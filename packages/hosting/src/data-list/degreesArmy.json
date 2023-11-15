@@ -1,0 +1,29 @@
+[
+  {
+    "label": "Personal de oficiales",
+    "options": [
+      {
+        "label": "General del Ejército",
+        "value": "generalDelEjercito"
+      },
+      {
+        "label": "General de Division",
+        "value": "generalDeDivision"
+      },
+      { "label": "General de Brigada", "value": "GeneralDeBrigada" }
+    ]
+  },
+  {
+    "label": "Personal de Oficiales",
+    "options": [
+      {
+        "label": "General del Ejército",
+        "value": "generalDelEjercito"
+      },
+      {
+        "label": "General de División",
+        "value": "generalDeDivision"
+      }
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "common": {
+    "title": "Korekenke",
+    "contactData": {
+      "emails": {
+        "sales": "korekenke@gmail.com"
+      },
+      "numbers": {
+        "phone": ["123 456 789"],
+        "wsp": ["123 456 789"]
+      },
+      "socialLinks": {
+        "facebook": "#",
+        "instagram": "#",
+        "whatsapp": "#",
+        "tiktok": "#",
+        "email": "mailto:#"
+      },
+      "directions": {
+        "local1": "Chorrillos - Lima - Perú"
+      },
+      "poweredBy": {
+        "name": "Agencia servitec",
+        "webUrl": "https://agenciaservitec.com"
+      }
+    }
+  },
+  "development": {
+    "version": "0.0.1",
+    "firebaseApp": {
+      "apiKey": "AIzaSyAYSl6EJNTHThN4MyQOVblXttK9nKnBf9Y",
+      "authDomain": "korekenke-prod.firebaseapp.com",
+      "projectId": "korekenke-prod",
+      "storageBucket": "korekenke-prod.appspot.com",
+      "messagingSenderId": "260763649435",
+      "appId": "1:260763649435:web:dd42dcd775324410908d3e",
+      "measurementId": "G-R6B1CB0TNV"
+    },
+    "publicHostingUrl": "https://vida-organic-store-dev.web.app",
+    "publicStorageUrl": "https://storage.googleapis.com/vida-organic-stores-dev-photos",
+    "buckets": {
+      "photos": "gs://vida-organic-stores-dev-photos"
+    },
+    "apiUrl": "https://us-central1-vida-organic-stores-dev.cloudfunctions.net/api"
+  },
+  "production": {
+    "version": "0.0.1",
+    "firebaseApp": {
+      "apiKey": "AIzaSyAYSl6EJNTHThN4MyQOVblXttK9nKnBf9Y",
+      "authDomain": "korekenke-prod.firebaseapp.com",
+      "projectId": "korekenke-prod",
+      "storageBucket": "korekenke-prod.appspot.com",
+      "messagingSenderId": "260763649435",
+      "appId": "1:260763649435:web:dd42dcd775324410908d3e",
+      "measurementId": "G-R6B1CB0TNV"
+    },
+    "publicHostingUrl": "https://vida-organic-store.web.app",
+    "publicStorageUrl": "https://storage.googleapis.com/vida-organic-stores-photos",
+    "buckets": {
+      "photos": "gs://vida-organic-stores-photos"
+    },
+    "apiUrl": "https://us-central1-vida-organic-stores.cloudfunctions.net/api"
+  }
+}

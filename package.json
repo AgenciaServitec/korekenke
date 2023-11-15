@@ -1,0 +1,19 @@
+{
+  "name": "korekenke",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "functions": "yarn --cwd packages/functions",
+    "hosting": "yarn --cwd packages/hosting",
+    "install:all": "yarn functions install && yarn hosting install",
+    "deploy": "firebase deploy",
+    "deploy:simple": "firebase deploy --only functions,hosting",
+    "deploy:functions": "yarn functions deploy",
+    "deploy:hosting": "yarn hosting deploy",
+    "deploy:indexes": "firebase deploy --only firestore:indexes",
+    "deploy:extensions": "firebase deploy --only extensions",
+    "export:extensions": "firebase ext:export",
+    "swagger": "yarn functions swagger",
+    "postswagger": "yarn hosting openapi"
+  }
+}
