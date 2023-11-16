@@ -141,7 +141,6 @@ export const PersonalInformation = ({ prev, next }) => {
             />
           )}
         />
-
         <Controller
           name="degree"
           control={control}

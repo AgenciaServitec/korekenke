@@ -29,6 +29,10 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
             // reCAPTCHA resuelto, permite signInWithPhoneNumber.
             console.log("reCAPTCHA resuelto:", { response });
           },
+          'expired-callback': () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            window.recaptchaVerifier.reset();
+          }
         }
       );
 
@@ -46,6 +50,7 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
         })
         .catch((error) => {
           console.error(error);
+          window.recaptchaVerifier.reset();
           prev();
         });
     } catch (e) {
