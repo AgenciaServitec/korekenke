@@ -3,7 +3,7 @@ import config from "./config.json";
 const projectId = process.env.GCLOUD_PROJECT;
 
 const currentEnvironment =
-  projectId === "vida-organic-stores" ? "production" : "development";
+  projectId === "korekenke-prod" ? "production" : "development";
 
 const isProduction = currentEnvironment === "production";
 

@@ -71,5 +71,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### Disabled site in hosting
 `
-firebase hosting:disable --project vida-organic-stores-dev.web.app -P dev
+firebase hosting:disable --project korekenke-prod.web.app -P dev
 `

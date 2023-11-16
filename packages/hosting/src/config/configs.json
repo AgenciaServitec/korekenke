@@ -36,12 +36,12 @@
       "appId": "1:260763649435:web:dd42dcd775324410908d3e",
       "measurementId": "G-R6B1CB0TNV"
     },
-    "publicHostingUrl": "https://vida-organic-store-dev.web.app",
-    "publicStorageUrl": "https://storage.googleapis.com/vida-organic-stores-dev-photos",
+    "publicHostingUrl": "-",
+    "publicStorageUrl": "-",
     "buckets": {
-      "photos": "gs://vida-organic-stores-dev-photos"
+      "photos": "-"
     },
-    "apiUrl": "https://us-central1-vida-organic-stores-dev.cloudfunctions.net/api"
+    "apiUrl": "-"
   },
   "production": {
     "version": "0.0.1",
@@ -54,11 +54,11 @@
       "appId": "1:260763649435:web:dd42dcd775324410908d3e",
       "measurementId": "G-R6B1CB0TNV"
     },
-    "publicHostingUrl": "https://vida-organic-store.web.app",
-    "publicStorageUrl": "https://storage.googleapis.com/vida-organic-stores-photos",
+    "publicHostingUrl": "-",
+    "publicStorageUrl": "-",
     "buckets": {
-      "photos": "gs://vida-organic-stores-photos"
+      "photos": "-"
     },
-    "apiUrl": "https://us-central1-vida-organic-stores.cloudfunctions.net/api"
+    "apiUrl": "-"
   }
 }

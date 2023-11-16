@@ -6,7 +6,7 @@ const { Footer } = Layout;
 export const FooterLayout = () => {
   return (
     <Footer style={{ textAlign: "center" }}>
-      vidatiendasorganicas.pe ©2023 Created by <strong>IUBI Company</strong>
+      korekenke.pe ©2023 Created by <strong>Agencia Servitec</strong>
     </Footer>
   );
 };
