@@ -2,7 +2,11 @@ import { Route, Routes } from "react-router-dom";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
-import { LoginIntegration, RegisterIntegration } from "../pages";
+import {
+  HomeIntegration,
+  LoginIntegration,
+  RegisterIntegration,
+} from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
@@ -35,6 +39,15 @@ export const Router = () => {
           element={
             <AdminLayout>
               <A.DocumentsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="home"
+          element={
+            <AdminLayout>
+              <A.HomeIntegration />
             </AdminLayout>
           }
         />

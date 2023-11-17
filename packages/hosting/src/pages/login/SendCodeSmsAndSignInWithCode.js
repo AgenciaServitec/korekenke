@@ -3,8 +3,11 @@ import Title from "antd/es/typography/Title";
 import { Button, InputNumber } from "../../components";
 import styled from "styled-components";
 import { firebase } from "../../firebase";
+import { useNavigate } from "react-router";
 
 export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [verificationId, setVerificationId] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
@@ -17,7 +20,7 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
     recaptchaVerifier: undefined,
   };
 
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     try {
       onSetLoading(true);
 
@@ -25,36 +28,26 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
         "sign-in-button",
         {
           size: "invisible",
-          callback: (response) => {
-            // reCAPTCHA resuelto, permite signInWithPhoneNumber.
-            console.log("reCAPTCHA resuelto:", { response });
-          },
-          'expired-callback': () => {
+          "expired-callback": () => {
             // Response expired. Ask user to solve reCAPTCHA again.
             window.recaptchaVerifier.reset();
-          }
+          },
         }
       );
 
       const appVerifier = window.recaptchaVerifier;
 
-      console.log({ appVerifier });
-
-      firebase
+      const confirmationResult = await firebase
         .auth()
-        .signInWithPhoneNumber(`+51${phoneNumber}`, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          setVerificationId(confirmationResult.verificationId);
-          next();
-        })
-        .catch((error) => {
-          console.error(error);
-          window.recaptchaVerifier.reset();
-          prev();
-        });
+        .signInWithPhoneNumber(`+51${phoneNumber}`, appVerifier);
+
+      window.confirmationResult = confirmationResult;
+      setVerificationId(confirmationResult.verificationId);
+      next();
     } catch (e) {
       console.error("recaptchaVerifier and send code:", e);
+      window.recaptchaVerifier.reset();
+      prev();
     } finally {
       onSetLoading(false);
     }
@@ -75,6 +68,8 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
           console.log("Usuario inició sesión correctamente: ", {
             userCredential,
           });
+
+          navigate("/home");
         })
         .catch((error) => {
           console.error(error);

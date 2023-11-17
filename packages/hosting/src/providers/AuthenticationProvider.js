@@ -1,13 +1,6 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { firebase, auth, firestore } from "../firebase";
+import React, { createContext, useContext, useMemo, useState } from "react";
+import { auth, firebase } from "../firebase";
 import { isError } from "lodash";
-import { useDocument } from "react-firebase-hooks/firestore";
 import { notification, Spinner } from "../components";
 
 const AuthenticationContext = createContext({
@@ -22,28 +15,24 @@ export const useAuthentication = () => useContext(AuthenticationContext);
 export const AuthenticationProvider = ({ children }) => {
   const [authenticating, setAuthenticating] = useState(true);
   const [authUser, setAuthUser] = useState(null);
-  const [firebaseUser, setFirebaseUser] = useState(null);
   const [loginLoading, setLoginLoading] = useState(false);
 
-  const [userSnapshot, loadingUser, errorUser] = useDocument(
-    firebaseUser ? firestore.collection("users").doc(firebaseUser.uid) : null
-  );
-
   useMemo(() => {
-    auth.onAuthStateChanged((currentUser) =>
-      currentUser ? setFirebaseUser(currentUser) : onLogout()
-    );
+    auth.onAuthStateChanged((currentUser) => {
+      console.log("currentUser->", currentUser);
+
+      return currentUser ? onLogin(currentUser) : onLogout();
+    });
   }, []);
 
-  useEffect(() => {
-    !loadingUser && userSnapshot && !errorUser && onLogin(userSnapshot?.data());
-  }, [loadingUser, userSnapshot]);
+  // useEffect(() => {
+  //   !loadingUser && userSnapshot && !errorUser && onLogin(userSnapshot?.data());
+  // }, [loadingUser, userSnapshot]);
 
   const onLogout = async () => {
     setAuthenticating(true);
 
     setAuthUser(null);
-    setFirebaseUser(null);
     setAuthenticating(false);
     setLoginLoading(false);
   };
@@ -53,6 +42,8 @@ export const AuthenticationProvider = ({ children }) => {
       setLoginLoading(true);
 
       if (!user) throw new Error("User doesn't exists");
+
+      console.log("user->", user);
 
       setAuthUser(user);
       setLoginLoading(false);
@@ -71,13 +62,18 @@ export const AuthenticationProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (phoneNumber, appVerifier) => {
     try {
       setLoginLoading(true);
 
       await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-      await auth.signInWithEmailAndPassword(email, password);
+      const confirmationResult = await auth.signInWithPhoneNumber(
+        `+51${phoneNumber}`,
+        appVerifier
+      );
+
+      window.confirmationResult = confirmationResult;
     } catch (e) {
       const error = isError(e) ? e : undefined;
 
