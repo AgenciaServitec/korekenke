@@ -4,7 +4,7 @@
   font-style: normal;
   font-display: swap;
   src: url(DinPro/DINPro-Regular.otf) format("otf"),
-  url(DinPro/DINPro-Regular.otf) format("truetype");
+    url(DinPro/DINPro-Regular.otf) format("truetype");
 }
 
 @font-face {
@@ -12,7 +12,7 @@
   font-style: normal;
   font-display: swap;
   src: url(DinPro/DINPro-Medium.otf) format("otf"),
-  url(DinPro/DINPro-Medium.otf) format("truetype");
+    url(DinPro/DINPro-Medium.otf) format("truetype");
 }
 
 @font-face {
@@ -20,6 +20,5 @@
   font-style: normal;
   font-display: swap;
   src: url(DinPro/DINPro-Bold.otf) format("otf"),
-  url(DinPro/DINPro-Bold.otf) format("truetype");
+    url(DinPro/DINPro-Bold.otf) format("truetype");
 }
-

@@ -2,11 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
-import {
-  HomeIntegration,
-  LoginIntegration,
-  RegisterIntegration,
-} from "../pages";
+import { LoginIntegration, RegisterIntegration } from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
@@ -35,6 +31,15 @@ export const Router = () => {
         />
         <Route
           exact
+          path="home"
+          element={
+            <AdminLayout>
+              <A.DocumentsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="documents"
           element={
             <AdminLayout>
@@ -44,10 +49,10 @@ export const Router = () => {
         />
         <Route
           exact
-          path="home"
+          path="documents/:documentId"
           element={
             <AdminLayout>
-              <A.HomeIntegration />
+              <A.DocumentIntegration />
             </AdminLayout>
           }
         />

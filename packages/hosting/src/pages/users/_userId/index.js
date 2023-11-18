@@ -11,7 +11,7 @@ import {
   InputPassword,
   notification,
   Select,
-  Upload
+  Upload,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

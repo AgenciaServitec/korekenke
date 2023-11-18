@@ -108,16 +108,16 @@ export const Upload = ({
         options: {
           file: requestOption.file,
           onError: (error) =>
-              requestOption.onError && requestOption.onError(error),
+            requestOption.onError && requestOption.onError(error),
           onProgress: (percent) =>
-              requestOption.onProgress &&
-              requestOption.onProgress({
-                ...new ProgressEvent("load"),
-                percent: percent,
-              }),
+            requestOption.onProgress &&
+            requestOption.onProgress({
+              ...new ProgressEvent("load"),
+              percent: percent,
+            }),
           onSuccess: (message) =>
-              requestOption.onSuccess &&
-              requestOption.onSuccess(message, new XMLHttpRequest()),
+            requestOption.onSuccess &&
+            requestOption.onSuccess(message, new XMLHttpRequest()),
         },
       });
 

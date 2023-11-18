@@ -1,5 +1,10 @@
-import {Router} from "./router";
-import {AuthenticationProvider, ConfigsInitializer, GlobalDataProvider, VersionProvider,} from "./providers";
+import { Router } from "./router";
+import {
+  AuthenticationProvider,
+  ConfigsInitializer,
+  GlobalDataProvider,
+  VersionProvider,
+} from "./providers";
 
 const App = () => {
   return (

@@ -40,8 +40,8 @@ const ButtonStyled = styled(ButtonAntd)`
   text-transform: uppercase;
 
   ${({ theme, styled: { background, color = () => "white" } = {} }) =>
-  background &&
-  css`
+    background &&
+    css`
       color: ${color(theme)};
       background: ${background(theme)};
       border-color: ${background(theme)};

@@ -1,7 +1,7 @@
-import React, {createContext, useContext} from "react";
-import {useDocumentData} from "react-firebase-hooks/firestore";
-import {firestore, version} from "../firebase";
-import {Button, Result, Spinner} from "../components";
+import React, { createContext, useContext } from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { firestore, version } from "../firebase";
+import { Button, Result, Spinner } from "../components";
 /*import Result from "antd/lib/result";*/
 import styled from "styled-components";
 
@@ -15,7 +15,7 @@ export const VersionProvider = ({ children }) => {
 
   const onClickRefresh = () => document.location.reload();
 
-  if (settingDefaultLoading) return <Spinner height="80vh"/>;
+  if (settingDefaultLoading) return <Spinner height="80vh" />;
 
   if (settingDefaultError)
     return (

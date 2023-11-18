@@ -3,9 +3,7 @@ import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import {
-  faCopyright,
-  faCube,
-  faCubes,
+  faFileAlt,
   faHome,
   faSignOutAlt,
   faUsers,
@@ -29,7 +27,7 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
       isVisible: true,
       onClick: () => {
-        onNavigateTo("/");
+        onNavigateTo("/home");
         setIsVisibleDrawer(false);
       },
     },
@@ -44,52 +42,12 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Categorías principales",
-      key: "principal-categories",
-      icon: <FontAwesomeIcon icon={faCube} size="lg" />,
+      label: "Documentos",
+      key: "documents",
+      icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
       isVisible: true,
       onClick: () => {
-        onNavigateTo("/principal-categories");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Categorías",
-      key: "categories",
-      icon: <FontAwesomeIcon icon={faCube} size="lg" />,
-      isVisible: true,
-      onClick: () => {
-        onNavigateTo("/categories");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Sub categorías",
-      key: "sub-categories",
-      icon: <FontAwesomeIcon icon={faCube} size="lg" />,
-      isVisible: true,
-      onClick: () => {
-        onNavigateTo("/sub-categories");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Marcas",
-      key: "brands",
-      icon: <FontAwesomeIcon icon={faCopyright} size="lg" />,
-      isVisible: true,
-      onClick: () => {
-        onNavigateTo("/brands");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Productos",
-      key: "products",
-      icon: <FontAwesomeIcon icon={faCubes} size="lg" />,
-      isVisible: true,
-      onClick: () => {
-        onNavigateTo("/products");
+        onNavigateTo("/documents");
         setIsVisibleDrawer(false);
       },
     },

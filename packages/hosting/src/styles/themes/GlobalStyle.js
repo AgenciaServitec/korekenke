@@ -1,6 +1,6 @@
 import { css, createGlobalStyle } from "styled-components";
 import { mediaQuery } from "../constants";
-import { darken, lighten } from "polished";
+import { darken } from "polished";
 
 const global = css`
   * {
@@ -8,7 +8,7 @@ const global = css`
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
 
   html {
@@ -20,52 +20,52 @@ const global = css`
     font-size: 15px;
     overflow-x: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    color: ${({ theme }) => theme.colors.font2};
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: ${({theme}) => theme.colors.font2};
   }
 
   h1,
   h2,
   h3 {
-    color: ${({ theme }) => theme.colors.font1};
+    color: ${({theme}) => theme.colors.font1};
   }
 
   h4,
   h5,
   h6 {
-    color: ${({ theme }) => theme.colors.font2};
+    color: ${({theme}) => theme.colors.font2};
     //font-family: "DINPro-Bold", serif;
   }
 
   h1 {
-    font-size: 2.3rem;
+    font-size: 2rem;
     font-weight: bold;
     line-height: 3.4rem;
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: bold;
     line-height: 2.2rem;
   }
 
   h3 {
-    font-size: 1.7rem;
-    font-weight: bold;
-  }
-
-  h4 {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  h5 {
     font-size: 1.3rem;
     font-weight: bold;
   }
 
+  h4 {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  h5 {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
   .link-color {
-    color: ${({ theme }) => theme.colors.primary};
+    color: rgba(49, 49, 255, 0.93);
   }
 
   .d-flex {

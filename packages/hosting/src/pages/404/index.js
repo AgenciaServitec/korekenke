@@ -7,7 +7,7 @@ import Result from "antd/lib/result";
 export const Page404 = () => {
   const navigate = useNavigate();
 
-  const navigateToInitialPage = () => navigate("/");
+  const onGoBack = () => navigate(-1);
 
   return (
     <Container>
@@ -16,7 +16,7 @@ export const Page404 = () => {
         title="404"
         subTitle="Lo sentimos, la página que visitaste no existe."
         extra={
-          <Button type="primary" onClick={() => navigateToInitialPage()}>
+          <Button type="primary" onClick={() => onGoBack()}>
             Ir a pagina de inicio
           </Button>
         }
@@ -31,8 +31,4 @@ const Container = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  .ant-result-title,
-  .ant-result-subtitle {
-    color: #fff !important;
-  }
 `;

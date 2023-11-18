@@ -18,9 +18,9 @@ export const HeaderLayout = ({
 }) => {
   return (
     <HeaderContainer>
-      <div className="item-logo" onClick={() => onNavigateTo("/products")}>
+      <div className="item-logo" onClick={() => onNavigateTo("/home")}>
         <Space align="center">
-          <img src={LogoPrimary} width={65} alt="Vida - tiendas organicas" />
+          <img src={LogoPrimary} width={40} alt="Korekenke" />
         </Space>
       </div>
       <div className="user-items">
