@@ -16,17 +16,7 @@ app.get("/", (req, res) => res.status(200).send("Welcome!").end());
 
 app.post("/user", postUser);
 
-app.put(
-  "/users/:userId",
-  [
-    body("id").exists(),
-    body("email").exists(),
-    body("password").exists(),
-    body("roleCode").exists(),
-    body("updateBy").exists(),
-  ],
-  putUser
-);
+app.put("/users/:userId", putUser);
 
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 
