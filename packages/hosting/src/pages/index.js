@@ -5,3 +5,4 @@ export * from "./users/_userId";
 export * from "./home";
 export * from "./documents";
 export * from "./documents/_document";
+export * from "./profile";

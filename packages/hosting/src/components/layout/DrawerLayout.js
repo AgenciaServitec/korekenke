@@ -6,6 +6,7 @@ import {
   faFileAlt,
   faHome,
   faSignOutAlt,
+  faUser,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +29,16 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/home");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Perfil",
+      key: "profile",
+      icon: <FontAwesomeIcon icon={faUser} size="lg" />,
+      isVisible: true,
+      onClick: () => {
+        onNavigateTo("/profile");
         setIsVisibleDrawer(false);
       },
     },
