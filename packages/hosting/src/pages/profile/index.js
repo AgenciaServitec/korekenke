@@ -2,7 +2,7 @@ import React from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Title from "antd/lib/typography/Title";
-import { Tabs, Tag } from "../../components";
+import { Tabs } from "../../components";
 import { ProfileDataForm } from "./ProfileDataForm";
 import { ProfileImagesForm } from "./ProfileImagesForm";
 import ProfileInformation from "./ProfileInformation";
