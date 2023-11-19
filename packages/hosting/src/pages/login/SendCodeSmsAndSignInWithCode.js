@@ -32,6 +32,11 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
           "expired-callback": () => {
             // Response expired. Ask user to solve reCAPTCHA again.
             applicationVerifier.clear();
+            notification({
+              type: "warning",
+              title: "El tiempo a expirado, vuela a intentarlo",
+            });
+            prev();
           },
         }
       );
@@ -137,7 +142,7 @@ const SendCodeSmsAndSignInWithCode = ({
             loading={loading}
             onClick={() => onSendCodeSms()}
           >
-            Enviar
+            {loading ? "Enviando" : "Enviar"}
           </Button>
         </div>
       )}
@@ -169,7 +174,7 @@ const SendCodeSmsAndSignInWithCode = ({
             loading={loading}
             htmlType="submit"
           >
-            Iniciar sesion
+            {loading ? "Iniciando sesión" : "Iniciar sesión"}
           </Button>
         </Form>
       )}
