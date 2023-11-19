@@ -12,7 +12,7 @@
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "firebase deploy --only hosting",
+    "deploy": "firebase deploy --only hosting:korekenke",
     "eslint:check": "eslint src",
     "prettier:check": "prettier . --check",
     "prettier:format": "prettier . --write",

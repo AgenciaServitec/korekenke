@@ -17,11 +17,9 @@ export const AuthenticationProvider = ({ children }) => {
   const [loginLoading, setLoginLoading] = useState(false);
 
   useMemo(() => {
-    auth.onAuthStateChanged((currentUser) => {
-      console.log("currentUser: ", currentUser);
-
-      return currentUser ? onLogin(currentUser) : onLogout();
-    });
+    auth.onAuthStateChanged((currentUser) =>
+      currentUser ? onLogin(currentUser) : onLogout()
+    );
   }, []);
 
   // useEffect(() => {

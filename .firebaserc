@@ -5,22 +5,22 @@
   },
   "targets": {
     "korekenke-prod": {
-      "korekenke": {
-        "hosting": [
+      "hosting": {
+        "korekenke": [
           "korekenke-prod"
         ]
       }
     },
     "korekenke-dev": {
-      "korekenke": {
-        "hosting": [
-          "korekenke-prod"
+      "hosting": {
+        "korekenke": [
+          "korekenke-dev"
         ]
       }
     }
   },
   "etags": {
-    "korekenke-dev": {
+    "vida-organic-stores-dev": {
       "extensionInstances": {
         "storage-resize-images-photos": "ea176abf15c07510a2405d45e2e64242d0a5f8d20263d2090d8f4bebde36c151"
       }

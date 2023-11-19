@@ -3,7 +3,7 @@ import Title from "antd/es/typography/Title";
 import { Button, Form, InputNumber, notification } from "../../components";
 import styled from "styled-components";
 import { firebase } from "../../firebase";
-import { clearLocalStorage, getLocalStorage } from "../../utils";
+import { getLocalStorage } from "../../utils";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
@@ -65,8 +65,6 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
         verificationCode.toString()
       );
 
-      console.log({ credential });
-
       const userCredential = await firebase
         .auth()
         .signInWithCredential(credential);
@@ -74,7 +72,6 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
       if (!userCredential.user) throw new Error(userCredential);
 
       setVerificationId("");
-      clearLocalStorage();
     } catch (e) {
       console.error("verifyCodeSmsAndSignIn:", e);
       const codeType = "auth/invalid-verification-code" === e?.code;
