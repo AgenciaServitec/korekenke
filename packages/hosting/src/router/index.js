@@ -56,6 +56,17 @@ export const Router = () => {
             </AdminLayout>
           }
         />
+
+        <Route
+          exact
+          path="profile"
+          element={
+            <AdminLayout>
+              <A.Profile />
+            </AdminLayout>
+          }
+        />
+
         {/*<Route*/}
         {/*  exact*/}
         {/*  path="scripts"*/}
