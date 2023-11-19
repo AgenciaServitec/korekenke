@@ -81,8 +81,8 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       return notification({
         type: "warning",
         title: `El ${
-          userWithEmail ? "email" : userWithPhoneNumber ? "número celular" : ""
-        }`,
+          userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
+        } ya se encuentra registrado.`,
       });
 
     setLocalStorage("register", { ...step1Data, ...formData });
