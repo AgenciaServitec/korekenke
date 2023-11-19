@@ -18,85 +18,85 @@ import Tag from "antd/lib/tag";
 
 const { Title } = Typography;
 
-export const DocumentsIntegration = () => {
+export const ReceptionsIntegration = () => {
   const { isMobile } = useDevice();
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const { documents } = useGlobalData();
+  const { receptions } = useGlobalData();
 
-  const navigateTo = (documentId) => {
-    const url = `/documents/${documentId}`;
+  const navigateTo = (receptionId) => {
+    const url = `/receptions/${receptionId}`;
 
     navigate(url);
   };
 
-  const onAddDocument = () => navigateTo("new");
+  const onAddReception = () => navigateTo("new");
 
-  const onEditDocument = (document) => navigateTo(document.id);
+  const onEditReception = (document) => navigateTo(document.id);
 
-  const onRemoveDocument = async (document) => {
+  const onRemoveReception = async (document) => {
     await firestore
-      .collection("documents")
+      .collection("receptions")
       .doc(document.id)
       .update(assignDeleteProps(document));
   };
 
-  const onConfirmRemoveDocument = (document) =>
+  const onConfirmRemoveReception = (reception) =>
     modalConfirm({
-      content: "El documento se eliminara",
-      onOk: () => onRemoveDocument(document),
+      content: "La recepcion se eliminara",
+      onOk: () => onRemoveReception(reception),
     });
 
   return (
-    <Documents
+    <Receptions
       isMobile={isMobile}
-      documents={documents}
-      onAddDocument={onAddDocument}
-      onEditDocument={onEditDocument}
-      onConfirmRemoveDocument={onConfirmRemoveDocument}
+      receptions={receptions}
+      onAddReception={onAddReception}
+      onEditReception={onEditReception}
+      onConfirmRemoveReception={onConfirmRemoveReception}
     />
   );
 };
 
-const Documents = ({
+const Receptions = ({
   isMobile,
-  documents,
-  onAddDocument,
-  onEditDocument,
-  onConfirmRemoveDocument,
+  receptions,
+  onAddReception,
+  onEditReception,
+  onConfirmRemoveReception,
 }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Button type="primary" onClick={() => onAddDocument()}>
-          Agregar documento
+        <Button type="primary" onClick={() => onAddReception()}>
+          Agregar recepcion
         </Button>
       </Col>
       <Divider />
       <Col span={24}>
-        <Title level={3}>Documentos</Title>
+        <Title level={3}>Recepciones</Title>
       </Col>
       <Col span={24}>
         <List
           className="demo-loadmore-list"
           itemLayout={isMobile ? "vertical" : "horizontal"}
-          dataSource={documents}
-          renderItem={(document) => (
+          dataSource={receptions}
+          renderItem={(reception) => (
             <List.Item
               actions={[
                 <IconAction
-                  key={document.id}
+                  key={reception.id}
                   tooltipTitle="Editar"
                   icon={faEdit}
-                  onClick={() => onEditDocument(document)}
+                  onClick={() => onEditReception(reception)}
                 />,
                 <IconAction
-                  key={document.id}
+                  key={reception.id}
                   tooltipTitle="Eliminar"
                   styled={{ color: (theme) => theme.colors.error }}
                   icon={faTrash}
-                  onClick={() => onConfirmRemoveDocument(document)}
+                  onClick={() => onConfirmRemoveReception(reception)}
                 />,
               ]}
             >
@@ -104,8 +104,8 @@ const Documents = ({
                 avatar={
                   <Image
                     src={
-                      document?.documento1Photo?.url ||
-                      document?.documento1Photo?.thumbUrl ||
+                      reception?.documento1Photo?.url ||
+                      reception?.documento1Photo?.thumbUrl ||
                       AvatarNoFound
                     }
                     width={90}
@@ -116,13 +116,13 @@ const Documents = ({
                 }
                 title={
                   <div>
-                    <Link to={`/documents/${document.id}`}>
+                    <Link to={`/receptions/${reception.id}`}>
                       <h4 className="link-color">
-                        {capitalize(document.name)}
+                        {capitalize(reception.name)}
                       </h4>
                     </Link>
-                    <Tag color={document.active ? "green" : "red"}>
-                      {capitalize(document.active ? "Procesado" : "En espera")}
+                    <Tag color={reception.active ? "green" : "red"}>
+                      {capitalize(reception.active ? "Procesado" : "En espera")}
                     </Tag>
                   </div>
                 }

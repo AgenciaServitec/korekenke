@@ -42,12 +42,12 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Documentos",
-      key: "documents",
+      label: "Recepciones",
+      key: "receptions",
       icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
       isVisible: true,
       onClick: () => {
-        onNavigateTo("/documents");
+        onNavigateTo("/receptions");
         setIsVisibleDrawer(false);
       },
     },

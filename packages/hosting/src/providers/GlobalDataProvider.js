@@ -7,7 +7,7 @@ import { orderBy } from "lodash";
 
 const GlobalDataContext = createContext({
   users: [],
-  documents: [],
+  receptions: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
@@ -19,13 +19,14 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
-  const [documents = [], documentsLoading, documentsError] = useCollectionData(
-    firestore.collection("documents").where("isDeleted", "==", false) || null
-  );
+  const [receptions = [], receptionsLoading, receptionsError] =
+    useCollectionData(
+      firestore.collection("receptions").where("isDeleted", "==", false) || null
+    );
 
-  const error = usersError || documentsError;
+  const error = usersError || receptionsError;
 
-  const loading = usersLoading || documentsLoading;
+  const loading = usersLoading || receptionsLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -37,7 +38,7 @@ export const GlobalDataProvider = ({ children }) => {
     <GlobalDataContext.Provider
       value={{
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
-        documents: orderBy(documents, (document) => [document.createAt], [
+        receptions: orderBy(receptions, (document) => [document.createAt], [
           "desc",
         ]),
       }}
