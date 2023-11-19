@@ -7,6 +7,7 @@ import {
   RadioGroup,
   Select,
   Title,
+  notification,
 } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -16,6 +17,8 @@ import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { DegreesArmy } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
+import { fetchCollectionOnce } from "../../firebase/utils";
+import { firestore } from "../../firebase";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const schema = yup.object({
@@ -70,10 +73,42 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
 
   console.log({ errors });
 
-  const onSubmitLogin = (formData) => {
+  const onSubmitLogin = async (formData) => {
+    const userWithEmail = await userByEmail(formData.email);
+    const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
+
+    if (userWithEmail || userWithPhoneNumber)
+      return notification({
+        type: "warning",
+        title: `El ${
+          userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
+        } ya se encuentra registrado.`,
+      });
+
     setLocalStorage("register", { ...step1Data, ...formData });
 
     next();
+  };
+
+  const userByEmail = async (email) => {
+    console.log(email);
+    const response = await fetchCollectionOnce(
+      firestore.collection("users").where("email", "==", email).limit(1)
+    );
+
+    return response[0];
+  };
+
+  const userByPhoneNumber = async (phoneNumber) => {
+    console.log(phoneNumber);
+    const response = await fetchCollectionOnce(
+      firestore
+        .collection("users")
+        .where("phoneNumber", "==", phoneNumber)
+        .limit(1)
+    );
+
+    return response[0];
   };
 
   return (
@@ -121,21 +156,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
           render={({ field: { onChange, value, name } }) => (
             <Input
               label="Ingrese apellido materno"
-              onChange={onChange}
-              value={value}
-              name={name}
-              error={error(name)}
-              helperText={errorMessage(name)}
-              required={required(name)}
-            />
-          )}
-        />
-        <Controller
-          name="dni"
-          control={control}
-          render={({ field: { onChange, value, name } }) => (
-            <InputNumber
-              label="Ingrese DNI"
               onChange={onChange}
               value={value}
               name={name}

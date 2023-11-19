@@ -14,40 +14,40 @@ import { assign } from "lodash";
 import { Switch } from "antd";
 import { getNameId } from "../../../utils";
 
-export const DocumentIntegration = () => {
+export const ReceptionIntegration = () => {
   const navigate = useNavigate();
-  const { documentId } = useParams();
+  const { receptionId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
-  const { documents } = useGlobalData();
+  const { receptions } = useGlobalData();
 
-  const [document, setDocument] = useState({});
-  const [savingDocument, setSavingDocument] = useState(false);
+  const [reception, setReception] = useState({});
+  const [savingReception, setSavingReception] = useState(false);
 
   const onGoBack = () => navigate(-1);
 
   useEffect(() => {
-    const document_ =
-      documentId === "new"
-        ? { id: firestore.collection("documents").doc().id }
-        : documents.find((document) => document.id === documentId);
+    const reception_ =
+      receptionId === "new"
+        ? { id: firestore.collection("receptions").doc().id }
+        : receptions.find((reception) => reception.id === receptionId);
 
-    if (!document_) return onGoBack();
+    if (!reception_) return onGoBack();
 
-    setDocument(document_);
+    setReception(reception_);
   }, []);
 
-  const onSubmitSaveDocument = async (formData) => {
+  const onSaveReception = async (formData) => {
     try {
-      setSavingDocument(true);
+      setSavingReception(true);
 
       await firestore
-        .collection("documents")
-        .doc(document.id)
+        .collection("receptions")
+        .doc(reception.id)
         .set(
-          documentId === "new"
-            ? assignCreateProps(mapDocument(document, formData))
-            : assignUpdateProps(mapDocument(document, formData)),
+          receptionId === "new"
+            ? assignCreateProps(mapReception(reception, formData))
+            : assignUpdateProps(mapReception(reception, formData)),
           { merge: true }
         );
 
@@ -55,18 +55,18 @@ export const DocumentIntegration = () => {
 
       onGoBack();
     } catch (e) {
-      console.log("ErrorSaveDocument: ", e);
+      console.log("ErrorSaveReception: ", e);
       notification({ type: "error" });
     } finally {
-      setSavingDocument(false);
+      setSavingReception(false);
     }
   };
 
-  const mapDocument = (document, formData) =>
+  const mapReception = (reception, formData) =>
     assign(
       {},
       {
-        id: document.id,
+        id: reception.id,
         nameId: getNameId(formData.name),
         name: formData.name,
         documento1Photo: formData.documento1Photo,
@@ -75,19 +75,19 @@ export const DocumentIntegration = () => {
     );
 
   return (
-    <Document
-      document={document}
-      onSubmitSaveDocument={onSubmitSaveDocument}
+    <Reception
+      reception={reception}
+      onSaveReception={onSaveReception}
       onGoBack={onGoBack}
-      savingDocument={savingDocument}
+      savingReception={savingReception}
     />
   );
 };
 
-const Document = ({
-  document,
-  onSubmitSaveDocument,
-  savingDocument,
+const Reception = ({
+  reception,
+  onSaveReception,
+  savingReception,
   onGoBack,
 }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -106,35 +106,35 @@ const Document = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      active: false
-    }
+      active: false,
+    },
   });
 
-  console.log({errors})
+  console.log({ errors });
 
   const { required, error } = useFormUtils({ errors, schema });
 
   useEffect(() => {
     resetForm();
-  }, [document]);
+  }, [reception]);
 
   const resetForm = () => {
     reset({
-      name: document?.name || "",
-      documento1Photo: document?.documento1Photo || null,
-      active: document?.active || false,
+      name: reception?.name || "",
+      documento1Photo: reception?.documento1Photo || null,
+      active: reception?.active || false,
     });
   };
 
-  const submitSaveDocument = (formData) => onSubmitSaveDocument(formData);
+  const onSubmitSaveReception = (formData) => onSaveReception(formData);
 
   return (
     <Row>
       <Col span={24}>
-        <Title level={3}>Documento</Title>
+        <Title level={3}>Recepción</Title>
       </Col>
       <Col span={24}>
-        <Form onSubmit={handleSubmit(submitSaveDocument)}>
+        <Form onSubmit={handleSubmit(onSubmitSaveReception)}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Controller
@@ -164,7 +164,7 @@ const Document = ({
                     accept="image/*"
                     name={name}
                     value={value}
-                    filePath={`documents/${document.id}`}
+                    filePath={`receptions/${reception.id}`}
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
@@ -197,7 +197,7 @@ const Document = ({
                 size="large"
                 block
                 onClick={() => onGoBack()}
-                disabled={uploadingImage | savingDocument}
+                disabled={uploadingImage | savingReception}
               >
                 Cancelar
               </Button>
@@ -208,8 +208,8 @@ const Document = ({
                 size="large"
                 block
                 htmlType="submit"
-                disabled={uploadingImage | savingDocument}
-                loading={savingDocument}
+                disabled={uploadingImage | savingReception}
+                loading={savingReception}
               >
                 Guardar
               </Button>
