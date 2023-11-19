@@ -1,23 +1,27 @@
 import React, { useState } from "react";
 import Title from "antd/es/typography/Title";
-import { Button, InputNumber, notification } from "../../components";
+import { Button, Form, InputNumber, notification } from "../../components";
 import styled from "styled-components";
 import { firebase } from "../../firebase";
-import { useNavigate } from "react-router";
-import { capitalize } from "lodash";
+import { clearLocalStorage, getLocalStorage } from "../../utils";
+import * as yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { useFormUtils } from "../../hooks";
 
-export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
-  const navigate = useNavigate();
-
+export const SendCodeSmsAndSignInWithCodeIntegration = ({
+  prev,
+  next,
+  currentStep,
+}) => {
   const [loading, setLoading] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
   const [verificationId, setVerificationId] = useState("");
 
-  const phoneNumber = JSON.parse(localStorage.getItem("login")).phoneNumber;
+  const phoneNumber = getLocalStorage("login").phoneNumber;
 
   const onSetLoading = (state = false) => setLoading(state);
 
-  const handleSendCode = async () => {
+  const onSendCodeSms = async () => {
     try {
       onSetLoading(true);
 
@@ -43,23 +47,18 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
       applicationVerifier.clear();
       next();
     } catch (e) {
-      console.error("recaptchaVerifier and send code:", e);
-      notification({ type: "error", title: e });
+      console.error("onSendCodeSms:", e);
+      notification({ type: "error", title: e.message });
+      setVerificationId("");
       prev();
     } finally {
       onSetLoading(false);
     }
   };
 
-  const handleVerifyCode = async (verificationCode) => {
+  const onVerifyCodeSmsAndSignIn = async (verificationCode) => {
     try {
       onSetLoading(true);
-
-      if (!verificationCode)
-        return notification({
-          type: "warning",
-          title: "El código es requerido",
-        });
 
       const credential = firebase.auth.PhoneAuthProvider.credential(
         verificationId,
@@ -72,29 +71,58 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
         .auth()
         .signInWithCredential(credential);
 
-      console.log({ userCredential });
-
       if (!userCredential.user) throw new Error(userCredential);
 
       setVerificationId("");
+      clearLocalStorage();
     } catch (e) {
-      console.error("verifyCode:", e);
-      // const { message } = e?.error;
-      notification({ type: "error", title: capitalize(e.message) });
+      console.error("verifyCodeSmsAndSignIn:", e);
+      const codeType = "auth/invalid-verification-code" === e?.code;
+      notification({
+        type: "error",
+        title: codeType ? "El código de verificación no es válido." : e.message,
+      });
     } finally {
       onSetLoading(false);
     }
   };
 
-  const onSubmit = async () => {
-    if (!verificationCode)
-      return notification({
-        type: "warning",
-        title: "Debe ingresar el código",
-      });
+  return (
+    <SendCodeSmsAndSignInWithCode
+      currentStep={currentStep}
+      onSendCodeSms={onSendCodeSms}
+      onVerifyCodeSmsAndSignIn={onVerifyCodeSmsAndSignIn}
+      loading={loading}
+      phoneNumber={phoneNumber}
+    />
+  );
+};
 
-    await handleVerifyCode(verificationCode);
-  };
+const SendCodeSmsAndSignInWithCode = ({
+  currentStep,
+  loading,
+  phoneNumber,
+  onSendCodeSms,
+  onVerifyCodeSmsAndSignIn,
+}) => {
+  const schema = yup.object({
+    verificationCode: yup
+      .string()
+      .min(6)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
+  const onSubmitSignIn = async (formData) =>
+    await onVerifyCodeSmsAndSignIn(formData.verificationCode);
 
   return (
     <Container>
@@ -110,7 +138,7 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
             size="large"
             type="primary"
             loading={loading}
-            onClick={() => handleSendCode()}
+            onClick={() => onSendCodeSms()}
           >
             Enviar
           </Button>
@@ -118,25 +146,35 @@ export const SendCodeSmsAndSignInWithCode = ({ prev, next, currentStep }) => {
       )}
       <div id="recaptcha-container"></div>
       {currentStep === 2 && (
-        <div className="verifier-and-signin-wrapper">
-          <InputNumber
-            label="Ingrese código"
-            required
-            value=""
-            id="code"
-            onChange={(value) => setVerificationCode(value)}
+        <Form onSubmit={handleSubmit(onSubmitSignIn)}>
+          <div className="title-login">
+            <Title level={3}>Verifica e inicia sesión</Title>
+          </div>
+          <Controller
+            name="verificationCode"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <InputNumber
+                label="Ingrese código"
+                onChange={onChange}
+                value={value}
+                name={name}
+                error={error(name)}
+                helperText={errorMessage(name)}
+                required={required(name)}
+              />
+            )}
           />
-          <br />
           <Button
             block
             size="large"
             type="primary"
             loading={loading}
-            onClick={() => onSubmit()}
+            htmlType="submit"
           >
             Iniciar sesion
           </Button>
-        </div>
+        </Form>
       )}
     </Container>
   );

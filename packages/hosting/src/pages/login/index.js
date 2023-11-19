@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { SendCodeSmsAndSignInWithCode } from "./SendCodeSmsAndSignInWithCode";
+import { SendCodeSmsAndSignInWithCodeIntegration } from "./SendCodeSmsAndSignInWithCode";
 import { AccessDataLogin } from "./AccessDataLogin";
 import { useAuthentication } from "../../providers";
 import { useNavigate } from "react-router";
@@ -25,25 +25,25 @@ export const LoginIntegration = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const steps = [
-    {
-      title: "Código CIP",
-      description: "Paso 1",
-    },
-    {
-      title: "Envio SMS",
-      description: "Paso 2",
-    },
-    {
-      title: "Verficación código",
-      description: "Paso 3",
-    },
-  ];
-
-  const items = steps.map((item) => ({
-    key: item.title,
-    title: item.title,
-  }));
+  // const steps = [
+  //   {
+  //     title: "Código CIP",
+  //     description: "Paso 1",
+  //   },
+  //   {
+  //     title: "Envio SMS",
+  //     description: "Paso 2",
+  //   },
+  //   {
+  //     title: "Verficación código",
+  //     description: "Paso 3",
+  //   },
+  // ];
+  //
+  // const items = steps.map((item) => ({
+  //   key: item.title,
+  //   title: item.title,
+  // }));
 
   return (
     <Container>
@@ -51,7 +51,7 @@ export const LoginIntegration = () => {
         <div className="content-step-wrapper">
           {currentStep === 0 && <AccessDataLogin next={next} />}
           {currentStep !== 0 && (
-            <SendCodeSmsAndSignInWithCode
+            <SendCodeSmsAndSignInWithCodeIntegration
               prev={prev}
               next={next}
               currentStep={currentStep}
