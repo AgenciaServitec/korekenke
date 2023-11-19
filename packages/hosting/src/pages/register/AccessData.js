@@ -8,7 +8,10 @@ import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getLocalStorage, setLocalStorage } from "../../utils";
-import { fetchCollectionOnce, querySnapshotToArray } from "../../firebase/utils";
+import {
+  fetchCollectionOnce,
+  querySnapshotToArray,
+} from "../../firebase/utils";
 import { firestore } from "../../firebase";
 
 export const AccessData = ({ next, currentStep }) => {
@@ -44,14 +47,16 @@ export const AccessData = ({ next, currentStep }) => {
   }, [currentStep]);
 
   const onSubmitRegister = async ({ cip, dni }) => {
-    const userWithCip = await userByCip(cip)
-    const userWithDni = await userByDni(dni)
+    const userWithCip = await userByCip(cip);
+    const userWithDni = await userByDni(dni);
 
     if (userWithCip || userWithDni)
-    return notification({
-      type: "warning",
-      title: `El ${userWithCip ? "código CIP" : userWithDni ? "DNI" : ""}, ya se encuentra registrado!`,
-    });
+      return notification({
+        type: "warning",
+        title: `El ${
+          userWithCip ? "código CIP" : userWithDni ? "DNI" : ""
+        }, ya se encuentra registrado!`,
+      });
 
     setLocalStorage("register", { cip, dni });
 
@@ -60,9 +65,7 @@ export const AccessData = ({ next, currentStep }) => {
 
   const userByCip = async (cip) => {
     const response = await fetchCollectionOnce(
-      firestore.collection("users")
-      .where("cip", "==", cip)
-      .limit(1)
+      firestore.collection("users").where("cip", "==", cip).limit(1)
     );
 
     return response[0];
@@ -70,14 +73,11 @@ export const AccessData = ({ next, currentStep }) => {
 
   const userByDni = async (dni) => {
     const response = await fetchCollectionOnce(
-      firestore.collection("users")
-      .where("dni", "==", dni)
-      .limit(1)
+      firestore.collection("users").where("dni", "==", dni).limit(1)
     );
 
     return response[0];
   };
-  
 
   return (
     <Container>

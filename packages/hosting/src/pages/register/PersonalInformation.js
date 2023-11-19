@@ -100,7 +100,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   };
 
   const userByPhoneNumber = async (phoneNumber) => {
-    console.log(phoneNumber)
+    console.log(phoneNumber);
     const response = await fetchCollectionOnce(
       firestore
         .collection("users")
