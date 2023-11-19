@@ -41,7 +41,7 @@
     "buckets": {
       "photos": "-"
     },
-    "apiUrl": "-"
+    "apiUrl": "https://korekenke-prod.web.app/api"
   },
   "production": {
     "version": "0.0.1",
@@ -59,6 +59,6 @@
     "buckets": {
       "photos": "-"
     },
-    "apiUrl": "-"
+    "apiUrl": "https://korekenke-prod.web.app/api"
   }
 }
