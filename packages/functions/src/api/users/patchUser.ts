@@ -44,11 +44,10 @@ const deleteUserFirestore = async (
   userId: string,
   user: Partial<User>
 ): Promise<void> => {
-
   await firestore
     .collection("users")
     .doc(userId)
-    .set({...user}, { merge: true });
+    .set({ ...user }, { merge: true });
 };
 
 const deleteUserAuth = async (userId: string): Promise<void> =>
