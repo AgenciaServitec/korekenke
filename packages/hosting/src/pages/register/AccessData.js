@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Title from "antd/es/typography/Title";
-import { Button, Form, InputNumber } from "../../components";
+import { Button, Form, InputNumber, notification } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,12 +8,19 @@ import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getLocalStorage, setLocalStorage } from "../../utils";
+import { fetchCollectionOnce, querySnapshotToArray } from "../../firebase/utils";
+import { firestore } from "../../firebase";
 
 export const AccessData = ({ next, currentStep }) => {
   const schema = yup.object({
     cip: yup
       .string()
       .min(9)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
+    dni: yup
+      .string()
+      .min(8)
       .required()
       .transform((value) => (value === null ? "" : value)),
   });
@@ -32,14 +39,45 @@ export const AccessData = ({ next, currentStep }) => {
   useEffect(() => {
     reset({
       cip: step1Data?.cip || null,
+      dni: step1Data?.dni || null,
     });
   }, [currentStep]);
 
-  const onSubmitRegister = ({ cip }) => {
-    setLocalStorage("register", { cip });
+  const onSubmitRegister = async ({ cip, dni }) => {
+    const userWithCip = await userByCip(cip)
+    const userWithDni = await userByDni(dni)
+
+    if (userWithCip || userWithDni)
+    return notification({
+      type: "warning",
+      title: `El ${userWithCip ? "código CIP" : userWithDni ? "DNI" : ""}, ya se encuentra registrado!`,
+    });
+
+    setLocalStorage("register", { cip, dni });
 
     next();
   };
+
+  const userByCip = async (cip) => {
+    const response = await fetchCollectionOnce(
+      firestore.collection("users")
+      .where("cip", "==", cip)
+      .limit(1)
+    );
+
+    return response[0];
+  };
+
+  const userByDni = async (dni) => {
+    const response = await fetchCollectionOnce(
+      firestore.collection("users")
+      .where("dni", "==", dni)
+      .limit(1)
+    );
+
+    return response[0];
+  };
+  
 
   return (
     <Container>
@@ -53,6 +91,21 @@ export const AccessData = ({ next, currentStep }) => {
           render={({ field: { onChange, value, name } }) => (
             <InputNumber
               label="Ingrese CIP"
+              onChange={onChange}
+              value={value}
+              name={name}
+              error={error(name)}
+              helperText={errorMessage(name)}
+              required={required(name)}
+            />
+          )}
+        />
+        <Controller
+          name="dni"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <InputNumber
+              label="Ingrese DNI"
               onChange={onChange}
               value={value}
               name={name}
