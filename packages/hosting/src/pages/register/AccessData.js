@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Title from "antd/es/typography/Title";
 import { Button, Form, InputNumber } from "../../components";
 import { Controller, useForm } from "react-hook-form";
@@ -7,26 +7,36 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { getLocalStorage, setLocalStorage } from "../../utils";
 
-export const AccessData = ({ next }) => {
+export const AccessData = ({ next, currentStep }) => {
   const schema = yup.object({
     cip: yup
       .string()
-      .matches(/^\d+$/, { message: "Debe ingresar solo números" })
-      .min(8)
-      .required(),
+      .min(9)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
   });
 
   const {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
+  const step1Data = getLocalStorage("register");
+
+  useEffect(() => {
+    reset({
+      cip: step1Data?.cip || null,
+    });
+  }, [currentStep]);
+
   const onSubmitRegister = ({ cip }) => {
-    localStorage.setItem("register", JSON.stringify({ cip }));
+    setLocalStorage("register", { cip });
 
     next();
   };

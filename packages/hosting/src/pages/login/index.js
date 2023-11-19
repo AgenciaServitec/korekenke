@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { SendCodeSmsAndSignInWithCode } from "./SendCodeSmsAndSignInWithCode";
 import { AccessDataLogin } from "./AccessDataLogin";
+import { useAuthentication } from "../../providers";
+import { useNavigate } from "react-router";
 
 export const LoginIntegration = () => {
+  const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+
   const [currentStep, setCurrentStep] = useState(0);
+
+  const onNavigateTo = (url) => navigate(url);
+
+  useEffect(() => {
+    authUser && onNavigateTo("/home");
+  }, [authUser]);
 
   const next = () => {
     setCurrentStep(currentStep + 1);

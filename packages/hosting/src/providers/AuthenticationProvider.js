@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
-import { auth, firebase } from "../firebase";
+import { auth } from "../firebase";
 import { isError } from "lodash";
 import { notification, Spinner } from "../components";
 
 const AuthenticationContext = createContext({
   authUser: null,
-  login: () => Promise.reject("Unable to find AuthenticationProvider."),
   logout: () => Promise.reject("Unable to find AuthenticationProvider."),
   loginLoading: false,
 });
@@ -19,7 +18,7 @@ export const AuthenticationProvider = ({ children }) => {
 
   useMemo(() => {
     auth.onAuthStateChanged((currentUser) => {
-      console.log("currentUser->", currentUser);
+      console.log("currentUser: ", currentUser);
 
       return currentUser ? onLogin(currentUser) : onLogout();
     });
@@ -43,8 +42,6 @@ export const AuthenticationProvider = ({ children }) => {
 
       if (!user) throw new Error("User doesn't exists");
 
-      console.log("user->", user);
-
       setAuthUser(user);
       setLoginLoading(false);
       setAuthenticating(false);
@@ -62,32 +59,6 @@ export const AuthenticationProvider = ({ children }) => {
     }
   };
 
-  const login = async (phoneNumber, appVerifier) => {
-    try {
-      setLoginLoading(true);
-
-      await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-
-      const confirmationResult = await auth.signInWithPhoneNumber(
-        `+51${phoneNumber}`,
-        appVerifier
-      );
-
-      window.confirmationResult = confirmationResult;
-    } catch (e) {
-      const error = isError(e) ? e : undefined;
-
-      console.error("singInUser:", e);
-
-      notification({
-        type: "error",
-        title: error.message,
-      });
-
-      setLoginLoading(false);
-    }
-  };
-
   const logout = async () => {
     sessionStorage.clear();
     localStorage.clear();
@@ -101,7 +72,6 @@ export const AuthenticationProvider = ({ children }) => {
     <AuthenticationContext.Provider
       value={{
         authUser,
-        login,
         logout,
         loginLoading,
       }}

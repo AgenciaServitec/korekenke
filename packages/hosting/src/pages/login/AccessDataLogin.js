@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Title from "antd/es/typography/Title";
 import { Button, Form, InputNumber, notification } from "../../components";
 import { Controller, useForm } from "react-hook-form";
@@ -9,14 +9,19 @@ import styled from "styled-components";
 import { firestore } from "../../firebase";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { Link } from "react-router-dom";
+import { setLocalStorage } from "../../utils";
 
 export const AccessDataLogin = ({ next }) => {
+  const [loading, setLoading] = useState(false);
+
+  const onSetLoading = (loading) => setLoading(loading);
+
   const schema = yup.object({
     cip: yup
       .string()
-      .matches(/^\d+$/, { message: "Debe ingresar solo números" })
-      .min(8)
-      .required(),
+      .min(9)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
   });
 
   const {
@@ -28,20 +33,26 @@ export const AccessDataLogin = ({ next }) => {
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   const onSubmitLogin = async ({ cip }) => {
-    const user = await userByCip(cip);
+    try {
+      onSetLoading(true);
 
-    if (!user)
-      return notification({
-        type: "warning",
-        title: "El código CIP, no se encuentra registrado!",
-      });
+      const user = await userByCip(cip);
 
-    localStorage.setItem(
-      "login",
-      JSON.stringify({ cip, phoneNumber: user.phoneNumber })
-    );
+      if (!user)
+        return notification({
+          type: "warning",
+          title: "El código CIP, no se encuentra registrado!",
+        });
 
-    next();
+      setLocalStorage("login", { cip, phoneNumber: user.phoneNumber });
+
+      next();
+    } catch (e) {
+      console.error({ e });
+      notification({ type: "error" });
+    } finally {
+      onSetLoading(false);
+    }
   };
 
   const userByCip = async (cip) => {
@@ -73,7 +84,13 @@ export const AccessDataLogin = ({ next }) => {
             />
           )}
         />
-        <Button block size="large" type="primary" htmlType="submit">
+        <Button
+          block
+          size="large"
+          type="primary"
+          loading={loading}
+          htmlType="submit"
+        >
           Siguiente
         </Button>
         <span>

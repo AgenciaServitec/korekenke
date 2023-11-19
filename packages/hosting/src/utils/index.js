@@ -6,3 +6,4 @@ export * from "./getUrlPublic";
 export * from "./isType";
 export * from "./searchify";
 export * from "./getNameId";
+export * from "./localStorage";

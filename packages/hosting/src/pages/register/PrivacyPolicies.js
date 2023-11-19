@@ -4,14 +4,17 @@ import { Button, Checkbox, Form, notification } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../hooks";
+import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { firestore } from "../../firebase";
 import { useNavigate } from "react-router";
+import { clearLocalStorage, getLocalStorage } from "../../utils";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();
+  const { assignCreateProps } = useDefaultFirestoreProps();
+
   const [loading, setLoading] = useState(false);
 
   const onNavigateGoToLogin = () => navigate("/");
@@ -35,23 +38,25 @@ export const PrivacyPolicies = ({ prev }) => {
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  const onSubmitLogin = ({ iAcceptPrivacyPolicies }) => {
+  const onSubmitLogin = async ({ iAcceptPrivacyPolicies }) => {
     try {
       setLoading(true);
 
-      const prevData = JSON.parse(localStorage.getItem("register"));
-
-      console.log("registerData: ", { ...prevData, iAcceptPrivacyPolicies });
-
-      const userData = { ...prevData, iAcceptPrivacyPolicies };
-
       const usersRef = firestore.collection("users");
+
+      const prevData = getLocalStorage("register");
 
       const userId = usersRef.doc().id;
 
-      usersRef.doc(userId).set({ id: userId, ...userData });
+      await usersRef
+        .doc(userId)
+        .set(
+          assignCreateProps({ id: userId, ...prevData, iAcceptPrivacyPolicies })
+        );
 
       notification({ type: "success", title: "Registro exitoso" });
+
+      clearLocalStorage();
 
       onNavigateGoToLogin();
     } catch (e) {
@@ -86,13 +91,7 @@ export const PrivacyPolicies = ({ prev }) => {
           )}
         />
         <div className="btns-wrapper">
-          <Button
-            block
-            size="large"
-            type="primary"
-            disabled={loading}
-            onClick={() => prev()}
-          >
+          <Button block size="large" disabled={loading} onClick={() => prev()}>
             Atras
           </Button>
           <Button

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import Steps from "antd/lib/steps";
@@ -6,10 +6,19 @@ import { mediaQuery } from "../../styles";
 import { AccessData } from "./AccessData";
 import { PersonalInformation } from "./PersonalInformation";
 import { PrivacyPolicies } from "./PrivacyPolicies";
+import { useAuthentication } from "../../providers";
 
 export const RegisterIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+
   const [currentStep, setCurrentStep] = useState(0);
+
+  const onNavigateTo = (url) => navigate(url);
+
+  useEffect(() => {
+    authUser && onNavigateTo("/home");
+  }, [authUser]);
 
   const next = () => {
     setCurrentStep(currentStep + 1);
@@ -38,8 +47,6 @@ export const RegisterIntegration = () => {
     title: item.title,
   }));
 
-  const onNavigateTo = (url) => navigate(url);
-
   return (
     <Container>
       <div className="content-wrapper">
@@ -51,8 +58,16 @@ export const RegisterIntegration = () => {
           />
         </div>
         <div className="content-step-wrapper">
-          {currentStep === 0 && <AccessData next={next} />}
-          {currentStep === 1 && <PersonalInformation prev={prev} next={next} />}
+          {currentStep === 0 && (
+            <AccessData next={next} currentStep={currentStep} />
+          )}
+          {currentStep === 1 && (
+            <PersonalInformation
+              prev={prev}
+              next={next}
+              currentStep={currentStep}
+            />
+          )}
           {currentStep === 2 && <PrivacyPolicies prev={prev} />}
         </div>
       </div>
