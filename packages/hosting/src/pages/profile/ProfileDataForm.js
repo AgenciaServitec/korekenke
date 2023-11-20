@@ -21,7 +21,7 @@ export const ProfileDataForm = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+  const { error, errorMessage } = useFormUtils({ errors, schema });
 
   const onSubmit = (data) => {
     console.log(data);
