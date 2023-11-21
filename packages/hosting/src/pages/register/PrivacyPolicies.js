@@ -97,7 +97,7 @@ export const PrivacyPolicies = ({ prev }) => {
             block
             size="large"
             type="primary"
-            loading={loading || postUserLoading}
+            loading={loading}
             htmlType="submit"
           >
             Registrarme
