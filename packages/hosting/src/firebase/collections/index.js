@@ -1,6 +1,4 @@
 export * from "./_search";
 export * from "./settings";
-export * from "./products";
+export * from "./receptions";
 export * from "./users";
-export * from "./principalCategories";
-export * from "./categories";

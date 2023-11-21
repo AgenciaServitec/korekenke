@@ -19,7 +19,6 @@ import Image from "antd/lib/image";
 
 export * from "./component-container";
 export * from "./calendar";
-
 export * from "./Button";
 export * from "./CheckboxGroup";
 export * from "./DatePicker";
@@ -46,7 +45,10 @@ export * from "./CharacteristicsList";
 export * from "./FixedButtonsWrap";
 export * from "./FilterPanel";
 export * from "./list";
-// export { default as Upload } from "./Upload";
+export * from "./Icon";
+export * from "./AddButton";
+export * from "./AlignmentWrapper";
+export { default as Legend } from "./Legend";
 
 const { Link, Paragraph } = Typography;
 
