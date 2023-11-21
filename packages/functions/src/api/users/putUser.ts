@@ -50,10 +50,8 @@ export const putUser = async (
         res.status(412).send("phone_number_already_exists").end();
     }
 
-    const p1 = updateUserAuth(user, changeEmail, changePhoneNumber);
-    const p2 = updateUser(assignUpdateProps(user));
-
-    await Promise.all([p1, p2]);
+    await updateUserAuth(user, changeEmail, changePhoneNumber);
+    await updateUser(assignUpdateProps(user));
 
     res.sendStatus(200).end();
   } catch (error) {

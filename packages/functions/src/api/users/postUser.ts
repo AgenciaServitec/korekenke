@@ -31,10 +31,8 @@ export const postUser = async (
 
     const userId = firestore.collection("users").doc().id;
 
-    const p1 = addUserAuth({ ...user, id: userId });
-    const p2 = addUser({ ...user, id: userId });
-
-    await Promise.all([p1, p2]);
+    await addUserAuth({ ...user, id: userId });
+    await addUser({ ...user, id: userId });
 
     res.sendStatus(200).end();
   } catch (error) {
