@@ -8,13 +8,11 @@ import { useApi } from "./useApi";
 // }
 
 export const useApiUserPost = () => {
-  const { post, loading, response } = useApi("/users");
+  const { post, loading, response } = useApi("/user");
 
   const postUser = useCallback(
     async (user) => {
-      const url = `/${user.id}`;
-
-      return post(url, user);
+      return post("/", user);
     },
     [post]
   );

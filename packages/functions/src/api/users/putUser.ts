@@ -50,10 +50,10 @@ export const putUser = async (
         res.status(412).send("phone_number_already_exists").end();
     }
 
-    const p0 = updateUser(assignUpdateProps(user));
     const p1 = updateUserAuth(user, changeEmail, changePhoneNumber);
+    const p2 = updateUser(assignUpdateProps(user));
 
-    await Promise.all([p0, p1]);
+    await Promise.all([p1, p2]);
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -75,8 +75,10 @@ const updateUserAuth = async (
   changePhoneNumber: boolean
 ): Promise<void> => {
   await auth.updateUser(user.id, {
-    ...(changeEmail && { email: user.email || undefined }),
-    ...(changePhoneNumber && { phoneNumber: user.phoneNumber || undefined }),
+    ...(changeEmail && { email: user?.email || undefined }),
+    ...(changePhoneNumber && {
+      phoneNumber: `+51${user?.phoneNumber}` || undefined,
+    }),
     password: user?.password || undefined,
   });
 };

@@ -16,13 +16,13 @@ export const postUser = async (
   });
 
   try {
-    if (user.email) {
+    if (user?.email) {
       const _isEmailExists = await isEmailExists(user.email);
 
       if (_isEmailExists) res.status(412).send("email_already_exists").end();
     }
 
-    if (user.phoneNumber) {
+    if (user?.phoneNumber) {
       const _isPhoneNumberExists = await isPhoneNumberExists(user.phoneNumber);
 
       if (_isPhoneNumberExists)
@@ -31,10 +31,10 @@ export const postUser = async (
 
     const userId = firestore.collection("users").doc().id;
 
+    const p1 = addUserAuth({ ...user, id: userId });
     const p2 = addUser({ ...user, id: userId });
-    const p3 = addUserAuth({ ...user, id: userId });
 
-    await Promise.all([p2, p3]);
+    await Promise.all([p1, p2]);
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -52,9 +52,9 @@ const addUser = async (user: User): Promise<void> => {
 const addUserAuth = async (user: User): Promise<void> => {
   await auth.createUser({
     uid: user.id,
-    phoneNumber: user.phoneNumber || undefined,
-    email: user.email || undefined,
-    password: user.password || undefined,
+    phoneNumber: `+51${user?.phoneNumber}` || undefined,
+    email: user?.email || undefined,
+    password: user?.password || undefined,
   });
 };
 
