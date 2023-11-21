@@ -6,6 +6,7 @@ import { Tabs } from "../../components";
 import { ProfileDataForm } from "./ProfileDataForm";
 import { ProfileImagesForm } from "./ProfileImagesForm";
 import ProfileInformation from "./ProfileInformation";
+import { useAuthentication } from "../../providers";
 
 const items = [
   {
@@ -20,6 +21,10 @@ const items = [
   },
 ];
 export const Profile = () => {
+  const { authUser } = useAuthentication();
+
+  console.log({ authUser });
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -30,7 +35,7 @@ export const Profile = () => {
         <Row gutter={[16, 16]}>
           <Col span={24} md={12}>
             <Title level={4}>Datos del usuario</Title>
-            <ProfileInformation />
+            <ProfileInformation user={authUser} />
           </Col>
           <Col span={24} md={12}>
             <Title level={4}>Editar Datos</Title>

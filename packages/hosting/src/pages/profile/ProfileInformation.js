@@ -2,11 +2,11 @@ import React from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 
-const ProfileInformation = () => {
+const ProfileInformation = ({ user }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <DescriptionItem title="Nombres" content="Servitec" />
+        <DescriptionItem title="Nombres" content={user.firstName} />
       </Col>
       <Col span={24} md={12}>
         <DescriptionItem title="Apellido Paterno" content="Servitec" />
@@ -18,7 +18,7 @@ const ProfileInformation = () => {
         <DescriptionItem title="DNI" content="123456" />
       </Col>
       <Col span={24} md={12}>
-        <DescriptionItem title="CIP" content="654321" />
+        <DescriptionItem title="CIP" content={user.cip} />
       </Col>
       <Col span={24} md={12}>
         <DescriptionItem title="Email" content="Servitec@email.com" />
@@ -53,4 +53,5 @@ const DescriptionItem = ({ title, content }) => (
     {content}
   </span>
 );
+
 export default ProfileInformation;

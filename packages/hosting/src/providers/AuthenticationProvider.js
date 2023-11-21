@@ -1,7 +1,14 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
-import { auth } from "../firebase";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { auth, firestore } from "../firebase";
 import { isError } from "lodash";
 import { notification, Spinner } from "../components";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 const AuthenticationContext = createContext({
   authUser: null,
@@ -14,22 +21,28 @@ export const useAuthentication = () => useContext(AuthenticationContext);
 export const AuthenticationProvider = ({ children }) => {
   const [authenticating, setAuthenticating] = useState(true);
   const [authUser, setAuthUser] = useState(null);
+  const [firebaseUser, setFirebaseUser] = useState(null);
   const [loginLoading, setLoginLoading] = useState(false);
+
+  const [userSnapshot, loadingUser, errorUser] = useDocument(
+    firebaseUser ? firestore.collection("users").doc(firebaseUser.uid) : null
+  );
 
   useMemo(() => {
     auth.onAuthStateChanged((currentUser) =>
-      currentUser ? onLogin(currentUser) : onLogout()
+      currentUser ? setFirebaseUser(currentUser) : onLogout()
     );
   }, []);
 
-  // useEffect(() => {
-  //   !loadingUser && userSnapshot && !errorUser && onLogin(userSnapshot?.data());
-  // }, [loadingUser, userSnapshot]);
+  useEffect(() => {
+    !loadingUser && userSnapshot && !errorUser && onLogin(userSnapshot?.data());
+  }, [loadingUser, userSnapshot]);
 
   const onLogout = async () => {
     setAuthenticating(true);
 
     setAuthUser(null);
+    setFirebaseUser(null);
     setAuthenticating(false);
     setLoginLoading(false);
   };
