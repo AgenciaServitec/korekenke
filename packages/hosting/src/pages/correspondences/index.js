@@ -18,15 +18,15 @@ import Tag from "antd/lib/tag";
 
 const { Title } = Typography;
 
-export const ReceptionsIntegration = () => {
+export const CorrespondencesIntegration = () => {
   const { isMobile } = useDevice();
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const { receptions } = useGlobalData();
+  const { correspondences } = useGlobalData();
 
   const navigateTo = (receptionId) => {
-    const url = `/receptions/${receptionId}`;
+    const url = `/correspondences/${receptionId}`;
 
     navigate(url);
   };
@@ -37,21 +37,21 @@ export const ReceptionsIntegration = () => {
 
   const onRemoveReception = async (document) => {
     await firestore
-      .collection("receptions")
+      .collection("correspondences")
       .doc(document.id)
       .update(assignDeleteProps(document));
   };
 
   const onConfirmRemoveReception = (reception) =>
     modalConfirm({
-      content: "La recepcion se eliminara",
+      content: "La correspondencia se eliminara",
       onOk: () => onRemoveReception(reception),
     });
 
   return (
-    <Receptions
+    <Correspondences
       isMobile={isMobile}
-      receptions={receptions}
+      receptions={correspondences}
       onAddReception={onAddReception}
       onEditReception={onEditReception}
       onConfirmRemoveReception={onConfirmRemoveReception}
@@ -59,7 +59,7 @@ export const ReceptionsIntegration = () => {
   );
 };
 
-const Receptions = ({
+const Correspondences = ({
   isMobile,
   receptions,
   onAddReception,
@@ -70,12 +70,12 @@ const Receptions = ({
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Button type="primary" onClick={() => onAddReception()}>
-          Agregar recepcion
+          Agregar correspondencia
         </Button>
       </Col>
       <Divider />
       <Col span={24}>
-        <Title level={3}>Recepciones</Title>
+        <Title level={3}>Correspondencias</Title>
       </Col>
       <Col span={24}>
         <List
@@ -116,7 +116,7 @@ const Receptions = ({
                 }
                 title={
                   <div>
-                    <Link to={`/receptions/${reception.id}`}>
+                    <Link to={`/correspondences/${reception.id}`}>
                       <h4 className="link-color">
                         {capitalize(reception.name)}
                       </h4>

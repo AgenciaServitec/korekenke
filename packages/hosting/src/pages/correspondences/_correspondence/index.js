@@ -12,14 +12,13 @@ import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import { Switch } from "antd";
-import { getNameId } from "../../../utils";
 
-export const ReceptionIntegration = () => {
+export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
-  const { receptionId } = useParams();
+  const { correspondenceId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
-  const { receptions } = useGlobalData();
+  const { correspondences } = useGlobalData();
 
   const [reception, setReception] = useState({});
   const [savingReception, setSavingReception] = useState(false);
@@ -28,9 +27,11 @@ export const ReceptionIntegration = () => {
 
   useEffect(() => {
     const reception_ =
-      receptionId === "new"
-        ? { id: firestore.collection("receptions").doc().id }
-        : receptions.find((reception) => reception.id === receptionId);
+      correspondenceId === "new"
+        ? { id: firestore.collection("correspondences").doc().id }
+        : correspondences.find(
+            (reception) => reception.id === correspondenceId
+          );
 
     if (!reception_) return onGoBack();
 
@@ -42,10 +43,10 @@ export const ReceptionIntegration = () => {
       setSavingReception(true);
 
       await firestore
-        .collection("receptions")
+        .collection("correspondences")
         .doc(reception.id)
         .set(
-          receptionId === "new"
+          correspondenceId === "new"
             ? assignCreateProps(mapReception(reception, formData))
             : assignUpdateProps(mapReception(reception, formData)),
           { merge: true }
@@ -67,7 +68,6 @@ export const ReceptionIntegration = () => {
       {},
       {
         id: reception.id,
-        nameId: getNameId(formData.name),
         name: formData.name,
         documento1Photo: formData.documento1Photo,
         active: !!formData?.active,
@@ -75,7 +75,7 @@ export const ReceptionIntegration = () => {
     );
 
   return (
-    <Reception
+    <Correspondence
       reception={reception}
       onSaveReception={onSaveReception}
       onGoBack={onGoBack}
@@ -84,7 +84,7 @@ export const ReceptionIntegration = () => {
   );
 };
 
-const Reception = ({
+const Correspondence = ({
   reception,
   onSaveReception,
   savingReception,
@@ -131,7 +131,7 @@ const Reception = ({
   return (
     <Row>
       <Col span={24}>
-        <Title level={3}>Recepción</Title>
+        <Title level={3}>Correspondencia</Title>
       </Col>
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmitSaveReception)}>
@@ -164,7 +164,7 @@ const Reception = ({
                     accept="image/*"
                     name={name}
                     value={value}
-                    filePath={`receptions/${reception.id}`}
+                    filePath={`correspondences/${reception.id}`}
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
@@ -211,7 +211,7 @@ const Reception = ({
                 disabled={uploadingImage | savingReception}
                 loading={savingReception}
               >
-                Guardar
+                Enviar
               </Button>
             </Col>
           </Row>

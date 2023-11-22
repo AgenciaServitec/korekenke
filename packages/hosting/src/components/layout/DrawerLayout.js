@@ -53,12 +53,12 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Recepciones",
-      key: "receptions",
+      label: "Correspondencias",
+      key: "correspondences",
       icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
       isVisible: true,
       onClick: () => {
-        onNavigateTo("/receptions");
+        onNavigateTo("/correspondences");
         setIsVisibleDrawer(false);
       },
     },

@@ -34,25 +34,25 @@ export const Router = () => {
           path="home"
           element={
             <AdminLayout>
-              <A.ReceptionsIntegration />
+              <A.CorrespondencesIntegration />
             </AdminLayout>
           }
         />
         <Route
           exact
-          path="receptions"
+          path="correspondences"
           element={
             <AdminLayout>
-              <A.ReceptionsIntegration />
+              <A.CorrespondencesIntegration />
             </AdminLayout>
           }
         />
         <Route
           exact
-          path="receptions/:receptionId"
+          path="correspondences/:correspondenceId"
           element={
             <AdminLayout>
-              <A.ReceptionIntegration />
+              <A.CorrespondenceIntegration />
             </AdminLayout>
           }
         />
