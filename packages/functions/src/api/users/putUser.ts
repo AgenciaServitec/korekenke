@@ -36,16 +36,12 @@ export const putUser = async (
     const changePhoneNumber = userFirestore.phoneNumber !== user.phoneNumber;
 
     if (changeEmail) {
-      assert(user.email, "missing user.email!");
       const emailExists = await isEmailExists(user.email);
-
       if (emailExists) res.status(412).send("email_already_exists").end();
     }
 
     if (changePhoneNumber) {
-      assert(user.phoneNumber, "missing user.phoneNumber!");
       const phoneNumberExists = await isPhoneNumberExists(user.phoneNumber);
-
       if (phoneNumberExists)
         res.status(412).send("phone_number_already_exists").end();
     }
@@ -64,7 +60,7 @@ const updateUser = async (user: User): Promise<void> => {
   await firestore
     .collection("users")
     .doc(user.id)
-    .set({ ...user }, { merge: true });
+    .update({ ...user });
 };
 
 const updateUserAuth = async (
@@ -81,7 +77,7 @@ const updateUserAuth = async (
   });
 };
 
-const isEmailExists = async (email: string): Promise<boolean> => {
+const isEmailExists = async (email: string | null): Promise<boolean> => {
   const users = await fetchCollection<User>(
     firestore
       .collection("users")
@@ -92,7 +88,9 @@ const isEmailExists = async (email: string): Promise<boolean> => {
   return !isEmpty(users);
 };
 
-const isPhoneNumberExists = async (phoneNumber: string): Promise<boolean> => {
+const isPhoneNumberExists = async (
+  phoneNumber: string | null
+): Promise<boolean> => {
   const users = await fetchCollection<User>(
     firestore
       .collection("users")
