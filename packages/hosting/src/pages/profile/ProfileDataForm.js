@@ -56,11 +56,11 @@ export const ProfileDataForm = () => {
     try {
       await putUser({ ...authUser, ...formData });
 
-      if (!putUserResponse.ok) throw new Error("error in updateProfile");
+      if (!putUserResponse.ok) throw new Error("Error in updateProfile");
 
       notification({ type: "success" });
     } catch (e) {
-      console.log(e);
+      console.error(e);
       notification({ type: "error" });
     }
   };
