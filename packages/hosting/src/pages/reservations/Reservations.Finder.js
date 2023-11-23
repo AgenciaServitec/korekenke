@@ -1,35 +1,17 @@
 import React, { memo } from "react";
 import moment from "moment";
 import styled from "styled-components";
-import {
-  DatePicker,
-  DatePickerProps,
-  Input,
-  InputProps,
-} from "../../components/ui";
+import { DatePicker, Input } from "../../components";
 import { mediaQuery } from "../../styles";
 
-export interface ReservationsFinderProps {
-  searchFields: SearchFields;
-  onSearch: (searchFields: SearchFields) => void;
-}
-
-export interface SearchFields {
-  createAt?: string;
-  searchTerm?: string;
-}
-
-const ReservationsFinder = ({
-  searchFields,
-  onSearch,
-}: ReservationsFinderProps): JSX.Element => {
-  const onChangeTourDate: DatePickerProps["onChange"] = (value) =>
+const ReservationsFinder = ({ searchFields, onSearch }) => {
+  const onChangeTourDate = (value) =>
     onSearch({
       ...searchFields,
       createAt: momentToDateString(value),
     });
 
-  const onChangeSearchTerm: InputProps["onChange"] = (event) =>
+  const onChangeSearchTerm = (event) =>
     onSearch({
       ...searchFields,
       searchTerm: event.target.value,
@@ -57,15 +39,12 @@ const ReservationsFinder = ({
 
 export default memo(ReservationsFinder);
 
-const dateStringToMoment = (
-  dateString: string | undefined
-): moment.Moment | undefined =>
+const dateStringToMoment = (dateString) =>
   moment(dateString, "YYYY-MM-DD", true).isValid()
     ? moment(dateString, "YYYY-MM-DD")
     : undefined;
 
-const momentToDateString = (date: moment.Moment | null): string | undefined =>
-  date?.format("YYYY-MM-DD") || undefined;
+const momentToDateString = (date) => date?.format("YYYY-MM-DD") || undefined;
 
 const Container = styled.section``;
 

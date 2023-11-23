@@ -12,10 +12,7 @@ import {
 } from "../../components/ui";
 import { useGlobalData } from "../../providers";
 import ReservationsTable from "./Reservations.Table";
-import {
-  ReservationModalProvider,
-  useReservationModal,
-} from "./Reservation.ModalProvider";
+import { ReservationModalProvider } from "./Reservation.ModalProvider";
 import ReservationsFinder from "./Reservations.Finder";
 import ReservationsFilters from "./Reservations.Filters";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -23,21 +20,16 @@ import { receptionsRef } from "../../firebase/collections";
 import { firestoreTimestamp } from "../../firebase/firestore";
 import { searchify } from "../../utils";
 import styled from "styled-components";
-import ReservationDriversQueue from "./Reservation.DriversQueue";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
 import { useDebounce, useQueriesState } from "../../hooks";
 import moment from "moment";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 export const ReservationsIntegration = () => {
   const navigate = useNavigate();
 
   const { users } = useGlobalData();
-
-  const { run: deleteReservation, error: deleteReservationError } = useOpenApi(
-    ReservationsApi,
-    "deleteReservation"
-  );
 
   const [searchFields, setSearchFields] = useQueriesState({
     createAt: moment().format("YYYY-MM-DD"),
@@ -50,7 +42,7 @@ export const ReservationsIntegration = () => {
     useCollectionData(reservationsQuery(debouncedSearchFields));
 
   const onDeleteReservation = async (receptionId) => {
-    await deleteReservation({ receptionId });
+    console.log("delete", receptionId);
 
     notification({ type: "success" });
   };
@@ -58,7 +50,7 @@ export const ReservationsIntegration = () => {
   const onNavigateTo = (pathname) => navigate(pathname);
 
   return (
-    <ReservationModalProvider users={users}>
+    <ReservationModalProvider users={users} drivers={users}>
       <Spin size="large" spinning={receptionsLoading}>
         <Reservation
           onNavigateTo={onNavigateTo}
@@ -79,8 +71,6 @@ const Reservation = ({
   onNavigateTo,
   onDeleteReservation,
 }) => {
-  const { onShowReservationModal } = useReservationModal();
-
   const [reservationsFilter, setReservationsFilter] = useQueriesState({
     status: "all",
     districtId: "all",
@@ -107,33 +97,7 @@ const Reservation = ({
     onNavigateTo(url);
   };
 
-  const onClickShowDriversQueue = () => {
-    const onDisconnectDriver = async (reception) => {
-      console.log("reception", { reception });
-    };
-
-    onShowReservationModal({
-      title: "Recepciones disponibles",
-      onRenderBody: (drivers) => {
-        const driversView = drivers.map((driver) => ({
-          ...driver,
-        }));
-
-        return (
-          <ReservationDriversQueue
-            drivers={driversView}
-            onDisconnectDriver={onDisconnectDriver}
-          />
-        );
-      },
-    });
-  };
-
-  const filteredReservationsView = receptions.filter((reception) =>
-    receptionsFilter.status === "all"
-      ? true
-      : receptionsFilter.status === reception.status
-  );
+  const filteredReservationsView = receptions.filter((reception) => reception);
 
   return (
     <Container>
@@ -157,24 +121,19 @@ const Reservation = ({
         <Row justify="space-between" align="middle" gutter={[16, 16]}>
           <Col sm={24} md={12}>
             <AlignmentWrapper align="start">
-              <Acl name="/reservations/new">
-                <AddButton
-                  onClick={onClickReservationAdd}
-                  title="RESERVA"
-                  margin="0"
-                />
-              </Acl>
+              <AddButton
+                onClick={onClickReservationAdd}
+                title="RESERVA"
+                margin="0"
+              />
             </AlignmentWrapper>
           </Col>
           <Col sm={24} md={12}>
-            <Acl name="/reservations/drivers-queue">
-              <AlignmentWrapper align="end">
-                <Button type="primary" onClick={onClickShowDriversQueue}>
-                  <FontAwesomeIcon icon={faEye} /> &nbsp; CONDUCTORES
-                  DISPONIBLES
-                </Button>
-              </AlignmentWrapper>
-            </Acl>
+            <AlignmentWrapper align="end">
+              <Button type="primary">
+                <FontAwesomeIcon icon={faEye} /> &nbsp; CONDUCTORES DISPONIBLES
+              </Button>
+            </AlignmentWrapper>
           </Col>
         </Row>
       </div>

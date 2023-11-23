@@ -1,39 +1,26 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import { Select, SelectOption } from "../../components/ui";
-
-export interface ReservationsFiltersProps {
-  companies: Company[];
-  districts: District[];
-  filter: Filter;
-  onFilter: (filter: Filter) => void;
-}
-
-export interface Filter {
-  status: "all" | ReservationStatus;
-  districtId: "all" | string;
-  companyId: "all" | string;
-}
+import { Select, SelectOption } from "../../components";
 
 const ReservationsFilters = ({
-  companies,
-  districts,
+  companies = [],
+  districts = [],
   filter,
   onFilter,
-}: ReservationsFiltersProps): JSX.Element => {
-  const onChangeStatus = (status: Filter["status"]) =>
+}) => {
+  const onChangeStatus = (status) =>
     onFilter({
       ...filter,
       status: !status ? "all" : status,
     });
 
-  const onChangeDistrict = (districtId: Filter["districtId"]) =>
+  const onChangeDistrict = (districtId) =>
     onFilter({
       ...filter,
       districtId: !districtId ? "all" : districtId,
     });
 
-  const onChangeCompany = (companyId: Filter["companyId"]) =>
+  const onChangeCompany = (companyId) =>
     onFilter({
       ...filter,
       companyId: !companyId ? "all" : companyId,
@@ -45,7 +32,7 @@ const ReservationsFilters = ({
         <Select
           label="Estado"
           value={filter.status}
-          onChange={(value) => onChangeStatus(value as Filter["status"])}
+          onChange={(value) => onChangeStatus(value)}
         >
           <SelectOption value="all">Todos</SelectOption>
           <SelectOption value="accepted">Aceptado</SelectOption>
@@ -54,7 +41,7 @@ const ReservationsFilters = ({
         <Select
           label="Distrito"
           value={filter.districtId}
-          onChange={(value) => onChangeDistrict(value as Filter["districtId"])}
+          onChange={(value) => onChangeDistrict(value)}
         >
           <SelectOption value="all">Todos</SelectOption>
           {districts.map((district) => (
@@ -66,7 +53,7 @@ const ReservationsFilters = ({
         <Select
           label="Compañia"
           value={filter.companyId}
-          onChange={(value) => onChangeCompany(value as Filter["companyId"])}
+          onChange={(value) => onChangeCompany(value)}
         >
           <SelectOption value="all">Todos</SelectOption>
           {companies.map((company) => (

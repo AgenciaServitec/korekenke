@@ -48,6 +48,8 @@ export * from "./list";
 export * from "./Icon";
 export * from "./AddButton";
 export * from "./AlignmentWrapper";
+export * from "./table";
+
 export { default as Legend } from "./Legend";
 
 const { Link, Paragraph } = Typography;
