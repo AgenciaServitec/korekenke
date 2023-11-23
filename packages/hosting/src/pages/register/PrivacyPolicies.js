@@ -4,16 +4,16 @@ import { Button, Checkbox, Form, notification } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
+import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { firestore } from "../../firebase";
 import { useNavigate } from "react-router";
 import { clearLocalStorage, getLocalStorage } from "../../utils";
+import { useApiUserPost } from "../../api";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();
-  const { assignCreateProps } = useDefaultFirestoreProps();
+  const { postUser, postUserLoading, postUserResponse } = useApiUserPost();
 
   const [loading, setLoading] = useState(false);
 
@@ -42,17 +42,11 @@ export const PrivacyPolicies = ({ prev }) => {
     try {
       setLoading(true);
 
-      const usersRef = firestore.collection("users");
-
       const prevData = getLocalStorage("register");
 
-      const userId = usersRef.doc().id;
+      await postUser({ ...prevData, iAcceptPrivacyPolicies });
 
-      await usersRef
-        .doc(userId)
-        .set(
-          assignCreateProps({ id: userId, ...prevData, iAcceptPrivacyPolicies })
-        );
+      if (!postUserResponse.ok) throw new Error("Register error");
 
       notification({ type: "success", title: "Registro exitoso" });
 
@@ -91,7 +85,12 @@ export const PrivacyPolicies = ({ prev }) => {
           )}
         />
         <div className="btns-wrapper">
-          <Button block size="large" disabled={loading} onClick={() => prev()}>
+          <Button
+            block
+            size="large"
+            disabled={loading || postUserLoading}
+            onClick={() => prev()}
+          >
             Atras
           </Button>
           <Button

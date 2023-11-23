@@ -8,7 +8,7 @@ const global = css`
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
 
   html {
@@ -20,20 +20,20 @@ const global = css`
     font-size: 15px;
     overflow-x: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    color: ${({theme}) => theme.colors.font2};
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: ${({ theme }) => theme.colors.font2};
   }
 
   h1,
   h2,
   h3 {
-    color: ${({theme}) => theme.colors.font1};
+    color: ${({ theme }) => theme.colors.font1};
   }
 
   h4,
   h5,
   h6 {
-    color: ${({theme}) => theme.colors.font2};
+    color: ${({ theme }) => theme.colors.font2};
     //font-family: "DINPro-Bold", serif;
   }
 

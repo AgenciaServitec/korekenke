@@ -16,25 +16,19 @@ export const postUser = async (
   });
 
   try {
-    if (user.email) {
-      const _isEmailExists = await isEmailExists(user.email);
+    const _isEmailExists = await isEmailExists(user?.email);
 
-      if (_isEmailExists) res.status(412).send("email_already_exists").end();
-    }
+    if (_isEmailExists) res.status(412).send("email_already_exists").end();
 
-    if (user.phoneNumber) {
-      const _isPhoneNumberExists = await isPhoneNumberExists(user.phoneNumber);
+    const _isPhoneNumberExists = await isPhoneNumberExists(user?.phoneNumber);
 
-      if (_isPhoneNumberExists)
-        res.status(412).send("phone_number_already_exists").end();
-    }
+    if (_isPhoneNumberExists)
+      res.status(412).send("phone_number_already_exists").end();
 
     const userId = firestore.collection("users").doc().id;
 
-    const p2 = addUser({ ...user, id: userId });
-    const p3 = addUserAuth({ ...user, id: userId });
-
-    await Promise.all([p2, p3]);
+    await addUserAuth({ ...user, id: userId });
+    await addUser({ ...user, id: userId });
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -52,13 +46,13 @@ const addUser = async (user: User): Promise<void> => {
 const addUserAuth = async (user: User): Promise<void> => {
   await auth.createUser({
     uid: user.id,
-    phoneNumber: user.phoneNumber || undefined,
-    email: user.email || undefined,
-    password: user.password || undefined,
+    phoneNumber: `+51${user?.phoneNumber}` || undefined,
+    email: user?.email || undefined,
+    password: user?.password || undefined,
   });
 };
 
-const isEmailExists = async (email: string): Promise<boolean> => {
+const isEmailExists = async (email: string | null): Promise<boolean> => {
   const users = await fetchCollection<User>(
     firestore
       .collection("users")
@@ -69,7 +63,9 @@ const isEmailExists = async (email: string): Promise<boolean> => {
   return !isEmpty(users);
 };
 
-const isPhoneNumberExists = async (phoneNumber: string): Promise<boolean> => {
+const isPhoneNumberExists = async (
+  phoneNumber: string | null
+): Promise<boolean> => {
   const users = await fetchCollection<User>(
     firestore
       .collection("users")
