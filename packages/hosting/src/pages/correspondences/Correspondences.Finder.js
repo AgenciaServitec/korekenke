@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { DatePicker, Input } from "../../components";
 import { mediaQuery } from "../../styles";
 
-const ReservationsFinder = ({ searchFields, onSearch }) => {
+const CorrespondencesFinder = ({ searchFields, onSearch }) => {
   const onChangeTourDate = (value) =>
     onSearch({
       ...searchFields,
@@ -21,7 +21,7 @@ const ReservationsFinder = ({ searchFields, onSearch }) => {
     <Container>
       <FormContent>
         <DatePicker
-          label="Fecha de reserva"
+          label="Fecha de correspondencia"
           value={dateStringToMoment(searchFields.createAt)}
           onChange={onChangeTourDate}
           allowClear
@@ -37,7 +37,7 @@ const ReservationsFinder = ({ searchFields, onSearch }) => {
   );
 };
 
-export default memo(ReservationsFinder);
+export default memo(CorrespondencesFinder);
 
 const dateStringToMoment = (dateString) =>
   moment(dateString, "YYYY-MM-DD", true).isValid()

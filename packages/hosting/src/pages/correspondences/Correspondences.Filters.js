@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import styled from "styled-components";
 import { Select, SelectOption } from "../../components";
 
-const ReservationsFilters = ({
+const CorrespondencesFilters = ({
   companies = [],
   districts = [],
   filter,
@@ -67,7 +67,7 @@ const ReservationsFilters = ({
   );
 };
 
-export default memo(ReservationsFilters);
+export default memo(CorrespondencesFilters);
 
 const Container = styled.section``;
 

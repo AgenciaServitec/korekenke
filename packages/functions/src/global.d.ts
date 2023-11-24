@@ -24,6 +24,13 @@ interface Image {
   url: string;
 }
 
+interface Archive {
+  name: string;
+  status?: string;
+  uid: string;
+  url: string;
+}
+
 interface Correspondence extends DefaultFirestoreProps {
   id: string;
   destination: string;
@@ -33,5 +40,6 @@ interface Correspondence extends DefaultFirestoreProps {
   classification: string;
   issue: string;
   dateCorrespondence: FirebaseFirestore.Timestamp;
-  photo: Image;
+  photos: Image[];
+  files: Archive[];
 }

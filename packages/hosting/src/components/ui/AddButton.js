@@ -31,7 +31,6 @@ const Container = styled(Button)`
     align-items: center;
     width: 100%;
     text-align: center;
-    color: ${({ theme }) => theme.colors.dark};
     .icon-item {
       margin-right: 0.8rem;
       display: flex;

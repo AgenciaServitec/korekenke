@@ -6,7 +6,7 @@ const ReservationModalContext = createContext({
   onCloseReservationModal: () => console.log(),
 });
 
-export const ReservationModalProvider = ({ children, drivers }) => {
+export const CorrespondenceModalProvider = ({ children, drivers }) => {
   const [visibleModal, setVisibleModal] = useState(false);
   const [modalProps, setModalProps] = useState();
 

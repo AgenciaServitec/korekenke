@@ -10,82 +10,89 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-const ReservationsTable = ({
-  reservations,
-  drivers,
-  companies,
-  onClickDeleteReservation,
+const CorrespondencesTable = ({
+  correspondences,
+  onClickDeleteCorrespondence,
   onClickPrintTicket,
 }) => {
   const columns = [
     {
-      title: "Reserva",
+      title: "Fecha creación",
       width: ["97px", "10%"],
-      render: (reservation) => (
-        <ReservationContainer>
+      render: (correspondence) => (
+        <CorrespondenceContainer>
           <span>
-            {moment(reservation.createAt.toDate()).format("DD/MM/YYYY")}
+            {moment(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
           </span>
-          <span>{moment(reservation.createAt.toDate()).format("h:mm a")}</span>
+          <span>
+            {moment(correspondence.createAt.toDate()).format("h:mm a")}
+          </span>
           <br />
-          <span>{reservationStatus(reservation)}</span>
-        </ReservationContainer>
+          <span>{correspondencesStatus(correspondence)}</span>
+        </CorrespondenceContainer>
       ),
     },
     {
-      title: "Vehículo",
+      title: "Destinatario",
       align: "center",
       width: ["130px", "15%"],
-      render: (reservation) => <div>TEST</div>,
+      render: (correspondence) => <div>{correspondence?.destination}</div>,
     },
     {
-      title: "Conductor",
+      title: "Recibido por",
       align: "center",
       width: ["130px", "15%"],
-      render: (reservation) => <div>TEST</div>,
+      render: (correspondence) => <div>{correspondence?.receivedBy}</div>,
     },
     {
-      title: "Distrito",
+      title: "Clase",
+      align: "center",
+      width: ["130px", "15%"],
+      render: (correspondence) => <div>{correspondence?.class}</div>,
+    },
+    {
+      title: "Indicativo",
       align: "center",
       width: ["130px", "10%"],
-      render: (reservation) => <div> TEST</div>,
+      render: (correspondence) => <div>{correspondence?.indicative}</div>,
     },
     {
-      title: "Cliente",
+      title: "Clasificación",
       align: "center",
       width: ["130px", "25%"],
-      render: (reservation) => (
+      render: (correspondence) => (
         <div>
-          <div>
-            <strong>
-              {reservation.firstName} {reservation.lastName}
-            </strong>
-          </div>
-          <div>{reservation.email}</div>
+          <div>{correspondence?.classification}</div>
         </div>
       ),
     },
     {
-      title: "Información de pago",
+      title: "Asunto",
       align: "center",
       width: ["130px", "15%"],
-      render: (reservation) => <div>TEST</div>,
+      render: (correspondence) => <div>{correspondence?.issue}</div>,
+    },
+    {
+      title: "Archivos",
+      align: "center",
+      width: ["130px", "15%"],
+      render: (correspondence) => <div>Files</div>,
     },
     {
       title: "⚙️",
       width: ["70px", "15%"],
-      render: (reservation) => (
+      render: (correspondence) => (
         <IconsActionWrapper>
           <IconAction
             className="pointer"
-            onClick={() => onClickDeleteReservation(reservation.id)}
+            onClick={() => onClickDeleteCorrespondence(correspondence.id)}
             styled={{ color: (theme) => theme.colors.error }}
             icon={faTrash}
           />
-          {reservation.status === "accepted" && (
+          {correspondence.status === "accepted" && (
             <IconAction
               className="pointer"
-              onClick={() => onClickPrintTicket(reservation.id)}
+              onClick={() => onClickPrintTicket(correspondence.id)}
               styled={{ color: (theme) => theme.colors.info }}
               icon={faPrint}
             />
@@ -97,7 +104,7 @@ const ReservationsTable = ({
 
   return (
     <TableVirtualized
-      dataSource={reservations}
+      dataSource={correspondences}
       columns={columns}
       rowHeaderHeight={50}
       rowBodyHeight={150}
@@ -105,10 +112,10 @@ const ReservationsTable = ({
   );
 };
 
-export default memo(ReservationsTable);
+export default memo(CorrespondencesTable);
 
-const reservationStatus = (reservation) => {
-  switch (reservation.status) {
+const correspondencesStatus = (correspondence) => {
+  switch (correspondence.status) {
     case "pending":
       return (
         <Tag color="processing" style={{ margin: 0 }}>
@@ -124,7 +131,7 @@ const reservationStatus = (reservation) => {
   }
 };
 
-const ReservationContainer = styled.div`
+const CorrespondenceContainer = styled.div`
   ${({ theme }) => css`
     width: 100%;
     display: flex;

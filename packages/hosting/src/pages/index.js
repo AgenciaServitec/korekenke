@@ -6,4 +6,3 @@ export * from "./home";
 export * from "./correspondences";
 export * from "./correspondences/_correspondence";
 export * from "./profile";
-export * from "./reservations";

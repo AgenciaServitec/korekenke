@@ -3,7 +3,13 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
-import { Button, Form, Input, notification, Upload } from "../../../components";
+import {
+  Button,
+  Form,
+  Input,
+  notification,
+  UploadMultiple,
+} from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -11,7 +17,6 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
-import { Switch } from "antd";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
@@ -20,35 +25,35 @@ export const CorrespondenceIntegration = () => {
 
   const { correspondences } = useGlobalData();
 
-  const [reception, setReception] = useState({});
-  const [savingReception, setSavingReception] = useState(false);
+  const [correspondence, setCorrespondence] = useState({});
+  const [savingCorrespondence, setSavingCorrespondence] = useState(false);
 
   const onGoBack = () => navigate(-1);
 
   useEffect(() => {
-    const reception_ =
+    const correspondence_ =
       correspondenceId === "new"
         ? { id: firestore.collection("correspondences").doc().id }
         : correspondences.find(
             (reception) => reception.id === correspondenceId
           );
 
-    if (!reception_) return onGoBack();
+    if (!correspondence_) return onGoBack();
 
-    setReception(reception_);
+    setCorrespondence(correspondence_);
   }, []);
 
-  const onSaveReception = async (formData) => {
+  const onSaveCorrespondence = async (formData) => {
     try {
-      setSavingReception(true);
+      setSavingCorrespondence(true);
 
       await firestore
         .collection("correspondences")
-        .doc(reception.id)
+        .doc(correspondence.id)
         .set(
           correspondenceId === "new"
-            ? assignCreateProps(mapReception(reception, formData))
-            : assignUpdateProps(mapReception(reception, formData)),
+            ? assignCreateProps(mapCorrespondence(correspondence, formData))
+            : assignUpdateProps(mapCorrespondence(correspondence, formData)),
           { merge: true }
         );
 
@@ -59,43 +64,41 @@ export const CorrespondenceIntegration = () => {
       console.log("ErrorSaveReception: ", e);
       notification({ type: "error" });
     } finally {
-      setSavingReception(false);
+      setSavingCorrespondence(false);
     }
   };
 
-  const mapReception = (reception, formData) =>
+  const mapCorrespondence = (correspondence, formData) =>
     assign(
       {},
       {
-        id: reception.id,
-        name: formData.name,
-        documento1Photo: formData.documento1Photo,
-        active: !!formData?.active,
+        id: correspondence.id,
+        destination: formData.destination,
+        photos: formData.photos,
       }
     );
 
   return (
     <Correspondence
-      reception={reception}
-      onSaveReception={onSaveReception}
+      correspondence={correspondence}
+      onSaveCorrespondence={onSaveCorrespondence}
       onGoBack={onGoBack}
-      savingReception={savingReception}
+      savingCorrespondence={savingCorrespondence}
     />
   );
 };
 
 const Correspondence = ({
-  reception,
-  onSaveReception,
-  savingReception,
+  correspondence,
+  onSaveCorrespondence,
+  savingCorrespondence,
   onGoBack,
 }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const schema = yup.object({
-    name: yup.string().required(),
-    documento1Photo: yup.mixed().notRequired(),
-    active: yup.boolean().notRequired(),
+    destination: yup.string().required(),
+    photos: yup.mixed().required(),
   });
 
   const {
@@ -116,17 +119,17 @@ const Correspondence = ({
 
   useEffect(() => {
     resetForm();
-  }, [reception]);
+  }, [correspondence]);
 
   const resetForm = () => {
     reset({
-      name: reception?.name || "",
-      documento1Photo: reception?.documento1Photo || null,
-      active: reception?.active || false,
+      destination: correspondence?.destination || "",
+      photos: correspondence?.photos || [],
     });
   };
 
-  const onSubmitSaveReception = (formData) => onSaveReception(formData);
+  const onSubmitSaveCorrespondence = (formData) =>
+    onSaveCorrespondence(formData);
 
   return (
     <Row>
@@ -134,16 +137,16 @@ const Correspondence = ({
         <Title level={3}>Correspondencia</Title>
       </Col>
       <Col span={24}>
-        <Form onSubmit={handleSubmit(onSubmitSaveReception)}>
+        <Form onSubmit={handleSubmit(onSubmitSaveCorrespondence)}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Controller
-                name="name"
+                name="destination"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Nombre"
+                    label="Destinatario"
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -155,36 +158,23 @@ const Correspondence = ({
             </Col>
             <Col span={24}>
               <Controller
-                name="documento1Photo"
+                name="photos"
                 control={control}
                 defaultValue={null}
                 render={({ field: { onChange, value, name } }) => (
-                  <Upload
-                    label="Foto documento 1 (300x800)"
+                  <UploadMultiple
+                    label="Fotos documentos (1480x2508)"
                     accept="image/*"
+                    bucket="documents"
+                    resize="1480x2508"
                     name={name}
                     value={value}
-                    filePath={`correspondences/${reception.id}`}
+                    filePath={`correspondences/${correspondence.id}`}
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
                     onChange={(file) => onChange(file)}
                     onUploading={setUploadingImage}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24}>
-              <Controller
-                name="active"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Switch
-                    checkedChildren="Active"
-                    unCheckedChildren="Inactive"
-                    checked={value}
-                    onChange={(checked) => onChange(checked)}
                   />
                 )}
               />
@@ -197,7 +187,7 @@ const Correspondence = ({
                 size="large"
                 block
                 onClick={() => onGoBack()}
-                disabled={uploadingImage | savingReception}
+                disabled={uploadingImage | savingCorrespondence}
               >
                 Cancelar
               </Button>
@@ -208,8 +198,8 @@ const Correspondence = ({
                 size="large"
                 block
                 htmlType="submit"
-                disabled={uploadingImage | savingReception}
-                loading={savingReception}
+                disabled={uploadingImage | savingCorrespondence}
+                loading={savingCorrespondence}
               >
                 Enviar
               </Button>

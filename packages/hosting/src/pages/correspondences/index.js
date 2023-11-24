@@ -1,136 +1,138 @@
 import React from "react";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
-import List from "antd/lib/list";
-import Image from "antd/lib/image";
-import Divider from "antd/lib/divider";
-import Typography from "antd/lib/typography";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Button, IconAction, modalConfirm } from "../../components";
-import { useDefaultFirestoreProps, useDevice } from "../../hooks";
-import { useGlobalData } from "../../providers";
+import {
+  AddButton,
+  AlignmentWrapper,
+  Col,
+  modalConfirm,
+  notification,
+  Row,
+  Spin,
+} from "../../components/ui";
+import CorrespondencesTable from "./Correspondences.Table";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { correspondencesRef } from "../../firebase/collections";
+import { firestoreTimestamp } from "../../firebase/firestore";
+import { searchify } from "../../utils";
+import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { capitalize } from "lodash";
-import { Link } from "react-router-dom";
-import { firestore } from "../../firebase";
-import { AvatarNoFound } from "../../images";
-import Tag from "antd/lib/tag";
-
-const { Title } = Typography;
+import { useDebounce, useQueriesState } from "../../hooks";
+import moment from "moment";
 
 export const CorrespondencesIntegration = () => {
-  const { isMobile } = useDevice();
   const navigate = useNavigate();
-  const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const { correspondences } = useGlobalData();
+  const [searchFields, setSearchFields] = useQueriesState({
+    createAt: moment().format("YYYY-MM-DD"),
+    searchTerm: undefined,
+  });
 
-  const navigateTo = (receptionId) => {
-    const url = `/correspondences/${receptionId}`;
+  const debouncedSearchFields = useDebounce(searchFields, 750);
 
-    navigate(url);
+  const [correspondences = [], correspondencesLoading, correspondencesError] =
+    useCollectionData(correspondencesQuery(debouncedSearchFields));
+
+  const onDeleteCorrespondence = async (correspondenceId) => {
+    console.log("delete", correspondenceId);
+
+    notification({ type: "success" });
   };
 
-  const onAddReception = () => navigateTo("new");
+  const onNavigateTo = (pathname) => navigate(pathname);
 
-  const onEditReception = (document) => navigateTo(document.id);
+  return (
+    <Spin size="large" spinning={correspondencesLoading}>
+      <Correspondence
+        onNavigateTo={onNavigateTo}
+        correspondences={correspondences}
+        onDeleteCorrespondence={onDeleteCorrespondence}
+      />
+    </Spin>
+  );
+};
 
-  const onRemoveReception = async (document) => {
-    await firestore
-      .collection("correspondences")
-      .doc(document.id)
-      .update(assignDeleteProps(document));
-  };
+const Correspondence = ({
+  onNavigateTo,
+  correspondences,
+  onDeleteCorrespondence,
+}) => {
+  const onClickCorrespondenceAdd = () => navigateToCorrespondencePage("new");
 
-  const onConfirmRemoveReception = (reception) =>
+  const onConfirmDeleteCorrespondence = (correspondenceId) =>
     modalConfirm({
-      content: "La correspondencia se eliminara",
-      onOk: () => onRemoveReception(reception),
+      title: "¿Estás seguro de que quieres eliminar la correspondencia?",
+      onOk: () => onDeleteCorrespondence(correspondenceId),
     });
 
+  const onClickDeleteCorrespondence = (correspondenceId) =>
+    onConfirmDeleteCorrespondence(correspondenceId);
+
+  const navigateToCorrespondencePage = (correspondenceId) => {
+    const url = `/correspondences/${correspondenceId}`;
+    onNavigateTo(url);
+  };
+
+  const filterCorrespondencesView = correspondences.filter(
+    (reception) => reception
+  );
+
   return (
-    <Correspondences
-      isMobile={isMobile}
-      receptions={correspondences}
-      onAddReception={onAddReception}
-      onEditReception={onEditReception}
-      onConfirmRemoveReception={onConfirmRemoveReception}
-    />
+    <Container>
+      <div>
+        <Row justify="space-between" align="middle" gutter={[16, 16]}>
+          <Col sm={24} md={12}>
+            <AlignmentWrapper align="start">
+              <AddButton
+                onClick={onClickCorrespondenceAdd}
+                title="correspondencia"
+                margin="0"
+              />
+            </AlignmentWrapper>
+          </Col>
+        </Row>
+      </div>
+      <div>
+        <CorrespondencesTable
+          correspondences={filterCorrespondencesView}
+          onClickDeleteCorrespondence={onClickDeleteCorrespondence}
+        />
+      </div>
+    </Container>
   );
 };
 
-const Correspondences = ({
-  isMobile,
-  receptions,
-  onAddReception,
-  onEditReception,
-  onConfirmRemoveReception,
-}) => {
-  return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Button type="primary" onClick={() => onAddReception()}>
-          Agregar correspondencia
-        </Button>
-      </Col>
-      <Divider />
-      <Col span={24}>
-        <Title level={3}>Correspondencias</Title>
-      </Col>
-      <Col span={24}>
-        <List
-          className="demo-loadmore-list"
-          itemLayout={isMobile ? "vertical" : "horizontal"}
-          dataSource={receptions}
-          renderItem={(reception) => (
-            <List.Item
-              actions={[
-                <IconAction
-                  key={reception.id}
-                  tooltipTitle="Editar"
-                  icon={faEdit}
-                  onClick={() => onEditReception(reception)}
-                />,
-                <IconAction
-                  key={reception.id}
-                  tooltipTitle="Eliminar"
-                  styled={{ color: (theme) => theme.colors.error }}
-                  icon={faTrash}
-                  onClick={() => onConfirmRemoveReception(reception)}
-                />,
-              ]}
-            >
-              <List.Item.Meta
-                avatar={
-                  <Image
-                    src={
-                      reception?.documento1Photo?.url ||
-                      reception?.documento1Photo?.thumbUrl ||
-                      AvatarNoFound
-                    }
-                    width={90}
-                    height={60}
-                    style={{ objectFit: "contain" }}
-                    alt="icon category"
-                  />
-                }
-                title={
-                  <div>
-                    <Link to={`/correspondences/${reception.id}`}>
-                      <h4 className="link-color">
-                        {capitalize(reception.name)}
-                      </h4>
-                    </Link>
-                    <Tag color={reception.active ? "green" : "red"}>
-                      {capitalize(reception.active ? "Procesado" : "En espera")}
-                    </Tag>
-                  </div>
-                }
-              />
-            </List.Item>
-          )}
-        />
-      </Col>
-    </Row>
-  );
+const correspondencesQuery = ({ searchTerm, createAt }) => {
+  let query = correspondencesRef
+    .where("isDeleted", "==", false)
+    .orderBy("createAt", "desc");
+
+  if (searchTerm) {
+    query = query.where(
+      "_search",
+      "array-contains-any",
+      searchify(searchTerm.split(" "))
+    );
+  }
+
+  if (createAt) {
+    const [startDate, endDate] = dateRange(createAt);
+
+    query = query
+      .startAt(firestoreTimestamp.fromDate(endDate))
+      .endAt(firestoreTimestamp.fromDate(startDate));
+  }
+
+  return query.limit(3000);
 };
+
+const dateRange = (date) => {
+  const startDate = moment(date, "YYYY-MM-DD").startOf("day").toDate();
+  const endDate = moment(date, "YYYY-MM-DD").endOf("day").toDate();
+
+  return [startDate, endDate];
+};
+
+const Container = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+`;

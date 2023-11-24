@@ -12,7 +12,7 @@ import { currentConfig } from "../config";
 
 export const buckets = {
   default: storage,
-  photos: firebase.app().storage(currentConfig.buckets.photos),
+  documents: firebase.app().storage(currentConfig.buckets.documents),
 };
 
 export const imageResizes = ["1000x1000", "700x700", "250x250"];
