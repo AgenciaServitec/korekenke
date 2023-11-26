@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   notification,
-  UploadMultiple,
+  DatePicker,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -74,7 +74,12 @@ export const CorrespondenceIntegration = () => {
       {
         id: correspondence.id,
         destination: formData.destination,
-        photos: formData.photos,
+        receivedBy: formData.receivedBy,
+        class: formData.class,
+        indicative: formData.indicative,
+        classification: formData.classification,
+        issue: formData.issue,
+        dateCorrespondence: formData.dateCorrespondence,
       }
     );
 
@@ -94,8 +99,6 @@ const Correspondence = ({
   savingCorrespondence,
   onGoBack,
 }) => {
-  const [uploadingImage, setUploadingImage] = useState(false);
-
   const schema = yup.object({
     destination: yup.string().required(),
     photos: yup.mixed().required(),
@@ -124,6 +127,12 @@ const Correspondence = ({
   const resetForm = () => {
     reset({
       destination: correspondence?.destination || "",
+      receivedBy: correspondence?.receivedBy || "",
+      class: correspondence?.class || "",
+      indicative: correspondence?.indicative || "",
+      classification: correspondence?.classification || "",
+      issue: correspondence?.issue || "",
+      dateCorrespondence: correspondence?.dateCorrespondence || "",
       photos: correspondence?.photos || [],
     });
   };
@@ -139,7 +148,7 @@ const Correspondence = ({
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmitSaveCorrespondence)}>
           <Row gutter={[16, 16]}>
-            <Col span={24}>
+            <Col span={24} md={12}>
               <Controller
                 name="destination"
                 control={control}
@@ -156,7 +165,111 @@ const Correspondence = ({
                 )}
               />
             </Col>
-            <Col span={24}>
+            <Col span={24} md={12}>
+              <Controller
+                name="receivedBy"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Recibido Por:"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={6}>
+              <Controller
+                name="class"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Clase"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={6}>
+              <Controller
+                name="dateCorrespondence"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <DatePicker
+                    label="Fecha"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={6}>
+              <Controller
+                name="indicative"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Indicativo"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={6}>
+              <Controller
+                name="classification"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Clasificación"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={{ span: 12, offset: 6 }}>
+              <Controller
+                name="issue"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Asunto"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+          </Row>
+          {/* <Row gutter={[16, 16]}>
+            <Col span={12}>
               <Controller
                 name="photos"
                 control={control}
@@ -179,7 +292,30 @@ const Correspondence = ({
                 )}
               />
             </Col>
-          </Row>
+            <Col span={12}>
+              <Controller
+                name="photos"
+                control={control}
+                defaultValue={null}
+                render={({ field: { onChange, value, name } }) => (
+                  <UploadMultiple
+                    label="Fotos documentos (1480x2508)"
+                    accept="image/*"
+                    bucket="documents"
+                    resize="1480x2508"
+                    name={name}
+                    value={value}
+                    filePath={`correspondences/${correspondence.id}`}
+                    buttonText="Subir imagen"
+                    error={error(name)}
+                    required={required(name)}
+                    onChange={(file) => onChange(file)}
+                    onUploading={setUploadingImage}
+                  />
+                )}
+              />
+            </Col>
+            </Row> */}
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
               <Button
@@ -187,7 +323,7 @@ const Correspondence = ({
                 size="large"
                 block
                 onClick={() => onGoBack()}
-                disabled={uploadingImage | savingCorrespondence}
+                disabled={savingCorrespondence}
               >
                 Cancelar
               </Button>
@@ -198,7 +334,7 @@ const Correspondence = ({
                 size="large"
                 block
                 htmlType="submit"
-                disabled={uploadingImage | savingCorrespondence}
+                disabled={savingCorrespondence}
                 loading={savingCorrespondence}
               >
                 Enviar
