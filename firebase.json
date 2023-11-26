@@ -2,7 +2,7 @@
   "hosting": [
     {
       "public": "packages/hosting/build",
-      "target": "korekenke",
+      "target": "app",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "predeploy": ["yarn hosting build"],
       "headers": [

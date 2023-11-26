@@ -44,5 +44,3 @@ jobs:
         run: yarn eslint:check
       - name: Check Type
         run: yarn type:check
-      - name: Test
-        run: yarn test

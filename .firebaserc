@@ -6,14 +6,14 @@
   "targets": {
     "korekenke-prod": {
       "hosting": {
-        "korekenke": [
+        "app": [
           "korekenke-prod"
         ]
       }
     },
     "korekenke-dev": {
       "hosting": {
-        "korekenke": [
+        "app": [
           "korekenke-dev"
         ]
       }
