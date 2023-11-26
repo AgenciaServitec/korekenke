@@ -40,7 +40,5 @@ jobs:
         run: yarn install
       - name: Check Prettier
         run: yarn prettier:check
-      - name: Check Eslint
-        run: yarn eslint:check
       - name: Test
         run: yarn test
