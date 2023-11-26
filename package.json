@@ -13,7 +13,6 @@
     "deploy:indexes": "firebase deploy --only firestore:indexes",
     "deploy:extensions": "firebase deploy --only extensions",
     "export:extensions": "firebase ext:export",
-    "swagger": "yarn functions swagger",
-    "postswagger": "yarn hosting openapi"
+    "ext:export": "firebase ext:export"
   }
 }
