@@ -49,7 +49,7 @@ export * from "./Icon";
 export * from "./AddButton";
 export * from "./AlignmentWrapper";
 export * from "./table";
-export * from "./InputCode"
+export * from "./InputCode";
 
 export { default as Legend } from "./Legend";
 
