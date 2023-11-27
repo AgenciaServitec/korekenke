@@ -41,7 +41,6 @@ export * from "./Audio";
 export * from "./TagHostname";
 export * from "./Checkbox";
 export * from "./DataEntryModal";
-export * from "./CharacteristicsList";
 export * from "./FixedButtonsWrap";
 export * from "./FilterPanel";
 export * from "./list";

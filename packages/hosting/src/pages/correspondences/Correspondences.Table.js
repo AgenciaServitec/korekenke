@@ -76,7 +76,7 @@ const CorrespondencesTable = ({
       title: "Archivos",
       align: "center",
       width: ["130px", "15%"],
-      render: (correspondence) => <div>Files</div>,
+      render: () => <div>Files</div>,
     },
     {
       title: "⚙️",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Title from "antd/es/typography/Title";
-import { Button, Form, InputNumber, notification } from "../../components";
+import { Button, Form, InputCode, notification } from "../../components";
 import styled from "styled-components";
 import { firebase } from "../../firebase";
 import { getLocalStorage } from "../../utils";
@@ -156,7 +156,7 @@ const SendCodeSmsAndSignInWithCode = ({
             name="verificationCode"
             control={control}
             render={({ field: { onChange, value, name } }) => (
-              <InputNumber
+              <InputCode
                 label="Ingrese código"
                 onChange={onChange}
                 value={value}

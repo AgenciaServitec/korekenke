@@ -21,15 +21,16 @@ import moment from "moment";
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
 
-  const [searchFields, setSearchFields] = useQueriesState({
+  const [searchFields] = useQueriesState({
     createAt: moment().format("YYYY-MM-DD"),
     searchTerm: undefined,
   });
 
   const debouncedSearchFields = useDebounce(searchFields, 750);
 
-  const [correspondences = [], correspondencesLoading, correspondencesError] =
-    useCollectionData(correspondencesQuery(debouncedSearchFields));
+  const [correspondences = [], correspondencesLoading] = useCollectionData(
+    correspondencesQuery(debouncedSearchFields)
+  );
 
   const onDeleteCorrespondence = async (correspondenceId) => {
     console.log("delete", correspondenceId);

@@ -8,10 +8,7 @@ import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getLocalStorage, setLocalStorage } from "../../utils";
-import {
-  fetchCollectionOnce,
-  querySnapshotToArray,
-} from "../../firebase/utils";
+import { fetchCollectionOnce } from "../../firebase/utils";
 import { firestore } from "../../firebase";
 
 export const AccessData = ({ next, currentStep }) => {
