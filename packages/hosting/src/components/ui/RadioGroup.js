@@ -23,7 +23,6 @@ export const RadioGroup = ({
   onChange,
   animation = false,
   variant = "filled",
-  children,
   helperText,
   ...props
 }) => {

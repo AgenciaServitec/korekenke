@@ -20,6 +20,8 @@
   "plugins": ["react"],
   "rules": {
     "react/prop-types": "off",
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "no-unused-vars": "off",
+    "react-in-jsx-scope": "off"
   }
 }

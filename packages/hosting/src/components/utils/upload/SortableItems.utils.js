@@ -1,14 +1,18 @@
 import { MouseSensor as LibMouseSensor } from "@dnd-kit/core";
 
 export class MouseSensor extends LibMouseSensor {
-  static activators = [
-    {
-      eventName: "onMouseDown",
-      handler: ({ nativeEvent: event }) => {
-        return shouldHandleEvent(event.target);
+  constructor(...args) {
+    super(...args);
+
+    this.constructor.activators = [
+      {
+        eventName: "onMouseDown",
+        handler: ({ nativeEvent: event }) => {
+          return shouldHandleEvent(event.target);
+        },
       },
-    },
-  ];
+    ];
+  }
 }
 
 const shouldHandleEvent = (element) => {

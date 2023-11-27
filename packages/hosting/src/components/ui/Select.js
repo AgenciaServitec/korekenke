@@ -41,7 +41,6 @@ export const Select = ({
   animation = true,
   isMobile = false,
   label,
-  children,
   variant = "filled",
   allowClear,
   filterOption = (inputValue, optionLabel) =>
