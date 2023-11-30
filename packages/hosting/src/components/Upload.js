@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { buckets } from "../firebase/storage";
+import { ComponentContainer, modalConfirm, notification } from "./index";
 import AntdUpload from "antd/lib/upload";
 import styled from "styled-components";
-import { ComponentContainer, modalConfirm, notification } from "./ui";
 import {
   deleteFileAndFileThumbFromStorage,
   uploadFile,
@@ -14,47 +14,23 @@ import {
 } from "./utils/upload/components";
 import { isEmpty } from "lodash";
 import AntdMessage from "antd/lib/message";
-
-// type UploadValue = File;
-//
-// interface File {
-//   uid: string;
-//   name: string;
-//   url: string;
-//   thumbUrl?: string;
-// }
-//
-// interface Props {
-//   accept?: string;
-//   bucket?: BucketType;
-//   buttonText?: string;
-//   dragger?: boolean;
-//   error?: FormError;
-//   filePath: string;
-//   fileName?: string;
-//   name?: string;
-//   isImage?: boolean;
-//   label: string;
-//   required?: boolean;
-//   resize?: ImageResize;
-//   value?: UploadValue;
-//   onUploading?: (uploading: boolean) => void;
-//   onChange: (file?: UploadValue) => void;
-// }
+import * as assert from "assert";
 
 export const Upload = ({
   accept,
   bucket = "default",
-  buttonText = "Subir imagen",
+  buttonText = "Upload image",
   dragger = true,
+  hidden,
   name,
-  error,
+  error = false,
+  helperText,
   filePath,
   fileName,
   isImage = true,
   label,
   required = false,
-  resize = null,
+  resize = "1480x2508",
   value,
   onChange,
   onUploading,
@@ -66,7 +42,7 @@ export const Upload = ({
   const [currentFile, setCurrentFile] = useState(null);
 
   useEffect(() => {
-    if (!value) return;
+    if (!value || typeof value !== "object") return;
 
     setFiles([{ ...value, status: "done" }]);
   }, [JSON.stringify(value)]);
@@ -83,16 +59,19 @@ export const Upload = ({
   }, [JSON.stringify(files)]);
 
   const uploadFileToFile = ({ uid, name, url, thumbUrl }) => {
-    if (!url) throw new Error("Missing url");
+    assert(url, "Missing url");
 
-    // if (!url) throw Error("Missing url");
-
-    return {
+    const file = {
       uid,
       name,
       url,
-      thumbUrl,
     };
+
+    if (isImage) {
+      file.thumbUrl = thumbUrl;
+    }
+
+    return file;
   };
 
   const customRequest = async (requestOption) => {
@@ -135,8 +114,8 @@ export const Upload = ({
   const uploadErrorMessage = () =>
     notification({
       type: "error",
-      title: "Error al cargar el archivo",
-      description: "¡Intentar de nuevo!",
+      title: " Error uploading the file",
+      description: "Try again!",
     });
 
   const addFileToFiles = (file) =>
@@ -163,7 +142,7 @@ export const Upload = ({
   const onRemove = async (file) =>
     new Promise((resolve) => {
       modalConfirm({
-        content: "La imagen se eliminará.",
+        content: "The image will be deleted.",
         onOk: async () => {
           await deleteFile(file);
           resolve(true);
@@ -179,12 +158,10 @@ export const Upload = ({
     );
   };
 
-  const beforeUpload = async () => {
+  const beforeUpload = () => {
     if (isEmpty(files)) return true;
 
-    await AntdMessage.error(
-      `¡Elimina el archivo actual antes de cargar un nuevo archivo!`
-    );
+    AntdMessage.error(`Delete current file before uploading new file!`);
 
     return AntdUpload.LIST_IGNORE;
   };
@@ -192,10 +169,12 @@ export const Upload = ({
   return (
     <>
       <ComponentContainer.filled
-        required={required}
-        error={error}
-        label={label}
         animation={false}
+        required={required}
+        hidden={hidden}
+        error={error}
+        helperText={helperText}
+        label={label}
       >
         <WrapperComponents>
           {dragger ? (
@@ -211,8 +190,8 @@ export const Upload = ({
               beforeUpload={beforeUpload}
             >
               <UploadDraggerBody
-                hint="Soportado para subir solo una imagen"
-                text="Click aquí o arrastrar para subir la imagen"
+                hint="Supported to upload only one file"
+                text="Click here or drag to upload the file"
               />
             </AntdUpload.Dragger>
           ) : (
@@ -245,10 +224,6 @@ export const Upload = ({
   );
 };
 
-const WrapperComponents = styled.div`
-  margin: 11px;
-`;
-
 const UploadStyled = styled(AntdUpload)`
   cursor: pointer;
 
@@ -263,6 +238,10 @@ const UploadStyled = styled(AntdUpload)`
   }
 
   .ant-upload-list .ant-upload-list-item {
-    //margin: 7px 5px;
+    margin: 7px 5px;
   }
+`;
+
+const WrapperComponents = styled.div`
+  margin: 11px;
 `;

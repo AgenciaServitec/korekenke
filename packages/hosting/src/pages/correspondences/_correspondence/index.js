@@ -9,6 +9,8 @@ import {
   Input,
   notification,
   DatePicker,
+  UploadMultiple,
+  Upload,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -99,6 +101,8 @@ const Correspondence = ({
   savingCorrespondence,
   onGoBack,
 }) => {
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   const schema = yup.object({
     destination: yup.string().required(),
     photos: yup.mixed().required(),
@@ -133,7 +137,8 @@ const Correspondence = ({
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
       dateCorrespondence: correspondence?.dateCorrespondence || "",
-      photos: correspondence?.photos || [],
+      photos: correspondence?.photos || null,
+      documents: correspondence?.documents || null,
     });
   };
 
@@ -268,21 +273,25 @@ const Correspondence = ({
               />
             </Col>
           </Row>
-          {/* <Row gutter={[16, 16]}>
-            <Col span={12}>
+          <Row gutter={[16, 16]}>
+            <Col sm={24} md={12}>
               <Controller
                 name="photos"
                 control={control}
-                defaultValue={null}
+                defaultValue={[]}
                 render={({ field: { onChange, value, name } }) => (
                   <UploadMultiple
-                    label="Fotos documentos (1480x2508)"
+                    label="Fotos (1480x2508)"
                     accept="image/*"
                     bucket="documents"
                     resize="1480x2508"
                     name={name}
                     value={value}
-                    filePath={`correspondences/${correspondence.id}`}
+                    filePath={`correspondences/photos/${
+                      correspondence.id || "x"
+                    }`}
+                    fileName="document-photo"
+                    isImage={true}
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
@@ -292,21 +301,20 @@ const Correspondence = ({
                 )}
               />
             </Col>
-            <Col span={12}>
+            <Col sm={24} md={12}>
               <Controller
-                name="photos"
+                name="documents"
                 control={control}
-                defaultValue={null}
+                defaultValue={[]}
                 render={({ field: { onChange, value, name } }) => (
                   <UploadMultiple
-                    label="Fotos documentos (1480x2508)"
-                    accept="image/*"
+                    label="Documentos"
+                    accept="file/*"
                     bucket="documents"
-                    resize="1480x2508"
                     name={name}
                     value={value}
-                    filePath={`correspondences/${correspondence.id}`}
-                    buttonText="Subir imagen"
+                    filePath={`correspondences/files/${correspondence.id}`}
+                    buttonText="Subir archivo"
                     error={error(name)}
                     required={required(name)}
                     onChange={(file) => onChange(file)}
@@ -315,7 +323,7 @@ const Correspondence = ({
                 )}
               />
             </Col>
-            </Row> */}
+          </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
               <Button
@@ -323,7 +331,7 @@ const Correspondence = ({
                 size="large"
                 block
                 onClick={() => onGoBack()}
-                disabled={savingCorrespondence}
+                disabled={savingCorrespondence || uploadingImage}
               >
                 Cancelar
               </Button>
@@ -334,7 +342,7 @@ const Correspondence = ({
                 size="large"
                 block
                 htmlType="submit"
-                disabled={savingCorrespondence}
+                disabled={savingCorrespondence || uploadingImage}
                 loading={savingCorrespondence}
               >
                 Enviar

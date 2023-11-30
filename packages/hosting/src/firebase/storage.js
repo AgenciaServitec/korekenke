@@ -15,4 +15,4 @@ export const buckets = {
   documents: firebase.app().storage(currentConfig.buckets.documents),
 };
 
-export const imageResizes = ["1000x1000", "700x700", "250x250"];
+export const imageResizes = ["1480x2508"];
