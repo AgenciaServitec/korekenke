@@ -26,7 +26,7 @@ export const uploadFile = async ({
       },
       thumbUrl: {
         path: `${filePath}/thumbs`,
-        fileName: `${fileName}_${resize}.${fileExtension}`,
+        fileName: `${fileName}_${resize}.webp`,
       },
     };
 

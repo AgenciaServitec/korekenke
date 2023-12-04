@@ -288,9 +288,8 @@ const Correspondence = ({
                     name={name}
                     value={value}
                     filePath={`correspondences/photos/${
-                      correspondence.id || "x"
+                      correspondence.id
                     }`}
-                    fileName="document-photo"
                     isImage={true}
                     buttonText="Subir imagen"
                     error={error(name)}
@@ -309,7 +308,7 @@ const Correspondence = ({
                 render={({ field: { onChange, value, name } }) => (
                   <UploadMultiple
                     label="Documentos"
-                    accept="file/*"
+                    accept="application/pdf"
                     bucket="documents"
                     name={name}
                     value={value}
