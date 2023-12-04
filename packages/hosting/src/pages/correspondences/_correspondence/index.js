@@ -287,9 +287,7 @@ const Correspondence = ({
                     resize="1480x2508"
                     name={name}
                     value={value}
-                    filePath={`correspondences/photos/${
-                      correspondence.id
-                    }`}
+                    filePath={`correspondences/photos/${correspondence.id}`}
                     isImage={true}
                     buttonText="Subir imagen"
                     error={error(name)}
