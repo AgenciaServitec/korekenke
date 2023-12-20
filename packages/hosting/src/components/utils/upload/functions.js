@@ -1,35 +1,7 @@
 import { imageResizes } from "../../../firebase/storage";
 import { timeoutPromise } from "../../../utils";
 import { isObject } from "lodash";
-// import { RcFile, UploadFile } from "antd/lib/upload/interface";
-
-// interface Props {
-//   filePath: string;
-//   fileName?: string;
-//   storage: FirebaseStorage;
-//   resize: ImageResize;
-//   isImage: boolean;
-//   options: {
-//     file: string | Blob | RcFile,
-//     onProgress: (percent: number) => void,
-//     onSuccess: (message: string) => void,
-//     onError: (error: FirebaseStorageError) => void,
-//   };
-// }
-//
-// type FileConfig = Record<FileConfigId, FileConfigUrl>;
-//
-// type FileConfigId = "url" | "thumbUrl";
-//
-// interface FileConfigUrl {
-//   path: string;
-//   fileName: string;
-// }
-//
-// interface Return {
-//   newFile: UploadFile;
-//   status: boolean;
-// }
+import * as assert from "assert";
 
 export const isRcFile = (data) => isObject(data) && "uid" in data;
 
@@ -42,7 +14,7 @@ export const uploadFile = async ({
   options: { file, onError, onProgress, onSuccess },
 }) =>
   await new Promise((resolve, reject) => {
-    if (!isRcFile(file)) throw new Error("Options.file not is File");
+    assert(isRcFile(file), "Options.file not is File");
 
     const fileExtension = file.name.split(".").pop();
     fileName = fileName || file.name.replace(`.${fileExtension}`, "");
@@ -54,7 +26,7 @@ export const uploadFile = async ({
       },
       thumbUrl: {
         path: `${filePath}/thumbs`,
-        fileName: `${fileName}_${resize}.${fileExtension}`,
+        fileName: `${fileName}_${resize}.webp`,
       },
     };
 
@@ -80,21 +52,17 @@ export const uploadFile = async ({
           .child(fileConfig.url.fileName)
           .getDownloadURL();
 
-        if (isImage && resize) {
+        if (isImage) {
           const fileThumbUrlRef = storage
             .ref(fileConfig.thumbUrl.path)
             .child(fileConfig.thumbUrl.fileName);
 
           const thumbUrl = await keepTryingGetThumbURL(fileThumbUrlRef);
 
-          if (typeof thumbUrl === "string")
-            throw new Error("thumbUrl no is string");
+          assert(typeof thumbUrl === "string", "thumbUrl no is string");
 
           newFile.thumbUrl = thumbUrl;
-        } else {
-          newFile.thumbUrl = null;
         }
-
         newFile.status = "success";
         newFile.name = fileConfig.url.fileName;
 
@@ -119,15 +87,22 @@ export const deleteFileAndFileThumbFromStorage = async (
   filePath,
   fileName
 ) => {
+  const extension = fileName.split(".").pop();
+
   const pathImage = `${filePath}/${fileName}`;
 
   const pathThumbImages = imageResizes.map(
-    (resizeImage) => `${filePath}/thumbs/${fileName}_${resizeImage}`
+    (resizeImage) =>
+      `${filePath}/thumbs/${fileName.replace(
+        `.${extension}`,
+        ""
+      )}_${resizeImage}.${extension}`
   );
 
   const uris = [pathImage, ...pathThumbImages].map(
     (url) => `gs://${storage.ref().bucket}/${url}`
   );
+
   try {
     await Promise.all(uris.map((uri) => deleteFileFromStorage(storage, uri)));
   } catch (error) {
@@ -137,6 +112,7 @@ export const deleteFileAndFileThumbFromStorage = async (
 
 export const deleteFileFromStorage = async (storage, url) => {
   try {
+    console.log("url", url);
     const ref = storage.refFromURL(url);
 
     return await storage.ref(ref.fullPath).delete();

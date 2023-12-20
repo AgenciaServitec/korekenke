@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { modalConfirm, notification } from "./ui";
 import {
   deleteFileAndFileThumbFromStorage,
+  isRcFile,
   uploadFile,
 } from "./utils/upload/functions";
 import {
@@ -15,6 +16,7 @@ import {
 } from "./utils/upload/components";
 import { isEmpty } from "lodash";
 import { useLoadings } from "../hooks";
+import * as assert from "assert";
 
 // type UploadValue = File[];
 //
@@ -30,15 +32,16 @@ import { useLoadings } from "../hooks";
 //   bucket?: BucketType;
 //   buttonText?: string;
 //   dragger?: boolean;
-//   error?: FormError;
+//   error?: boolean;
+//   helperText?: string;
 //   filePath: string;
-//   fileName?: string;
+//   name: string;
 //   isImage?: boolean;
 //   label: string;
 //   limit?: number;
 //   required?: boolean;
 //   resize?: ImageResize;
-//   value?: UploadValue;
+//   value?: UploadValue | null;
 //   onUploading?: (uploading: boolean) => void;
 //   onChange: (files?: UploadValue) => void;
 //   keepFilesAfterUpload?: boolean;
@@ -47,11 +50,12 @@ import { useLoadings } from "../hooks";
 export const UploadMultiple = ({
   accept,
   bucket = "default",
-  buttonText = "Subir imagen",
+  buttonText = "Upload image",
   dragger = true,
-  error,
+  error = false,
+  helperText,
   filePath,
-  fileName,
+  name,
   isImage = true,
   label,
   required = false,
@@ -91,18 +95,18 @@ export const UploadMultiple = ({
     uploadedFiles && afterUpload();
   }, [JSON.stringify(files)]);
 
-  const afterUpload = async () => {
+  const afterUpload = () => {
     const newFiles = !isEmpty(files)
       ? files.map((file) => uploadFileToFile(file))
       : [];
 
-    await onChange(newFiles);
+    onChange(newFiles);
 
     !keepFilesAfterUpload && setFiles([]);
   };
 
   const uploadFileToFile = ({ uid, name, url, thumbUrl }) => {
-    if (!url) throw new Error("Missing url");
+    assert(url, "Missing url");
 
     return {
       uid,
@@ -113,15 +117,13 @@ export const UploadMultiple = ({
   };
 
   const customRequest = async (requestOption) => {
-    if (!(requestOption.file instanceof File))
-      throw new Error("RequestOption.file not is File");
+    assert(isRcFile(requestOption.file), "Options.file not is File");
 
     try {
       setUploadings({ [requestOption.file.uid]: true });
 
       const { newFile, status } = await uploadFile({
         filePath,
-        fileName,
         resize,
         storage,
         isImage,
@@ -201,46 +203,51 @@ export const UploadMultiple = ({
 
   return (
     <>
-      <ComponentContainer.outlined
+      <ComponentContainer.filled
+        animation={false}
         required={required}
         error={error}
+        helperText={helperText}
         label={label}
-        animation
       >
-        {dragger ? (
-          <AntdUpload.Dragger
-            fileList={files}
-            multiple={true}
-            listType="picture"
-            accept={accept}
-            customRequest={customRequest}
-            onRemove={onRemove}
-            onPreview={onPreview}
-            onChange={onChangeUpload}
-          >
-            <UploadDraggerBody
-              hint="Soportado para subir varias imágenes"
-              text="Click aquí o arrastrar para subir las imágenes"
-            />
-          </AntdUpload.Dragger>
-        ) : (
-          <UploadStyled
-            fileList={files}
-            multiple={true}
-            listType="picture"
-            accept={accept}
-            customRequest={customRequest}
-            onRemove={onRemove}
-            onPreview={onPreview}
-            onChange={onChangeUpload}
-          >
-            <UploadBody
-              visible={limit ? files.length < limit : true}
-              buttonText={buttonText}
-            />
-          </UploadStyled>
-        )}
-      </ComponentContainer.outlined>
+        <WrapperComponents>
+          {dragger ? (
+            <AntdUpload.Dragger
+              name={name}
+              fileList={files}
+              multiple={true}
+              listType="picture"
+              accept={accept}
+              customRequest={customRequest}
+              onRemove={onRemove}
+              onPreview={onPreview}
+              onChange={onChangeUpload}
+            >
+              <UploadDraggerBody
+                hint="Support for uploading multiple images"
+                text="Click here or drag to upload the images"
+              />
+            </AntdUpload.Dragger>
+          ) : (
+            <UploadStyled
+              name={name}
+              fileList={files}
+              multiple={true}
+              listType="picture"
+              accept={accept}
+              customRequest={customRequest}
+              onRemove={onRemove}
+              onPreview={onPreview}
+              onChange={onChangeUpload}
+            >
+              <UploadBody
+                visible={limit ? files.length < limit : true}
+                buttonText={buttonText}
+              />
+            </UploadStyled>
+          )}
+        </WrapperComponents>
+      </ComponentContainer.filled>
       {currentFile?.url && (
         <PreviewFile
           url={currentFile.url}
@@ -270,4 +277,8 @@ const UploadStyled = styled(AntdUpload)`
   .ant-upload-list .ant-upload-list-item {
     margin: 7px 5px;
   }
+`;
+
+const WrapperComponents = styled.div`
+  margin: 11px;
 `;
