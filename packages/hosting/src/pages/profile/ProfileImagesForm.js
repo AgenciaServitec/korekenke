@@ -8,7 +8,9 @@ import { useForm, Controller } from "react-hook-form";
 
 export const ProfileImagesForm = () => {
   const schema = yup.object({
-    dniPhoto: yup.mixed(),
+    dniPhoto: yup.mixed().required(),
+    cipPhoto: yup.mixed().required(),
+    signaturePhoto: yup.mixed().required(),
   });
 
   const {
@@ -20,17 +22,11 @@ export const ProfileImagesForm = () => {
   });
 
   const onHandleSubmit = (e) => {
-    e.preventDefault();
     console.log(e.target);
-  };
-
-  const handleOnChange = (e) => {
-    console.log(e);
   };
 
   return (
     <Form onSubmit={handleSubmit(onHandleSubmit)}>
-      <Row></Row>
       <Row justify="end" gutter={[16, 16]}>
         <Col xs={24} sm={12} md={12}>
           <Controller
@@ -45,15 +41,49 @@ export const ProfileImagesForm = () => {
                 onChange={(file) => onChange(file)}
                 value={value}
                 name={name}
+                error={errors[name]}
+                helperText={errors[name]?.message}
               />
             )}
           />
         </Col>
         <Col xs={24} sm={12} md={12}>
-          <Upload label="Foto de CIP" onChange={handleOnChange} />
+          <Controller
+            control={control}
+            name="cipPhoto"
+            render={({ field: { onChange, value, onBlur, name } }) => (
+              <Upload
+                label="Foto de CIP"
+                accept="image/*"
+                resize="400x400"
+                buttonText="Subir foto"
+                onChange={(file) => onChange(file)}
+                value={value}
+                name={name}
+                error={errors[name]}
+                helperText={errors[name]?.message}
+              />
+            )}
+          />
         </Col>
         <Col span={24}>
-          <Upload label="Foto de Firma" onChange={handleOnChange} />
+          <Controller
+            control={control}
+            name="signaturePhoto"
+            render={({ field: { onChange, value, onBlur, name } }) => (
+              <Upload
+                label="Foto de firma"
+                accept="image/*"
+                resize="400x400"
+                buttonText="Subir foto"
+                onChange={(file) => onChange(file)}
+                value={value}
+                name={name}
+                error={errors[name]}
+                helperText={errors[name]?.message}
+              />
+            )}
+          />
         </Col>
         <Col xs={24} sm={12} md={8}>
           <Button type="primary" size="large" block htmlType="submit">
