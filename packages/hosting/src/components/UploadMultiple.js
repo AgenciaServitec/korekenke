@@ -251,7 +251,7 @@ export const UploadMultiple = ({
       {currentFile?.url && (
         <PreviewFile
           url={currentFile.url}
-          thumbUrl={currentFile?.thumbUrl}
+          thumbUrl={currentFile?.thumbUrl || currentFile?.url}
           isImage={isImage}
           onCancel={() => setCurrentFile(null)}
           visible={!!currentFile}

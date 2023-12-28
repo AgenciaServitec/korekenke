@@ -305,6 +305,7 @@ const Correspondence = ({
                 defaultValue={[]}
                 render={({ field: { onChange, value, name } }) => (
                   <UploadMultiple
+                    isImage={false}
                     label="Documentos"
                     accept="application/pdf"
                     bucket="documents"
