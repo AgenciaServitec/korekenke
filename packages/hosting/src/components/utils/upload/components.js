@@ -25,7 +25,7 @@ export const PreviewFile = ({ url, isImage, onCancel, thumbUrl, visible }) => (
       <ButtonStyled
         key="download"
         size="large"
-        onClick={() => window.open(thumbUrl, "_blank")}
+        onClick={() => window.open(isImage ? thumbUrl : url, "_blank")}
         icon={<FontAwesomeIcon icon={faDownload} />}
       >
         &ensp; Descargar
