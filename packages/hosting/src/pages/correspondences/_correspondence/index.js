@@ -11,6 +11,7 @@ import {useDefaultFirestoreProps, useFormUtils} from "../../../hooks";
 import {firestore} from "../../../firebase";
 import {useGlobalData} from "../../../providers";
 import {assign} from "lodash";
+import moment from "moment";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
@@ -99,14 +100,14 @@ const Correspondence = ({
 
   const schema = yup.object({
     destination: yup.string().required(),
-    receivedBy: yup.string(),
-    class: yup.string(),
-    indicative: yup.string(),
-    classification: yup.string(),
+    receivedBy: yup.string().required(),
+    class: yup.string().required(),
+    indicative: yup.string().required(),
+    classification: yup.string().required(),
     issue: yup.string(),
     dateCorrespondence: yup.date().required(),
     photos: yup.mixed().required(),
-    documents: yup.mixed().required(),
+    documents: yup.mixed(),
   });
 
   const {
@@ -135,7 +136,7 @@ const Correspondence = ({
       indicative: correspondence?.indicative || "",
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
-      dateCorrespondence: correspondence?.dateCorrespondence || undefined,
+      dateCorrespondence: correspondence?.dateCorrespondence || moment(),
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,
     });
