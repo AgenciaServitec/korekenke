@@ -224,8 +224,8 @@ export const UploadMultiple = ({
               onChange={onChangeUpload}
             >
               <UploadDraggerBody
-                hint="Support for uploading multiple images"
-                text="Click here or drag to upload the images"
+                hint="Soportado para cargar múltiples imágenes."
+                text="Haga clic aquí o arrastre para cargar las imágenes."
               />
             </AntdUpload.Dragger>
           ) : (

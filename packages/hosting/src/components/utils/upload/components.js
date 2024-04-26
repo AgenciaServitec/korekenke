@@ -17,7 +17,7 @@ export const PreviewFile = ({ url, isImage, onCancel, thumbUrl, visible }) => (
   <ModalStyled
     onCancel={onCancel}
     style={{ textAlign: "center" }}
-    visible={visible}
+    open={visible}
     title="Visualización"
     closable={true}
     centered={true}
