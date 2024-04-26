@@ -13,7 +13,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { correspondencesRef } from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { firestore } from "../../firebase";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
