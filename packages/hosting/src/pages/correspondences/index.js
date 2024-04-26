@@ -65,6 +65,9 @@ const Correspondence = ({
   correspondences,
   onDeleteCorrespondence,
 }) => {
+  const navigateToCorrespondencePage = (correspondenceId) =>
+    onNavigateTo(`/correspondences/${correspondenceId}`);
+
   const onClickCorrespondenceAdd = () => navigateToCorrespondencePage("new");
 
   const onConfirmDeleteCorrespondence = (correspondenceId) =>
@@ -73,13 +76,11 @@ const Correspondence = ({
       onOk: () => onDeleteCorrespondence(correspondenceId),
     });
 
+  const onClickEditCorrespondence = (correspondenceId) =>
+    navigateToCorrespondencePage(correspondenceId);
+
   const onClickDeleteCorrespondence = (correspondenceId) =>
     onConfirmDeleteCorrespondence(correspondenceId);
-
-  const navigateToCorrespondencePage = (correspondenceId) => {
-    const url = `/correspondences/${correspondenceId}`;
-    onNavigateTo(url);
-  };
 
   const filterCorrespondencesView = correspondences.filter(
     (reception) => reception
@@ -103,6 +104,7 @@ const Correspondence = ({
       <div>
         <CorrespondencesTable
           correspondences={filterCorrespondencesView}
+          onClickEditCorrespondence={onClickEditCorrespondence}
           onClickDeleteCorrespondence={onClickDeleteCorrespondence}
         />
       </div>
@@ -114,4 +116,8 @@ const Container = styled.div`
   display: flex;
   gap: 1rem;
   flex-direction: column;
+
+  .capitalize {
+    text-transform: capitalize;
+  }
 `;

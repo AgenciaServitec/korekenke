@@ -9,6 +9,7 @@ import {
   Form,
   Input,
   notification,
+  TextArea,
   UploadMultiple,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
@@ -144,7 +145,9 @@ const Correspondence = ({
       indicative: correspondence?.indicative || "",
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
-      dateCorrespondence: correspondence?.dateCorrespondence || moment(),
+      dateCorrespondence: correspondence?.dateCorrespondence
+        ? moment(correspondence.dateCorrespondence.toDate())
+        : moment(),
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,
     });
@@ -154,9 +157,9 @@ const Correspondence = ({
     onSaveCorrespondence(formData);
 
   return (
-    <Row>
+    <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Title level={3}>Correspondencia</Title>
+        <Title level={2}>Correspondencia</Title>
       </Col>
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmitSaveCorrespondence)}>
@@ -269,8 +272,9 @@ const Correspondence = ({
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
-                  <Input
+                  <TextArea
                     label="Asunto"
+                    rows={5}
                     name={name}
                     value={value}
                     onChange={onChange}
