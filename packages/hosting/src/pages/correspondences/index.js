@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AddButton,
   AlignmentWrapper,
@@ -11,26 +11,29 @@ import {
 import CorrespondencesTable from "./Correspondences.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { correspondencesRef } from "../../firebase/collections";
-import { firestoreTimestamp } from "../../firebase/firestore";
-import { searchify } from "../../utils";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { useDebounce, useQueriesState } from "../../hooks";
-import moment from "moment";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
 
-  const [searchFields] = useQueriesState({
-    createAt: moment().format("YYYY-MM-DD"),
-    searchTerm: undefined,
-  });
+  const [correspondences = [], correspondencesLoading, correspondencesError] =
+    useCollectionData(
+      correspondencesRef
+        .where("isDeleted", "==", false)
+        .orderBy("createAt", "desc")
+    );
 
-  const debouncedSearchFields = useDebounce(searchFields, 750);
+  useEffect(() => {
+    if (correspondencesError) {
+      console.error(correspondencesError);
 
-  const [correspondences = [], correspondencesLoading] = useCollectionData(
-    correspondencesQuery(debouncedSearchFields)
-  );
+      notification({
+        type: "error",
+        title: "Error al obtener las correspondencias",
+      });
+    }
+  }, [correspondencesError]);
 
   const onDeleteCorrespondence = async (correspondenceId) => {
     console.log("delete", correspondenceId);
@@ -99,37 +102,6 @@ const Correspondence = ({
       </div>
     </Container>
   );
-};
-
-const correspondencesQuery = ({ searchTerm, createAt }) => {
-  let query = correspondencesRef
-    .where("isDeleted", "==", false)
-    .orderBy("createAt", "desc");
-
-  if (searchTerm) {
-    query = query.where(
-      "_search",
-      "array-contains-any",
-      searchify(searchTerm.split(" "))
-    );
-  }
-
-  if (createAt) {
-    const [startDate, endDate] = dateRange(createAt);
-
-    query = query
-      .startAt(firestoreTimestamp.fromDate(endDate))
-      .endAt(firestoreTimestamp.fromDate(startDate));
-  }
-
-  return query.limit(3000);
-};
-
-const dateRange = (date) => {
-  const startDate = moment(date, "YYYY-MM-DD").startOf("day").toDate();
-  const endDate = moment(date, "YYYY-MM-DD").endOf("day").toDate();
-
-  return [startDate, endDate];
 };
 
 const Container = styled.div`

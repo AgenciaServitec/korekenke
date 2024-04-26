@@ -17,7 +17,7 @@ const CorrespondencesTable = ({
 }) => {
   const columns = [
     {
-      title: "Fecha creación",
+      title: "F. Creación",
       width: ["97px", "10%"],
       render: (correspondence) => (
         <CorrespondenceContainer>
