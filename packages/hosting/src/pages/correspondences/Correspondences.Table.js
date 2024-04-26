@@ -1,34 +1,40 @@
 import React, { memo } from "react";
 import styled, { css } from "styled-components";
 import moment from "moment";
-import { IconAction, TableVirtualized, Tag } from "../../components/ui";
+import { IconAction, Space, TableVirtualized, Tag } from "../../components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faCircleInfo,
+  faEdit,
+  faFilePdf,
   faPrint,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 const CorrespondencesTable = ({
   correspondences,
+  onClickEditCorrespondence,
   onClickDeleteCorrespondence,
   onClickPrintTicket,
 }) => {
   const columns = [
     {
-      title: "Fecha creación",
+      title: "F. Creación",
       width: ["97px", "10%"],
       render: (correspondence) => (
         <CorrespondenceContainer>
-          <span>
-            {moment(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
-          </span>
-          <span>
-            {moment(correspondence.createAt.toDate()).format("h:mm a")}
-          </span>
-          <br />
-          <span>{correspondencesStatus(correspondence)}</span>
+          <Space direction="vertical">
+            <div>
+              <span>
+                {moment(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
+              </span>
+              <span>
+                {moment(correspondence.createAt.toDate()).format("h:mm a")}
+              </span>
+            </div>
+            <div>{correspondencesStatus(correspondence.status)}</div>
+          </Space>
         </CorrespondenceContainer>
       ),
     },
@@ -36,25 +42,33 @@ const CorrespondencesTable = ({
       title: "Destinatario",
       align: "center",
       width: ["130px", "15%"],
-      render: (correspondence) => <div>{correspondence?.destination}</div>,
+      render: (correspondence) => (
+        <div className="capitalize">{correspondence?.destination}</div>
+      ),
     },
     {
       title: "Recibido por",
       align: "center",
       width: ["130px", "15%"],
-      render: (correspondence) => <div>{correspondence?.receivedBy}</div>,
+      render: (correspondence) => (
+        <div className="capitalize">{correspondence?.receivedBy}</div>
+      ),
     },
     {
       title: "Clase",
       align: "center",
       width: ["130px", "15%"],
-      render: (correspondence) => <div>{correspondence?.class}</div>,
+      render: (correspondence) => (
+        <div className="capitalize">{correspondence?.class}</div>
+      ),
     },
     {
       title: "Indicativo",
       align: "center",
       width: ["130px", "10%"],
-      render: (correspondence) => <div>{correspondence?.indicative}</div>,
+      render: (correspondence) => (
+        <div className="capitalize">{correspondence?.indicative}</div>
+      ),
     },
     {
       title: "Clasificación",
@@ -62,7 +76,7 @@ const CorrespondencesTable = ({
       width: ["130px", "25%"],
       render: (correspondence) => (
         <div>
-          <div>{correspondence?.classification}</div>
+          <div className="capitalize">{correspondence?.classification}</div>
         </div>
       ),
     },
@@ -76,13 +90,34 @@ const CorrespondencesTable = ({
       title: "Archivos",
       align: "center",
       width: ["130px", "15%"],
-      render: () => <div>Files</div>,
+      render: (correspondence) => (
+        <div>
+          <Space>
+            {(correspondence?.documents || []).map((document, index) => (
+              <a
+                key={index}
+                href={document.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faFilePdf} size="2x" />
+              </a>
+            ))}
+          </Space>
+        </div>
+      ),
     },
     {
       title: "⚙️",
       width: ["70px", "15%"],
       render: (correspondence) => (
         <IconsActionWrapper>
+          <IconAction
+            className="pointer"
+            onClick={() => onClickEditCorrespondence(correspondence.id)}
+            styled={{ color: (theme) => theme.colors.tertiary }}
+            icon={faEdit}
+          />
           <IconAction
             className="pointer"
             onClick={() => onClickDeleteCorrespondence(correspondence.id)}
@@ -107,15 +142,15 @@ const CorrespondencesTable = ({
       dataSource={correspondences}
       columns={columns}
       rowHeaderHeight={50}
-      rowBodyHeight={150}
+      rowBodyHeight={100}
     />
   );
 };
 
 export default memo(CorrespondencesTable);
 
-const correspondencesStatus = (correspondence) => {
-  switch (correspondence.status) {
+const correspondencesStatus = (status) => {
+  switch (status) {
     case "pending":
       return (
         <Tag color="processing" style={{ margin: 0 }}>
