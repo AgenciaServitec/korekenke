@@ -70,13 +70,15 @@ const RowContainer = styled.div`
 
 const RowHeaderContainer = styled(RowContainer)`
   ${({ theme }) => css`
+    width: 100%;
     align-content: center;
-    color: ${theme.colors.dark};
+    color: ${theme.colors.light};
     font-size: ${theme.font_sizes.small};
     font-weight: ${theme.font_weight.medium};
+    border-radius: 0.7em 0.7em 0 0;
 
     .cell-header {
-      background: ${theme.colors.secondary};
+      background: ${theme.colors.tertiary};
       justify-content: center;
     }
 

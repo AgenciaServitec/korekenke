@@ -1,16 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import {useNavigate, useParams} from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
-import {Button, DatePicker, Form, Input, notification, UploadMultiple,} from "../../../components";
-import {Controller, useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  notification,
+  UploadMultiple,
+} from "../../../components";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {useDefaultFirestoreProps, useFormUtils} from "../../../hooks";
-import {firestore} from "../../../firebase";
-import {useGlobalData} from "../../../providers";
-import {assign} from "lodash";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { firestore } from "../../../firebase";
+import { useGlobalData } from "../../../providers";
+import { assign } from "lodash";
 import moment from "moment";
 
 export const CorrespondenceIntegration = () => {
@@ -77,6 +84,7 @@ export const CorrespondenceIntegration = () => {
         classification: formData.classification,
         photos: formData.photos,
         documents: formData.documents,
+        status: "pending",
       }
     );
 

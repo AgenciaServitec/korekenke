@@ -13,6 +13,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { correspondencesRef } from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
+import { firestore } from "../../firebase";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -36,9 +37,14 @@ export const CorrespondencesIntegration = () => {
   }, [correspondencesError]);
 
   const onDeleteCorrespondence = async (correspondenceId) => {
-    console.log("delete", correspondenceId);
+    await correspondencesRef.doc(correspondenceId).update({
+      isDeleted: true,
+    });
 
-    notification({ type: "success" });
+    notification({
+      type: "success",
+      title: "Correspondencia eliminada",
+    });
   };
 
   const onNavigateTo = (pathname) => navigate(pathname);

@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import styled, { css } from "styled-components";
 import moment from "moment";
-import { IconAction, TableVirtualized, Tag } from "../../components/ui";
+import { IconAction, Space, TableVirtualized, Tag } from "../../components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
@@ -21,14 +21,17 @@ const CorrespondencesTable = ({
       width: ["97px", "10%"],
       render: (correspondence) => (
         <CorrespondenceContainer>
-          <span>
-            {moment(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
-          </span>
-          <span>
-            {moment(correspondence.createAt.toDate()).format("h:mm a")}
-          </span>
-          <br />
-          <span>{correspondencesStatus(correspondence)}</span>
+          <Space direction="vertical">
+            <div>
+              <span>
+                {moment(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
+              </span>
+              <span>
+                {moment(correspondence.createAt.toDate()).format("h:mm a")}
+              </span>
+            </div>
+            <div>{correspondencesStatus(correspondence.status)}</div>
+          </Space>
         </CorrespondenceContainer>
       ),
     },
@@ -114,8 +117,8 @@ const CorrespondencesTable = ({
 
 export default memo(CorrespondencesTable);
 
-const correspondencesStatus = (correspondence) => {
-  switch (correspondence.status) {
+const correspondencesStatus = (status) => {
+  switch (status) {
     case "pending":
       return (
         <Tag color="processing" style={{ margin: 0 }}>
