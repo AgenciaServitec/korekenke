@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { useNavigate, useParams } from "react-router";
+import {useNavigate, useParams} from "react-router";
 import Title from "antd/lib/typography/Title";
-import {
-  Button,
-  Form,
-  Input,
-  notification,
-  DatePicker,
-  UploadMultiple,
-  Upload,
-} from "../../../components";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import {Button, DatePicker, Form, Input, notification, UploadMultiple,} from "../../../components";
+import {Controller, useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
-import { firestore } from "../../../firebase";
-import { useGlobalData } from "../../../providers";
-import { assign } from "lodash";
+import {useDefaultFirestoreProps, useFormUtils} from "../../../hooks";
+import {firestore} from "../../../firebase";
+import {useGlobalData} from "../../../providers";
+import {assign} from "lodash";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
@@ -78,10 +70,12 @@ export const CorrespondenceIntegration = () => {
         destination: formData.destination,
         receivedBy: formData.receivedBy,
         class: formData.class,
-        indicative: formData.indicative,
-        classification: formData.classification,
-        issue: formData.issue,
         dateCorrespondence: formData.dateCorrespondence,
+        indicative: formData.indicative,
+        issue: formData.issue,
+        classification: formData.classification,
+        photos: formData.photos,
+        documents: formData.documents,
       }
     );
 
@@ -105,7 +99,14 @@ const Correspondence = ({
 
   const schema = yup.object({
     destination: yup.string().required(),
+    receivedBy: yup.string(),
+    class: yup.string(),
+    indicative: yup.string(),
+    classification: yup.string(),
+    issue: yup.string(),
+    dateCorrespondence: yup.date().required(),
     photos: yup.mixed().required(),
+    documents: yup.mixed().required(),
   });
 
   const {
@@ -119,8 +120,6 @@ const Correspondence = ({
       active: false,
     },
   });
-
-  console.log({ errors });
 
   const { required, error } = useFormUtils({ errors, schema });
 
@@ -136,7 +135,7 @@ const Correspondence = ({
       indicative: correspondence?.indicative || "",
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
-      dateCorrespondence: correspondence?.dateCorrespondence || "",
+      dateCorrespondence: correspondence?.dateCorrespondence || undefined,
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,
     });
