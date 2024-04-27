@@ -71,7 +71,7 @@ const isPhoneNumberExists = async (
     firestore
       .collection("users")
       .where("isDeleted", "==", false)
-      .where("phoneNumber", "==", phoneNumber)
+      .where("phone.number", "==", phoneNumber)
   );
 
   return !isEmpty(users);

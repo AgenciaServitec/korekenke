@@ -1,4 +1,4 @@
-import notificationAntd from "antd/lib/notification";
+import { notification as notificationAntd } from "antd";
 
 // type Type = "error" | "success" | "info" | "warning" | "open" | "close";
 //

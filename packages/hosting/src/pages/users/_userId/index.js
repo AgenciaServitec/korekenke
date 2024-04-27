@@ -17,7 +17,7 @@ import * as yup from "yup";
 import { useFormUtils } from "../../../hooks";
 import { useAuthentication, useGlobalData } from "../../../providers";
 import { assign, capitalize } from "lodash";
-import { allRoles } from "../../../data-list";
+import { allRoles, ApiErrors } from "../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../api";
 import moment from "moment";
 
@@ -52,7 +52,11 @@ export const UserIntegration = () => {
       onGoBack();
     } catch (e) {
       console.log("ErrorSaveUser: ", e);
-      notification({ type: "error" });
+      const errorParse = JSON.parse(e.message);
+
+      ApiErrors?.[errorParse.data]
+        ? notification({ type: "warning", title: ApiErrors[errorParse.data] })
+        : notification({ type: "error" });
     }
   };
 
@@ -61,7 +65,9 @@ export const UserIntegration = () => {
 
     const responseStatus = postUserResponse.ok || putUserResponse.ok;
 
-    if (!responseStatus) return notification({ type: "error" });
+    if (!responseStatus) {
+      throw new Error(JSON.stringify(postUserResponse));
+    }
   };
 
   const getOtherRoles = (otherRoleCodes = []) =>
@@ -123,6 +129,7 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     dni: yup
       .string()
       .min(8)
+      .max(8)
       .required()
       .transform((value) => (value === null ? "" : value)),
     phoneNumber: yup
