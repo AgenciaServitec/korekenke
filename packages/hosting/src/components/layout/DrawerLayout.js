@@ -14,13 +14,12 @@ import { mediaQuery } from "../../styles";
 import { useAuthentication } from "../../providers";
 
 export const DrawerLayout = ({
-  isVisibleDrawer,
-  setIsVisibleDrawer,
   user,
+  isVisibleDrawer,
+  onSetIsVisibleDrawer,
   onNavigateTo,
+  onLogout,
 }) => {
-  const { logout } = useAuthentication();
-
   const items = [
     {
       label: "Home",
@@ -29,7 +28,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/home");
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
     {
@@ -39,7 +38,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/profile");
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
     {
@@ -49,7 +48,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/users");
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
     {
@@ -59,7 +58,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/correspondences");
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
     {
@@ -68,8 +67,8 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faSignOutAlt} size="lg" />,
       isVisible: true,
       onClick: async () => {
-        await logout();
-        setIsVisibleDrawer(false);
+        await onLogout();
+        onSetIsVisibleDrawer(false);
       },
     },
   ];
@@ -78,16 +77,16 @@ export const DrawerLayout = ({
 
   return (
     <DrawerContainer
+      key="right"
       title={
         <div style={{ width: "100%", textAlign: "right" }}>
           <h5>version: {version}</h5>
         </div>
       }
-      placement="right"
+      placement="left"
       closable={true}
-      onClose={() => setIsVisibleDrawer(!isVisibleDrawer)}
+      onClose={() => onSetIsVisibleDrawer(!isVisibleDrawer)}
       open={isVisibleDrawer}
-      key="right"
       className="drawer-content"
       bodyStyle={{ padding: "0" }}
     >

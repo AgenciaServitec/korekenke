@@ -1,20 +1,52 @@
 [
   {
-    "id": "1",
-    "roleName": "Super admin",
-    "roleCode": "super_admin",
-    "redirectTo": "/"
+    "defaultRole": "super_admin",
+    "roles": [
+      {
+        "name": "Super admin",
+        "code": "super_admin"
+      },
+      {
+        "name": "admin",
+        "code": "admin"
+      },
+      {
+        "name": "Funcionario",
+        "code": "funtionary"
+      },
+      {
+        "name": "Usuario",
+        "code": "user"
+      }
+    ],
+    "initialPage": "/home"
   },
   {
-    "id": "2",
-    "roleName": "admin",
-    "roleCode": "admin",
-    "redirectTo": "/"
+    "defaultRole": "admin",
+    "roles": [
+      {
+        "name": "admin",
+        "code": "admin"
+      },
+      {
+        "name": "Funcionario",
+        "code": "funtionary"
+      },
+      {
+        "name": "Usuario",
+        "code": "user"
+      }
+    ],
+    "initialPage": "/home"
   },
   {
-    "id": "3",
-    "roleName": "user",
-    "roleCode": "user",
-    "redirectTo": "/"
+    "defaultRole": "user",
+    "roles": [
+      {
+        "name": "Usuario",
+        "code": "user"
+      }
+    ],
+    "initialPage": "/home"
   }
 ]
