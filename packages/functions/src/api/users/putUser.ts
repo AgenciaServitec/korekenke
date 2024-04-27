@@ -7,7 +7,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { isEmpty } from "lodash";
 import assert from "assert";
-import { defaultFirestoreProps } from "../../utils";
+import { defaultFirestoreProps, logger } from "../../utils";
 
 interface Params {
   userId: string;
@@ -51,7 +51,7 @@ export const putUser = async (
 
     res.sendStatus(200).end();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     next(error);
   }
 };

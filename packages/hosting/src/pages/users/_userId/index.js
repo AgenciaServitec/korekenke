@@ -84,6 +84,7 @@ export const UserIntegration = () => {
     assign(
       {},
       {
+        ...(user?.id && { id: user.id }),
         defaultRoleCode: formData.defaultRoleCode,
         otherRoles: getOtherRoles(formData.otherRoleCodes),
         firstName: formData.firstName.toLowerCase(),
