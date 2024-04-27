@@ -8,27 +8,25 @@ import {
   Form,
   Input,
   InputNumber,
-  InputPassword,
   notification,
   Select,
-  Upload,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
-import { firestore } from "../../../firebase";
-import { useGlobalData } from "../../../providers";
+import { useFormUtils } from "../../../hooks";
+import { useAuthentication, useGlobalData } from "../../../providers";
 import { assign, capitalize } from "lodash";
-import { countriesISO, allRoles } from "../../../data-list";
+import { allRoles } from "../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../api";
+import moment from "moment";
 
 export const UserIntegration = () => {
+  const { authUser } = useAuthentication();
   const navigate = useNavigate();
   const { userId } = useParams();
   const { postUser, postUserResponse, postUserLoading } = useApiUserPost();
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
-  const { assignUpdateProps } = useDefaultFirestoreProps();
 
   const { users } = useGlobalData();
 
@@ -36,9 +34,7 @@ export const UserIntegration = () => {
 
   useEffect(() => {
     const _user =
-      userId === "new"
-        ? { id: firestore.collection("users").doc().id }
-        : users.find((user) => user.id === userId);
+      userId === "new" ? {} : users.find((user) => user.id === userId);
 
     if (!_user) return navigate(-1);
 
@@ -47,7 +43,7 @@ export const UserIntegration = () => {
 
   const onSubmitSaveUser = async (formData) => {
     try {
-      const _user = mapUser(assignUpdateProps(formData));
+      const _user = mapUserToApi(formData);
 
       await saveUser(_user);
 
@@ -68,21 +64,33 @@ export const UserIntegration = () => {
     if (!responseStatus) return notification({ type: "error" });
   };
 
-  const mapUser = (formData) =>
+  const getOtherRoles = (otherRoleCodes = []) =>
+    allRoles
+      .filter((role) => otherRoleCodes.find((_role) => _role === role?.code))
+      .map((role) => ({
+        code: role?.code,
+        name: role.name,
+        imgUrl: role.imgUrl,
+        updateAt: moment(),
+      }));
+
+  const mapUserToApi = (formData) =>
     assign(
       {},
       {
-        id: user.id,
-        roleCode: formData.defaultRoleCode,
+        defaultRoleCode: formData.defaultRoleCode,
+        otherRoles: getOtherRoles(formData.otherRoleCodes),
         firstName: formData.firstName.toLowerCase(),
-        lastName: formData.lastName.toLowerCase(),
+        paternalSurname: formData.paternalSurname.toLowerCase(),
+        maternalSurname: formData.maternalSurname.toLowerCase(),
         email: formData.email.toLowerCase(),
-        password: formData.password,
+        cip: formData.cip,
+        dni: formData.dni,
         phone: {
+          prefix: "+51",
           number: formData.phoneNumber,
-          prefix: formData.phonePrefix,
         },
-        ...(formData?.profileImage && { profileImage: formData.profileImage }),
+        updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
       }
     );
 
@@ -99,16 +107,30 @@ export const UserIntegration = () => {
 };
 
 const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
-  const [uploadingImage, setUploadingImage] = useState(false);
-
   const schema = yup.object({
-    roleCode: yup.string().required(),
+    defaultRoleCode: yup.string().required(),
+    otherRoleCodes: yup.array().notRequired().nullable(),
     firstName: yup.string().required(),
-    lastName: yup.string().required(),
+    paternalSurname: yup.string().required(),
+    maternalSurname: yup.string().required(),
     email: yup.string().email().required(),
-    password: yup.string().required(),
-    phonePrefix: yup.string().required(),
-    phoneNumber: yup.number().required(),
+    cip: yup
+      .string()
+      .min(9)
+      .max(9)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
+    dni: yup
+      .string()
+      .min(8)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
+    phoneNumber: yup
+      .string()
+      .min(9)
+      .max(9)
+      .required()
+      .transform((value) => (value === null ? "" : value)),
   });
 
   const {
@@ -116,6 +138,8 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -128,16 +152,21 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
 
   const resetForm = () => {
     reset({
-      roleCode: user?.defaultRoleCode || "",
+      defaultRoleCode: user?.defaultRoleCode || "",
+      otherRoleCodes: user?.otherRoleCodes || "",
       firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
+      paternalSurname: user?.paternalSurname || "",
+      maternalSurname: user?.maternalSurname || "",
       email: user?.email || "",
-      password: user?.password || "",
-      phonePrefix: user?.phone?.prefix || "+51",
+      cip: user?.cip || "",
+      dni: user?.dni || "",
       phoneNumber: user?.phone?.number || "",
-      profileImage: user?.profileImage || null,
     });
   };
+
+  useEffect(() => {
+    setValue("otherRoleCodes", []);
+  }, [watch("defaultRoleCode")]);
 
   const submitSaveUser = (formData) => onSubmitSaveUser(formData);
 
@@ -151,12 +180,12 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Controller
-                name="roleCode"
+                name="defaultRoleCode"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
-                    label="Rol"
+                    label="Rol predeterminado"
                     value={value}
                     onChange={onChange}
                     error={error(name)}
@@ -165,6 +194,29 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                       label: capitalize(role.name),
                       value: role.code,
                     }))}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="otherRoleCodes"
+                control={control}
+                defaultValue={[]}
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="Otros roles"
+                    mode="multiple"
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    options={allRoles
+                      .filter((role) => role.code !== watch("defaultRoleCode"))
+                      .map((role) => ({
+                        label: capitalize(role.name),
+                        value: role.code,
+                      }))}
                   />
                 )}
               />
@@ -188,12 +240,29 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
             </Col>
             <Col span={24}>
               <Controller
-                name="lastName"
+                name="paternalSurname"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Apellidos"
+                    label="Apellido paterno"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="maternalSurname"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Apellido materno"
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -222,42 +291,38 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
             </Col>
             <Col span={24}>
               <Controller
-                name="password"
+                name="cip"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
-                  <InputPassword
-                    label="Contraseña"
-                    name={name}
-                    value={value}
+                  <InputNumber
+                    label="CIP"
                     onChange={onChange}
+                    value={value}
+                    name={name}
                     error={error(name)}
                     required={required(name)}
                   />
                 )}
               />
             </Col>
-            <Col xs={24} sm={6} md={6}>
+            <Col span={24}>
               <Controller
-                name="phonePrefix"
+                name="dni"
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
-                  <Select
-                    label="Prefijo"
-                    value={value}
+                  <InputNumber
+                    label="DNI"
                     onChange={onChange}
+                    value={value}
+                    name={name}
                     error={error(name)}
                     required={required(name)}
-                    options={countriesISO.map((countryIso) => ({
-                      code: countryIso.code,
-                      label: `${countryIso.name} (${countryIso.phonePrefix})`,
-                      value: countryIso.phonePrefix,
-                    }))}
                   />
                 )}
               />
             </Col>
-            <Col xs={24} sm={18} md={18}>
+            <Col span={24}>
               <Controller
                 name="phoneNumber"
                 control={control}
@@ -273,28 +338,6 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                 )}
               />
             </Col>
-            <Col span={24}>
-              <Controller
-                name="profileImage"
-                control={control}
-                defaultValue={null}
-                render={({ field: { onChange, value, name } }) => (
-                  <Upload
-                    label="Foto"
-                    accept="image/*"
-                    name={name}
-                    value={value}
-                    filePath={`users/${user.id}`}
-                    resize="400x400"
-                    buttonText="Subir foto"
-                    error={error(name)}
-                    required={required(name)}
-                    onChange={(file) => onChange(file)}
-                    onUploading={setUploadingImage}
-                  />
-                )}
-              />
-            </Col>
           </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
@@ -303,7 +346,7 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                 size="large"
                 block
                 onClick={() => onGoBack()}
-                disabled={uploadingImage | isSavingUser}
+                disabled={isSavingUser}
               >
                 Cancelar
               </Button>
@@ -314,7 +357,6 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                 size="large"
                 block
                 htmlType="submit"
-                disabled={uploadingImage}
                 loading={isSavingUser}
               >
                 Guardar
