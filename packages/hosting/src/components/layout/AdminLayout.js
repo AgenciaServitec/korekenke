@@ -11,6 +11,7 @@ import { Spin } from "../ui";
 import { usersRef } from "../../firebase/collections";
 import { firestoreTimestamp } from "../../firebase/firestore";
 import moment from "moment";
+import { orderBy } from "lodash";
 
 const { Content } = LayoutAntd;
 
@@ -37,12 +38,17 @@ export const AdminLayout = ({ children }) => {
   const onSaveUser = async (role) => {
     await usersRef.doc(authUser.id).update({
       defaultRole: role.code,
-      roles: [
-        ...authUser.roles.filter((_role) => _role.code !== role.code),
-        { ...role, updateAt: firestoreTimestamp.fromDate(moment().toDate()) },
-      ],
+      roles: orderBy(
+        [
+          ...authUser.roles.filter((_role) => _role.code !== role.code),
+          { ...role, updateAt: firestoreTimestamp.fromDate(moment().toDate()) },
+        ],
+        "updateAt",
+        "desc"
+      ),
     });
   };
+
   return (
     <Spin tip="Cargando..." spinning={isChangeRole} className="spin-item">
       <LayoutContainer>
