@@ -7,6 +7,7 @@ import {
   InscriptionFile,
   LoginIntegration,
   RegisterIntegration,
+  CmstsIntegration,
 } from "../pages";
 import { Page404 } from "../pages/404";
 
@@ -70,6 +71,15 @@ export const Router = () => {
             </AdminLayout>
           }
         />{" "}
+        <Route
+          exact
+          path="inscriptions/cmsts"
+          element={
+            <AdminLayout>
+              <A.CmstsIntegration />
+            </AdminLayout>
+          }
+        />
         <Route
           exact
           path="inscriptions/cmsts/sheet"

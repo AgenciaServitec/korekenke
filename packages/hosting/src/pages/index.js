@@ -6,4 +6,4 @@ export * from "./home";
 export * from "./correspondences";
 export * from "./correspondences/_correspondence";
 export * from "./profile";
-export * from "./inscriptions/cmsts/sheets";
+export * from "./inscriptions";
