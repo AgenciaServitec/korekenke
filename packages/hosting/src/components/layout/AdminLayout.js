@@ -37,10 +37,10 @@ export const AdminLayout = ({ children }) => {
 
   const onSaveUser = async (role) => {
     await usersRef.doc(authUser.id).update({
-      defaultRole: role.code,
-      roles: orderBy(
+      defaultRoleCode: role.code,
+      otherRoles: orderBy(
         [
-          ...authUser.roles.filter((_role) => _role.code !== role.code),
+          ...authUser.otherRoles.filter((_role) => _role.code !== role.code),
           { ...role, updateAt: firestoreTimestamp.fromDate(moment().toDate()) },
         ],
         "updateAt",

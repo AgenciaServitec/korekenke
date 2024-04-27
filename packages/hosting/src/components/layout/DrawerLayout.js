@@ -11,7 +11,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
-import { useAuthentication } from "../../providers";
 
 export const DrawerLayout = ({
   user,
@@ -88,7 +87,7 @@ export const DrawerLayout = ({
       onClose={() => onSetIsVisibleDrawer(!isVisibleDrawer)}
       open={isVisibleDrawer}
       className="drawer-content"
-      bodyStyle={{ padding: "0" }}
+      bodyStyle={{ padding: "1em" }}
     >
       <div className="logo" />
       <Menu

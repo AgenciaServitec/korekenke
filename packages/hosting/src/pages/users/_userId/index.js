@@ -20,7 +20,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign, capitalize } from "lodash";
-import { countriesISO, roles } from "../../../data-list";
+import { countriesISO, allRoles } from "../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../api";
 
 export const UserIntegration = () => {
@@ -73,7 +73,7 @@ export const UserIntegration = () => {
       {},
       {
         id: user.id,
-        roleCode: formData.roleCode,
+        roleCode: formData.defaultRoleCode,
         firstName: formData.firstName.toLowerCase(),
         lastName: formData.lastName.toLowerCase(),
         email: formData.email.toLowerCase(),
@@ -128,7 +128,7 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
 
   const resetForm = () => {
     reset({
-      roleCode: user?.roleCode || "",
+      roleCode: user?.defaultRoleCode || "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       email: user?.email || "",
@@ -161,9 +161,9 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={roles.map((role) => ({
-                      label: capitalize(role.roleName),
-                      value: role.roleCode,
+                    options={allRoles.map((role) => ({
+                      label: capitalize(role.name),
+                      value: role.code,
                     }))}
                   />
                 )}

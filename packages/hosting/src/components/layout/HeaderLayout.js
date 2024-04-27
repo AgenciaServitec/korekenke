@@ -7,7 +7,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { AvatarNoFound, LogoPrimary } from "../../images";
+import { LogoPrimary, PhotoNoFound } from "../../images";
 import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
@@ -32,9 +32,12 @@ export const HeaderLayout = ({
   const onSetIsVisibleMoreRoles = () =>
     setIsVisibleMoreRoles(!isVisibleMoreRoles);
 
-  const defaultRole = user.roles.find((role) => role.code === user.defaultRole);
+  const defaultRole = user.otherRoles.find(
+    (role) => role?.code === user?.defaultRoleCode
+  );
+
   const lastRole = orderBy(
-    user.roles.filter((role) => role.code !== defaultRole.code),
+    user.otherRoles.filter((role) => role.code !== defaultRole.code),
     "updateAt",
     "desc"
   )[0];
@@ -94,7 +97,7 @@ export const HeaderLayout = ({
                     <div className="wrapper-default-roles">
                       <div className="selected-role item-role">
                         <img
-                          src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436189.jpg"
+                          src={user?.profileImage?.thumbUrl || PhotoNoFound}
                           alt="Role seleccionado"
                         />
                         <div className="text-role">
@@ -111,10 +114,7 @@ export const HeaderLayout = ({
                             type="light"
                             className="icon-rotate"
                           />
-                          <img
-                            src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
-                            alt="Role seleccionado"
-                          />
+                          <img src={lastRole.imgUrl} alt="Role seleccionado" />
                         </div>
                         <div className="text-role">
                           <strong>{lastRole.name}</strong>
@@ -136,7 +136,7 @@ export const HeaderLayout = ({
                     </div>
                     <div className="wrapper-more-roles">
                       <ul>
-                        {user.roles.map((role, index) => (
+                        {user.otherRoles.map((role, index) => (
                           <li
                             key={index}
                             className="item-role"
@@ -145,10 +145,7 @@ export const HeaderLayout = ({
                               return onChangeDefaultRole(role);
                             }}
                           >
-                            <img
-                              src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436189.jpg"
-                              alt="Role seleccionado"
-                            />
+                            <img src={role.imgUrl} alt="Role seleccionado" />
                             <div className="text-role">
                               <strong>{role.name}</strong>
                             </div>
@@ -176,7 +173,7 @@ export const HeaderLayout = ({
             <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
             <span>({defaultRole.name})</span>
             <img
-              src={user?.profileImage?.thumbUrl || AvatarNoFound}
+              src={user?.profileImage?.thumbUrl || PhotoNoFound}
               alt="user"
             />
           </Space>
