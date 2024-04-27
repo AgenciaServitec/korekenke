@@ -33,7 +33,7 @@ export const putUser = async (
   try {
     const userFirestore = await fetchUser(user.id);
     const changeEmail = userFirestore.email !== user.email;
-    const changePhoneNumber = userFirestore.phoneNumber !== user.phoneNumber;
+    const changePhoneNumber = userFirestore.phone.number !== user.phone.number;
 
     if (changeEmail) {
       const emailExists = await isEmailExists(user.email);
@@ -41,7 +41,7 @@ export const putUser = async (
     }
 
     if (changePhoneNumber) {
-      const phoneNumberExists = await isPhoneNumberExists(user.phoneNumber);
+      const phoneNumberExists = await isPhoneNumberExists(user.phone.number);
       if (phoneNumberExists)
         res.status(412).send("phone_number_already_exists").end();
     }
@@ -71,7 +71,8 @@ const updateUserAuth = async (
   await auth.updateUser(user.id, {
     ...(changeEmail && { email: user?.email || undefined }),
     ...(changePhoneNumber && {
-      phoneNumber: `+51${user?.phoneNumber}` || undefined,
+      phoneNumber:
+        `${user?.phone?.prefix || "+51"}${user?.phone.number}` || undefined,
     }),
     password: user?.password || undefined,
   });
@@ -95,7 +96,7 @@ const isPhoneNumberExists = async (
     firestore
       .collection("users")
       .where("isDeleted", "==", false)
-      .where("phoneNumber", "==", phoneNumber)
+      .where("phone.number", "==", phoneNumber)
   );
 
   return !isEmpty(users);

@@ -2,10 +2,6 @@ import * as admin from "firebase-admin";
 
 export type CurrencyCode = "PEN" | "USD";
 
-type DefaultFirestoreProps = DocumentCreate &
-  Partial<DocumentUpdate> &
-  Partial<DocumentDelete>;
-
 export interface DocumentCreate {
   createAt: admin.firestore.Timestamp;
   updateBy: string;
@@ -38,21 +34,3 @@ export type ApiToFirestore<T> = {
 };
 
 export type Image = Omit<_Image, "createAt"> & { createAt: Date };
-
-export interface _User extends DefaultFirestoreProps {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  roleCode: RoleCode;
-  companyCode: string | null;
-  updateBy: string;
-}
-
-export interface Search {
-  id: string;
-  title?: string | null;
-  tags: string;
-  photoName: string | null;
-  minPrice?: string;
-}
