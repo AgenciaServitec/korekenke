@@ -5,7 +5,7 @@ import Typography from "antd/lib/typography";
 import List from "antd/lib/list";
 import Tag from "antd/lib/tag";
 import {
-  Button,
+  AddButton,
   IconAction,
   modalConfirm,
   notification,
@@ -69,9 +69,7 @@ export const Users = () => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Button type="primary" onClick={() => onAddUser()}>
-          Agregar usuario
-        </Button>
+        <AddButton onClick={onAddUser} title="Usuario" margin="0" />
       </Col>
       <Divider />
       <Col span={24}>

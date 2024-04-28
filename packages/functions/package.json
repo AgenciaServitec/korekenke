@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "main": "lib/index.js",
   "description": "Cloud Functions for Firebase",

@@ -1,19 +1,32 @@
-type RoleCode = "super_admin" | "admin" | "user";
+type RoleCode = "super_admin" | "admin" | "functionary" | "user";
+
+interface Role {
+  code: RoleCode;
+  name: string;
+  imgUrl: string;
+  updateAt: string;
+}
 
 interface User extends DefaultFirestoreProps {
   id: string;
-  cip: string;
-  password: string | null;
-  roleCode: RoleCode;
+  defaultRoleCode: string;
+  otherRoles?: Role[];
   firstName: string;
-  lastName: string;
-  dni: string;
+  paternalSurname: string;
+  maternalSurname: string;
   email: string | null;
-  phoneNumber: string | null;
-  degree: string;
-  cgi: string;
-  iAcceptPrivacyPolicies: boolean;
-  updateBy?: string;
+  cip: string;
+  dni: string;
+  phone: {
+    prefix: string;
+    number: string;
+  };
+  password?: string | null;
+  degree?: string;
+  cgi?: string;
+  iAcceptPrivacyPolicies?: boolean;
+  updateBy: string;
+  profileImage?: Image;
 }
 
 interface Image {

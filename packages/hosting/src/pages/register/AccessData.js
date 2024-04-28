@@ -16,11 +16,13 @@ export const AccessData = ({ next, currentStep }) => {
     cip: yup
       .string()
       .min(9)
+      .max(9)
       .required()
       .transform((value) => (value === null ? "" : value)),
     dni: yup
       .string()
       .min(8)
+      .max(8)
       .required()
       .transform((value) => (value === null ? "" : value)),
   });
