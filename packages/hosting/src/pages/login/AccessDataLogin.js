@@ -20,6 +20,7 @@ export const AccessDataLogin = ({ next }) => {
     cip: yup
       .string()
       .min(9)
+      .max(9)
       .required()
       .transform((value) => (value === null ? "" : value)),
   });
