@@ -45,17 +45,21 @@ export const HeaderLayout = ({
   const items = [
     {
       label: (
-        <div>
-          <Link to="/profile">Perfil</Link>
-        </div>
+        <Link to="/profile" style={{ color: "#000" }}>
+          <div style={{ padding: ".4em 0" }}>Perfil</div>
+        </Link>
       ),
       key: "1",
     },
     {
-      type: "divider",
-    },
-    {
-      label: <div onClick={() => onLogout()}>Cerrar sesion</div>,
+      label: (
+        <div
+          onClick={() => onLogout()}
+          style={{ padding: ".4em 0", color: "red" }}
+        >
+          Cerrar sesion
+        </div>
+      ),
       key: "3",
     },
   ];

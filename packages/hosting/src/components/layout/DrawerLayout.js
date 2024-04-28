@@ -2,13 +2,7 @@ import React from "react";
 import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
-import {
-  faFileAlt,
-  faHome,
-  faSignOutAlt,
-  faUser,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faHome, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
 
@@ -17,7 +11,6 @@ export const DrawerLayout = ({
   isVisibleDrawer,
   onSetIsVisibleDrawer,
   onNavigateTo,
-  onLogout,
 }) => {
   const items = [
     {
@@ -27,16 +20,6 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/home");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Perfil",
-      key: "profile",
-      icon: <FontAwesomeIcon icon={faUser} size="lg" />,
-      isVisible: true,
-      onClick: () => {
-        onNavigateTo("/profile");
         onSetIsVisibleDrawer(false);
       },
     },
@@ -57,16 +40,6 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/correspondences");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Cerrar sesion",
-      key: "logout",
-      icon: <FontAwesomeIcon icon={faSignOutAlt} size="lg" />,
-      isVisible: true,
-      onClick: async () => {
-        await onLogout();
         onSetIsVisibleDrawer(false);
       },
     },

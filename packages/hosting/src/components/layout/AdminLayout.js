@@ -9,7 +9,6 @@ import { BreadcrumbLayout } from "./Breadcrumb";
 import { useAuthentication } from "../../providers";
 import { Spin } from "../ui";
 import { usersRef } from "../../firebase/collections";
-import { firestoreTimestamp } from "../../firebase/firestore";
 import moment from "moment";
 import { orderBy } from "lodash";
 
@@ -58,7 +57,6 @@ export const AdminLayout = ({ children }) => {
             isVisibleDrawer={isVisibleDrawer}
             onSetIsVisibleDrawer={setIsVisibleDrawer}
             onNavigateTo={onNavigateTo}
-            onLogout={logout}
           />
           <HeaderLayout
             user={authUser}
