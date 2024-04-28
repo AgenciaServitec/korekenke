@@ -47,7 +47,7 @@ const deleteUserFirestore = async (
   await firestore
     .collection("users")
     .doc(userId)
-    .set({ ...user }, { merge: true });
+    .update({ ...user, isDeleted: true });
 };
 
 const deleteUserAuth = async (userId: string): Promise<void> =>

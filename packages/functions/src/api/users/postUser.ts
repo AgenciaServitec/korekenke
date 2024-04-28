@@ -20,7 +20,7 @@ export const postUser = async (
 
     if (_isEmailExists) res.status(412).send("email_already_exists").end();
 
-    const _isPhoneNumberExists = await isPhoneNumberExists(user?.phoneNumber);
+    const _isPhoneNumberExists = await isPhoneNumberExists(user?.phone.number);
 
     if (_isPhoneNumberExists)
       res.status(412).send("phone_number_already_exists").end();
@@ -46,7 +46,9 @@ const addUser = async (user: User): Promise<void> => {
 const addUserAuth = async (user: User): Promise<void> => {
   await auth.createUser({
     uid: user.id,
-    phoneNumber: `+51${user?.phoneNumber}` || undefined,
+    phoneNumber: user?.phone
+      ? `${user.phone?.prefix || "+51"}${user.phone.number}`
+      : undefined,
     email: user?.email || undefined,
     password: user?.password || undefined,
   });
@@ -70,7 +72,7 @@ const isPhoneNumberExists = async (
     firestore
       .collection("users")
       .where("isDeleted", "==", false)
-      .where("phoneNumber", "==", phoneNumber)
+      .where("phone.number", "==", phoneNumber)
   );
 
   return !isEmpty(users);

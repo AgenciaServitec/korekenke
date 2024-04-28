@@ -2,25 +2,16 @@ import React from "react";
 import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
-import {
-  faFileAlt,
-  faHome,
-  faSignOutAlt,
-  faUser,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faHome, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
-import { useAuthentication } from "../../providers";
 
 export const DrawerLayout = ({
-  isVisibleDrawer,
-  setIsVisibleDrawer,
   user,
+  isVisibleDrawer,
+  onSetIsVisibleDrawer,
   onNavigateTo,
 }) => {
-  const { logout } = useAuthentication();
-
   const items = [
     {
       label: "Home",
@@ -29,17 +20,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/home");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Perfil",
-      key: "profile",
-      icon: <FontAwesomeIcon icon={faUser} size="lg" />,
-      isVisible: true,
-      onClick: () => {
-        onNavigateTo("/profile");
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
     {
@@ -49,7 +30,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/users");
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
     {
@@ -59,17 +40,7 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/correspondences");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Cerrar sesion",
-      key: "logout",
-      icon: <FontAwesomeIcon icon={faSignOutAlt} size="lg" />,
-      isVisible: true,
-      onClick: async () => {
-        await logout();
-        setIsVisibleDrawer(false);
+        onSetIsVisibleDrawer(false);
       },
     },
   ];
@@ -78,18 +49,18 @@ export const DrawerLayout = ({
 
   return (
     <DrawerContainer
+      key="right"
       title={
         <div style={{ width: "100%", textAlign: "right" }}>
           <h5>version: {version}</h5>
         </div>
       }
-      placement="right"
+      placement="left"
       closable={true}
-      onClose={() => setIsVisibleDrawer(!isVisibleDrawer)}
+      onClose={() => onSetIsVisibleDrawer(!isVisibleDrawer)}
       open={isVisibleDrawer}
-      key="right"
       className="drawer-content"
-      bodyStyle={{ padding: "0" }}
+      bodyStyle={{ padding: "1em" }}
     >
       <div className="logo" />
       <Menu

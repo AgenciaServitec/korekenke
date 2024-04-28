@@ -8,6 +8,8 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { useFormUtils } from "../../hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export const SendCodeSmsAndSignInWithCodeIntegration = ({
   prev,
@@ -96,6 +98,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
       onVerifyCodeSmsAndSignIn={onVerifyCodeSmsAndSignIn}
       loading={loading}
       phoneNumber={phoneNumber}
+      prev={prev}
     />
   );
 };
@@ -106,6 +109,7 @@ const SendCodeSmsAndSignInWithCode = ({
   phoneNumber,
   onSendCodeSms,
   onVerifyCodeSmsAndSignIn,
+  prev,
 }) => {
   const schema = yup.object({
     verificationCode: yup
@@ -144,6 +148,20 @@ const SendCodeSmsAndSignInWithCode = ({
           >
             {loading ? "Enviando" : "Enviar"}
           </Button>
+          <br />
+          <br />
+          <div>
+            <span
+              className="link link-color"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                document.getElementById("recaptcha-container").innerHTML = "";
+                prev();
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+            </span>
+          </div>
         </div>
       )}
       <div id="recaptcha-container"></div>
@@ -176,6 +194,16 @@ const SendCodeSmsAndSignInWithCode = ({
           >
             {loading ? "Iniciando sesión" : "Iniciar sesión"}
           </Button>
+          <span
+            className="link link-color"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              document.getElementById("recaptcha-container").innerHTML = "";
+              prev();
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+          </span>
         </Form>
       )}
     </Container>
@@ -189,6 +217,10 @@ const Container = styled.div`
 
     h3 {
       color: inherit;
+    }
+
+    .link {
+      cursor: pointer;
     }
   }
 `;

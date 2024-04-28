@@ -11,28 +11,34 @@ import {
   Input,
   notification,
   RadioGroup,
+  Upload,
 } from "../../components";
 import { useAuthentication } from "../../providers";
 import { useApiUserPut } from "../../api";
+import { assign } from "lodash";
+import { ApiErrors } from "../../data-list";
 
 export const ProfileDataForm = () => {
   const { authUser } = useAuthentication();
   const { putUser, putUserLoading, putUserResponse } = useApiUserPut();
 
   const schema = yup.object({
+    profilePhoto: yup.mixed(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
     email: yup.string().email().required(),
-    phoneNumber: yup.number().required(),
+    phoneNumber: yup.string().min(9).max(9).required(),
     cip: yup
       .string()
       .min(9)
+      .max(9)
       .required()
       .transform((value) => (value === null ? "" : value)),
     dni: yup
       .string()
       .min(8)
+      .max(8)
       .required()
       .transform((value) => (value === null ? "" : value)),
   });
@@ -48,30 +54,38 @@ export const ProfileDataForm = () => {
 
   const { error, errorMessage, required } = useFormUtils({ errors, schema });
 
-  const onSubmit = async (formData) => {
-    await startUpdateProfile(formData);
-  };
-
-  const startUpdateProfile = async (formData) => {
+  const updateProfile = async (formData) => {
     try {
-      await putUser({ ...authUser, ...formData });
+      await putUser(
+        assign({}, formData, {
+          id: authUser.id,
+          phone: { prefix: "+51", number: formData.phoneNumber },
+        })
+      );
 
-      if (!putUserResponse.ok) throw new Error("Error in updateProfile");
+      if (!putUserResponse.ok) {
+        throw new Error(JSON.stringify(putUserResponse));
+      }
 
       notification({ type: "success" });
     } catch (e) {
-      console.error(e);
-      notification({ type: "error" });
+      console.log("ErrorUpdateUser: ", e);
+      const errorParse = JSON.parse(e.message);
+
+      ApiErrors?.[errorParse.data]
+        ? notification({ type: "warning", title: ApiErrors[errorParse.data] })
+        : notification({ type: "error" });
     }
   };
 
   const resetForm = () => {
     reset({
+      profilePhoto: authUser?.profilePhoto || null,
       firstName: authUser?.firstName || "",
       maternalSurname: authUser?.maternalSurname || "",
       paternalSurname: authUser?.paternalSurname || "",
       email: authUser?.email || "",
-      phoneNumber: authUser?.phoneNumber || "",
+      phoneNumber: authUser?.phone?.number || "",
       cip: authUser?.cip || "",
       dni: authUser?.dni || "",
       cgi: authUser?.cgi || false,
@@ -82,9 +96,34 @@ export const ProfileDataForm = () => {
     resetForm();
   }, [authUser]);
 
+  const onSubmit = async (formData) => {
+    await updateProfile(formData);
+  };
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Controller
+            control={control}
+            name="profilePhoto"
+            render={({ field: { onChange, value, onBlur, name } }) => (
+              <Upload
+                label="Foto personal"
+                accept="image/*"
+                resize="313x370"
+                buttonText="Subir foto"
+                value={value}
+                name={name}
+                filePath={`users/${authUser.id}/profile`}
+                fileName="personal-photo"
+                onChange={(file) => onChange(file)}
+                required={required(name)}
+                error={error(name)}
+              />
+            )}
+          />
+        </Col>
         <Col span={24} md={12}>
           <Controller
             name="firstName"
@@ -206,6 +245,7 @@ export const ProfileDataForm = () => {
             render={({ field: { onChange, value, name } }) => (
               <RadioGroup
                 label="Perteneces a discapacitados, CGI? "
+                animation={false}
                 onChange={onChange}
                 value={value}
                 name={name}
@@ -227,7 +267,6 @@ export const ProfileDataForm = () => {
           />
         </Col>
       </Row>
-
       <Row justify="end" gutter={[16, 16]}>
         <Col xs={24} sm={12} md={8}>
           <Button
@@ -236,7 +275,6 @@ export const ProfileDataForm = () => {
             block
             htmlType="submit"
             loading={putUserLoading}
-            disabled={putUserLoading}
           >
             Guardar
           </Button>

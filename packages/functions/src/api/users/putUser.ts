@@ -7,7 +7,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { isEmpty } from "lodash";
 import assert from "assert";
-import { defaultFirestoreProps } from "../../utils";
+import { defaultFirestoreProps, logger } from "../../utils";
 
 interface Params {
   userId: string;
@@ -33,7 +33,7 @@ export const putUser = async (
   try {
     const userFirestore = await fetchUser(user.id);
     const changeEmail = userFirestore.email !== user.email;
-    const changePhoneNumber = userFirestore.phoneNumber !== user.phoneNumber;
+    const changePhoneNumber = userFirestore.phone.number !== user.phone.number;
 
     if (changeEmail) {
       const emailExists = await isEmailExists(user.email);
@@ -41,7 +41,7 @@ export const putUser = async (
     }
 
     if (changePhoneNumber) {
-      const phoneNumberExists = await isPhoneNumberExists(user.phoneNumber);
+      const phoneNumberExists = await isPhoneNumberExists(user.phone.number);
       if (phoneNumberExists)
         res.status(412).send("phone_number_already_exists").end();
     }
@@ -51,7 +51,7 @@ export const putUser = async (
 
     res.sendStatus(200).end();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     next(error);
   }
 };
@@ -71,7 +71,9 @@ const updateUserAuth = async (
   await auth.updateUser(user.id, {
     ...(changeEmail && { email: user?.email || undefined }),
     ...(changePhoneNumber && {
-      phoneNumber: `+51${user?.phoneNumber}` || undefined,
+      phoneNumber: user?.phone
+        ? `${user.phone?.prefix || "+51"}${user.phone.number}`
+        : undefined,
     }),
     password: user?.password || undefined,
   });
@@ -95,7 +97,7 @@ const isPhoneNumberExists = async (
     firestore
       .collection("users")
       .where("isDeleted", "==", false)
-      .where("phoneNumber", "==", phoneNumber)
+      .where("phone.number", "==", phoneNumber)
   );
 
   return !isEmpty(users);

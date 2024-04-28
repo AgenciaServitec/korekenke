@@ -7,41 +7,77 @@ import { FooterLayout } from "./FooterLayout";
 import { useNavigate } from "react-router";
 import { BreadcrumbLayout } from "./Breadcrumb";
 import { useAuthentication } from "../../providers";
+import { Spin } from "../ui";
+import { usersRef } from "../../firebase/collections";
+import moment from "moment";
+import { orderBy } from "lodash";
 
 const { Content } = LayoutAntd;
 
 export const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
-  const { authUser } = useAuthentication();
+  const { authUser, logout } = useAuthentication();
 
+  const [isChangeRole, setIsChangeRole] = useState(false);
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   const onNavigateTo = (url) => navigate(url);
 
+  const onChangeDefaultRole = async (role) => {
+    try {
+      setIsChangeRole(true);
+      await onSaveUser(role);
+    } finally {
+      setOpenDropdown(false);
+      setIsChangeRole(false);
+    }
+  };
+
+  const onSaveUser = async (role) => {
+    await usersRef.doc(authUser.id).update({
+      defaultRoleCode: role.code,
+      otherRoles: orderBy(
+        [
+          ...authUser.otherRoles.filter((_role) => _role.code !== role.code),
+          { ...role, updateAt: moment().format("YYYY-MM-DD HH:mm:ss") },
+        ],
+        "updateAt",
+        "desc"
+      ),
+    });
+  };
+
   return (
-    <LayoutContainer>
-      <LayoutAntd className="site-layout">
-        <DrawerLayout
-          isVisibleDrawer={isVisibleDrawer}
-          setIsVisibleDrawer={setIsVisibleDrawer}
-          user={authUser}
-          onNavigateTo={onNavigateTo}
-        />
-        <HeaderLayout
-          onNavigateTo={onNavigateTo}
-          isVisibleDrawer={isVisibleDrawer}
-          setIsVisibleDrawer={setIsVisibleDrawer}
-          user={authUser}
-        />
-        <Content style={{ margin: "0 16px" }}>
-          <BreadcrumbLayout user={authUser} />
-          <div className="site-layout-background" style={{ padding: 24 }}>
-            {children}
-          </div>
-        </Content>
-        <FooterLayout />
-      </LayoutAntd>
-    </LayoutContainer>
+    <Spin tip="Cargando..." spinning={isChangeRole} className="spin-item">
+      <LayoutContainer>
+        <LayoutAntd className="site-layout">
+          <DrawerLayout
+            user={authUser}
+            isVisibleDrawer={isVisibleDrawer}
+            onSetIsVisibleDrawer={setIsVisibleDrawer}
+            onNavigateTo={onNavigateTo}
+          />
+          <HeaderLayout
+            user={authUser}
+            onNavigateTo={onNavigateTo}
+            isVisibleDrawer={isVisibleDrawer}
+            setIsVisibleDrawer={setIsVisibleDrawer}
+            openDropdown={openDropdown}
+            onOpenDropdown={setOpenDropdown}
+            onChangeDefaultRole={onChangeDefaultRole}
+            onLogout={logout}
+          />
+          <Content style={{ margin: "0 16px" }}>
+            <BreadcrumbLayout user={authUser} />
+            <div className="site-layout-background" style={{ padding: 24 }}>
+              {children}
+            </div>
+          </Content>
+          <FooterLayout />
+        </LayoutAntd>
+      </LayoutContainer>
+    </Spin>
   );
 };
 

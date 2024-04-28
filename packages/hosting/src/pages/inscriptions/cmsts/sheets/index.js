@@ -127,6 +127,7 @@ export const InscriptionFile = () => {
                   <td> Hijo (a) </td>
                   <td> 12 </td>
                   <td> 123656 </td>
+                  <td> 123656 </td>
                 </tbody>
               </table>
 
@@ -194,6 +195,7 @@ const Container = styled.div`
   min-height: 100vh;
   height: auto;
   background: #626262;
+  padding: 1.5em;
 
   .mb {
     &_1 {
@@ -210,12 +212,12 @@ const Container = styled.div`
   .sheet-one {
     max-width: 1200px;
     background: #fff;
-    padding: 1em;
+    padding: 1.5em 2em;
     margin: auto;
 
     .header {
       display: grid;
-      grid-template-columns: 30% 1fr 30%;
+      grid-template-columns: 25% 1fr 25%;
       gap: 1em;
 
       .item:nth-child(2) {
@@ -223,6 +225,7 @@ const Container = styled.div`
         place-items: center;
         text-align: center;
         font-weight: 700;
+        font-size: 1.5em;
       }
 
       .item:last-child {

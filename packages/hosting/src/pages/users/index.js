@@ -5,7 +5,7 @@ import Typography from "antd/lib/typography";
 import List from "antd/lib/list";
 import Tag from "antd/lib/tag";
 import {
-  Button,
+  AddButton,
   IconAction,
   modalConfirm,
   notification,
@@ -16,7 +16,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useDevice } from "../../hooks";
 import { Link } from "react-router-dom";
-import { roles } from "../../data-list";
+import { allRoles } from "../../data-list";
 import { useApiUserPatch } from "../../api";
 import { assign, capitalize } from "lodash";
 
@@ -40,7 +40,7 @@ export const Users = () => {
   const onEditUser = (user) => navigateTo(user.id);
 
   const findRole = (roleCode) =>
-    roles.find((role) => role.roleCode === roleCode);
+    allRoles.find((role) => role.code === roleCode);
 
   const onDeleteUser = async (_user) => {
     const user_ = assign({}, _user, { updateBy: authUser?.email });
@@ -69,9 +69,7 @@ export const Users = () => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Button type="primary" onClick={() => onAddUser()}>
-          Agregar usuario
-        </Button>
+        <AddButton onClick={onAddUser} title="Usuario" margin="0" />
       </Col>
       <Divider />
       <Col span={24}>
@@ -110,14 +108,18 @@ export const Users = () => {
                   <>
                     <div>
                       <Text>
-                        {capitalize(`${user?.firstName} ${user?.lastName}`)}
+                        {capitalize(
+                          `${user?.firstName} ${user?.paternalSurname} ${
+                            user?.maternalSurname || ""
+                          }`
+                        )}
                       </Text>
                     </div>
                     <div>
                       <Text>
                         Rol:{" "}
                         <Tag color="blue">{`${
-                          findRole(user?.roleCode)?.roleName || ""
+                          findRole(user?.defaultRoleCode)?.name || ""
                         }`}</Tag>
                       </Text>
                     </div>
