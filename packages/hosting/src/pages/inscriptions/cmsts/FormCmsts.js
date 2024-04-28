@@ -1,41 +1,117 @@
 import React, { useEffect } from "react";
-import { Button, DatePicker, Form, Input, Select } from "../../../components";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+} from "../../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Title from "antd/lib/typography/Title";
+import * as yup from "yup";
+import { useNavigate } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import { useAuthentication } from "../../../providers";
+import { assign } from "lodash";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 
 export const FormCmsts = () => {
   const { authUser } = useAuthentication();
 
   console.log(authUser);
 
-  const { control, reset } = useForm({
+  const { assignUpdateProps } = useDefaultFirestoreProps;
+
+  const onSubmitSaveCmstsUser = async (formData) => {
+
+  };
+
+  const navigate = useNavigate();
+
+  // const updateUser = async (user) => {
+  //   await putUser(user)
+  // };
+
+  const mapCmstsUser = (formData) =>
+    assign(
+      {},
+      {
+        firstName: formData.firstName.toLowerCase(),
+        paternalSurname: formData.paternalSurname.toLowerCase(),
+        maternalSurname: formData.maternalSurname.toLowerCase(),
+        phone: {
+          number: formData.phoneNumber,
+          prefix: formData.phonePrefix,
+        },
+        cip: formData.cip.toLowerCase(),
+        dni: formData.dni.toLowerCase(),
+        civilStatus: formData.civilStatus.toLowerCase(),
+        gender: formData.gender.toLowerCase(),
+        placeBirth: formData.placeBirth.toLowerCase(),
+        birthdate: formData.birthdate.toLowerCase(),
+        houseLocation: formData.houseLocation.toLowerCase(),
+        urbanization: formData.urbanization.toLowerCase(),
+        address: formData.address.toLowerCase(),
+        emergencyCellPhone: formData.emergencyCellPhone,
+      }
+    );
+
+  const onGoBack = () => navigate(-1);
+
+  const schema = yup.object({
+    firstName: yup.string().required(),
+    paternalSurname: yup.string().required(),
+    maternalSurname: yup.string().required(),
+    cip: yup.string().min(9).max(9).required(),
+    dni: yup.string().min(8).max(8).required(),
+    civilStatus: yup.string().required(),
+    gender: yup.string().required(),
+    placeBirth: yup.string().required(),
+    birthdate: yup.string().required(),
+    houseLocation: yup.string().required(),
+    urbanization: yup.string().required(),
+    address: yup.string().required(),
+    emergencyCellPhone: yup.string().min(9).max(9).required(),
+  });
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    reset,
+  } = useForm({
     defaultValues: {
       active: false,
     },
   });
 
-//   useEffect(() => {
-//     resetForm();
-//   }, []);
+  const { required, error } = useFormUtils({ errors, schema });
 
-//   const resetForm = () => {
-//     reset({
-//       fullName: correspondence?.destination || "",
-//       cip: correspondence?.receivedBy || "",
-//       dni: correspondence?.class || "",
-//       civilStatus: correspondence?.indicative || "",
-//       gender: correspondence?.classification || "",
-//       placeBirth: correspondence?.issue || "",
-//       birthdate: correspondence?.dateCorrespondence || "",
-//       houseLocation: correspondence?.photos || null,
-//       urbanization: correspondence?.documents || null,
-//       address: correspondence?.documents || null,
-//       emergencyCellPhone: correspondence?.documents || null,
-//     });
-//   };
+  useEffect(() => {
+    resetForm();
+  }, [authUser]);
+
+  const resetForm = () => {
+    reset({
+      firstName: authUser?.firstName || "",
+      paternalSurname: authUser?.paternalSurname || "",
+      maternalSurname: authUser?.maternalSurname || "",
+      cip: authUser?.cip || "",
+      dni: authUser?.dni || "",
+      civilStatus: authUser?.civilStatus || "",
+      gender: authUser?.gender || "",
+      placeBirth: authUser?.placeBirth || "",
+      birthdate: authUser?.birthdate || "",
+      houseLocation: authUser?.houseLocation || "",
+      urbanization: authUser?.urbanization || "",
+      address: authUser?.address || "",
+      emergencyCellPhone: authUser?.phoneNumber || "",
+    });
+  };
+
+  const submitSaveCmstsUser = (formData) => onSubmitSaveCmstsUser(formData);
 
   return (
     <Row gutter={[16, 16]}>
@@ -45,24 +121,60 @@ export const FormCmsts = () => {
         </Title>
       </Col>
       <Col span={24}>
-        <Form>
+        <Form onsubmit={handleSubmit(submitSaveCmstsUser)}>
           <Row gutter={[16, 16]}>
-            <Col span={24} md={6}>
+            <Col span={24} md={8}>
               <Controller
-                name="fullname"
+                name="firstName"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Nombres y Apellidos"
+                    label="Nombres"
                     name={name}
                     value={value}
                     onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={8}>
+              <Controller
+                name="paternalSurname"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Apellido Paterno"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={8}>
+              <Controller
+                name="maternalSurname"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Apellido Materno"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={8}>
               <Controller
                 name="cip"
                 control={control}
@@ -73,11 +185,13 @@ export const FormCmsts = () => {
                     name={name}
                     value={value}
                     onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={8}>
               <Controller
                 name="dni"
                 control={control}
@@ -88,11 +202,13 @@ export const FormCmsts = () => {
                     name={name}
                     value={value}
                     onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={8}>
               <Controller
                 name="civilStatus"
                 control={control}
@@ -101,7 +217,10 @@ export const FormCmsts = () => {
                   <Select
                     label="Estado Civil"
                     defaultValue=""
+                    value={value}
                     onChange={onchange}
+                    error={error(name)}
+                    required={required(name)}
                     options={[
                       {
                         value: "single",
@@ -141,7 +260,10 @@ export const FormCmsts = () => {
                   <Select
                     label="Género"
                     defaultValue=""
+                    value={value}
                     onChange={onchange}
+                    error={error(name)}
+                    required={required(name)}
                     options={[
                       {
                         value: "male",
@@ -165,7 +287,10 @@ export const FormCmsts = () => {
                   <Select
                     label="Ubigeo de Nacimiento"
                     defaultValue=""
+                    value={value}
                     onChange={onchange}
+                    error={error(name)}
+                    required={required(name)}
                     options={[
                       {
                         value: "lima",
@@ -191,6 +316,8 @@ export const FormCmsts = () => {
                     name={name}
                     value={value}
                     onChange={onchange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
@@ -204,7 +331,10 @@ export const FormCmsts = () => {
                   <Select
                     label="Ubigeo de Vivienda"
                     defaultValue=""
+                    value={value}
                     onChange={onchange}
+                    error={error(name)}
+                    required={required(name)}
                     options={[
                       {
                         value: "lima",
@@ -230,6 +360,8 @@ export const FormCmsts = () => {
                     name={name}
                     value={value}
                     onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
@@ -245,6 +377,8 @@ export const FormCmsts = () => {
                     name={name}
                     value={value}
                     onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
@@ -255,11 +389,13 @@ export const FormCmsts = () => {
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
-                  <Input
+                  <InputNumber
                     label="Celular de Emergencia"
                     name={name}
                     value={value}
                     onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
                   />
                 )}
               />
@@ -267,13 +403,18 @@ export const FormCmsts = () => {
           </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
-              <Button type="default" size="large" block>
+              <Button
+                type="default"
+                size="large"
+                block
+                onClick={() => onGoBack()}
+              >
                 Cancelar
               </Button>
             </Col>
             <Col xs={24} sm={6} md={4}>
               <Button type="primary" size="large" block htmlType="submit">
-                Enviar
+                Guardar
               </Button>
             </Col>
           </Row>
