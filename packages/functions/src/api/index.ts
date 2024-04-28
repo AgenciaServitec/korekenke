@@ -4,6 +4,7 @@ import { errorHandler, hostingToApi } from "./_middlewares";
 import { body } from "express-validator";
 import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
+import { getEntityDataByDni } from "./entities";
 
 const app: express.Application = express();
 
@@ -16,11 +17,12 @@ app.use(hostingToApi);
 app.get("/", (req, res) => res.status(200).send("Welcome!").end());
 
 app.post("/user", postUser);
+app.put("/users/:userId", putUser);
+app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
+
 app.post("/correspondence", postCorrespondence);
 
-app.put("/users/:userId", putUser);
-
-app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
+app.get("/entities/dni/:dni", getEntityDataByDni);
 
 app.use(errorHandler);
 

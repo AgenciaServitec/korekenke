@@ -1,4 +1,4 @@
-import config from "./config.json";
+import { config } from "./config";
 
 const projectId = process.env.GCLOUD_PROJECT;
 
@@ -7,6 +7,9 @@ const currentEnvironment =
 
 const isProduction = currentEnvironment === "production";
 
-const environmentConfig = { ...config[currentEnvironment], ...config.common };
+const environmentConfig: EnvironmentConfig = {
+  ...config[currentEnvironment],
+  ...config.common,
+};
 
-export { currentEnvironment, isProduction, environmentConfig, config };
+export { isProduction, environmentConfig, config };
