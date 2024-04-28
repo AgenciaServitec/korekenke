@@ -5,7 +5,7 @@ import Title from "antd/lib/typography/Title";
 import { Tabs } from "../../components";
 import { ProfileDataForm } from "./ProfileDataForm";
 import { ProfileImagesForm } from "./ProfileImagesForm";
-import ProfileInformation from "./ProfileInformation";
+import { ProfileInformation } from "./ProfileInformation";
 import { useAuthentication } from "../../providers";
 
 const items = [

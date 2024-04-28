@@ -11,6 +11,7 @@ import {
   Input,
   notification,
   RadioGroup,
+  Upload,
 } from "../../components";
 import { useAuthentication } from "../../providers";
 import { useApiUserPut } from "../../api";
@@ -22,6 +23,7 @@ export const ProfileDataForm = () => {
   const { putUser, putUserLoading, putUserResponse } = useApiUserPut();
 
   const schema = yup.object({
+    profilePhoto: yup.mixed(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
@@ -78,6 +80,7 @@ export const ProfileDataForm = () => {
 
   const resetForm = () => {
     reset({
+      profilePhoto: authUser?.profilePhoto || null,
       firstName: authUser?.firstName || "",
       maternalSurname: authUser?.maternalSurname || "",
       paternalSurname: authUser?.paternalSurname || "",
@@ -100,6 +103,27 @@ export const ProfileDataForm = () => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Controller
+            control={control}
+            name="profilePhoto"
+            render={({ field: { onChange, value, onBlur, name } }) => (
+              <Upload
+                label="Foto personal"
+                accept="image/*"
+                resize="313x370"
+                buttonText="Subir foto"
+                value={value}
+                name={name}
+                filePath={`users/${authUser.id}/profile`}
+                fileName="personal-photo"
+                onChange={(file) => onChange(file)}
+                required={required(name)}
+                error={error(name)}
+              />
+            )}
+          />
+        </Col>
         <Col span={24} md={12}>
           <Controller
             name="firstName"
