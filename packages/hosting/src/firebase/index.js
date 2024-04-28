@@ -15,7 +15,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 const storage = firebase.storage();
 
-firestore.settings({ ignoreUndefinedProperties: true });
+firestore.settings({ ignoreUndefinedProperties: true, merge: true });
 
 const { version, apiUrl } = currentConfig;
 

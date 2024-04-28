@@ -10,12 +10,13 @@ import { mediaQuery } from "../../styles";
 import { useNavigate } from "react-router";
 import { clearLocalStorage, getLocalStorage } from "../../utils";
 import { useApiUserPost } from "../../api";
+import { assign } from "lodash";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();
   const { postUser, postUserLoading, postUserResponse } = useApiUserPost();
 
-  const [loading, setLoading] = useState(false);
+  const [savingUser, setSavingUser] = useState(false);
 
   const onNavigateGoToLogin = () => navigate("/");
 
@@ -38,13 +39,20 @@ export const PrivacyPolicies = ({ prev }) => {
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  const onSubmitLogin = async ({ iAcceptPrivacyPolicies }) => {
+  const onSubmit = async ({ iAcceptPrivacyPolicies }) => {
     try {
-      setLoading(true);
+      setSavingUser(true);
 
       const prevData = getLocalStorage("register");
 
-      await postUser({ ...prevData, iAcceptPrivacyPolicies });
+      await postUser(
+        assign({}, prevData, {
+          firstName: prevData.firstName.toLocaleLowerCase(),
+          paternalSurname: prevData.paternalSurname.toLocaleLowerCase(),
+          maternalSurname: prevData.maternalSurname.toLocaleLowerCase(),
+          iAcceptPrivacyPolicies,
+        })
+      );
 
       if (!postUserResponse.ok) throw new Error("Register error");
 
@@ -57,7 +65,7 @@ export const PrivacyPolicies = ({ prev }) => {
       console.error({ e });
       notification({ type: "error" });
     } finally {
-      setLoading(false);
+      setSavingUser(false);
     }
   };
 
@@ -66,7 +74,7 @@ export const PrivacyPolicies = ({ prev }) => {
       <div className="title-login">
         <Title level={3}>POLÍTICAS DE PRIVACIDAD</Title>
       </div>
-      <Form onSubmit={handleSubmit(onSubmitLogin)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="iAcceptPrivacyPolicies"
           control={control}
@@ -88,7 +96,7 @@ export const PrivacyPolicies = ({ prev }) => {
           <Button
             block
             size="large"
-            disabled={loading || postUserLoading}
+            disabled={savingUser || postUserLoading}
             onClick={() => prev()}
           >
             Atras
@@ -97,7 +105,7 @@ export const PrivacyPolicies = ({ prev }) => {
             block
             size="large"
             type="primary"
-            loading={loading}
+            loading={savingUser}
             htmlType="submit"
           >
             Registrarme

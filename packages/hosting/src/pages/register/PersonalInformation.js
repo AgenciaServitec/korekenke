@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -21,6 +21,8 @@ import { fetchCollectionOnce } from "../../firebase/utils";
 import { firestore } from "../../firebase";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
+  const [savingData, setSavingData] = useState(false);
+
   const schema = yup.object({
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
@@ -74,20 +76,28 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   console.log({ errors });
 
   const onSubmitLogin = async (formData) => {
-    const userWithEmail = await userByEmail(formData.email);
-    const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
+    try {
+      setSavingData(true);
+      const userWithEmail = await userByEmail(formData.email);
+      const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
 
-    if (userWithEmail || userWithPhoneNumber)
-      return notification({
-        type: "warning",
-        title: `El ${
-          userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
-        } ya se encuentra registrado.`,
-      });
+      if (userWithEmail || userWithPhoneNumber)
+        return notification({
+          type: "warning",
+          title: `El ${
+            userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
+          } ya se encuentra registrado.`,
+        });
 
-    setLocalStorage("register", { ...step1Data, ...formData });
+      setLocalStorage("register", { ...step1Data, ...formData });
 
-    next();
+      next();
+    } catch (e) {
+      console.error("Error savePersonalData: ", e);
+      notification({ type: "error" });
+    } finally {
+      setSavingData(false);
+    }
   };
 
   const userByEmail = async (email) => {
@@ -239,10 +249,21 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
           )}
         />
         <div className="btns-wrapper">
-          <Button block size="large" onClick={() => prev()}>
+          <Button
+            block
+            size="large"
+            onClick={() => prev()}
+            disabled={savingData}
+          >
             Atras
           </Button>
-          <Button block size="large" type="primary" htmlType="submit">
+          <Button
+            block
+            size="large"
+            type="primary"
+            htmlType="submit"
+            loading={savingData}
+          >
             Siguiente
           </Button>
         </div>

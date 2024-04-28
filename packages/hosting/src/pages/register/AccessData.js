@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "antd/es/typography/Title";
 import { Button, Form, InputNumber, notification } from "../../components";
 import { Controller, useForm } from "react-hook-form";
@@ -10,8 +10,13 @@ import { Link } from "react-router-dom";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { firestore } from "../../firebase";
+import { useApiPersonDataByDniGet } from "../../api";
+import { capitalize } from "lodash";
 
 export const AccessData = ({ next, currentStep }) => {
+  const { getPersonDataByDni } = useApiPersonDataByDniGet();
+  const [savingData, setSavingData] = useState(false);
+
   const schema = yup.object({
     cip: yup
       .string()
@@ -46,20 +51,36 @@ export const AccessData = ({ next, currentStep }) => {
   }, [currentStep]);
 
   const onSubmitRegister = async ({ cip, dni }) => {
-    const userWithCip = await userByCip(cip);
-    const userWithDni = await userByDni(dni);
+    try {
+      setSavingData(true);
+      const userWithCip = await userByCip(cip);
+      const userWithDni = await userByDni(dni);
 
-    if (userWithCip || userWithDni)
-      return notification({
-        type: "warning",
-        title: `El ${
-          userWithCip ? "código CIP" : userWithDni ? "DNI" : ""
-        }, ya se encuentra registrado!`,
+      if (userWithCip || userWithDni)
+        return notification({
+          type: "warning",
+          title: `El ${
+            userWithCip ? "código CIP" : userWithDni ? "DNI" : ""
+          }, ya se encuentra registrado!`,
+        });
+
+      const personData = await getPersonDataByDni(dni);
+
+      setLocalStorage("register", {
+        cip,
+        dni,
+        firstName: capitalize(personData?.nombres || ""),
+        paternalSurname: capitalize(personData?.apellidoPaterno || ""),
+        maternalSurname: capitalize(personData?.apellidoMaterno || ""),
       });
 
-    setLocalStorage("register", { cip, dni });
-
-    next();
+      next();
+    } catch (e) {
+      console.error("Error saveData: ", e);
+      notification({ type: "error" });
+    } finally {
+      setSavingData(false);
+    }
   };
 
   const userByCip = async (cip) => {
@@ -114,7 +135,13 @@ export const AccessData = ({ next, currentStep }) => {
             />
           )}
         />
-        <Button block size="large" type="primary" htmlType="submit">
+        <Button
+          block
+          size="large"
+          type="primary"
+          htmlType="submit"
+          loading={savingData}
+        >
           Siguiente
         </Button>
         <span>
