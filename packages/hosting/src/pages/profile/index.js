@@ -23,8 +23,6 @@ const items = [
 export const Profile = () => {
   const { authUser } = useAuthentication();
 
-  console.log("authUser->", authUser);
-
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -34,6 +32,7 @@ export const Profile = () => {
         <Row gutter={[16, 16]}>
           <Col span={24} md={12}>
             <Title level={4}>Datos del usuario</Title>
+            <br />
             <ProfileInformation user={authUser} />
           </Col>
           <Col span={24} md={12}>

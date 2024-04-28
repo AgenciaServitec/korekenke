@@ -52,10 +52,6 @@ export const ProfileDataForm = () => {
 
   const { error, errorMessage, required } = useFormUtils({ errors, schema });
 
-  const onSubmit = async (formData) => {
-    await updateProfile(formData);
-  };
-
   const updateProfile = async (formData) => {
     try {
       await putUser(
@@ -96,6 +92,10 @@ export const ProfileDataForm = () => {
   useEffect(() => {
     resetForm();
   }, [authUser]);
+
+  const onSubmit = async (formData) => {
+    await updateProfile(formData);
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -251,7 +251,6 @@ export const ProfileDataForm = () => {
             block
             htmlType="submit"
             loading={putUserLoading}
-            disabled={putUserLoading}
           >
             Guardar
           </Button>
