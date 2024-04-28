@@ -45,7 +45,7 @@ export const AccessDataLogin = ({ next }) => {
           title: "El código CIP, no se encuentra registrado!",
         });
 
-      setLocalStorage("login", { cip, phoneNumber: user.phoneNumber });
+      setLocalStorage("login", { cip, phoneNumber: user.phone.number });
 
       next();
     } catch (e) {
