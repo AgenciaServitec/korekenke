@@ -41,7 +41,7 @@ export const AdminLayout = ({ children }) => {
       otherRoles: orderBy(
         [
           ...authUser.otherRoles.filter((_role) => _role.code !== role.code),
-          { ...role, updateAt: firestoreTimestamp.fromDate(moment().toDate()) },
+          { ...role, updateAt: moment().format("YYYY-MM-DD HH:mm:ss") },
         ],
         "updateAt",
         "desc"
