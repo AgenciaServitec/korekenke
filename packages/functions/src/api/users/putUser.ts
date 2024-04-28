@@ -71,8 +71,9 @@ const updateUserAuth = async (
   await auth.updateUser(user.id, {
     ...(changeEmail && { email: user?.email || undefined }),
     ...(changePhoneNumber && {
-      phoneNumber:
-        `${user?.phone?.prefix || "+51"}${user?.phone.number}` || undefined,
+      phoneNumber: user?.phone
+        ? `${user.phone?.prefix || "+51"}${user.phone.number}`
+        : undefined,
     }),
     password: user?.password || undefined,
   });

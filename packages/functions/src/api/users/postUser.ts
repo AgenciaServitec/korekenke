@@ -46,8 +46,9 @@ const addUser = async (user: User): Promise<void> => {
 const addUserAuth = async (user: User): Promise<void> => {
   await auth.createUser({
     uid: user.id,
-    phoneNumber:
-      `${user?.phone?.prefix || "+51"}${user?.phone.number}` || undefined,
+    phoneNumber: user?.phone
+      ? `${user.phone?.prefix || "+51"}${user.phone.number}`
+      : undefined,
     email: user?.email || undefined,
     password: user?.password || undefined,
   });
