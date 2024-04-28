@@ -148,6 +148,20 @@ const SendCodeSmsAndSignInWithCode = ({
           >
             {loading ? "Enviando" : "Enviar"}
           </Button>
+          <br />
+          <br />
+          <div>
+            <span
+              className="link link-color"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                document.getElementById("recaptcha-container").innerHTML = "";
+                prev();
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+            </span>
+          </div>
         </div>
       )}
       <div id="recaptcha-container"></div>
