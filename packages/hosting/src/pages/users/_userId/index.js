@@ -77,7 +77,7 @@ export const UserIntegration = () => {
         code: role?.code,
         name: role.name,
         imgUrl: role.imgUrl,
-        updateAt: moment(),
+        updateAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       }));
 
   const mapUserToApi = (formData) =>
@@ -116,7 +116,7 @@ export const UserIntegration = () => {
 const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
   const schema = yup.object({
     defaultRoleCode: yup.string().required(),
-    otherRoleCodes: yup.array().notRequired().nullable(),
+    otherRoleCodes: yup.array(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
@@ -147,7 +147,6 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     control,
     reset,
     watch,
-    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -158,10 +157,12 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     resetForm();
   }, [user]);
 
+  console.log(user);
+
   const resetForm = () => {
     reset({
       defaultRoleCode: user?.defaultRoleCode || "",
-      otherRoleCodes: user?.otherRoleCodes || "",
+      otherRoleCodes: (user?.otherRoles || []).map((role) => role.code),
       firstName: user?.firstName || "",
       paternalSurname: user?.paternalSurname || "",
       maternalSurname: user?.maternalSurname || "",
@@ -172,14 +173,10 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     });
   };
 
-  useEffect(() => {
-    setValue("otherRoleCodes", []);
-  }, [watch("defaultRoleCode")]);
-
   const submitSaveUser = (formData) => onSubmitSaveUser(formData);
 
   return (
-    <Row>
+    <Row gutter={[16, 16]}>
       <Col span={24}>
         <Title level={3}>Usuario</Title>
       </Col>
@@ -198,10 +195,16 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={allRoles.map((role) => ({
-                      label: capitalize(role.name),
-                      value: role.code,
-                    }))}
+                    options={allRoles
+                      .filter((role) =>
+                        watch("otherRoleCodes")
+                          ? !watch("otherRoleCodes").includes(role.code)
+                          : true
+                      )
+                      .map((role) => ({
+                        label: capitalize(role.name),
+                        value: role.code,
+                      }))}
                   />
                 )}
               />
@@ -220,7 +223,11 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     error={error(name)}
                     required={required(name)}
                     options={allRoles
-                      .filter((role) => role.code !== watch("defaultRoleCode"))
+                      .filter((role) =>
+                        watch("defaultRoleCode")
+                          ? role.code !== watch("defaultRoleCode")
+                          : true
+                      )
                       .map((role) => ({
                         label: capitalize(role.name),
                         value: role.code,

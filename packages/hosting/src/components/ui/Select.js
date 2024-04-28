@@ -86,9 +86,10 @@ export const Select = ({
       ) : (
         <AntSelect
           allowClear={disabled ? false : allowClear}
-          bordered={false}
+          variant="borderless"
           disabled={disabled}
           value={fixValue}
+          defaultValue={fixValue}
           onChange={onChange}
           filterOption={(inputValue, option) =>
             filterOption(inputValue, option?.children)

@@ -4,7 +4,7 @@ interface Role {
   code: RoleCode;
   name: string;
   imgUrl: string;
-  updateAt: FirebaseFirestore.Timestamp;
+  updateAt: string;
 }
 
 interface User extends DefaultFirestoreProps {
