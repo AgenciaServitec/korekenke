@@ -7,3 +7,6 @@ export * from "./correspondences";
 export * from "./correspondences/_correspondence";
 export * from "./profile";
 export * from "./inscriptions";
+export * from "./default-roles-acls";
+export * from "./default-roles-acls/_roleAclsId";
+export * from "./manage-acls";

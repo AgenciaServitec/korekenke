@@ -7,9 +7,9 @@ import {
   faHome,
   faIdCard,
   faUsers,
+  faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { mediaQuery } from "../../styles";
 
 export const DrawerLayout = ({
   user,
@@ -27,6 +27,32 @@ export const DrawerLayout = ({
         onNavigateTo("/home");
         onSetIsVisibleDrawer(false);
       },
+    },
+    {
+      label: "Gestion de privilegios (acls)",
+      key: "group-acls",
+      icon: <FontAwesomeIcon icon={faUsersCog} size="lg" />,
+      isVisible: true,
+      children: [
+        {
+          label: "Acls de roles predeterminados",
+          key: "default-roles-acls",
+          isVisible: true,
+          onClick: () => {
+            onNavigateTo("/default-roles-acls");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+        {
+          label: "Administrardor Acls",
+          key: "manage-acls",
+          isVisible: true,
+          onClick: () => {
+            onNavigateTo("/manage-acls");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+      ],
     },
     {
       label: "Usuarios",
@@ -77,11 +103,12 @@ export const DrawerLayout = ({
         </div>
       }
       placement="left"
+      width={330}
       closable={true}
       onClose={() => onSetIsVisibleDrawer(!isVisibleDrawer)}
       open={isVisibleDrawer}
       className="drawer-content"
-      bodyStyle={{ padding: "1em" }}
+      bodyStyle={{ padding: "0" }}
     >
       <div className="logo" />
       <Menu
@@ -94,18 +121,16 @@ export const DrawerLayout = ({
 };
 
 const DrawerContainer = styled(Drawer)`
-  background: #fff;
-  .ant-drawer-wrapper-body {
-    background: #fff !important;
-    .ant-drawer-body {
-      background: #fff !important;
-    }
-  }
-  .ant-drawer-content-wrapper {
-    width: 100% !important;
-    background: #fff;
-    ${mediaQuery.minTablet} {
-      width: 300px !important;
-    }
-  }
+  //background: #fff;
+  //.ant-drawer-wrapper-body {
+  //  background: #fff !important;
+  //  .ant-drawer-body {
+  //    padding: 0 !important;
+  //    background: #fff !important;
+  //  }
+  //}
+  //.ant-drawer-content-wrapper {
+  //  width: 100% !important;
+  //  background: #fff;
+  //}
 `;

@@ -3,12 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
-import {
-  InscriptionFile,
-  LoginIntegration,
-  RegisterIntegration,
-  CmstsIntegration,
-} from "../pages";
+import { LoginIntegration, RegisterIntegration } from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
@@ -93,6 +88,33 @@ export const Router = () => {
           exact
           path="inscriptions/cmsts/sheet"
           element={<A.InscriptionFile />}
+        />
+        <Route
+          exact
+          path="default-roles-acls"
+          element={
+            <AdminLayout>
+              <A.DefaultRolesAclsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="default-roles-acls/:roleAclsId"
+          element={
+            <AdminLayout>
+              <A.RoleAclIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="manage-acls"
+          element={
+            <AdminLayout>
+              <A.ManageAclsIntegration />
+            </AdminLayout>
+          }
         />
         {/*<Route*/}
         {/*  exact*/}

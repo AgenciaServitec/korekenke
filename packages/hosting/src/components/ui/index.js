@@ -49,6 +49,7 @@ export * from "./AddButton";
 export * from "./AlignmentWrapper";
 export * from "./table";
 export * from "./InputCode";
+export * from "./Acl";
 
 export { default as Legend } from "./Legend";
 

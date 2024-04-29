@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { isEmpty } from "lodash";
+import { currentEnvironment } from "../config";
 
-export const useAsync = (asyncFn, initialParams) => {
+export const useAsync = (asyncFn, initialParams = undefined) => {
   const [loading, setLoading] = useState(initialParams !== undefined);
   const [error, setError] = useState();
   const [data, setData] = useState();
@@ -9,9 +10,17 @@ export const useAsync = (asyncFn, initialParams) => {
 
   useEffect(() => {
     if (!isEmpty(initialParams) && initialParams) {
-      void run(...initialParams);
+      void start(initialParams);
     }
   }, [JSON.stringify(initialParams)]);
+
+  const start = async (initialParams) => {
+    try {
+      await run(...initialParams);
+    } catch (e) {
+      currentEnvironment === "development" && console.error(e);
+    }
+  };
 
   const run = useCallback(async (...args) => {
     try {
