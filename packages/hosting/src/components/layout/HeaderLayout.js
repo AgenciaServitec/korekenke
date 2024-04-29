@@ -72,10 +72,16 @@ export const HeaderLayout = ({
 
   return (
     <HeaderContainer>
-      <div className="item-logo" onClick={() => onNavigateTo("/home")}>
+      <div className="right-item">
         <Space align="center" size="large">
           <div>
-            <img src={LogoPrimary} width={40} alt="Korekenke" />
+            <img
+              src={LogoPrimary}
+              width={40}
+              alt="Korekenke"
+              onClick={() => onNavigateTo("/home")}
+              className="logo-img"
+            />
           </div>
           <div
             style={{ fontSize: "1.7em", display: "flex", alignItems: "center" }}
@@ -83,6 +89,7 @@ export const HeaderLayout = ({
             <FontAwesomeIcon
               icon={faBars}
               onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
+              className="icon-item"
             />
           </div>
         </Space>
@@ -324,10 +331,13 @@ const HeaderContainer = styled(Header)`
   overflow: hidden;
   padding: 0 16px;
 
-  .item-logo {
+  .right-item {
     display: flex;
     align-items: center;
-    cursor: pointer;
+    .logo-img,
+    .icon-item {
+      cursor: pointer;
+    }
   }
 
   .user-items {
