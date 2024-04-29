@@ -16,9 +16,9 @@ export const ProfileImagesForm = () => {
   const { putUser, putUserLoading, putUserResponse } = useApiUserPut();
 
   const schema = yup.object({
-    dniPhoto: yup.mixed().required(),
-    cipPhoto: yup.mixed().required(),
-    signaturePhoto: yup.mixed().required(),
+    dniPhoto: yup.mixed(),
+    cipPhoto: yup.mixed(),
+    signaturePhoto: yup.mixed(),
   });
 
   const {
@@ -39,6 +39,9 @@ export const ProfileImagesForm = () => {
           id: authUser.id,
           phone: authUser.phone,
           email: authUser.email,
+          dniPhoto: formData?.dniPhoto || null,
+          cipPhoto: formData?.cipPhoto || null,
+          signaturePhoto: formData?.signaturePhoto || null,
         })
       );
 
@@ -89,7 +92,6 @@ export const ProfileImagesForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/documents`}
-                fileName="dni-photo"
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
@@ -109,7 +111,6 @@ export const ProfileImagesForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/documents`}
-                fileName="cip-photo"
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
@@ -129,7 +130,6 @@ export const ProfileImagesForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/documents`}
-                fileName="signature-photo"
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
