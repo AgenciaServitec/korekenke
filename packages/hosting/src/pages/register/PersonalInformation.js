@@ -81,6 +81,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     },
     degree: formData.degree,
     cgi: formData.cgi,
+    defaultRoleCode: "user",
   });
 
   const onSubmitLogin = async (formData) => {
