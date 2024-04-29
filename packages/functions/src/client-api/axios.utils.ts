@@ -3,6 +3,8 @@ import assert from "assert";
 import { logger } from "../utils";
 
 export const catchAxiosError = (axiosError: unknown): AxiosError => {
+  // @ts-ignore
+  // eslint-disable-next-line import/no-named-as-default-member
   assert(axios.isAxiosError(axiosError), "Is not axios error");
 
   const message = getMessage(axiosError);
