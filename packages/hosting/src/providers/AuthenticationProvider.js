@@ -1,17 +1,16 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { auth, firestore } from "../firebase";
-import { isError } from "lodash";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { auth } from "../firebase";
+import { isError, isObject } from "lodash";
 import { notification, Spinner } from "../components";
-import { useDocument } from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { allRoles } from "../data-list";
+import { usersRef } from "../firebase/collections";
+import { authPersistence } from "../firebase/auth";
 
 const AuthenticationContext = createContext({
   authUser: null,
+  loginWithEmailAndPassword: () =>
+    Promise.reject("Unable to find AuthenticationProvider."),
   logout: () => Promise.reject("Unable to find AuthenticationProvider."),
   loginLoading: false,
 });
@@ -19,54 +18,50 @@ const AuthenticationContext = createContext({
 export const useAuthentication = () => useContext(AuthenticationContext);
 
 export const AuthenticationProvider = ({ children }) => {
-  const [authenticating, setAuthenticating] = useState(true);
-  const [authUser, setAuthUser] = useState(null);
-  const [firebaseUser, setFirebaseUser] = useState(null);
   const [loginLoading, setLoginLoading] = useState(false);
 
-  const [userSnapshot, loadingUser, errorUser] = useDocument(
-    firebaseUser ? firestore.collection("users").doc(firebaseUser.uid) : null
+  const { firebaseUser, firebaseUserLoading } = useFirebaseUser();
+  const [user, userLoading, userError] = useDocumentData(
+    firebaseUser ? usersRef.doc(firebaseUser.uid) : null
   );
 
-  useMemo(() => {
-    auth.onAuthStateChanged((currentUser) =>
-      currentUser ? setFirebaseUser(currentUser) : onLogout()
-    );
-  }, []);
+  const authLoading = firebaseUserLoading || userLoading;
+  const authError = userError;
+  const authEmptyData = !user;
+
+  const authUser =
+    !authLoading && !authError && !authEmptyData ? mapAuthUser(user) : null;
 
   useEffect(() => {
-    !loadingUser && userSnapshot && !errorUser && onLogin(userSnapshot?.data());
-  }, [loadingUser, userSnapshot]);
+    authError && logout();
+  }, [authError]);
 
-  const onLogout = async () => {
-    setAuthenticating(true);
+  useEffect(() => {
+    if (isAuthUserError(authUser)) {
+      notification({ type: "warning", title: authUser.message });
 
-    setAuthUser(null);
-    setFirebaseUser(null);
-    setAuthenticating(false);
-    setLoginLoading(false);
-  };
+      logout();
+    }
+  }, [JSON.stringify(authUser)]);
 
-  const onLogin = async (user) => {
+  const loginWithEmailAndPassword = async (email, password) => {
     try {
       setLoginLoading(true);
 
-      if (!user) throw new Error("User doesn't exists");
+      await auth.setPersistence(authPersistence.LOCAL);
+      await auth.signInWithEmailAndPassword(email, password);
 
-      setAuthUser(user);
       setLoginLoading(false);
-      setAuthenticating(false);
-    } catch (error) {
-      console.error("Login", error);
+    } catch (e) {
+      const error = isError(e) ? e : undefined;
 
-      if (isError(error)) {
-        notification({
-          type: "error",
-          title: error.message,
-        });
-      }
+      notification({
+        type: "error",
+        title: "Login error",
+        description: error?.message,
+      });
 
-      await logout();
+      setLoginLoading(false);
     }
   };
 
@@ -77,12 +72,13 @@ export const AuthenticationProvider = ({ children }) => {
     return auth.signOut();
   };
 
-  if (authenticating) return <Spinner height="100vh" />;
+  if (authLoading && location.pathname !== "/") return <Spinner fullscreen />;
 
   return (
     <AuthenticationContext.Provider
       value={{
-        authUser,
+        authUser: isAuthUser(authUser) ? authUser : null,
+        loginWithEmailAndPassword,
         logout,
         loginLoading,
       }}
@@ -91,3 +87,51 @@ export const AuthenticationProvider = ({ children }) => {
     </AuthenticationContext.Provider>
   );
 };
+
+const useFirebaseUser = () => {
+  const [firebaseUser, setFirebaseUser] = useState(null);
+  const [firebaseUserLoading, setFirebaseUserLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setFirebaseUser(user);
+      setFirebaseUserLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  return { firebaseUser, firebaseUserLoading };
+};
+
+const mapAuthUser = (user) => {
+  const authUserRole = findAuthUserRole(user);
+
+  if (!authUserRole) return mapAuthUserError("You don't have an assigned role");
+
+  const authUserPathnames = findAuthUserPathnames(user);
+
+  return {
+    ...user,
+    role: authUserRole,
+    pathnames: authUserPathnames,
+  };
+};
+
+const mapAuthUserError = (message) => ({
+  type: "error",
+  message,
+});
+
+const isAuthUser = (data) => isObject(data) && "id" in data;
+
+const isAuthUserError = (data) =>
+  isObject(data) && "type" in data && data.type === "error";
+
+const findAuthUserRole = (user) =>
+  allRoles.find((role) => role.code === user.defaultRoleCode);
+
+const findAuthUserPathnames = (user) =>
+  (user?.acls || []).map((acl) => acl.split("#")[0]);

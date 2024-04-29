@@ -16,7 +16,8 @@ export const Acl = ({ children, name, redirect }) => {
     return navigate("/403");
   };
 
-  const isValidateAclName = (name) => authUser.acls.some((acl) => acl === name);
+  const isValidateAclName = (name) =>
+    (authUser?.acls || []).some((acl) => acl === name);
 
   useMemo(() => {
     if (!name) return;

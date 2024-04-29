@@ -5,14 +5,13 @@
 //   useMemo,
 //   useState,
 // } from "react";
-// import { firebase, auth, firestore } from "../firebase";
+// import { auth, firestore } from "../firebase";
 // import { isError } from "lodash";
-// import { useDocument } from "react-firebase-hooks/firestore";
 // import { notification, Spinner } from "../components";
+// import { useDocument } from "react-firebase-hooks/firestore";
 //
 // const AuthenticationContext = createContext({
 //   authUser: null,
-//   login: () => Promise.reject("Unable to find AuthenticationProvider."),
 //   logout: () => Promise.reject("Unable to find AuthenticationProvider."),
 //   loginLoading: false,
 // });
@@ -71,27 +70,6 @@
 //     }
 //   };
 //
-//   const login = async (email, password) => {
-//     try {
-//       setLoginLoading(true);
-//
-//       await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-//
-//       await auth.signInWithEmailAndPassword(email, password);
-//     } catch (e) {
-//       const error = isError(e) ? e : undefined;
-//
-//       console.error("singInUser:", e);
-//
-//       notification({
-//         type: "error",
-//         title: error.message,
-//       });
-//
-//       setLoginLoading(false);
-//     }
-//   };
-//
 //   const logout = async () => {
 //     sessionStorage.clear();
 //     localStorage.clear();
@@ -105,7 +83,6 @@
 //     <AuthenticationContext.Provider
 //       value={{
 //         authUser,
-//         login,
 //         logout,
 //         loginLoading,
 //       }}

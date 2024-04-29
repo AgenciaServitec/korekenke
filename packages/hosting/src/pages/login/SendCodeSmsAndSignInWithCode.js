@@ -19,7 +19,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
   const [loading, setLoading] = useState(false);
   const [verificationId, setVerificationId] = useState("");
 
-  const phoneNumber = getLocalStorage("login").phoneNumber;
+  const phoneNumber = getLocalStorage("login")?.phoneNumber;
 
   const onSetLoading = (state = false) => setLoading(state);
 

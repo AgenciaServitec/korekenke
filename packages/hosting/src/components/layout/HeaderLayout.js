@@ -12,7 +12,7 @@ import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
-import { allRoles } from "../../data-list/roles";
+import { allRoles } from "../../data-list";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -38,10 +38,10 @@ export const HeaderLayout = ({
   );
 
   const lastRole = orderBy(
-    user.otherRoles.filter((role) => role.code !== defaultRole.code),
+    (user?.otherRoles || []).filter((role) => role.code !== defaultRole.code),
     "updateAt",
     "desc"
-  )[0];
+  )?.[0];
 
   const items = [
     {
@@ -103,76 +103,86 @@ export const HeaderLayout = ({
           onOpenChange={onOpenDropdown}
           dropdownRender={(menu) => (
             <div style={contentStyle}>
-              <ItemDefaultRole>
-                {!isVisibleMoreRoles ? (
-                  <>
-                    <div className="wrapper-default-roles">
-                      <div className="selected-role item-role">
-                        <img
-                          src={user?.profileImage?.thumbUrl || PhotoNoFound}
-                          alt="Role seleccionado"
-                        />
-                        <div className="text-role">
-                          <strong>{defaultRole.name}</strong>
-                        </div>
-                      </div>
-                      <div className="last-role item-role">
-                        <div
-                          className="item-img"
-                          onClick={() => onChangeDefaultRole(lastRole)}
-                        >
-                          <FontAwesomeIcon
-                            icon={faArrowsRotate}
-                            type="light"
-                            className="icon-rotate"
-                          />
-                          <img src={lastRole.imgUrl} alt="Role seleccionado" />
-                        </div>
-                        <div className="text-role">
-                          <strong>{lastRole.name}</strong>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="item-show-more-roles">
-                      <span onClick={() => onSetIsVisibleMoreRoles(false)}>
-                        Ver todos los roles
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="wrapper-go-back">
-                      <span onClick={() => onSetIsVisibleMoreRoles()}>
-                        <FontAwesomeIcon icon={faArrowLeft} /> Regresar
-                      </span>
-                    </div>
-                    <div className="wrapper-more-roles">
-                      <ul>
-                        {user.otherRoles.map((role, index) => (
-                          <li
-                            key={index}
-                            className="item-role"
-                            onClick={() => {
-                              onSetIsVisibleMoreRoles();
-                              return onChangeDefaultRole(role);
-                            }}
-                          >
-                            <img src={role.imgUrl} alt="Role seleccionado" />
+              {lastRole && (
+                <>
+                  <ItemDefaultRole>
+                    {!isVisibleMoreRoles ? (
+                      <>
+                        <div className="wrapper-default-roles">
+                          <div className="selected-role item-role">
+                            <img
+                              src={user?.profileImage?.thumbUrl || PhotoNoFound}
+                              alt="Role seleccionado"
+                            />
                             <div className="text-role">
-                              <strong>{role.name}</strong>
+                              <strong>{defaultRole.name}</strong>
                             </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </>
-                )}
-              </ItemDefaultRole>
-              <Divider
-                style={{
-                  margin: 0,
-                }}
-              />
+                          </div>
+                          <div className="last-role item-role">
+                            <div
+                              className="item-img"
+                              onClick={() => onChangeDefaultRole(lastRole)}
+                            >
+                              <FontAwesomeIcon
+                                icon={faArrowsRotate}
+                                type="light"
+                                className="icon-rotate"
+                              />
+                              <img
+                                src={lastRole.imgUrl}
+                                alt="Role seleccionado"
+                              />
+                            </div>
+                            <div className="text-role">
+                              <strong>{lastRole.name}</strong>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item-show-more-roles">
+                          <span onClick={() => onSetIsVisibleMoreRoles(false)}>
+                            Ver todos los roles
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="wrapper-go-back">
+                          <span onClick={() => onSetIsVisibleMoreRoles()}>
+                            <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+                          </span>
+                        </div>
+                        <div className="wrapper-more-roles">
+                          <ul>
+                            {user.otherRoles.map((role, index) => (
+                              <li
+                                key={index}
+                                className="item-role"
+                                onClick={() => {
+                                  onSetIsVisibleMoreRoles();
+                                  return onChangeDefaultRole(role);
+                                }}
+                              >
+                                <img
+                                  src={role.imgUrl}
+                                  alt="Role seleccionado"
+                                />
+                                <div className="text-role">
+                                  <strong>{role.name}</strong>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
+                    )}
+                  </ItemDefaultRole>
+                  <Divider
+                    style={{
+                      margin: 0,
+                    }}
+                  />
+                </>
+              )}
               {cloneElement(menu, {
                 style: {
                   boxShadow: "none",

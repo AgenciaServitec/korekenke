@@ -12,9 +12,10 @@ export const filterAclExact = (filter) =>
   Object.fromEntries(Object.entries(acls).filter(([acl]) => acl === filter));
 
 export const mapAcls = (acls = []) => ({
-  users: [...filterMapAcl(acls, "users")],
+  home: filterMapAcl(acls, "home"),
   defaultRolesAcls: filterMapAcl(acls, "default-roles-acls"),
   manageAcls: filterMapAcl(acls, "manage-acls"),
+  users: [...filterMapAcl(acls, "users")],
 });
 
 const filterMapAcl = (acls = [], filter, except = []) =>

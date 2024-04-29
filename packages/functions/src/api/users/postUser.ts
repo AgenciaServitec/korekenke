@@ -40,7 +40,17 @@ export const postUser = async (
 const addUser = async (user: User): Promise<void> => {
   const { assignCreateProps } = defaultFirestoreProps();
 
-  await firestore.collection("users").doc(user.id).set(assignCreateProps(user));
+  await firestore
+    .collection("users")
+    .doc(user.id)
+    .set(
+      assignCreateProps({
+        ...user,
+        defaultRoleCode: "user",
+        acls: ["/home"],
+        otherRoles: [],
+      })
+    );
 };
 
 const addUserAuth = async (user: User): Promise<void> => {

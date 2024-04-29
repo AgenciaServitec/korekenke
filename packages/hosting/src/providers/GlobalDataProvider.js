@@ -13,6 +13,8 @@ const GlobalDataContext = createContext({
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
+  console.log({ authUser });
+
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser ? firestore.collection("roles-acls") : null
   );

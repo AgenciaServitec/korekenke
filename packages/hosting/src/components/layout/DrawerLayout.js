@@ -29,7 +29,7 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Gestion de privilegios (acls)",
+      label: "Lista Control de Accesos (acls)",
       key: "group-acls",
       icon: <FontAwesomeIcon icon={faUsersCog} size="lg" />,
       isVisible: true,
