@@ -27,11 +27,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
-    dni: yup
-      .string()
-      .min(8)
-      .required()
-      .transform((value) => (value === null ? "" : value)),
     email: yup.string().email().required(),
     phoneNumber: yup
       .string()
@@ -50,7 +45,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      dni: "",
       phoneNumber: "",
       cgi: false,
     },
@@ -65,7 +59,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       firstName: step1Data?.firstName || "",
       paternalSurname: step1Data?.paternalSurname || "",
       maternalSurname: step1Data?.maternalSurname || "",
-      dni: step1Data?.dni || "",
       email: step1Data?.email || "",
       phoneNumber: step1Data?.phoneNumber || "",
       degree: step1Data?.degree || "",
@@ -74,6 +67,21 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   }, [currentStep]);
 
   console.log({ errors });
+
+  const mapUser = (formData) => ({
+    cip: formData.cip,
+    dni: formData.dni,
+    firstName: formData.firstName,
+    paternalSurname: formData.paternalSurname,
+    maternalSurname: formData.maternalSurname,
+    email: formData.email,
+    phone: {
+      prefix: "+51",
+      number: formData.phoneNumber,
+    },
+    degree: formData.degree,
+    cgi: formData.cgi,
+  });
 
   const onSubmitLogin = async (formData) => {
     try {
@@ -89,7 +97,9 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
           } ya se encuentra registrado.`,
         });
 
-      setLocalStorage("register", { ...step1Data, ...formData });
+      const user = mapUser({ ...step1Data, ...formData });
+
+      setLocalStorage("register", user);
 
       next();
     } catch (e) {
