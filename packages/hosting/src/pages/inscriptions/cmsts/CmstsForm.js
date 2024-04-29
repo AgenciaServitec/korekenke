@@ -6,11 +6,10 @@ import {
   IconAction,
   Input,
   InputNumber,
-  Select,
   notification,
+  Select,
 } from "../../../components";
-import { Row, Col } from "antd/lib";
-import Title from "antd/lib/typography/Title";
+import { Col, Row } from "antd/lib";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { useAuthentication } from "../../../providers";
@@ -22,6 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { Space } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const CmstsForm = () => {
   const { authUser } = useAuthentication();
@@ -115,25 +115,28 @@ export const CmstsForm = () => {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={24} md={22}>
-        <Title level={2}>
-          Circulo Militar de Superiores tecnicos y sub oficiales
-        </Title>
-      </Col>
-      <Col sm={24} md={2}>
-        <Space>
-          <IconAction
-            className="pointer"
-            onClick={() => onNavigateTo("/inscriptions/cmsts/all")}
-            styled={{ color: (theme) => theme.colors.primary }}
-            icon={faAddressBook}
-          />
+      <Col sm={24}>
+        <Space
+          align="middle"
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            alignItems: "center",
+          }}
+        >
           <IconAction
             className="pointer"
             onClick={() => onNavigateTo("/inscriptions/cmsts/sheet")}
             styled={{ color: (theme) => theme.colors.error }}
             icon={faFilePdf}
           />
+          <Button
+            type="primary"
+            onClick={() => onNavigateTo("/inscriptions/cmsts/all")}
+          >
+            <FontAwesomeIcon icon={faAddressBook} /> &nbsp; Ver todos los
+            inscritos
+          </Button>
         </Space>
       </Col>
       <Col span={24}>

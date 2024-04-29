@@ -1,13 +1,12 @@
 import React from "react";
 import { Col, Row } from "antd/lib";
-import Title from "antd/lib/typography/Title";
 import {
   Button,
   Form,
   Input,
-  Select,
   modalConfirm,
   notification,
+  Select,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -137,9 +136,6 @@ export const CmstsFamilyForm = () => {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Title level={2}>Composición Familiar</Title>
-      </Col>
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
