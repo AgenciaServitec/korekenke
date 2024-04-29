@@ -39,10 +39,9 @@ export const theme = {
   },
   colors: {
     primary: "#637A3A",
-    primary2: "#3f4d22",
+    secondary: "#3f4d22",
     tertiary: "#343a40",
 
-    font_c1: "#3f4d22",
     font1: "#101110FF",
     font2: "#1f211f",
     font3: "#292c29",
