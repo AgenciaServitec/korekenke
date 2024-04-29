@@ -352,10 +352,10 @@ const Correspondence = ({
                 size="large"
                 block
                 htmlType="submit"
-                disabled={savingCorrespondence || uploadingImage}
+                disabled={uploadingImage}
                 loading={savingCorrespondence}
               >
-                Enviar
+                Guardar
               </Button>
             </Col>
           </Row>
