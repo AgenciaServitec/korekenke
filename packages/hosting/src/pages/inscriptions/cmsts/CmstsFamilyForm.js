@@ -23,6 +23,8 @@ export const CmstsFamilyForm = () => {
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
 
   const mapUserToApi = (formData) => {
+    console.log(authUser?.familyMembers || []);
+
     return assign(
       {},
       {
@@ -30,19 +32,23 @@ export const CmstsFamilyForm = () => {
         email: authUser.email,
         phone: authUser.phone,
         familyMembers: [
-          ...authUser.familyMembers,
+          ...(authUser?.familyMembers || []),
           { ...formData, id: formData.dni },
         ],
       }
     );
   };
 
-  const exitsFamilyDni = (dni) =>
-    !!authUser.familyMembers.find((familyMember) => familyMember.dni === dni);
+  const exitsFamilyMember = (dni) =>
+    !!(authUser?.familyMembers || []).find(
+      (familyMember) => familyMember?.dni === dni
+    );
 
   const onSubmitSaveFamilyUser = async (formData) => {
     try {
-      if (exitsFamilyDni(formData.dni))
+      const familyMember = exitsFamilyMember(formData.dni);
+
+      if (familyMember)
         return notification({
           type: "warning",
           title: "El DNI ya esta registrado.",
@@ -137,7 +143,7 @@ export const CmstsFamilyForm = () => {
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
-            <Col span={24} md={6}>
+            <Col span={24} md={4}>
               <Controller
                 name="firstName"
                 control={control}
@@ -154,7 +160,7 @@ export const CmstsFamilyForm = () => {
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={4}>
               <Controller
                 name="paternalSurname"
                 control={control}
@@ -171,7 +177,7 @@ export const CmstsFamilyForm = () => {
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={4}>
               <Controller
                 name="maternalSurname"
                 control={control}
@@ -188,7 +194,7 @@ export const CmstsFamilyForm = () => {
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={3}>
               <Controller
                 name="relationship"
                 control={control}
@@ -219,7 +225,7 @@ export const CmstsFamilyForm = () => {
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={2}>
               <Controller
                 name="age"
                 control={control}
@@ -236,7 +242,7 @@ export const CmstsFamilyForm = () => {
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={3}>
               <Controller
                 name="cciiffs"
                 control={control}
@@ -253,7 +259,7 @@ export const CmstsFamilyForm = () => {
                 )}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} md={4}>
               <Controller
                 name="dni"
                 control={control}

@@ -1,22 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col } from "antd/lib";
 import { Table } from "antd";
 import Title from "antd/es/typography/Title";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { usersRef } from "../../../../firebase/collections/users";
+import { usersRef } from "../../../../firebase/collections";
+import { notification } from "../../../../components";
 
 export const AllRegistered = () => {
   const [inscribedUsers = [], inscribedUsersLoading, inscribedUsersError] =
     useCollectionData(usersRef.where("isDeleted", "==", false));
 
-  console.log(inscribedUsers);
+  useEffect(() => {
+    inscribedUsersError && notification({ type: "error" });
+  }, [inscribedUsersError]);
 
   const columns = [
     {
-      title: "Nombres y Apellidos",
-      key: "fullName",
-      render: (_, value) =>
-        `${_.firstName} ${_.paternalSurname} ${_.maternalSurname}`,
+      title: "Apellidos y Nombres",
+      key: "paternalSurname",
+      sorter: (a, b) => a.paternalSurname.length - b.paternalSurname.length,
+      render: (_) => `${_.paternalSurname} ${_.maternalSurname} ${_.firstName}`,
     },
     {
       title: "CIP",
@@ -32,11 +35,17 @@ export const AllRegistered = () => {
       title: "Estado Civil",
       dataIndex: "civilStatus",
       key: "civilStatus",
+      sorter: (a, b) =>
+        a?.civilStatus
+          ? a.civilStatus.length - b.civilStatus.length
+          : undefined,
     },
     {
       title: "Género",
       dataIndex: "gender",
       key: "gender",
+      sorter: (a, b) =>
+        a?.gender ? a.gender.length - b.gender.length : undefined,
     },
     {
       title: "Ubigeo de Nacimiento",
@@ -47,6 +56,7 @@ export const AllRegistered = () => {
       title: "Fecha de Nacimiento",
       dataIndex: "birthdate",
       key: "birthdate",
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Ubigeo de Vivienda",
@@ -66,17 +76,27 @@ export const AllRegistered = () => {
     {
       title: "Celular de Emergencia",
       key: "emergencyCellPhone",
-      render: (_, value) => _.emergencyCellPhone?.number || "",
+      render: (_) => _.emergencyCellPhone?.number || "",
     },
   ];
 
   return (
     <Row gutter={[16, 16]}>
-      <Col>
+      <Col span={24}>
         <Title level={2}>Inscritos en Circulo Militar</Title>
       </Col>
-      <Col>
-        <Table columns={columns} dataSource={inscribedUsers} />
+      <Col span={24}>
+        <Table
+          columns={columns}
+          dataSource={inscribedUsers}
+          loading={inscribedUsersLoading}
+          virtual
+          bordered
+          size="small"
+          scroll={{
+            x: "max-content",
+          }}
+        />
       </Col>
     </Row>
   );

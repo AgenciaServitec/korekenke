@@ -9,13 +9,13 @@ export const CmstsTable = ({ onDeleteFamilyMember }) => {
 
   const familyMembers = authUser?.familyMembers || [];
 
-  console.log(...familyMembers);
-
   const columns = [
     {
       title: "Apellidos y Nombres",
       dataIndex: "fullName",
       key: "fullName",
+      sorter: (a, b) =>
+        a?.fullName ? a.fullName.length - b.fullName.length : undefined,
     },
     {
       title: "Parentesco",
@@ -26,6 +26,7 @@ export const CmstsTable = ({ onDeleteFamilyMember }) => {
       title: "Edad",
       dataIndex: "age",
       key: "age",
+      sorter: (a, b) => (a?.age ? a.age - b.age : undefined),
     },
     {
       title: "CCIIFFS",
@@ -39,7 +40,7 @@ export const CmstsTable = ({ onDeleteFamilyMember }) => {
     },
     {
       title: "Acciones",
-      key: "behavior",
+      key: "actions",
       render: (_, { dni }) => (
         <Space>
           <IconAction
@@ -63,9 +64,20 @@ export const CmstsTable = ({ onDeleteFamilyMember }) => {
       relationship: familyMember.relationship,
       cciiffs: familyMember.cciiffs,
       dni: familyMember.dni,
-      behavior: familyMember?.behavior,
     };
   });
 
-  return <Table columns={columns} dataSource={data} pagination={false} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={data}
+      pagination={false}
+      virtual
+      bordered
+      size="small"
+      scroll={{
+        x: "max-content",
+      }}
+    />
+  );
 };
