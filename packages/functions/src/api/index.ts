@@ -5,6 +5,7 @@ import { body } from "express-validator";
 import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
 import { getEntityDataByDni } from "./entities";
+import { getUserByCip } from "./consult";
 
 const app: express.Application = express();
 
@@ -23,6 +24,8 @@ app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 app.post("/correspondence", postCorrespondence);
 
 app.get("/entities/dni/:dni", getEntityDataByDni);
+
+app.get("/consult/cmsts/:cip", getUserByCip);
 
 app.use(errorHandler);
 
