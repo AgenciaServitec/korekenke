@@ -15,7 +15,7 @@ export const getUserByCip = async (
     params: { cip },
   } = req;
 
-  console.log("「Change comment by Get user data by CIP Initialize", cip, {
+  console.log("「Get user data by CIP Initialize", cip, {
     params: req.params,
   });
 
