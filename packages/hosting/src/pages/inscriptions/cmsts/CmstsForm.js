@@ -3,62 +3,60 @@ import {
   Button,
   DatePicker,
   Form,
+  IconAction,
   Input,
   InputNumber,
   Select,
+  notification,
 } from "../../../components";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
+import { Row, Col } from "antd/lib";
 import Title from "antd/lib/typography/Title";
 import * as yup from "yup";
-import { useNavigate } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import { useAuthentication } from "../../../providers";
 import { assign } from "lodash";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { useFormUtils } from "../../../hooks";
+import { useApiUserPut } from "../../../api";
+import moment from "moment";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
+import { Space } from "antd";
 
-export const FormCmsts = () => {
+export const CmstsForm = () => {
   const { authUser } = useAuthentication();
-
-  console.log(authUser);
-
-  const { assignUpdateProps } = useDefaultFirestoreProps;
-
-  const onSubmitSaveCmstsUser = async (formData) => {
-
-  };
-
   const navigate = useNavigate();
 
-  // const updateUser = async (user) => {
-  //   await putUser(user)
-  // };
+  const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
 
-  const mapCmstsUser = (formData) =>
-    assign(
-      {},
-      {
-        firstName: formData.firstName.toLowerCase(),
-        paternalSurname: formData.paternalSurname.toLowerCase(),
-        maternalSurname: formData.maternalSurname.toLowerCase(),
-        phone: {
-          number: formData.phoneNumber,
-          prefix: formData.phonePrefix,
-        },
-        cip: formData.cip.toLowerCase(),
-        dni: formData.dni.toLowerCase(),
-        civilStatus: formData.civilStatus.toLowerCase(),
-        gender: formData.gender.toLowerCase(),
-        placeBirth: formData.placeBirth.toLowerCase(),
-        birthdate: formData.birthdate.toLowerCase(),
-        houseLocation: formData.houseLocation.toLowerCase(),
-        urbanization: formData.urbanization.toLowerCase(),
-        address: formData.address.toLowerCase(),
-        emergencyCellPhone: formData.emergencyCellPhone,
+  const mapUser = (formData) =>
+    assign({}, formData, {
+      id: authUser.id,
+      email: authUser.email,
+      phone: authUser.phone,
+      birthdate: moment(formData.birthdate).format("YYYY-MM-DD HH:mm:ss"),
+      emergencyCellPhone: {
+        number: formData.emergencyCellPhone,
+        prefix: "+51",
+      },
+    });
+
+  const onUpdateCmstsUser = async (formData) => {
+    try {
+      const user = mapUser(formData);
+
+      await putUser(user);
+
+      if (!putUserResponse.ok) {
+        throw new Error(JSON.stringify(putUserResponse));
       }
-    );
 
-  const onGoBack = () => navigate(-1);
+      notification({ type: "success" });
+    } catch (e) {
+      console.log("ErrorUpdateUser: ", e);
+      notification({ type: "error" });
+    }
+  };
 
   const schema = yup.object({
     firstName: yup.string().required(),
@@ -69,7 +67,7 @@ export const FormCmsts = () => {
     civilStatus: yup.string().required(),
     gender: yup.string().required(),
     placeBirth: yup.string().required(),
-    birthdate: yup.string().required(),
+    birthdate: yup.date().required(),
     houseLocation: yup.string().required(),
     urbanization: yup.string().required(),
     address: yup.string().required(),
@@ -82,9 +80,7 @@ export const FormCmsts = () => {
     control,
     reset,
   } = useForm({
-    defaultValues: {
-      active: false,
-    },
+    resolver: yupResolver(schema),
   });
 
   const { required, error } = useFormUtils({ errors, schema });
@@ -103,25 +99,45 @@ export const FormCmsts = () => {
       civilStatus: authUser?.civilStatus || "",
       gender: authUser?.gender || "",
       placeBirth: authUser?.placeBirth || "",
-      birthdate: authUser?.birthdate || "",
+      birthdate: authUser?.birthdate
+        ? moment(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
+        : undefined,
       houseLocation: authUser?.houseLocation || "",
       urbanization: authUser?.urbanization || "",
       address: authUser?.address || "",
-      emergencyCellPhone: authUser?.phoneNumber || "",
+      emergencyCellPhone: authUser?.emergencyCellPhone.number || "",
     });
   };
 
-  const submitSaveCmstsUser = (formData) => onSubmitSaveCmstsUser(formData);
+  const onNavigateTo = (pathName) => navigate(pathName);
+
+  const onSubmit = (formData) => onUpdateCmstsUser(formData);
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={24}>
+      <Col span={24} md={22}>
         <Title level={2}>
           Circulo Militar de Superiores tecnicos y sub oficiales
         </Title>
       </Col>
+      <Col sm={24} md={2}>
+        <Space>
+          <IconAction
+            className="pointer"
+            onClick={() => onNavigateTo("/inscriptions/cmsts/all")}
+            styled={{ color: (theme) => theme.colors.primary }}
+            icon={faAddressBook}
+          />
+          <IconAction
+            className="pointer"
+            onClick={() => onNavigateTo("/inscriptions/cmsts/sheet")}
+            styled={{ color: (theme) => theme.colors.error }}
+            icon={faFilePdf}
+          />
+        </Space>
+      </Col>
       <Col span={24}>
-        <Form onsubmit={handleSubmit(submitSaveCmstsUser)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
             <Col span={24} md={8}>
               <Controller
@@ -218,7 +234,7 @@ export const FormCmsts = () => {
                     label="Estado Civil"
                     defaultValue=""
                     value={value}
-                    onChange={onchange}
+                    onChange={onChange}
                     error={error(name)}
                     required={required(name)}
                     options={[
@@ -261,7 +277,7 @@ export const FormCmsts = () => {
                     label="Género"
                     defaultValue=""
                     value={value}
-                    onChange={onchange}
+                    onChange={onChange}
                     error={error(name)}
                     required={required(name)}
                     options={[
@@ -288,7 +304,7 @@ export const FormCmsts = () => {
                     label="Ubigeo de Nacimiento"
                     defaultValue=""
                     value={value}
-                    onChange={onchange}
+                    onChange={onChange}
                     error={error(name)}
                     required={required(name)}
                     options={[
@@ -315,7 +331,7 @@ export const FormCmsts = () => {
                     label="Fecha de Nacimiento"
                     name={name}
                     value={value}
-                    onChange={onchange}
+                    onChange={onChange}
                     error={error(name)}
                     required={required(name)}
                   />
@@ -332,7 +348,7 @@ export const FormCmsts = () => {
                     label="Ubigeo de Vivienda"
                     defaultValue=""
                     value={value}
-                    onChange={onchange}
+                    onChange={onChange}
                     error={error(name)}
                     required={required(name)}
                     options={[
@@ -404,16 +420,12 @@ export const FormCmsts = () => {
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
               <Button
-                type="default"
+                type="primary"
                 size="large"
                 block
-                onClick={() => onGoBack()}
+                htmlType="submit"
+                loading={putUserLoading}
               >
-                Cancelar
-              </Button>
-            </Col>
-            <Col xs={24} sm={6} md={4}>
-              <Button type="primary" size="large" block htmlType="submit">
                 Guardar
               </Button>
             </Col>

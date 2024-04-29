@@ -1,12 +1,17 @@
 import React from "react";
-import { CmstsTable } from "./CmstsTable";
-import { FormCmsts } from "./FormCmsts";
+import { CmstsFamilyForm } from "./CmstsFamilyForm";
+import { CmstsForm } from "./CmstsForm";
+import { Col, Row } from "antd/lib";
 
 export const CmstsIntegration = () => {
   return (
-    <>
-      <FormCmsts />
-      {/* <CmstsTable /> */}
-    </>
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <CmstsForm />
+      </Col>
+      <Col span={24}>
+        <CmstsFamilyForm />
+      </Col>
+    </Row>
   );
 };

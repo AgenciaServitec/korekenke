@@ -82,6 +82,15 @@ export const Router = () => {
         />
         <Route
           exact
+          path="inscriptions/cmsts/all"
+          element={
+            <AdminLayout>
+              <A.AllRegistered />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="inscriptions/cmsts/sheet"
           element={<A.InscriptionFile />}
         />
