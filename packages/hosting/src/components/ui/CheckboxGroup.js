@@ -7,13 +7,18 @@ export const CheckboxGroup = ({
   required,
   error,
   label,
-  variant = "outlined",
+  variant = "filled",
   ...props
 }) => {
   const Container = ComponentContainer[variant];
 
   return (
-    <Container required={required} error={error} label={label} animation={true}>
+    <Container
+      required={required}
+      error={error}
+      label={label}
+      animation={false}
+    >
       <CheckboxGroupStyled {...props} />
     </Container>
   );
