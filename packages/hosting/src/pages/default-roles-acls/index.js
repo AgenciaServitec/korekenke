@@ -31,7 +31,7 @@ export const DefaultRolesAclsIntegration = () => {
     deleteRoleAclsSuccess &&
       notification({
         type: "success",
-        title: "Role Acls deleted successfully!",
+        title: "El rol se eliminó exitosamente junto con sus acls!",
       });
   }, [deleteRoleAclsSuccess]);
 
@@ -80,7 +80,7 @@ const DefaultRolesAcls = ({
           size="large"
           icon={<FontAwesomeIcon icon={faPlus} />}
         >
-          &ensp; Add role acl
+          &ensp; Agregar rol con acls
         </Button>
       </Col>
       <Col span={24}>

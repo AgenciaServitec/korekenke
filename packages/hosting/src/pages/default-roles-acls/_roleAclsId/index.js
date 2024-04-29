@@ -70,7 +70,7 @@ export const RoleAclIntegration = () => {
     if (saveRoleAclsSuccess) {
       notification({
         type: "success",
-        title: "Role Acls saved successfully!",
+        title: "Acls de rol guardados exitosamente",
       });
 
       navigate(-1);
@@ -88,7 +88,7 @@ export const RoleAclIntegration = () => {
   const onCancel = (modifiedFields) => {
     if (!isEmpty(modifiedFields))
       return modalConfirm({
-        title: "Are you leaving without saving?",
+        title: "¿Te vas sin guardar?",
         onOk: () => navigate(-1),
       });
     navigate(-1);
@@ -173,7 +173,9 @@ const RoleAcl = ({
             )}
           />
         </Col>
-        <Title level={4}>Privilegios de usuario</Title>
+        <Col span={24}>
+          <Title level={4}>Privilegios de usuario</Title>
+        </Col>
         <Col span={24}>
           <Controller
             name="acls.users"
@@ -181,7 +183,7 @@ const RoleAcl = ({
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <CheckboxGroup
-                label="Users"
+                label="Usuarios"
                 options={map(
                   {
                     ...filterAcl("users"),
@@ -207,7 +209,7 @@ const RoleAcl = ({
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <CheckboxGroup
-                label="Default roles acls"
+                label="Acls de roles predeterminados"
                 options={map(
                   filterAcl("default-roles-acls"),
                   (item, itemKey) => ({
@@ -231,7 +233,7 @@ const RoleAcl = ({
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <CheckboxGroup
-                label="Manage acls"
+                label="Administrador Acls"
                 options={map(filterAcl("manage-acls"), (item, itemKey) => ({
                   label: item,
                   value: itemKey,

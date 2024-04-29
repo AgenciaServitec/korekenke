@@ -178,7 +178,7 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <RadioGroup
-                      label="Action"
+                      label="Acción"
                       options={Object.values(ACTION).map((action) => ({
                         label: action.label,
                         value: action.id,
@@ -214,8 +214,6 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
                   )}
                 />
               </Col>
-            </Row>
-            <Row gutter={[16, 24]}>
               <Col span={24}>
                 <Title level={4}>Privilegios de usuario</Title>
               </Col>
@@ -226,7 +224,7 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <CheckboxGroup
-                      label="Users"
+                      label="Usuarios"
                       options={map(
                         {
                           ...filterAcl("users"),
@@ -252,7 +250,7 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <CheckboxGroup
-                      label="Default roles acls"
+                      label="Acls de roles predeterminados"
                       options={map(
                         filterAcl("default-roles-acls"),
                         (item, itemKey) => ({
@@ -276,7 +274,7 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <CheckboxGroup
-                      label="Manage acls"
+                      label="Administrador Acls"
                       options={map(
                         filterAcl("manage-acls"),
                         (item, itemKey) => ({
