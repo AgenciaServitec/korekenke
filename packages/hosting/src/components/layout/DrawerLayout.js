@@ -2,7 +2,12 @@ import React from "react";
 import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
-import { faFileAlt, faHome, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileAlt,
+  faHome,
+  faIdCard,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
 
@@ -42,6 +47,22 @@ export const DrawerLayout = ({
         onNavigateTo("/correspondences");
         onSetIsVisibleDrawer(false);
       },
+    },
+    {
+      label: "Inscripciones",
+      key: "inscriptions",
+      icon: <FontAwesomeIcon icon={faIdCard} size="lg" />,
+      isVisible: true,
+      children: [
+        {
+          key: "military-circle",
+          label: "Circulo Militar",
+          onClick: () => {
+            onNavigateTo("/inscriptions/cmsts");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+      ],
     },
   ];
 

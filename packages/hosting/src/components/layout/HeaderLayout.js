@@ -12,6 +12,7 @@ import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
+import { allRoles } from "../../data-list/roles";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -32,7 +33,7 @@ export const HeaderLayout = ({
   const onSetIsVisibleMoreRoles = () =>
     setIsVisibleMoreRoles(!isVisibleMoreRoles);
 
-  const defaultRole = user.otherRoles.find(
+  const defaultRole = allRoles.find(
     (role) => role?.code === user?.defaultRoleCode
   );
 
