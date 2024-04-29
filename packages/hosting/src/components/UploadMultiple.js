@@ -59,7 +59,7 @@ export const UploadMultiple = ({
   isImage = true,
   label,
   required = false,
-  resize = "1480x2508",
+  resize = "423x304",
   value,
   onChange,
   onUploading,

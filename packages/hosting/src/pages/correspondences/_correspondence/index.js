@@ -293,13 +293,13 @@ const Correspondence = ({
                 defaultValue={[]}
                 render={({ field: { onChange, value, name } }) => (
                   <UploadMultiple
-                    label="Fotos (1480x2508)"
+                    label="Fotos (523x404)"
                     accept="image/*"
                     bucket="documents"
-                    resize="1480x2508"
+                    resize="423x304"
                     name={name}
                     value={value}
-                    filePath={`correspondences/photos/${correspondence.id}`}
+                    filePath={`correspondences/${correspondence.id}/photos`}
                     isImage={true}
                     buttonText="Subir imagen"
                     error={error(name)}
@@ -323,7 +323,7 @@ const Correspondence = ({
                     bucket="documents"
                     name={name}
                     value={value}
-                    filePath={`correspondences/files/${correspondence.id}`}
+                    filePath={`correspondences/${correspondence.id}/files`}
                     buttonText="Subir archivo"
                     error={error(name)}
                     required={required(name)}
