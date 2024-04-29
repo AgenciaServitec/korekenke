@@ -79,7 +79,9 @@ export const CorrespondenceIntegration = () => {
         destination: formData.destination,
         receivedBy: formData.receivedBy,
         class: formData.class,
-        dateCorrespondence: formData.dateCorrespondence,
+        dateCorrespondence: moment(formData.dateCorrespondence).format(
+          "YYYY-MM-DD HH:mm:ss"
+        ),
         indicative: formData.indicative,
         issue: formData.issue,
         classification: formData.classification,
@@ -126,9 +128,6 @@ const Correspondence = ({
     reset,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      active: false,
-    },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
@@ -146,8 +145,8 @@ const Correspondence = ({
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
       dateCorrespondence: correspondence?.dateCorrespondence
-        ? moment(correspondence.dateCorrespondence.toDate())
-        : moment(),
+        ? moment(correspondence.dateCorrespondence, "YYYY-MM-DD HH:mm:ss")
+        : undefined,
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,
     });

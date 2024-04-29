@@ -1,5 +1,5 @@
 import React from "react";
-import AntdDatePicker from "antd/lib/date-picker";
+import { DatePicker as AntdDatePicker } from "antd";
 import { ComponentContainer } from "./component-container";
 import moment from "moment";
 
@@ -41,7 +41,7 @@ export const DatePicker = ({
         placeholder=""
         onChange={onChange}
         allowClear={allowClear}
-        bordered={false}
+        variant="borderless"
       />
     </Container>
   );
