@@ -116,7 +116,6 @@ export const ProfileDataForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/profile`}
-                fileName="personal-photo"
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
