@@ -105,7 +105,7 @@ export const CmstsForm = () => {
       houseLocation: authUser?.houseLocation || "",
       urbanization: authUser?.urbanization || "",
       address: authUser?.address || "",
-      emergencyCellPhone: authUser?.emergencyCellPhone.number || "",
+      emergencyCellPhone: authUser?.emergencyCellPhone?.number || "",
     });
   };
 

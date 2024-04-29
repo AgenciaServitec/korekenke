@@ -7,7 +7,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 export const CmstsTable = ({ onDeleteFamilyMember }) => {
   const { authUser } = useAuthentication();
 
-  const familyMembers = authUser.familyMembers;
+  const familyMembers = authUser?.familyMembers || [];
 
   console.log(...familyMembers);
 
