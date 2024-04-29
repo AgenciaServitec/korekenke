@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import {
-  Acl,
   AddButton,
   Col,
-  IconAction,
   modalConfirm,
   notification,
   Row,
@@ -14,7 +12,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { correspondencesRef } from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -91,22 +88,12 @@ const Correspondence = ({
     <Container>
       <div>
         <Row justify="space-between" align="middle" gutter={[16, 16]}>
-          <Col sm={24} md={23}>
+          <Col span={24}>
             <AddButton
               onClick={onClickCorrespondenceAdd}
               title="correspondencia"
               margin="0"
             />
-          </Col>
-          <Col sm={24} md={1}>
-            <div>
-              <IconAction
-                className="pointer"
-                onClick={() => onNavigateTo("/inscriptions/cmsts/sheet")}
-                styled={{ color: (theme) => theme.colors.error }}
-                icon={faFilePdf}
-              />
-            </div>
           </Col>
         </Row>
       </div>

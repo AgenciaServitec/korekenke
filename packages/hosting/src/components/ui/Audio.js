@@ -4,9 +4,7 @@ import styled from "styled-components";
 export const Audio = ({ audio, autoPlay }) => {
   const audioRef = useRef(null);
 
-  useEffect(() => {
-    console.log("current->", audioRef.current);
-  }, [audioRef]);
+  useEffect(() => {}, [audioRef]);
 
   return (
     <ContainerAudio

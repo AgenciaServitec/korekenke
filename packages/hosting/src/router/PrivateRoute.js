@@ -19,8 +19,6 @@ export const PrivateRoute = () => {
       ),
     };
 
-    console.log(rules);
-
     return Object.values(rules).every((rule) => !!rule);
   };
 

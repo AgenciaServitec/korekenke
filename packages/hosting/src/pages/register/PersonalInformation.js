@@ -66,8 +66,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     });
   }, [currentStep]);
 
-  console.log({ errors });
-
   const mapUser = (formData) => ({
     cip: formData.cip,
     dni: formData.dni,
@@ -111,7 +109,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   };
 
   const userByEmail = async (email) => {
-    console.log(email);
     const response = await fetchCollectionOnce(
       firestore.collection("users").where("email", "==", email).limit(1)
     );
@@ -120,7 +117,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   };
 
   const userByPhoneNumber = async (phoneNumber) => {
-    console.log(phoneNumber);
     const response = await fetchCollectionOnce(
       firestore
         .collection("users")

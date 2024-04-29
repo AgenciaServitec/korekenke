@@ -168,8 +168,6 @@ const User = ({
     resetForm();
   }, [user]);
 
-  console.log(user);
-
   const resetForm = () => {
     reset({
       defaultRoleCode: user?.defaultRoleCode || "",
