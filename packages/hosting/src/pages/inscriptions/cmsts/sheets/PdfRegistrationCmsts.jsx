@@ -112,31 +112,33 @@ export const PdfRegistrationCmsts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <td>
-                        <ul>
-                          <li>9</li>
-                          <li>8</li>
-                          <li>7</li>
-                          <li>6</li>
-                          <li>5</li>
-                          <li>4</li>
-                          <li>3</li>
-                          <li>2</li>
-                          <li>1</li>
-                        </ul>
-                      </td>
-                      <td>
-                        <ul>
-                          <li>8</li>
-                          <li>7</li>
-                          <li>6</li>
-                          <li>5</li>
-                          <li>4</li>
-                          <li>3</li>
-                          <li>2</li>
-                          <li>1</li>
-                        </ul>
-                      </td>
+                      <tr>
+                        <td>
+                          <ul>
+                            <li>9</li>
+                            <li>8</li>
+                            <li>7</li>
+                            <li>6</li>
+                            <li>5</li>
+                            <li>4</li>
+                            <li>3</li>
+                            <li>2</li>
+                            <li>1</li>
+                          </ul>
+                        </td>
+                        <td>
+                          <ul>
+                            <li>8</li>
+                            <li>7</li>
+                            <li>6</li>
+                            <li>5</li>
+                            <li>4</li>
+                            <li>3</li>
+                            <li>2</li>
+                            <li>1</li>
+                          </ul>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -159,11 +161,13 @@ export const PdfRegistrationCmsts = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <td>1</td>
-                    <td>Nombre Apellido</td>
-                    <td>Hijo (a)</td>
-                    <td>12</td>
-                    <td>123656</td>
+                    <tr>
+                      <td>1</td>
+                      <td>Nombre Apellido</td>
+                      <td>Hijo (a)</td>
+                      <td>12</td>
+                      <td>123656</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -180,9 +184,11 @@ export const PdfRegistrationCmsts = () => {
                 </tr>
               </thead>
               <tbody>
-                <td>972252744</td>
-                <td>Beto1perk@gmail.com</td>
-                <td>972252744</td>
+                <tr>
+                  <td>972252744</td>
+                  <td>Beto1perk@gmail.com</td>
+                  <td>972252744</td>
+                </tr>
               </tbody>
             </table>
           </WrapperContent>
