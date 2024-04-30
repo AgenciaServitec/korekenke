@@ -29,9 +29,13 @@ import styled, { css } from "styled-components";
 //   mode?: "multiple" | "tags";
 // }
 
-const defaultFilterOption = (inputValue, optionLabel) =>
-  defaultTo(optionLabel, "").toUpperCase().indexOf(inputValue.toUpperCase()) ===
-  0;
+const defaultFilterOption = (inputValue, optionLabel) => {
+  return (
+    defaultTo(optionLabel, "")
+      .toUpperCase()
+      .indexOf(inputValue.toUpperCase()) === 0
+  );
+};
 
 export const Select = ({
   value = undefined,
@@ -53,12 +57,10 @@ export const Select = ({
 }) => {
   const Container = ComponentContainer[variant];
 
-  const fixValue = value ? value : undefined;
-
   return (
     <Container
       required={required}
-      value={fixValue}
+      value={value}
       error={error}
       helperText={helperText}
       disabled={disabled}
@@ -67,16 +69,16 @@ export const Select = ({
     >
       {isMobile ? (
         <StyledSelectMobile
-          key={fixValue}
+          key={value}
           disabled={disabled}
           error={error}
           onChange={(event) => onChange && onChange(event.target.value)}
-          value={fixValue}
-          defaultValue={fixValue}
+          value={value}
+          defaultValue={value}
           placeholder={placeholder}
         >
           {placeholder && <option hidden>{placeholder}</option>}
-          {!fixValue && <option hidden />}
+          {!value && <option hidden />}
           {options.map((option) => (
             <option key={option.code} value={option.value}>
               {option.label}
@@ -88,11 +90,11 @@ export const Select = ({
           allowClear={disabled ? false : allowClear}
           variant="borderless"
           disabled={disabled}
-          value={fixValue}
-          defaultValue={fixValue}
+          value={value}
+          defaultValue={value}
           onChange={onChange}
           filterOption={(inputValue, option) =>
-            filterOption(inputValue, option?.children)
+            filterOption(inputValue, option?.label)
           }
           showSearch
           size="large"
