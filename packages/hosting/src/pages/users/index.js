@@ -2,28 +2,17 @@ import React from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
-import List from "antd/lib/list";
-import Tag from "antd/lib/tag";
-import {
-  AddButton,
-  IconAction,
-  modalConfirm,
-  notification,
-} from "../../components";
+import { AddButton, modalConfirm, notification } from "../../components";
 import { Divider } from "antd";
 import { useAuthentication, useGlobalData } from "../../providers";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { useDevice } from "../../hooks";
-import { Link } from "react-router-dom";
-import { allRoles } from "../../data-list";
+import { UsersTable } from "./UserTable";
 import { useApiUserPatch } from "../../api";
-import { assign, capitalize } from "lodash";
+import { assign } from "lodash";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export const Users = () => {
-  const { isMobile } = useDevice();
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
   const { users } = useGlobalData();
@@ -31,7 +20,6 @@ export const Users = () => {
 
   const navigateTo = (userId) => {
     const url = `/users/${userId}`;
-
     navigate(url);
   };
 
@@ -39,11 +27,8 @@ export const Users = () => {
 
   const onEditUser = (user) => navigateTo(user.id);
 
-  const findRole = (roleCode) =>
-    allRoles.find((role) => role.code === roleCode);
-
-  const onDeleteUser = async (_user) => {
-    const user_ = assign({}, _user, { updateBy: authUser?.email });
+  const onDeleteUser = async (user) => {
+    const user_ = assign({}, user, { updateBy: authUser?.email });
 
     await patchUser(user_);
 
@@ -60,7 +45,7 @@ export const Users = () => {
 
   const onConfirmRemoveUser = (user) =>
     modalConfirm({
-      content: "El usuario se eliminara",
+      content: "El usuario se eliminará",
       onOk: async () => {
         await onDeleteUser(user);
       },
@@ -76,58 +61,10 @@ export const Users = () => {
         <Title level={3}>Usuarios</Title>
       </Col>
       <Col span={24}>
-        <List
-          className="demo-loadmore-list"
-          itemLayout={isMobile}
-          dataSource={users}
-          renderItem={(user) => (
-            <List.Item
-              actions={[
-                <IconAction
-                  key={user.id}
-                  tooltipTitle="Editar"
-                  icon={faEdit}
-                  onClick={() => onEditUser(user)}
-                />,
-                <IconAction
-                  key={user.id}
-                  tooltipTitle="Eliminar"
-                  styled={{ color: (theme) => theme.colors.error }}
-                  icon={faTrash}
-                  onClick={() => onConfirmRemoveUser(user)}
-                />,
-              ]}
-            >
-              <List.Item.Meta
-                title={
-                  <Link to={`/users/${user.id}`}>
-                    <h4 className="link-color">{user.email}</h4>
-                  </Link>
-                }
-                description={
-                  <>
-                    <div>
-                      <Text>
-                        {capitalize(
-                          `${user?.firstName} ${user?.paternalSurname} ${
-                            user?.maternalSurname || ""
-                          }`
-                        )}
-                      </Text>
-                    </div>
-                    <div>
-                      <Text>
-                        Rol:{" "}
-                        <Tag color="blue">{`${
-                          findRole(user?.defaultRoleCode)?.name || ""
-                        }`}</Tag>
-                      </Text>
-                    </div>
-                  </>
-                }
-              />
-            </List.Item>
-          )}
+        <UsersTable
+          users={users}
+          onEditUser={onEditUser}
+          onConfirmRemoveUser={onConfirmRemoveUser}
         />
       </Col>
     </Row>
