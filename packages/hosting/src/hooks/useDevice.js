@@ -16,9 +16,15 @@ export const useDevice = () => {
     resizeObserver.observe(document.body);
   }, []);
 
+  const isDeviceMobile =
+    !!navigator.userAgent.match("Android") ||
+    !!navigator.userAgent.match("iPhone") ||
+    !!navigator.userAgent.match("iPad");
+
   return {
     currentScreenWidth,
     isMobile: currentScreenWidth < breakPoints.tablet,
     isTablet: currentScreenWidth < breakPoints.desktop,
+    isDevice: { mobile: isDeviceMobile },
   };
 };
