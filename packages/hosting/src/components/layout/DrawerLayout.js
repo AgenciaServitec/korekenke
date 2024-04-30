@@ -10,6 +10,7 @@ import {
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { includes, isEmpty } from "lodash";
 
 export const DrawerLayout = ({
   user,
@@ -17,12 +18,15 @@ export const DrawerLayout = ({
   onSetIsVisibleDrawer,
   onNavigateTo,
 }) => {
+  const existPageAclsInAclsOfUser = (aclNames = []) =>
+    (user?.acls || []).some((acl) => includes(aclNames, acl));
+
   const items = [
     {
       label: "Home",
       key: "home",
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
-      isVisible: true,
+      isVisible: existPageAclsInAclsOfUser(["/home"]),
       onClick: () => {
         onNavigateTo("/home");
         onSetIsVisibleDrawer(false);
@@ -32,12 +36,12 @@ export const DrawerLayout = ({
       label: "Lista Control de Accesos (acls)",
       key: "group-acls",
       icon: <FontAwesomeIcon icon={faUsersCog} size="lg" />,
-      isVisible: true,
+      isVisible: existPageAclsInAclsOfUser(["/access-control-list"]),
       children: [
         {
           label: "Acls de roles predeterminados",
           key: "default-roles-acls",
-          isVisible: true,
+          isVisible: existPageAclsInAclsOfUser(["/default-roles-acls"]),
           onClick: () => {
             onNavigateTo("/default-roles-acls");
             onSetIsVisibleDrawer(false);
@@ -46,7 +50,7 @@ export const DrawerLayout = ({
         {
           label: "Administrardor Acls",
           key: "manage-acls",
-          isVisible: true,
+          isVisible: existPageAclsInAclsOfUser(["/manage-acls"]),
           onClick: () => {
             onNavigateTo("/manage-acls");
             onSetIsVisibleDrawer(false);
@@ -58,7 +62,7 @@ export const DrawerLayout = ({
       label: "Usuarios",
       key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-      isVisible: true,
+      isVisible: existPageAclsInAclsOfUser(["/users"]),
       onClick: () => {
         onNavigateTo("/users");
         onSetIsVisibleDrawer(false);
@@ -68,7 +72,7 @@ export const DrawerLayout = ({
       label: "Correspondencias",
       key: "correspondences",
       icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
-      isVisible: true,
+      isVisible: existPageAclsInAclsOfUser(["/correspondences"]),
       onClick: () => {
         onNavigateTo("/correspondences");
         onSetIsVisibleDrawer(false);
@@ -78,11 +82,12 @@ export const DrawerLayout = ({
       label: "Inscripciones",
       key: "inscriptions",
       icon: <FontAwesomeIcon icon={faIdCard} size="lg" />,
-      isVisible: true,
+      isVisible: existPageAclsInAclsOfUser(["/inscriptions"]),
       children: [
         {
           key: "military-circle",
           label: "Circulo Militar",
+          isVisible: existPageAclsInAclsOfUser(["/inscriptions/cmsts"]),
           onClick: () => {
             onNavigateTo("/inscriptions/cmsts");
             onSetIsVisibleDrawer(false);
@@ -92,7 +97,17 @@ export const DrawerLayout = ({
     },
   ];
 
-  const filterByRoleCode = (items) => items.filter((item) => item.isVisible);
+  const filterByRoleCode = (items) => {
+    return items.filter((item) => {
+      if (item?.children) {
+        item.children = (item?.children || []).filter(
+          (_children) => _children.isVisible
+        );
+      }
+
+      return item.isVisible;
+    });
+  };
 
   return (
     <DrawerContainer

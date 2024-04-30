@@ -173,21 +173,20 @@ const RoleAcl = ({
             )}
           />
         </Col>
-        <Col span={24}>
-          <Title level={4}>Privilegios de usuario</Title>
-        </Col>
+      </Row>
+
+      <Title level={4}>Privilegios de usuario</Title>
+      <Row gutter={[16, 24]}>
         <Col span={24}>
           <Controller
-            name="acls.users"
+            name="acls.accessControlList"
             defaultValue={[]}
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <CheckboxGroup
-                label="Usuarios"
+                label="Lista Control de Accesos (acls)"
                 options={map(
-                  {
-                    ...filterAcl("users"),
-                  },
+                  filterAcl("access-control-list"),
                   (item, itemKey) => ({
                     label: item,
                     value: itemKey,
@@ -238,6 +237,105 @@ const RoleAcl = ({
                   label: item,
                   value: itemKey,
                 }))}
+                name={name}
+                value={value}
+                onChange={onChange}
+                error={error(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24}>
+          <Controller
+            name="acls.profile"
+            defaultValue={[]}
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <CheckboxGroup
+                label="Perfil usuario"
+                options={map(filterAcl("profile"), (item, itemKey) => ({
+                  label: item,
+                  value: itemKey,
+                }))}
+                name={name}
+                value={value}
+                onChange={onChange}
+                error={error(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24}>
+          <Controller
+            name="acls.users"
+            defaultValue={[]}
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <CheckboxGroup
+                label="Usuarios"
+                options={map(
+                  {
+                    ...filterAcl("users"),
+                  },
+                  (item, itemKey) => ({
+                    label: item,
+                    value: itemKey,
+                  })
+                )}
+                name={name}
+                value={value}
+                onChange={onChange}
+                error={error(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24}>
+          <Controller
+            name="acls.correspondences"
+            defaultValue={[]}
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <CheckboxGroup
+                label="Correspondencias"
+                options={map(
+                  {
+                    ...filterAcl("correspondences"),
+                  },
+                  (item, itemKey) => ({
+                    label: item,
+                    value: itemKey,
+                  })
+                )}
+                name={name}
+                value={value}
+                onChange={onChange}
+                error={error(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24}>
+          <Controller
+            name="acls.inscriptions"
+            defaultValue={[]}
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <CheckboxGroup
+                label="Inscripciones"
+                options={map(
+                  {
+                    ...filterAcl("inscriptions"),
+                  },
+                  (item, itemKey) => ({
+                    label: item,
+                    value: itemKey,
+                  })
+                )}
                 name={name}
                 value={value}
                 onChange={onChange}

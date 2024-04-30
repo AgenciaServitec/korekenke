@@ -15,7 +15,10 @@ export const mapAcls = (acls = []) => ({
   home: filterMapAcl(acls, "home"),
   defaultRolesAcls: filterMapAcl(acls, "default-roles-acls"),
   manageAcls: filterMapAcl(acls, "manage-acls"),
+  profile: filterMapAcl(acls, "profile"),
   users: [...filterMapAcl(acls, "users")],
+  correspondences: [...filterMapAcl(acls, "correspondences")],
+  inscriptions: [...filterMapAcl(acls, "inscriptions")],
 });
 
 const filterMapAcl = (acls = [], filter, except = []) =>

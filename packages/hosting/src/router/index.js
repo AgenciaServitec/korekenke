@@ -41,6 +41,33 @@ export const Router = () => {
         />
         <Route
           exact
+          path="default-roles-acls"
+          element={
+            <AdminLayout>
+              <A.DefaultRolesAclsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="default-roles-acls/:roleAclsId"
+          element={
+            <AdminLayout>
+              <A.RoleAclIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="manage-acls"
+          element={
+            <AdminLayout>
+              <A.ManageAclsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="correspondences"
           element={
             <AdminLayout>
@@ -89,42 +116,6 @@ export const Router = () => {
           path="inscriptions/cmsts/sheet"
           element={<A.InscriptionFile />}
         />
-        <Route
-          exact
-          path="default-roles-acls"
-          element={
-            <AdminLayout>
-              <A.DefaultRolesAclsIntegration />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
-          path="default-roles-acls/:roleAclsId"
-          element={
-            <AdminLayout>
-              <A.RoleAclIntegration />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
-          path="manage-acls"
-          element={
-            <AdminLayout>
-              <A.ManageAclsIntegration />
-            </AdminLayout>
-          }
-        />
-        {/*<Route*/}
-        {/*  exact*/}
-        {/*  path="scripts"*/}
-        {/*  element={*/}
-        {/*    <AdminLayout>*/}
-        {/*      <Scripts />*/}
-        {/*    </AdminLayout>*/}
-        {/*  }*/}
-        {/*/>*/}
       </Route>
       <Route path="*" element={<Page404 />} />
     </Routes>
