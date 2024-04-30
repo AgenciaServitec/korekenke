@@ -4,6 +4,7 @@ import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
 import {
+  Acl,
   Button,
   DatePicker,
   Form,
@@ -156,210 +157,212 @@ const Correspondence = ({
     onSaveCorrespondence(formData);
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Title level={2}>Correspondencia</Title>
-      </Col>
-      <Col span={24}>
-        <Form onSubmit={handleSubmit(onSubmitSaveCorrespondence)}>
-          <Row gutter={[16, 16]}>
-            <Col span={24} md={12}>
-              <Controller
-                name="destination"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Destinatario"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24} md={12}>
-              <Controller
-                name="receivedBy"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Recibido Por:"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24} md={6}>
-              <Controller
-                name="class"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Clase"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24} md={6}>
-              <Controller
-                name="dateCorrespondence"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <DatePicker
-                    label="Fecha"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24} md={6}>
-              <Controller
-                name="indicative"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Indicativo"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24} md={6}>
-              <Controller
-                name="classification"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Clasificación"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24} md={{ span: 12, offset: 6 }}>
-              <Controller
-                name="issue"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <TextArea
-                    label="Asunto"
-                    rows={5}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-          </Row>
-          <Row gutter={[16, 16]}>
-            <Col sm={24} md={12}>
-              <Controller
-                name="photos"
-                control={control}
-                defaultValue={[]}
-                render={({ field: { onChange, value, name } }) => (
-                  <UploadMultiple
-                    label="Fotos (523x404)"
-                    accept="image/*"
-                    bucket="documents"
-                    resize="423x304"
-                    name={name}
-                    value={value}
-                    filePath={`correspondences/${correspondence.id}/photos`}
-                    isImage={true}
-                    buttonText="Subir imagen"
-                    error={error(name)}
-                    required={required(name)}
-                    onChange={(file) => onChange(file)}
-                    onUploading={setUploadingImage}
-                  />
-                )}
-              />
-            </Col>
-            <Col sm={24} md={12}>
-              <Controller
-                name="documents"
-                control={control}
-                defaultValue={[]}
-                render={({ field: { onChange, value, name } }) => (
-                  <UploadMultiple
-                    isImage={false}
-                    label="Documentos"
-                    accept="application/pdf"
-                    bucket="documents"
-                    name={name}
-                    value={value}
-                    filePath={`correspondences/${correspondence.id}/files`}
-                    buttonText="Subir archivo"
-                    error={error(name)}
-                    required={required(name)}
-                    onChange={(file) => onChange(file)}
-                    onUploading={setUploadingImage}
-                  />
-                )}
-              />
-            </Col>
-          </Row>
-          <Row justify="end" gutter={[16, 16]}>
-            <Col xs={24} sm={6} md={4}>
-              <Button
-                type="default"
-                size="large"
-                block
-                onClick={() => onGoBack()}
-                disabled={savingCorrespondence || uploadingImage}
-              >
-                Cancelar
-              </Button>
-            </Col>
-            <Col xs={24} sm={6} md={4}>
-              <Button
-                type="primary"
-                size="large"
-                block
-                htmlType="submit"
-                disabled={uploadingImage}
-                loading={savingCorrespondence}
-              >
-                Guardar
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </Col>
-    </Row>
+    <Acl name="/correspondences" redirect>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Title level={2}>Correspondencia</Title>
+        </Col>
+        <Col span={24}>
+          <Form onSubmit={handleSubmit(onSubmitSaveCorrespondence)}>
+            <Row gutter={[16, 16]}>
+              <Col span={24} md={12}>
+                <Controller
+                  name="destination"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Destinatario"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={12}>
+                <Controller
+                  name="receivedBy"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Recibido Por:"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={6}>
+                <Controller
+                  name="class"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Clase"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={6}>
+                <Controller
+                  name="dateCorrespondence"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <DatePicker
+                      label="Fecha"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={6}>
+                <Controller
+                  name="indicative"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Indicativo"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={6}>
+                <Controller
+                  name="classification"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Clasificación"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={{ span: 12, offset: 6 }}>
+                <Controller
+                  name="issue"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <TextArea
+                      label="Asunto"
+                      rows={5}
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col sm={24} md={12}>
+                <Controller
+                  name="photos"
+                  control={control}
+                  defaultValue={[]}
+                  render={({ field: { onChange, value, name } }) => (
+                    <UploadMultiple
+                      label="Fotos (523x404)"
+                      accept="image/*"
+                      bucket="documents"
+                      resize="423x304"
+                      name={name}
+                      value={value}
+                      filePath={`correspondences/${correspondence.id}/photos`}
+                      isImage={true}
+                      buttonText="Subir imagen"
+                      error={error(name)}
+                      required={required(name)}
+                      onChange={(file) => onChange(file)}
+                      onUploading={setUploadingImage}
+                    />
+                  )}
+                />
+              </Col>
+              <Col sm={24} md={12}>
+                <Controller
+                  name="documents"
+                  control={control}
+                  defaultValue={[]}
+                  render={({ field: { onChange, value, name } }) => (
+                    <UploadMultiple
+                      isImage={false}
+                      label="Documentos"
+                      accept="application/pdf"
+                      bucket="documents"
+                      name={name}
+                      value={value}
+                      filePath={`correspondences/${correspondence.id}/files`}
+                      buttonText="Subir archivo"
+                      error={error(name)}
+                      required={required(name)}
+                      onChange={(file) => onChange(file)}
+                      onUploading={setUploadingImage}
+                    />
+                  )}
+                />
+              </Col>
+            </Row>
+            <Row justify="end" gutter={[16, 16]}>
+              <Col xs={24} sm={6} md={4}>
+                <Button
+                  type="default"
+                  size="large"
+                  block
+                  onClick={() => onGoBack()}
+                  disabled={savingCorrespondence || uploadingImage}
+                >
+                  Cancelar
+                </Button>
+              </Col>
+              <Col xs={24} sm={6} md={4}>
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  htmlType="submit"
+                  disabled={uploadingImage}
+                  loading={savingCorrespondence}
+                >
+                  Guardar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+    </Acl>
   );
 };
