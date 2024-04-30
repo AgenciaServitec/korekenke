@@ -30,11 +30,8 @@ import styled, { css } from "styled-components";
 // }
 
 const defaultFilterOption = (inputValue, optionLabel) => {
-  return (
-    defaultTo(optionLabel, "")
-      .toUpperCase()
-      .indexOf(inputValue.toUpperCase()) === 0
-  );
+  const labelParts = optionLabel.toLowerCase().split(" - ");
+  return labelParts.some((part) => part.includes(inputValue.toLowerCase()));
 };
 
 export const Select = ({
