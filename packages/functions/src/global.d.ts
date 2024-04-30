@@ -9,6 +9,7 @@ interface Role {
 
 interface User extends DefaultFirestoreProps {
   id: string;
+  acls: string[];
   defaultRoleCode: string;
   otherRoles?: Role[];
   firstName: string;
@@ -22,11 +23,35 @@ interface User extends DefaultFirestoreProps {
     number: string;
   };
   password?: string | null;
-  degree?: string;
-  cgi?: string;
-  iAcceptPrivacyPolicies?: boolean;
+  degree: string;
+  cgi: string;
+  iAcceptPrivacyPolicies: boolean;
+  profilePhoto?: Image;
+  cipPhoto?: Image;
+  dniPhoto?: Image;
+  signaturePhoto?: Image;
+  address?: boolean;
+  civilStatus?: boolean;
+  houseLocation?: string;
+  placeBirth?: string;
+  urbanization?: string;
+  emergencyCellPhone?: {
+    prefix: string;
+    number: string;
+  };
+  familyMembers?: FamilyMember[];
   updateBy: string;
-  profileImage?: Image;
+}
+
+interface FamilyMember {
+  age: number;
+  cciiffs: string;
+  dni: string;
+  firstName: string;
+  id: string;
+  maternalSurname: string;
+  paternalSurname: string;
+  relationship: string;
 }
 
 interface Image {
