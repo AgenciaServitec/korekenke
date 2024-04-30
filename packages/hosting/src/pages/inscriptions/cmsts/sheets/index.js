@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import {PDF} from "./PDF";
+import { PDF } from "./PDF";
 import Col from "antd/lib/col";
 import Row from "antd/lib/row";
-import {PdfRegistrationCmsts} from "./PdfRegistrationCmsts";
-import {Sheet} from "./Sheet";
+import { PdfRegistrationCmsts } from "./PdfRegistrationCmsts";
+import { Sheet } from "./Sheet";
 
 const PAGE_SIZES = {
   portrait: { width: "210mm", height: "297mm" },
@@ -12,11 +12,11 @@ const PAGE_SIZES = {
 };
 export const InscriptionFile = () => {
   return (
-      <PDF>
-        <Sheet layout="portrait">
-            <PdfRegistrationCmsts/>
-        </Sheet>
-      </PDF>
+    <PDF>
+      <Sheet layout="portrait">
+        <PdfRegistrationCmsts />
+      </Sheet>
+    </PDF>
   );
 };
 
