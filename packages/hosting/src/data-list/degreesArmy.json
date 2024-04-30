@@ -4,26 +4,89 @@
     "options": [
       {
         "label": "General del Ejército",
-        "value": "generalDelEjercito"
+        "value": "general_del_ejercito"
       },
       {
         "label": "General de Division",
-        "value": "generalDeDivision"
+        "value": "general_de_division"
       },
-      { "label": "General de Brigada", "value": "GeneralDeBrigada" }
+      { "label": "General de Brigada",
+        "value": "general_de_brigada"
+      },
+      {
+        "label": "Coronel",
+        "value": "coronel"
+      },
+      {
+        "label": "Teniente coronel",
+        "value": "teniente_coronel"
+      },
+      {
+        "label": "Mayor",
+        "value": "mayor"
+      },
+      {
+        "label": "Capitan",
+        "value": "capitan"
+      },
+      {
+        "label": "Teniente",
+        "value": "teniente"
+      },
+      {
+        "label": "Sub-Teniente o Alférez",
+        "value": "sub_teniente_o_alfarez"
+      }
     ]
   },
   {
-    "label": "Personal de Oficiales",
+    "label": "Personal auxiliar y subalterno",
     "options": [
       {
-        "label": "General del Ejército",
-        "value": "generalDelEjercito"
-      },
-      {
-        "label": "General de División",
-        "value": "generalDeDivision"
+        "label": "Tecnico jefe superior",
+        "value": "tenico_jefe_superior"
+      },{
+        "label": "Tecnico jefe",
+        "value": "tenico_jefe"
+      },{
+        "label": "Tecnico 1ra",
+        "value": "tenico_primera"
+      },{
+        "label": "Tecnico 2da",
+        "value": "tenico_segunda"
+      },{
+        "label": "Tecnico 3ra",
+        "value": "tenico_tercera"
+      },{
+        "label": "Sub-Oficial 1ra",
+        "value": "sub_oficial_primera"
+      },{
+        "label": "Sub-Oficial 2da",
+        "value": "sub_oficial_segunda"
+      },{
+        "label": "Sub-Oficial 3ra",
+        "value": "sub_oficial_tercera"
+      },{
+        "label": "Personal Civil",
+        "value": "personal_civil"
       }
     ]
-  }
+  },{
+  "label": "Tropa Servicio Militar y Especialista",
+  "options": [
+    {
+      "label": "Sargento 1ro",
+      "value": "sargento_primero"
+    },{
+      "label": "Sargento 2do",
+      "value": "sargento_segundo"
+    },{
+      "label": "Cabo",
+      "value": "cabo"
+    },{
+      "label": "Soldado",
+      "value": "soldado"
+    }
+  ]
+}
 ]
