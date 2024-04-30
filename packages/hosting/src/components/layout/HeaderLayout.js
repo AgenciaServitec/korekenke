@@ -111,7 +111,7 @@ export const HeaderLayout = ({
                         <div className="wrapper-default-roles">
                           <div className="selected-role item-role">
                             <img
-                              src={user?.profileImage?.thumbUrl || PhotoNoFound}
+                              src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
                               alt="Role seleccionado"
                             />
                             <div className="text-role">
@@ -195,7 +195,7 @@ export const HeaderLayout = ({
             <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
             <span>({defaultRole.name})</span>
             <img
-              src={user?.profileImage?.thumbUrl || PhotoNoFound}
+              src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
               alt="user"
             />
           </Space>
