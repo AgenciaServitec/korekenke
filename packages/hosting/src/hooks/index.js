@@ -11,3 +11,4 @@ export * from "./useQueriesState";
 export * from "./useDebounce";
 export * from "./useAsync";
 export * from "./useAcl";
+export * from "./userInfo";
