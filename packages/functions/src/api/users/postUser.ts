@@ -47,7 +47,7 @@ const addUser = async (user: User): Promise<void> => {
       assignCreateProps({
         ...user,
         defaultRoleCode: "user",
-        acls: ["/home"],
+        acls: ["/home", "/profile"],
         otherRoles: [],
       })
     );
