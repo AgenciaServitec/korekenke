@@ -10,9 +10,7 @@
         "label": "General de Division",
         "value": "general_de_division"
       },
-      { "label": "General de Brigada",
-        "value": "general_de_brigada"
-      },
+      { "label": "General de Brigada", "value": "general_de_brigada" },
       {
         "label": "Coronel",
         "value": "coronel"
@@ -45,48 +43,60 @@
       {
         "label": "Tecnico jefe superior",
         "value": "tenico_jefe_superior"
-      },{
+      },
+      {
         "label": "Tecnico jefe",
         "value": "tenico_jefe"
-      },{
+      },
+      {
         "label": "Tecnico 1ra",
         "value": "tenico_primera"
-      },{
+      },
+      {
         "label": "Tecnico 2da",
         "value": "tenico_segunda"
-      },{
+      },
+      {
         "label": "Tecnico 3ra",
         "value": "tenico_tercera"
-      },{
+      },
+      {
         "label": "Sub-Oficial 1ra",
         "value": "sub_oficial_primera"
-      },{
+      },
+      {
         "label": "Sub-Oficial 2da",
         "value": "sub_oficial_segunda"
-      },{
+      },
+      {
         "label": "Sub-Oficial 3ra",
         "value": "sub_oficial_tercera"
-      },{
+      },
+      {
         "label": "Personal Civil",
         "value": "personal_civil"
       }
     ]
-  },{
-  "label": "Tropa Servicio Militar y Especialista",
-  "options": [
-    {
-      "label": "Sargento 1ro",
-      "value": "sargento_primero"
-    },{
-      "label": "Sargento 2do",
-      "value": "sargento_segundo"
-    },{
-      "label": "Cabo",
-      "value": "cabo"
-    },{
-      "label": "Soldado",
-      "value": "soldado"
-    }
-  ]
-}
+  },
+  {
+    "label": "Tropa Servicio Militar y Especialista",
+    "options": [
+      {
+        "label": "Sargento 1ro",
+        "value": "sargento_primero"
+      },
+      {
+        "label": "Sargento 2do",
+        "value": "sargento_segundo"
+      },
+      {
+        "label": "Cabo",
+        "value": "cabo"
+      },
+      {
+        "label": "Soldado",
+        "value": "soldado"
+      }
+    ]
+  }
 ]
