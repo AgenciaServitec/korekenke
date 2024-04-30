@@ -75,7 +75,7 @@ export const CmstsFamilyForm = () => {
     maternalSurname: yup.string().required(),
     relationship: yup.string().required(),
     age: yup.number().required(),
-    cciiffs: yup.string().required(),
+    cciiffs: yup.number().min(6).max(6).required(),
     dni: yup.string().min(8).max(8).required(),
   });
 
