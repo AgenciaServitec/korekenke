@@ -22,6 +22,7 @@ import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { Space } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { UbigeosPeru } from "../../../data-list";
 
 export const CmstsForm = () => {
   const { authUser } = useAuthentication();
@@ -29,12 +30,17 @@ export const CmstsForm = () => {
 
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
 
+  const findPlaceByUbigeo = (ubigeo) =>
+    UbigeosPeru.find((ubigeoPeru) => ubigeoPeru.ubigeo === ubigeo) || null;
+
   const mapUser = (formData) =>
     assign({}, formData, {
       id: authUser.id,
       email: authUser.email,
       phone: authUser.phone,
       birthdate: moment(formData.birthdate).format("YYYY-MM-DD HH:mm:ss"),
+      houseLocation: findPlaceByUbigeo(formData.houseLocation),
+      placeBirth: findPlaceByUbigeo(formData.placeBirth),
       emergencyCellPhone: {
         number: formData.emergencyCellPhone,
         prefix: "+51",
@@ -98,11 +104,15 @@ export const CmstsForm = () => {
       dni: authUser?.dni || "",
       civilStatus: authUser?.civilStatus || "",
       gender: authUser?.gender || "",
-      placeBirth: authUser?.placeBirth || "",
+      placeBirth:
+        `${authUser?.placeBirth.department} - ${authUser?.placeBirth.province} - ${authUser?.placeBirth.district}` ||
+        "",
       birthdate: authUser?.birthdate
         ? moment(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
         : undefined,
-      houseLocation: authUser?.houseLocation || "",
+      houseLocation:
+        `${authUser?.houseLocation.department} - ${authUser?.houseLocation.province} - ${authUser?.houseLocation.district}` ||
+        "",
       urbanization: authUser?.urbanization || "",
       address: authUser?.address || "",
       emergencyCellPhone: authUser?.emergencyCellPhone?.number || "",
@@ -110,6 +120,11 @@ export const CmstsForm = () => {
   };
 
   const onNavigateTo = (pathName) => navigate(pathName);
+
+  const ubigeos = UbigeosPeru.map((ubigeoPeru) => ({
+    label: `${ubigeoPeru.department} - ${ubigeoPeru.province} - ${ubigeoPeru.district}`,
+    value: `${ubigeoPeru.ubigeo}`,
+  }));
 
   const onSubmit = (formData) => onUpdateCmstsUser(formData);
 
@@ -305,21 +320,11 @@ export const CmstsForm = () => {
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Ubigeo de Nacimiento"
-                    defaultValue=""
                     value={value}
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={[
-                      {
-                        value: "lima",
-                        label: "Lima",
-                      },
-                      {
-                        value: "cusco",
-                        label: "Cusco",
-                      },
-                    ]}
+                    options={ubigeos}
                   />
                 )}
               />
@@ -349,21 +354,11 @@ export const CmstsForm = () => {
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Ubigeo de Vivienda"
-                    defaultValue=""
                     value={value}
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={[
-                      {
-                        value: "lima",
-                        label: "Lima",
-                      },
-                      {
-                        value: "cusco",
-                        label: "Cusco",
-                      },
-                    ]}
+                    options={ubigeos}
                   />
                 )}
               />

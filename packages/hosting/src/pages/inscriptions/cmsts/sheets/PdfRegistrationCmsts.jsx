@@ -2,8 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { QRCode } from "antd";
 import moment from "moment";
+import { LogoPrimary, PhotoNoFound } from "../../../../images";
+import { capitalize } from "lodash";
+import { CivilStatus, DegreesArmy, Genders } from "../../../../data-list";
 
-export const PdfRegistrationCmsts = () => {
+export const PdfRegistrationCmsts = ({ user }) => {
+  const findDegree = (degreeCode) =>
+    DegreesArmy.flatMap((degreeArmy) => degreeArmy.options).find(
+      (degree) => degree.value === degreeCode
+    );
+
   return (
     <Container>
       <div className="sheet">
@@ -16,7 +24,9 @@ export const PdfRegistrationCmsts = () => {
           </h2>
           <div className="header__image">
             <img
-              src="https://www.ciat.org/wp-content/uploads/2019/03/Roberto-de-Michele_avatar.jpg"
+              src={
+                user?.profilePhoto ? user.profilePhoto.thumbUrl : PhotoNoFound
+              }
               alt="img file"
             />
           </div>
@@ -40,11 +50,11 @@ export const PdfRegistrationCmsts = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Mendoza</td>
-                        <td>Perca</td>
-                        <td>Roberto</td>
-                        <td>M</td>
-                        <td>Casado</td>
+                        <td>{user.paternalSurname}</td>
+                        <td>{user.maternalSurname}</td>
+                        <td>{user.firstName}</td>
+                        <td>{Genders[user.gender]?.code || ""}</td>
+                        <td>{CivilStatus?.[user.civilStatus] || ""}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -67,12 +77,12 @@ export const PdfRegistrationCmsts = () => {
                     <tbody>
                       <tr>
                         <td>Peruano</td>
-                        <td>Lima</td>
-                        <td>Lima</td>
-                        <td>Pueblo Libre</td>
-                        <td>13</td>
-                        <td>09</td>
-                        <td>1981</td>
+                        <td>{user.placeBirth.department}</td>
+                        <td>{user.placeBirth.province}</td>
+                        <td>{user.placeBirth.district}</td>
+                        <td>{moment(user.birthdate).format("D")}</td>
+                        <td>{moment(user.birthdate).format("MM")}</td>
+                        <td>{moment(user.birthdate).format("YYYY")}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -92,11 +102,11 @@ export const PdfRegistrationCmsts = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Lima</td>
-                        <td>Lima</td>
-                        <td>Pueblo Libre</td>
-                        <td>San Juan</td>
-                        <td>Jr. Pereyra 108 - Dpto 4A</td>
+                        <td>{user.houseLocation.department}</td>
+                        <td>{user.houseLocation.province}</td>
+                        <td>{user.houseLocation.district}</td>
+                        <td>{capitalize(user.urbanization)}</td>
+                        <td>{user.address}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -115,27 +125,16 @@ export const PdfRegistrationCmsts = () => {
                       <tr>
                         <td>
                           <ul>
-                            <li>9</li>
-                            <li>8</li>
-                            <li>7</li>
-                            <li>6</li>
-                            <li>5</li>
-                            <li>4</li>
-                            <li>3</li>
-                            <li>2</li>
-                            <li>1</li>
+                            {user.cip.split("").map((number, index) => (
+                              <li key={index}>{number}</li>
+                            ))}
                           </ul>
                         </td>
                         <td>
                           <ul>
-                            <li>8</li>
-                            <li>7</li>
-                            <li>6</li>
-                            <li>5</li>
-                            <li>4</li>
-                            <li>3</li>
-                            <li>2</li>
-                            <li>1</li>
+                            {user.dni.split("").map((number, index) => (
+                              <li key={index}>{number}</li>
+                            ))}
                           </ul>
                         </td>
                       </tr>
@@ -161,13 +160,15 @@ export const PdfRegistrationCmsts = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Nombre Apellido</td>
-                      <td>Hijo (a)</td>
-                      <td>12</td>
-                      <td>123656</td>
-                    </tr>
+                    {user.familyMembers.map((familyMember, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{familyMember.firstName}</td>
+                        <td>{familyMember.relationship}</td>
+                        <td>{familyMember.age}</td>
+                        <td>{familyMember.cciiffs}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -185,9 +186,9 @@ export const PdfRegistrationCmsts = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td>972252744</td>
-                  <td>Beto1perk@gmail.com</td>
-                  <td>972252744</td>
+                  <td>{user.phone.number}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phone.number}</td>
                 </tr>
               </tbody>
             </table>
@@ -215,16 +216,23 @@ export const PdfRegistrationCmsts = () => {
               <div className="signature-item">
                 <div className="signature-item__text">
                   <div className="signature-item__profile">
-                    <h4> Pc. Mendoza Perca Roberto</h4>
+                    <h4>
+                      {findDegree(user.degree)?.label || ""}.{" "}
+                      {user.paternalSurname} {user.maternalSurname}
+                      {user.firstName}
+                    </h4>
                     <h4> (Grado y Nombres)</h4>
                   </div>
 
                   <div className="signature-item__image">
                     <div>
-                      <img
-                        src="https://azaharaletras.com/wp-content/uploads/2023/03/firma-m-gonzalez-4.jpg.webp"
-                        alt="img file"
-                      />
+                      <div>
+                        {user?.signaturePhoto ? (
+                          <img src={user.signaturePhoto.url} alt="img file" />
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
                     <div>------------------------</div>
                     <div>
@@ -233,7 +241,10 @@ export const PdfRegistrationCmsts = () => {
                   </div>
                 </div>
                 <div className="signature-item__pdf-date">
-                  <span>Chorrillos {moment().format("DD MMMM YYYY")}</span>
+                  <span>
+                    {user.houseLocation.district}{" "}
+                    {moment().format("DD MMMM YYYY")}
+                  </span>
                 </div>
               </div>
             </div>
@@ -241,9 +252,12 @@ export const PdfRegistrationCmsts = () => {
         </div>
         <div className="footer-bottom">
           <QRCode
-            value={"https://ant.design/components/qr-code"}
+            value={`${window.location.href}`}
+            errorLevel="H"
+            icon={LogoPrimary}
+            iconSize={30}
             type="svg"
-            size={120}
+            size={110}
             bordered={false}
           />
         </div>
@@ -255,7 +269,7 @@ export const PdfRegistrationCmsts = () => {
 const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
 
   .sheet {
     background: #fff;
@@ -388,15 +402,14 @@ const Container = styled.div`
         }
 
         .signature-item {
+          min-height: 6em;
           &__text {
-            display: flex;
-            align-items: start;
-            justify-content: end;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: end;
             gap: 1em;
           }
           &__profile {
-            padding-top: 5em;
-            align-self: center;
             h4 {
               font-size: 0.8em;
               &:last-child {
@@ -407,14 +420,24 @@ const Container = styled.div`
           &__image {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: end;
             text-align: center;
             h5 {
               font-size: 0.8em;
             }
-            div img {
-              width: 8.5em;
-              height: auto;
+            div {
+              display: flex;
+              justify-content: center;
+              align-items: end;
+              div {
+                width: 7em;
+                height: 5em;
+                img {
+                  width: 100%;
+                  height: 80%;
+                  object-fit: contain;
+                }
+              }
             }
           }
 
@@ -437,12 +460,13 @@ const Container = styled.div`
 `;
 
 const WrapperContent = styled.div`
-  padding: 0 0 1.1em;
+  padding: 0 0 0.8em;
 
   h2,
   h3 {
     font-size: 1em;
     text-transform: uppercase;
+    line-height: 1.2;
   }
 
   h2 {
