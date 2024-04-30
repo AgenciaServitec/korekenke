@@ -100,7 +100,7 @@ export const PdfRegistrationCmsts = () => {
                   </table>
                 </div>
 
-                <div>
+                <div className="cip-dni-table">
                   <h3>IV. Documentos personales</h3>
                   <table>
                     <thead>
@@ -110,8 +110,31 @@ export const PdfRegistrationCmsts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <td>6219950000</td>
-                      <td>41162024</td>
+                      <td>
+                        <ul>
+                          <li>9</li>
+                          <li>8</li>
+                          <li>7</li>
+                          <li>6</li>
+                          <li>5</li>
+                          <li>4</li>
+                          <li>3</li>
+                          <li>2</li>
+                          <li>1</li>
+                        </ul>
+                      </td>
+                      <td>
+                        <ul>
+                          <li>8</li>
+                          <li>7</li>
+                          <li>6</li>
+                          <li>5</li>
+                          <li>4</li>
+                          <li>3</li>
+                          <li>2</li>
+                          <li>1</li>
+                        </ul>
+                      </td>
                     </tbody>
                   </table>
                 </div>
@@ -162,7 +185,7 @@ export const PdfRegistrationCmsts = () => {
             </table>
           </WrapperContent>
           <WrapperContent>
-            <div className="note">
+            <div className="main__note">
               Recuerda que los beneficios que brinda la ACM-STS es única y
               exclusivamente para el titular y sus familiares directos previa
               presentación de su carnet de identidad (hijos menores de 24 años
@@ -176,19 +199,19 @@ export const PdfRegistrationCmsts = () => {
           <WrapperContent>
             <div className="section-footer">
               <div className="right-index">
-                <div className="index">
-                  <div className="box-index"></div>
-                  <h3 className="box-text">Indice Derecho</h3>
+                <div className="right-index__index">
+                  <div className="right-index__box-index"></div>
+                  <h3 className="right-index__box-text">Indice Derecho</h3>
                 </div>
               </div>
               <div className="signature-item">
-                <div>
+                <div className="signature-item__text">
                   <div className="signature-item__profile">
                     <h4> Pc. Mendoza Perca Roberto</h4>
                     <h4> (Grado y Nombres)</h4>
                   </div>
 
-                  <div className="signature">
+                  <div className="signature-item__image">
                     <div>
                       <img
                         src="https://azaharaletras.com/wp-content/uploads/2023/03/firma-m-gonzalez-4.jpg.webp"
@@ -201,7 +224,7 @@ export const PdfRegistrationCmsts = () => {
                     </div>
                   </div>
                 </div>
-                <div className="pdf-date">
+                <div className="signature-item__pdf-date">
                   <span>Chorrillos {moment().format("DD MMMM YYYY")}</span>
                 </div>
               </div>
@@ -259,19 +282,73 @@ const Container = styled.div`
     .main {
       font-size: 0.8em;
 
-      &__first-part {
-      }
-
-      &__second-part {
-      }
-
       &__section {
         display: flex;
         flex-direction: column;
         gap: 1em;
+
+        .cip-dni-table {
+          tbody {
+            td {
+              border: none;
+            }
+            ul {
+              width: max-content;
+              margin: 0 auto;
+              list-style: none;
+              display: flex;
+            }
+            li {
+              width: 25px;
+              height: 25px;
+              border: 1px solid #000;
+              border-left: none;
+              padding: 0.5em;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              &:first-child {
+                border-left: 1px solid #000;
+              }
+            }
+          }
+        }
       }
 
-      .note {
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+          border: 1px solid #000;
+          text-align: center;
+        }
+
+        th {
+          background-color: #f2f2f2;
+        }
+
+        thead {
+          th {
+            padding: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+          }
+        }
+
+        tbody {
+          td {
+            padding: 4px;
+          }
+        }
+
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+      }
+
+      &__note {
         text-align: center;
         font-size: 0.8em;
         font-weight: 500;
@@ -286,43 +363,46 @@ const Container = styled.div`
         .right-index {
           display: flex;
           place-items: center;
-          .index {
+          &__index {
             display: grid;
             gap: 1em;
-            .box-index {
-              width: 6em;
-              height: 7em;
-              border: 1px solid #444;
-              margin: auto;
-            }
-            .box-text {
-              text-align: center;
-              font-size: 0.9em;
-            }
+          }
+          &__box-index {
+            width: 6em;
+            height: 7em;
+            border: 1px solid #444;
+            margin: auto;
+          }
+          &__box-text {
+            text-align: center;
+            font-size: 0.8em;
           }
         }
 
         .signature-item {
-          > div {
+          &__text {
             display: flex;
             align-items: start;
             justify-content: end;
             gap: 1em;
           }
           &__profile {
-            padding-top: 4.8em;
+            padding-top: 5em;
             align-self: center;
             h4 {
-              font-size: 0.85em;
+              font-size: 0.8em;
+              &:last-child {
+                font-size: 0.7em;
+              }
             }
           }
-          .signature {
+          &__image {
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
             h5 {
-              font-size: 0.85em;
+              font-size: 0.8em;
             }
             div img {
               width: 8.5em;
@@ -330,10 +410,11 @@ const Container = styled.div`
             }
           }
 
-          .pdf-date {
+          &__pdf-date {
             font-size: 0.8em;
             font-weight: bold;
             margin-top: 1em;
+            text-align: right;
           }
         }
       }
@@ -343,39 +424,6 @@ const Container = styled.div`
       width: 100%;
       display: flex;
       justify-content: end;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-      border: 1px solid #000;
-      text-align: center;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    thead {
-      th {
-        padding: 2px;
-        text-transform: uppercase;
-        font-weight: 500;
-      }
-    }
-
-    tbody {
-      td {
-        padding: 4px;
-      }
-    }
-
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
     }
   }
 `;
