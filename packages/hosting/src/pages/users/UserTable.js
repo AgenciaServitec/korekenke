@@ -1,19 +1,12 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
-import { IconAction, modalConfirm } from "../../components";
+import { IconAction } from "../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
 import { capitalize } from "lodash";
 import moment from "moment";
 import { allRoles, DegreesArmy } from "../../data-list";
 
-export const UsersTable = ({ users, onDeleteUser }) => {
-  const navigate = useNavigate();
-
-  const onEditUser = (user) => {
-    navigate(`/users/${user.id}`);
-  };
-
+export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
   const findRole = (roleCode) =>
     allRoles.find((role) => role.code === roleCode);
 
@@ -21,15 +14,6 @@ export const UsersTable = ({ users, onDeleteUser }) => {
     DegreesArmy.flatMap((degreeArmy) => degreeArmy.options).find(
       (degree) => degree.value === degreeCode
     );
-
-  const onConfirmRemoveUser = (user) => {
-    modalConfirm({
-      content: "El usuario se eliminará",
-      onOk: async () => {
-        await onDeleteUser(user);
-      },
-    });
-  };
 
   const columns = [
     {
@@ -59,13 +43,13 @@ export const UsersTable = ({ users, onDeleteUser }) => {
       title: "Rol",
       dataIndex: "defaultRoleCode",
       key: "defaultRoleCode",
-      render: (_, user) => capitalize(user?.defaultRoleCode || ""),
+      render: (_, user) => findRole(user?.defaultRoleCode)?.name || "",
     },
     {
       title: "Estado",
       dataIndex: "status",
       key: "status",
-      render: (_, user) => (
+      render: (_) => (
         <Space>
           <span>
             <Tag color="yellow">Registrado</Tag>

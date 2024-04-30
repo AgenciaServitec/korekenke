@@ -7,14 +7,12 @@ import { Divider } from "antd";
 import { useAuthentication, useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
 import { UsersTable } from "./UserTable";
-import { useDevice } from "../../hooks";
 import { useApiUserPatch } from "../../api";
 import { assign } from "lodash";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export const Users = () => {
-  const { isMobile } = useDevice();
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
   const { users } = useGlobalData();
@@ -63,8 +61,11 @@ export const Users = () => {
         <Title level={3}>Usuarios</Title>
       </Col>
       <Col span={24}>
-        <UsersTable users={users} onDeleteUser={onDeleteUser} />{" "}
-        {/* Aquí se utiliza el componente UsersTable */}
+        <UsersTable
+          users={users}
+          onEditUser={onEditUser}
+          onConfirmRemoveUser={onConfirmRemoveUser}
+        />
       </Col>
     </Row>
   );
