@@ -56,10 +56,6 @@ const LandscapeCss = css`
   @media print {
     transform-origin: 0 0;
     transform: rotate(270deg) translate(-${PAGE_SIZES.landscape.width}, 0);
-    -moz-transform: rotate(270deg) translate(-${PAGE_SIZES.landscape.width}, 0);
-    -o-transform: rotate(270deg) translate(-${PAGE_SIZES.landscape.width}, 0);
-    -webkit-transform: rotate(270deg)
-      translate(-${PAGE_SIZES.landscape.width}, 0);
   }
 `;
 

@@ -91,11 +91,13 @@ export const PdfRegistrationCmsts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <td>Lima</td>
-                      <td>Lima</td>
-                      <td>Pueblo Libre</td>
-                      <td>San Juan</td>
-                      <td>Jr. Pereyra 108 - Dpto 4A</td>
+                      <tr>
+                        <td>Lima</td>
+                        <td>Lima</td>
+                        <td>Pueblo Libre</td>
+                        <td>San Juan</td>
+                        <td>Jr. Pereyra 108 - Dpto 4A</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -351,7 +353,7 @@ const Container = styled.div`
       &__note {
         text-align: center;
         font-size: 0.8em;
-        font-weight: 500;
+        font-weight: 400;
       }
     }
 
@@ -375,7 +377,7 @@ const Container = styled.div`
           }
           &__box-text {
             text-align: center;
-            font-size: 0.8em;
+            font-size: 0.7em;
           }
         }
 
@@ -411,7 +413,7 @@ const Container = styled.div`
           }
 
           &__pdf-date {
-            font-size: 0.8em;
+            font-size: 0.7em;
             font-weight: bold;
             margin-top: 1em;
             text-align: right;
