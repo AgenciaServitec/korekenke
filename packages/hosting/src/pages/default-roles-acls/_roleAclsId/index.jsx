@@ -9,7 +9,7 @@ import {
   useFormUtils,
 } from "../../../hooks";
 import { allRoles } from "../../../data-list";
-import { assign, capitalize, flatten, isEmpty, map } from "lodash";
+import { assign, capitalize, flatten, isEmpty, map, uniq } from "lodash";
 import {
   Button,
   CheckboxGroup,
@@ -81,7 +81,10 @@ export const RoleAclIntegration = () => {
     await saveRoleAcls(
       assign({}, formData, {
         id: formData.roleCode,
-        acls: flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
+        acls: uniq([
+          "/home",
+          ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
+        ]),
       })
     );
 
