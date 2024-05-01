@@ -1,7 +1,6 @@
 import React from "react";
 import AntSelect from "antd/lib/select";
 import { ComponentContainer } from "./component-container";
-import { defaultTo } from "lodash";
 import { lighten } from "polished";
 import styled, { css } from "styled-components";
 

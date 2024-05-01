@@ -4,7 +4,7 @@ import { ComponentContainer } from "./component-container";
 import moment from "moment";
 
 export const DatePicker = ({
-  value,
+  value = undefined,
   name,
   required = false,
   disabled = false,
