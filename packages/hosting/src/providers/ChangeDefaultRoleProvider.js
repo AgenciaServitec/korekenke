@@ -18,14 +18,6 @@ export const ChangeDefaultRoleProvider = ({ children }) => {
     useState(false);
 
   const onSaveUser = async (role) => {
-    console.log(
-      uniq(
-        (rolesAcls || []).find((_role) => _role.id === role.code)?.acls || [
-          "/home",
-        ]
-      )
-    );
-
     await usersRef.doc(authUser.id).update({
       defaultRoleCode: role.code,
       acls: uniq(
