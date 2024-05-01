@@ -46,7 +46,7 @@ export const ProfileInformation = ({ user }) => {
           <DescriptionItem title="Email" content={user?.email} />
         </Col>
         <Col span={24} md={12}>
-          <DescriptionItem title="Celular" content={user?.phoneNumber} />
+          <DescriptionItem title="Celular" content={user?.phone?.number} />
         </Col>
       </Row>
     </Container>
