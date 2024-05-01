@@ -3,8 +3,13 @@ import styled from "styled-components";
 import { QRCode } from "antd";
 import moment from "moment";
 import { LogoPrimary, PhotoNoFound } from "../../../../images";
-import { capitalize } from "lodash";
-import { CivilStatus, DegreesArmy, Genders } from "../../../../data-list";
+import { defaultTo, isEmpty } from "lodash";
+import {
+  CivilStatus,
+  DegreesArmy,
+  Genders,
+  Relationships,
+} from "../../../../data-list";
 
 export const PdfRegistrationCmsts = ({ user }) => {
   const findDegree = (degreeCode) =>
@@ -50,10 +55,12 @@ export const PdfRegistrationCmsts = ({ user }) => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{user.paternalSurname}</td>
-                        <td>{user.maternalSurname}</td>
-                        <td>{user.firstName}</td>
-                        <td>{Genders[user.gender]?.code || ""}</td>
+                        <td className="capitalize">{user.paternalSurname}</td>
+                        <td className="capitalize">{user.maternalSurname}</td>
+                        <td className="capitalize">{user.firstName}</td>
+                        <td className="capitalize">
+                          {Genders[user.gender]?.code || ""}
+                        </td>
                         <td>{CivilStatus?.[user.civilStatus] || ""}</td>
                       </tr>
                     </tbody>
@@ -76,13 +83,28 @@ export const PdfRegistrationCmsts = ({ user }) => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Peruano</td>
-                        <td>{user.placeBirth.department}</td>
-                        <td>{user.placeBirth.province}</td>
-                        <td>{user.placeBirth.district}</td>
-                        <td>{moment(user.birthdate).format("D")}</td>
-                        <td>{moment(user.birthdate).format("MM")}</td>
-                        <td>{moment(user.birthdate).format("YYYY")}</td>
+                        <td className="capitalize">Peruano</td>
+                        <td className="capitalize">
+                          {defaultTo(user?.placeBirth?.department, "")}
+                        </td>
+                        <td className="capitalize">
+                          {defaultTo(user?.placeBirth.province, "")}
+                        </td>
+                        <td className="capitalize">
+                          {defaultTo(user?.placeBirth.district, "")}
+                        </td>
+                        <td>
+                          {user?.birthdate &&
+                            moment(user.birthdate).format("D")}
+                        </td>
+                        <td>
+                          {user?.birthdate &&
+                            moment(user.birthdate).format("MM")}
+                        </td>
+                        <td>
+                          {user?.birthdate &&
+                            moment(user.birthdate).format("YYYY")}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -102,11 +124,21 @@ export const PdfRegistrationCmsts = ({ user }) => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{user.houseLocation.department}</td>
-                        <td>{user.houseLocation.province}</td>
-                        <td>{user.houseLocation.district}</td>
-                        <td>{capitalize(user.urbanization)}</td>
-                        <td>{user.address}</td>
+                        <td className="capitalize">
+                          {defaultTo(user?.houseLocation.department, "")}
+                        </td>
+                        <td className="capitalize">
+                          {defaultTo(user?.houseLocation.province, "")}
+                        </td>
+                        <td className="capitalize">
+                          {defaultTo(user?.houseLocation.district, "")}
+                        </td>
+                        <td className="capitalize">
+                          {defaultTo(user?.urbanization, "")}
+                        </td>
+                        <td className="capitalize">
+                          {defaultTo(user?.address, "")}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -132,9 +164,12 @@ export const PdfRegistrationCmsts = ({ user }) => {
                         </td>
                         <td>
                           <ul>
-                            {user.dni.split("").map((number, index) => (
-                              <li key={index}>{number}</li>
-                            ))}
+                            {user?.dni &&
+                              user.dni
+                                .split("")
+                                .map((number, index) => (
+                                  <li key={index}>{number}</li>
+                                ))}
                           </ul>
                         </td>
                       </tr>
@@ -160,13 +195,20 @@ export const PdfRegistrationCmsts = ({ user }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {user.familyMembers.map((familyMember, index) => (
+                    {(!isEmpty(user?.familyMembers)
+                      ? user.familyMembers
+                      : [1, 2, 3]
+                    ).map((familyMember, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{familyMember.firstName}</td>
-                        <td>{familyMember.relationship}</td>
-                        <td>{familyMember.age}</td>
-                        <td>{familyMember.cciiffs}</td>
+                        <td className="capitalize">
+                          {familyMember?.firstName || ""}
+                        </td>
+                        <td>
+                          {Relationships?.[familyMember.relationship] || ""}
+                        </td>
+                        <td>{familyMember?.age || ""}</td>
+                        <td>{familyMember?.cciiffs || ""}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -186,9 +228,9 @@ export const PdfRegistrationCmsts = ({ user }) => {
               </thead>
               <tbody>
                 <tr>
-                  <td>{user.phone.number}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone.number}</td>
+                  <td>{defaultTo(user?.phone.number, "")}</td>
+                  <td>{defaultTo(user?.email, "")}</td>
+                  <td>{defaultTo(user?.phone.number, "")}</td>
                 </tr>
               </tbody>
             </table>
@@ -216,12 +258,14 @@ export const PdfRegistrationCmsts = ({ user }) => {
               <div className="signature-item">
                 <div className="signature-item__text">
                   <div className="signature-item__profile">
-                    <h4>
-                      {findDegree(user.degree)?.label || ""}.{" "}
-                      {user.paternalSurname} {user.maternalSurname}
+                    <span className="capitalize">
+                      {user.paternalSurname}&nbsp;{user.maternalSurname}&nbsp;
                       {user.firstName}
-                    </h4>
-                    <h4> (Grado y Nombres)</h4>
+                    </span>
+                    <br />
+                    <span>{findDegree(user.degree)?.label || ""}</span>
+                    <br />
+                    <span> (Nombres y grado)</span>
                   </div>
 
                   <div className="signature-item__image">
@@ -242,7 +286,7 @@ export const PdfRegistrationCmsts = ({ user }) => {
                 </div>
                 <div className="signature-item__pdf-date">
                   <span>
-                    {user.houseLocation.district}{" "}
+                    {defaultTo(user?.houseLocation.district, "")}{" "}
                     {moment().format("DD MMMM YYYY")}
                   </span>
                 </div>
@@ -270,6 +314,10 @@ const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
+
+  .capitalize {
+    text-transform: capitalize;
+  }
 
   .sheet {
     background: #fff;
@@ -380,7 +428,7 @@ const Container = styled.div`
     .footer {
       .section-footer {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr auto;
 
         .right-index {
           display: flex;
@@ -410,9 +458,11 @@ const Container = styled.div`
             gap: 1em;
           }
           &__profile {
-            h4 {
+            span {
+              font-weight: 600;
               font-size: 0.8em;
               &:last-child {
+                font-weight: 500;
                 font-size: 0.7em;
               }
             }
@@ -443,7 +493,7 @@ const Container = styled.div`
 
           &__pdf-date {
             font-size: 0.7em;
-            font-weight: bold;
+            font-weight: 500;
             margin-top: 1em;
             text-align: right;
           }
