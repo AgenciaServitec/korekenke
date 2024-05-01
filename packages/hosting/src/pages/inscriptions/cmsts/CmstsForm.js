@@ -105,13 +105,13 @@ export const CmstsForm = () => {
       civilStatus: authUser?.civilStatus || "",
       gender: authUser?.gender || "",
       placeBirth:
-        `${authUser?.placeBirth.department} - ${authUser?.placeBirth.province} - ${authUser?.placeBirth.district}` ||
+        `${authUser?.placeBirth?.department} - ${authUser?.placeBirth?.province} - ${authUser?.placeBirth?.district}` ||
         "",
       birthdate: authUser?.birthdate
         ? moment(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
         : undefined,
       houseLocation:
-        `${authUser?.houseLocation.department} - ${authUser?.houseLocation.province} - ${authUser?.houseLocation.district}` ||
+        `${authUser?.houseLocation?.department} - ${authUser?.houseLocation?.province} - ${authUser?.houseLocation?.district}` ||
         "",
       urbanization: authUser?.urbanization || "",
       address: authUser?.address || "",

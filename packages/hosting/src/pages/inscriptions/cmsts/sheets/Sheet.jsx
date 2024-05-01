@@ -21,7 +21,7 @@ const Container = styled.section`
     -ms-user-select: text;
     user-select: text;
 
-    ${PAGE_SIZES[layout]}
+    ${PAGE_SIZES[layout]};
 
     margin: 1rem auto;
     display: block;

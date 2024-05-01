@@ -32,7 +32,7 @@ export const CmstsFamilyForm = () => {
         phone: authUser.phone,
         familyMembers: [
           ...(authUser?.familyMembers || []),
-          { ...formData, id: formData.dni },
+          { ...formData, id: formData.dni, cciiffs: +formData.cciiffs },
         ],
       }
     );
@@ -75,7 +75,7 @@ export const CmstsFamilyForm = () => {
     maternalSurname: yup.string().required(),
     relationship: yup.string().required(),
     age: yup.number().required(),
-    cciiffs: yup.number().min(6).max(6).required(),
+    cciiffs: yup.string().min(6).max(6).required(),
     dni: yup.string().min(8).max(8).required(),
   });
 
@@ -209,12 +209,12 @@ export const CmstsFamilyForm = () => {
                         label: "Hijo (a)",
                       },
                       {
-                        value: "husband",
-                        label: "Esposo (a)",
-                      },
-                      {
                         value: "brother",
                         label: "Hermano (a)",
+                      },
+                      {
+                        value: "husband",
+                        label: "Esposo (a)",
                       },
                     ]}
                   />
@@ -246,6 +246,7 @@ export const CmstsFamilyForm = () => {
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="CCIIFFS"
+                    type="number"
                     name={name}
                     value={value}
                     onChange={onChange}
