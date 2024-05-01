@@ -2,6 +2,7 @@ import React from "react";
 import { Router } from "./router";
 import {
   AuthenticationProvider,
+  ChangeDefaultRoleProvider,
   ConfigsInitializer,
   GlobalDataProvider,
   VersionProvider,
@@ -13,7 +14,9 @@ const App = () => {
       <ConfigsInitializer>
         <AuthenticationProvider>
           <GlobalDataProvider>
-            <Router />
+            <ChangeDefaultRoleProvider>
+              <Router />
+            </ChangeDefaultRoleProvider>
           </GlobalDataProvider>
         </AuthenticationProvider>
       </ConfigsInitializer>

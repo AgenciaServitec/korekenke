@@ -138,7 +138,7 @@ const RoleAcl = ({
 
   const roleAclsToForm = (roleAcls) =>
     reset({
-      acls: roleAcls.acls ? mapAcls(roleAcls.acls) : {},
+      acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
       roleCode: roleAcls.id,
     });
 

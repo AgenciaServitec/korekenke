@@ -13,6 +13,7 @@ export const filterAclExact = (filter) =>
 
 export const mapAcls = (acls = []) => ({
   home: filterMapAcl(acls, "home"),
+  accessControlList: filterMapAcl(acls, "access-control-list"),
   defaultRolesAcls: filterMapAcl(acls, "default-roles-acls"),
   manageAcls: filterMapAcl(acls, "manage-acls"),
   profile: filterMapAcl(acls, "profile"),
