@@ -202,7 +202,9 @@ export const PdfRegistrationCmsts = ({ user }) => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="capitalize">
-                          {familyMember?.firstName || ""}
+                          {`${familyMember?.paternalSurname || ""} ${
+                            familyMember?.maternalSurname || ""
+                          } ${familyMember?.firstName || ""}`}
                         </td>
                         <td>
                           {Relationships?.[familyMember.relationship] || ""}
