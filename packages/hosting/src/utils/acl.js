@@ -16,6 +16,7 @@ export const mapAcls = (acls = []) => ({
   accessControlList: filterMapAcl(acls, "access-control-list"),
   defaultRolesAcls: filterMapAcl(acls, "default-roles-acls"),
   manageAcls: filterMapAcl(acls, "manage-acls"),
+  entities: filterMapAcl(acls, "entities"),
   profile: filterMapAcl(acls, "profile"),
   users: [...filterMapAcl(acls, "users")],
   correspondences: [...filterMapAcl(acls, "correspondences")],

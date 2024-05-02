@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
-import { LoginIntegration, RegisterIntegration } from "../pages";
+import { Entities, LoginIntegration, RegisterIntegration } from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
@@ -63,6 +63,15 @@ export const Router = () => {
           element={
             <AdminLayout>
               <A.ManageAclsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities"
+          element={
+            <AdminLayout>
+              <A.Entities />
             </AdminLayout>
           }
         />

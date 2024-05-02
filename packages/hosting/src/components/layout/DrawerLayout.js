@@ -3,6 +3,7 @@ import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import {
+  faBuilding,
   faFileAlt,
   faHome,
   faIdCard,
@@ -57,6 +58,16 @@ export const DrawerLayout = ({
           },
         },
       ],
+    },
+    {
+      label: "Núcleos",
+      key: "entities",
+      icon: <FontAwesomeIcon icon={faBuilding} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser(["/entities"]),
+      onClick: () => {
+        onNavigateTo("/entities");
+        onSetIsVisibleDrawer(false);
+      },
     },
     {
       label: "Usuarios",

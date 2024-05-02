@@ -6,6 +6,7 @@
   "/default-roles-acls/:roleAclsId": "Editar rol acls",
   "/default-roles-acls#delete": "Eliminar rol acls",
   "/manage-acls": "Menu: Administrardor acls",
+  "/entities": "Menú: Núcleos",
   "/profile": "Menu: Perfil",
   "/users": "Menu: Usuarios",
   "/users/new": "Agregar usuario",
