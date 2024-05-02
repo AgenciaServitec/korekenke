@@ -104,15 +104,11 @@ export const CmstsForm = () => {
       dni: authUser?.dni || "",
       civilStatus: authUser?.civilStatus || "",
       gender: authUser?.gender || "",
-      placeBirth:
-        `${authUser?.placeBirth?.department} - ${authUser?.placeBirth?.province} - ${authUser?.placeBirth?.district}` ||
-        "",
+      placeBirth: authUser?.placeBirth?.ubigeo || null,
       birthdate: authUser?.birthdate
         ? moment(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
         : undefined,
-      houseLocation:
-        `${authUser?.houseLocation?.department} - ${authUser?.houseLocation?.province} - ${authUser?.houseLocation?.district}` ||
-        "",
+      houseLocation: authUser?.houseLocation?.ubigeo || null,
       urbanization: authUser?.urbanization || "",
       address: authUser?.address || "",
       emergencyCellPhone: authUser?.emergencyCellPhone?.number || "",
@@ -123,7 +119,7 @@ export const CmstsForm = () => {
 
   const ubigeos = UbigeosPeru.map((ubigeoPeru) => ({
     label: `${ubigeoPeru.department} - ${ubigeoPeru.province} - ${ubigeoPeru.district}`,
-    value: `${ubigeoPeru.ubigeo}`,
+    value: ubigeoPeru.ubigeo,
   }));
 
   const onSubmit = (formData) => onUpdateCmstsUser(formData);

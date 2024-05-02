@@ -22,8 +22,6 @@ export const CmstsFamilyForm = () => {
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
 
   const mapUserToApi = (formData) => {
-    console.log(authUser?.familyMembers || []);
-
     return assign(
       {},
       {
