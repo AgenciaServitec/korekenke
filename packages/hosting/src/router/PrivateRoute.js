@@ -34,9 +34,5 @@ export const PrivateRoute = () => {
     return pathnameTemplate;
   };
 
-  return isLoginPage || isEnabledAccess() ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/home" />
-  );
+  return isLoginPage || isEnabledAccess() ? <Outlet /> : <Navigate to="/" />;
 };
