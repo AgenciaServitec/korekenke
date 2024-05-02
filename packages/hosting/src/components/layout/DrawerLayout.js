@@ -11,7 +11,7 @@ import {
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { includes, isEmpty } from "lodash";
+import { includes } from "lodash";
 
 export const DrawerLayout = ({
   user,
