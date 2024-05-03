@@ -11,3 +11,4 @@ export * from "./default-roles-acls";
 export * from "./default-roles-acls/_roleAclsId";
 export * from "./manage-acls";
 export * from "./entities";
+export * from "./entities/_entity";

@@ -1,21 +1,23 @@
-import Typography from "antd/lib/typography";
-import Tag from "antd/lib/tag";
-import Row from "antd/lib/row";
-import Card from "antd/lib/card";
-import Col from "antd/lib/col";
-import Spin from "antd/lib/spin";
-import Menu from "antd/lib/menu";
-import Drawer from "antd/lib/drawer";
-import Dropdown from "antd/lib/dropdown";
-import Layout from "antd/lib/layout";
-import Alert from "antd/lib/alert";
-import Space from "antd/lib/space";
-import Result from "antd/lib/result";
-import Tabs from "antd/lib/tabs";
-import Radio from "antd/lib/radio";
-import Divider from "antd/lib/divider";
-import Empty from "antd/lib/empty";
-import Image from "antd/lib/image";
+import {
+  Typography,
+  Tag,
+  Row,
+  Card,
+  Col,
+  Spin,
+  Menu,
+  Drawer,
+  Dropdown,
+  Layout,
+  Alert,
+  Space,
+  Result,
+  Tabs,
+  Radio,
+  Divider,
+  Empty,
+  Image,
+} from "antd";
 
 export * from "./component-container";
 export * from "./calendar";
@@ -36,6 +38,7 @@ export * from "./SelectOption";
 export * from "./Spinner";
 export * from "./TextArea";
 export * from "./Title";
+export * from "./Text";
 export * from "./TimePicker";
 export * from "./Audio";
 export * from "./TagHostname";
