@@ -13,6 +13,12 @@ const GlobalDataContext = createContext({
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
+  const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
+    authUser
+      ? firestore.collection("entities").where("isDeleted", "==", false)
+      : null
+  );
+
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser ? firestore.collection("roles-acls") : null
   );
@@ -29,9 +35,14 @@ export const GlobalDataProvider = ({ children }) => {
         null
     );
 
-  const error = rolesAclsError || usersError || correspondencesError;
+  const error =
+    entitiesError || rolesAclsError || usersError || correspondencesError;
 
-  const loading = rolesAclsLoading || usersLoading || correspondencesLoading;
+  const loading =
+    entitiesLoading ||
+    rolesAclsLoading ||
+    usersLoading ||
+    correspondencesLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -42,6 +53,7 @@ export const GlobalDataProvider = ({ children }) => {
   return (
     <GlobalDataContext.Provider
       value={{
+        entities,
         rolesAcls,
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
         correspondences: orderBy(

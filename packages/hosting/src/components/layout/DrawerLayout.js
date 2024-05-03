@@ -3,6 +3,7 @@ import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import {
+  faBuilding,
   faFileAlt,
   faHome,
   faIdCard,
@@ -10,7 +11,7 @@ import {
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { includes, isEmpty } from "lodash";
+import { includes } from "lodash";
 
 export const DrawerLayout = ({
   user,
@@ -57,6 +58,16 @@ export const DrawerLayout = ({
           },
         },
       ],
+    },
+    {
+      label: "Núcleos",
+      key: "entities",
+      icon: <FontAwesomeIcon icon={faBuilding} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser(["/entities"]),
+      onClick: () => {
+        onNavigateTo("/entities");
+        onSetIsVisibleDrawer(false);
+      },
     },
     {
       label: "Usuarios",

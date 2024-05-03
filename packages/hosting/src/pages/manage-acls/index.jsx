@@ -292,6 +292,27 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
               </Col>
               <Col span={24}>
                 <Controller
+                  name="acls.entities"
+                  defaultValue={[]}
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <CheckboxGroup
+                      label="Núcleos"
+                      options={map(filterAcl("entities"), (item, itemKey) => ({
+                        label: item,
+                        value: itemKey,
+                      }))}
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
                   name="acls.profile"
                   defaultValue={[]}
                   control={control}

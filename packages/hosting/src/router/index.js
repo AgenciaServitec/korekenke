@@ -3,14 +3,13 @@ import { Route, Routes } from "react-router-dom";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
-import { LoginIntegration, RegisterIntegration } from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
   return (
     <Routes>
-      <Route exact path="/" element={<LoginIntegration />} />
-      <Route exact path="/register" element={<RegisterIntegration />} />
+      <Route exact path="/" element={<A.LoginIntegration />} />
+      <Route exact path="/register" element={<A.RegisterIntegration />} />
       <Route path="/" element={<PrivateRoute />}>
         <Route
           exact
@@ -63,6 +62,24 @@ export const Router = () => {
           element={
             <AdminLayout>
               <A.ManageAclsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities"
+          element={
+            <AdminLayout>
+              <A.Entities />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities/:entityId"
+          element={
+            <AdminLayout>
+              <A.EntitiesIntegration />
             </AdminLayout>
           }
         />
