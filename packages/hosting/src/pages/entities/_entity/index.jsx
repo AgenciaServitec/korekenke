@@ -4,24 +4,27 @@ import { useGlobalData } from "../../../providers";
 import {
   Acl,
   Button,
+  Col,
   Form,
   Input,
   notification,
+  Row,
   Select,
   Title,
 } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useFormUtils } from "../../../hooks";
-import { assign, capitalize } from "lodash";
-import { Row, Col } from "../../../components";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { capitalize } from "lodash";
 import { firestore } from "../../../firebase";
 
 export const EntitiesIntegration = () => {
   const { entityId } = useParams();
   const navigate = useNavigate();
   const { entities, users } = useGlobalData();
+
+  const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
@@ -46,19 +49,19 @@ export const EntitiesIntegration = () => {
     setEntity(_entity);
   }, []);
 
+  const mapEntity = (formData) => ({
+    ...entity,
+    name: formData.name,
+    entityManageId: formData.entityManageId,
+  });
+
   const onSubmitSaveEntity = async (formData) => {
     try {
       setLoading(true);
       await firestore
         .collection("entities")
         .doc(entity.id)
-        .set(
-          assign({
-            ...entity,
-            name: formData.name,
-            entityManageId: formData.entityManageId,
-          })
-        );
+        .set(assignCreateProps(mapEntity(formData)));
 
       notification({ type: "success" });
 

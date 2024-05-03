@@ -14,7 +14,9 @@ export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
-    authUser ? firestore.collection("entities") : null
+    authUser
+      ? firestore.collection("entities").where("isDeleted", "==", false)
+      : null
   );
 
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(

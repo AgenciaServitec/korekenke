@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Col from "antd/lib/col";
-import { Acl, Button, List } from "../../components";
+import { Acl, Button, List, notification } from "../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Row from "antd/lib/row";
@@ -26,8 +26,19 @@ export const Entities = () => {
     error: deleteEntityError,
     success: deleteEntitySuccess,
   } = useAsync((entities) =>
-    firestore.collection("entities").doc(entities.id).delete()
+    firestore
+      .collection("entities")
+      .doc(entities.id)
+      .update({ isDeleted: true })
   );
+
+  useEffect(() => {
+    deleteEntitySuccess && notification({ type: "success" });
+  }, [deleteEntitySuccess]);
+
+  useEffect(() => {
+    deleteEntityError && notification({ type: "error" });
+  }, [deleteEntityError]);
 
   const navigateToEntity = (entityId = undefined) => {
     const url = `/entities/${entityId}`;
@@ -38,7 +49,13 @@ export const Entities = () => {
   const { aclCheck } = useAcl();
 
   const onEditEntity = (entity) => navigateToEntity(entity.id);
-  const onDeleteEntity = async (entity) => deleteEntity(entity);
+  const onDeleteEntity = async (entity) => {
+    try {
+      await deleteEntity(entity);
+    } catch (e) {
+      console.error("ErrorDeleteEntity: ", e);
+    }
+  };
 
   return (
     <Acl name="/entities" redirect>
