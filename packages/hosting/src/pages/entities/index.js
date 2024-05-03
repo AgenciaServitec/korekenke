@@ -11,8 +11,8 @@ import { firestore } from "../../firebase";
 
 export const Entities = () => {
   const navigate = useNavigate();
-
   const { entities } = useGlobalData();
+  const { aclCheck } = useAcl();
 
   const navigateTo = (entitiesId) => {
     const url = `/entities/${entitiesId}`;
@@ -23,11 +23,8 @@ export const Entities = () => {
 
   const navigateToEntity = (entityId = undefined) => {
     const url = `/entities/${entityId}`;
-
     navigate(url);
   };
-
-  const { aclCheck } = useAcl();
 
   const onEditEntity = (entity) => navigateToEntity(entity.id);
   const onDeleteEntity = async (entity) => {

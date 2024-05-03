@@ -68,7 +68,6 @@ export const EntitiesIntegration = () => {
       onGoBack();
     } catch (e) {
       console.error("ErrorSaveEntity: ", e);
-
       notification({ type: "error" });
     } finally {
       setLoading(false);
@@ -98,7 +97,7 @@ export const EntitiesIntegration = () => {
   const resetForm = () => {
     reset({
       name: entity?.name || "",
-      entityManageId: entity?.entityManageId,
+      entityManageId: entity?.entityManageId || null,
     });
   };
 
