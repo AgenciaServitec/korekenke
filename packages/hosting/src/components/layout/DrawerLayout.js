@@ -90,6 +90,16 @@ export const DrawerLayout = ({
       },
     },
     {
+      label: "Secciones",
+      key: "sections",
+      icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser(["/sections"]),
+      onClick: () => {
+        onNavigateTo("/sections");
+        onSetIsVisibleDrawer(false);
+      },
+    },
+    {
       label: "Correspondencias",
       key: "correspondences",
       icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,

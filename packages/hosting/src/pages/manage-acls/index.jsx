@@ -408,6 +408,32 @@ const ManageAcls = ({
               </Col>
               <Col span={24}>
                 <Controller
+                  name="acls.sections"
+                  defaultValue={[]}
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <CheckboxGroup
+                      label="Secciones"
+                      options={map(
+                        {
+                          ...filterAcl("sections"),
+                        },
+                        (item, itemKey) => ({
+                          label: item,
+                          value: itemKey,
+                        })
+                      )}
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
                   name="acls.correspondences"
                   defaultValue={[]}
                   control={control}

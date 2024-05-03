@@ -26,6 +26,12 @@ export const GlobalDataProvider = ({ children }) => {
         : null
     );
 
+    const [sections = [], sectionsLoading, sectionsError] = useCollectionData(
+        authUser
+            ? firestore.collection("sections").where("isDeleted", "==", false)
+            : null
+    );
+
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser ? firestore.collection("roles-acls") : null
   );
