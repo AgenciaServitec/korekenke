@@ -19,6 +19,13 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
+  const [departments = [], departmentsLoading, departmentsError] =
+    useCollectionData(
+      authUser
+        ? firestore.collection("departments").where("isDeleted", "==", false)
+        : null
+    );
+
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser ? firestore.collection("roles-acls") : null
   );
@@ -36,13 +43,18 @@ export const GlobalDataProvider = ({ children }) => {
     );
 
   const error =
-    entitiesError || rolesAclsError || usersError || correspondencesError;
+    entitiesError ||
+    rolesAclsError ||
+    usersError ||
+    correspondencesError ||
+    departmentsError;
 
   const loading =
     entitiesLoading ||
     rolesAclsLoading ||
     usersLoading ||
-    correspondencesLoading;
+    correspondencesLoading ||
+    departmentsLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -54,6 +66,7 @@ export const GlobalDataProvider = ({ children }) => {
     <GlobalDataContext.Provider
       value={{
         entities,
+        departments,
         rolesAcls,
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
         correspondences: orderBy(

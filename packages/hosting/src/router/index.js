@@ -85,6 +85,24 @@ export const Router = () => {
         />
         <Route
           exact
+          path="departments"
+          element={
+            <AdminLayout>
+              <A.Departments />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="departments/:departmentId"
+          element={
+            <AdminLayout>
+              <A.DepartmentIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="correspondences"
           element={
             <AdminLayout>
