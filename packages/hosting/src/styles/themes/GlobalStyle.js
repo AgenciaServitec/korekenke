@@ -65,7 +65,8 @@ const global = css`
   }
 
   .link-color {
-    color: rgba(49, 49, 255, 0.93);
+    color: rgba(49, 138, 255, 0.93);
+    cursor: pointer;
   }
 
   .d-flex {
@@ -169,49 +170,12 @@ const antd = {
       border-color: ${({ theme }) => darken(0.09, theme.colors.primary)};
     }
   `,
-  input: css`
-    .ant-input,
-    .ant-input-number {
-      font-weight: 500;
-      color: ${({ theme }) => theme.colors.font2};
-    }
-
-    // .ant-input-placeholder {
-    //   color: //({ theme }) => theme.colors.black40};
-    // }
-
-    .ant-input-affix-wrapper {
-      .ant-input-suffix {
-        .ant-input-clear-icon {
-          font-size: 1rem;
-          color: ${({ theme }) => theme.colors.primary};
-        }
-      }
-    }
-    .ant-input-number-handler-wrap {
-      display: none;
-    }
-  `,
   switch: css`
     .ant-switch {
       background-color: ${({ theme }) => theme.colors.error};
     }
     .ant-switch-checked {
       background-color: ${({ theme }) => theme.colors.primary};
-    }
-  `,
-  carousel: css`
-    .ant-carousel .slick-dots-bottom {
-      bottom: 9%;
-    }
-    .ant-carousel .slick-dots li button {
-      width: 1rem;
-      height: 1rem;
-      border-radius: 3rem;
-      background: ${({ theme }) => theme.colors.secondary};
-    }
-    .ant-carousel .slick-dots li.slick-active button {
-      background: ${({ theme }) => theme.colors.primary};
     }
   `,
   dropdown: css`
@@ -224,21 +188,6 @@ const antd = {
   card: css`
     .ant-card-bordered {
       border: 1px solid #dcdcdc;
-    }
-  `,
-  drawer: css`
-    .ant-drawer {
-      .ant-drawer-wrapper-body {
-        background: ${({ theme }) => theme.colors.secondary};
-        .ant-drawer-body {
-          background: ${({ theme }) => theme.colors.secondary};
-        }
-        .ant-menu-item-active {
-          &:hover {
-            color: ${({ theme }) => theme.colors.primary};
-          }
-        }
-      }
     }
   `,
 };

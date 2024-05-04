@@ -21,7 +21,8 @@ import {
 } from "../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { filterAcl } from "../../utils";
+import { filterAcl, mapAcls } from "../../utils";
+import { useGlobalData } from "../../providers";
 
 const ACTION = {
   add: {
@@ -44,6 +45,7 @@ const ACTION = {
 
 export const ManageAclsIntegration = () => {
   const navigate = useNavigate();
+  const { rolesAcls } = useGlobalData();
 
   const { assignUpdateProps } = useDefaultFirestoreProps();
 
@@ -108,6 +110,7 @@ export const ManageAclsIntegration = () => {
 
   return (
     <ManageAcls
+      rolesAcls={rolesAcls}
       onUpdateUsersAcls={updateUsersAcls}
       isSavingUsersAcls={isSavingUsersAcls}
       onCancel={onCancel}
@@ -115,7 +118,12 @@ export const ManageAclsIntegration = () => {
   );
 };
 
-const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
+const ManageAcls = ({
+  rolesAcls = [],
+  onUpdateUsersAcls,
+  isSavingUsersAcls,
+  onCancel,
+}) => {
   const schema = yup.object({
     roleCode: yup.string().required(),
     actionId: yup.string().required(),
@@ -126,6 +134,8 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
     control,
     reset,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -161,6 +171,26 @@ const ManageAcls = ({ onUpdateUsersAcls, isSavingUsersAcls, onCancel }) => {
       duration: 2,
     });
   };
+
+  const getAclsByRoleCode = (roleCode) => {
+    const aclsDefault = {};
+
+    const roleAcl = rolesAcls.find((roleAcl) => roleAcl.id === roleCode);
+
+    Object.entries(mapAcls(roleAcl.acls)).forEach(
+      ([aclKey, value]) => (aclsDefault[aclKey] = value)
+    );
+
+    reset({
+      acls: aclsDefault,
+      actionId: watch("actionId"),
+      roleCode: watch("roleCode"),
+    });
+  };
+
+  useEffect(() => {
+    watch("roleCode") && getAclsByRoleCode(watch("roleCode"));
+  }, [watch("roleCode")]);
 
   return (
     <Acl redirect name="/manage-acls">
