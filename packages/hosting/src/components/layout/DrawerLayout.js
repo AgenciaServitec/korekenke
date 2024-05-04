@@ -70,6 +70,16 @@ export const DrawerLayout = ({
       },
     },
     {
+      label: "Departamentos",
+      key: "departments",
+      icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser(["/departments"]),
+      onClick: () => {
+        onNavigateTo("/departments");
+        onSetIsVisibleDrawer(false);
+      },
+    },
+    {
       label: "Usuarios",
       key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,

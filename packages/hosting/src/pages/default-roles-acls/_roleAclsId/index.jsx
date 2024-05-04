@@ -276,6 +276,27 @@ const RoleAcl = ({
               )}
             />
           </Col>
+            <Col span={24}>
+                <Controller
+                    name="acls.departments"
+                    defaultValue={[]}
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                        <CheckboxGroup
+                            label="Departamentos"
+                            options={map(filterAcl("departments"), (item, itemKey) => ({
+                                label: item,
+                                value: itemKey,
+                            }))}
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                        />
+                    )}
+                />
+            </Col>
           <Col span={24}>
             <Controller
               name="acls.profile"
