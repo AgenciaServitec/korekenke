@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+  Acl,
   AddButton,
   Col,
   modalConfirm,
@@ -85,26 +86,28 @@ const Correspondence = ({
   );
 
   return (
-    <Container>
-      <div>
-        <Row justify="space-between" align="middle" gutter={[16, 16]}>
-          <Col span={24}>
-            <AddButton
-              onClick={onClickCorrespondenceAdd}
-              title="correspondencia"
-              margin="0"
-            />
-          </Col>
-        </Row>
-      </div>
-      <div>
-        <CorrespondencesTable
-          correspondences={filterCorrespondencesView}
-          onClickEditCorrespondence={onClickEditCorrespondence}
-          onClickDeleteCorrespondence={onClickDeleteCorrespondence}
-        />
-      </div>
-    </Container>
+    <Acl redirect name="/correspondences">
+      <Container>
+        <div>
+          <Row justify="space-between" align="middle" gutter={[16, 16]}>
+            <Col span={24}>
+              <AddButton
+                onClick={onClickCorrespondenceAdd}
+                title="correspondencia"
+                margin="0"
+              />
+            </Col>
+          </Row>
+        </div>
+        <div>
+          <CorrespondencesTable
+            correspondences={filterCorrespondencesView}
+            onClickEditCorrespondence={onClickEditCorrespondence}
+            onClickDeleteCorrespondence={onClickDeleteCorrespondence}
+          />
+        </div>
+      </Container>
+    </Acl>
   );
 };
 

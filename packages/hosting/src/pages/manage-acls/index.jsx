@@ -173,16 +173,10 @@ const ManageAcls = ({
   };
 
   const getAclsByRoleCode = (roleCode) => {
-    const aclsDefault = {};
-
     const roleAcl = rolesAcls.find((roleAcl) => roleAcl.id === roleCode);
 
-    Object.entries(mapAcls(roleAcl.acls)).forEach(
-      ([aclKey, value]) => (aclsDefault[aclKey] = value)
-    );
-
     reset({
-      acls: aclsDefault,
+      acls: roleAcl?.acls ? mapAcls(roleAcl.acls) : {},
       actionId: watch("actionId"),
       roleCode: watch("roleCode"),
     });

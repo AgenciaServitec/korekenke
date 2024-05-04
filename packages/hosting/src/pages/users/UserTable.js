@@ -1,6 +1,6 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
-import { IconAction } from "../../components";
+import { Acl, IconAction } from "../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 import moment from "moment";
@@ -69,17 +69,21 @@ export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
       key: "actions",
       render: (_, user) => (
         <Space>
-          <IconAction
-            tooltipTitle="Editar"
-            icon={faEdit}
-            onClick={() => onEditUser(user)}
-          />
-          <IconAction
-            tooltipTitle="Eliminar"
-            styled={{ color: (theme) => theme.colors.error }}
-            icon={faTrash}
-            onClick={() => onConfirmRemoveUser(user)}
-          />
+          <Acl name="/users/:userId">
+            <IconAction
+              tooltipTitle="Editar"
+              icon={faEdit}
+              onClick={() => onEditUser(user)}
+            />
+          </Acl>
+          <Acl name="/users#delete">
+            <IconAction
+              tooltipTitle="Eliminar"
+              styled={{ color: (theme) => theme.colors.error }}
+              icon={faTrash}
+              onClick={() => onConfirmRemoveUser(user)}
+            />
+          </Acl>
         </Space>
       ),
     },

@@ -11,6 +11,7 @@ import {
 import { allRoles } from "../../../data-list";
 import { assign, capitalize, flatten, isEmpty, map, uniq } from "lodash";
 import {
+  Acl,
   Button,
   CheckboxGroup,
   Form,
@@ -151,248 +152,254 @@ const RoleAcl = ({
   const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmitRoleAcls)}>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Controller
-            name="roleCode"
-            defaultValue=""
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <Select
-                label="Rol"
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                helperText={errorMessage(name)}
-                required={required(name)}
-                autoFocus
-                options={rolesView.map((role) => ({
-                  label: capitalize(role.name),
-                  value: role.code,
-                  disabled: role.disabled,
-                }))}
-              />
-            )}
-          />
-        </Col>
-      </Row>
-
-      <Title level={4}>Privilegios de usuario</Title>
-      <Row gutter={[16, 24]}>
-        <Col span={24}>
-          <Controller
-            name="acls.accessControlList"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Lista Control de Accesos (acls)"
-                options={map(
-                  filterAcl("access-control-list"),
-                  (item, itemKey) => ({
+    <Acl
+      redirect
+      name={
+        isNew ? "/default-roles-acls/new" : "/default-roles-acls/:roleAclsId"
+      }
+    >
+      <Form onSubmit={handleSubmit(onSubmitRoleAcls)}>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Controller
+              name="roleCode"
+              defaultValue=""
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Select
+                  label="Rol"
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                  autoFocus
+                  options={rolesView.map((role) => ({
+                    label: capitalize(role.name),
+                    value: role.code,
+                    disabled: role.disabled,
+                  }))}
+                />
+              )}
+            />
+          </Col>
+        </Row>
+        <Title level={4}>Privilegios de usuario</Title>
+        <Row gutter={[16, 24]}>
+          <Col span={24}>
+            <Controller
+              name="acls.accessControlList"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Lista Control de Accesos (acls)"
+                  options={map(
+                    filterAcl("access-control-list"),
+                    (item, itemKey) => ({
+                      label: item,
+                      value: itemKey,
+                    })
+                  )}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.defaultRolesAcls"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Acls de roles predeterminados"
+                  options={map(
+                    filterAcl("default-roles-acls"),
+                    (item, itemKey) => ({
+                      label: item,
+                      value: itemKey,
+                    })
+                  )}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.manageAcls"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Administrador Acls"
+                  options={map(filterAcl("manage-acls"), (item, itemKey) => ({
                     label: item,
                     value: itemKey,
-                  })
-                )}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.defaultRolesAcls"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Acls de roles predeterminados"
-                options={map(
-                  filterAcl("default-roles-acls"),
-                  (item, itemKey) => ({
+                  }))}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.entities"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Núcleos"
+                  options={map(filterAcl("entities"), (item, itemKey) => ({
                     label: item,
                     value: itemKey,
-                  })
-                )}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.manageAcls"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Administrador Acls"
-                options={map(filterAcl("manage-acls"), (item, itemKey) => ({
-                  label: item,
-                  value: itemKey,
-                }))}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.entities"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Núcleos"
-                options={map(filterAcl("entities"), (item, itemKey) => ({
-                  label: item,
-                  value: itemKey,
-                }))}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.profile"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Perfil usuario"
-                options={map(filterAcl("profile"), (item, itemKey) => ({
-                  label: item,
-                  value: itemKey,
-                }))}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.users"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Usuarios"
-                options={map(
-                  {
-                    ...filterAcl("users"),
-                  },
-                  (item, itemKey) => ({
+                  }))}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.profile"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Perfil usuario"
+                  options={map(filterAcl("profile"), (item, itemKey) => ({
                     label: item,
                     value: itemKey,
-                  })
-                )}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.correspondences"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Correspondencias"
-                options={map(
-                  {
-                    ...filterAcl("correspondences"),
-                  },
-                  (item, itemKey) => ({
-                    label: item,
-                    value: itemKey,
-                  })
-                )}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-        <Col span={24}>
-          <Controller
-            name="acls.inscriptions"
-            defaultValue={[]}
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <CheckboxGroup
-                label="Inscripciones"
-                options={map(
-                  {
-                    ...filterAcl("inscriptions"),
-                  },
-                  (item, itemKey) => ({
-                    label: item,
-                    value: itemKey,
-                  })
-                )}
-                name={name}
-                value={value}
-                onChange={onChange}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
-      </Row>
-      <Row justify="start" gutter={[16, 16]}>
-        <Col xs={24} sm={12} md={5}>
-          <Button
-            htmlType="submit"
-            type="primary"
-            size="large"
-            block
-            loading={savingRoleAcls}
-          >
-            Save
-          </Button>
-        </Col>
-        <Col xs={24} sm={12} md={5}>
-          <Button
-            size="large"
-            block
-            onClick={() => onCancel(dirtyFields)}
-            disabled={savingRoleAcls}
-          >
-            Cancel
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+                  }))}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.users"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Usuarios"
+                  options={map(
+                    {
+                      ...filterAcl("users"),
+                    },
+                    (item, itemKey) => ({
+                      label: item,
+                      value: itemKey,
+                    })
+                  )}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.correspondences"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Correspondencias"
+                  options={map(
+                    {
+                      ...filterAcl("correspondences"),
+                    },
+                    (item, itemKey) => ({
+                      label: item,
+                      value: itemKey,
+                    })
+                  )}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="acls.inscriptions"
+              defaultValue={[]}
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <CheckboxGroup
+                  label="Inscripciones"
+                  options={map(
+                    {
+                      ...filterAcl("inscriptions"),
+                    },
+                    (item, itemKey) => ({
+                      label: item,
+                      value: itemKey,
+                    })
+                  )}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+        </Row>
+        <Row justify="start" gutter={[16, 16]}>
+          <Col xs={24} sm={12} md={5}>
+            <Button
+              htmlType="submit"
+              type="primary"
+              size="large"
+              block
+              loading={savingRoleAcls}
+            >
+              Save
+            </Button>
+          </Col>
+          <Col xs={24} sm={12} md={5}>
+            <Button
+              size="large"
+              block
+              onClick={() => onCancel(dirtyFields)}
+              disabled={savingRoleAcls}
+            >
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Acl>
   );
 };

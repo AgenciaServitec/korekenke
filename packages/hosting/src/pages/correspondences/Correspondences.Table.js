@@ -1,7 +1,13 @@
 import React, { memo } from "react";
 import styled, { css } from "styled-components";
 import moment from "moment";
-import { IconAction, Space, TableVirtualized, Tag } from "../../components/ui";
+import {
+  Acl,
+  IconAction,
+  Space,
+  TableVirtualized,
+  Tag,
+} from "../../components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
@@ -112,18 +118,22 @@ const CorrespondencesTable = ({
       width: ["70px", "15%"],
       render: (correspondence) => (
         <IconsActionWrapper>
-          <IconAction
-            className="pointer"
-            onClick={() => onClickEditCorrespondence(correspondence.id)}
-            styled={{ color: (theme) => theme.colors.tertiary }}
-            icon={faEdit}
-          />
-          <IconAction
-            className="pointer"
-            onClick={() => onClickDeleteCorrespondence(correspondence.id)}
-            styled={{ color: (theme) => theme.colors.error }}
-            icon={faTrash}
-          />
+          <Acl name="/correspondences/:correspondenceId">
+            <IconAction
+              className="pointer"
+              onClick={() => onClickEditCorrespondence(correspondence.id)}
+              styled={{ color: (theme) => theme.colors.tertiary }}
+              icon={faEdit}
+            />
+          </Acl>
+          <Acl name="/correspondences#delete">
+            <IconAction
+              className="pointer"
+              onClick={() => onClickDeleteCorrespondence(correspondence.id)}
+              styled={{ color: (theme) => theme.colors.error }}
+              icon={faTrash}
+            />
+          </Acl>
           {correspondence.status === "accepted" && (
             <IconAction
               className="pointer"

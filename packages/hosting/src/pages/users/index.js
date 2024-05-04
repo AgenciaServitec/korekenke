@@ -2,7 +2,7 @@ import React from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
-import { AddButton, modalConfirm, notification } from "../../components";
+import { Acl, AddButton, modalConfirm, notification } from "../../components";
 import { Divider } from "antd";
 import { useAuthentication, useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
@@ -52,21 +52,27 @@ export const Users = () => {
     });
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <AddButton onClick={onAddUser} title="Usuario" margin="0" />
-      </Col>
-      <Divider />
-      <Col span={24}>
-        <Title level={3}>Usuarios</Title>
-      </Col>
-      <Col span={24}>
-        <UsersTable
-          users={users}
-          onEditUser={onEditUser}
-          onConfirmRemoveUser={onConfirmRemoveUser}
-        />
-      </Col>
-    </Row>
+    <Acl redirect name="/users">
+      <Row gutter={[16, 16]}>
+        <Acl name="/users/new">
+          <>
+            <Col span={24}>
+              <AddButton onClick={onAddUser} title="Usuario" margin="0" />
+            </Col>
+            <Divider />
+          </>
+        </Acl>
+        <Col span={24}>
+          <Title level={3}>Usuarios</Title>
+        </Col>
+        <Col span={24}>
+          <UsersTable
+            users={users}
+            onEditUser={onEditUser}
+            onConfirmRemoveUser={onConfirmRemoveUser}
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };

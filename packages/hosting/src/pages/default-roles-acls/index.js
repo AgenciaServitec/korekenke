@@ -6,7 +6,7 @@ import { firestore } from "../../firebase";
 import { allRoles } from "../../data-list";
 import { useAcl, useAsync } from "../../hooks";
 import { assign, get } from "lodash";
-import { Button, List, notification } from "../../components";
+import { Acl, Button, List, notification } from "../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useGlobalData } from "../../providers";
@@ -72,27 +72,29 @@ const DefaultRolesAcls = ({
   );
 
   return (
-    <Row gutter={[0, 24]}>
-      <Col span={24}>
-        <Button
-          onClick={onAddRoleAcls}
-          type="primary"
-          size="large"
-          icon={<FontAwesomeIcon icon={faPlus} />}
-        >
-          &ensp; Agregar rol con acls
-        </Button>
-      </Col>
-      <Col span={24}>
-        <List
-          dataSource={rolesAclsView}
-          onDeleteItem={(roleAcls) => onDeleteRoleAcls(roleAcls)}
-          onEditItem={(roleAcls) => onEditRoleAcls(roleAcls)}
-          itemTitle={(roleAcls) => get(roleAcls, "role.name", "")}
-          visibleEditItem={() => aclCheck("/default-roles-acls/:roleAclsId")}
-          visibleDeleteItem={() => aclCheck("/default-roles-acls#delete")}
-        />
-      </Col>
-    </Row>
+    <Acl redirect name="/default-roles-acls">
+      <Row gutter={[0, 24]}>
+        <Col span={24}>
+          <Button
+            onClick={onAddRoleAcls}
+            type="primary"
+            size="large"
+            icon={<FontAwesomeIcon icon={faPlus} />}
+          >
+            &ensp; Agregar rol con acls
+          </Button>
+        </Col>
+        <Col span={24}>
+          <List
+            dataSource={rolesAclsView}
+            onDeleteItem={(roleAcls) => onDeleteRoleAcls(roleAcls)}
+            onEditItem={(roleAcls) => onEditRoleAcls(roleAcls)}
+            itemTitle={(roleAcls) => get(roleAcls, "role.name", "")}
+            visibleEditItem={() => aclCheck("/default-roles-acls/:roleAclsId")}
+            visibleDeleteItem={() => aclCheck("/default-roles-acls#delete")}
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };
