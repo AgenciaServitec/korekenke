@@ -9,7 +9,7 @@ import { useGlobalData } from "../../providers";
 import { useAcl } from "../../hooks";
 import { firestore } from "../../firebase";
 
-export const Departments = () => {
+export const DepartmentsIntegration = () => {
   const navigate = useNavigate();
   const { departments } = useGlobalData();
   const { aclCheck } = useAcl();
@@ -34,7 +34,7 @@ export const Departments = () => {
         .doc(department.id)
         .update({ isDeleted: true });
     } catch (e) {
-      console.error("ErrorDeleteEntity: ", e);
+      console.error("ErrorDeleteDepartment: ", e);
     }
   };
 

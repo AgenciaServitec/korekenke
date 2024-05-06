@@ -70,7 +70,7 @@ export const Router = () => {
           path="entities"
           element={
             <AdminLayout>
-              <A.Entities />
+              <A.EntitiesIntegration />
             </AdminLayout>
           }
         />
@@ -79,7 +79,7 @@ export const Router = () => {
           path="entities/:entityId"
           element={
             <AdminLayout>
-              <A.EntitiesIntegration />
+              <A.EntityIntegration />
             </AdminLayout>
           }
         />
@@ -88,7 +88,7 @@ export const Router = () => {
           path="departments"
           element={
             <AdminLayout>
-              <A.Departments />
+              <A.DepartmentsIntegration />
             </AdminLayout>
           }
         />
@@ -106,7 +106,7 @@ export const Router = () => {
           path="sections"
           element={
             <AdminLayout>
-              <A.Sections />
+              <A.SectionsIntegration />
             </AdminLayout>
           }
         />

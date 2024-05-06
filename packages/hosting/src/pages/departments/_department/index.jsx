@@ -62,7 +62,7 @@ export const DepartmentIntegration = () => {
 
       onGoBack();
     } catch (e) {
-      console.error("ErrorSaveEntity: ", e);
+      console.error("ErrorSaveDepartment: ", e);
       notification({ type: "error" });
     } finally {
       setLoading(false);
@@ -110,7 +110,7 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const userView = users.map((user) => ({
+  const usersView = users.map((user) => ({
     label: `${capitalize(user.firstName)} ${capitalize(
       user.paternalSurname
     )} ${capitalize(user.maternalSurname)}`,
@@ -181,7 +181,7 @@ export const DepartmentIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={userView}
+                      options={usersView}
                     />
                   )}
                 />
@@ -198,7 +198,7 @@ export const DepartmentIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={userView.filter(
+                      options={usersView.filter(
                         (user) => user.value !== watch("departmentManageId")
                       )}
                       disabled={!watch("departmentManageId")}
@@ -219,7 +219,7 @@ export const DepartmentIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={userView}
+                      options={usersView}
                     />
                   )}
                 />
