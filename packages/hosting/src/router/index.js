@@ -121,6 +121,24 @@ export const Router = () => {
         />
         <Route
           exact
+          path="offices"
+          element={
+            <AdminLayout>
+              <A.OfficesIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="offices/:officeId"
+          element={
+            <AdminLayout>
+              <A.OfficeIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="correspondences"
           element={
             <AdminLayout>

@@ -81,6 +81,16 @@ export const DrawerLayout = ({
       },
     },
     {
+      label: "Oficinas",
+      key: "offices",
+      icon: <FontAwesomeIcon icon={faBuilding} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser(["/offices"]),
+      onClick: () => {
+        onNavigateTo("/offices");
+        onSetIsVisibleDrawer(false);
+      },
+    },
+    {
       label: "Usuarios",
       key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
