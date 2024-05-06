@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import { useAcl } from "../../hooks";
 import { firestore } from "../../firebase";
 
-export const Entities = () => {
+export const EntitiesIntegration = () => {
   const navigate = useNavigate();
   const { entities } = useGlobalData();
   const { aclCheck } = useAcl();

@@ -9,7 +9,7 @@ import { Acl, Button, List } from "../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-export const Sections = () => {
+export const SectionsIntegration = () => {
   const navigate = useNavigate();
   const { sections } = useGlobalData();
   const { aclCheck } = useAcl();

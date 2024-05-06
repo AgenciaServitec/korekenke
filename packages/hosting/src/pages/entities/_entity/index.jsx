@@ -19,7 +19,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { capitalize } from "lodash";
 import { firestore } from "../../../firebase";
 
-export const EntitiesIntegration = () => {
+export const EntityIntegration = () => {
   const { entityId } = useParams();
   const navigate = useNavigate();
   const { entities, users } = useGlobalData();
@@ -28,15 +28,6 @@ export const EntitiesIntegration = () => {
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
-
-  const _users = users.map((user) => {
-    return {
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
-      value: user.id,
-    };
-  });
 
   useEffect(() => {
     const _entity =
@@ -101,6 +92,15 @@ export const EntitiesIntegration = () => {
     });
   };
 
+  const usersView = users.map((user) => {
+    return {
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+    };
+  });
+
   const submitSaveEntity = (formData) => onSubmitSaveEntity(formData);
 
   const onGoBack = () => navigate(-1);
@@ -145,7 +145,7 @@ export const EntitiesIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={_users}
+                      options={usersView}
                     />
                   )}
                 />
