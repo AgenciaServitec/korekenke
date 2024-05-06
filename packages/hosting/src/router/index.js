@@ -101,24 +101,24 @@ export const Router = () => {
             </AdminLayout>
           }
         />
-          <Route
-              exact
-              path="sections"
-              element={
-                  <AdminLayout>
-                      <A.Sections />
-                  </AdminLayout>
-              }
-          />
-          <Route
-              exact
-              path="sections/:sectionId"
-              element={
-                  <AdminLayout>
-                      <A.SectionIntegration />
-                  </AdminLayout>
-              }
-          />
+        <Route
+          exact
+          path="sections"
+          element={
+            <AdminLayout>
+              <A.Sections />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="sections/:sectionId"
+          element={
+            <AdminLayout>
+              <A.SectionIntegration />
+            </AdminLayout>
+          }
+        />
         <Route
           exact
           path="correspondences"

@@ -21,7 +21,7 @@
   "/users#delete": "Eliminar usuario",
   "/sections": "Menu: Secciones",
   "/sections/new": "Agregar sección",
-  "/sections/:userId": "Editar sección",
+  "/sections/:sectionId": "Editar sección",
   "/sections#delete": "Eliminar sección",
   "/correspondences": "Menu: Correspondencias",
   "/correspondences/new": "Agregar correspondencia",
