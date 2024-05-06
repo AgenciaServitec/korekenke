@@ -32,6 +32,12 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
+  const [offices = [], officesLoading, officesError] = useCollectionData(
+    authUser
+      ? firestore.collection("offices").where("isDeleted", "==", false)
+      : null
+  );
+
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser ? firestore.collection("roles-acls") : null
   );
@@ -54,7 +60,8 @@ export const GlobalDataProvider = ({ children }) => {
     usersError ||
     correspondencesError ||
     departmentsError ||
-    sectionsError;
+    sectionsError ||
+    officesError;
 
   const loading =
     entitiesLoading ||
@@ -62,7 +69,8 @@ export const GlobalDataProvider = ({ children }) => {
     usersLoading ||
     correspondencesLoading ||
     departmentsLoading ||
-    sectionsLoading;
+    sectionsLoading ||
+    officesLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -77,6 +85,7 @@ export const GlobalDataProvider = ({ children }) => {
         departments,
         sections,
         rolesAcls,
+        offices,
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
         correspondences: orderBy(
           correspondences,
