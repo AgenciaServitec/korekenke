@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { version } from "../../firebase";
 import {
   faBuilding,
+  faDisplay,
   faFileAlt,
   faHome,
   faIdCard,
@@ -86,6 +87,16 @@ export const DrawerLayout = ({
       isVisible: existPageAclsInAclsOfUser(["/users"]),
       onClick: () => {
         onNavigateTo("/users");
+        onSetIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Secciones",
+      key: "sections",
+      icon: <FontAwesomeIcon icon={faDisplay} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser(["/sections"]),
+      onClick: () => {
+        onNavigateTo("/sections");
         onSetIsVisibleDrawer(false);
       },
     },

@@ -14,3 +14,5 @@ export * from "./entities";
 export * from "./entities/_entity";
 export * from "./departments";
 export * from "./departments/_department";
+export * from "./sections";
+export * from "./sections/_section";
