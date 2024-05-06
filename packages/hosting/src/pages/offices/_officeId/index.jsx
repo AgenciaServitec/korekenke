@@ -22,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 export const OfficeIntegration = () => {
   const { officeId } = useParams();
   const navigate = useNavigate();
-  const { offices, users, sections } = useGlobalData(); // Obtener las secciones
+  const { offices, users, sections } = useGlobalData();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -49,13 +49,13 @@ export const OfficeIntegration = () => {
     fetchOffice();
   }, [officeId, navigate, offices]);
 
-  const mapEntity = (formData) => ({
+  const mapOffice = (formData) => ({
     ...office,
     name: formData.name,
     description: formData.description,
     officeManagerId: formData.officeManagerId,
     assistantsIds: formData.assistantsIds,
-    sectionId: formData.sectionId, // Incluir sectionId
+    sectionId: formData.sectionId,
   });
 
   const onSubmitSaveOffice = async (formData) => {
@@ -64,7 +64,7 @@ export const OfficeIntegration = () => {
       await firestore
         .collection("offices")
         .doc(office.id)
-        .set(assignCreateProps(mapEntity(formData)));
+        .set(assignCreateProps(mapOffice(formData)));
 
       notification({ type: "success" });
       onGoBack();
@@ -81,7 +81,7 @@ export const OfficeIntegration = () => {
     description: yup.string().required(),
     officeManagerId: yup.string().required(),
     assistantsIds: yup.array().required(),
-    sectionId: yup.string().required(), // Validar sectionId
+    sectionId: yup.string().required(),
   });
 
   const {
@@ -105,7 +105,7 @@ export const OfficeIntegration = () => {
       description: office?.description || "",
       officeManagerId: office?.officeManagerId || "",
       assistantsIds: office?.assistantsIds || [],
-      sectionId: office?.sectionId || "", // Incluir sectionId
+      sectionId: office?.sectionId || "",
     });
   };
 
