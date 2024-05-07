@@ -19,18 +19,21 @@ import {
   notification,
   Select,
   Title,
+  Upload,
+  Input,
 } from "../../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router-dom";
 import { filterAcl, mapAcls } from "../../../utils";
-import { useGlobalData } from "../../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
 
 export const RoleAclIntegration = () => {
   const navigate = useNavigate();
   const { roleAclsId } = useParams();
   const { assignCreateProps, assignUpdateProps } =
     useDefaultFirestoreProps(false);
+  const { authUser } = useAuthentication();
 
   const { rolesAcls } = useGlobalData();
   const [roleAcls, setRoleAcls] = useState({});
@@ -78,14 +81,18 @@ export const RoleAclIntegration = () => {
     }
   }, [saveRoleAclsSuccess]);
 
+  const roleCodeId = (formData) =>
+    formData.roleCode.lowerCase().split(" ").join("_");
+
   const onSaveRoleAcls = async (formData) =>
     await saveRoleAcls(
       assign({}, formData, {
-        id: formData.roleCode,
+        id: roleCodeId(formData),
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
+        avatarImage: formData?.avatarImage || null,
       })
     );
 
@@ -101,6 +108,7 @@ export const RoleAclIntegration = () => {
   return (
     <RoleAcl
       isNew={roleAclsId === "new"}
+      user={authUser}
       roleAcls={roleAcls}
       rolesAcls={rolesAcls}
       savingRoleAcls={saveRoleAclsLoading}
@@ -112,6 +120,7 @@ export const RoleAclIntegration = () => {
 
 const RoleAcl = ({
   isNew,
+  user,
   roleAcls,
   rolesAcls,
   savingRoleAcls,
@@ -141,6 +150,7 @@ const RoleAcl = ({
     reset({
       acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
       roleCode: roleAcls.id,
+      avatarImage: roleAcls?.avatarImage || null,
     });
 
   const rolesView = allRoles.map((role) =>
@@ -166,19 +176,33 @@ const RoleAcl = ({
               defaultValue=""
               control={control}
               render={({ field: { onChange, value, name } }) => (
-                <Select
+                <Input
                   label="Rol"
-                  value={value}
+                  name={name}
                   onChange={onChange}
+                  value={value}
                   error={error(name)}
                   helperText={errorMessage(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              control={control}
+              name="avatarImage"
+              render={({ field: { onChange, value, onBlur, name } }) => (
+                <Upload
+                  label="Avatar"
+                  accept="image/*"
+                  buttonText="Subir foto"
+                  value={value}
+                  name={name}
+                  filePath={`default-roles/${user.id}`}
+                  withThumbImage={false}
+                  onChange={(file) => onChange(file)}
                   required={required(name)}
-                  autoFocus
-                  options={rolesView.map((role) => ({
-                    label: capitalize(role.name),
-                    value: role.code,
-                    disabled: role.disabled,
-                  }))}
+                  error={error(name)}
                 />
               )}
             />
