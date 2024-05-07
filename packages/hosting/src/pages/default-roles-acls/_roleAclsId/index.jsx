@@ -188,36 +188,12 @@ const RoleAcl = ({
         <Row gutter={[16, 24]}>
           <Col span={24}>
             <Controller
-              name="acls.accessControlList"
-              defaultValue={[]}
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <CheckboxGroup
-                  label="Lista Control de Accesos (acls)"
-                  options={map(
-                    filterAcl("access-control-list"),
-                    (item, itemKey) => ({
-                      label: item,
-                      value: itemKey,
-                    })
-                  )}
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
               name="acls.defaultRolesAcls"
               defaultValue={[]}
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <CheckboxGroup
-                  label="Acls de roles predeterminados"
+                  label="Roles con Acls"
                   options={map(
                     filterAcl("default-roles-acls"),
                     (item, itemKey) => ({
