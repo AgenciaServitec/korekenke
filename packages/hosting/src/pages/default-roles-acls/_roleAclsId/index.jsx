@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { firestore } from "../../../firebase";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,31 +7,33 @@ import {
   useDefaultFirestoreProps,
   useFormUtils,
 } from "../../../hooks";
-import { allRoles } from "../../../data-list";
-import { assign, capitalize, flatten, isEmpty, map, uniq } from "lodash";
+import { assign, flatten, isEmpty, map, uniq } from "lodash";
 import {
   Acl,
   Button,
   CheckboxGroup,
   Form,
+  Input,
   modalConfirm,
   notification,
-  Select,
   Title,
   Upload,
-  Input,
 } from "../../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router-dom";
 import { filterAcl, mapAcls } from "../../../utils";
 import { useAuthentication, useGlobalData } from "../../../providers";
+import {
+  addRoleAcl,
+  fetchRoleAcl,
+  updateRoleAcl,
+} from "../../../firebase/collections";
 
 export const RoleAclIntegration = () => {
   const navigate = useNavigate();
   const { roleAclsId } = useParams();
-  const { assignCreateProps, assignUpdateProps } =
-    useDefaultFirestoreProps(false);
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { authUser } = useAuthentication();
 
   const { rolesAcls } = useGlobalData();
@@ -55,15 +56,9 @@ export const RoleAclIntegration = () => {
     error: saveRoleAclsError,
     success: saveRoleAclsSuccess,
   } = useAsync(async (roleAcls) => {
-    await firestore
-      .collection("roles-acls")
-      .doc(roleAcls.id)
-      .set(
-        roleAclsId === "new"
-          ? assignCreateProps(roleAcls)
-          : assignUpdateProps(roleAcls),
-        { merge: true }
-      );
+    roleAclsId === "new"
+      ? await addRoleAcl(assignCreateProps(roleAcls))
+      : await updateRoleAcl(assignUpdateProps(roleAcls));
   });
 
   useEffect(() => {
@@ -81,20 +76,27 @@ export const RoleAclIntegration = () => {
     }
   }, [saveRoleAclsSuccess]);
 
-  const roleCodeId = (formData) =>
-    formData.roleCode.lowerCase().split(" ").join("_");
+  const onSaveRoleAcls = async (formData) => {
+    const roleId = formData.roleCode.toLowerCase().split(" ").join("_");
+    const roleAcl = await fetchRoleAcl(roleId);
 
-  const onSaveRoleAcls = async (formData) =>
+    if (roleAcl)
+      return notification({
+        type: "warning",
+        title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
+      });
+
     await saveRoleAcls(
       assign({}, formData, {
-        id: roleCodeId(formData),
+        id: roleId,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
-        avatarImage: formData?.avatarImage || null,
+        roleCode: formData.roleCode.toLowerCase(),
       })
     );
+  };
 
   const onCancel = (modifiedFields) => {
     if (!isEmpty(modifiedFields))
@@ -149,15 +151,9 @@ const RoleAcl = ({
   const roleAclsToForm = (roleAcls) =>
     reset({
       acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
-      roleCode: roleAcls.id,
+      roleCode: roleAcls?.roleCode || "",
       avatarImage: roleAcls?.avatarImage || null,
     });
-
-  const rolesView = allRoles.map((role) =>
-    assign({}, role, {
-      disabled: rolesAcls.some((roleAcls) => roleAcls.id === role.code),
-    })
-  );
 
   const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
 

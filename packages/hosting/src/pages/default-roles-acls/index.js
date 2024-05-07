@@ -3,26 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { firestore } from "../../firebase";
-import { useAcl, useAsync } from "../../hooks";
+import { useAcl, useAsync, useDefaultFirestoreProps } from "../../hooks";
 import { capitalize } from "lodash";
 import { Acl, Button, List, notification } from "../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useGlobalData } from "../../providers";
+import { updateRoleAcl } from "../../firebase/collections";
 
 export const DefaultRolesAclsIntegration = () => {
   const navigate = useNavigate();
   const { rolesAcls } = useGlobalData();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const {
     run: deleteRoleAcls,
     error: deleteRoleAclsError,
     success: deleteRoleAclsSuccess,
   } = useAsync((roleAcls) =>
-    firestore
-      .collection("roles-acls")
-      .doc(roleAcls.id)
-      .update({ isDeleted: true })
+    updateRoleAcl(roleAcls.id, assignDeleteProps(roleAcls))
   );
 
   useEffect(() => {
