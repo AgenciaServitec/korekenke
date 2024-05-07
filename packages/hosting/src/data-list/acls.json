@@ -1,7 +1,6 @@
 {
   "/home": "Menu Inicio",
-  "/access-control-list": "Menu: Lista Control de Accesos (acls)",
-  "/default-roles-acls": "Menu: Acls de roles predeterminados",
+  "/default-roles-acls": "Menu: Roles con Acls",
   "/default-roles-acls/new": "Agregar rol acls",
   "/default-roles-acls/:roleAclsId": "Editar rol acls",
   "/default-roles-acls#delete": "Eliminar rol acls",
