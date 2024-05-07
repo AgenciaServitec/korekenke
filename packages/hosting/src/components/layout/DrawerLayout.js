@@ -3,11 +3,14 @@ import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import {
-  faBuilding,
-  faDisplay,
+  faBriefcase,
+  faBuildingUser,
+  faComputer,
   faFileAlt,
+  faGears,
   faHome,
   faIdCard,
+  faNetworkWired,
   faUsers,
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
@@ -35,13 +38,16 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Lista Control de Accesos (acls)",
+      label: "Control de Accesos (acls)",
       key: "group-acls",
       icon: <FontAwesomeIcon icon={faUsersCog} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/access-control-list"]),
+      isVisible: existPageAclsInAclsOfUser([
+        "/default-roles-acls",
+        "/manage-acls",
+      ]),
       children: [
         {
-          label: "Acls de roles predeterminados",
+          label: "Roles con Acls",
           key: "default-roles-acls",
           isVisible: existPageAclsInAclsOfUser(["/default-roles-acls"]),
           onClick: () => {
@@ -50,7 +56,7 @@ export const DrawerLayout = ({
           },
         },
         {
-          label: "Administrardor Acls",
+          label: "Administrador Acls",
           key: "manage-acls",
           isVisible: existPageAclsInAclsOfUser(["/manage-acls"]),
           onClick: () => {
@@ -61,54 +67,68 @@ export const DrawerLayout = ({
       ],
     },
     {
-      label: "Núcleos",
-      key: "entities",
-      icon: <FontAwesomeIcon icon={faBuilding} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/entities"]),
-      onClick: () => {
-        onNavigateTo("/entities");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Departamentos",
-      key: "departments",
-      icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/departments"]),
-      onClick: () => {
-        onNavigateTo("/departments");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Oficinas",
-      key: "offices",
-      icon: <FontAwesomeIcon icon={faBuilding} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/offices"]),
-      onClick: () => {
-        onNavigateTo("/offices");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Usuarios",
-      key: "users",
-      icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/users"]),
-      onClick: () => {
-        onNavigateTo("/users");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Secciones",
-      key: "sections",
-      icon: <FontAwesomeIcon icon={faDisplay} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/sections"]),
-      onClick: () => {
-        onNavigateTo("/sections");
-        onSetIsVisibleDrawer(false);
-      },
+      label: "Administración",
+      key: "manager",
+      icon: <FontAwesomeIcon icon={faGears} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser([
+        "/users",
+        "/entities",
+        "/departments",
+        "/sections",
+        "/offices",
+      ]),
+      children: [
+        {
+          label: "Usuarios",
+          key: "users",
+          icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/users"]),
+          onClick: () => {
+            onNavigateTo("/users");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+        {
+          label: "Núcleos",
+          key: "entities",
+          icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/entities"]),
+          onClick: () => {
+            onNavigateTo("/entities");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+        {
+          label: "Departamentos",
+          key: "departments",
+          icon: <FontAwesomeIcon icon={faBuildingUser} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/departments"]),
+          onClick: () => {
+            onNavigateTo("/departments");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+        {
+          label: "Secciones",
+          key: "sections",
+          icon: <FontAwesomeIcon icon={faComputer} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/sections"]),
+          onClick: () => {
+            onNavigateTo("/sections");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+        {
+          label: "Oficinas",
+          key: "offices",
+          icon: <FontAwesomeIcon icon={faBriefcase} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/offices"]),
+          onClick: () => {
+            onNavigateTo("/offices");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+      ],
     },
     {
       label: "Correspondencias",
