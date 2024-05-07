@@ -16,7 +16,6 @@ import {
   Input,
   modalConfirm,
   notification,
-  Select,
   Title,
   Upload,
 } from "../../../components";
@@ -77,8 +76,9 @@ export const RoleAclIntegration = () => {
     }
   }, [saveRoleAclsSuccess]);
 
-  const roleCodeId = (formData) =>
-    formData.roleCode.lowerCase().split(" ").join("_");
+  const onSaveRoleAcls = async (formData) => {
+    const roleId = formData.roleCode.toLowerCase().split(" ").join("_");
+    const roleAcl = await fetchRoleAcl(roleId);
 
   const onSaveRoleAcls = async (formData) => {
     const roleId = formData.name.toLowerCase().split(" ").join("_");
@@ -93,13 +93,14 @@ export const RoleAclIntegration = () => {
     }
     await saveRoleAcls(
       assign({}, formData, {
-        id: roleCodeId(formData),
+        id: roleId,
           name: formData.name.toLowerCase(),
           avatarImage: formData?.avatarImage || null,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
+        roleCode: formData.roleCode.toLowerCase(),
       })
     );
   };
@@ -165,10 +166,7 @@ const RoleAcl = ({
         acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
     });
 
-  const onSubmitRoleAcls = (formData) => {
-    console.log({ formData });
-    return onSaveRoleAcls(formData);
-  };
+  const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
 
   return (
     <Acl
