@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { firestore } from "../../firebase";
 import { useAcl, useAsync, useDefaultFirestoreProps } from "../../hooks";
 import { capitalize } from "lodash";
 import { Acl, Button, List, notification } from "../../components";
@@ -71,8 +70,6 @@ const DefaultRolesAcls = ({
     name: capitalize(roleAcl.name),
     initialPathname: "/home",
   }));
-
-  console.log(rolesAclsView);
 
   return (
     <Acl redirect name="/default-roles-acls">

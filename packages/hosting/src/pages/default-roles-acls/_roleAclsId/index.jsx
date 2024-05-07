@@ -77,6 +77,9 @@ export const RoleAclIntegration = () => {
     }
   }, [saveRoleAclsSuccess]);
 
+  const roleCodeId = (formData) =>
+    formData.roleCode.lowerCase().split(" ").join("_");
+
   const onSaveRoleAcls = async (formData) => {
     const roleId = formData.name.toLowerCase().split(" ").join("_");
 
@@ -88,15 +91,15 @@ export const RoleAclIntegration = () => {
           title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
         });
     }
-
     await saveRoleAcls(
       assign({}, formData, {
-        id: roleAcls?.id || roleId,
+        id: roleCodeId(formData),
+          name: formData.name.toLowerCase(),
+          avatarImage: formData?.avatarImage || null,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
-        name: formData.name.toLowerCase(),
       })
     );
   };
@@ -155,10 +158,11 @@ const RoleAcl = ({
 
   const roleAclsToForm = (roleAcls) =>
     reset({
-      acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
+        roleId: roleAcls?.id || "",
       name: roleAcls?.name || "",
       avatarImage: roleAcls?.avatarImage || null,
       initialPathname: roleAcls?.initialPathname || "/home",
+        acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
     });
 
   const onSubmitRoleAcls = (formData) => {
