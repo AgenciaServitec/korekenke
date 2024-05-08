@@ -3,8 +3,7 @@ import { auth } from "../firebase";
 import { isError, isObject } from "lodash";
 import { notification, Spinner } from "../components";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { allRoles } from "../data-list";
-import { usersRef } from "../firebase/collections";
+import { fetchRolesAcls, usersRef } from "../firebase/collections";
 import { authPersistence } from "../firebase/auth";
 
 const AuthenticationContext = createContext({
@@ -130,8 +129,10 @@ const isAuthUser = (data) => isObject(data) && "id" in data;
 const isAuthUserError = (data) =>
   isObject(data) && "type" in data && data.type === "error";
 
-const findAuthUserRole = (user) =>
-  allRoles.find((role) => role.code === user.defaultRoleCode);
+const findAuthUserRole = async (user) => {
+  const rolesAcls = await fetchRolesAcls();
+  return rolesAcls.find((role) => role.id === user.defaultRoleCode);
+};
 
 const findAuthUserPathnames = (user) =>
   (user?.acls || []).map((acl) => acl.split("#")[0]);

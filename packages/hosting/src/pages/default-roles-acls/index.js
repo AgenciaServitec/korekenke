@@ -68,7 +68,7 @@ const DefaultRolesAcls = ({
 
   const rolesAclsView = rolesAcls.map((roleAcl) => ({
     id: roleAcl.id,
-    name: capitalize(roleAcl.roleCode),
+    name: capitalize(roleAcl.name),
     initialPathname: "/home",
   }));
 

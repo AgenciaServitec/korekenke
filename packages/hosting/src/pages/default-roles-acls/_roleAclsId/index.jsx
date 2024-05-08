@@ -16,6 +16,7 @@ import {
   Input,
   modalConfirm,
   notification,
+  Select,
   Title,
   Upload,
 } from "../../../components";
@@ -58,7 +59,7 @@ export const RoleAclIntegration = () => {
   } = useAsync(async (roleAcls) => {
     roleAclsId === "new"
       ? await addRoleAcl(assignCreateProps(roleAcls))
-      : await updateRoleAcl(assignUpdateProps(roleAcls));
+      : await updateRoleAcl(roleAcls.id, assignUpdateProps(roleAcls));
   });
 
   useEffect(() => {
@@ -77,23 +78,25 @@ export const RoleAclIntegration = () => {
   }, [saveRoleAclsSuccess]);
 
   const onSaveRoleAcls = async (formData) => {
-    const roleId = formData.roleCode.toLowerCase().split(" ").join("_");
-    const roleAcl = await fetchRoleAcl(roleId);
+    const roleId = formData.name.toLowerCase().split(" ").join("_");
 
-    if (roleAcl)
-      return notification({
-        type: "warning",
-        title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
-      });
+    if (roleAclsId === "new") {
+      const roleAcl = await fetchRoleAcl(roleId);
+      if (roleAcl)
+        return notification({
+          type: "warning",
+          title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
+        });
+    }
 
     await saveRoleAcls(
       assign({}, formData, {
-        id: roleId,
+        id: roleAcls?.id || roleId,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
-        roleCode: formData.roleCode.toLowerCase(),
+        name: formData.name.toLowerCase(),
       })
     );
   };
@@ -112,7 +115,6 @@ export const RoleAclIntegration = () => {
       isNew={roleAclsId === "new"}
       user={authUser}
       roleAcls={roleAcls}
-      rolesAcls={rolesAcls}
       savingRoleAcls={saveRoleAclsLoading}
       onSaveRoleAcls={onSaveRoleAcls}
       onCancel={onCancel}
@@ -124,13 +126,14 @@ const RoleAcl = ({
   isNew,
   user,
   roleAcls,
-  rolesAcls,
   savingRoleAcls,
   onSaveRoleAcls,
   onCancel,
 }) => {
   const schema = yup.object({
-    roleCode: yup.string().required(),
+    name: yup.string().required(),
+    initialPathname: yup.string().required(),
+    avatarImage: yup.mixed().required(),
   });
 
   const {
@@ -142,6 +145,8 @@ const RoleAcl = ({
     resolver: yupResolver(schema),
   });
 
+  console.log(errors);
+
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   useEffect(() => {
@@ -151,11 +156,15 @@ const RoleAcl = ({
   const roleAclsToForm = (roleAcls) =>
     reset({
       acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
-      roleCode: roleAcls?.roleCode || "",
+      name: roleAcls?.name || "",
       avatarImage: roleAcls?.avatarImage || null,
+      initialPathname: roleAcls?.initialPathname || "/home",
     });
 
-  const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
+  const onSubmitRoleAcls = (formData) => {
+    console.log({ formData });
+    return onSaveRoleAcls(formData);
+  };
 
   return (
     <Acl
@@ -168,7 +177,7 @@ const RoleAcl = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Controller
-              name="roleCode"
+              name="name"
               defaultValue=""
               control={control}
               render={({ field: { onChange, value, name } }) => (
@@ -178,7 +187,31 @@ const RoleAcl = ({
                   onChange={onChange}
                   value={value}
                   error={error(name)}
-                  helperText={errorMessage(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="initialPathname"
+              defaultValue=""
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Select
+                  label="Página de Inicio"
+                  onChange={onChange}
+                  value={value}
+                  error={error(name)}
+                  options={[
+                    {
+                      label: "Inicio",
+                      value: "/home",
+                    },
+                    {
+                      label: "Perfil",
+                      value: "/profile",
+                    },
+                  ]}
                 />
               )}
             />
