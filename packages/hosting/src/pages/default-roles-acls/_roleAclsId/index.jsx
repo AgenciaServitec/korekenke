@@ -78,7 +78,7 @@ export const RoleAclIntegration = () => {
   }, [saveRoleAclsSuccess]);
 
   const onSaveRoleAcls = async (formData) => {
-    const roleId = formData.name.toLowerCase().split(" ").join("_");
+    const roleId = formData.roleId.toLowerCase().split(" ").join("_");
 
     if (roleAclsId === "new") {
       const roleAcl = await fetchRoleAcl(roleId);
@@ -101,7 +101,6 @@ export const RoleAclIntegration = () => {
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
-        name: formData.name.toLowerCase(),
       })
     );
   };
@@ -136,6 +135,7 @@ const RoleAcl = ({
   onCancel,
 }) => {
   const schema = yup.object({
+    roleId: yup.string().required(),
     name: yup.string().required(),
     initialPathname: yup.string().required(),
     avatarImage: yup.mixed().required(),
@@ -183,12 +183,28 @@ const RoleAcl = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Controller
+              name="roleId"
+              defaultValue=""
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Rol id en inglés"
+                  name={name}
+                  onChange={onChange}
+                  value={value}
+                  error={error(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
               name="name"
               defaultValue=""
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <Input
-                  label="Rol"
+                  label="Nombre"
                   name={name}
                   onChange={onChange}
                   value={value}
