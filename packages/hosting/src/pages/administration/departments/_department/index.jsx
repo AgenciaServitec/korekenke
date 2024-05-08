@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize } from "lodash";
+import { capitalize, isEmpty } from "lodash";
 import { firestore } from "../../../../firebase";
 import {
   Acl,
@@ -14,6 +14,7 @@ import {
   Row,
   Select,
   Title,
+  Text,
 } from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -29,11 +30,12 @@ export const DepartmentIntegration = () => {
   const [loading, setLoading] = useState(false);
   const [department, setDepartment] = useState({});
 
+  const isNew = departmentId === "new";
+
   useEffect(() => {
-    const _department =
-      departmentId === "new"
-        ? { id: firestore.collection("departments").doc().id }
-        : departments.find((department) => department.id === departmentId);
+    const _department = isNew
+      ? { id: firestore.collection("departments").doc().id }
+      : departments.find((department) => department.id === departmentId);
 
     if (!_department) return navigate(-1);
 
@@ -43,11 +45,11 @@ export const DepartmentIntegration = () => {
   const mapDepartment = (formData) => ({
     ...department,
     name: formData.name,
-    entityManageId: formData.entityManageId,
+    description: formData.description,
     entityId: formData.entityId,
-    departmentManageId: formData.departmentManageId,
-    secondDepartmentManageId: formData.secondDepartmentManageId,
-    assistantsIds: formData.assistantsIds,
+    bossId: formData.bossId,
+    secondBossId: formData.secondBossId,
+    membersIds: formData.membersIds,
   });
 
   const onSubmitSaveDepartment = async (formData) => {
@@ -71,10 +73,11 @@ export const DepartmentIntegration = () => {
 
   const schema = yup.object({
     name: yup.string().required(),
+    description: yup.string(),
     entityId: yup.string().required(),
-    departmentManageId: yup.string().required(),
-    secondDepartmentManageId: yup.string().required(),
-    assistantsIds: yup.array().required(),
+    bossId: yup.string().required(),
+    secondBossId: yup.string().required(),
+    membersIds: yup.array().required(),
   });
 
   const {
@@ -83,6 +86,7 @@ export const DepartmentIntegration = () => {
     control,
     reset,
     watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -96,10 +100,11 @@ export const DepartmentIntegration = () => {
   const resetForm = () => {
     reset({
       name: department?.name || "",
+      description: department?.description || "",
       entityId: department?.entityId || "",
-      departmentManageId: department?.departmentManageId || null,
-      secondDepartmentManageId: department?.secondDepartmentManageId || null,
-      assistantsIds: department?.assistantsIds || [],
+      membersIds: department?.membersIds || [],
+      bossId: department?.bossId || null,
+      secondBossId: department?.secondBossId || null,
     });
   };
 
@@ -110,18 +115,51 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const usersView = users.map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)}`,
-    value: user.id,
-  }));
+  const usersViewForMembers = users
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+      roleCode: user.defaultRoleCode,
+    }))
+    .filter((user) =>
+      ["department_boss", "assistant_boss_department"].includes(user.roleCode)
+    );
+
+  const usersViewForBoss = users
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+    }))
+    .filter((user) => [...(watch("membersIds") || [])].includes(user.value))
+    .filter((user) => user.value !== watch("secondBossId"));
+
+  const usersViewForSecondBoss = users
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+    }))
+    .filter((user) => (watch("membersIds") || []).includes(user.value))
+    .filter((user) => user.value !== watch("bossId"));
+
+  useEffect(() => {
+    if (
+      isEmpty(watch("membersIds")) ||
+      (watch("membersIds") || []).length < 2
+    ) {
+      setValue("bossId", "");
+      setValue("secondBossId", "");
+    }
+  }, [watch("membersIds")]);
 
   const submitSaveDepartment = (formData) => onSubmitSaveDepartment(formData);
 
   const onGoBack = () => navigate(-1);
-
-  const isNew = departmentId === "new";
 
   return (
     <Acl
@@ -130,7 +168,12 @@ export const DepartmentIntegration = () => {
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Departamentos</Title>
+          <Title level={3}>Departamento</Title>
+          <Text>
+            Crear un departamento para agrupar usuarios. Los departamentos se
+            pueden utilizar en lugar de los usuarios para compartir recursos
+            como Vistas.
+          </Text>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveDepartment)}>
@@ -142,7 +185,24 @@ export const DepartmentIntegration = () => {
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Nombre del Departamento"
+                      label="Nombre"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="description"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Descripción"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -159,7 +219,7 @@ export const DepartmentIntegration = () => {
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Núcleo"
+                      label="Entidad (nucleo)"
                       value={value}
                       onChange={onChange}
                       error={error(name)}
@@ -171,55 +231,54 @@ export const DepartmentIntegration = () => {
               </Col>
               <Col span={24}>
                 <Controller
-                  name="departmentManageId"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Jefe del Departamento"
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      options={usersView}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="secondDepartmentManageId"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Segundo Jefe del Departamento"
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      options={usersView.filter(
-                        (user) => user.value !== watch("departmentManageId")
-                      )}
-                      disabled={!watch("departmentManageId")}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="assistantsIds"
+                  name="membersIds"
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
-                      label="Asistentes del Departamento"
+                      label="Miembros"
                       value={value}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersView}
+                      options={usersViewForMembers}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="bossId"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Jefe"
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      options={usersViewForBoss}
+                      disabled={isEmpty(watch("membersIds"))}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="secondBossId"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Segundo Jefe"
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      options={usersViewForSecondBoss}
+                      disabled={!watch("bossId")}
                     />
                   )}
                 />
