@@ -16,6 +16,7 @@ import {
   Input,
   modalConfirm,
   notification,
+  Select,
   Title,
   Upload,
 } from "../../../components";
@@ -77,15 +78,15 @@ export const RoleAclIntegration = () => {
   }, [saveRoleAclsSuccess]);
 
   const onSaveRoleAcls = async (formData) => {
-    const roleId = formData.roleCode.toLowerCase().split(" ").join("_");
-    const roleAcl = await fetchRoleAcl(roleId);
-
-  const onSaveRoleAcls = async (formData) => {
     const roleId = formData.name.toLowerCase().split(" ").join("_");
 
     if (roleAclsId === "new") {
       const roleAcl = await fetchRoleAcl(roleId);
-      if (roleAcl)
+  const onSaveRoleAcls = async (formData) => {
+    const roleId = formData.name.toLowerCase().split(" ").join("_");
+
+    if (roleAclsId === "new") {
+      const roleAcl = await fetchRoleAcl(roleId);    if (roleAcl)
         return notification({
           type: "warning",
           title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
@@ -93,14 +94,14 @@ export const RoleAclIntegration = () => {
     }
     await saveRoleAcls(
       assign({}, formData, {
-        id: roleId,
+        id: roleAcls?.id || roleId,
           name: formData.name.toLowerCase(),
           avatarImage: formData?.avatarImage || null,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
-        roleCode: formData.roleCode.toLowerCase(),
+        name: formData.name.toLowerCase(),
       })
     );
   };
@@ -166,7 +167,10 @@ const RoleAcl = ({
         acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
     });
 
-  const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
+  const onSubmitRoleAcls = (formData) => {
+    console.log({ formData });
+    return onSaveRoleAcls(formData);
+  };
 
   return (
     <Acl
