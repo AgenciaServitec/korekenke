@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { firestore } from "../../firebase";
 import { querySnapshotToArray } from "../../firebase/firestore";
-import { acls, allRoles } from "../../data-list";
+import { acls } from "../../data-list";
 import { useNavigate } from "react-router-dom";
 import { useAsync, useDefaultFirestoreProps, useFormUtils } from "../../hooks";
 import { capitalize, difference, flatten, map, union } from "lodash";
@@ -230,9 +230,9 @@ const ManageAcls = ({
                       error={error(name)}
                       helperText={errorMessage(name)}
                       required={required(name)}
-                      options={allRoles.map((role) => ({
+                      options={rolesAcls.map((role) => ({
                         label: capitalize(role.name),
-                        value: role.code,
+                        value: role.id,
                       }))}
                     />
                   )}
