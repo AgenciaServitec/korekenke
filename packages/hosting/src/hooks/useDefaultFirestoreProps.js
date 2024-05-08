@@ -39,7 +39,9 @@ export const useDefaultFirestoreProps = (isSoftDelete = true) => {
     const CREATE = {
       createAt: now(),
       updateAt: now(),
-      ...(authUser?.email && { updateBy: authUser.email }),
+      ...(authUser?.email && {
+        updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
+      }),
       ...(authUser?.email && { createBy: authUser.email }),
     };
 
@@ -51,7 +53,9 @@ export const useDefaultFirestoreProps = (isSoftDelete = true) => {
   const assignUpdateProps = (document) => {
     const UPDATE = {
       updateAt: now(),
-      ...(authUser?.email && { updateBy: authUser.email }),
+      ...(authUser?.email && {
+        updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
+      }),
     };
 
     return assign({}, document, UPDATE);
@@ -60,7 +64,9 @@ export const useDefaultFirestoreProps = (isSoftDelete = true) => {
   const assignDeleteProps = (document) => {
     const DELETE = {
       updateAt: now(),
-      ...(authUser?.email && { updateBy: authUser.email }),
+      ...(authUser?.email && {
+        updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
+      }),
     };
 
     if (isSoftDelete) DELETE.isDeleted = true;
