@@ -6,13 +6,14 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Row from "antd/lib/row";
 import { useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
-import { useAcl } from "../../hooks";
-import { firestore } from "../../firebase";
+import { useAcl, useDefaultFirestoreProps } from "../../hooks";
+import { updateEntity } from "../../firebase/collections/entities";
 
 export const EntitiesIntegration = () => {
   const navigate = useNavigate();
   const { entities } = useGlobalData();
   const { aclCheck } = useAcl();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const navigateTo = (entitiesId) => {
     const url = `/entities/${entitiesId}`;
@@ -29,10 +30,7 @@ export const EntitiesIntegration = () => {
   const onEditEntity = (entity) => navigateToEntity(entity.id);
   const onDeleteEntity = async (entity) => {
     try {
-      await firestore
-        .collection("entities")
-        .doc(entity.id)
-        .update({ isDeleted: true });
+      await updateEntity(entity.id, assignDeleteProps({ isDeleted: true }));
     } catch (e) {
       console.error("ErrorDeleteEntity: ", e);
     }

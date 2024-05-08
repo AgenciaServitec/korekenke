@@ -17,23 +17,27 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { capitalize } from "lodash";
-import { firestore } from "../../../firebase";
+import {
+  addEntity,
+  getEntityId,
+  updateEntity,
+} from "../../../firebase/collections/entities";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
   const navigate = useNavigate();
   const { entities, users } = useGlobalData();
-
-  const { assignCreateProps } = useDefaultFirestoreProps();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
 
+  const isNew = entityId === "new";
+
   useEffect(() => {
-    const _entity =
-      entityId === "new"
-        ? { id: firestore.collection("entities").doc().id }
-        : entities.find((entity) => entity.id === entityId);
+    const _entity = isNew
+      ? { id: getEntityId() }
+      : entities.find((entity) => entity.id === entityId);
 
     if (!_entity) return navigate(-1);
 
@@ -49,10 +53,10 @@ export const EntityIntegration = () => {
   const onSubmitSaveEntity = async (formData) => {
     try {
       setLoading(true);
-      await firestore
-        .collection("entities")
-        .doc(entity.id)
-        .set(assignCreateProps(mapEntity(formData)));
+
+      isNew
+        ? await addEntity(assignCreateProps(mapEntity(formData)))
+        : await updateEntity(entity.id, assignUpdateProps(mapEntity(formData)));
 
       notification({ type: "success" });
 
@@ -104,8 +108,6 @@ export const EntityIntegration = () => {
   const submitSaveEntity = (formData) => onSubmitSaveEntity(formData);
 
   const onGoBack = () => navigate(-1);
-
-  const isNew = entityId === "new";
 
   return (
     <Acl name={isNew ? "/entities/new" : "/entities/:entityId"} redirect>
