@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { useGlobalData } from "../../providers";
-import { useAcl } from "../../hooks";
-import { firestore } from "../../firebase";
+import { useGlobalData } from "../../../providers";
+import { useAcl } from "../../../hooks";
+import { firestore } from "../../../firebase";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { Acl, Button, List } from "../../components";
+import { Acl, Button, List } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
-import { Acl, IconAction } from "../../components";
+import { Acl, IconAction } from "../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 import moment from "moment";
-import { allRoles, DegreesArmy } from "../../data-list";
+import { allRoles, DegreesArmy } from "../../../data-list";
 
 export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
   const findRole = (roleCode) =>

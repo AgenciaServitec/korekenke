@@ -1,13 +1,13 @@
 import React from "react";
 import Col from "antd/lib/col";
-import { Acl, Button, List } from "../../components";
+import { Acl, Button, List } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Row from "antd/lib/row";
-import { useGlobalData } from "../../providers";
+import { useGlobalData } from "../../../providers";
 import { useNavigate } from "react-router";
-import { useAcl, useDefaultFirestoreProps } from "../../hooks";
-import { updateEntity } from "../../firebase/collections/entities";
+import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import { updateEntity } from "../../../firebase/collections";
 
 export const EntitiesIntegration = () => {
   const navigate = useNavigate();

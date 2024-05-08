@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGlobalData } from "../../../providers";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { useGlobalData } from "../../../../providers";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { capitalize } from "lodash";
-import { firestore } from "../../../firebase";
+import { firestore } from "../../../../firebase";
 import {
   Acl,
   Button,
@@ -14,7 +14,7 @@ import {
   Row,
   Select,
   Title,
-} from "../../../components";
+} from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

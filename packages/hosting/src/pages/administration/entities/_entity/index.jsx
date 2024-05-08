@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGlobalData } from "../../../providers";
+import { useGlobalData } from "../../../../providers";
 import {
   Acl,
   Button,
@@ -11,17 +11,17 @@ import {
   Row,
   Select,
   Title,
-} from "../../../components";
+} from "../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { capitalize } from "lodash";
 import {
   addEntity,
   getEntityId,
   updateEntity,
-} from "../../../firebase/collections/entities";
+} from "../../../../firebase/collections";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();

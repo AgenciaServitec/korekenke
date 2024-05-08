@@ -2,12 +2,17 @@ import React from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
-import { Acl, AddButton, modalConfirm, notification } from "../../components";
+import {
+  Acl,
+  AddButton,
+  modalConfirm,
+  notification,
+} from "../../../components";
 import { Divider } from "antd";
-import { useAuthentication, useGlobalData } from "../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
 import { useNavigate } from "react-router";
 import { UsersTable } from "./UserTable";
-import { useApiUserPatch } from "../../api";
+import { useApiUserPatch } from "../../../api";
 import { assign } from "lodash";
 
 const { Title } = Typography;

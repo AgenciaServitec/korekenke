@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGlobalData } from "../../../providers";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
-import { capitalize } from "lodash";
-import { firestore } from "../../../firebase";
+import { useGlobalData } from "../../../../providers";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import { firestore } from "../../../../firebase";
 import {
   Acl,
   Button,
@@ -14,55 +13,53 @@ import {
   Row,
   Select,
   Title,
-} from "../../../components";
+} from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { capitalize } from "lodash";
 
-export const DepartmentIntegration = () => {
-  const { departmentId } = useParams();
+export const SectionIntegration = () => {
+  const { sectionId } = useParams();
   const navigate = useNavigate();
-  const { departments, users, entities } = useGlobalData();
-
+  const { sections, departments, users } = useGlobalData();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
-  const [department, setDepartment] = useState({});
+  const [section, setSection] = useState({});
 
   useEffect(() => {
-    const _department =
-      departmentId === "new"
-        ? { id: firestore.collection("departments").doc().id }
-        : departments.find((department) => department.id === departmentId);
+    const _section =
+      sectionId === "new"
+        ? { id: firestore.collection("sections").doc().id }
+        : sections.find((section) => section.id === sectionId);
 
-    if (!_department) return navigate(-1);
+    if (!_section) return navigate(-1);
 
-    setDepartment(_department);
+    setSection(_section);
   }, []);
 
-  const mapDepartment = (formData) => ({
-    ...department,
+  const mapSection = (formData) => ({
+    ...section,
     name: formData.name,
-    entityManageId: formData.entityManageId,
-    entityId: formData.entityId,
-    departmentManageId: formData.departmentManageId,
-    secondDepartmentManageId: formData.secondDepartmentManageId,
+    departmentId: formData.departmentId,
+    sectionManageId: formData.sectionManageId,
     assistantsIds: formData.assistantsIds,
   });
 
-  const onSubmitSaveDepartment = async (formData) => {
+  const onSubmitSaveSection = async (formData) => {
     try {
       setLoading(true);
       await firestore
-        .collection("departments")
-        .doc(department.id)
-        .set(assignCreateProps(mapDepartment(formData)));
+        .collection("sections")
+        .doc(section.id)
+        .set(assignCreateProps(mapSection(formData)));
 
       notification({ type: "success" });
 
       onGoBack();
     } catch (e) {
-      console.error("ErrorSaveDepartment: ", e);
+      console.error("ErrorSaveSection: ", e);
       notification({ type: "error" });
     } finally {
       setLoading(false);
@@ -71,9 +68,8 @@ export const DepartmentIntegration = () => {
 
   const schema = yup.object({
     name: yup.string().required(),
-    entityId: yup.string().required(),
-    departmentManageId: yup.string().required(),
-    secondDepartmentManageId: yup.string().required(),
+    departmentId: yup.string().required(),
+    sectionManageId: yup.string().required(),
     assistantsIds: yup.array().required(),
   });
 
@@ -82,7 +78,6 @@ export const DepartmentIntegration = () => {
     handleSubmit,
     control,
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -91,24 +86,16 @@ export const DepartmentIntegration = () => {
 
   useEffect(() => {
     resetForm();
-  }, [department]);
+  }, [section]);
 
   const resetForm = () => {
     reset({
-      name: department?.name || "",
-      entityId: department?.entityId || "",
-      departmentManageId: department?.departmentManageId || null,
-      secondDepartmentManageId: department?.secondDepartmentManageId || null,
-      assistantsIds: department?.assistantsIds || [],
+      name: section?.name || "",
+      departmentId: section?.departmentId || null,
+      sectionManageId: section?.sectionManageId || null,
+      assistantsIds: section?.assistantsIds || [],
     });
   };
-
-  const entitiesView = entities.map((entity) => {
-    return {
-      label: entity.name,
-      value: entity.id,
-    };
-  });
 
   const usersView = users.map((user) => ({
     label: `${capitalize(user.firstName)} ${capitalize(
@@ -117,23 +104,29 @@ export const DepartmentIntegration = () => {
     value: user.id,
   }));
 
-  const submitSaveDepartment = (formData) => onSubmitSaveDepartment(formData);
+  const departmentsView = departments.map((department) => {
+    return {
+      label: department.name,
+      value: department.id,
+    };
+  });
 
-  const onGoBack = () => navigate(-1);
+  const submitSaveSection = (formData) => onSubmitSaveSection(formData);
 
-  const isNew = departmentId === "new";
+  const onGoBack = () => {
+    navigate(-1);
+  };
+
+  const isNew = sectionId === "new";
 
   return (
-    <Acl
-      name={isNew ? "/departments/new" : "/departments/:departmentId"}
-      redirect
-    >
+    <Acl name={isNew ? "/sections/new" : "/sections/:sectionId"} redirect>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Departamentos</Title>
+          <Title level={3}>Secciones</Title>
         </Col>
         <Col span={24}>
-          <Form onSubmit={handleSubmit(submitSaveDepartment)}>
+          <Form onSubmit={handleSubmit(submitSaveSection)}>
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Controller
@@ -142,7 +135,7 @@ export const DepartmentIntegration = () => {
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Nombre del Departamento"
+                      label="Nombre de la Sección"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -154,54 +147,34 @@ export const DepartmentIntegration = () => {
               </Col>
               <Col span={24}>
                 <Controller
-                  name="entityId"
+                  name="departmentId"
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Núcleo"
+                      label="Departamento"
                       value={value}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={entitiesView}
+                      options={departmentsView}
                     />
                   )}
                 />
               </Col>
               <Col span={24}>
                 <Controller
-                  name="departmentManageId"
+                  name="sectionManageId"
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Jefe del Departamento"
+                      label="Jefe de Sección"
                       value={value}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
                       options={usersView}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="secondDepartmentManageId"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Segundo Jefe del Departamento"
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      options={usersView.filter(
-                        (user) => user.value !== watch("departmentManageId")
-                      )}
-                      disabled={!watch("departmentManageId")}
                     />
                   )}
                 />
@@ -214,7 +187,7 @@ export const DepartmentIntegration = () => {
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
-                      label="Asistentes del Departamento"
+                      label="Asistentes de la Sección"
                       value={value}
                       onChange={onChange}
                       error={error(name)}

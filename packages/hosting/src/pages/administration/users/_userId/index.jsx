@@ -10,15 +10,15 @@ import {
   InputNumber,
   notification,
   Select,
-} from "../../../components";
+} from "../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useFormUtils } from "../../../hooks";
-import { useAuthentication, useGlobalData } from "../../../providers";
+import { useFormUtils } from "../../../../hooks";
+import { useAuthentication, useGlobalData } from "../../../../providers";
 import { assign, capitalize } from "lodash";
-import { allRoles, ApiErrors } from "../../../data-list";
-import { useApiUserPost, useApiUserPut } from "../../../api";
+import { allRoles, ApiErrors } from "../../../../data-list";
+import { useApiUserPost, useApiUserPut } from "../../../../api";
 import moment from "moment";
 
 export const UserIntegration = () => {
