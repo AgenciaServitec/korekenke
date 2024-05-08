@@ -55,9 +55,6 @@ export const theme = {
     white: "#ffffff",
     dark: "#090B0D",
     light: "#ececec",
-
-    rgba: "rgb(43, 49, 57)",
     gray: "rgb(121, 131, 140)",
-    gray2: "rgb(143,151,157)",
   },
 };

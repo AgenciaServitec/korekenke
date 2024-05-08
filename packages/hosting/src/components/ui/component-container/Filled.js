@@ -67,7 +67,7 @@ const Container = styled.div`
     position: relative;
     width: inherit;
     border-radius: ${theme.border_radius.xx_small};
-    background: ${disabled ? theme.colors.gray2 : theme.colors.white};
+    background: ${disabled ? theme.colors.light : theme.colors.white};
     border: 1px solid ${error ? theme.colors.error : theme.colors.gray};
     animation: ${error && keyframes.shake} 340ms
       cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
