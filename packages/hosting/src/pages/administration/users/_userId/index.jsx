@@ -20,7 +20,7 @@ import { assign, capitalize } from "lodash";
 import { ApiErrors } from "../../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../../api";
 import moment from "moment";
-import { fetchRolesAcls } from "../../../firebase/collections";
+import { fetchRolesAcls } from "../../../../firebase/collections";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -111,12 +111,19 @@ export const UserIntegration = () => {
       user={user}
       onSubmitSaveUser={onSubmitSaveUser}
       onGoBack={onGoBack}
+      rolesAcls={rolesAcls}
       isSavingUser={postUserLoading || putUserLoading}
     />
   );
 };
 
-const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
+const User = ({
+  user,
+  onSubmitSaveUser,
+  onGoBack,
+  rolesAcls,
+  isSavingUser,
+}) => {
   const schema = yup.object({
     defaultRoleCode: yup.string().required(),
     otherRoleCodes: yup.array(),
@@ -174,11 +181,6 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     });
   };
 
-  const rolesAclsView = async () => {
-    const rolesAcls = await fetchRolesAcls();
-    return rolesAcls;
-  };
-
   const submitSaveUser = (formData) => onSubmitSaveUser(formData);
 
   return (
@@ -201,7 +203,7 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={rolesAclsView
+                    options={rolesAcls
                       .filter((role) =>
                         watch("otherRoleCodes")
                           ? !watch("otherRoleCodes").includes(role.id)
@@ -228,7 +230,7 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={rolesAclsView
+                    options={rolesAcls
                       .filter((role) =>
                         watch("defaultRoleCode")
                           ? role.id !== watch("defaultRoleCode")

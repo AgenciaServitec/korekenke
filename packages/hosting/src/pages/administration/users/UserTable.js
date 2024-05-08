@@ -5,7 +5,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 import moment from "moment";
 import { DegreesArmy } from "../../../data-list";
-import { useGlobalData } from "../../providers";
+import { useGlobalData } from "../../../providers";
 
 export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
   const { rolesAcls } = useGlobalData();
