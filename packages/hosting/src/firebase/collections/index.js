@@ -1,4 +1,4 @@
 export * from "./_search";
 export * from "./settings";
-export * from "./receptions";
+export * from "./correspondences";
 export * from "./users";
