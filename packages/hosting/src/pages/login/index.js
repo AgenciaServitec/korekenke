@@ -10,12 +10,14 @@ export const LoginIntegration = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
 
+  console.log("Login: ", authUser);
+
   const [currentStep, setCurrentStep] = useState(0);
 
   const onNavigateTo = (url) => navigate(url);
 
   useEffect(() => {
-    authUser && onNavigateTo("/home");
+    authUser && onNavigateTo(authUser?.role?.initialPathname || "/home");
   }, [authUser]);
 
   const next = () => {

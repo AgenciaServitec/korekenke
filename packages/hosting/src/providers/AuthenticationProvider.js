@@ -2,8 +2,11 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { isError, isObject } from "lodash";
 import { notification, Spinner } from "../components";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { fetchRolesAcls, usersRef } from "../firebase/collections";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
+import { rolesAclsRef, usersRef } from "../firebase/collections";
 import { authPersistence } from "../firebase/auth";
 
 const AuthenticationContext = createContext({
@@ -20,20 +23,29 @@ export const AuthenticationProvider = ({ children }) => {
   const [loginLoading, setLoginLoading] = useState(false);
 
   const { firebaseUser, firebaseUserLoading } = useFirebaseUser();
+
   const [user, userLoading, userError] = useDocumentData(
     firebaseUser ? usersRef.doc(firebaseUser.uid) : null
   );
+  const [rolesAcls, rolesAclsLoading, rolesAclsError] =
+    useCollectionData(rolesAclsRef);
 
   const authLoading = firebaseUserLoading || userLoading;
   const authError = userError;
   const authEmptyData = !user;
 
   const authUser =
-    !authLoading && !authError && !authEmptyData ? mapAuthUser(user) : null;
+    !authLoading && !authError && !authEmptyData
+      ? mapAuthUser(user, rolesAcls)
+      : null;
 
   useEffect(() => {
     authError && logout();
   }, [authError]);
+
+  useEffect(() => {
+    rolesAclsError && notification({ type: "error", title: rolesAclsError });
+  }, []);
 
   useEffect(() => {
     if (isAuthUserError(authUser)) {
@@ -79,7 +91,7 @@ export const AuthenticationProvider = ({ children }) => {
         authUser: isAuthUser(authUser) ? authUser : null,
         loginWithEmailAndPassword,
         logout,
-        loginLoading,
+        loginLoading: loginLoading || rolesAclsLoading,
       }}
     >
       {children}
@@ -105,13 +117,12 @@ const useFirebaseUser = () => {
   return { firebaseUser, firebaseUserLoading };
 };
 
-const mapAuthUser = (user) => {
-  const authUserRole = findAuthUserRole(user);
+const mapAuthUser = (user, rolesAcls) => {
+  const authUserRole = findAuthUserRole(user, rolesAcls);
 
   if (!authUserRole) return mapAuthUserError("You don't have an assigned role");
 
   const authUserPathnames = findAuthUserPathnames(user);
-
   return {
     ...user,
     role: authUserRole,
@@ -129,10 +140,8 @@ const isAuthUser = (data) => isObject(data) && "id" in data;
 const isAuthUserError = (data) =>
   isObject(data) && "type" in data && data.type === "error";
 
-const findAuthUserRole = async (user) => {
-  const rolesAcls = await fetchRolesAcls();
-  return rolesAcls.find((role) => role.id === user.defaultRoleCode);
-};
+const findAuthUserRole = (user, rolesAcls = []) =>
+  rolesAcls.find((roleAcl) => roleAcl.id === user.defaultRoleCode);
 
 const findAuthUserPathnames = (user) =>
   (user?.acls || []).map((acl) => acl.split("#")[0]);
