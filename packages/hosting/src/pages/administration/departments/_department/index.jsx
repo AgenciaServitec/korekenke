@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { capitalize, isEmpty } from "lodash";
-import { firestore } from "../../../../firebase";
 import {
   Acl,
   Button,
@@ -13,19 +12,23 @@ import {
   notification,
   Row,
   Select,
-  Title,
   Text,
+  Title,
 } from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  addDepartment,
+  getDepartmentId,
+  updateDepartment,
+} from "../../../../firebase/collections";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
   const { departments, users, entities } = useGlobalData();
-
-  const { assignCreateProps } = useDefaultFirestoreProps();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const [department, setDepartment] = useState({});
@@ -34,7 +37,7 @@ export const DepartmentIntegration = () => {
 
   useEffect(() => {
     const _department = isNew
-      ? { id: firestore.collection("departments").doc().id }
+      ? { id: getDepartmentId() }
       : departments.find((department) => department.id === departmentId);
 
     if (!_department) return navigate(-1);
@@ -55,10 +58,13 @@ export const DepartmentIntegration = () => {
   const onSubmitSaveDepartment = async (formData) => {
     try {
       setLoading(true);
-      await firestore
-        .collection("departments")
-        .doc(department.id)
-        .set(assignCreateProps(mapDepartment(formData)));
+
+      isNew
+        ? await addDepartment(assignCreateProps(mapDepartment(formData)))
+        : await updateDepartment(
+            department.id,
+            assignUpdateProps(mapDepartment(formData))
+          );
 
       notification({ type: "success" });
 

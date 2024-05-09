@@ -6,13 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
-import { useAcl } from "../../../hooks";
-import { firestore } from "../../../firebase";
+import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import { updateDepartment } from "../../../firebase/collections";
 
 export const DepartmentsIntegration = () => {
   const navigate = useNavigate();
   const { departments } = useGlobalData();
   const { aclCheck } = useAcl();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const navigateTo = (departmentsId) => {
     const url = `/departments/${departmentsId}`;
@@ -29,10 +30,10 @@ export const DepartmentsIntegration = () => {
   const onEditDepartment = (department) => navigateToDepartment(department.id);
   const onDeleteDepartment = async (department) => {
     try {
-      await firestore
-        .collection("departments")
-        .doc(department.id)
-        .update({ isDeleted: true });
+      await updateDepartment(
+        department.id,
+        assignDeleteProps({ isDeleted: true })
+      );
     } catch (e) {
       console.error("ErrorDeleteDepartment: ", e);
     }
