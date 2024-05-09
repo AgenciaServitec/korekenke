@@ -12,7 +12,7 @@ import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
-import { allRoles } from "../../data-list";
+import { useGlobalData } from "../../providers";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -28,17 +28,22 @@ export const HeaderLayout = ({
   onLogout,
 }) => {
   const { token } = useToken();
+  const { rolesAcls } = useGlobalData();
   const [isVisibleMoreRoles, setIsVisibleMoreRoles] = useState(false);
+
+  console.log(rolesAcls);
 
   const onSetIsVisibleMoreRoles = () =>
     setIsVisibleMoreRoles(!isVisibleMoreRoles);
 
-  const defaultRole = allRoles.find(
-    (role) => role?.code === user?.defaultRoleCode
+  const defaultRole = rolesAcls.find(
+    (role) => role?.id === user?.defaultRoleCode
   );
 
+  console.log(defaultRole);
+
   const lastRole = orderBy(
-    (user?.otherRoles || []).filter((role) => role.code !== defaultRole.code),
+    (user?.otherRoles || []).filter((role) => role.code !== defaultRole?.id),
     "updateAt",
     "desc"
   )?.[0];
@@ -115,7 +120,7 @@ export const HeaderLayout = ({
                               alt="Role seleccionado"
                             />
                             <div className="text-role">
-                              <strong>{defaultRole.name}</strong>
+                              <strong>{defaultRole?.name}</strong>
                             </div>
                           </div>
                           <div className="last-role item-role">
@@ -193,7 +198,7 @@ export const HeaderLayout = ({
         >
           <Space key="user-avatar" align="center">
             <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
-            <span>({defaultRole.name})</span>
+            <span>({defaultRole?.name})</span>
             <img
               src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
               alt="user"

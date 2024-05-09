@@ -6,4 +6,3 @@ export { default as UbigeosPeru } from "./ubigeosPeru.json";
 export { default as CivilStatus } from "./civilStatus.json";
 export { default as Genders } from "./genders.json";
 export { default as Relationships } from "./relationships.json";
-export * from "./roles";
