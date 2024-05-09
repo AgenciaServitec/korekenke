@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { capitalize, isEmpty } from "lodash";
-import { firestore } from "../../../../firebase";
 import {
   Acl,
   Button,
@@ -21,8 +20,8 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   addDepartment,
-  updateDepartment,
   getDepartmentId,
+  updateDepartment,
 } from "../../../../firebase/collections";
 
 export const DepartmentIntegration = () => {
