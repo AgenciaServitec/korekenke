@@ -10,8 +10,6 @@ export const LoginIntegration = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
 
-  console.log("Login: ", authUser);
-
   const [currentStep, setCurrentStep] = useState(0);
 
   const onNavigateTo = (url) => navigate(url);
@@ -23,29 +21,10 @@ export const LoginIntegration = () => {
   const next = () => {
     setCurrentStep(currentStep + 1);
   };
+
   const prev = () => {
     setCurrentStep(currentStep - 1);
   };
-
-  // const steps = [
-  //   {
-  //     title: "Código CIP",
-  //     description: "Paso 1",
-  //   },
-  //   {
-  //     title: "Envio SMS",
-  //     description: "Paso 2",
-  //   },
-  //   {
-  //     title: "Verficación código",
-  //     description: "Paso 3",
-  //   },
-  // ];
-  //
-  // const items = steps.map((item) => ({
-  //   key: item.title,
-  //   title: item.title,
-  // }));
 
   return (
     <Container>

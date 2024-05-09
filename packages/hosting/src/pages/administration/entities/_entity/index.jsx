@@ -125,7 +125,7 @@ export const EntityIntegration = () => {
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Nombre del Núcleo"
+                      label="Nombre"
                       name={name}
                       value={value}
                       onChange={onChange}
