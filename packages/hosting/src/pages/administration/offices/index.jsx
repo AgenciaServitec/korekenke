@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
-import { useAcl } from "../../../hooks";
-import { firestore } from "../../../firebase";
+import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
 import { Col, Row } from "antd";
+import { updateOffice } from "../../../firebase/collections";
 
 export const OfficesIntegration = () => {
   const navigate = useNavigate();
-  const { offices, sections } = useGlobalData(); // Obtener las secciones
+  const { offices } = useGlobalData();
   const { aclCheck } = useAcl();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const navigateTo = (officeId) => {
     const url = `/offices/${officeId}`;
@@ -28,10 +29,7 @@ export const OfficesIntegration = () => {
   const onEditOffice = (office) => navigateToOffice(office.id);
   const onDeleteOffice = async (office) => {
     try {
-      await firestore
-        .collection("offices")
-        .doc(office.id)
-        .update({ isDeleted: true });
+      await updateOffice(office.id, assignDeleteProps({ isDeleted: true }));
     } catch (error) {
       console.error("Error deleting office:", error);
     }

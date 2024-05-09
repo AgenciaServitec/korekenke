@@ -18,36 +18,32 @@ import {
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  addOffice,
+  addSection,
+  getOfficeId,
+  updateOffice,
+} from "../../../../firebase/collections";
 
 export const OfficeIntegration = () => {
   const { officeId } = useParams();
   const navigate = useNavigate();
   const { offices, users, sections } = useGlobalData();
-  const { assignCreateProps } = useDefaultFirestoreProps();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const [office, setOffice] = useState({});
+  const isNew = officeId === "new";
 
   useEffect(() => {
-    const fetchOffice = async () => {
-      try {
-        const _office =
-          officeId === "new"
-            ? {
-                id: firestore.collection("offices").doc().id,
-              }
-            : offices.find((office) => office.id === officeId);
+    const _office = isNew
+      ? { id: getOfficeId() }
+      : offices.find((office) => office.id === officeId);
 
-        if (!_office) navigate(-1);
+    if (!_office) navigate(-1);
 
-        setOffice(_office);
-      } catch (error) {
-        console.error("Error fetching office:", error);
-      }
-    };
-
-    fetchOffice();
-  }, [officeId, navigate, offices]);
+    setOffice(_office);
+  }, []);
 
   const mapOffice = (formData) => ({
     ...office,
@@ -60,11 +56,9 @@ export const OfficeIntegration = () => {
 
   const onSubmitSaveOffice = async (formData) => {
     try {
-      setLoading(true);
-      await firestore
-        .collection("offices")
-        .doc(office.id)
-        .set(assignCreateProps(mapOffice(formData)));
+      isNew
+        ? await addOffice(assignCreateProps(mapOffice(formData)))
+        : await updateOffice(office.id, assignUpdateProps(mapOffice(formData)));
 
       notification({ type: "success" });
       onGoBack();
@@ -124,8 +118,6 @@ export const OfficeIntegration = () => {
   const submitSaveOffice = (formData) => onSubmitSaveOffice(formData);
 
   const onGoBack = () => navigate(-1);
-
-  const isNew = officeId === "new";
 
   return (
     <Acl name={isNew ? "/offices/new" : "/offices/:officeId"} redirect>
