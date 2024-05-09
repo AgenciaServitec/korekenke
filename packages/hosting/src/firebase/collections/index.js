@@ -2,6 +2,7 @@ export * from "./_search";
 export * from "./settings";
 export * from "./users";
 export * from "./correspondences";
+export * from "./rolesAcls";
 export * from "./entities";
 export * from "./departments";
 export * from "./sections";

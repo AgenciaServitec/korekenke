@@ -2,25 +2,25 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { firestore } from "../../firebase";
-import { allRoles } from "../../data-list";
-import { useAcl, useAsync } from "../../hooks";
-import { assign, get } from "lodash";
+import { useAcl, useAsync, useDefaultFirestoreProps } from "../../hooks";
+import { capitalize } from "lodash";
 import { Acl, Button, List, notification } from "../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useGlobalData } from "../../providers";
+import { updateRoleAcl } from "../../firebase/collections";
 
 export const DefaultRolesAclsIntegration = () => {
   const navigate = useNavigate();
-
   const { rolesAcls } = useGlobalData();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
+
   const {
     run: deleteRoleAcls,
     error: deleteRoleAclsError,
     success: deleteRoleAclsSuccess,
   } = useAsync((roleAcls) =>
-    firestore.collection("roles-acls").doc(roleAcls.id).delete()
+    updateRoleAcl(roleAcls.id, assignDeleteProps(roleAcls))
   );
 
   useEffect(() => {
@@ -65,11 +65,11 @@ const DefaultRolesAcls = ({
 }) => {
   const { aclCheck } = useAcl();
 
-  const rolesAclsView = rolesAcls.map((roleAcls) =>
-    assign({}, roleAcls, {
-      role: allRoles.find((role) => role.code === roleAcls.roleCode),
-    })
-  );
+  const rolesAclsView = rolesAcls.map((roleAcl) => ({
+    id: roleAcl.id,
+    name: capitalize(roleAcl.name),
+    initialPathname: "/home",
+  }));
 
   return (
     <Acl redirect name="/default-roles-acls">
@@ -89,7 +89,7 @@ const DefaultRolesAcls = ({
             dataSource={rolesAclsView}
             onDeleteItem={(roleAcls) => onDeleteRoleAcls(roleAcls)}
             onEditItem={(roleAcls) => onEditRoleAcls(roleAcls)}
-            itemTitle={(roleAcls) => get(roleAcls, "role.name", "")}
+            itemTitle={(roleAcls) => roleAcls.name}
             visibleEditItem={() => aclCheck("/default-roles-acls/:roleAclsId")}
             visibleDeleteItem={() => aclCheck("/default-roles-acls#delete")}
           />

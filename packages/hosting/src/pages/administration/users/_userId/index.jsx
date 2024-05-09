@@ -17,9 +17,10 @@ import * as yup from "yup";
 import { useFormUtils } from "../../../../hooks";
 import { useAuthentication, useGlobalData } from "../../../../providers";
 import { assign, capitalize } from "lodash";
-import { allRoles, ApiErrors } from "../../../../data-list";
+import { ApiErrors } from "../../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../../api";
 import moment from "moment";
+import { fetchRolesAcls } from "../../../../firebase/collections";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -71,12 +72,12 @@ export const UserIntegration = () => {
   };
 
   const getOtherRoles = (otherRoleCodes = []) =>
-    allRoles
-      .filter((role) => otherRoleCodes.find((_role) => _role === role?.code))
+    rolesAcls
+      .filter((role) => otherRoleCodes.find((_role) => _role === role?.id))
       .map((role) => ({
-        code: role?.code,
+        code: role?.id,
         name: role.name,
-        imgUrl: role.imgUrl,
+        imgUrl: role.avatarImage.url,
         updateAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       }));
 
@@ -110,12 +111,19 @@ export const UserIntegration = () => {
       user={user}
       onSubmitSaveUser={onSubmitSaveUser}
       onGoBack={onGoBack}
+      rolesAcls={rolesAcls}
       isSavingUser={postUserLoading || putUserLoading}
     />
   );
 };
 
-const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
+const User = ({
+  user,
+  onSubmitSaveUser,
+  onGoBack,
+  rolesAcls,
+  isSavingUser,
+}) => {
   const schema = yup.object({
     defaultRoleCode: yup.string().required(),
     otherRoleCodes: yup.array(),
@@ -173,6 +181,11 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     });
   };
 
+  const rolesAclsView = async () => {
+    const rolesAcls = await fetchRolesAcls();
+    return rolesAcls;
+  };
+
   const submitSaveUser = (formData) => onSubmitSaveUser(formData);
 
   return (
@@ -195,15 +208,15 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={allRoles
+                    options={rolesAcls
                       .filter((role) =>
                         watch("otherRoleCodes")
-                          ? !watch("otherRoleCodes").includes(role.code)
+                          ? !watch("otherRoleCodes").includes(role.id)
                           : true
                       )
                       .map((role) => ({
                         label: capitalize(role.name),
-                        value: role.code,
+                        value: role.id,
                       }))}
                   />
                 )}
@@ -222,10 +235,10 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={allRoles
+                    options={rolesAcls
                       .filter((role) =>
                         watch("defaultRoleCode")
-                          ? role.code !== watch("defaultRoleCode")
+                          ? role.id !== watch("defaultRoleCode")
                           : true
                       )
                       .map((role) => ({

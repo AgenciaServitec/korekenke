@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { firestore } from "../../../firebase";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,29 +7,35 @@ import {
   useDefaultFirestoreProps,
   useFormUtils,
 } from "../../../hooks";
-import { allRoles } from "../../../data-list";
-import { assign, capitalize, flatten, isEmpty, map, uniq } from "lodash";
+import { assign, flatten, isEmpty, map, uniq } from "lodash";
 import {
   Acl,
   Button,
   CheckboxGroup,
   Form,
+  Input,
   modalConfirm,
   notification,
   Select,
   Title,
+  Upload,
 } from "../../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router-dom";
 import { filterAcl, mapAcls } from "../../../utils";
-import { useGlobalData } from "../../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
+import {
+  addRoleAcl,
+  fetchRoleAcl,
+  updateRoleAcl,
+} from "../../../firebase/collections";
 
 export const RoleAclIntegration = () => {
   const navigate = useNavigate();
   const { roleAclsId } = useParams();
-  const { assignCreateProps, assignUpdateProps } =
-    useDefaultFirestoreProps(false);
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { authUser } = useAuthentication();
 
   const { rolesAcls } = useGlobalData();
   const [roleAcls, setRoleAcls] = useState({});
@@ -52,15 +57,9 @@ export const RoleAclIntegration = () => {
     error: saveRoleAclsError,
     success: saveRoleAclsSuccess,
   } = useAsync(async (roleAcls) => {
-    await firestore
-      .collection("roles-acls")
-      .doc(roleAcls.id)
-      .set(
-        roleAclsId === "new"
-          ? assignCreateProps(roleAcls)
-          : assignUpdateProps(roleAcls),
-        { merge: true }
-      );
+    roleAclsId === "new"
+      ? await addRoleAcl(assignCreateProps(roleAcls))
+      : await updateRoleAcl(roleAcls.id, assignUpdateProps(roleAcls));
   });
 
   useEffect(() => {
@@ -78,16 +77,28 @@ export const RoleAclIntegration = () => {
     }
   }, [saveRoleAclsSuccess]);
 
-  const onSaveRoleAcls = async (formData) =>
+  const onSaveRoleAcls = async (formData) => {
+    const roleId = formData.roleId.toLowerCase().split(" ").join("_");
+    if (roleAclsId === "new") {
+      const roleAcl = await fetchRoleAcl(roleId);
+      if (roleAcl)
+        return notification({
+          type: "warning",
+          title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
+        });
+    }
     await saveRoleAcls(
       assign({}, formData, {
-        id: formData.roleCode,
+        id: roleAcls?.id || roleId,
+        name: formData.name.toLowerCase(),
+        avatarImage: formData?.avatarImage || null,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
       })
     );
+  };
 
   const onCancel = (modifiedFields) => {
     if (!isEmpty(modifiedFields))
@@ -101,8 +112,8 @@ export const RoleAclIntegration = () => {
   return (
     <RoleAcl
       isNew={roleAclsId === "new"}
+      user={authUser}
       roleAcls={roleAcls}
-      rolesAcls={rolesAcls}
       savingRoleAcls={saveRoleAclsLoading}
       onSaveRoleAcls={onSaveRoleAcls}
       onCancel={onCancel}
@@ -112,14 +123,17 @@ export const RoleAclIntegration = () => {
 
 const RoleAcl = ({
   isNew,
+  user,
   roleAcls,
-  rolesAcls,
   savingRoleAcls,
   onSaveRoleAcls,
   onCancel,
 }) => {
   const schema = yup.object({
-    roleCode: yup.string().required(),
+    roleId: yup.string().required(),
+    name: yup.string().required(),
+    initialPathname: yup.string().required(),
+    avatarImage: yup.mixed().required(),
   });
 
   const {
@@ -131,7 +145,9 @@ const RoleAcl = ({
     resolver: yupResolver(schema),
   });
 
-  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+  console.log(errors);
+
+  const { required, error } = useFormUtils({ errors, schema });
 
   useEffect(() => {
     roleAcls && roleAclsToForm(roleAcls);
@@ -139,17 +155,17 @@ const RoleAcl = ({
 
   const roleAclsToForm = (roleAcls) =>
     reset({
+      roleId: roleAcls?.id || "",
+      name: roleAcls?.name || "",
+      avatarImage: roleAcls?.avatarImage || null,
+      initialPathname: roleAcls?.initialPathname || "/home",
       acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
-      roleCode: roleAcls.id,
     });
 
-  const rolesView = allRoles.map((role) =>
-    assign({}, role, {
-      disabled: rolesAcls.some((roleAcls) => roleAcls.id === role.code),
-    })
-  );
-
-  const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
+  const onSubmitRoleAcls = (formData) => {
+    console.log({ formData });
+    return onSaveRoleAcls(formData);
+  };
 
   return (
     <Acl
@@ -162,23 +178,78 @@ const RoleAcl = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Controller
-              name="roleCode"
+              name="roleId"
+              defaultValue=""
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Rol id en inglés"
+                  name={name}
+                  onChange={onChange}
+                  value={value}
+                  error={error(name)}
+                  disabled={!isNew}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="name"
+              defaultValue=""
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Nombre"
+                  name={name}
+                  onChange={onChange}
+                  value={value}
+                  error={error(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="initialPathname"
               defaultValue=""
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <Select
-                  label="Rol"
-                  value={value}
+                  label="Página de Inicio"
                   onChange={onChange}
+                  value={value}
                   error={error(name)}
-                  helperText={errorMessage(name)}
+                  options={[
+                    {
+                      label: "Inicio",
+                      value: "/home",
+                    },
+                    {
+                      label: "Perfil",
+                      value: "/profile",
+                    },
+                  ]}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              control={control}
+              name="avatarImage"
+              render={({ field: { onChange, value, name } }) => (
+                <Upload
+                  label="Avatar"
+                  accept="image/*"
+                  buttonText="Subir foto"
+                  value={value}
+                  name={name}
+                  filePath={`default-roles/${user.id}`}
+                  withThumbImage={false}
+                  onChange={(file) => onChange(file)}
                   required={required(name)}
-                  autoFocus
-                  options={rolesView.map((role) => ({
-                    label: capitalize(role.name),
-                    value: role.code,
-                    disabled: role.disabled,
-                  }))}
+                  error={error(name)}
                 />
               )}
             />

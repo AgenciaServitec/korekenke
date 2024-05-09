@@ -11,6 +11,7 @@ export const uploadFile = async ({
   storage,
   resize,
   isImage,
+  withThumbImage,
   options: { file, onError, onProgress, onSuccess },
 }) =>
   await new Promise((resolve, reject) => {
@@ -52,7 +53,7 @@ export const uploadFile = async ({
           .child(fileConfig.url.fileName)
           .getDownloadURL();
 
-        if (isImage) {
+        if (isImage && withThumbImage) {
           const fileThumbUrlRef = storage
             .ref(fileConfig.thumbUrl.path)
             .child(fileConfig.thumbUrl.fileName);
