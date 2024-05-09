@@ -18,21 +18,28 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { capitalize } from "lodash";
+import {
+  addEntity,
+  addSection,
+  getSectionId,
+  updateEntity,
+} from "../../../../firebase/collections";
 
 export const SectionIntegration = () => {
   const { sectionId } = useParams();
   const navigate = useNavigate();
   const { sections, departments, users } = useGlobalData();
-  const { assignCreateProps } = useDefaultFirestoreProps();
+  const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const [section, setSection] = useState({});
 
+  const isNew = sectionId === "new";
+
   useEffect(() => {
-    const _section =
-      sectionId === "new"
-        ? { id: firestore.collection("sections").doc().id }
-        : sections.find((section) => section.id === sectionId);
+    const _section = isNew
+      ? { id: getSectionId() }
+      : sections.find((section) => section.id === sectionId);
 
     if (!_section) return navigate(-1);
 
@@ -50,10 +57,13 @@ export const SectionIntegration = () => {
   const onSubmitSaveSection = async (formData) => {
     try {
       setLoading(true);
-      await firestore
-        .collection("sections")
-        .doc(section.id)
-        .set(assignCreateProps(mapSection(formData)));
+
+      isNew
+        ? await addSection(assignCreateProps(mapSection(formData)))
+        : await updateEntity(
+            section.id,
+            assignUpdateProps(mapSection(formData))
+          );
 
       notification({ type: "success" });
 
@@ -116,8 +126,6 @@ export const SectionIntegration = () => {
   const onGoBack = () => {
     navigate(-1);
   };
-
-  const isNew = sectionId === "new";
 
   return (
     <Acl name={isNew ? "/sections/new" : "/sections/:sectionId"} redirect>
