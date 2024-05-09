@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { capitalize } from "lodash";
-import { firestore } from "../../../../firebase";
 import {
   Acl,
   Button,
@@ -20,7 +19,6 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   addOffice,
-  addSection,
   getOfficeId,
   updateOffice,
 } from "../../../../firebase/collections";
