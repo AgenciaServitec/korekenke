@@ -13,8 +13,8 @@ import {
   notification,
   Row,
   Select,
-  Title,
   Text,
+  Title,
 } from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   addDepartment,
   updateDepartment,
+  getDepartmentId,
 } from "../../../../firebase/collections";
 
 export const DepartmentIntegration = () => {
@@ -37,7 +38,7 @@ export const DepartmentIntegration = () => {
 
   useEffect(() => {
     const _department = isNew
-      ? { id: firestore.collection("departments").doc().id }
+      ? { id: getDepartmentId() }
       : departments.find((department) => department.id === departmentId);
 
     if (!_department) return navigate(-1);

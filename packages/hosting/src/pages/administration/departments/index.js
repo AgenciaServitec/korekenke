@@ -7,7 +7,6 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
 import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
-import { firestore } from "../../../firebase";
 import { updateDepartment } from "../../../firebase/collections";
 
 export const DepartmentsIntegration = () => {
