@@ -19,10 +19,9 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { capitalize } from "lodash";
 import {
-  addEntity,
   addSection,
   getSectionId,
-  updateEntity,
+  updateSection,
 } from "../../../../firebase/collections";
 
 export const SectionIntegration = () => {
@@ -60,7 +59,7 @@ export const SectionIntegration = () => {
 
       isNew
         ? await addSection(assignCreateProps(mapSection(formData)))
-        : await updateEntity(
+        : await updateSection(
             section.id,
             assignUpdateProps(mapSection(formData))
           );
