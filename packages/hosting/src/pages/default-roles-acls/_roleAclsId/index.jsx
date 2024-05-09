@@ -79,14 +79,9 @@ export const RoleAclIntegration = () => {
 
   const onSaveRoleAcls = async (formData) => {
     const roleId = formData.roleId.toLowerCase().split(" ").join("_");
-
     if (roleAclsId === "new") {
       const roleAcl = await fetchRoleAcl(roleId);
-  const onSaveRoleAcls = async (formData) => {
-    const roleId = formData.name.toLowerCase().split(" ").join("_");
-
-    if (roleAclsId === "new") {
-      const roleAcl = await fetchRoleAcl(roleId);    if (roleAcl)
+      if (roleAcl)
         return notification({
           type: "warning",
           title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
@@ -95,8 +90,8 @@ export const RoleAclIntegration = () => {
     await saveRoleAcls(
       assign({}, formData, {
         id: roleAcls?.id || roleId,
-          name: formData.name.toLowerCase(),
-          avatarImage: formData?.avatarImage || null,
+        name: formData.name.toLowerCase(),
+        avatarImage: formData?.avatarImage || null,
         acls: uniq([
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
@@ -150,9 +145,7 @@ const RoleAcl = ({
     resolver: yupResolver(schema),
   });
 
-  console.log(errors);
-
-  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+  const { required, error } = useFormUtils({ errors, schema });
 
   useEffect(() => {
     roleAcls && roleAclsToForm(roleAcls);
@@ -160,11 +153,11 @@ const RoleAcl = ({
 
   const roleAclsToForm = (roleAcls) =>
     reset({
-        roleId: roleAcls?.id || "",
+      roleId: roleAcls?.id || "",
       name: roleAcls?.name || "",
       avatarImage: roleAcls?.avatarImage || null,
       initialPathname: roleAcls?.initialPathname || "/home",
-        acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
+      acls: roleAcls?.acls ? mapAcls(roleAcls.acls) : {},
     });
 
   const onSubmitRoleAcls = (formData) => {
@@ -193,6 +186,7 @@ const RoleAcl = ({
                   onChange={onChange}
                   value={value}
                   error={error(name)}
+                  disabled={!isNew}
                 />
               )}
             />
@@ -242,7 +236,7 @@ const RoleAcl = ({
             <Controller
               control={control}
               name="avatarImage"
-              render={({ field: { onChange, value, onBlur, name } }) => (
+              render={({ field: { onChange, value, name } }) => (
                 <Upload
                   label="Avatar"
                   accept="image/*"
