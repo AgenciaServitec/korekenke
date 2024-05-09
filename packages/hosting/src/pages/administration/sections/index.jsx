@@ -31,7 +31,6 @@ export const SectionsIntegration = () => {
   const onDeleteSection = async (section) => {
     try {
       await updateSection(section.id, assignDeleteProps({ isDeleted: true }));
-
     } catch (e) {
       console.error("ErrorDeleteSection: ", e);
     }
