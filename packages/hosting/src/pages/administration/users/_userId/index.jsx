@@ -181,6 +181,11 @@ const User = ({
     });
   };
 
+  const rolesAclsView = async () => {
+    const rolesAcls = await fetchRolesAcls();
+    return rolesAcls;
+  };
+
   const submitSaveUser = (formData) => onSubmitSaveUser(formData);
 
   return (

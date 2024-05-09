@@ -96,6 +96,7 @@ export const RoleAclIntegration = () => {
           "/home",
           ...flatten(map(formData.acls, (acl) => acl).filter((acl) => acl)),
         ]),
+        name: formData.name.toLowerCase(),
       })
     );
   };
@@ -144,6 +145,8 @@ const RoleAcl = ({
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  console.log(errors);
 
   const { required, error } = useFormUtils({ errors, schema });
 
