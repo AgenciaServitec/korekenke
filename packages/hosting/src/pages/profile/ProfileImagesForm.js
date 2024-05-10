@@ -10,6 +10,7 @@ import { useAuthentication } from "../../providers";
 import { assign } from "lodash";
 import { ApiErrors } from "../../data-list";
 import { useApiUserPut } from "../../api";
+import { v4 as uuidv4 } from "uuid";
 
 export const ProfileImagesForm = () => {
   const { authUser } = useAuthentication();
@@ -92,6 +93,7 @@ export const ProfileImagesForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/documents`}
+                fileName={`dni-foto-${uuidv4()}`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
@@ -111,6 +113,7 @@ export const ProfileImagesForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/documents`}
+                fileName={`cip-foto-${uuidv4()}`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
@@ -130,6 +133,7 @@ export const ProfileImagesForm = () => {
                 value={value}
                 name={name}
                 filePath={`users/${authUser.id}/documents`}
+                fileName={`signature-foto-${uuidv4()}`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
