@@ -20,7 +20,6 @@ import {
   useApiUserPut,
 } from "../../api";
 import { assign } from "lodash";
-import { ApiErrors } from "../../data-list";
 
 export const ProfileDataForm = () => {
   const { authUser } = useAuthentication();
