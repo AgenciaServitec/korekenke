@@ -17,10 +17,13 @@ import * as yup from "yup";
 import { useFormUtils } from "../../../../hooks";
 import { useAuthentication, useGlobalData } from "../../../../providers";
 import { assign, capitalize } from "lodash";
-import { ApiErrors } from "../../../../data-list";
-import { useApiUserPost, useApiUserPut } from "../../../../api";
+import {
+  apiErrorNotification,
+  getApiErrorResponse,
+  useApiUserPost,
+  useApiUserPut,
+} from "../../../../api";
 import moment from "moment";
-import { fetchRolesAcls } from "../../../../firebase/collections";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -33,41 +36,35 @@ export const UserIntegration = () => {
 
   const [user, setUser] = useState({});
 
+  const isNew = userId === "new";
+
   useEffect(() => {
-    const _user =
-      userId === "new" ? {} : users.find((user) => user.id === userId);
+    const _user = isNew ? {} : users.find((user) => user.id === userId);
 
     if (!_user) return navigate(-1);
 
     setUser(_user);
   }, []);
 
-  const onSubmitSaveUser = async (formData) => {
+  const saveUser = async (formData) => {
     try {
       const _user = mapUserToApi(formData);
 
-      await saveUser(_user);
+      const response = isNew ? await postUser(_user) : await putUser(_user);
 
-      notification({ type: "success" });
+      if (isNew ? !postUserResponse.ok : !putUserResponse.ok) {
+        throw new Error(response);
+      }
 
-      onGoBack();
+      notification({
+        type: "success",
+        title: "¡El usuario se guardó correctamente!",
+      });
+
+      return onGoBack();
     } catch (e) {
-      console.log("ErrorSaveUser: ", e);
-      const errorParse = JSON.parse(e.message);
-
-      ApiErrors?.[errorParse.data]
-        ? notification({ type: "warning", title: ApiErrors[errorParse.data] })
-        : notification({ type: "error" });
-    }
-  };
-
-  const saveUser = async (user) => {
-    userId === "new" ? await postUser(user) : await putUser(user);
-
-    const responseStatus = postUserResponse.ok || putUserResponse.ok;
-
-    if (!responseStatus) {
-      throw new Error(JSON.stringify(postUserResponse));
+      const errorResponse = await getApiErrorResponse(e);
+      apiErrorNotification(errorResponse);
     }
   };
 
@@ -109,7 +106,7 @@ export const UserIntegration = () => {
   return (
     <User
       user={user}
-      onSubmitSaveUser={onSubmitSaveUser}
+      onSaveUser={saveUser}
       onGoBack={onGoBack}
       rolesAcls={rolesAcls}
       isSavingUser={postUserLoading || putUserLoading}
@@ -117,13 +114,7 @@ export const UserIntegration = () => {
   );
 };
 
-const User = ({
-  user,
-  onSubmitSaveUser,
-  onGoBack,
-  rolesAcls,
-  isSavingUser,
-}) => {
+const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
   const schema = yup.object({
     defaultRoleCode: yup.string().required(),
     otherRoleCodes: yup.array(),
@@ -181,12 +172,7 @@ const User = ({
     });
   };
 
-  const rolesAclsView = async () => {
-    const rolesAcls = await fetchRolesAcls();
-    return rolesAcls;
-  };
-
-  const submitSaveUser = (formData) => onSubmitSaveUser(formData);
+  const submitSaveUser = (formData) => onSaveUser(formData);
 
   return (
     <Row gutter={[16, 16]}>
@@ -330,6 +316,7 @@ const User = ({
                     name={name}
                     error={error(name)}
                     required={required(name)}
+                    disabled={user?.cip}
                   />
                 )}
               />
@@ -346,6 +333,7 @@ const User = ({
                     name={name}
                     error={error(name)}
                     required={required(name)}
+                    disabled={user?.dni}
                   />
                 )}
               />

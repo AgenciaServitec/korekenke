@@ -1,0 +1,30 @@
+{
+  "default": {
+    "title": "Ha ocurrido un error!",
+    "description": "Por favor, inténtelo de nuevo más tarde..."
+  },
+  "user/user_exists": {
+    "title": "El usuario ya existe!",
+    "description": "El usuario especificado ya existe."
+  },
+  "user/user_does_not_exist": {
+    "title": "El usuario no existe!",
+    "description": "El usuario especificado no existe."
+  },
+  "user/email_already_exists": {
+    "title": "El email ya está registrado",
+    "description": "El email especificado ya existe."
+  },
+  "user/cip_already_exists": {
+    "title": "El CIP ya está registrado",
+    "description": "El CIP especificado ya existe."
+  },
+  "user/dni_already_exists": {
+    "title": "El DNI ya está registrado",
+    "description": "El DNI especificado ya existe."
+  },
+  "user/phone_number_already_exists": {
+    "title": "El teléfono ya está registrado",
+    "description": "El teléfono especificado ya existe."
+  }
+}
