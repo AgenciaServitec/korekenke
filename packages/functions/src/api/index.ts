@@ -17,7 +17,16 @@ app.use(hostingToApi);
 
 app.get("/", (req, res) => res.status(200).send("Welcome!").end());
 
-app.post("/user", postUser);
+app.post(
+  "/user",
+  [
+    body("email").exists(),
+    body("cip").exists(),
+    body("dni").exists(),
+    body("phone").exists(),
+  ],
+  postUser
+);
 app.put("/users/:userId", putUser);
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 

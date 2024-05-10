@@ -37,13 +37,18 @@ export const putUser = async (
 
     if (changeEmail) {
       const emailExists = await isEmailExists(user.email);
-      if (emailExists) res.status(412).send("email_already_exists").end();
+      if (emailExists) {
+        res.status(412).send("user/email_already_exists").end();
+        return;
+      }
     }
 
     if (changePhoneNumber) {
       const phoneNumberExists = await isPhoneNumberExists(user.phone.number);
-      if (phoneNumberExists)
-        res.status(412).send("phone_number_already_exists").end();
+      if (phoneNumberExists) {
+        res.status(412).send("user/phone_number_already_exists").end();
+        return;
+      }
     }
 
     await updateUserAuth(user, changeEmail, changePhoneNumber);
