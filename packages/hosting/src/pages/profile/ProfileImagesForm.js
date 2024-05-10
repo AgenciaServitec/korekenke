@@ -8,8 +8,11 @@ import { Controller, useForm } from "react-hook-form";
 import { useFormUtils } from "../../hooks";
 import { useAuthentication } from "../../providers";
 import { assign } from "lodash";
-import { ApiErrors } from "../../data-list";
-import { useApiUserPut } from "../../api";
+import {
+  apiErrorNotification,
+  getApiErrorResponse,
+  useApiUserPut,
+} from "../../api";
 
 export const ProfileImagesForm = () => {
   const { authUser } = useAuthentication();
@@ -34,7 +37,7 @@ export const ProfileImagesForm = () => {
 
   const updateProfile = async (formData) => {
     try {
-      await putUser(
+      const response = await putUser(
         assign({}, formData, {
           id: authUser.id,
           phone: authUser.phone,
@@ -46,17 +49,13 @@ export const ProfileImagesForm = () => {
       );
 
       if (!putUserResponse.ok) {
-        throw new Error(JSON.stringify(putUserResponse));
+        throw new Error(response);
       }
 
       notification({ type: "success" });
     } catch (e) {
-      console.log("ErrorUpdateUserImages: ", e);
-      const errorParse = JSON.parse(e.message);
-
-      ApiErrors?.[errorParse.data]
-        ? notification({ type: "warning", title: ApiErrors[errorParse.data] })
-        : notification({ type: "error" });
+      const errorResponse = await getApiErrorResponse(e);
+      apiErrorNotification(errorResponse);
     }
   };
 
