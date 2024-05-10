@@ -2,7 +2,7 @@ import { notification } from "../components";
 import { isObject } from "lodash";
 import apiErrors from "../config/apiErros.json";
 
-export const getApiErrorResponse = async (response) => {
+export const getApiErrorResponse = (response) => {
   try {
     if (isResponse(response)) {
       try {

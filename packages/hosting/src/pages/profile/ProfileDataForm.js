@@ -14,7 +14,11 @@ import {
   Upload,
 } from "../../components";
 import { useAuthentication } from "../../providers";
-import { useApiUserPut } from "../../api";
+import {
+  apiErrorNotification,
+  getApiErrorResponse,
+  useApiUserPut,
+} from "../../api";
 import { assign } from "lodash";
 import { ApiErrors } from "../../data-list";
 
@@ -56,7 +60,7 @@ export const ProfileDataForm = () => {
 
   const updateProfile = async (formData) => {
     try {
-      await putUser(
+      const response = await putUser(
         assign({}, formData, {
           id: authUser.id,
           phone: { prefix: "+51", number: formData.phoneNumber },
@@ -64,17 +68,13 @@ export const ProfileDataForm = () => {
       );
 
       if (!putUserResponse.ok) {
-        throw new Error(JSON.stringify(putUserResponse));
+        throw new Error(response);
       }
 
       notification({ type: "success" });
     } catch (e) {
-      console.log("ErrorUpdateUser: ", e);
-      const errorParse = JSON.parse(e.message);
-
-      ApiErrors?.[errorParse.data]
-        ? notification({ type: "warning", title: ApiErrors[errorParse.data] })
-        : notification({ type: "error" });
+      const errorResponse = await getApiErrorResponse(e);
+      apiErrorNotification(errorResponse);
     }
   };
 
