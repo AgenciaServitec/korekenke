@@ -127,7 +127,7 @@ export const DepartmentIntegration = () => {
         user.paternalSurname
       )} ${capitalize(user.maternalSurname)}`,
       value: user.id,
-      roleCode: user.defaultRoleCode,
+      roleCode: user.roleCode,
     }))
     .filter((user) =>
       ["department_boss", "assistant_boss_department"].includes(user.roleCode)

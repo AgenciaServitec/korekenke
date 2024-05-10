@@ -36,9 +36,7 @@ export const HeaderLayout = ({
   const onSetIsVisibleMoreRoles = () =>
     setIsVisibleMoreRoles(!isVisibleMoreRoles);
 
-  const defaultRole = rolesAcls.find(
-    (role) => role?.id === user?.defaultRoleCode
-  );
+  const defaultRole = rolesAcls.find((role) => role?.id === user?.roleCode);
 
   console.log(defaultRole);
 

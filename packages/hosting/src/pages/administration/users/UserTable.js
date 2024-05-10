@@ -43,9 +43,9 @@ export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
     },
     {
       title: "Rol",
-      dataIndex: "defaultRoleCode",
-      key: "defaultRoleCode",
-      render: (_, user) => findRole(user?.defaultRoleCode)?.name || "",
+      dataIndex: "roleCode",
+      key: "roleCode",
+      render: (_, user) => findRole(user?.roleCode)?.name || "",
     },
     {
       title: "Estado",

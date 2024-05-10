@@ -10,7 +10,7 @@ interface Role {
 interface User extends DefaultFirestoreProps {
   id: string;
   acls: string[];
-  defaultRoleCode: string;
+  roleCode: string;
   otherRoles?: Role[];
   firstName: string;
   paternalSurname: string;

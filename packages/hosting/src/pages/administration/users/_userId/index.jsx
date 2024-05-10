@@ -83,7 +83,7 @@ export const UserIntegration = () => {
       {},
       {
         ...(user?.id && { id: user.id }),
-        defaultRoleCode: formData.defaultRoleCode,
+        roleCode: formData.roleCode,
         otherRoles: getOtherRoles(formData.otherRoleCodes),
         firstName: formData.firstName.toLowerCase(),
         paternalSurname: formData.paternalSurname.toLowerCase(),
@@ -95,8 +95,10 @@ export const UserIntegration = () => {
           prefix: "+51",
           number: formData.phoneNumber,
         },
-        acls: rolesAcls.find((role) => role.id === formData.defaultRoleCode)
-          ?.acls || ["/home", "/profile"],
+        acls: rolesAcls.find((role) => role.id === formData.roleCode)?.acls || [
+          "/home",
+          "/profile",
+        ],
         updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
       }
     );
@@ -116,7 +118,7 @@ export const UserIntegration = () => {
 
 const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
   const schema = yup.object({
-    defaultRoleCode: yup.string().required(),
+    roleCode: yup.string().required(),
     otherRoleCodes: yup.array(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
@@ -160,7 +162,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
 
   const resetForm = () => {
     reset({
-      defaultRoleCode: user?.defaultRoleCode || "",
+      roleCode: user?.roleCode || "",
       otherRoleCodes: (user?.otherRoles || []).map((role) => role.code),
       firstName: user?.firstName || "",
       paternalSurname: user?.paternalSurname || "",
@@ -184,7 +186,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Controller
-                name="defaultRoleCode"
+                name="roleCode"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
@@ -223,9 +225,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                     required={required(name)}
                     options={rolesAcls
                       .filter((role) =>
-                        watch("defaultRoleCode")
-                          ? role.id !== watch("defaultRoleCode")
-                          : true
+                        watch("roleCode") ? role.id !== watch("roleCode") : true
                       )
                       .map((role) => ({
                         label: capitalize(role.name),

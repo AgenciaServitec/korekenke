@@ -75,7 +75,7 @@ export const ManageAclsIntegration = () => {
     const usersQuerySnapshot = await firestore
       .collection("users")
       .where("isDeleted", "==", false)
-      .where("defaultRoleCode", "==", formData.roleCode)
+      .where("roleCode", "==", formData.roleCode)
       .get();
 
     return querySnapshotToArray(usersQuerySnapshot);
