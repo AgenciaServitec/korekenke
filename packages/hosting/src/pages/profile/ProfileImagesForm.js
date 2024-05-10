@@ -91,8 +91,8 @@ export const ProfileImagesForm = () => {
                 buttonText="Subir foto"
                 value={value}
                 name={name}
-                filePath={`users/${authUser.id}/documents`}
                 fileName={`dni-foto-${uuidv4()}`}
+                filePath={`users/${authUser.id}/documents`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
@@ -111,8 +111,8 @@ export const ProfileImagesForm = () => {
                 buttonText="Subir foto"
                 value={value}
                 name={name}
-                filePath={`users/${authUser.id}/documents`}
                 fileName={`cip-foto-${uuidv4()}`}
+                filePath={`users/${authUser.id}/documents`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
@@ -131,8 +131,8 @@ export const ProfileImagesForm = () => {
                 buttonText="Subir foto"
                 value={value}
                 name={name}
-                filePath={`users/${authUser.id}/documents`}
                 fileName={`signature-foto-${uuidv4()}`}
+                filePath={`users/${authUser.id}/documents`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
                 error={error(name)}
