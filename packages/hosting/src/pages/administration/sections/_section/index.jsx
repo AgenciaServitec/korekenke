@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { firestore } from "../../../../firebase";
 import {
   Acl,
   Button,
@@ -17,7 +16,7 @@ import {
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { capitalize } from "lodash";
+import { capitalize, isEmpty } from "lodash";
 import {
   addSection,
   getSectionId,
@@ -27,7 +26,7 @@ import {
 export const SectionIntegration = () => {
   const { sectionId } = useParams();
   const navigate = useNavigate();
-  const { sections, departments, users } = useGlobalData();
+  const { departments, sections, users } = useGlobalData();
   const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -49,8 +48,8 @@ export const SectionIntegration = () => {
     ...section,
     name: formData.name,
     departmentId: formData.departmentId,
-    sectionManageId: formData.sectionManageId,
-    assistantsIds: formData.assistantsIds,
+    membersIds: formData.membersIds,
+    bossId: formData.bossId,
   });
 
   const onSubmitSaveSection = async (formData) => {
@@ -78,8 +77,8 @@ export const SectionIntegration = () => {
   const schema = yup.object({
     name: yup.string().required(),
     departmentId: yup.string().required(),
-    sectionManageId: yup.string().required(),
-    assistantsIds: yup.array().required(),
+    bossId: yup.string().required(),
+    membersIds: yup.array().required(),
   });
 
   const {
@@ -87,6 +86,8 @@ export const SectionIntegration = () => {
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -101,17 +102,32 @@ export const SectionIntegration = () => {
     reset({
       name: section?.name || "",
       departmentId: section?.departmentId || null,
-      sectionManageId: section?.sectionManageId || null,
-      assistantsIds: section?.assistantsIds || [],
+      bossId: section?.bossId || null,
+      membersIds: section?.membersIds || null,
     });
   };
 
-  const usersView = users.map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)}`,
-    value: user.id,
-  }));
+  const usersViewForMembers = users
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+      roleCode: user.roleCode,
+    }))
+    .filter((user) =>
+      ["section_boss", "assistant_boss_section"].includes(user.roleCode)
+    );
+
+  const usersViewForBoss = users
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+      roleCode: user.roleCode,
+    }))
+    .filter((user) => (watch("membersIds") || []).includes(user.value));
 
   const departmentsView = departments.map((department) => {
     return {
@@ -120,17 +136,24 @@ export const SectionIntegration = () => {
     };
   });
 
+  useEffect(() => {
+    if (
+      isEmpty(watch("membersIds")) ||
+      (watch("membersIds") || []).length < 2
+    ) {
+      setValue("bossId", null);
+    }
+  }, [watch("membersIds")]);
+
   const submitSaveSection = (formData) => onSubmitSaveSection(formData);
 
-  const onGoBack = () => {
-    navigate(-1);
-  };
+  const onGoBack = () => navigate(-1);
 
   return (
     <Acl name={isNew ? "/sections/new" : "/sections/:sectionId"} redirect>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Secciones</Title>
+          <Title level={3}>Sección</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveSection)}>
@@ -142,7 +165,7 @@ export const SectionIntegration = () => {
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Nombre de la Sección"
+                      label="Nombre"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -171,35 +194,36 @@ export const SectionIntegration = () => {
               </Col>
               <Col span={24}>
                 <Controller
-                  name="sectionManageId"
+                  name="membersIds"
                   control={control}
-                  defaultValue=""
+                  defaultValue={null}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Jefe de Sección"
+                      mode="multiple"
+                      label="Miembros"
                       value={value}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersView}
+                      options={usersViewForMembers}
                     />
                   )}
                 />
               </Col>
               <Col span={24}>
                 <Controller
-                  name="assistantsIds"
+                  name="bossId"
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      mode="multiple"
-                      label="Asistentes de la Sección"
+                      label="Jefe"
                       value={value}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersView}
+                      options={usersViewForBoss}
+                      disabled={!watch("membersIds")}
                     />
                   )}
                 />
