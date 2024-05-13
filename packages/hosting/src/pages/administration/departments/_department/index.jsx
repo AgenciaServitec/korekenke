@@ -121,17 +121,13 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const usersViewForMembers = users
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
-      value: user.id,
-      roleCode: user.roleCode,
-    }))
-    .filter((user) =>
-      ["department_boss", "assistant_boss_department"].includes(user.roleCode)
-    );
+  const usersViewForMembers = users.map((user) => ({
+    label: `${capitalize(user.firstName)} ${capitalize(
+      user.paternalSurname
+    )} ${capitalize(user.maternalSurname)}`,
+    value: user.id,
+    roleCode: user.roleCode,
+  }));
 
   const usersViewForBoss = users
     .map((user) => ({
@@ -160,6 +156,9 @@ export const DepartmentIntegration = () => {
     ) {
       setValue("bossId", null);
       setValue("secondBossId", null);
+    } else {
+      setValue("bossId", watch("membersIds")[0]);
+      setValue("secondBossId", watch("membersIds")[1]);
     }
   }, [watch("membersIds")]);
 
