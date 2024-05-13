@@ -108,7 +108,7 @@ export const DepartmentIntegration = () => {
       name: department?.name || "",
       description: department?.description || "",
       entityId: department?.entityId || "",
-      membersIds: department?.membersIds || [],
+      membersIds: department?.membersIds || null,
       bossId: department?.bossId || null,
       secondBossId: department?.secondBossId || null,
     });
@@ -158,8 +158,8 @@ export const DepartmentIntegration = () => {
       isEmpty(watch("membersIds")) ||
       (watch("membersIds") || []).length < 2
     ) {
-      setValue("bossId", "");
-      setValue("secondBossId", "");
+      setValue("bossId", null);
+      setValue("secondBossId", null);
     }
   }, [watch("membersIds")]);
 
@@ -239,7 +239,7 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="membersIds"
                   control={control}
-                  defaultValue=""
+                  defaultValue={null}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
