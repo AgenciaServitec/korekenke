@@ -116,7 +116,7 @@ export const SectionIntegration = () => {
       roleCode: user.roleCode,
     }))
     .filter((user) =>
-      ["section_boss", "assistant_boss_section"].includes(user.roleCode)
+      ["section_head", "section_assistant"].includes(user.roleCode)
     );
 
   const usersViewForBoss = users
@@ -142,6 +142,8 @@ export const SectionIntegration = () => {
       (watch("membersIds") || []).length < 2
     ) {
       setValue("bossId", null);
+    } else {
+      setValue("bossId", watch("membersIds")[0]);
     }
   }, [watch("membersIds")]);
 
