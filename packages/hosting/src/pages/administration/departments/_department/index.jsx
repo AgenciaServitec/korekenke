@@ -23,6 +23,7 @@ import {
   getDepartmentId,
   updateDepartment,
 } from "../../../../firebase/collections";
+import { findRole } from "../../../../utils";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
@@ -124,7 +125,9 @@ export const DepartmentIntegration = () => {
   const usersViewForMembers = users.map((user) => ({
     label: `${capitalize(user.firstName)} ${capitalize(
       user.paternalSurname
-    )} ${capitalize(user.maternalSurname)}`,
+    )} ${capitalize(user.maternalSurname)} (${capitalize(
+      findRole(user?.roleCode)?.name || ""
+    )})`,
     value: user.id,
     roleCode: user.roleCode,
   }));
