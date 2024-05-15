@@ -31,14 +31,10 @@ export const HeaderLayout = ({
   const { rolesAcls } = useGlobalData();
   const [isVisibleMoreRoles, setIsVisibleMoreRoles] = useState(false);
 
-  console.log(rolesAcls);
-
   const onSetIsVisibleMoreRoles = () =>
     setIsVisibleMoreRoles(!isVisibleMoreRoles);
 
   const defaultRole = rolesAcls.find((role) => role?.id === user?.roleCode);
-
-  console.log(defaultRole);
 
   const lastRole = orderBy(
     (user?.otherRoles || []).filter((role) => role.code !== defaultRole?.id),
