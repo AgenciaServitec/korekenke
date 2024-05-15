@@ -22,6 +22,7 @@ import {
   getSectionId,
   updateSection,
 } from "../../../../firebase/collections";
+import { findRole } from "../../../../utils";
 
 export const SectionIntegration = () => {
   const { sectionId } = useParams();
@@ -48,8 +49,8 @@ export const SectionIntegration = () => {
     ...section,
     name: formData.name,
     departmentId: formData.departmentId,
-    membersIds: formData.membersIds,
     bossId: formData.bossId,
+    membersIds: formData.membersIds,
   });
 
   const onSubmitSaveSection = async (formData) => {
@@ -77,8 +78,8 @@ export const SectionIntegration = () => {
   const schema = yup.object({
     name: yup.string().required(),
     departmentId: yup.string().required(),
-    bossId: yup.string().required(),
     membersIds: yup.array().required(),
+    bossId: yup.string().required(),
   });
 
   const {
@@ -102,8 +103,8 @@ export const SectionIntegration = () => {
     reset({
       name: section?.name || "",
       departmentId: section?.departmentId || null,
-      bossId: section?.bossId || null,
       membersIds: section?.membersIds || null,
+      bossId: section?.bossId || null,
     });
   };
 
@@ -111,7 +112,9 @@ export const SectionIntegration = () => {
     .map((user) => ({
       label: `${capitalize(user.firstName)} ${capitalize(
         user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
+      )} ${capitalize(user.maternalSurname)} (${capitalize(
+        findRole(user?.roleCode)?.name || ""
+      )})`,
       value: user.id,
       roleCode: user.roleCode,
     }))
@@ -123,7 +126,9 @@ export const SectionIntegration = () => {
     .map((user) => ({
       label: `${capitalize(user.firstName)} ${capitalize(
         user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
+      )} ${capitalize(user.maternalSurname)} (${capitalize(
+        findRole(user?.roleCode)?.name || ""
+      )})`,
       value: user.id,
       roleCode: user.roleCode,
     }))

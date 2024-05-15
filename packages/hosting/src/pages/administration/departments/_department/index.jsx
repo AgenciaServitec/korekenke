@@ -51,9 +51,9 @@ export const DepartmentIntegration = () => {
     name: formData.name,
     description: formData.description,
     entityId: formData.entityId,
+    membersIds: formData.membersIds,
     bossId: formData.bossId,
     secondBossId: formData.secondBossId,
-    membersIds: formData.membersIds,
   });
 
   const onSubmitSaveDepartment = async (formData) => {
@@ -82,9 +82,9 @@ export const DepartmentIntegration = () => {
     name: yup.string().required(),
     description: yup.string(),
     entityId: yup.string().required(),
+    membersIds: yup.array().required(),
     bossId: yup.string().required(),
     secondBossId: yup.string().required(),
-    membersIds: yup.array().required(),
   });
 
   const {
