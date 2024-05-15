@@ -23,6 +23,7 @@ import {
   getDepartmentId,
   updateDepartment,
 } from "../../../../firebase/collections";
+import { findRole } from "../../../../utils";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
@@ -50,9 +51,9 @@ export const DepartmentIntegration = () => {
     name: formData.name,
     description: formData.description,
     entityId: formData.entityId,
+    membersIds: formData.membersIds,
     bossId: formData.bossId,
     secondBossId: formData.secondBossId,
-    membersIds: formData.membersIds,
   });
 
   const onSubmitSaveDepartment = async (formData) => {
@@ -81,9 +82,9 @@ export const DepartmentIntegration = () => {
     name: yup.string().required(),
     description: yup.string(),
     entityId: yup.string().required(),
+    membersIds: yup.array().required(),
     bossId: yup.string().required(),
     secondBossId: yup.string().required(),
-    membersIds: yup.array().required(),
   });
 
   const {
@@ -108,7 +109,7 @@ export const DepartmentIntegration = () => {
       name: department?.name || "",
       description: department?.description || "",
       entityId: department?.entityId || "",
-      membersIds: department?.membersIds || [],
+      membersIds: department?.membersIds || null,
       bossId: department?.bossId || null,
       secondBossId: department?.secondBossId || null,
     });
@@ -121,17 +122,15 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const usersViewForMembers = users
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
-      value: user.id,
-      roleCode: user.roleCode,
-    }))
-    .filter((user) =>
-      ["department_boss", "assistant_boss_department"].includes(user.roleCode)
-    );
+  const usersViewForMembers = users.map((user) => ({
+    label: `${capitalize(user.firstName)} ${capitalize(
+      user.paternalSurname
+    )} ${capitalize(user.maternalSurname)} (${capitalize(
+      findRole(user?.roleCode)?.name || ""
+    )})`,
+    value: user.id,
+    roleCode: user.roleCode,
+  }));
 
   const usersViewForBoss = users
     .map((user) => ({
@@ -158,8 +157,11 @@ export const DepartmentIntegration = () => {
       isEmpty(watch("membersIds")) ||
       (watch("membersIds") || []).length < 2
     ) {
-      setValue("bossId", "");
-      setValue("secondBossId", "");
+      setValue("bossId", null);
+      setValue("secondBossId", null);
+    } else {
+      setValue("bossId", watch("membersIds")[0]);
+      setValue("secondBossId", watch("membersIds")[1]);
     }
   }, [watch("membersIds")]);
 
@@ -239,7 +241,7 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="membersIds"
                   control={control}
-                  defaultValue=""
+                  defaultValue={null}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"

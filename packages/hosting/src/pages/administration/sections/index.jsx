@@ -4,7 +4,7 @@ import { useGlobalData } from "../../../providers";
 import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { Acl, Button, List } from "../../../components";
+import { Acl, Button, List, notification } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { updateSection } from "../../../firebase/collections";
@@ -15,17 +15,12 @@ export const SectionsIntegration = () => {
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (sectionsId) => {
-    const url = `/sections/${sectionsId}`;
-    navigate(url);
-  };
+  const navigateTo = (sectionsId) => navigate(`/sections/${sectionsId}`);
 
   const onAddSection = () => navigateTo("new");
 
-  const navigateToSection = (sectionId = undefined) => {
-    const url = `/sections/${sectionId}`;
-    navigate(url);
-  };
+  const navigateToSection = (sectionId = undefined) =>
+    navigate(`/sections/${sectionId}`);
 
   const onEditSection = (section) => navigateToSection(section.id);
   const onDeleteSection = async (section) => {
@@ -33,6 +28,7 @@ export const SectionsIntegration = () => {
       await updateSection(section.id, assignDeleteProps({ isDeleted: true }));
     } catch (e) {
       console.error("ErrorDeleteSection: ", e);
+      notification({ type: "error" });
     }
   };
 

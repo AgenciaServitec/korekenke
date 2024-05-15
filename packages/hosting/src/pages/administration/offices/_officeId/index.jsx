@@ -22,6 +22,7 @@ import {
   getOfficeId,
   updateOffice,
 } from "../../../../firebase/collections";
+import { findRole } from "../../../../utils";
 
 export const OfficeIntegration = () => {
   const { officeId } = useParams();
@@ -47,9 +48,9 @@ export const OfficeIntegration = () => {
     ...office,
     name: formData.name,
     description: formData.description,
-    officeManagerId: formData.officeManagerId,
-    assistantsIds: formData.assistantsIds,
     sectionId: formData.sectionId,
+    membersIds: formData.membersIds,
+    bossId: formData.bossId,
   });
 
   const onSubmitSaveOffice = async (formData) => {
@@ -71,9 +72,9 @@ export const OfficeIntegration = () => {
   const schema = yup.object({
     name: yup.string().required(),
     description: yup.string().required(),
-    officeManagerId: yup.string().required(),
-    assistantsIds: yup.array().required(),
     sectionId: yup.string().required(),
+    membersIds: yup.array().required(),
+    bossId: yup.string().required(),
   });
 
   const {
@@ -95,22 +96,24 @@ export const OfficeIntegration = () => {
     reset({
       name: office?.name || "",
       description: office?.description || "",
-      officeManagerId: office?.officeManagerId || "",
-      assistantsIds: office?.assistantsIds || [],
       sectionId: office?.sectionId || "",
+      membersIds: office?.membersIds || null,
+      bossId: office?.bossId || "",
     });
   };
-
-  const usersView = users.map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)}`,
-    value: user.id,
-  }));
 
   const sectionsView = sections.map((section) => ({
     label: section.name,
     value: section.id,
+  }));
+
+  const usersView = users.map((user) => ({
+    label: `${capitalize(user.firstName)} ${capitalize(
+      user.paternalSurname
+    )} ${capitalize(user.maternalSurname)} (${capitalize(
+      findRole(user?.roleCode)?.name || ""
+    )})`,
+    value: user.id,
   }));
 
   const submitSaveOffice = (formData) => onSubmitSaveOffice(formData);
@@ -133,7 +136,7 @@ export const OfficeIntegration = () => {
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Nombre de la Oficina"
+                      label="Nombre"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -162,41 +165,6 @@ export const OfficeIntegration = () => {
               </Col>
               <Col span={24}>
                 <Controller
-                  name="officeManagerId"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Gerente de la Oficina"
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      options={usersView}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="assistantsIds"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      mode="multiple"
-                      label="Asistentes de la Oficina"
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      options={usersView}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
                   name="sectionId"
                   control={control}
                   defaultValue=""
@@ -208,6 +176,41 @@ export const OfficeIntegration = () => {
                       error={error(name)}
                       required={required(name)}
                       options={sectionsView}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="membersIds"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      mode="multiple"
+                      label="Miembros"
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      options={usersView}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="bossId"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Jefe"
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      options={usersView}
                     />
                   )}
                 />

@@ -4,19 +4,9 @@ import { Acl, IconAction } from "../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 import moment from "moment";
-import { DegreesArmy } from "../../../data-list";
-import { useGlobalData } from "../../../providers";
+import { findDegree, findRole } from "../../../utils";
 
 export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
-  const { rolesAcls } = useGlobalData();
-
-  const findRole = (roleCode) => rolesAcls.find((role) => role.id === roleCode);
-
-  const findDegree = (degreeCode) =>
-    DegreesArmy.flatMap((degreeArmy) => degreeArmy.options).find(
-      (degree) => degree.value === degreeCode
-    );
-
   const columns = [
     {
       title: "Nombres y Apellidos",
@@ -45,7 +35,7 @@ export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
       title: "Rol",
       dataIndex: "roleCode",
       key: "roleCode",
-      render: (_, user) => findRole(user?.roleCode)?.name || "",
+      render: (_, user) => capitalize(findRole(user?.roleCode)?.name || ""),
     },
     {
       title: "Estado",
