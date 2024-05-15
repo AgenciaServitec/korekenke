@@ -122,35 +122,45 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const usersViewForMembers = users.map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)} (${capitalize(
-      findRole(user?.roleCode)?.name || ""
-    )})`,
-    value: user.id,
-    roleCode: user.roleCode,
-  }));
+  const usersViewForMembers = users
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)} (${capitalize(
+        findRole(user?.roleCode)?.name || ""
+      )})`,
+      value: user.id,
+      roleCode: user.roleCode,
+    }))
+    .filter((user) =>
+      ["department_boss", "assistant_boss_department"].includes(user.roleCode)
+    );
 
   const usersViewForBoss = users
+    .filter((user) => user.roleCode === "department_boss")
+    .filter((user) => [...(watch("membersIds") || [])].includes(user.id))
+    .filter((user) => user.id !== watch("secondBossId"))
     .map((user) => ({
       label: `${capitalize(user.firstName)} ${capitalize(
         user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
+      )} ${capitalize(user.maternalSurname)} (${capitalize(
+        findRole(user?.roleCode)?.name || ""
+      )})`,
       value: user.id,
-    }))
-    .filter((user) => [...(watch("membersIds") || [])].includes(user.value))
-    .filter((user) => user.value !== watch("secondBossId"));
+    }));
 
   const usersViewForSecondBoss = users
+    .filter((user) => user.roleCode === "department_boss")
+    .filter((user) => (watch("membersIds") || []).includes(user.id))
+    .filter((user) => user.id !== watch("bossId"))
     .map((user) => ({
       label: `${capitalize(user.firstName)} ${capitalize(
         user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
+      )} ${capitalize(user.maternalSurname)} (${capitalize(
+        findRole(user?.roleCode)?.name || ""
+      )})`,
       value: user.id,
-    }))
-    .filter((user) => (watch("membersIds") || []).includes(user.value))
-    .filter((user) => user.value !== watch("bossId"));
+    }));
 
   useEffect(() => {
     if (
@@ -160,8 +170,8 @@ export const DepartmentIntegration = () => {
       setValue("bossId", null);
       setValue("secondBossId", null);
     } else {
-      setValue("bossId", watch("membersIds")[0]);
-      setValue("secondBossId", watch("membersIds")[1]);
+      setValue("bossId", usersViewForBoss?.[0]?.value || "");
+      setValue("secondBossId", usersViewForBoss?.[1]?.value || "");
     }
   }, [watch("membersIds")]);
 
@@ -190,7 +200,6 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="name"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Nombre"
@@ -207,7 +216,6 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="description"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Descripción"
@@ -224,7 +232,6 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="entityId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Entidad (nucleo)"
@@ -241,7 +248,6 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="membersIds"
                   control={control}
-                  defaultValue={null}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
@@ -259,7 +265,6 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="bossId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Jefe"
@@ -277,7 +282,6 @@ export const DepartmentIntegration = () => {
                 <Controller
                   name="secondBossId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Segundo Jefe"
