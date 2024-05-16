@@ -1,0 +1,18 @@
+[
+  {
+    "roles": ["manager", "sub_manager", "assistant_manager"],
+    "type": "entity"
+  },
+  {
+    "roles": ["department_boss", "department_assistant"],
+    "type": "department"
+  },
+  {
+    "roles": ["section_boss", "section_assistant"],
+    "type": "section"
+  },
+  {
+    "roles": ["office_boss", "office_assistant"],
+    "type": "office"
+  }
+]

@@ -16,14 +16,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../hooks";
 import { useAuthentication, useGlobalData } from "../../../../providers";
-import { assign, capitalize } from "lodash";
+import { assign, capitalize, isEmpty } from "lodash";
 import {
   apiErrorNotification,
   getApiErrorResponse,
   useApiUserPost,
   useApiUserPut,
 } from "../../../../api";
-import moment from "moment";
+import { getTypeForAssignedToByRoleCode } from "../../../../utils";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -48,6 +48,18 @@ export const UserIntegration = () => {
 
   const saveUser = async (formData) => {
     try {
+      //Validate to assignTo when role code change of user
+      if (user.roleCode !== formData.roleCode) {
+        if (!isEmpty(user?.assignedTo?.id)) {
+          return notification({
+            type: "warning",
+            title: "Este usuario está asignado como miembro",
+            description:
+              "Para realizar el cambio del rol, no debe estar como miembro en ningún grupo como (departamento, sección u oficina)",
+          });
+        }
+      }
+
       const _user = mapUserToApi(formData);
 
       const response = isNew ? await postUser(_user) : await putUser(_user);
@@ -68,23 +80,12 @@ export const UserIntegration = () => {
     }
   };
 
-  const getOtherRoles = (otherRoleCodes = []) =>
-    rolesAcls
-      .filter((role) => otherRoleCodes.find((_role) => _role === role?.id))
-      .map((role) => ({
-        code: role?.id,
-        name: role.name,
-        imgUrl: role.avatarImage.url,
-        updateAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-      }));
-
   const mapUserToApi = (formData) =>
     assign(
       {},
       {
         ...(user?.id && { id: user.id }),
         roleCode: formData.roleCode,
-        otherRoles: getOtherRoles(formData.otherRoleCodes),
         firstName: formData.firstName.toLowerCase(),
         paternalSurname: formData.paternalSurname.toLowerCase(),
         maternalSurname: formData.maternalSurname.toLowerCase(),
@@ -100,6 +101,13 @@ export const UserIntegration = () => {
           "/profile",
         ],
         updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
+        assignedTo:
+          user.roleCode !== formData.roleCode
+            ? {
+                type: getTypeForAssignedToByRoleCode(formData.roleCode),
+                id: null,
+              }
+            : user.assignedTo,
       }
     );
 
@@ -119,7 +127,6 @@ export const UserIntegration = () => {
 const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
   const schema = yup.object({
     roleCode: yup.string().required(),
-    otherRoleCodes: yup.array(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
@@ -163,7 +170,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
   const resetForm = () => {
     reset({
       roleCode: user?.roleCode || "",
-      otherRoleCodes: (user?.otherRoles || []).map((role) => role.code),
       firstName: user?.firstName || "",
       paternalSurname: user?.paternalSurname || "",
       maternalSurname: user?.maternalSurname || "",
@@ -191,7 +197,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
-                    label="Rol predeterminado"
+                    label="Rol"
                     value={value}
                     onChange={onChange}
                     error={error(name)}
@@ -205,31 +211,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                       .map((role) => ({
                         label: capitalize(role.name),
                         value: role.id,
-                      }))}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24}>
-              <Controller
-                name="otherRoleCodes"
-                control={control}
-                defaultValue={[]}
-                render={({ field: { onChange, value, name } }) => (
-                  <Select
-                    label="Otros roles"
-                    mode="multiple"
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                    options={rolesAcls
-                      .filter((role) =>
-                        watch("roleCode") ? role.id !== watch("roleCode") : true
-                      )
-                      .map((role) => ({
-                        label: capitalize(role.name),
-                        value: role.code,
                       }))}
                   />
                 )}

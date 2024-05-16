@@ -13,7 +13,7 @@ import { useAuthentication, useGlobalData } from "../../../providers";
 import { useNavigate } from "react-router";
 import { UsersTable } from "./UserTable";
 import { useApiUserPatch } from "../../../api";
-import { assign } from "lodash";
+import { assign, isEmpty } from "lodash";
 
 const { Title } = Typography;
 
@@ -33,6 +33,15 @@ export const Users = () => {
   const onEditUser = (user) => navigateTo(user.id);
 
   const onDeleteUser = async (user) => {
+    if (!isEmpty(user?.assignedTo?.id)) {
+      return notification({
+        type: "warning",
+        title: "Este usuario está asignado como miembro",
+        description:
+          "Para eliminar, el usuario no debe estar como miembro en ningún grupo como (departamento, sección u oficina)",
+      });
+    }
+
     const user_ = assign({}, user, { updateBy: authUser?.email });
 
     await patchUser(user_);
