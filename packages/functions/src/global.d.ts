@@ -40,7 +40,13 @@ interface User extends DefaultFirestoreProps {
     number: string;
   };
   familyMembers?: FamilyMember[];
+  assignedTo: AssignedTo | null;
   updateBy: string;
+}
+
+interface AssignedTo {
+  type: "entity" | "department" | "section" | "office";
+  id: string | null;
 }
 
 interface FamilyMember {

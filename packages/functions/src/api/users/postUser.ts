@@ -1,5 +1,8 @@
 import { auth, fetchCollection, firestore } from "../../_firebase";
-import { defaultFirestoreProps } from "../../utils";
+import {
+  defaultFirestoreProps,
+  getTypeForAssignedToByRoleCode,
+} from "../../utils";
 import { NextFunction, Request, Response } from "express";
 import { isEmpty } from "lodash";
 
@@ -64,6 +67,12 @@ const addUser = async (user: User): Promise<void> => {
         roleCode: "user",
         acls: ["/home", "/profile"],
         otherRoles: [],
+        assignedTo: getTypeForAssignedToByRoleCode(user.roleCode)
+          ? {
+              type: getTypeForAssignedToByRoleCode(user.roleCode),
+              id: null,
+            }
+          : null,
       })
     );
 };

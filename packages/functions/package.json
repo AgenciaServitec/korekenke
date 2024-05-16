@@ -19,17 +19,20 @@
     "type:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/jest": "^29.5.12",
     "axios": "^1.6.8",
     "crypto-js": "^4.1.1",
     "express": "^4.18.2",
     "express-validator": "^6.14.2",
     "firebase-admin": "latest",
     "firebase-functions": "latest",
+    "jest": "^29.7.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "normalize-text": "^2.4.1",
-    "titleize": "^3.0.0"
+    "titleize": "^3.0.0",
+    "ts-jest": "^29.1.2"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
@@ -49,6 +52,7 @@
     "eslint-plugin-react": "^7.31.10",
     "firebase-functions-test": "^3.0.0",
     "prettier": "^2.7.1",
+    "ts-node": "^10.9.2",
     "typescript": "^4.8.4"
   }
 }
