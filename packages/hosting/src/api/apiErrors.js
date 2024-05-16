@@ -6,8 +6,10 @@ export const getApiErrorResponse = (response) => {
   try {
     if (isResponse(response)) {
       try {
+        console.error(response);
         return response.message;
       } catch (e) {
+        console.error(e);
         return response;
       }
     }
@@ -21,13 +23,14 @@ export const apiErrorNotification = (response) =>
   response ? notificationApiError(response) : notification({ type: "error" });
 
 const notificationApiError = (key) => {
-  const titleDefault = apiErrors["default.title"];
-  const descriptionDefault = apiErrors["default.description"];
-
   notification({
     type: "warning",
-    title: apiErrors[key ? key : titleDefault]?.title,
-    description: apiErrors[key ? key : descriptionDefault]?.description,
+    title: apiErrors?.[key]
+      ? apiErrors?.[key]?.title
+      : apiErrors["default"].title,
+    description: apiErrors?.[key]
+      ? apiErrors?.[key]?.description
+      : apiErrors["default"].description,
   });
 };
 
