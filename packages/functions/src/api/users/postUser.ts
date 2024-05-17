@@ -64,9 +64,8 @@ const addUser = async (user: User): Promise<void> => {
     .set(
       assignCreateProps({
         ...user,
-        roleCode: "user",
-        acls: ["/home", "/profile"],
-        otherRoles: [],
+        roleCode: user?.roleCode || "user",
+        acls: user?.acls || ["/home", "/profile"],
         assignedTo: getTypeForAssignedToByRoleCode(user.roleCode)
           ? {
               type: getTypeForAssignedToByRoleCode(user.roleCode),
