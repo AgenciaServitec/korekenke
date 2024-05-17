@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize, isEmpty } from "lodash";
+import { capitalize, concat, isEmpty } from "lodash";
 import {
   Acl,
   Button,
@@ -22,8 +22,9 @@ import {
   addDepartment,
   getDepartmentId,
   updateDepartment,
+  updateUsersWithBatch,
 } from "../../../../firebase/collections";
-import { findRole } from "../../../../utils";
+import { findRole, getTypeForAssignedToByRoleCode } from "../../../../utils";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
@@ -35,6 +36,9 @@ export const DepartmentIntegration = () => {
   const [department, setDepartment] = useState({});
 
   const isNew = departmentId === "new";
+  const usersWithDepartmentsRoles = users.filter((user) =>
+    ["department_boss", "department_assistant"].includes(user.roleCode)
+  );
 
   useEffect(() => {
     const _department = isNew
@@ -56,10 +60,38 @@ export const DepartmentIntegration = () => {
     secondBossId: formData.secondBossId,
   });
 
+  const userMap = (user, department) => ({
+    id: user.id,
+    assignedTo: {
+      type:
+        user?.assignedTo?.type || getTypeForAssignedToByRoleCode(user.roleCode),
+      id: department?.id || null,
+    },
+  });
+
   const onSubmitSaveDepartment = async (formData) => {
     try {
       setLoading(true);
 
+      //Get users deselection
+      const usersIdsDeselected = department.membersIds.filter(
+        (memberId) => !(formData?.membersIds || []).includes(memberId)
+      );
+      const usersDeselected = usersWithDepartmentsRoles
+        .filter((user) => usersIdsDeselected.includes(user.id))
+        .map((user) => userMap(user, null));
+
+      //Get users selections
+      const usersSelected = usersWithDepartmentsRoles
+        .filter((user) => formData.membersIds.includes(user.id))
+        .map((user) => userMap(user, department));
+
+      const users = concat(usersDeselected, usersSelected);
+
+      //Update of both users
+      await updateUsersWithBatch(users.map((user) => assignUpdateProps(user)));
+
+      //Update of department
       isNew
         ? await addDepartment(assignCreateProps(mapDepartment(formData)))
         : await updateDepartment(
@@ -122,21 +154,19 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const usersViewForMembers = users
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)} (${capitalize(
-        findRole(user?.roleCode)?.name || ""
-      )})`,
-      value: user.id,
-      roleCode: user.roleCode,
-    }))
-    .filter((user) =>
-      ["department_boss", "department_assistant"].includes(user.roleCode)
-    );
+  const usersViewForMembers = usersWithDepartmentsRoles.map((user) => ({
+    label: `${capitalize(user.firstName)} ${capitalize(
+      user.paternalSurname
+    )} ${capitalize(user.maternalSurname)} (${capitalize(
+      findRole(user?.roleCode)?.name || ""
+    )})`,
+    value: user.id,
+    roleCode: user.roleCode,
+  }));
 
-  const usersViewForBoss = users
+  console.log({ usersViewForMembers });
+
+  const usersViewForBoss = usersWithDepartmentsRoles
     .filter((user) => user.roleCode === "department_boss")
     .filter((user) => [...(watch("membersIds") || [])].includes(user.id))
     .filter((user) => user.id !== watch("secondBossId"))
@@ -149,7 +179,7 @@ export const DepartmentIntegration = () => {
       value: user.id,
     }));
 
-  const usersViewForSecondBoss = users
+  const usersViewForSecondBoss = usersWithDepartmentsRoles
     .filter((user) => user.roleCode === "department_boss")
     .filter((user) => (watch("membersIds") || []).includes(user.id))
     .filter((user) => user.id !== watch("bossId"))

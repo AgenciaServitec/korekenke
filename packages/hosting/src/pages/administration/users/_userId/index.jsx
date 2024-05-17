@@ -9,6 +9,7 @@ import {
   Input,
   InputNumber,
   notification,
+  RadioGroup,
   Select,
 } from "../../../../components";
 import { Controller, useForm } from "react-hook-form";
@@ -24,6 +25,7 @@ import {
   useApiUserPut,
 } from "../../../../api";
 import { getTypeForAssignedToByRoleCode } from "../../../../utils";
+import { DegreesArmy } from "../../../../data-list";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -108,6 +110,8 @@ export const UserIntegration = () => {
                 id: null,
               }
             : user.assignedTo,
+        degree: formData.degree,
+        cgi: formData.cgi,
       }
     );
 
@@ -149,6 +153,8 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
       .max(9)
       .required()
       .transform((value) => (value === null ? "" : value)),
+    degree: yup.string(),
+    cgi: yup.boolean().required(),
   });
 
   const {
@@ -159,6 +165,10 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
     watch,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      phoneNumber: "",
+      cgi: false,
+    },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
@@ -177,6 +187,8 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
       cip: user?.cip || "",
       dni: user?.dni || "",
       phoneNumber: user?.phone?.number || "",
+      degree: user?.degree || "",
+      cgi: user?.cgi || false,
     });
   };
 
@@ -331,6 +343,50 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="degree"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="Seleccione grado"
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    error={error(name)}
+                    required={required(name)}
+                    options={DegreesArmy}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="cgi"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <RadioGroup
+                    label="Perteneces a discapacitados, CGI? "
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    error={error(name)}
+                    required={required(name)}
+                    options={[
+                      {
+                        label: "SI",
+                        value: true,
+                      },
+                      {
+                        label: "NO",
+                        value: false,
+                      },
+                    ]}
                   />
                 )}
               />

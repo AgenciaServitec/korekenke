@@ -1,6 +1,6 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
-import { useDefaultFirestoreProps } from "../../hooks";
+import { chunk } from "lodash";
 
 export const usersRef = firestore.collection("users");
 
@@ -12,14 +12,11 @@ export const fetchUsers = async () =>
   fetchCollectionOnce(usersRef.where("isDeleted", "==", false));
 
 export const updateUsersWithBatch = async (users = []) => {
-  const { assignUpdateProps } = useDefaultFirestoreProps();
-
   const batch = firestore.batch();
 
-  users.forEach((user) =>
-    batch.update(
-      firestore.collection("users").doc(user.id),
-      assignUpdateProps(user)
+  chunk(users, 400).forEach((users) =>
+    users.forEach((user) =>
+      batch.update(firestore.collection("users").doc(user.id), user)
     )
   );
 
