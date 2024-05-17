@@ -72,6 +72,7 @@ const addUser = async (user: User): Promise<void> => {
               id: null,
             }
           : null,
+        iAcceptPrivacyPolicies: true,
       })
     );
 };
