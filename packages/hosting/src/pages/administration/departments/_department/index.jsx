@@ -133,7 +133,7 @@ export const DepartmentIntegration = () => {
       roleCode: user.roleCode,
     }))
     .filter((user) =>
-      ["department_boss", "assistant_boss_department"].includes(user.roleCode)
+      ["department_boss", "department_assistant"].includes(user.roleCode)
     );
 
   const usersViewForBoss = users
