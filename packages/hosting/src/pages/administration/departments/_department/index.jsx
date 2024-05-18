@@ -154,7 +154,27 @@ export const DepartmentIntegration = () => {
     };
   });
 
-  const usersViewForMembers = usersWithDepartmentsRoles.map((user) => ({
+  const membersInEdition = users.filter((user) =>
+    !isEmpty(department?.membersIds)
+      ? department.membersIds.includes(user.id)
+      : false
+  );
+
+  const usersViewForMembers = (
+    isNew
+      ? usersWithDepartmentsRoles.filter(
+          (user) =>
+            user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
+        )
+      : concat(
+          membersInEdition,
+          usersWithDepartmentsRoles.filter(
+            (user) =>
+              user.assignedTo.type === "department" &&
+              isEmpty(user.assignedTo.id)
+          )
+        )
+  ).map((user) => ({
     label: `${capitalize(user.firstName)} ${capitalize(
       user.paternalSurname
     )} ${capitalize(user.maternalSurname)} (${capitalize(
@@ -163,8 +183,6 @@ export const DepartmentIntegration = () => {
     value: user.id,
     roleCode: user.roleCode,
   }));
-
-  console.log({ usersViewForMembers });
 
   const usersViewForBoss = usersWithDepartmentsRoles
     .filter((user) => user.roleCode === "department_boss")
