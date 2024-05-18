@@ -74,12 +74,14 @@ export const DepartmentIntegration = () => {
       setLoading(true);
 
       //Get users deselection
-      const usersIdsDeselected = department.membersIds.filter(
+      const usersIdsDeselected = (department?.membersIds || []).filter(
         (memberId) => !(formData?.membersIds || []).includes(memberId)
       );
       const usersDeselected = usersWithDepartmentsRoles
         .filter((user) => usersIdsDeselected.includes(user.id))
         .map((user) => userMap(user, null));
+
+      console.log({ usersDeselected });
 
       //Get users selections
       const usersSelected = usersWithDepartmentsRoles
@@ -219,7 +221,10 @@ export const DepartmentIntegration = () => {
       setValue("secondBossId", null);
     } else {
       setValue("bossId", usersViewForBoss?.[0]?.value || "");
-      setValue("secondBossId", usersViewForBoss?.[1]?.value || "");
+      setValue(
+        "secondBossId",
+        usersViewForBoss?.[1]?.value || usersViewForSecondBoss?.[0]?.value || ""
+      );
     }
   }, [watch("membersIds")]);
 
