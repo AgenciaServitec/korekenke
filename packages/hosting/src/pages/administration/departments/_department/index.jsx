@@ -81,8 +81,6 @@ export const DepartmentIntegration = () => {
         .filter((user) => usersIdsDeselected.includes(user.id))
         .map((user) => userMap(user, null));
 
-      console.log({ usersDeselected });
-
       //Get users selections
       const usersSelected = usersWithDepartmentsRoles
         .filter((user) => formData.membersIds.includes(user.id))
