@@ -4,14 +4,35 @@ import { firestore } from "../firebase";
 import { useAuthentication } from "./AuthenticationProvider";
 import { notification, Spinner } from "../components";
 import { orderBy } from "lodash";
+import { usersByRoleCode } from "../utils";
 
 const GlobalDataContext = createContext({
   users: [],
+  departmentUsers: [],
+  sectionUsers: [],
+  officeUsers: [],
+  entities: [],
+  departments: [],
+  sections: [],
+  rolesAcls: [],
+  offices: [],
   correspondences: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
+
+  const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
+    authUser
+      ? firestore.collection("roles-acls").where("isDeleted", "==", false)
+      : null
+  );
+
+  const [users = [], usersLoading, usersError] = useCollectionData(
+    authUser
+      ? firestore.collection("users").where("isDeleted", "==", false)
+      : null
+  );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
     authUser
@@ -35,18 +56,6 @@ export const GlobalDataProvider = ({ children }) => {
   const [offices = [], officesLoading, officesError] = useCollectionData(
     authUser
       ? firestore.collection("offices").where("isDeleted", "==", false)
-      : null
-  );
-
-  const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
-    authUser
-      ? firestore.collection("roles-acls").where("isDeleted", "==", false)
-      : null
-  );
-
-  const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser
-      ? firestore.collection("users").where("isDeleted", "==", false)
       : null
   );
 
@@ -83,12 +92,27 @@ export const GlobalDataProvider = ({ children }) => {
   return (
     <GlobalDataContext.Provider
       value={{
+        users: orderBy(users, (user) => [user.createAt], ["desc"]),
+        departmentUsers: orderBy(
+          usersByRoleCode(users, ["department_boss", "department_assistant"]),
+          (user) => [user.createAt],
+          ["desc"]
+        ),
+        sectionsUsers: orderBy(
+          usersByRoleCode(users, ["section_boss", "section_assistant"]),
+          (user) => [user.createAt],
+          ["desc"]
+        ),
+        officesUsers: orderBy(
+          usersByRoleCode(users, ["office_boss", "office_assistant"]),
+          (user) => [user.createAt],
+          ["desc"]
+        ),
         entities,
         departments,
         sections,
         rolesAcls,
         offices,
-        users: orderBy(users, (user) => [user.createAt], ["desc"]),
         correspondences: orderBy(
           correspondences,
           (document) => [document.createAt],
