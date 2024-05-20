@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize, concat, isEmpty } from "lodash";
+import { capitalize, concat, isEmpty, orderBy } from "lodash";
 import {
   Acl,
   Button,
@@ -32,8 +32,6 @@ export const DepartmentIntegration = () => {
   const { departments, entities, departmentUsers } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
-
-  console.log({ departmentUsers });
 
   const [loading, setLoading] = useState(false);
   const [department, setDepartment] = useState({});
@@ -313,7 +311,11 @@ const Department = ({
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersViewForMembers}
+                      options={orderBy(
+                        usersViewForMembers,
+                        ["roleCode"],
+                        ["desc"]
+                      )}
                     />
                   )}
                 />
