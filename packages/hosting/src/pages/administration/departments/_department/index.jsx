@@ -22,23 +22,24 @@ import {
   addDepartment,
   getDepartmentId,
   updateDepartment,
-  updateUsersWithBatch,
 } from "../../../../firebase/collections";
-import { findRole, getTypeForAssignedToByRoleCode } from "../../../../utils";
+import { findRole } from "../../../../utils";
+import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
-  const { departments, users, entities } = useGlobalData();
+  const { departments, entities, departmentUsers } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
+
+  console.log({ departmentUsers });
 
   const [loading, setLoading] = useState(false);
   const [department, setDepartment] = useState({});
 
   const isNew = departmentId === "new";
-  const usersWithDepartmentsRoles = users.filter((user) =>
-    ["department_boss", "department_assistant"].includes(user.roleCode)
-  );
+  const onGoBack = () => navigate(-1);
 
   useEffect(() => {
     const _department = isNew
@@ -60,36 +61,22 @@ export const DepartmentIntegration = () => {
     secondBossId: formData.secondBossId,
   });
 
-  const userMap = (user, department) => ({
-    id: user.id,
-    assignedTo: {
-      type:
-        user?.assignedTo?.type || getTypeForAssignedToByRoleCode(user.roleCode),
-      id: department?.id || null,
-    },
-  });
-
-  const onSubmitSaveDepartment = async (formData) => {
+  const onSaveDepartment = async (formData) => {
     try {
       setLoading(true);
 
-      //Get users deselection
+      //Get users ids deselection
       const usersIdsDeselected = (department?.membersIds || []).filter(
         (memberId) => !(formData?.membersIds || []).includes(memberId)
       );
-      const usersDeselected = usersWithDepartmentsRoles
-        .filter((user) => usersIdsDeselected.includes(user.id))
-        .map((user) => userMap(user, null));
 
-      //Get users selections
-      const usersSelected = usersWithDepartmentsRoles
-        .filter((user) => formData.membersIds.includes(user.id))
-        .map((user) => userMap(user, department));
-
-      const users = concat(usersDeselected, usersSelected);
-
-      //Update of both users
-      await updateUsersWithBatch(users.map((user) => assignUpdateProps(user)));
+      //Update of assignTo of users
+      await updateAssignToUser({
+        oldUsersIds: usersIdsDeselected,
+        newUsersIds: formData.membersIds,
+        moduleId: department?.id,
+        users: departmentUsers,
+      });
 
       //Update of department
       isNew
@@ -110,6 +97,28 @@ export const DepartmentIntegration = () => {
     }
   };
 
+  return (
+    <Department
+      isNew={isNew}
+      onGoBack={onGoBack}
+      department={department}
+      entities={entities}
+      departmentUsers={departmentUsers}
+      onSaveDepartment={onSaveDepartment}
+      loading={loading}
+    />
+  );
+};
+
+const Department = ({
+  isNew,
+  onGoBack,
+  department,
+  entities,
+  departmentUsers,
+  onSaveDepartment,
+  loading,
+}) => {
   const schema = yup.object({
     name: yup.string().required(),
     description: yup.string(),
@@ -147,14 +156,12 @@ export const DepartmentIntegration = () => {
     });
   };
 
-  const entitiesView = entities.map((entity) => {
-    return {
-      label: entity.name,
-      value: entity.id,
-    };
-  });
+  const entitiesView = entities.map((entity) => ({
+    label: entity.name,
+    value: entity.id,
+  }));
 
-  const membersInEdition = users.filter((user) =>
+  const membersInEdition = departmentUsers.filter((user) =>
     !isEmpty(department?.membersIds)
       ? department.membersIds.includes(user.id)
       : false
@@ -162,13 +169,13 @@ export const DepartmentIntegration = () => {
 
   const usersViewForMembers = (
     isNew
-      ? usersWithDepartmentsRoles.filter(
+      ? departmentUsers.filter(
           (user) =>
             user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
         )
       : concat(
           membersInEdition,
-          usersWithDepartmentsRoles.filter(
+          departmentUsers.filter(
             (user) =>
               user.assignedTo.type === "department" &&
               isEmpty(user.assignedTo.id)
@@ -181,10 +188,11 @@ export const DepartmentIntegration = () => {
       findRole(user?.roleCode)?.name || ""
     )})`,
     value: user.id,
+    key: user.id,
     roleCode: user.roleCode,
   }));
 
-  const usersViewForBoss = usersWithDepartmentsRoles
+  const usersViewForBoss = departmentUsers
     .filter((user) => user.roleCode === "department_boss")
     .filter((user) => [...(watch("membersIds") || [])].includes(user.id))
     .filter((user) => user.id !== watch("secondBossId"))
@@ -197,7 +205,7 @@ export const DepartmentIntegration = () => {
       value: user.id,
     }));
 
-  const usersViewForSecondBoss = usersWithDepartmentsRoles
+  const usersViewForSecondBoss = departmentUsers
     .filter((user) => user.roleCode === "department_boss")
     .filter((user) => (watch("membersIds") || []).includes(user.id))
     .filter((user) => user.id !== watch("bossId"))
@@ -226,9 +234,7 @@ export const DepartmentIntegration = () => {
     }
   }, [watch("membersIds")]);
 
-  const submitSaveDepartment = (formData) => onSubmitSaveDepartment(formData);
-
-  const onGoBack = () => navigate(-1);
+  const submitSaveDepartment = (formData) => onSaveDepartment(formData);
 
   return (
     <Acl
