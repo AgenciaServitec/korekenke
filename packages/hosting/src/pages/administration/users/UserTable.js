@@ -6,7 +6,12 @@ import { capitalize } from "lodash";
 import moment from "moment";
 import { findDegree, findRole } from "../../../utils";
 
-export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
+export const UsersTable = ({
+  users,
+  rolesAcls,
+  onEditUser,
+  onConfirmRemoveUser,
+}) => {
   const columns = [
     {
       title: "Nombres y Apellidos",
@@ -35,7 +40,8 @@ export const UsersTable = ({ users, onEditUser, onConfirmRemoveUser }) => {
       title: "Rol",
       dataIndex: "roleCode",
       key: "roleCode",
-      render: (_, user) => capitalize(findRole(user?.roleCode)?.name || ""),
+      render: (_, user) =>
+        capitalize(findRole(rolesAcls, user?.roleCode)?.name || ""),
     },
     {
       title: "Estado",
