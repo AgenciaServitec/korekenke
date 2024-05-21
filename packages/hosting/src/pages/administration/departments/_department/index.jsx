@@ -172,6 +172,11 @@ const Department = ({
       : false
   );
 
+  const userBosses = departmentUsers.filter(
+    (user) => user.roleCode === "department_boss"
+  );
+
+  //LIST TO SELECTS
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
     departmentUsers.filter(
@@ -179,10 +184,6 @@ const Department = ({
         user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
     )
   ).map(mapOptionSelectMembers);
-
-  const userBosses = departmentUsers.filter(
-    (user) => user.roleCode === "department_boss"
-  );
 
   const bossesView = (bossId = undefined) =>
     userBosses

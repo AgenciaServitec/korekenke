@@ -1,7 +1,7 @@
 import React from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { Acl, Button, List } from "../../../components";
+import { Acl, Button, List, notification } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
@@ -17,20 +17,10 @@ export const DepartmentsIntegration = () => {
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
 
-  const navigateTo = (departmentsId) => {
-    const url = `/departments/${departmentsId}`;
-    navigate(url);
-  };
+  const navigateTo = (departmentId) => navigate(`/departments/${departmentId}`);
 
   const onAddDepartment = () => navigateTo("new");
-
-  const navigateToDepartment = (departmentId = undefined) => {
-    const url = `/departments/${departmentId}`;
-    navigate(url);
-  };
-
-  const onEditDepartment = (department) => navigateToDepartment(department.id);
-
+  const onEditDepartment = (department) => navigateTo(department?.id);
   const onDeleteDepartment = async (department) => {
     try {
       await updateAssignToUser({
@@ -49,6 +39,7 @@ export const DepartmentsIntegration = () => {
       );
     } catch (e) {
       console.error("ErrorDeleteDepartment: ", e);
+      notification({ type: "error" });
     }
   };
 
