@@ -194,12 +194,13 @@ const Department = ({
   const onChangeMembersWithValidation = (onChange, value) => {
     const _userBosses = userBosses.filter((user) => value.includes(user.id));
 
-    if (_userBosses.length < 1) {
-      setValue("bossId", "");
-      setValue("secondBossId", "");
-    }
     if (_userBosses.length >= 1) {
       setValue("bossId", bossesView(watch("secondBossId"))?.[0]?.value || "");
+      setValue("secondBossId", "");
+    }
+
+    if (_userBosses.length <= 0) {
+      setValue("bossId", "");
       setValue("secondBossId", "");
     }
 
