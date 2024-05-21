@@ -23,13 +23,13 @@ import {
   getDepartmentId,
   updateDepartment,
 } from "../../../../firebase/collections";
-import { findRole } from "../../../../utils";
+import { findRole, userFullName } from "../../../../utils";
 import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
-  const { departments, entities, departmentUsers } = useGlobalData();
+  const { rolesAcls, departments, entities, departmentUsers } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
 
@@ -100,6 +100,7 @@ export const DepartmentIntegration = () => {
       isNew={isNew}
       onGoBack={onGoBack}
       department={department}
+      rolesAcls={rolesAcls}
       entities={entities}
       departmentUsers={departmentUsers}
       onSaveDepartment={onSaveDepartment}
@@ -112,6 +113,7 @@ const Department = ({
   isNew,
   onGoBack,
   department,
+  rolesAcls,
   entities,
   departmentUsers,
   onSaveDepartment,
@@ -123,7 +125,7 @@ const Department = ({
     entityId: yup.string().required(),
     membersIds: yup.array().required(),
     bossId: yup.string().required(),
-    secondBossId: yup.string().required(),
+    secondBossId: yup.string().notRequired(),
   });
 
   const {
@@ -149,15 +151,20 @@ const Department = ({
       description: department?.description || "",
       entityId: department?.entityId || "",
       membersIds: department?.membersIds || null,
-      bossId: department?.bossId || null,
-      secondBossId: department?.secondBossId || null,
+      bossId: department?.bossId || "",
+      secondBossId: department?.secondBossId || "",
     });
   };
 
-  const entitiesView = entities.map((entity) => ({
-    label: entity.name,
-    value: entity.id,
-  }));
+  //VIEWS TO SELECTS
+  const mapOptionSelectMembers = (user) => ({
+    label: `${userFullName(user)} (${capitalize(
+      findRole(rolesAcls, user?.roleCode)?.name || ""
+    )})`,
+    value: user.id,
+    key: user.id,
+    roleCode: user.roleCode,
+  });
 
   const membersInEdition = departmentUsers.filter((user) =>
     !isEmpty(department?.membersIds)
@@ -165,72 +172,23 @@ const Department = ({
       : false
   );
 
-  const usersViewForMembers = (
-    isNew
-      ? departmentUsers.filter(
-          (user) =>
-            user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
-        )
-      : concat(
-          membersInEdition,
-          departmentUsers.filter(
-            (user) =>
-              user.assignedTo.type === "department" &&
-              isEmpty(user.assignedTo.id)
-          )
-        )
-  ).map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)} (${capitalize(
-      findRole(user?.roleCode)?.name || ""
-    )})`,
-    value: user.id,
-    key: user.id,
-    roleCode: user.roleCode,
-  }));
+  const usersViewForMembers = concat(
+    isNew ? [] : membersInEdition,
+    departmentUsers.filter(
+      (user) =>
+        user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
+    )
+  ).map(mapOptionSelectMembers);
 
-  const usersViewForBoss = departmentUsers
-    .filter((user) => user.roleCode === "department_boss")
-    .filter((user) => [...(watch("membersIds") || [])].includes(user.id))
-    .filter((user) => user.id !== watch("secondBossId"))
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)} (${capitalize(
-        findRole(user?.roleCode)?.name || ""
-      )})`,
-      value: user.id,
-    }));
+  const userBosses = departmentUsers.filter(
+    (user) => user.roleCode === "department_boss"
+  );
 
-  const usersViewForSecondBoss = departmentUsers
-    .filter((user) => user.roleCode === "department_boss")
-    .filter((user) => (watch("membersIds") || []).includes(user.id))
-    .filter((user) => user.id !== watch("bossId"))
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)} (${capitalize(
-        findRole(user?.roleCode)?.name || ""
-      )})`,
-      value: user.id,
-    }));
-
-  useEffect(() => {
-    if (
-      isEmpty(watch("membersIds")) ||
-      (watch("membersIds") || []).length < 2
-    ) {
-      setValue("bossId", null);
-      setValue("secondBossId", null);
-    } else {
-      setValue("bossId", usersViewForBoss?.[0]?.value || "");
-      setValue(
-        "secondBossId",
-        usersViewForBoss?.[1]?.value || usersViewForSecondBoss?.[0]?.value || ""
-      );
-    }
-  }, [watch("membersIds")]);
+  const bossesView = (bossId = undefined) =>
+    userBosses
+      .filter((user) => (watch("membersIds") || []).includes(user.id))
+      .filter((user) => (!bossId ? true : user.id !== bossId))
+      .map(mapOptionSelectMembers);
 
   const submitSaveDepartment = (formData) => onSaveDepartment(formData);
 
@@ -294,7 +252,10 @@ const Department = ({
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={entitiesView}
+                      options={entities.map((entity) => ({
+                        label: entity.name,
+                        value: entity.id,
+                      }))}
                     />
                   )}
                 />
@@ -308,7 +269,25 @@ const Department = ({
                       mode="multiple"
                       label="Miembros"
                       value={value}
-                      onChange={onChange}
+                      onChange={(value) => {
+                        const _userBosses = userBosses.filter((user) =>
+                          value.includes(user.id)
+                        );
+
+                        if (_userBosses.length < 1) {
+                          setValue("bossId", "");
+                          setValue("secondBossId", "");
+                        }
+
+                        if (_userBosses.length >= 1) {
+                          setValue(
+                            "bossId",
+                            bossesView(watch("secondBossId"))?.[0]?.value || ""
+                          );
+                        }
+
+                        return onChange(value);
+                      }}
                       error={error(name)}
                       required={required(name)}
                       options={orderBy(
@@ -331,7 +310,7 @@ const Department = ({
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersViewForBoss}
+                      options={bossesView(watch("secondBossId"))}
                       disabled={isEmpty(watch("membersIds"))}
                     />
                   )}
@@ -348,7 +327,7 @@ const Department = ({
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersViewForSecondBoss}
+                      options={bossesView(watch("bossId"))}
                       disabled={!watch("bossId")}
                     />
                   )}
