@@ -16,24 +16,27 @@ import {
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { capitalize, isEmpty } from "lodash";
+import { capitalize, concat, isEmpty } from "lodash";
 import {
   addSection,
   getSectionId,
   updateSection,
 } from "../../../../firebase/collections";
-import { findRole } from "../../../../utils";
+import { findRole, userFullName } from "../../../../utils";
+import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const SectionIntegration = () => {
   const { sectionId } = useParams();
   const navigate = useNavigate();
-  const { departments, sections, users } = useGlobalData();
+  const { rolesAcls, departments, sections, sectionUsers } = useGlobalData();
   const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
 
   const [loading, setLoading] = useState(false);
   const [section, setSection] = useState({});
 
   const isNew = sectionId === "new";
+  const onGoBack = () => navigate(-1);
 
   useEffect(() => {
     const _section = isNew
@@ -49,13 +52,26 @@ export const SectionIntegration = () => {
     ...section,
     name: formData.name,
     departmentId: formData.departmentId,
-    bossId: formData.bossId,
     membersIds: formData.membersIds,
+    bossId: formData.bossId,
   });
 
-  const onSubmitSaveSection = async (formData) => {
+  const onSaveSection = async (formData) => {
     try {
       setLoading(true);
+
+      //Get users ids deselection
+      const usersIdsDeselected = (section?.membersIds || []).filter(
+        (memberId) => !(formData?.membersIds || []).includes(memberId)
+      );
+
+      //Update of assignTo of users
+      await updateAssignToUser({
+        oldUsersIds: usersIdsDeselected,
+        newUsersIds: formData.membersIds,
+        moduleId: section?.id,
+        users: sectionUsers,
+      });
 
       isNew
         ? await addSection(assignCreateProps(mapSection(formData)))
@@ -75,6 +91,30 @@ export const SectionIntegration = () => {
     }
   };
 
+  return (
+    <Section
+      isNew={isNew}
+      onGoBack={onGoBack}
+      section={section}
+      rolesAcls={rolesAcls}
+      departments={departments}
+      sectionUsers={sectionUsers}
+      onSaveSection={onSaveSection}
+      loading={loading}
+    />
+  );
+};
+
+const Section = ({
+  isNew,
+  onGoBack,
+  section,
+  rolesAcls,
+  departments,
+  sectionUsers,
+  onSaveSection,
+  loading,
+}) => {
   const schema = yup.object({
     name: yup.string().required(),
     departmentId: yup.string().required(),
@@ -102,59 +142,59 @@ export const SectionIntegration = () => {
   const resetForm = () => {
     reset({
       name: section?.name || "",
-      departmentId: section?.departmentId || null,
+      departmentId: section?.departmentId || "",
       membersIds: section?.membersIds || null,
-      bossId: section?.bossId || null,
+      bossId: section?.bossId || "",
     });
   };
 
-  const usersViewForMembers = users
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)} (${capitalize(
-        findRole(user?.roleCode)?.name || ""
-      )})`,
-      value: user.id,
-      roleCode: user.roleCode,
-    }))
-    .filter((user) =>
-      ["section_head", "section_assistant"].includes(user.roleCode)
-    );
-
-  const usersViewForBoss = users
-    .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)} (${capitalize(
-        findRole(user?.roleCode)?.name || ""
-      )})`,
-      value: user.id,
-      roleCode: user.roleCode,
-    }))
-    .filter((user) => (watch("membersIds") || []).includes(user.value));
-
-  const departmentsView = departments.map((department) => {
-    return {
-      label: department.name,
-      value: department.id,
-    };
+  //VIEWS TO SELECTS
+  const mapOptionSelectMembers = (user) => ({
+    label: `${userFullName(user)} (${capitalize(
+      findRole(rolesAcls, user?.roleCode)?.name || ""
+    )})`,
+    value: user.id,
+    key: user.id,
+    roleCode: user.roleCode,
   });
 
-  useEffect(() => {
-    if (
-      isEmpty(watch("membersIds")) ||
-      (watch("membersIds") || []).length < 2
-    ) {
-      setValue("bossId", null);
-    } else {
-      setValue("bossId", watch("membersIds")[0]);
+  const membersInEdition = sectionUsers.filter((user) =>
+    !isEmpty(section?.membersIds) ? section.membersIds.includes(user.id) : false
+  );
+
+  const userBosses = sectionUsers.filter(
+    (user) => user.roleCode === "section_boss"
+  );
+
+  //LIST TO SELECTS
+  const usersViewForMembers = concat(
+    isNew ? [] : membersInEdition,
+    sectionUsers.filter(
+      (user) =>
+        user.assignedTo.type === "section" && isEmpty(user.assignedTo.id)
+    )
+  ).map(mapOptionSelectMembers);
+
+  const bossesView = () =>
+    userBosses
+      .filter((user) => (watch("membersIds") || []).includes(user.id))
+      .map(mapOptionSelectMembers);
+
+  const onChangeMembersWithValidation = (onChange, value) => {
+    const _userBosses = userBosses.filter((user) => value.includes(user.id));
+
+    if (_userBosses.length <= 0) {
+      setValue("bossId", "");
     }
-  }, [watch("membersIds")]);
 
-  const submitSaveSection = (formData) => onSubmitSaveSection(formData);
+    if (_userBosses.length >= 1) {
+      setValue("bossId", bossesView(value)?.[0]?.value || "");
+    }
 
-  const onGoBack = () => navigate(-1);
+    return onChange(value);
+  };
+
+  const onSubmitSaveSection = (formData) => onSaveSection(formData);
 
   return (
     <Acl name={isNew ? "/sections/new" : "/sections/:sectionId"} redirect>
@@ -163,7 +203,7 @@ export const SectionIntegration = () => {
           <Title level={3}>Sección</Title>
         </Col>
         <Col span={24}>
-          <Form onSubmit={handleSubmit(submitSaveSection)}>
+          <Form onSubmit={handleSubmit(onSubmitSaveSection)}>
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Controller
@@ -194,7 +234,10 @@ export const SectionIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={departmentsView}
+                      options={departments.map((department) => ({
+                        label: department.name,
+                        value: department.id,
+                      }))}
                     />
                   )}
                 />
@@ -209,7 +252,9 @@ export const SectionIntegration = () => {
                       mode="multiple"
                       label="Miembros"
                       value={value}
-                      onChange={onChange}
+                      onChange={(value) =>
+                        onChangeMembersWithValidation(onChange, value)
+                      }
                       error={error(name)}
                       required={required(name)}
                       options={usersViewForMembers}
@@ -229,7 +274,7 @@ export const SectionIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersViewForBoss}
+                      options={bossesView()}
                       disabled={!watch("membersIds")}
                     />
                   )}
