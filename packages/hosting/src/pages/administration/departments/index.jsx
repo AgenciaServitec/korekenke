@@ -8,12 +8,14 @@ import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
 import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
 import { updateDepartment } from "../../../firebase/collections";
+import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
 
 export const DepartmentsIntegration = () => {
   const navigate = useNavigate();
-  const { departments } = useGlobalData();
+  const { departments, departmentUsers } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
 
   const navigateTo = (departmentsId) => {
     const url = `/departments/${departmentsId}`;
@@ -28,11 +30,22 @@ export const DepartmentsIntegration = () => {
   };
 
   const onEditDepartment = (department) => navigateToDepartment(department.id);
+
   const onDeleteDepartment = async (department) => {
     try {
+      await updateAssignToUser({
+        oldUsersIds: department.membersIds,
+        users: departmentUsers,
+      });
+
       await updateDepartment(
         department.id,
-        assignDeleteProps({ isDeleted: true })
+        assignDeleteProps({
+          isDeleted: true,
+          membersIds: null,
+          bossId: null,
+          secondBossId: null,
+        })
       );
     } catch (e) {
       console.error("ErrorDeleteDepartment: ", e);
@@ -58,6 +71,11 @@ export const DepartmentsIntegration = () => {
           <List
             dataSource={departments}
             onDeleteItem={(department) => onDeleteDepartment(department)}
+            onDeleteConfirmOptions={{
+              title: "¿Seguro que deseas eliminar el departamento?",
+              content:
+                "Al eliminar el departamento los usuarios vinculados estaran libres para ser asignados en otros departamentos.",
+            }}
             onEditItem={(department) => onEditDepartment(department)}
             itemTitle={(department) => department.name}
             visibleEditItem={() => aclCheck("/departments/:departmentId")}
