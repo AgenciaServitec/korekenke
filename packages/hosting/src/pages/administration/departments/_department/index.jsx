@@ -190,6 +190,21 @@ const Department = ({
       .filter((user) => (!bossId ? true : user.id !== bossId))
       .map(mapOptionSelectMembers);
 
+  const onChangeMembersWithValidation = (onChange, value) => {
+    const _userBosses = userBosses.filter((user) => value.includes(user.id));
+
+    if (_userBosses.length < 1) {
+      setValue("bossId", "");
+      setValue("secondBossId", "");
+    }
+    if (_userBosses.length >= 1) {
+      setValue("bossId", bossesView(watch("secondBossId"))?.[0]?.value || "");
+      setValue("secondBossId", "");
+    }
+
+    return onChange(value);
+  };
+
   const submitSaveDepartment = (formData) => onSaveDepartment(formData);
 
   return (
@@ -269,25 +284,9 @@ const Department = ({
                       mode="multiple"
                       label="Miembros"
                       value={value}
-                      onChange={(value) => {
-                        const _userBosses = userBosses.filter((user) =>
-                          value.includes(user.id)
-                        );
-
-                        if (_userBosses.length < 1) {
-                          setValue("bossId", "");
-                          setValue("secondBossId", "");
-                        }
-
-                        if (_userBosses.length >= 1) {
-                          setValue(
-                            "bossId",
-                            bossesView(watch("secondBossId"))?.[0]?.value || ""
-                          );
-                        }
-
-                        return onChange(value);
-                      }}
+                      onChange={(value) =>
+                        onChangeMembersWithValidation(onChange, value)
+                      }
                       error={error(name)}
                       required={required(name)}
                       options={orderBy(
