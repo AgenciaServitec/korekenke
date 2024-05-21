@@ -98,12 +98,12 @@ export const GlobalDataProvider = ({ children }) => {
           (user) => [user.createAt],
           ["desc"]
         ),
-        sectionsUsers: orderBy(
+        sectionUsers: orderBy(
           usersByRoleCode(users, ["section_boss", "section_assistant"]),
           (user) => [user.createAt],
           ["desc"]
         ),
-        officesUsers: orderBy(
+        officeUsers: orderBy(
           usersByRoleCode(users, ["office_boss", "office_assistant"]),
           (user) => [user.createAt],
           ["desc"]
