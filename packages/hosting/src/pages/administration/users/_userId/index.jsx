@@ -33,12 +33,12 @@ export const UserIntegration = () => {
   const { userId } = useParams();
   const { postUser, postUserResponse, postUserLoading } = useApiUserPost();
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
-
   const { rolesAcls, users } = useGlobalData();
 
   const [user, setUser] = useState({});
 
   const isNew = userId === "new";
+  const onGoBack = () => navigate(-1);
 
   useEffect(() => {
     const _user = isNew ? {} : users.find((user) => user.id === userId);
@@ -114,8 +114,6 @@ export const UserIntegration = () => {
         cgi: formData.cgi,
       }
     );
-
-  const onGoBack = () => navigate(-1);
 
   return (
     <User
