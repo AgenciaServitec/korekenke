@@ -183,12 +183,12 @@ const Section = ({
   const onChangeMembersWithValidation = (onChange, value) => {
     const _userBosses = userBosses.filter((user) => value.includes(user.id));
 
-    if (_userBosses.length <= 0) {
-      setValue("bossId", "");
+    if (_userBosses.length > 0) {
+      setValue("bossId", _userBosses?.[0]?.id || "");
     }
 
-    if (_userBosses.length >= 1) {
-      setValue("bossId", bossesView(value)?.[0]?.value || "");
+    if (_userBosses.length <= 0) {
+      setValue("bossId", "");
     }
 
     return onChange(value);
