@@ -16,6 +16,7 @@ export const List = ({
   itemTitle,
   loading,
   onDeleteItem,
+  onDeleteConfirmOptions,
   onEditItem,
   visibleDeleteItem = () => true,
   visibleEditItem = () => true,
@@ -40,6 +41,7 @@ export const List = ({
       const onClickDelete = () => {
         modalConfirm({
           onOk: () => onDeleteItem(item, index),
+          ...onDeleteConfirmOptions,
         });
       };
 
