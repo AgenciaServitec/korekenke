@@ -6,7 +6,7 @@ import { getTypeForAssignedToByRoleCode } from "../utils";
 export const useUpdateAssignToInUser = () => {
   const { assignUpdateProps } = useDefaultFirestoreProps();
 
-  const userMap = (user, moduleId = undefined) => ({
+  const userMap = (user, moduleId = null) => ({
     id: user.id,
     assignedTo: {
       type:
@@ -16,22 +16,22 @@ export const useUpdateAssignToInUser = () => {
   });
 
   //Get users by ids and return assignedTo data
-  const getUsers = ({ usersIds = [], users = [], moduleId = undefined }) =>
+  const getUsers = ({ usersIds = [], users = [], moduleId = null }) =>
     users
       .filter((user) => usersIds.includes(user.id))
-      .map((user) => userMap(user, moduleId || null));
+      .map((user) => userMap(user, moduleId));
 
   const updateAssignToUser = async ({
     oldUsersIds = [],
     newUsersIds = [],
-    moduleId = undefined, //departmentId | sectionId | officeId
+    moduleId = null, //departmentId | sectionId | officeId
     users = [], //departmentUsers | sectionUsers | officeUsers
   }) => {
     //Get old users by ids
     const oldUsers = getUsers({
       usersIds: oldUsersIds,
       users,
-      moduleId: undefined,
+      moduleId: null,
     });
 
     //Get new users by ids
