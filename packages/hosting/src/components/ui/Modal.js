@@ -1,5 +1,5 @@
 import React from "react";
-import AntdModal from "antd/lib/modal";
+import { Modal as AntdModal } from "antd";
 
 // interface Props {
 //   closable: boolean;

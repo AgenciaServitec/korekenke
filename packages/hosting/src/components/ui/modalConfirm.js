@@ -1,4 +1,4 @@
-import Modal from "antd/lib/modal";
+import { Modal } from "antd";
 
 // interface Props {
 //     centered?: boolean;
@@ -10,9 +10,12 @@ import Modal from "antd/lib/modal";
 //     content?: string;
 // }
 
+const { confirm } = Modal;
+
 export const modalConfirm = ({
   centered = true,
   title = "¿Estás seguro de que quieres eliminar?",
+  content = "",
   okText = "SI",
   cancelText = "NO",
   okButtonProps = {
@@ -21,11 +24,12 @@ export const modalConfirm = ({
   },
   ...props
 }) =>
-  Modal.confirm({
+  confirm({
     centered,
     okText,
     cancelText,
     okButtonProps,
     title,
+    content,
     ...props,
   });
