@@ -22,6 +22,7 @@ import {
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
+import { InitialEntities } from "../../../../data-list";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
@@ -31,6 +32,15 @@ export const EntityIntegration = () => {
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
+
+  const organosView = InitialEntities[0].organos[0].comandos[0].entities.map(
+    (comando) => ({
+      label: comando.name,
+      value: comando.id,
+    })
+  );
+
+  console.log(organosView);
 
   const isNew = entityId === "new";
 

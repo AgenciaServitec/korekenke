@@ -188,6 +188,15 @@ export const Router = () => {
           element={<A.InscriptionFile />}
         />
       </Route>
+      <Route
+        exact
+        path="clinic-history"
+        element={
+          <AdminLayout>
+            <A.ClinicHistoryIntegration />
+          </AdminLayout>
+        }
+      />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );
