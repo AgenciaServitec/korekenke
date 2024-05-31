@@ -191,12 +191,20 @@ export const Router = () => {
       <Route
         exact
         path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
-        element={<A.LiveStockAndEquinesIntegration />}
+        element={
+          <AdminLayout>
+            <A.LiveStockAndEquinesIntegration />
+          </AdminLayout>
+        }
       />
       <Route
         exact
         path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId"
-        element={<A.LiveStockAndEquineIntegration />}
+        element={
+          <AdminLayout>
+            <A.LiveStockAndEquineIntegration />
+          </AdminLayout>
+        }
       />
       <Route
         exact
