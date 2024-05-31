@@ -8,19 +8,39 @@ import {
   Input,
   notification,
   Title,
-} from "../../components";
+} from "../../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../hooks";
+import { useFormUtils } from "../../../../../hooks";
 import * as yup from "yup";
 import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
 import { ClinicHistoryInformation } from "./ClinicHistoryInformation";
 import moment from "moment/moment";
-import { firestore } from "../../firebase";
+import { firestore } from "../../../../../firebase";
+import { useNavigate } from "react-router";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 
 export const ClinicHistoryIntegration = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const [
+    livestockAndEquines,
+    livestockAndEquinesLoading,
+    livestockAndEquinesError,
+  ] = useCollectionData(
+    firestore
+      .collection("livestock-and-equines")
+      .doc("3817zSlDzCIFyuI94txS")
+      .collection("clinic-history")
+  );
+
+  const navigateTo = (liveStockEquinesId) =>
+    navigate(`/clinic-history/${liveStockEquinesId}`);
 
   const mapForm = (formData) => ({
     id: firestore.collection("livestock-and-equines").doc().id,
@@ -41,7 +61,7 @@ export const ClinicHistoryIntegration = () => {
         .collection("livestock-and-equines")
         .doc("3817zSlDzCIFyuI94txS")
         .collection("clinic-history")
-        .doc(formData.id)
+        .doc(_clinicHistory.id)
         .set(_clinicHistory);
 
       notification({ type: "success" });
@@ -77,7 +97,7 @@ export const ClinicHistoryIntegration = () => {
         </Card>
       </Col>
       <Col span={24}>
-        <ClinicHistoryTable />
+        <ClinicHistoryTable livestockAndEquines={livestockAndEquines} />
       </Col>
     </Container>
   );

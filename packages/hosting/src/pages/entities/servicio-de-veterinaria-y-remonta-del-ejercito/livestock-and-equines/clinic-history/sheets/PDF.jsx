@@ -9,7 +9,7 @@ import {
   faMagnifyingGlassPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDevice } from "../../../../hooks";
+import { useDevice } from "../../../../../../hooks";
 import { floor, max } from "lodash";
 import { useNavigate } from "react-router";
 

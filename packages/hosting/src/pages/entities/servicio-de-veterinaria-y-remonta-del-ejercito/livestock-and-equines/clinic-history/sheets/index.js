@@ -1,9 +1,9 @@
 import React from "react";
-import { Sheet } from "../../inscriptions/cmsts/sheets/Sheet";
 import { PdfRegistrationClinicHistory } from "./PdfRegistrationClinicHistory";
-import { PDF } from "../../inscriptions/cmsts/sheets/PDF";
+import { PDF } from "./PDF";
+import { Sheet } from "./Sheet";
 
-export const Index = () => {
+export const Sheets = () => {
   return (
     <PDF>
       <Sheet layout="portrait">
