@@ -1,7 +1,7 @@
 import React from "react";
 import { Space, Table } from "antd";
-import { Acl, IconAction } from "../../../../../components";
-import { faEdit, faTrash, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { IconAction } from "../../../../../components";
+import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
 export const ClinicHistoryTable = ({ livestockAndEquines }) => {
