@@ -18,4 +18,5 @@ export * from "./inscriptions";
 export * from "./default-roles-acls";
 export * from "./default-roles-acls/_roleAclsId";
 export * from "./manage-acls";
-export * from "./ClinicHistory";
+export * from "./clinic-history";
+export * from "./clinic-history/sheets";
