@@ -188,6 +188,30 @@ export const Router = () => {
           element={<A.InscriptionFile />}
         />
       </Route>
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+        element={<A.LiveStockAndEquinesIntegration />}
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId"
+        element={<A.LiveStockAndEquineIntegration />}
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/clinic-history"
+        element={
+          <AdminLayout>
+            <A.ClinicHistoryIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/clinic-history/sheets"
+        element={<A.Sheets />}
+      />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );

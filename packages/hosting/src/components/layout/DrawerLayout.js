@@ -173,12 +173,16 @@ export const DrawerLayout = ({
       label: "Servicio de veterinaria y remonta del ejército",
       key: "servicio-de-veterinaria-y-remonta-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      isVisible: true,
       children: [
         {
           key: "livestock-and-equines",
           label: "Ganados e equinos",
+          isVisible: true,
           onClick: () => {
-            onNavigateTo("/livestock-and-equines");
+            onNavigateTo(
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+            );
             onSetIsVisibleDrawer(false);
           },
         },

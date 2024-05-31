@@ -1,0 +1,170 @@
+[
+  {
+    "id": "comandancia_general_del_ejercito",
+    "name": "Comandancia General Del Ejército",
+    "organos": [
+      {
+        "id": "secreatira_de_la_comandancia_general_del_ejercito",
+        "name": "Secretaría De La Comandancia General Del Ejército",
+        "category": "organo_de_administracion_interna",
+        "comandos": [
+          {
+            "id": "comando_de_personal_del_ejercito",
+            "name": "Comando De Personal Del Ejército",
+            "entities": [
+              {
+                "id": "jefatura_de_administracion_de_personal_civil_del_ejercito",
+                "name": "Jefatura De Administración De Personal Civil Del Ejército"
+              },
+              {
+                "id": "jefatura_de_administracion_de_derechos_de_personal_del_ejercito",
+                "name": "Jefatura De Administración De Derechos De Personal Del Ejército"
+              },
+              {
+                "id": "jefatura_de_bienestar_del_ejercito",
+                "name": "Jefatura De Bienestar Del Ejército"
+              }
+            ]
+          },
+          {
+            "id": "comando_de_educacion_y_doctrina_del_ejercito",
+            "name": "Comando De Educación y Doctrina Del Ejército",
+            "entities": [
+              {
+                "id": "jefatura_de_educacion_del_ejercito",
+                "name": "Jefatura De Educación Del Ejército"
+              },
+              {
+                "id": "jefatura_de_doctrina_del_ejercito",
+                "name": "Jefatura De Doctrina Del Ejército"
+              }
+            ]
+          },
+          {
+            "id": "comando_logistico_del_ejercito",
+            "name": "Comando Logístico Del Ejército",
+            "entities": [
+              {
+                "id": "servicio_de_comunicaciones_del_ejercito",
+                "name": "Servicio De Comunicaciones Del Ejército"
+              },
+              {
+                "id": "servicio_de_ingenieria_del_ejercito",
+                "name": "Servicio De Ingeniería Del Ejército"
+              },
+              {
+                "id": "servicio_de_intendencia_del_ejercito",
+                "name": "Servicio De Intendencia Del Ejército"
+              },
+              {
+                "id": "servicio_de_material_de_guerra_del_ejercito",
+                "name": "Servicio De Material De Guerra Del Ejército"
+              },
+              {
+                "id": "servicio_de_transportes_del_ejercito",
+                "name": "Servicio De Transportes Del Ejército"
+              },
+              {
+                "id": "servicio_de_veterinaria_y_remonta_del_ejercito",
+                "name": "Servicio De Veterinaria y Remonta Del Ejército"
+              },
+              {
+                "id": "jefatura_de_patrimonio_del_ejercito",
+                "name": "Jefatura De Patrimonio Del Ejército"
+              }
+            ]
+          },
+          {
+            "id": "comando_general_de_apoyo_del_ejercito",
+            "name": "Comando General De Apoyo Del Ejército",
+            "entities": [
+              {
+                "id": "comando_de_operaciones_terrestres_del_ejercito",
+                "name": "Comando De Operaciones Terrestres Del Ejército"
+              },
+              {
+                "id": "comando_de_apoyo_al_desarrollo_nacional_del_ejercito",
+                "name": "Comando De Apoyo Al Desarrollo Nacional Del Ejército"
+              },
+              {
+                "id": "comando_de_salud_del_ejercito",
+                "name": "Comando De Salud Del Ejército"
+              },
+              {
+                "id": "comando_de_reemplazos_y_movilizacion_del_ejercito",
+                "name": "Comando De Reemplazos y Movilización Del Ejército"
+              },
+              {
+                "id": "comando_administrativo_del_cuartel_general_del_ejercito",
+                "name": "Comando Administrativo Del Cuartel General Del Ejército"
+              },
+              {
+                "id": "oficina_generadora_de_recursos_del_ejercito",
+                "name": "Oficina Generadora De Recursos Del Ejército"
+              },
+              {
+                "id": "oficina_de_economia_del_ejercito",
+                "name": "Oficina De Economía Del Ejército"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "estado_mayor_general_del_ejercito",
+        "name": "Estado Mayor General Del Ejército",
+        "category": "organo_de_planeamiento_y_asesoramiento",
+        "entities": [
+          {
+            "id": "direccion_de_planeamiento_del_ejercito",
+            "name": "Dirección De Planeamiento Del Ejército"
+          },
+          {
+            "id": "direccion_de_personal_del_ejercito",
+            "name": "Dirección De Personal Del Ejército"
+          },
+          {
+            "id": "direccion_de_inteligencia_del_ejercito",
+            "name": "Dirección De Inteligencia Del Ejército"
+          },
+          {
+            "id": "direccion_de_educacion_y_doctrina_del_ejercito",
+            "name": "Dirección De Educación y Doctrina Del Ejército"
+          },
+          {
+            "id": "direccion_de_logistica_del_ejercito",
+            "name": "Dirección De Logística Del Ejército"
+          },
+          {
+            "id": "direccion_de_apoyo_al_desarrollo_nacional_del_ejercito",
+            "name": "Dirección De Apoyo Al Desarrollo Nacional Del Ejército"
+          },
+          {
+            "id": "direccion_de_telematica_y_estadistica_del_ejercito",
+            "name": "Dirección De Telemática y Estadística Del Ejército"
+          },
+          {
+            "id": "direccion_de_informaciones_del_ejercito",
+            "name": "Dirección De Informaciones Del Ejército"
+          },
+          {
+            "id": "direccion_de_ciencia_y_tecnologia_del_ejercito",
+            "name": "Dirección De Ciencia y Tecnología Del Ejército"
+          },
+          {
+            "id": "direccion_de_relaciones_internacionales_del_ejercito",
+            "name": "Dirección De Relaciones Internacionales Del Ejército"
+          },
+          {
+            "id": "direccion_de_salud_del_ejercito",
+            "name": "Dirección De Salud Del Ejército"
+          },
+          {
+            "id": "direccion_inversiones_del_ejercito",
+            "name": "Dirección Inversiones Del Ejército"
+          }
+        ]
+      }
+    ]
+  }
+]
