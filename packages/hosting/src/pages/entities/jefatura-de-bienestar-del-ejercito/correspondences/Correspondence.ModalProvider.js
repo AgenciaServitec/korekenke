@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { Modal } from "../../components";
+import { Modal } from "../../../../components";
 
 const ReservationModalContext = createContext({
   onShowReservationModal: () => console.log(),

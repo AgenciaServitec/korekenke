@@ -3,7 +3,7 @@ import { CmstsFamilyForm } from "./CmstsFamilyForm";
 import { CmstsForm } from "./CmstsForm";
 import { Col, Row } from "antd/lib";
 import Title from "antd/lib/typography/Title";
-import { Card } from "../../../components";
+import { Card } from "../../../../../components";
 import styled from "styled-components";
 
 export const CmstsIntegration = () => {

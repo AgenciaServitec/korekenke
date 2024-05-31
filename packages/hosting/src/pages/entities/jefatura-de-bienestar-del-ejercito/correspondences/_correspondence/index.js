@@ -12,13 +12,13 @@ import {
   notification,
   TextArea,
   UploadMultiple,
-} from "../../../components";
+} from "../../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
-import { firestore } from "../../../firebase";
-import { useGlobalData } from "../../../providers";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
+import { firestore } from "../../../../../firebase";
+import { useGlobalData } from "../../../../../providers";
 import { assign } from "lodash";
 import moment from "moment";
 

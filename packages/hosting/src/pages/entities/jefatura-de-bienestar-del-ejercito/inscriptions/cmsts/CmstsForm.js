@@ -8,21 +8,21 @@ import {
   InputNumber,
   notification,
   Select,
-} from "../../../components";
+} from "../../../../../components";
 import { Col, Row } from "antd/lib";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
-import { useAuthentication } from "../../../providers";
+import { useAuthentication } from "../../../../../providers";
 import { assign } from "lodash";
-import { useFormUtils } from "../../../hooks";
-import { useApiUserPut } from "../../../api";
+import { useFormUtils } from "../../../../../hooks";
+import { useApiUserPut } from "../../../../../api";
 import moment from "moment";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { Space } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { UbigeosPeru } from "../../../data-list";
+import { UbigeosPeru } from "../../../../../data-list";
 
 export const CmstsForm = () => {
   const { authUser } = useAuthentication();

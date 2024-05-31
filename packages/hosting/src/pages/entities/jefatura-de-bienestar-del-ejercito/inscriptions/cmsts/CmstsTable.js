@@ -1,7 +1,7 @@
 import React from "react";
 import { Space, Table } from "antd";
-import { useAuthentication } from "../../../providers";
-import { IconAction } from "../../../components";
+import { useAuthentication } from "../../../../../providers";
+import { IconAction } from "../../../../../components";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const CmstsTable = ({ onDeleteFamilyMember }) => {

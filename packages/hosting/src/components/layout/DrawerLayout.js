@@ -11,6 +11,7 @@ import {
   faHome,
   faIdCard,
   faNetworkWired,
+  faShield,
   faUsers,
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
@@ -89,7 +90,7 @@ export const DrawerLayout = ({
           },
         },
         {
-          label: "Núcleos",
+          label: "Entidades",
           key: "entities",
           icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
           isVisible: existPageAclsInAclsOfUser(["/entities"]),
@@ -131,27 +132,53 @@ export const DrawerLayout = ({
       ],
     },
     {
-      label: "Correspondencias",
-      key: "correspondences",
-      icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/correspondences"]),
-      onClick: () => {
-        onNavigateTo("/correspondences");
-        onSetIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Inscripciones",
-      key: "inscriptions",
-      icon: <FontAwesomeIcon icon={faIdCard} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/inscriptions"]),
+      label: "Jefatura de bienestar del ejército (COBIENE)",
+      key: "jefatura-de-bienestar-del-ejercito",
+      icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      isVisible: existPageAclsInAclsOfUser([
+        "/correspondences",
+        "/inscriptions",
+      ]),
       children: [
         {
-          key: "military-circle",
-          label: "Circulo Militar",
-          isVisible: existPageAclsInAclsOfUser(["/inscriptions/cmsts"]),
+          label: "Correspondencias",
+          key: "correspondences",
+          icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/correspondences"]),
           onClick: () => {
-            onNavigateTo("/inscriptions/cmsts");
+            onNavigateTo("/correspondences");
+            onSetIsVisibleDrawer(false);
+          },
+        },
+        {
+          label: "Inscripciones",
+          key: "inscriptions",
+          icon: <FontAwesomeIcon icon={faIdCard} size="lg" />,
+          isVisible: existPageAclsInAclsOfUser(["/inscriptions"]),
+          children: [
+            {
+              key: "military-circle",
+              label: "Circulo Militar",
+              isVisible: existPageAclsInAclsOfUser(["/inscriptions/cmsts"]),
+              onClick: () => {
+                onNavigateTo("/inscriptions/cmsts");
+                onSetIsVisibleDrawer(false);
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Servicio de veterinaria y remonta del ejército",
+      key: "servicio-de-veterinaria-y-remonta-del-ejercito",
+      icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      children: [
+        {
+          key: "livestock-and-equines",
+          label: "Ganados e equinos",
+          onClick: () => {
+            onNavigateTo("/livestock-and-equines");
             onSetIsVisibleDrawer(false);
           },
         },

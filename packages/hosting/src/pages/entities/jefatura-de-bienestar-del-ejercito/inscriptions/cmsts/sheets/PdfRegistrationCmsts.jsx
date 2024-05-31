@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { QRCode } from "antd";
 import moment from "moment";
-import { LogoPrimary, PhotoNoFound } from "../../../../images";
+import { LogoPrimary, PhotoNoFound } from "../../../../../../images";
 import { defaultTo, isEmpty } from "lodash";
 import {
   CivilStatus,
   DegreesArmy,
   Genders,
   Relationships,
-} from "../../../../data-list";
+} from "../../../../../../data-list";
 
 export const PdfRegistrationCmsts = ({ user }) => {
   const findDegree = (degreeCode) =>
