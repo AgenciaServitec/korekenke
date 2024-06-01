@@ -16,9 +16,9 @@ export * from "./administration/sections";
 export * from "./administration/sections/_section";
 
 //ACCESS CONTROL
-export * from "./default-roles-acls";
-export * from "./default-roles-acls/_roleAclsId";
-export * from "./manage-acls";
+export * from "./access-control/default-roles-acls";
+export * from "./access-control/default-roles-acls/_roleAclsId";
+export * from "./access-control/manage-acls";
 
 //ENTITIES "jefatura-de-bienestar-del-ejercito"
 export * from "./entities/jefatura-de-bienestar-del-ejercito/correspondences";
