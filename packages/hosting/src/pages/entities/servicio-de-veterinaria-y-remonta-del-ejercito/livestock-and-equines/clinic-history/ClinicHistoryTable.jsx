@@ -1,44 +1,46 @@
 import React from "react";
 import { Space, Table } from "antd";
 import { IconAction } from "../../../../../components";
-import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
-export const ClinicHistoryTable = ({ livestockAndEquines }) => {
+export const ClinicHistoryTable = ({
+  livestockAndEquines,
+  loading,
+  onConfirmRemoveClinicHistory,
+}) => {
   const navigate = useNavigate();
-
-  console.log(livestockAndEquines);
 
   const columns = [
     {
       title: "Fecha",
       dataIndex: "date",
       key: "date",
-      render: (_) => <div>{_}</div>,
+      render: (_, equine) => <div>{equine.date}</div>,
     },
     {
       title: "Sintomatología",
       key: "symptomatology",
       dataIndex: "symptomatology",
-      render: (_) => <div>{_}</div>,
+      render: (_, equine) => <div>{equine.symptomatology}</div>,
     },
     {
       title: "Diagnóstico",
       dataIndex: "diagnosis",
       key: "diagnosis",
-      render: (_) => <div>{_}</div>,
+      render: (_, equine) => <div>{equine.diagnosis}</div>,
     },
     {
       title: "Tratamiento",
       key: "treatment",
       dataIndex: "treatment",
-      render: (_) => <div>{_}</div>,
+      render: (_, equine) => <div>{equine.treatment}</div>,
     },
     {
       title: "Observaciones",
       dataIndex: "observations",
       key: "observations",
-      render: (_) => <div>{_}</div>,
+      render: (_, equine) => <div>{equine.observations}</div>,
     },
     {
       title: "Acciones",
@@ -58,7 +60,8 @@ export const ClinicHistoryTable = ({ livestockAndEquines }) => {
           <IconAction
             tooltipTitle="Eliminar"
             icon={faTrash}
-            onClick={() => ""}
+            styled={{ color: (theme) => theme.colors.error }}
+            onClick={() => onConfirmRemoveClinicHistory(equine)}
           />
         </Space>
       ),
@@ -71,6 +74,7 @@ export const ClinicHistoryTable = ({ livestockAndEquines }) => {
       dataSource={livestockAndEquines}
       pagination={false}
       scroll={{ x: "max-content" }}
+      loading={loading}
     />
   );
 };
