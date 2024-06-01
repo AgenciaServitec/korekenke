@@ -140,7 +140,6 @@ const ManageAcls = ({
     reset,
     formState: { errors },
     watch,
-    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
