@@ -90,14 +90,14 @@ export const RoleAclIntegration = () => {
         });
     }
 
-    console.log({ formData });
-
     await saveRoleAcls(
       assign({}, formData, {
         id: roleAcls?.id || roleId,
         name: formData.name.toLowerCase(),
         avatarImage: formData?.avatarImage || null,
-        acls: formData.acls,
+        acls: {
+          ...formData.acls,
+        },
       })
     );
   };
@@ -147,8 +147,6 @@ const RoleAcl = ({
     resolver: yupResolver(schema),
   });
 
-  console.log(errors);
-
   const { required, error } = useFormUtils({ errors, schema });
 
   useEffect(() => {
@@ -164,10 +162,7 @@ const RoleAcl = ({
       acls: mapAcls(roleAcls?.acls),
     });
 
-  const onSubmitRoleAcls = (formData) => {
-    console.log({ formData });
-    return onSaveRoleAcls(formData);
-  };
+  const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
 
   return (
     <Acl
@@ -278,6 +273,7 @@ const RoleAcl = ({
                         Object.entries(items).filter(
                           (_item) => !_item.includes("label")
                         );
+
                       return (
                         keySubCategory !== "label" && (
                           <Col span={24} key={keySubCategory}>
