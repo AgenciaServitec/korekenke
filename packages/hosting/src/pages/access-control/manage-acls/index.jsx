@@ -87,12 +87,19 @@ export const ManageAclsIntegration = () => {
   };
 
   const mapUser = (user, formData, currentAction) => {
-    const userAcl = user.acls;
-    const formDataAcl = flatten(
-      map(formData.acls, (acl) => acl).filter((acl) => acl)
-    );
+    const userAcl = user?.acls || {};
+    Object.entries(formData.acls).map(([key, subCategories = {}]) => {
+      if (!userAcl?.[key]) {
+        userAcl[key] = {};
+      }
 
-    user.acls = currentAction.setAcls(userAcl, formDataAcl);
+      Object.entries(subCategories).map(([_key, values = []]) => {
+        userAcl[key][_key] = currentAction.setAcls(
+          userAcl[key][_key] || [],
+          flatten(map(values, (acl) => acl).filter((acl) => acl))
+        );
+      });
+    });
 
     return user;
   };
@@ -159,7 +166,12 @@ const ManageAcls = ({
   const resetForm = () => {
     const aclsDefault = {};
 
-    Object.keys(acls).forEach((aclKey) => (aclsDefault[aclKey] = []));
+    Object.entries(acls).forEach(([key, subCategories = {}]) => {
+      aclsDefault[key] = {};
+      Object.keys(subCategories).forEach(
+        (_key) => (aclsDefault[key][_key] = [])
+      );
+    });
 
     reset({
       acls: aclsDefault,
