@@ -76,6 +76,11 @@ const global = css`
   .pointer {
     cursor: pointer;
   }
+
+  .data-entry-modal {
+    background: #ededed;
+    pointer-events: none;
+  }
 `;
 
 const antd = {
