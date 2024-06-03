@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import { AddButton, Card, modalConfirm } from "../../../../../components";
-import { useDefaultFirestoreProps } from "../../../../../hooks";
+import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
 import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
 import { ClinicHistoryInformation } from "./ClinicHistoryInformation";
@@ -9,46 +9,64 @@ import { firestore } from "../../../../../firebase";
 import { useNavigate } from "react-router";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
+import { useParams } from "react-router-dom";
+import { updateClinicHistory } from "../../../../../firebase/collections";
 
 export const ClinicHistoryIntegration = () => {
+  const { livestockOrEquineId } = useParams();
+  const [clinicHistoryId, setClinicHistoryId] = useQueryString(
+    "clinicHistoryId",
+    ""
+  );
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const [visibleForm, setVisibleForm] = useState(false);
+  const [isVisibleModal, setIsVisibleModal] = useState({
+    historyClinicModal: false,
+  });
+  const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
 
-  const [
-    livestockAndEquines,
-    livestockAndEquinesLoading,
-    livestockAndEquinesError,
-  ] = useCollectionData(
-    firestore
-      .collection("livestock-and-equines")
-      .doc("3817zSlDzCIFyuI94txS")
-      .collection("clinic-history")
-      .where("isDeleted", "==", false)
-  );
-
-  const navigateTo = (liveStockEquinesId) =>
-    navigate(`/clinic-history/${liveStockEquinesId}`);
-
-  const onDeleteClinicHistory = async (equine) => {
-    try {
-      await firestore
+  const [clinicHistories = [], clinicHistoriesLoading, clinicHistoriesError] =
+    useCollectionData(
+      firestore
         .collection("livestock-and-equines")
         .doc("3817zSlDzCIFyuI94txS")
         .collection("clinic-history")
-        .doc(equine.id)
-        .update(assignDeleteProps({ isDeleted: true }));
+        .where("isDeleted", "==", false)
+    );
+
+  useEffect(() => {
+    const clinicHistory = clinicHistories.find(
+      (clinicHistory) => clinicHistory?.id === clinicHistoryId
+    );
+
+    if (!clinicHistory) return setCurrentHistoryClinic(null);
+
+    setCurrentHistoryClinic(clinicHistory);
+  }, [isVisibleModal.historyClinicModal]);
+
+  const onDeleteClinicHistory = async (clinicHistory) => {
+    try {
+      await updateClinicHistory(
+        "3817zSlDzCIFyuI94txS",
+        clinicHistory.id,
+        assignDeleteProps({ isDeleted: true })
+      );
     } catch (e) {
       console.error("ErrorDeleteClinicHistory: ", e);
     }
   };
 
-  const onConfirmRemoveClinicHistory = (equine) =>
+  const onConfirmRemoveClinicHistory = (clinicHistory) =>
     modalConfirm({
       content: "El registro se eliminará",
       onOk: async () => {
-        await onDeleteClinicHistory(equine);
+        await onDeleteClinicHistory(clinicHistory);
       },
+    });
+
+  const onSetVisibleHistoryClinicModal = () =>
+    setIsVisibleModal({
+      historyClinicModal: !isVisibleModal.historyClinicModal,
     });
 
   return (
@@ -60,23 +78,32 @@ export const ClinicHistoryIntegration = () => {
       </Col>
       <Col span={24} md={6}>
         <AddButton
-          onClick={() => setVisibleForm(true)}
+          onClick={() => {
+            setClinicHistoryId("new");
+            onSetVisibleHistoryClinicModal();
+          }}
           title="Historia Clínica"
           margin="0"
         />
       </Col>
       <Col span={24}>
         <ClinicHistoryTable
-          livestockAndEquines={livestockAndEquines}
-          loading={livestockAndEquinesLoading}
+          clinicHistories={clinicHistories}
+          livestockOrEquineId={livestockOrEquineId}
+          loading={clinicHistoriesLoading}
           onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
-          onSetVisibleForm={setVisibleForm}
+          onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
+          onSetClinicHistoryId={setClinicHistoryId}
         />
       </Col>
       <ClinicHistoryModalComponent
-        key={visibleForm}
-        visibleForm={visibleForm}
-        onSetVisibleForm={setVisibleForm}
+        key={isVisibleModal.historyClinicModal}
+        clinicHistories={clinicHistories}
+        currentHistoryClinic={currentHistoryClinic}
+        isVisibleModal={isVisibleModal}
+        onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
+        clinicHistoryId={clinicHistoryId}
+        onSetClinicHistoryId={setClinicHistoryId}
       />
     </Container>
   );

@@ -1,28 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
 import {
   Button,
+  DataEntryModal,
   DatePicker,
   Form,
   Input,
-  Modal,
   notification,
+  TextArea,
 } from "../../../../../components";
 import { Col, Row } from "antd";
-import { firestore } from "../../../../../firebase";
 import moment from "moment";
+import {
+  addClinicHistory,
+  getClinicHistoryId,
+  updateClinicHistory,
+} from "../../../../../firebase/collections";
 
 export const ClinicHistoryModalComponent = ({
-  visibleForm,
-  onSetVisibleForm,
+  currentHistoryClinic,
+  clinicHistoryId,
+  isVisibleModal,
+  onSetIsVisibleModal,
+  onSetClinicHistoryId,
 }) => {
-  const { assignCreateProps } = useDefaultFirestoreProps();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
+
+  const isNew = clinicHistoryId === "new";
+
   const mapForm = (formData) => ({
-    id: firestore.collection("livestock-and-equines").doc().id,
+    id: isNew ? getClinicHistoryId() : currentHistoryClinic.id,
     date: moment(formData.date).format("YYYY-MM-DD HH:mm:ss"),
     symptomatology: formData.symptomatology,
     diagnosis: formData.diagnosis,
@@ -34,17 +45,21 @@ export const ClinicHistoryModalComponent = ({
     try {
       setLoading(true);
 
-      const _clinicHistory = assignCreateProps(mapForm(formData));
+      const _clinicHistory = mapForm(formData);
 
-      await firestore
-        .collection("livestock-and-equines")
-        .doc("3817zSlDzCIFyuI94txS")
-        .collection("clinic-history")
-        .doc(_clinicHistory.id)
-        .set(_clinicHistory);
+      isNew
+        ? await addClinicHistory(
+            "3817zSlDzCIFyuI94txS",
+            assignCreateProps(_clinicHistory)
+          )
+        : await updateClinicHistory(
+            "3817zSlDzCIFyuI94txS",
+            _clinicHistory.id,
+            assignUpdateProps(_clinicHistory)
+          );
 
-      onSetVisibleForm(false);
-
+      onSetIsVisibleModal();
+      onSetClinicHistoryId("");
       notification({ type: "success" });
     } catch (e) {
       console.log("Error", e);
@@ -58,20 +73,23 @@ export const ClinicHistoryModalComponent = ({
 
   return (
     <ClinicHistoryModal
-      visibleForm={visibleForm}
-      onSetVisibleForm={onSetVisibleForm}
+      currentHistoryClinic={currentHistoryClinic}
+      isVisibleModal={isVisibleModal}
+      onSetIsVisibleModal={onSetIsVisibleModal}
       onSubmit={onSubmit}
       loading={loading}
+      onSetClinicHistoryId={onSetClinicHistoryId}
     />
   );
 };
 
 const ClinicHistoryModal = ({
-  historyClinic,
-  visibleForm,
-  onSetVisibleForm,
+  currentHistoryClinic,
+  isVisibleModal,
+  onSetIsVisibleModal,
   onSubmit,
   loading,
+  onSetClinicHistoryId,
 }) => {
   const schema = yup.object({
     date: yup.string().required(),
@@ -86,19 +104,36 @@ const ClinicHistoryModal = ({
     handleSubmit,
     control,
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const { required, error } = useFormUtils({ errors, schema });
 
+  useEffect(() => {
+    resetForm();
+  }, [currentHistoryClinic]);
+
+  const resetForm = () => {
+    reset({
+      date: currentHistoryClinic?.date
+        ? moment(currentHistoryClinic?.date, "YYYY-MM-DD HH:mm:ss")
+        : null,
+      symptomatology: currentHistoryClinic?.symptomatology || null,
+      diagnosis: currentHistoryClinic?.diagnosis || null,
+      treatment: currentHistoryClinic?.treatment || null,
+      observations: currentHistoryClinic?.observations || null,
+    });
+  };
+
   return (
-    <Modal
+    <DataEntryModal
       title="Historia Clínica"
-      open={visibleForm}
-      closable
-      onCancel={() => onSetVisibleForm(false)}
+      visible={isVisibleModal.historyClinicModal}
+      onCancel={() => {
+        onSetClinicHistoryId("");
+        onSetIsVisibleModal();
+      }}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]}>
@@ -176,10 +211,11 @@ const ClinicHistoryModal = ({
               control={control}
               defaultValue=""
               render={({ field: { onChange, value, name } }) => (
-                <Input
+                <TextArea
                   label="Observaciones"
                   name={name}
                   value={value}
+                  rows={5}
                   onChange={onChange}
                   error={error(name)}
                   required={required(name)}
@@ -202,6 +238,6 @@ const ClinicHistoryModal = ({
           </Col>
         </Row>
       </Form>
-    </Modal>
+    </DataEntryModal>
   );
 };

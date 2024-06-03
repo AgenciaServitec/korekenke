@@ -5,9 +5,12 @@ import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
 export const ClinicHistoryTable = ({
-  livestockAndEquines,
+  clinicHistories,
   loading,
+  livestockOrEquineId,
   onConfirmRemoveClinicHistory,
+  onSetIsVisibleModal,
+  onSetClinicHistoryId,
 }) => {
   const navigate = useNavigate();
 
@@ -16,36 +19,36 @@ export const ClinicHistoryTable = ({
       title: "Fecha",
       dataIndex: "date",
       key: "date",
-      render: (_, equine) => <div>{equine.date}</div>,
+      render: (_, clinicHistory) => <div>{clinicHistory.date}</div>,
     },
     {
       title: "Sintomatología",
       key: "symptomatology",
       dataIndex: "symptomatology",
-      render: (_, equine) => <div>{equine.symptomatology}</div>,
+      render: (_, clinicHistory) => <div>{clinicHistory.symptomatology}</div>,
     },
     {
       title: "Diagnóstico",
       dataIndex: "diagnosis",
       key: "diagnosis",
-      render: (_, equine) => <div>{equine.diagnosis}</div>,
+      render: (_, clinicHistory) => <div>{clinicHistory.diagnosis}</div>,
     },
     {
       title: "Tratamiento",
       key: "treatment",
       dataIndex: "treatment",
-      render: (_, equine) => <div>{equine.treatment}</div>,
+      render: (_, clinicHistory) => <div>{clinicHistory.treatment}</div>,
     },
     {
       title: "Observaciones",
       dataIndex: "observations",
       key: "observations",
-      render: (_, equine) => <div>{equine.observations}</div>,
+      render: (_, clinicHistory) => <div>{clinicHistory.observations}</div>,
     },
     {
       title: "Acciones",
       key: "action",
-      render: (_, equine) => (
+      render: (_, clinicHistory) => (
         <Space>
           <IconAction
             tooltipTitle="Pdf"
@@ -53,15 +56,23 @@ export const ClinicHistoryTable = ({
             styled={{ color: (theme) => theme.colors.error }}
             onClick={() =>
               navigate(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${equine.id}/clinic-history/sheets`
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockOrEquineId}/clinic-history/sheets`
               )
             }
+          />
+          <IconAction
+            tooltipTitle="Editar"
+            icon={faEdit}
+            onClick={() => {
+              onSetClinicHistoryId(clinicHistory.id);
+              onSetIsVisibleModal();
+            }}
           />
           <IconAction
             tooltipTitle="Eliminar"
             icon={faTrash}
             styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => onConfirmRemoveClinicHistory(equine)}
+            onClick={() => onConfirmRemoveClinicHistory(clinicHistory)}
           />
         </Space>
       ),
@@ -71,7 +82,7 @@ export const ClinicHistoryTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={livestockAndEquines}
+      dataSource={clinicHistories}
       pagination={false}
       scroll={{ x: "max-content" }}
       loading={loading}
