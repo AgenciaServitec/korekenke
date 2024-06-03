@@ -19,7 +19,7 @@ export const DataEntryModal = ({
     onCancel={onCancel}
     visible={visible}
     title={title}
-    width="60%"
+    width="70%"
     closeIcon={<FontAwesomeIcon icon={faTimes} size="lg" />}
     destroyOnClose
     data-testid={dataTestId}
