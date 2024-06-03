@@ -17,7 +17,7 @@ export const DataEntryModal = ({
     wrapClassName="data-entry-modal"
     footer={false}
     onCancel={onCancel}
-    visible={visible}
+    open={visible}
     title={title}
     width="70%"
     closeIcon={<FontAwesomeIcon icon={faTimes} size="lg" />}
