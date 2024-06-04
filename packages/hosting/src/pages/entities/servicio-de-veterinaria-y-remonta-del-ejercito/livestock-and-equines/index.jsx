@@ -1,11 +1,6 @@
 import React from "react";
 import Col from "antd/lib/col";
-import {
-  Acl,
-  Button,
-  modalConfirm,
-  notification,
-} from "../../../../components";
+import { Acl, Button, modalConfirm } from "../../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Row } from "antd";
@@ -13,12 +8,7 @@ import { useNavigate } from "react-router";
 import Title from "antd/es/typography/Title";
 import { LiveStockAndEquinesTable } from "./LiveStockAndEquinesTable";
 import { useGlobalData } from "../../../../providers";
-import { assign, isEmpty } from "lodash";
-import { apiErrorNotification, getApiErrorResponse } from "../../../../api";
-import {
-  updateEntity,
-  updateLivestockAndEquine,
-} from "../../../../firebase/collections";
+import { updateLivestockAndEquine } from "../../../../firebase/collections";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 
 export const LiveStockAndEquinesIntegration = () => {

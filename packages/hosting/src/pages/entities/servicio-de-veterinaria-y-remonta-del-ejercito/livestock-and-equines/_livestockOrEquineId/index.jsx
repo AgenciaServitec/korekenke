@@ -20,11 +20,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
 import { useGlobalData } from "../../../../../providers";
 import {
-  getLivestockAndEquineId,
   addLivestockAndEquine,
+  getLivestockAndEquineId,
   updateLivestockAndEquine,
-  addEntity,
-  updateEntity,
 } from "../../../../../firebase/collections";
 import moment from "moment";
 
