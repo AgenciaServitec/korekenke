@@ -1,5 +1,5 @@
 import { acls } from "../data-list";
-import { includes } from "lodash";
+import { includes, isEmpty } from "lodash";
 
 export const filterAcl = (category, subCategory, except = []) =>
   Object.fromEntries(
@@ -30,9 +30,12 @@ export const removeLabelFieldOfObject = (object = {}, field = "label") => {
 };
 
 export const mapAcls = (acls = {}) => {
-  Object.entries(acls).filter(
-    ([key, subCategories]) => (acls[key] = subCategories)
-  );
+  Object.entries(acls).forEach(([key, subCategories = {}]) => {
+    acls[key] = subCategories;
+    Object.entries(subCategories).forEach(([_key, values = []]) => {
+      acls[key][_key] = values;
+    });
+  });
 
   return acls;
 };
