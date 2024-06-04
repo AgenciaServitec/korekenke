@@ -2,8 +2,9 @@ import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import assert from "assert";
 import { useAuthentication } from "../../providers";
+import { isEmpty } from "lodash";
 
-export const Acl = ({ children, name, redirect }) => {
+export const Acl = ({ children, category, subCategory, name, redirect }) => {
   const navigate = useNavigate();
 
   const { authUser } = useAuthentication();
@@ -16,8 +17,15 @@ export const Acl = ({ children, name, redirect }) => {
     return navigate("/403");
   };
 
-  const isValidateAclName = (name) =>
-    (authUser?.acls || []).some((acl) => acl === name);
+  const isValidateAclName = (name) => {
+    if (isEmpty(category)) return false;
+    if (isEmpty(subCategory)) return false;
+    if (isEmpty(name)) return false;
+
+    return (authUser?.acls?.[category]?.[subCategory] || []).some(
+      (acl) => acl === name
+    );
+  };
 
   useMemo(() => {
     if (!name) return;
