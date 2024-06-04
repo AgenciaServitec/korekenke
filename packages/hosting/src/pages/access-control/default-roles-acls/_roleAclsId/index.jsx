@@ -95,9 +95,7 @@ export const RoleAclIntegration = () => {
         id: roleAcls?.id || roleId,
         name: formData.name.toLowerCase(),
         avatarImage: formData?.avatarImage || null,
-        acls: {
-          ...formData.acls,
-        },
+        acls: mapAcls(formData.acls),
       })
     );
   };
