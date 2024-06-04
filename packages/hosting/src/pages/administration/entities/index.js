@@ -15,19 +15,10 @@ export const EntitiesIntegration = () => {
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (entitiesId) => {
-    const url = `/entities/${entitiesId}`;
-    navigate(url);
-  };
+  const navigateTo = (entityId) => navigate(`/entities/${entityId}`);
 
   const onAddEntity = () => navigateTo("new");
-
-  const navigateToEntity = (entityId = undefined) => {
-    const url = `/entities/${entityId}`;
-    navigate(url);
-  };
-
-  const onEditEntity = (entity) => navigateToEntity(entity.id);
+  const onEditEntity = (entity) => navigateTo(entity.id);
   const onDeleteEntity = async (entity) =>
     modalConfirm({
       title: "¿Estás seguro de que quieres eliminar la entidad?",
