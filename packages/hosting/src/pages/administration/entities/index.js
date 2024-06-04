@@ -37,10 +37,19 @@ export const EntitiesIntegration = () => {
   };
 
   return (
-    <Acl name="/entities" redirect>
+    <Acl
+      category="administration"
+      subCategory="entities"
+      name="/entities"
+      redirect
+    >
       <Row gutter={[0, 24]}>
         <Col span={24}>
-          <Acl name="/entities/new">
+          <Acl
+            category="administration"
+            subCategory="entities"
+            name="/entities/new"
+          >
             <Button
               onClick={onAddEntity}
               type="primary"
@@ -57,8 +66,12 @@ export const EntitiesIntegration = () => {
             onDeleteItem={(entity) => onDeleteEntity(entity)}
             onEditItem={(entity) => onEditEntity(entity)}
             itemTitle={(entity) => entity.name}
-            visibleEditItem={() => aclCheck("/entities/:entityId")}
-            visibleDeleteItem={() => aclCheck("/entities#delete")}
+            visibleEditItem={() =>
+              aclCheck("administration", "entities", ["/entities/:entityId"])
+            }
+            visibleDeleteItem={() =>
+              aclCheck("administration", "entities", ["/entities#delete"])
+            }
           />
         </Col>
       </Row>

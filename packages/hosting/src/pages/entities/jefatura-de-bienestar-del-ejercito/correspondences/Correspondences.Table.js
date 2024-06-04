@@ -118,7 +118,11 @@ const CorrespondencesTable = ({
       width: ["70px", "15%"],
       render: (correspondence) => (
         <IconsActionWrapper>
-          <Acl name="/correspondences/:correspondenceId">
+          <Acl
+            category="jefatura-de-bienestar-del-ejercito"
+            subCategory="correspondences"
+            name="/correspondences/:correspondenceId"
+          >
             <IconAction
               className="pointer"
               onClick={() => onClickEditCorrespondence(correspondence.id)}
@@ -126,7 +130,11 @@ const CorrespondencesTable = ({
               icon={faEdit}
             />
           </Acl>
-          <Acl name="/correspondences#delete">
+          <Acl
+            category="jefatura-de-bienestar-del-ejercito"
+            subCategory="correspondences"
+            name="/correspondences#delete"
+          >
             <IconAction
               className="pointer"
               onClick={() => onClickDeleteCorrespondence(correspondence.id)}

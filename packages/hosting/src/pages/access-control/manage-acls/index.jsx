@@ -11,7 +11,7 @@ import {
   useDefaultFirestoreProps,
   useFormUtils,
 } from "../../../hooks";
-import { capitalize, difference, flatten, isObject, map, union } from "lodash";
+import { capitalize, difference, isArray, isObject, union } from "lodash";
 import {
   Acl,
   Button,
@@ -87,21 +87,23 @@ export const ManageAclsIntegration = () => {
   };
 
   const mapUser = (user, formData, currentAction) => {
-    const userAcl = user?.acls || {};
+    const userAcl = isArray(user?.acls) ? {} : user?.acls || {};
+
     Object.entries(formData.acls).map(([key, subCategories = {}]) => {
       if (!userAcl?.[key]) {
         userAcl[key] = {};
       }
 
       Object.entries(subCategories).map(([_key, values = []]) => {
-        userAcl[key][_key] = currentAction.setAcls(
-          userAcl[key][_key] || [],
-          flatten(map(values, (acl) => acl).filter((acl) => acl))
-        );
+        if (!userAcl[key]?.[_key]) {
+          userAcl[key][_key] = [];
+        }
+
+        userAcl[key][_key] = currentAction.setAcls(userAcl[key][_key], values);
       });
     });
 
-    return user;
+    return { ...user, acls: userAcl };
   };
 
   useEffect(() => {
@@ -203,7 +205,12 @@ const ManageAcls = ({
   }, [watch("roleCode")]);
 
   return (
-    <Acl redirect name="/manage-acls">
+    <Acl
+      redirect
+      category="accessControl"
+      subCategory="manageAcls"
+      name="/manage-acls"
+    >
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={2}>Administrador Acls</Title>

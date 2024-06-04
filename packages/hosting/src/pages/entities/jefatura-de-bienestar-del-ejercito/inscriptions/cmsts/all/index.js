@@ -4,7 +4,7 @@ import { Table } from "antd";
 import Title from "antd/es/typography/Title";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { usersRef } from "../../../../../../firebase/collections";
-import { notification } from "../../../../../../components";
+import { Acl, notification } from "../../../../../../components";
 
 export const AllRegistered = () => {
   const [inscribedUsers = [], inscribedUsersLoading, inscribedUsersError] =
@@ -81,23 +81,30 @@ export const AllRegistered = () => {
   ];
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Title level={2}>Inscritos en Circulo Militar</Title>
-      </Col>
-      <Col span={24}>
-        <Table
-          columns={columns}
-          dataSource={inscribedUsers}
-          loading={inscribedUsersLoading}
-          virtual
-          bordered
-          size="small"
-          scroll={{
-            x: "max-content",
-          }}
-        />
-      </Col>
-    </Row>
+    <Acl
+      category="jefatura-de-bienestar-del-ejercito"
+      subCategory="inscriptions"
+      name="/inscriptions/cmsts/all"
+      redirect
+    >
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Title level={2}>Inscritos en Circulo Militar</Title>
+        </Col>
+        <Col span={24}>
+          <Table
+            columns={columns}
+            dataSource={inscribedUsers}
+            loading={inscribedUsersLoading}
+            virtual
+            bordered
+            size="small"
+            scroll={{
+              x: "max-content",
+            }}
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };

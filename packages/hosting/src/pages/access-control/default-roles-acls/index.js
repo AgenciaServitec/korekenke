@@ -72,7 +72,12 @@ const DefaultRolesAcls = ({
   }));
 
   return (
-    <Acl redirect name="/default-roles-acls">
+    <Acl
+      redirect
+      category="accessControl"
+      subCategory="defaultRolesAcls"
+      name="/default-roles-acls"
+    >
       <Row gutter={[0, 24]}>
         <Col span={24}>
           <Button
@@ -90,8 +95,16 @@ const DefaultRolesAcls = ({
             onDeleteItem={(roleAcls) => onDeleteRoleAcls(roleAcls)}
             onEditItem={(roleAcls) => onEditRoleAcls(roleAcls)}
             itemTitle={(roleAcls) => roleAcls.name}
-            visibleEditItem={() => aclCheck("/default-roles-acls/:roleAclsId")}
-            visibleDeleteItem={() => aclCheck("/default-roles-acls#delete")}
+            visibleEditItem={() =>
+              aclCheck("accessControl", "defaultRolesAcls", [
+                "/default-roles-acls/:roleAclsId",
+              ])
+            }
+            visibleDeleteItem={() =>
+              aclCheck("accessControl", "defaultRolesAcls", [
+                "/default-roles-acls#delete",
+              ])
+            }
           />
         </Col>
       </Row>

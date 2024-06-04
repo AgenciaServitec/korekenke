@@ -86,7 +86,12 @@ const Correspondence = ({
   );
 
   return (
-    <Acl redirect name="/correspondences">
+    <Acl
+      category="jefatura-de-bienestar-del-ejercito"
+      subCategory="correspondences"
+      name="/correspondences"
+      redirect
+    >
       <Container>
         <div>
           <Row justify="space-between" align="middle" gutter={[16, 16]}>

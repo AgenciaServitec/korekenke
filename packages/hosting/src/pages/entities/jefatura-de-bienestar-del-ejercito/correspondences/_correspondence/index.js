@@ -157,7 +157,12 @@ const Correspondence = ({
     onSaveCorrespondence(formData);
 
   return (
-    <Acl name="/correspondences" redirect>
+    <Acl
+      category="jefatura-de-bienestar-del-ejercito"
+      subCategory="correspondences"
+      name="/correspondences"
+      redirect
+    >
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={2}>Correspondencia</Title>

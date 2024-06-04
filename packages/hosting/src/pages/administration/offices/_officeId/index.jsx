@@ -27,7 +27,7 @@ import { findRole } from "../../../../utils";
 export const OfficeIntegration = () => {
   const { officeId } = useParams();
   const navigate = useNavigate();
-  const { offices, users, sections } = useGlobalData();
+  const { offices, users, sections, rolesAcls } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -111,7 +111,7 @@ export const OfficeIntegration = () => {
     label: `${capitalize(user.firstName)} ${capitalize(
       user.paternalSurname
     )} ${capitalize(user.maternalSurname)} (${capitalize(
-      findRole(user?.roleCode)?.name || ""
+      findRole(rolesAcls, user?.roleCode)?.name || ""
     )})`,
     value: user.id,
   }));
@@ -121,7 +121,12 @@ export const OfficeIntegration = () => {
   const onGoBack = () => navigate(-1);
 
   return (
-    <Acl name={isNew ? "/offices/new" : "/offices/:officeId"} redirect>
+    <Acl
+      category="administration"
+      subCategory="offices"
+      name={isNew ? "/offices/new" : "/offices/:officeId"}
+      redirect
+    >
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={3}>Oficina</Title>

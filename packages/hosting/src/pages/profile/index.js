@@ -24,7 +24,7 @@ export const Profile = () => {
   const { authUser } = useAuthentication();
 
   return (
-    <Acl redirect name="/profile">
+    <Acl redirect category="default" subCategory="profile" name="/profile">
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={3}>Perfil</Title>

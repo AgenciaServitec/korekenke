@@ -16,7 +16,7 @@ import {
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { includes } from "lodash";
+import { includes, isEmpty } from "lodash";
 
 export const DrawerLayout = ({
   user,
@@ -24,15 +24,25 @@ export const DrawerLayout = ({
   onSetIsVisibleDrawer,
   onNavigateTo,
 }) => {
-  const existPageAclsInAclsOfUser = (aclNames = []) =>
-    (user?.acls || []).some((acl) => includes(aclNames, acl));
+  const existPageAclsInAclsOfUser = (
+    category,
+    subCategories = [],
+    aclNames = []
+  ) =>
+    subCategories.map((subCategory) => {
+      if (isEmpty(user.acls?.[category]?.[subCategory])) return false;
+
+      return user.acls?.[category]?.[subCategory].some((acl) =>
+        includes(aclNames, acl)
+      );
+    });
 
   const items = [
     {
       label: "Home",
       key: "home",
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(["/home"]),
+      isVisible: existPageAclsInAclsOfUser("default", ["home"], ["/home"]),
       onClick: () => {
         onNavigateTo("/home");
         onSetIsVisibleDrawer(false);
@@ -42,15 +52,20 @@ export const DrawerLayout = ({
       label: "Control de Accesos (acls)",
       key: "group-acls",
       icon: <FontAwesomeIcon icon={faUsersCog} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser([
-        "/default-roles-acls",
-        "/manage-acls",
-      ]),
+      isVisible: existPageAclsInAclsOfUser(
+        "accessControl",
+        ["defaultRolesAcls", "manageAcls"],
+        ["/default-roles-acls", "/manage-acls"]
+      ),
       children: [
         {
           label: "Roles con Acls",
           key: "default-roles-acls",
-          isVisible: existPageAclsInAclsOfUser(["/default-roles-acls"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "accessControl",
+            ["defaultRolesAcls"],
+            ["/default-roles-acls"]
+          ),
           onClick: () => {
             onNavigateTo("/default-roles-acls");
             onSetIsVisibleDrawer(false);
@@ -59,7 +74,11 @@ export const DrawerLayout = ({
         {
           label: "Administrador Acls",
           key: "manage-acls",
-          isVisible: existPageAclsInAclsOfUser(["/manage-acls"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "accessControl",
+            ["manageAcls"],
+            ["/manage-acls"]
+          ),
           onClick: () => {
             onNavigateTo("/manage-acls");
             onSetIsVisibleDrawer(false);
@@ -71,19 +90,21 @@ export const DrawerLayout = ({
       label: "Administración",
       key: "manager",
       icon: <FontAwesomeIcon icon={faGears} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser([
-        "/users",
-        "/entities",
-        "/departments",
-        "/sections",
-        "/offices",
-      ]),
+      isVisible: existPageAclsInAclsOfUser(
+        "administration",
+        ["users", "entities", "departments", "offices", "sections"],
+        ["/users", "/entities", "/departments", "/sections", "/offices"]
+      ),
       children: [
         {
           label: "Usuarios",
           key: "users",
           icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/users"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "administration",
+            ["users"],
+            ["/users"]
+          ),
           onClick: () => {
             onNavigateTo("/users");
             onSetIsVisibleDrawer(false);
@@ -93,7 +114,11 @@ export const DrawerLayout = ({
           label: "Entidades",
           key: "entities",
           icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/entities"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "administration",
+            ["entities"],
+            ["/entities"]
+          ),
           onClick: () => {
             onNavigateTo("/entities");
             onSetIsVisibleDrawer(false);
@@ -103,7 +128,11 @@ export const DrawerLayout = ({
           label: "Departamentos",
           key: "departments",
           icon: <FontAwesomeIcon icon={faBuildingUser} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/departments"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "administration",
+            ["departments"],
+            ["/departments"]
+          ),
           onClick: () => {
             onNavigateTo("/departments");
             onSetIsVisibleDrawer(false);
@@ -113,7 +142,11 @@ export const DrawerLayout = ({
           label: "Secciones",
           key: "sections",
           icon: <FontAwesomeIcon icon={faComputer} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/sections"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "administration",
+            ["sections"],
+            ["/sections"]
+          ),
           onClick: () => {
             onNavigateTo("/sections");
             onSetIsVisibleDrawer(false);
@@ -123,7 +156,11 @@ export const DrawerLayout = ({
           label: "Oficinas",
           key: "offices",
           icon: <FontAwesomeIcon icon={faBriefcase} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/offices"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "administration",
+            ["offices"],
+            ["/offices"]
+          ),
           onClick: () => {
             onNavigateTo("/offices");
             onSetIsVisibleDrawer(false);
@@ -135,16 +172,21 @@ export const DrawerLayout = ({
       label: "Jefatura de bienestar del ejército (COBIENE)",
       key: "jefatura-de-bienestar-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser([
-        "/correspondences",
-        "/inscriptions",
-      ]),
+      isVisible: existPageAclsInAclsOfUser(
+        "jefatura-de-bienestar-del-ejercito",
+        ["correspondences", "inscriptions"],
+        ["/correspondences", "/inscriptions"]
+      ),
       children: [
         {
           label: "Correspondencias",
           key: "correspondences",
           icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/correspondences"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "jefatura-de-bienestar-del-ejercito",
+            ["correspondences"],
+            ["/correspondences"]
+          ),
           onClick: () => {
             onNavigateTo("/correspondences");
             onSetIsVisibleDrawer(false);
@@ -154,12 +196,20 @@ export const DrawerLayout = ({
           label: "Inscripciones",
           key: "inscriptions",
           icon: <FontAwesomeIcon icon={faIdCard} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(["/inscriptions"]),
+          isVisible: existPageAclsInAclsOfUser(
+            "jefatura-de-bienestar-del-ejercito",
+            ["inscriptions"],
+            ["/inscriptions"]
+          ),
           children: [
             {
               key: "military-circle",
               label: "Circulo Militar",
-              isVisible: existPageAclsInAclsOfUser(["/inscriptions/cmsts"]),
+              isVisible: existPageAclsInAclsOfUser(
+                "jefatura-de-bienestar-del-ejercito",
+                ["inscriptions"],
+                ["/inscriptions/cmsts"]
+              ),
               onClick: () => {
                 onNavigateTo("/inscriptions/cmsts");
                 onSetIsVisibleDrawer(false);
@@ -173,12 +223,20 @@ export const DrawerLayout = ({
       label: "Servicio de veterinaria y remonta del ejército",
       key: "servicio-de-veterinaria-y-remonta-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: true,
+      isVisible: existPageAclsInAclsOfUser(
+        "servicio-de-veterinaria-y-remonta-del-ejercito",
+        ["livestockAndEquines"],
+        ["/livestock-and-equines"]
+      ),
       children: [
         {
           key: "livestock-and-equines",
           label: "Ganados e equinos",
-          isVisible: true,
+          isVisible: existPageAclsInAclsOfUser(
+            "servicio-de-veterinaria-y-remonta-del-ejercito",
+            ["livestockAndEquines"],
+            ["/livestock-and-equines"]
+          ),
           onClick: () => {
             onNavigateTo(
               "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
