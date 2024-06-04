@@ -1,7 +1,6 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
-import { entitiesRef } from "./entities";
 
 export const livestockAndEquinesRef = firestore.collection(
   "livestock-and-equines"
