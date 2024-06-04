@@ -30,4 +30,6 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livesto
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/clinic-history";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/clinic-history/sheets";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/_equineMagazineProfileId";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/sheets";
