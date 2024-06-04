@@ -17,6 +17,7 @@ const GlobalDataContext = createContext({
   rolesAcls: [],
   offices: [],
   correspondences: [],
+  livestockAndEquines: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
@@ -59,6 +60,16 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
+  const [
+    livestockAndEquines = [],
+    livestockAndEquinesLoading,
+    livestockAndEquinesError,
+  ] = useCollectionData(
+    firestore
+      .collection("livestock-and-equines")
+      .where("isDeleted", "==", false) || null
+  );
+
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
       firestore.collection("correspondences").where("isDeleted", "==", false) ||
@@ -72,8 +83,8 @@ export const GlobalDataProvider = ({ children }) => {
     correspondencesError ||
     departmentsError ||
     sectionsError ||
-    officesError;
-
+    officesError ||
+    livestockAndEquinesError;
   const loading =
     entitiesLoading ||
     rolesAclsLoading ||
@@ -81,8 +92,8 @@ export const GlobalDataProvider = ({ children }) => {
     correspondencesLoading ||
     departmentsLoading ||
     sectionsLoading ||
-    officesLoading;
-
+    officesLoading ||
+    livestockAndEquinesLoading;
   useEffect(() => {
     error && notification({ type: "error" });
   }, [error]);
@@ -113,11 +124,8 @@ export const GlobalDataProvider = ({ children }) => {
         sections,
         rolesAcls,
         offices,
-        correspondences: orderBy(
-          correspondences,
-          (document) => [document.createAt],
-          ["desc"]
-        ),
+        correspondences: orderBy(correspondences, ["createAt"], ["desc"]),
+        livestockAndEquines,
       }}
     >
       {children}
