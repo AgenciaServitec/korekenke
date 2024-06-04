@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthentication } from "../providers";
-import { endsWith, isUndefined } from "lodash";
+import { endsWith, isEmpty, isUndefined } from "lodash";
 import { useParams } from "react-router";
 
 export const PrivateRoute = () => {
@@ -11,12 +11,29 @@ export const PrivateRoute = () => {
 
   const isLoginPage = location.pathname === "/login";
 
+  const validateAuthorizedRoute = () => {
+    let result = false;
+
+    Object.entries(authUser?.acls || {}).forEach(([key, subCategories = {}]) =>
+      Object.entries(subCategories).forEach(([_key, values]) => {
+        const response = values.find((aclRoute) =>
+          endsWith(pathnameTemplate(), aclRoute)
+        );
+
+        if (!isEmpty(response)) {
+          result = !isEmpty(response);
+          return;
+        }
+      })
+    );
+
+    return result;
+  };
+
   const isEnabledAccess = () => {
     const rules = {
       isAuth: authUser,
-      isAuthorizedRoute: (authUser?.acls || []).find((aclRoute) =>
-        endsWith(pathnameTemplate(), aclRoute)
-      ),
+      isAuthorizedRoute: validateAuthorizedRoute(),
     };
 
     return Object.values(rules).every((rule) => !!rule);

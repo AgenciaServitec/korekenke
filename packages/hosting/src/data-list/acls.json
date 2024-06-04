@@ -26,6 +26,13 @@
   },
   "administration": {
     "label": "Administración",
+    "users": {
+      "label": "Usuarios",
+      "/users": "Menú: Usuarios",
+      "/users/new": "Agregar Usuario",
+      "/users/:userId": "Editar Usuario",
+      "/users#delete": "Eliminar Usuario"
+    },
     "entities": {
       "label": "Entidades",
       "/entities": "Menú: Entidades",
@@ -70,6 +77,16 @@
       "/inscriptions/cmsts": "Menu: Inscripciones cmsts",
       "/inscriptions/cmsts/all": "Ver todos los inscripciones cmsts",
       "/inscriptions/cmsts/sheet": "Imprimir hoja cmsts"
+    }
+  },
+  "servicio-de-veterinaria-y-remonta-del-ejercito": {
+    "label": "Servicio de veterinaria y remonta del ejército",
+    "livestockAndEquines": {
+      "label": "Ganado y equinos",
+      "/livestock-and-equines": "Menu: Ganados y equinos",
+      "/livestock-and-equines/new": "Agregar ganado y equino",
+      "/livestock-and-equines/:livestockAndEquineId": "Editar ganado y equino",
+      "/livestock-and-equines#delete": "Eliminar ganado y equino"
     }
   }
 }
