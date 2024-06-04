@@ -67,14 +67,22 @@ export const UsersTable = ({
       key: "actions",
       render: (_, user) => (
         <Space>
-          <Acl name="/users/:userId">
+          <Acl
+            category="administration"
+            subCategory="users"
+            name="/users/:userId"
+          >
             <IconAction
               tooltipTitle="Editar"
               icon={faEdit}
               onClick={() => onEditUser(user)}
             />
           </Acl>
-          <Acl name="/users#delete">
+          <Acl
+            category="administration"
+            subCategory="users"
+            name="/users#delete"
+          >
             <IconAction
               tooltipTitle="Eliminar"
               styled={{ color: (theme) => theme.colors.error }}

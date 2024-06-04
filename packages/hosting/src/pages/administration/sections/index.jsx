@@ -43,10 +43,19 @@ export const SectionsIntegration = () => {
   };
 
   return (
-    <Acl name="/sections" redirect>
+    <Acl
+      category="administration"
+      subCategory="sections"
+      name="/sections"
+      redirect
+    >
       <Row gutter={[0, 24]}>
         <Col span={24}>
-          <Acl name="/sections/new">
+          <Acl
+            category="administration"
+            subCategory="sections"
+            name="/sections/new"
+          >
             <Button
               onClick={onAddSection}
               type="primary"
@@ -68,8 +77,12 @@ export const SectionsIntegration = () => {
             }}
             onEditItem={(section) => onEditSection(section)}
             itemTitle={(section) => section.name}
-            visibleEditItem={() => aclCheck("/sections/:sectionId")}
-            visibleDeleteItem={() => aclCheck("/sections#delete")}
+            visibleEditItem={() =>
+              aclCheck("administration", "sections", ["/sections/:sectionId"])
+            }
+            visibleDeleteItem={() =>
+              aclCheck("administration", "sections", ["/sections#delete"])
+            }
           />
         </Col>
       </Row>

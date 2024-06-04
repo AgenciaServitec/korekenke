@@ -197,7 +197,12 @@ const Section = ({
   const onSubmitSaveSection = (formData) => onSaveSection(formData);
 
   return (
-    <Acl name={isNew ? "/sections/new" : "/sections/:sectionId"} redirect>
+    <Acl
+      category="administration"
+      subCategory="sections"
+      name={isNew ? "/sections/new" : "/sections/:sectionId"}
+      redirect
+    >
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={3}>Sección</Title>
