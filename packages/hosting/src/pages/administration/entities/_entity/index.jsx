@@ -57,7 +57,7 @@ export const EntityIntegration = () => {
   const mapEntity = (formData) => ({
     ...entity,
     name: formData.name,
-    entityManageId: formData.entityManageId,
+    entityManageId: formData.entityManageId, //use moment for birthdate
   });
 
   const onSubmitSaveEntity = async (formData) => {
