@@ -73,10 +73,10 @@ const DefaultRolesAcls = ({
 
   return (
     <Acl
-      redirect
       category="accessControl"
       subCategory="defaultRolesAcls"
       name="/default-roles-acls"
+      redirect
     >
       <Row gutter={[0, 24]}>
         <Col span={24}>

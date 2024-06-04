@@ -164,10 +164,12 @@ const RoleAcl = ({
 
   return (
     <Acl
-      redirect
+      category="accessControl"
+      subCategory="defaultRolesAcls"
       name={
         isNew ? "/default-roles-acls/new" : "/default-roles-acls/:roleAclsId"
       }
+      redirect
     >
       <Form onSubmit={handleSubmit(onSubmitRoleAcls)}>
         <Row gutter={[16, 16]}>
