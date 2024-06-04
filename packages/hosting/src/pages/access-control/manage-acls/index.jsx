@@ -282,6 +282,7 @@ const ManageAcls = ({
                               <Col span={24} key={keySubCategory}>
                                 <Controller
                                   name={`acls.${keyCategory}.${keySubCategory}`}
+                                  defaultValue={undefined}
                                   control={control}
                                   render={({
                                     field: { onChange, value, name },
