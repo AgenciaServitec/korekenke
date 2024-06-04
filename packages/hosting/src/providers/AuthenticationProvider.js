@@ -85,8 +85,6 @@ export const AuthenticationProvider = ({ children }) => {
 
   if (authLoading && location.pathname !== "/") return <Spinner fullscreen />;
 
-  console.log("authUser: ", authUser);
-
   return (
     <AuthenticationContext.Provider
       value={{

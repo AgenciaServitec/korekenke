@@ -14,8 +14,6 @@ export const PdfRegistrationClinicHistory = () => {
       .doc(liveStockEquinesId)
   );
 
-  console.log(equine);
-
   return (
     <Container>
       <div className="sheet">

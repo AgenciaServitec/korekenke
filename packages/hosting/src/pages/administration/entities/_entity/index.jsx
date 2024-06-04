@@ -22,7 +22,6 @@ import {
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
-import { InitialEntities } from "../../../../data-list";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
@@ -32,15 +31,6 @@ export const EntityIntegration = () => {
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
-
-  const organosView = InitialEntities[0].organos[0].comandos[0].entities.map(
-    (comando) => ({
-      label: comando.name,
-      value: comando.id,
-    })
-  );
-
-  console.log(organosView);
 
   const isNew = entityId === "new";
 
@@ -57,7 +47,7 @@ export const EntityIntegration = () => {
   const mapEntity = (formData) => ({
     ...entity,
     name: formData.name,
-    entityManageId: formData.entityManageId, //use moment for birthdate
+    entityManageId: formData.entityManageId,
   });
 
   const onSubmitSaveEntity = async (formData) => {
@@ -106,14 +96,12 @@ export const EntityIntegration = () => {
     });
   };
 
-  const usersView = users.map((user) => {
-    return {
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
-      value: user.id,
-    };
-  });
+  const usersView = users.map((user) => ({
+    label: `${capitalize(user.firstName)} ${capitalize(
+      user.paternalSurname
+    )} ${capitalize(user.maternalSurname)}`,
+    value: user.id,
+  }));
 
   const submitSaveEntity = (formData) => onSubmitSaveEntity(formData);
 

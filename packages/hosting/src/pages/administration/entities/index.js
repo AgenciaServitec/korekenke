@@ -1,6 +1,6 @@
 import React from "react";
 import Col from "antd/lib/col";
-import { Acl, Button, List } from "../../../components";
+import { Acl, Button, List, modalConfirm } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Row from "antd/lib/row";
@@ -28,13 +28,12 @@ export const EntitiesIntegration = () => {
   };
 
   const onEditEntity = (entity) => navigateToEntity(entity.id);
-  const onDeleteEntity = async (entity) => {
-    try {
-      await updateEntity(entity.id, assignDeleteProps({ isDeleted: true }));
-    } catch (e) {
-      console.error("ErrorDeleteEntity: ", e);
-    }
-  };
+  const onDeleteEntity = async (entity) =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres eliminar la entidad?",
+      onOK: async () =>
+        await updateEntity(entity.id, assignDeleteProps({ isDeleted: true })),
+    });
 
   return (
     <Acl
@@ -56,7 +55,7 @@ export const EntitiesIntegration = () => {
               size="large"
               icon={<FontAwesomeIcon icon={faPlus} />}
             >
-              &ensp; Agregar Núcleo
+              &ensp; Agregar Entidad
             </Button>
           </Acl>
         </Col>

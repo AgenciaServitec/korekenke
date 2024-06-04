@@ -27,6 +27,6 @@ export * from "./entities/jefatura-de-bienestar-del-ejercito/inscriptions";
 
 //ENTITIES "servicio-de-veterinaria-y-remonta-del-ejercito"
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockOrEquineId";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/clinic-history";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/clinic-history/sheets";

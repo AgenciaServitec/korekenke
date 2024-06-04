@@ -27,7 +27,7 @@ import {
 import moment from "moment";
 
 export const LiveStockAndEquineIntegration = () => {
-  const { livestockOrEquineId } = useParams();
+  const { livestockAndEquineId } = useParams();
   const navigate = useNavigate();
   const { livestockAndEquines } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
@@ -35,17 +35,17 @@ export const LiveStockAndEquineIntegration = () => {
   const [loading, setLoading] = useState(false);
   const [livestockAndEquine, setLivestockAndEquine] = useState({});
 
-  const isNew = livestockOrEquineId === "new";
+  const isNew = livestockAndEquineId === "new";
 
   useEffect(() => {
-    const _livestockOrEquine = isNew
+    const _livestockAndEquine = isNew
       ? { id: getLivestockAndEquineId() }
       : livestockAndEquines.find(
-          (livestockAndEquine) => livestockAndEquine.id === livestockOrEquineId
+          (livestockAndEquine) => livestockAndEquine.id === livestockAndEquineId
         );
-    if (!_livestockOrEquine) return navigate(-1);
+    if (!_livestockAndEquine) return navigate(-1);
 
-    setLivestockAndEquine(_livestockOrEquine);
+    setLivestockAndEquine(_livestockAndEquine);
   }, []);
 
   const mapLiveStockAndEquine = (formData) => ({
@@ -61,8 +61,9 @@ export const LiveStockAndEquineIntegration = () => {
     height: formData.height,
     father: formData.father,
     mother: formData.mother,
-    procedencia: formData.procedencia,
+    origin: formData.origin,
     raceOrLine: formData.raceOrLine,
+    fur: formData.fur,
     squadron: formData.squadron,
     description: formData.description,
   });
@@ -122,8 +123,9 @@ const LiveStockAndEquine = ({
     height: yup.string().required(),
     father: yup.string().required(),
     mother: yup.string().required(),
-    procedencia: yup.string().required(),
+    origin: yup.string().required(),
     raceOrLine: yup.string().required(),
+    fur: yup.string().required(),
     squadron: yup.string().required(),
     description: yup.string().required(),
   });
@@ -154,12 +156,13 @@ const LiveStockAndEquine = ({
       color: livestockAndEquine?.color || "",
       birthdate: livestockAndEquine?.birthdate
         ? moment(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm")
-        : "",
+        : undefined,
       height: livestockAndEquine?.height || "",
       father: livestockAndEquine?.father || "",
       mother: livestockAndEquine?.mother || "",
-      procedencia: livestockAndEquine?.procedencia || "",
+      origin: livestockAndEquine?.origin || "",
       raceOrLine: livestockAndEquine?.raceOrLine || "",
+      fur: livestockAndEquine?.fur || "",
       squadron: livestockAndEquine?.squadron || "",
       description: livestockAndEquine?.description || "",
     });
@@ -182,7 +185,7 @@ const LiveStockAndEquine = ({
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Equino</Title>
+          <Title level={3}>Ganado o equino</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -339,7 +342,7 @@ const LiveStockAndEquine = ({
               </Col>
               <Col span={6}>
                 <Controller
-                  name="procedencia"
+                  name="origin"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
@@ -365,16 +368,14 @@ const LiveStockAndEquine = ({
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      showSearch={false}
-                      filterOption={false}
                       options={[
                         {
-                          value: "male",
                           label: "Macho",
+                          value: "male",
                         },
                         {
-                          value: "female",
                           label: "Hembra",
+                          value: "female",
                         },
                       ]}
                     />

@@ -16,17 +16,18 @@ export const LiveStockAndEquinesIntegration = () => {
   const { livestockAndEquines } = useGlobalData();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (pathname = "new") =>
+  const navigateTo = (id = "new") =>
     navigate(
-      `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${pathname}`
+      `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${id}`
     );
 
   const onAddEquine = () => navigateTo("new");
   const onEditEquine = (livestockAndEquine) =>
     navigateTo(livestockAndEquine.id);
-  const onDeleteEquine = async (livestockAndEquine) => {
+
+  const onConfirmDeleteEquine = async (livestockAndEquine) => {
     modalConfirm({
-      title: "¿Estás seguro que quieres eliminar el ganado o equino",
+      title: "¿Estás seguro que quieres eliminar el ganado o equino?",
       onOk: async () => {
         await updateLivestockAndEquine(
           livestockAndEquine.id,
@@ -38,19 +39,19 @@ export const LiveStockAndEquinesIntegration = () => {
 
   return (
     <LiveStockAndEquines
+      livestockAndEquines={livestockAndEquines}
       onAddEquine={onAddEquine}
       onEditEquine={onEditEquine}
-      onDeleteEquine={onDeleteEquine}
-      livestockAndEquines={livestockAndEquines}
+      onDeleteEquine={onConfirmDeleteEquine}
     />
   );
 };
 
 const LiveStockAndEquines = ({
+  livestockAndEquines,
   onAddEquine,
   onEditEquine,
   onDeleteEquine,
-  livestockAndEquines,
 }) => {
   return (
     <Acl
@@ -79,7 +80,6 @@ const LiveStockAndEquines = ({
         <Col span={24}>
           <Title level={3}>Equinos</Title>
         </Col>
-
         <Col span={24}>
           <LiveStockAndEquinesTable
             livestockAndEquines={livestockAndEquines}
