@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Divider, Row } from "antd";
-import { AddButton } from "../../../../../components";
+import { AddButton, notification } from "../../../../../components";
 import { EquineMagazineProfilesTable } from "./EquineMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -20,6 +20,10 @@ export const EquineMagazineProfilesIntegration = () => {
       .doc(livestockOrEquineId)
       .collection("equine-magazine-profiles")
   );
+
+  useEffect(() => {
+    equineMagazineProfilesError && notification({ type: "error" });
+  }, [equineMagazineProfilesError]);
 
   const navigateTo = (equineMagazineProfileId) =>
     navigate(
