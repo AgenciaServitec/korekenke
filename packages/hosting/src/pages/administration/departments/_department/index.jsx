@@ -211,6 +211,8 @@ const Department = ({
 
   return (
     <Acl
+      category="administration"
+      subCategory="departments"
       name={isNew ? "/departments/new" : "/departments/:departmentId"}
       redirect
     >

@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useAcl, useAsync, useDefaultFirestoreProps } from "../../hooks";
+import { useAcl, useAsync, useDefaultFirestoreProps } from "../../../hooks";
 import { capitalize } from "lodash";
-import { Acl, Button, List, notification } from "../../components";
+import { Acl, Button, List, notification } from "../../../components";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { useGlobalData } from "../../providers";
-import { updateRoleAcl } from "../../firebase/collections";
+import { useGlobalData } from "../../../providers";
+import { updateRoleAcl } from "../../../firebase/collections";
 
 export const DefaultRolesAclsIntegration = () => {
   const navigate = useNavigate();
@@ -72,7 +72,12 @@ const DefaultRolesAcls = ({
   }));
 
   return (
-    <Acl redirect name="/default-roles-acls">
+    <Acl
+      category="accessControl"
+      subCategory="defaultRolesAcls"
+      name="/default-roles-acls"
+      redirect
+    >
       <Row gutter={[0, 24]}>
         <Col span={24}>
           <Button
@@ -90,8 +95,16 @@ const DefaultRolesAcls = ({
             onDeleteItem={(roleAcls) => onDeleteRoleAcls(roleAcls)}
             onEditItem={(roleAcls) => onEditRoleAcls(roleAcls)}
             itemTitle={(roleAcls) => roleAcls.name}
-            visibleEditItem={() => aclCheck("/default-roles-acls/:roleAclsId")}
-            visibleDeleteItem={() => aclCheck("/default-roles-acls#delete")}
+            visibleEditItem={() =>
+              aclCheck("accessControl", "defaultRolesAcls", [
+                "/default-roles-acls/:roleAclsId",
+              ])
+            }
+            visibleDeleteItem={() =>
+              aclCheck("accessControl", "defaultRolesAcls", [
+                "/default-roles-acls#delete",
+              ])
+            }
           />
         </Col>
       </Row>

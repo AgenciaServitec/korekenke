@@ -120,7 +120,12 @@ export const EntityIntegration = () => {
   const onGoBack = () => navigate(-1);
 
   return (
-    <Acl name={isNew ? "/entities/new" : "/entities/:entityId"} redirect>
+    <Acl
+      category="administration"
+      subCategory="entities"
+      name={isNew ? "/entities/new" : "/entities/:entityId"}
+      redirect
+    >
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={3}>Núcleo</Title>

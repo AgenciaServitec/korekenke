@@ -44,10 +44,19 @@ export const DepartmentsIntegration = () => {
   };
 
   return (
-    <Acl name="/departments" redirect>
+    <Acl
+      category="administration"
+      subCategory="departments"
+      name="/departments"
+      redirect
+    >
       <Row gutter={[0, 24]}>
         <Col span={24}>
-          <Acl name="/departments/new">
+          <Acl
+            category="administration"
+            subCategory="departments"
+            name="/departments/new"
+          >
             <Button
               onClick={onAddDepartment}
               type="primary"
@@ -69,8 +78,14 @@ export const DepartmentsIntegration = () => {
             }}
             onEditItem={(department) => onEditDepartment(department)}
             itemTitle={(department) => department.name}
-            visibleEditItem={() => aclCheck("/departments/:departmentId")}
-            visibleDeleteItem={() => aclCheck("/departments#delete")}
+            visibleEditItem={() =>
+              aclCheck("administration", "departments", [
+                "/departments/:departmentId",
+              ])
+            }
+            visibleDeleteItem={() =>
+              aclCheck("administration", "departments", ["/departments#delete"])
+            }
           />
         </Col>
       </Row>

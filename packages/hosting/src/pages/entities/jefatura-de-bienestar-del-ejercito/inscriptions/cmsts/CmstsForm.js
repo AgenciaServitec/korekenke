@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+  Acl,
   Button,
   DatePicker,
   Form,
@@ -135,19 +136,31 @@ export const CmstsForm = () => {
             alignItems: "center",
           }}
         >
-          <IconAction
-            className="pointer"
-            onClick={() => onNavigateTo("/inscriptions/cmsts/sheet")}
-            styled={{ color: (theme) => theme.colors.error }}
-            icon={faFilePdf}
-          />
-          <Button
-            type="primary"
-            onClick={() => onNavigateTo("/inscriptions/cmsts/all")}
+          <Acl
+            category="jefatura-de-bienestar-del-ejercito"
+            subCategory="inscriptions"
+            name="/inscriptions/cmsts/sheet"
           >
-            <FontAwesomeIcon icon={faAddressBook} /> &nbsp; Ver todos los
-            inscritos
-          </Button>
+            <IconAction
+              className="pointer"
+              onClick={() => onNavigateTo("/inscriptions/cmsts/sheet")}
+              styled={{ color: (theme) => theme.colors.error }}
+              icon={faFilePdf}
+            />
+          </Acl>
+          <Acl
+            category="jefatura-de-bienestar-del-ejercito"
+            subCategory="inscriptions"
+            name="/inscriptions/cmsts/all"
+          >
+            <Button
+              type="primary"
+              onClick={() => onNavigateTo("/inscriptions/cmsts/all")}
+            >
+              <FontAwesomeIcon icon={faAddressBook} /> &nbsp; Ver todos los
+              inscritos
+            </Button>
+          </Acl>
         </Space>
       </Col>
       <Col span={24}>

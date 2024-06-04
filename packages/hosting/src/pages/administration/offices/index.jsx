@@ -33,10 +33,19 @@ export const OfficesIntegration = () => {
   };
 
   return (
-    <Acl name="/offices" redirect>
+    <Acl
+      category="administration"
+      subCategory="offices"
+      name="/offices"
+      redirect
+    >
       <Row gutter={[0, 24]}>
         <Col span={24}>
-          <Acl name="/offices/new">
+          <Acl
+            category="administration"
+            subCategory="offices"
+            name="/offices/new"
+          >
             <Button
               onClick={onAddOffice}
               type="primary"
@@ -53,8 +62,12 @@ export const OfficesIntegration = () => {
             onDeleteItem={(office) => onDeleteOffice(office)}
             onEditItem={(office) => onEditOffice(office)}
             itemTitle={(office) => office.name}
-            visibleEditItem={() => aclCheck("/offices/:officeId")}
-            visibleDeleteItem={() => aclCheck("/offices#delete")}
+            visibleEditItem={() =>
+              aclCheck("administration", "offices", ["/offices/:officeId"])
+            }
+            visibleDeleteItem={() =>
+              aclCheck("administration", "offices", ["/offices#delete"])
+            }
           />
         </Col>
       </Row>

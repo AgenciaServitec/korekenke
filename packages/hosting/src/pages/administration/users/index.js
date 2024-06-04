@@ -68,7 +68,7 @@ export const Users = () => {
     });
 
   return (
-    <Acl redirect name="/users">
+    <Acl redirect category="administration" subCategory="users" name="/users">
       <Row gutter={[16, 16]}>
         <Acl name="/users/new">
           <>

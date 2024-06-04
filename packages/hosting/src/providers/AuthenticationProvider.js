@@ -122,11 +122,10 @@ const mapAuthUser = (user, rolesAcls) => {
 
   if (!authUserRole) return mapAuthUserError("You don't have an assigned role");
 
-  const authUserPathnames = findAuthUserPathnames(user);
+  // const authUserPathnames = findAuthUserPathnames(user);
   return {
     ...user,
     role: authUserRole,
-    pathnames: authUserPathnames,
   };
 };
 
