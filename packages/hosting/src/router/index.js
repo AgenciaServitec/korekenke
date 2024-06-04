@@ -4,6 +4,7 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
+import { EquineMagazineProfileIntegration } from "../pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/_equineMagazineProfileId";
 
 export const Router = () => {
   return (
@@ -219,6 +220,29 @@ export const Router = () => {
         exact
         path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/clinic-history/sheets"
         element={<A.Sheets />}
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/equine-magazine-profiles"
+        element={
+          <AdminLayout>
+            <A.EquineMagazineProfilesIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+        element={
+          <AdminLayout>
+            <A.EquineMagazineProfileIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/equine-magazine-profiles/sheets"
+        element={<A.SheetsEquineMagazineProfiles />}
       />
       <Route path="*" element={<Page404 />} />
     </Routes>
