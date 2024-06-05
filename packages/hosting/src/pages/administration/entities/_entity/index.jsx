@@ -96,12 +96,14 @@ export const EntityIntegration = () => {
     });
   };
 
-  const usersView = users.map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)}`,
-    value: user.id,
-  }));
+  const usersView = users
+    .filter((user) => user.roleCode === "manager")
+    .map((user) => ({
+      label: `${capitalize(user.firstName)} ${capitalize(
+        user.paternalSurname
+      )} ${capitalize(user.maternalSurname)}`,
+      value: user.id,
+    }));
 
   const submitSaveEntity = (formData) => onSubmitSaveEntity(formData);
 
