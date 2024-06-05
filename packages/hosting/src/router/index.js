@@ -4,8 +4,6 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { EquineMagazineProfileIntegration } from "../pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/_equineMagazineProfileId";
-import { PdfEquineMagazineProfilesSheets } from "../pages";
 
 export const Router = () => {
   return (
