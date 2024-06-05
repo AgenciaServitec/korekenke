@@ -121,7 +121,6 @@ export const ClinicHistoryIntegration = () => {
         <Col span={24}>
           <ClinicHistoryTable
             clinicHistories={clinicHistories}
-            livestockAndEquineId={livestockAndEquineId}
             loading={clinicHistoriesLoading}
             onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
             onSetIsVisibleModal={onSetVisibleHistoryClinicModal}

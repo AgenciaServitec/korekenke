@@ -27,6 +27,7 @@ import {
 } from "../../../../../firebase/collections";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 
 export const LiveStockAndEquineIntegration = () => {
   const { livestockAndEquineId } = useParams();
@@ -63,7 +64,7 @@ export const LiveStockAndEquineIntegration = () => {
     chipNumber: formData.chipNumber,
     gender: formData.gender,
     color: formData.color,
-    birthdate: moment(formData.birthdate).format("DD/MM/YYYY HH:mm"),
+    birthdate: moment(formData.birthdate).format(DATE_FORMAT_TO_FIRESTORE),
     height: formData.height,
     father: formData.father,
     mother: formData.mother,
@@ -167,7 +168,7 @@ const LiveStockAndEquine = ({
       chipNumber: livestockAndEquine?.chipNumber || "",
       color: livestockAndEquine?.color || "",
       birthdate: livestockAndEquine?.birthdate
-        ? moment(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm")
+        ? moment(livestockAndEquine.birthdate, DATE_FORMAT_TO_FIRESTORE)
         : undefined,
       height: livestockAndEquine?.height || "",
       father: livestockAndEquine?.father || "",

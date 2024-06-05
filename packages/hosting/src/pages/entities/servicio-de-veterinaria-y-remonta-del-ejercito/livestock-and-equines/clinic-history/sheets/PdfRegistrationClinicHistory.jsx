@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import { firestore } from "../../../../../../firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
+import { notification, Spinner } from "../../../../../../components";
+import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
 
 export const PdfRegistrationClinicHistory = () => {
-  const { liveStockEquinesId } = useParams();
-  const [equine, equineLoading, equineError] = useDocumentData(
-    firestore
-      .collection("livestock-and-equines")
-      .doc("3817zSlDzCIFyuI94txS")
-      .collection("clinic-history")
-      .doc(liveStockEquinesId)
-  );
+  const { livestockAndEquineId, clinicHistoryId } = useParams();
+
+  const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
+    useDocumentData(
+      livestockAndEquinesRef
+        .doc(livestockAndEquineId)
+        .collection("clinic-history")
+        .doc(clinicHistoryId)
+    );
+
+  useEffect(() => {
+    clinicHistoryError && notification({ type: "error" });
+  }, [clinicHistoryError]);
+
+  if (clinicHistoryLoading) return <Spinner height="80vh" />;
+
+  console.log("Datos clinicHistory: ", clinicHistory);
 
   return (
     <Container>

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 export const ClinicHistoryTable = ({
   clinicHistories,
   loading,
-  livestockAndEquineId,
   onConfirmRemoveClinicHistory,
   onSetIsVisibleModal,
   onSetClinicHistoryId,
@@ -49,9 +48,7 @@ export const ClinicHistoryTable = ({
               tooltipTitle="Pdf"
               icon={faFilePdf}
               styled={{ color: (theme) => theme.colors.error }}
-              onClick={() =>
-                navigate(`${livestockAndEquineId}/pdf-clinic-history`)
-              }
+              onClick={() => navigate(`${clinicHistory.id}/pdf-clinic-history`)}
             />
           </Acl>
           <Acl

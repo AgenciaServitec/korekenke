@@ -4,6 +4,7 @@ import { Acl, IconAction } from "../../../../../components";
 import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { orderBy } from "lodash";
 
 export const EquineMagazineProfilesTable = ({
   equineMagazineProfiles,
@@ -22,7 +23,7 @@ export const EquineMagazineProfilesTable = ({
       render: (_, equineMagazineProfile) => (
         <div>
           {moment(equineMagazineProfile?.createAt.toDate()).format(
-            "DD/MM/YYYY"
+            "DD/MM/YYYY HH:mm"
           )}
         </div>
       ),
@@ -105,7 +106,7 @@ export const EquineMagazineProfilesTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={equineMagazineProfiles}
+      dataSource={orderBy(equineMagazineProfiles, "createAt", "desc")}
       loading={equineMagazineProfilesLoading}
       pagination={false}
       scroll={{ x: "max-content" }}
