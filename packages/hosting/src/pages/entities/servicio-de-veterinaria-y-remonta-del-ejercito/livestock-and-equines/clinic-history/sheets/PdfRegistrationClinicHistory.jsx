@@ -74,7 +74,7 @@ export const PdfRegistrationClinicHistory = () => {
                   <span>{livestockAndEquine.registrationNumber}</span>
                 </div>
                 <div>
-                  <span>Fecha de Nacimiento:</span>
+                  <span>Fecha nacimiento:</span>
                   <span>
                     {moment(
                       livestockAndEquine.birthdate,
@@ -202,7 +202,7 @@ export const PdfRegistrationClinicHistory = () => {
 const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
 
   .sheet {
     .header {
@@ -210,7 +210,7 @@ const Container = styled.div`
         display: flex;
         justify-content: flex-end;
         margin-bottom: 2em;
-        font-size: 0.9em;
+        font-size: 1em;
         font-weight: 500;
         padding-right: 1em;
 
@@ -218,12 +218,13 @@ const Container = styled.div`
           display: flex;
           flex-direction: column;
           gap: 0.5em;
+          font-weight: 600;
         }
       }
 
       &__title {
         text-align: center;
-        font-size: 1.7em;
+        font-size: 1.4em;
       }
     }
 
@@ -233,6 +234,8 @@ const Container = styled.div`
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
+        text-transform: uppercase;
+        font-size: 0.9em;
 
         > div {
           display: flex;
@@ -241,12 +244,13 @@ const Container = styled.div`
           div {
             display: flex;
             gap: 0.5em;
-            span:first-child {
-              font-weight: 500;
+            span:last-child {
+              font-weight: 700;
             }
           }
         }
       }
+
       &__table {
         table {
           width: 100%;
@@ -258,13 +262,14 @@ const Container = styled.div`
 
         th {
           text-transform: uppercase;
-          padding: 0.5em 0;
+          padding: 0.5em;
+          font-size: 0.8em;
         }
 
         td {
           height: 3em;
-          padding: 0 0.5em;
-          font-size: 0.9em;
+          padding: 0.5em;
+          font-size: 0.7em;
         }
       }
     }
