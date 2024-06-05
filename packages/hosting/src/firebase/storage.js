@@ -13,6 +13,9 @@ import { currentConfig } from "../config";
 export const buckets = {
   default: storage,
   documents: firebase.app().storage(currentConfig.buckets.documents),
+  servicioDeVeterinariaYRemontaDelEjercito: firebase
+    .app()
+    .storage(currentConfig.buckets.servicioDeVeterinariaYRemontaDelEjercito),
 };
 
 export const imageResizes = ["423x304", "313x370"];

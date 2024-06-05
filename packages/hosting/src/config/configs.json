@@ -39,7 +39,8 @@
     "publicHostingUrl": "-",
     "publicStorageUrl": "-",
     "buckets": {
-      "documents": "gs://korekenke-documents"
+      "documents": "gs://korekenke-documents",
+      "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito"
     },
     "apiUrl": "https://korekenke-prod.web.app/api"
   },
@@ -57,7 +58,8 @@
     "publicHostingUrl": "-",
     "publicStorageUrl": "-",
     "buckets": {
-      "documents": "gs://korekenke-documents"
+      "documents": "gs://korekenke-documents",
+      "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito"
     },
     "apiUrl": "https://korekenke-prod.web.app/api"
   }

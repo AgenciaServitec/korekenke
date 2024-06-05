@@ -192,8 +192,8 @@ export const Upload = ({
               beforeUpload={beforeUpload}
             >
               <UploadDraggerBody
-                hint="Supported to upload only one file"
-                text="Click here or drag to upload the file"
+                hint="Soportado para cargar solo un archivo"
+                text="Haga clic aquí o arrastre para cargar el archivo"
               />
             </AntdUpload.Dragger>
           ) : (
