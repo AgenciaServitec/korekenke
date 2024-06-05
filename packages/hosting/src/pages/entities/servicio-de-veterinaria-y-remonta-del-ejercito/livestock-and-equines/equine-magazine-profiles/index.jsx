@@ -23,9 +23,7 @@ export const EquineMagazineProfilesIntegration = () => {
 
   useEffect(() => {
     equineMagazineProfilesError && notification({ type: "error" });
-  }, [equineMagazineProfilesError]);
-
-  const navigateTo = (equineMagazineProfileId) =>
+  }, [equineMagazineProfilesError]);const navigateTo = (equineMagazineProfileId) =>
     navigate(
       `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockOrEquineId}/equine-magazine-profiles/${equineMagazineProfileId}`
     );
