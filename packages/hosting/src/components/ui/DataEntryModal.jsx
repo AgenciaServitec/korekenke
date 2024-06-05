@@ -40,7 +40,6 @@ export const ModalStyled = styled(ModalAntd)`
   ${({ theme }) => css`
     max-width: 100vw;
     margin: 0;
-    height: calc(100vh - calc(100vh - 100%));
     min-width: 100vw;
     padding-bottom: 9em;
     ${mediaQuery.minDesktop} {
