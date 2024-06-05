@@ -1,13 +1,14 @@
 import React from "react";
 import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../components";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faIdCard, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 
 export const LiveStockAndEquinesTable = ({
   livestockAndEquines,
   onEditLiveStockAndEquine,
   onConfirmRemoveLiveStockAndEquine,
+  onNavigateGoToPdfEquineLivestockRegistrationCard,
 }) => {
   const columns = [
     {
@@ -42,6 +43,15 @@ export const LiveStockAndEquinesTable = ({
       key: "actions",
       render: (_, livestockAndEquine) => (
         <Space>
+          <IconAction
+            tooltipTitle="Ver tarjeta"
+            icon={faIdCard}
+            onClick={() =>
+              onNavigateGoToPdfEquineLivestockRegistrationCard(
+                livestockAndEquine.id
+              )
+            }
+          />
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="livestockAndEquines"

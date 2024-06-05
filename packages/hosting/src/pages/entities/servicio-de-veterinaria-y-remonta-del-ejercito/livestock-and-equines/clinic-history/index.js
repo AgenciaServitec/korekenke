@@ -6,19 +6,17 @@ import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
 import { ClinicHistoryInformation } from "./ClinicHistoryInformation";
 import { firestore } from "../../../../../firebase";
-import { useNavigate } from "react-router";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import { updateClinicHistory } from "../../../../../firebase/collections";
 
 export const ClinicHistoryIntegration = () => {
-  const { livestockOrEquineId } = useParams();
+  const { livestockAndEquineId } = useParams();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
     ""
   );
-  const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
@@ -29,7 +27,7 @@ export const ClinicHistoryIntegration = () => {
     useCollectionData(
       firestore
         .collection("livestock-and-equines")
-        .doc("3817zSlDzCIFyuI94txS")
+        .doc(livestockAndEquineId)
         .collection("clinic-history")
         .where("isDeleted", "==", false)
     );
@@ -47,7 +45,7 @@ export const ClinicHistoryIntegration = () => {
   const onDeleteClinicHistory = async (clinicHistory) => {
     try {
       await updateClinicHistory(
-        "3817zSlDzCIFyuI94txS",
+        livestockAndEquineId,
         clinicHistory.id,
         assignDeleteProps({ isDeleted: true })
       );
@@ -89,7 +87,7 @@ export const ClinicHistoryIntegration = () => {
       <Col span={24}>
         <ClinicHistoryTable
           clinicHistories={clinicHistories}
-          livestockOrEquineId={livestockOrEquineId}
+          livestockAndEquineId={livestockAndEquineId}
           loading={clinicHistoriesLoading}
           onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
           onSetIsVisibleModal={onSetVisibleHistoryClinicModal}

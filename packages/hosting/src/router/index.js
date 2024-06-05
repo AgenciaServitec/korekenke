@@ -163,7 +163,7 @@ export const Router = () => {
               <A.Profile />
             </AdminLayout>
           }
-        />{" "}
+        />
         <Route
           exact
           path="inscriptions/cmsts"
@@ -187,28 +187,34 @@ export const Router = () => {
           path="inscriptions/cmsts/sheet"
           element={<A.InscriptionFile />}
         />
+        <Route
+          exact
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+          element={
+            <AdminLayout>
+              <A.LiveStockAndEquinesIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId"
+          element={
+            <AdminLayout>
+              <A.LiveStockAndEquineIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+          element={<A.PdfEquineLivestockRegistrationCardSheet />}
+        />
       </Route>
+
       <Route
         exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
-        element={
-          <AdminLayout>
-            <A.LiveStockAndEquinesIntegration />
-          </AdminLayout>
-        }
-      />
-      <Route
-        exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId"
-        element={
-          <AdminLayout>
-            <A.LiveStockAndEquineIntegration />
-          </AdminLayout>
-        }
-      />
-      <Route
-        exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/clinic-history"
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history"
         element={
           <AdminLayout>
             <A.ClinicHistoryIntegration />
@@ -217,7 +223,7 @@ export const Router = () => {
       />
       <Route
         exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockOrEquineId/clinic-history/sheets"
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/sheets"
         element={<A.Sheets />}
       />
       <Route path="*" element={<Page404 />} />

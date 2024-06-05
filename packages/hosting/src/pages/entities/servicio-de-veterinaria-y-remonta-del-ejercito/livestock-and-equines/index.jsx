@@ -16,14 +16,15 @@ export const LiveStockAndEquinesIntegration = () => {
   const { livestockAndEquines } = useGlobalData();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (id = "new") =>
-    navigate(
-      `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${id}`
-    );
+  const navigateTo = (id = "new") => navigate(id);
 
   const onAddEquine = () => navigateTo("new");
   const onEditEquine = (livestockAndEquine) =>
     navigateTo(livestockAndEquine.id);
+  const onNavigateGoToPdfEquineLivestockRegistrationCard = (
+    livestockAndEquineId
+  ) =>
+    navigate(`${livestockAndEquineId}/pdf-equine-livestock-registration-card`);
 
   const onConfirmDeleteEquine = async (livestockAndEquine) => {
     modalConfirm({
@@ -43,6 +44,9 @@ export const LiveStockAndEquinesIntegration = () => {
       onAddEquine={onAddEquine}
       onEditEquine={onEditEquine}
       onDeleteEquine={onConfirmDeleteEquine}
+      onNavigateGoToPdfEquineLivestockRegistrationCard={
+        onNavigateGoToPdfEquineLivestockRegistrationCard
+      }
     />
   );
 };
@@ -52,6 +56,7 @@ const LiveStockAndEquines = ({
   onAddEquine,
   onEditEquine,
   onDeleteEquine,
+  onNavigateGoToPdfEquineLivestockRegistrationCard,
 }) => {
   return (
     <Acl
@@ -73,18 +78,21 @@ const LiveStockAndEquines = ({
               size="large"
               icon={<FontAwesomeIcon icon={faPlus} />}
             >
-              &ensp; Agregar Equino
+              &ensp; Agregar Ganado o Equino
             </Button>
           </Acl>
         </Col>
         <Col span={24}>
-          <Title level={3}>Equinos</Title>
+          <Title level={3}>Ganados y equinos</Title>
         </Col>
         <Col span={24}>
           <LiveStockAndEquinesTable
             livestockAndEquines={livestockAndEquines}
             onEditLiveStockAndEquine={onEditEquine}
             onConfirmRemoveLiveStockAndEquine={onDeleteEquine}
+            onNavigateGoToPdfEquineLivestockRegistrationCard={
+              onNavigateGoToPdfEquineLivestockRegistrationCard
+            }
           />
         </Col>
       </Row>

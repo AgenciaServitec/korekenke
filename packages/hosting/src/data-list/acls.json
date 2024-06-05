@@ -86,7 +86,8 @@
       "/livestock-and-equines": "Menu: Ganados y equinos",
       "/livestock-and-equines/new": "Agregar ganado y equino",
       "/livestock-and-equines/:livestockAndEquineId": "Editar ganado y equino",
-      "/livestock-and-equines#delete": "Eliminar ganado y equino"
+      "/livestock-and-equines#delete": "Eliminar ganado y equino",
+      "/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card": "Pdf tarjeta de registro ganado y equino"
     }
   }
 }

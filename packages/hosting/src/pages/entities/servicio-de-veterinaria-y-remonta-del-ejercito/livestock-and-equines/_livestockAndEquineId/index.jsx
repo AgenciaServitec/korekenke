@@ -45,6 +45,7 @@ export const LiveStockAndEquineIntegration = () => {
       : livestockAndEquines.find(
           (livestockAndEquine) => livestockAndEquine.id === livestockAndEquineId
         );
+
     if (!_livestockAndEquine) return navigate(-1);
 
     setLivestockAndEquine(_livestockAndEquine);

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 export const ClinicHistoryTable = ({
   clinicHistories,
   loading,
-  livestockOrEquineId,
+  livestockAndEquineId,
   onConfirmRemoveClinicHistory,
   onSetIsVisibleModal,
   onSetClinicHistoryId,
@@ -56,7 +56,7 @@ export const ClinicHistoryTable = ({
             styled={{ color: (theme) => theme.colors.error }}
             onClick={() =>
               navigate(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockOrEquineId}/clinic-history/sheets`
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockAndEquineId}/clinic-history/sheets`
               )
             }
           />

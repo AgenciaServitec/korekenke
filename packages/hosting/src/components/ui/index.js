@@ -53,6 +53,7 @@ export * from "./AlignmentWrapper";
 export * from "./table";
 export * from "./InputCode";
 export * from "./Acl";
+export * from "./sheet";
 
 export { default as Legend } from "./Legend";
 
