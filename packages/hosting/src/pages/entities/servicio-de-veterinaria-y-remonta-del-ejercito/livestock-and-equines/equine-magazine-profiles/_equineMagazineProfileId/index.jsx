@@ -20,7 +20,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { EquipeMagazineProfileInformation } from "./EquipeMagazineProfileInformation";
 import styled from "styled-components";
-import { HorseCondition } from "../../../../../../images";
+import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
 import { EquineMagazineProfiles } from "../../../../../../data-list";
 import {
@@ -30,6 +30,7 @@ import {
   updateEquineMagazineProfile,
 } from "../../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../../providers";
+import { mediaQuery } from "../../../../../../styles";
 
 export const EquineMagazineProfileIntegration = () => {
   const navigate = useNavigate();
@@ -260,104 +261,107 @@ const EquineMagazineProfile = ({
       <Container>
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <Card
-              title={
-                <Title level={4} style={{ marginBottom: 0 }}>
-                  Condición Corporal
-                </Title>
-              }
-              bordered={false}
-              type="inner"
-            >
-              <div className="wrapper-condition-corporal">
-                <ul>
-                  {equineMagazineProfiles.bodyCondition.map(
-                    (_bodyCondition) => (
+            <div className="wrapper-grid">
+              <Card
+                title={
+                  <Title level={4} style={{ marginBottom: 0 }}>
+                    Condición Corporal
+                  </Title>
+                }
+                bordered={false}
+                type="inner"
+              >
+                <div className="wrapper-condition-corporal">
+                  <ul>
+                    {equineMagazineProfiles.bodyCondition.map(
+                      (_bodyCondition) => (
+                        <li
+                          key={_bodyCondition.id}
+                          className={`item-condition ${
+                            bodyCondition === _bodyCondition.id && "active"
+                          }`}
+                          onClick={() => setBodyCondition(_bodyCondition.id)}
+                        >
+                          <div className="item-image">
+                            <img
+                              src={_bodyCondition.img}
+                              alt={_bodyCondition.name}
+                            />
+                          </div>
+                          <div className="item-text">
+                            <div>{_bodyCondition.id}</div>
+                            <div>
+                              <h5>{_bodyCondition.name}</h5>
+                            </div>
+                          </div>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                  <br />
+                  <TextArea
+                    label="Observaciones"
+                    value={bodyConditionObservation}
+                    rows={2}
+                    onChange={(e) =>
+                      setBodyConditionObservation(e.target.value)
+                    }
+                  />
+                </div>
+              </Card>
+              <Card
+                title={
+                  <Title level={4} style={{ marginBottom: 0 }}>
+                    Toillete
+                  </Title>
+                }
+                bordered={false}
+                type="inner"
+              >
+                <div className="wrapper-toillete-and-herrado">
+                  <div className="wrapper-toillete-and-herrado__image">
+                    <img src={ToilleteImg} alt="toillete" />
+                  </div>
+                  <ul>
+                    {equineMagazineProfiles.toillete.map((_toillete) => (
                       <li
-                        key={_bodyCondition.id}
-                        className={`item-condition ${
-                          bodyCondition === _bodyCondition.id && "active"
-                        }`}
-                        onClick={() => setBodyCondition(_bodyCondition.id)}
+                        key={_toillete.id}
+                        onClick={() => setToillete(_toillete.id)}
+                        className={toillete === _toillete.id && "active"}
                       >
-                        <div className="item-image">
-                          <img
-                            src={_bodyCondition.img}
-                            alt={_bodyCondition.name}
-                          />
-                        </div>
-                        <div className="item-text">
-                          <h4>{_bodyCondition.name}</h4>
-                        </div>
+                        <h5>{_toillete.name}</h5>
                       </li>
-                    )
-                  )}
-                </ul>
-                <br />
-                <TextArea
-                  label="Observaciones"
-                  value={bodyConditionObservation}
-                  rows={5}
-                  onChange={(e) => setBodyConditionObservation(e.target.value)}
-                />
-              </div>
-            </Card>
-          </Col>
-          <Col span={24} md={12}>
-            <Card
-              title={
-                <Title level={4} style={{ marginBottom: 0 }}>
-                  Toillete
-                </Title>
-              }
-              bordered={false}
-              type="inner"
-            >
-              <div className="wrapper-condition-toillete">
-                <div className="wrapper-condition-toillete__image">
-                  <img src={HorseCondition} alt="" />
+                    ))}
+                  </ul>
                 </div>
-                <ul>
-                  {equineMagazineProfiles.toillete.map((_toillete) => (
-                    <li
-                      key={_toillete.id}
-                      onClick={() => setToillete(_toillete.id)}
-                      className={toillete === _toillete.id && "active"}
-                    >
-                      <h4>{_toillete.name}</h4>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Card>
-          </Col>
-          <Col span={24} md={12}>
-            <Card
-              title={
-                <Title level={4} style={{ marginBottom: 0 }}>
-                  Herrado
-                </Title>
-              }
-              bordered={false}
-              type="inner"
-            >
-              <div className="wrapper-condition-herrado">
-                <div className="wrapper-condition-herrado__image">
-                  <img src={HorseCondition} alt="" />
+              </Card>
+              <Card
+                title={
+                  <Title level={4} style={{ marginBottom: 0 }}>
+                    Herrado
+                  </Title>
+                }
+                bordered={false}
+                type="inner"
+              >
+                <div className="wrapper-toillete-and-herrado">
+                  <div className="wrapper-toillete-and-herrado__image">
+                    <img src={HerradoImg} alt="Herrado" />
+                  </div>
+                  <ul>
+                    {equineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                      <li
+                        key={_horseshoe.id}
+                        onClick={() => setHorseshoe(_horseshoe.id)}
+                        className={horseshoe === _horseshoe.id && "active"}
+                      >
+                        <h5>{_horseshoe.name}</h5>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul>
-                  {equineMagazineProfiles.horseshoe.map((_horseshoe) => (
-                    <li
-                      key={_horseshoe.id}
-                      onClick={() => setHorseshoe(_horseshoe.id)}
-                      className={horseshoe === _horseshoe.id && "active"}
-                    >
-                      <h4>{_horseshoe.name}</h4>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Card>
+              </Card>
+            </div>
           </Col>
           <Col span={24}>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -501,8 +505,19 @@ const Container = styled.div`
 
   .wrapper-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
     gap: 2em;
+    ${mediaQuery.minDesktop} {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .ant-card:first-child {
+      ${mediaQuery.minDesktop} {
+        grid-row: span 2;
+      }
+    }
   }
 
   .active {
@@ -511,6 +526,7 @@ const Container = styled.div`
 
   .wrapper-condition-corporal {
     width: 100%;
+    font-size: 13px;
 
     ul {
       width: 100%;
@@ -519,53 +535,77 @@ const Container = styled.div`
       margin: 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
-      gap: 0.5em;
+      gap: 0.7em;
 
       .item-condition {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr 2fr;
-        border-radius: 1em;
+        grid-template-columns: auto 1fr;
+        border-radius: 0.7em;
         overflow: hidden;
         cursor: pointer;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
 
+        &:hover {
+          background: rgba(239, 239, 241, 0.85);
+        }
+
         .item-image {
-          width: auto;
+          width: 10em;
           height: auto;
-          padding: 1em;
 
           img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
           }
         }
 
         .item-text {
           align-self: center;
           text-align: center;
+          display: grid;
+          grid-template-columns: auto 1fr;
+          width: 100%;
+          height: 100%;
+
+          div {
+            display: grid;
+            place-items: center;
+
+            h5 {
+              margin: 0;
+            }
+          }
+
+          div:first-child {
+            font-size: 2em;
+            font-weight: 700;
+            padding: 0 0.5em;
+            color: red;
+            background: #f3f3f3;
+          }
         }
       }
     }
   }
 
-  .wrapper-condition-toillete {
+  .wrapper-toillete-and-herrado {
     display: flex;
     flex-direction: column;
     gap: 1em;
 
     &__image {
-      flex: 1 1 0;
-
+      width: 100%;
+      height: 12em;
       img {
         width: 100%;
         height: 100%;
+        object-fit: scale-down;
       }
     }
 
     ul {
-      flex: 1 1 0;
       width: 100%;
       height: 100%;
       padding: 0;
@@ -579,45 +619,16 @@ const Container = styled.div`
         place-items: center;
         flex: 1 1 0;
         padding: 1em;
-        border-radius: 1em;
+        border-radius: 0.7em;
         cursor: pointer;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-      }
-    }
-  }
-
-  .wrapper-condition-herrado {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-
-    &__image {
-      flex: 1 1 0;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    ul {
-      flex: 1 1 0;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      display: flex;
-      gap: 0.5em;
-
-      li {
-        display: grid;
-        place-items: center;
-        flex: 1 1 0;
-        padding: 1em;
-        border-radius: 1em;
-        cursor: pointer;
-        box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        &:hover {
+          background: rgba(239, 239, 241, 0.85);
+        }
+        h5 {
+          margin: 0;
+        }
       }
     }
   }

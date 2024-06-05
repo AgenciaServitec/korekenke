@@ -12,3 +12,5 @@ export { default as BodyCondition6 } from "./webp/body-condition-6.webp";
 export { default as BodyCondition7 } from "./webp/body-condition-7.webp";
 export { default as BodyCondition8 } from "./webp/body-condition-8.webp";
 export { default as BodyCondition9 } from "./webp/body-condition-9.webp";
+export { default as ToilleteImg } from "./webp/toillete.webp";
+export { default as HerradoImg } from "./webp/herrado.webp";
