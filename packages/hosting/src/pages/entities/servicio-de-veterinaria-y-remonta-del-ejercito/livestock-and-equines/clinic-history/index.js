@@ -130,7 +130,7 @@ export const ClinicHistoryIntegration = () => {
         </Col>
         <ClinicHistoryModalComponent
           key={isVisibleModal.historyClinicModal}
-          clinicHistories={clinicHistories}
+          livestockAndEquineId={livestockAndEquineId}
           currentHistoryClinic={currentHistoryClinic}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicModal}

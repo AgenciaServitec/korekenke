@@ -19,9 +19,11 @@ import {
   getClinicHistoryId,
   updateClinicHistory,
 } from "../../../../../firebase/collections";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 
 export const ClinicHistoryModalComponent = ({
   currentHistoryClinic,
+  livestockAndEquineId,
   clinicHistoryId,
   isVisibleModal,
   onSetIsVisibleModal,
@@ -34,11 +36,11 @@ export const ClinicHistoryModalComponent = ({
 
   const mapForm = (formData) => ({
     id: isNew ? getClinicHistoryId() : currentHistoryClinic.id,
-    date: moment(formData.date).format("YYYY-MM-DD HH:mm:ss"),
+    date: moment(formData.date).format(DATE_FORMAT_TO_FIRESTORE),
     symptomatology: formData.symptomatology,
     diagnosis: formData.diagnosis,
     treatment: formData.treatment,
-    observations: formData.observations,
+    observation: formData.observation,
   });
 
   const saveClinicHistory = async (formData) => {
@@ -49,11 +51,11 @@ export const ClinicHistoryModalComponent = ({
 
       isNew
         ? await addClinicHistory(
-            "3817zSlDzCIFyuI94txS",
+            livestockAndEquineId,
             assignCreateProps(_clinicHistory)
           )
         : await updateClinicHistory(
-            "3817zSlDzCIFyuI94txS",
+            livestockAndEquineId,
             _clinicHistory.id,
             assignUpdateProps(_clinicHistory)
           );
@@ -92,11 +94,11 @@ const ClinicHistoryModal = ({
   onSetClinicHistoryId,
 }) => {
   const schema = yup.object({
-    date: yup.string().required(),
+    date: yup.date().required(),
     symptomatology: yup.string().required(),
     diagnosis: yup.string().required(),
     treatment: yup.string().required(),
-    observations: yup.string().required(),
+    observation: yup.string().required(),
   });
 
   const {
@@ -117,12 +119,12 @@ const ClinicHistoryModal = ({
   const resetForm = () => {
     reset({
       date: currentHistoryClinic?.date
-        ? moment(currentHistoryClinic?.date, "YYYY-MM-DD HH:mm:ss")
+        ? moment(currentHistoryClinic?.date, DATE_FORMAT_TO_FIRESTORE)
         : null,
       symptomatology: currentHistoryClinic?.symptomatology || null,
       diagnosis: currentHistoryClinic?.diagnosis || null,
       treatment: currentHistoryClinic?.treatment || null,
-      observations: currentHistoryClinic?.observations || null,
+      observation: currentHistoryClinic?.observation || null,
     });
   };
 
@@ -207,12 +209,12 @@ const ClinicHistoryModal = ({
           </Col>
           <Col span={24}>
             <Controller
-              name="observations"
+              name="observation"
               control={control}
               defaultValue=""
               render={({ field: { onChange, value, name } }) => (
                 <TextArea
-                  label="Observaciones"
+                  label="Observacion"
                   name={name}
                   value={value}
                   rows={5}

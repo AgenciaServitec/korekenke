@@ -19,31 +19,21 @@ export const ClinicHistoryTable = ({
       title: "Fecha",
       dataIndex: "date",
       key: "date",
-      render: (_, clinicHistory) => <div>{clinicHistory.date}</div>,
     },
     {
       title: "Sintomatología",
       key: "symptomatology",
       dataIndex: "symptomatology",
-      render: (_, clinicHistory) => <div>{clinicHistory.symptomatology}</div>,
     },
     {
       title: "Diagnóstico",
       dataIndex: "diagnosis",
       key: "diagnosis",
-      render: (_, clinicHistory) => <div>{clinicHistory.diagnosis}</div>,
     },
     {
       title: "Tratamiento",
       key: "treatment",
       dataIndex: "treatment",
-      render: (_, clinicHistory) => <div>{clinicHistory.treatment}</div>,
-    },
-    {
-      title: "Observaciones",
-      dataIndex: "observations",
-      key: "observations",
-      render: (_, clinicHistory) => <div>{clinicHistory.observations}</div>,
     },
     {
       title: "Acciones",
