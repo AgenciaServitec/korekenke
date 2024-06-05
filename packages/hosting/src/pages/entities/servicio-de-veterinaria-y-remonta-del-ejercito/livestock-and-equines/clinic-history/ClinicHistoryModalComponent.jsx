@@ -6,20 +6,17 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
 import {
   Button,
   DataEntryModal,
-  DatePicker,
   Form,
   Input,
   notification,
   TextArea,
 } from "../../../../../components";
 import { Col, Row } from "antd";
-import moment from "moment";
 import {
   addClinicHistory,
   getClinicHistoryId,
   updateClinicHistory,
 } from "../../../../../firebase/collections";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 
 export const ClinicHistoryModalComponent = ({
   currentHistoryClinic,
@@ -36,7 +33,6 @@ export const ClinicHistoryModalComponent = ({
 
   const mapForm = (formData) => ({
     id: isNew ? getClinicHistoryId() : currentHistoryClinic.id,
-    date: moment(formData.date).format(DATE_FORMAT_TO_FIRESTORE),
     symptomatology: formData.symptomatology,
     diagnosis: formData.diagnosis,
     treatment: formData.treatment,
@@ -94,7 +90,6 @@ const ClinicHistoryModal = ({
   onSetClinicHistoryId,
 }) => {
   const schema = yup.object({
-    date: yup.date().required(),
     symptomatology: yup.string().required(),
     diagnosis: yup.string().required(),
     treatment: yup.string().required(),
@@ -118,9 +113,6 @@ const ClinicHistoryModal = ({
 
   const resetForm = () => {
     reset({
-      date: currentHistoryClinic?.date
-        ? moment(currentHistoryClinic?.date, DATE_FORMAT_TO_FIRESTORE)
-        : null,
       symptomatology: currentHistoryClinic?.symptomatology || null,
       diagnosis: currentHistoryClinic?.diagnosis || null,
       treatment: currentHistoryClinic?.treatment || null,
@@ -139,23 +131,23 @@ const ClinicHistoryModal = ({
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Controller
-              name="date"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <DatePicker
-                  label="Fecha"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
+          {/*<Col span={24}>*/}
+          {/*  <Controller*/}
+          {/*    name="date"*/}
+          {/*    control={control}*/}
+          {/*    defaultValue=""*/}
+          {/*    render={({ field: { onChange, value, name } }) => (*/}
+          {/*      <DatePicker*/}
+          {/*        label="Fecha"*/}
+          {/*        name={name}*/}
+          {/*        value={value}*/}
+          {/*        onChange={onChange}*/}
+          {/*        error={error(name)}*/}
+          {/*        required={required(name)}*/}
+          {/*      />*/}
+          {/*    )}*/}
+          {/*  />*/}
+          {/*</Col>*/}
           <Col span={24}>
             <Controller
               name="symptomatology"
