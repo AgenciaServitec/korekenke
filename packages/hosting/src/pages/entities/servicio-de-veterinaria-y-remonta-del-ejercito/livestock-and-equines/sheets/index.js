@@ -5,7 +5,7 @@ import { PDF, Sheet } from "../../../../../components";
 export const PdfEquineLivestockRegistrationCardSheet = () => {
   return (
     <PDF>
-      <Sheet layout="portrait">
+      <Sheet layout="landscape">
         <PdfEquineLivestockRegistrationCard />
       </Sheet>
     </PDF>
