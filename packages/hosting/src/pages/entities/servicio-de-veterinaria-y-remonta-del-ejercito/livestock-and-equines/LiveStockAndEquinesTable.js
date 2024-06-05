@@ -9,6 +9,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
+import moment from "moment";
 
 export const LiveStockAndEquinesTable = ({
   livestockAndEquines,
@@ -17,9 +18,15 @@ export const LiveStockAndEquinesTable = ({
   onNavigateGoToPdfEquineLivestockRegistrationCard,
   onNavigateGoToEquineMagazineProfiles,
   onNavigateGoToClinicHistory,
-  li,
 }) => {
   const columns = [
+    {
+      title: "Fecha creación",
+      dataIndex: "createAt",
+      key: "createAt",
+      render: (_, livestockAndEquine) =>
+        moment(livestockAndEquine.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+    },
     {
       title: "Nombre",
       dataIndex: "name",
