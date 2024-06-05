@@ -116,7 +116,7 @@ export const EntityIntegration = () => {
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Núcleo</Title>
+          <Title level={3}>Entidad</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveEntity)}>
