@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import {
+  Acl,
   Button,
   Card,
   Form,
@@ -28,12 +29,15 @@ import {
   getClinicHistoryId,
   updateEquineMagazineProfile,
 } from "../../../../../../firebase/collections";
+import { useGlobalData } from "../../../../../../providers";
 
 export const EquineMagazineProfileIntegration = () => {
   const navigate = useNavigate();
-  const { equineMagazineProfileId, livestockOrEquineId } = useParams();
+  const { livestockAndEquines } = useGlobalData();
+  const { equineMagazineProfileId, livestockAndEquineId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
+  const [livestockAndEquine, setLivestockAndEquine] = useState({});
   const [equineMagazineProfile, setEquineMagazineProfile] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +50,7 @@ export const EquineMagazineProfileIntegration = () => {
       ? { id: getClinicHistoryId() }
       : (async () => {
           fetchEquineMagazineProfile(
-            livestockOrEquineId,
+            livestockAndEquineId,
             equineMagazineProfileId
           ).then((_response) => {
             if (!_response) return onGoBack();
@@ -54,6 +58,12 @@ export const EquineMagazineProfileIntegration = () => {
             return;
           });
         })();
+
+    setLivestockAndEquine(
+      livestockAndEquines.find(
+        (_livestockAndEquine) => _livestockAndEquine.id === livestockAndEquineId
+      ) || {}
+    );
     setEquineMagazineProfile(_equineMagazineProfile);
   }, []);
 
@@ -105,7 +115,7 @@ export const EquineMagazineProfileIntegration = () => {
 
       isNew
         ? await addEquineMagazineProfile(
-            livestockOrEquineId,
+            livestockAndEquineId,
             assignCreateProps(mapForm(formData))
           )
         : await updateEquineMagazineProfile(
@@ -134,7 +144,9 @@ export const EquineMagazineProfileIntegration = () => {
           bordered={false}
           type="inner"
         >
-          <EquipeMagazineProfileInformation />
+          <EquipeMagazineProfileInformation
+            livestockAndEquine={livestockAndEquine}
+          />
         </Card>
       </Col>
       <Col span={24}>
@@ -239,231 +251,243 @@ const EquineMagazineProfile = ({
   };
 
   return (
-    <Container>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Card
-            title={
-              <Title level={4} style={{ marginBottom: 0 }}>
-                Condición Corporal
-              </Title>
-            }
-            bordered={false}
-            type="inner"
-          >
-            <div className="wrapper-condition-corporal">
-              <ul>
-                {equineMagazineProfiles.bodyCondition.map((_bodyCondition) => (
-                  <li
-                    key={_bodyCondition.id}
-                    className={`item-condition ${
-                      bodyCondition === _bodyCondition.id && "active"
-                    }`}
-                    onClick={() => setBodyCondition(_bodyCondition.id)}
-                  >
-                    <div className="item-image">
-                      <img src={_bodyCondition.img} alt={_bodyCondition.name} />
-                    </div>
-                    <div className="item-text">
-                      <h4>{_bodyCondition.name}</h4>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <br />
-              <TextArea
-                label="Observaciones"
-                value={bodyConditionObservation}
-                rows={5}
-                onChange={(e) => setBodyConditionObservation(e.target.value)}
-              />
-            </div>
-          </Card>
-        </Col>
-        <Col span={24} md={12}>
-          <Card
-            title={
-              <Title level={4} style={{ marginBottom: 0 }}>
-                Toillete
-              </Title>
-            }
-            bordered={false}
-            type="inner"
-          >
-            <div className="wrapper-condition-toillete">
-              <div className="wrapper-condition-toillete__image">
-                <img src={HorseCondition} alt="" />
-              </div>
-              <ul>
-                {equineMagazineProfiles.toillete.map((_toillete) => (
-                  <li
-                    key={_toillete.id}
-                    onClick={() => setToillete(_toillete.id)}
-                    className={toillete === _toillete.id && "active"}
-                  >
-                    <h4>{_toillete.name}</h4>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Card>
-        </Col>
-        <Col span={24} md={12}>
-          <Card
-            title={
-              <Title level={4} style={{ marginBottom: 0 }}>
-                Herrado
-              </Title>
-            }
-            bordered={false}
-            type="inner"
-          >
-            <div className="wrapper-condition-herrado">
-              <div className="wrapper-condition-herrado__image">
-                <img src={HorseCondition} alt="" />
-              </div>
-              <ul>
-                {equineMagazineProfiles.horseshoe.map((_horseshoe) => (
-                  <li
-                    key={_horseshoe.id}
-                    onClick={() => setHorseshoe(_horseshoe.id)}
-                    className={horseshoe === _horseshoe.id && "active"}
-                  >
-                    <h4>{_horseshoe.name}</h4>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Card>
-        </Col>
-        <Col span={24}>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+    <Acl
+      category="servicio-de-veterinaria-y-remonta-del-ejercito"
+      subCategory="equineMagazineProfiles"
+      name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+      redirect
+    >
+      <Container>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
             <Card
               title={
                 <Title level={4} style={{ marginBottom: 0 }}>
-                  Estimación del peso corporal
+                  Condición Corporal
                 </Title>
               }
               bordered={false}
               type="inner"
             >
-              <Row gutter={[16, 16]}>
-                <Col span={24} md={6}>
-                  <Controller
-                    name="chestCircumference"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value, name } }) => (
-                      <InputNumber
-                        label="PT: Perimetro toraxico (CM)"
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                      />
-                    )}
-                  />
+              <div className="wrapper-condition-corporal">
+                <ul>
+                  {equineMagazineProfiles.bodyCondition.map(
+                    (_bodyCondition) => (
+                      <li
+                        key={_bodyCondition.id}
+                        className={`item-condition ${
+                          bodyCondition === _bodyCondition.id && "active"
+                        }`}
+                        onClick={() => setBodyCondition(_bodyCondition.id)}
+                      >
+                        <div className="item-image">
+                          <img
+                            src={_bodyCondition.img}
+                            alt={_bodyCondition.name}
+                          />
+                        </div>
+                        <div className="item-text">
+                          <h4>{_bodyCondition.name}</h4>
+                        </div>
+                      </li>
+                    )
+                  )}
+                </ul>
+                <br />
+                <TextArea
+                  label="Observaciones"
+                  value={bodyConditionObservation}
+                  rows={5}
+                  onChange={(e) => setBodyConditionObservation(e.target.value)}
+                />
+              </div>
+            </Card>
+          </Col>
+          <Col span={24} md={12}>
+            <Card
+              title={
+                <Title level={4} style={{ marginBottom: 0 }}>
+                  Toillete
+                </Title>
+              }
+              bordered={false}
+              type="inner"
+            >
+              <div className="wrapper-condition-toillete">
+                <div className="wrapper-condition-toillete__image">
+                  <img src={HorseCondition} alt="" />
+                </div>
+                <ul>
+                  {equineMagazineProfiles.toillete.map((_toillete) => (
+                    <li
+                      key={_toillete.id}
+                      onClick={() => setToillete(_toillete.id)}
+                      className={toillete === _toillete.id && "active"}
+                    >
+                      <h4>{_toillete.name}</h4>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Card>
+          </Col>
+          <Col span={24} md={12}>
+            <Card
+              title={
+                <Title level={4} style={{ marginBottom: 0 }}>
+                  Herrado
+                </Title>
+              }
+              bordered={false}
+              type="inner"
+            >
+              <div className="wrapper-condition-herrado">
+                <div className="wrapper-condition-herrado__image">
+                  <img src={HorseCondition} alt="" />
+                </div>
+                <ul>
+                  {equineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                    <li
+                      key={_horseshoe.id}
+                      onClick={() => setHorseshoe(_horseshoe.id)}
+                      className={horseshoe === _horseshoe.id && "active"}
+                    >
+                      <h4>{_horseshoe.name}</h4>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Card>
+          </Col>
+          <Col span={24}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Card
+                title={
+                  <Title level={4} style={{ marginBottom: 0 }}>
+                    Estimación del peso corporal
+                  </Title>
+                }
+                bordered={false}
+                type="inner"
+              >
+                <Row gutter={[16, 16]}>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="chestCircumference"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value, name } }) => (
+                        <InputNumber
+                          label="PT: Perimetro toraxico (CM)"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="bodyLength"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value, name } }) => (
+                        <InputNumber
+                          label="LG: Longitud corporal (CM)"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="heightOfTheCross"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value, name } }) => (
+                        <InputNumber
+                          label="AC: Altura de la cruz (CM)"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="horseWeight"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value, name } }) => (
+                        <InputNumber
+                          label="Peso del caballo (Kg)"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <Controller
+                      name="observation"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value, name } }) => (
+                        <TextArea
+                          label="Observaciones"
+                          rows={5}
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                </Row>
+              </Card>
+              <Row justify="end" gutter={[16, 16]}>
+                <Col xs={24} sm={6} md={4}>
+                  <Button
+                    type="default"
+                    size="large"
+                    block
+                    onClick={() => onGoBack()}
+                    disabled={loading}
+                  >
+                    Cancelar
+                  </Button>
                 </Col>
-                <Col span={24} md={6}>
-                  <Controller
-                    name="bodyLength"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value, name } }) => (
-                      <InputNumber
-                        label="LG: Longitud corporal (CM)"
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                      />
-                    )}
-                  />
-                </Col>
-                <Col span={24} md={6}>
-                  <Controller
-                    name="heightOfTheCross"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value, name } }) => (
-                      <InputNumber
-                        label="AC: Altura de la cruz (CM)"
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                      />
-                    )}
-                  />
-                </Col>
-                <Col span={24} md={6}>
-                  <Controller
-                    name="horseWeight"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value, name } }) => (
-                      <InputNumber
-                        label="Peso del caballo (Kg)"
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                      />
-                    )}
-                  />
-                </Col>
-                <Col span={24}>
-                  <Controller
-                    name="observation"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value, name } }) => (
-                      <TextArea
-                        label="Observaciones"
-                        rows={5}
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                      />
-                    )}
-                  />
+                <Col xs={24} sm={6} md={4}>
+                  <Button
+                    type="primary"
+                    size="large"
+                    block
+                    htmlType="submit"
+                    loading={loading}
+                  >
+                    Guardar
+                  </Button>
                 </Col>
               </Row>
-            </Card>
-            <Row justify="end" gutter={[16, 16]}>
-              <Col xs={24} sm={6} md={4}>
-                <Button
-                  type="default"
-                  size="large"
-                  block
-                  onClick={() => onGoBack()}
-                  disabled={loading}
-                >
-                  Cancelar
-                </Button>
-              </Col>
-              <Col xs={24} sm={6} md={4}>
-                <Button
-                  type="primary"
-                  size="large"
-                  block
-                  htmlType="submit"
-                  loading={loading}
-                >
-                  Guardar
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
+    </Acl>
   );
 };
 

@@ -1,20 +1,18 @@
 import React from "react";
 import { Space, Table } from "antd";
-import { IconAction } from "../../../../../components";
+import { Acl, IconAction } from "../../../../../components";
 import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
 export const EquineMagazineProfilesTable = ({
-  livestockOrEquineId,
   equineMagazineProfiles,
+  equineMagazineProfilesLoading,
+  onDeleteEquineMagazineProfile,
 }) => {
   const navigate = useNavigate();
 
-  const navigateTo = (equineMagazineProfileId) =>
-    navigate(
-      `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockOrEquineId}/equine-magazine-profiles/${equineMagazineProfileId}`
-    );
+  const navigateTo = (pathname) => navigate(pathname);
 
   const columns = [
     {
@@ -58,27 +56,47 @@ export const EquineMagazineProfilesTable = ({
       key: "action",
       render: (_, equineMagazineProfile) => (
         <Space>
-          <IconAction
-            tooltipTitle="Pdf"
-            icon={faFilePdf}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() =>
-              navigate(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockOrEquineId}/equine-magazine-profiles/sheets`
-              )
-            }
-          />
-          <IconAction
-            tooltipTitle="Editar"
-            icon={faEdit}
-            onClick={() => navigateTo(equineMagazineProfile.id)}
-          />
-          <IconAction
-            tooltipTitle="Eliminar"
-            icon={faTrash}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => ""}
-          />
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="equineMagazineProfiles"
+            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
+          >
+            <IconAction
+              tooltipTitle="Pdf"
+              icon={faFilePdf}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() =>
+                navigateTo(
+                  `${equineMagazineProfile.id}/pdf-equine-magazine-profile`
+                )
+              }
+            />
+          </Acl>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="equineMagazineProfiles"
+            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+          >
+            <IconAction
+              tooltipTitle="Editar"
+              icon={faEdit}
+              onClick={() => navigateTo(equineMagazineProfile.id)}
+            />
+          </Acl>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="equineMagazineProfiles"
+            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles#delete"
+          >
+            <IconAction
+              tooltipTitle="Eliminar"
+              icon={faTrash}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() =>
+                onDeleteEquineMagazineProfile(equineMagazineProfile.id)
+              }
+            />
+          </Acl>
         </Space>
       ),
     },
@@ -88,6 +106,7 @@ export const EquineMagazineProfilesTable = ({
     <Table
       columns={columns}
       dataSource={equineMagazineProfiles}
+      loading={equineMagazineProfilesLoading}
       pagination={false}
       scroll={{ x: "max-content" }}
     />

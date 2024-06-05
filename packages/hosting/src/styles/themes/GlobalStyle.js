@@ -77,6 +77,10 @@ const global = css`
     cursor: pointer;
   }
 
+  .capitalize {
+    text-transform: capitalize;
+  }
+
   .data-entry-modal {
     background: #ededed;
     pointer-events: none;

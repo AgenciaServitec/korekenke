@@ -1,7 +1,6 @@
 import React from "react";
 import { PdfRegistrationClinicHistory } from "./PdfRegistrationClinicHistory";
-import { PDF } from "./PDF";
-import { Sheet } from "./Sheet";
+import { PDF, Sheet } from "../../../../../../components";
 
 export const Sheets = () => {
   return (

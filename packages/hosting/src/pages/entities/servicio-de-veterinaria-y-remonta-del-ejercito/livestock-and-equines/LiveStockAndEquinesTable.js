@@ -1,7 +1,12 @@
 import React from "react";
 import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../components";
-import { faEdit, faIdCard, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faIdCard,
+  faListCheck,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 
 export const LiveStockAndEquinesTable = ({
@@ -9,6 +14,7 @@ export const LiveStockAndEquinesTable = ({
   onEditLiveStockAndEquine,
   onConfirmRemoveLiveStockAndEquine,
   onNavigateGoToPdfEquineLivestockRegistrationCard,
+  onNavigateGoToEquineMagazineProfiles,
 }) => {
   const columns = [
     {
@@ -43,6 +49,13 @@ export const LiveStockAndEquinesTable = ({
       key: "actions",
       render: (_, livestockAndEquine) => (
         <Space>
+          <IconAction
+            tooltipTitle="Ficha revista equina"
+            icon={faListCheck}
+            onClick={() =>
+              onNavigateGoToEquineMagazineProfiles(livestockAndEquine.id)
+            }
+          />
           <IconAction
             tooltipTitle="Ver tarjeta"
             icon={faIdCard}

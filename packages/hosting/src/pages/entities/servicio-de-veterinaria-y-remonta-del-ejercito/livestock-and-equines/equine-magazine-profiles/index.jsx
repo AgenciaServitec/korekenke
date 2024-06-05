@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
 import { Col, Divider, Row } from "antd";
-import { AddButton, notification } from "../../../../../components";
+import {
+  Acl,
+  AddButton,
+  modalConfirm,
+  notification,
+} from "../../../../../components";
 import { EquineMagazineProfilesTable } from "./EquineMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
+import { updateEquineMagazineProfile } from "../../../../../firebase/collections";
 
 export const EquineMagazineProfilesIntegration = () => {
-  const { livestockOrEquineId } = useParams();
+  const { livestockAndEquineId } = useParams();
   const navigate = useNavigate();
 
   const [
@@ -17,36 +23,61 @@ export const EquineMagazineProfilesIntegration = () => {
   ] = useCollectionData(
     firestore
       .collection("livestock-and-equines")
-      .doc(livestockOrEquineId)
+      .doc(livestockAndEquineId)
       .collection("equine-magazine-profiles")
+      .where("isDeleted", "==", false)
   );
 
   useEffect(() => {
     equineMagazineProfilesError && notification({ type: "error" });
-  }, [equineMagazineProfilesError]);const navigateTo = (equineMagazineProfileId) =>
-    navigate(
-      `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/${livestockOrEquineId}/equine-magazine-profiles/${equineMagazineProfileId}`
-    );
+  }, [equineMagazineProfilesError]);
+
+  const navigateTo = (pathname = "new") => navigate(pathname);
 
   const onAddEquineMagazineProfile = () => navigateTo("new");
+  const onDeleteEquineMagazineProfile = (equineMagazineProfileId) =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres eliminar la revista equina?",
+      onOk: async () =>
+        await updateEquineMagazineProfile(
+          livestockAndEquineId,
+          equineMagazineProfileId,
+          {
+            isDeleted: true,
+          }
+        ),
+    });
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}></Col>
-      <Col span={24} md={6}>
-        <AddButton
-          onClick={() => onAddEquineMagazineProfile()}
-          title="Ficha de Revista Equina"
-          margin="0"
-        />
-      </Col>
-      <Divider />
-      <Col span={24}>
-        <EquineMagazineProfilesTable
-          livestockOrEquineId={livestockOrEquineId}
-          equineMagazineProfiles={equineMagazineProfiles}
-        />
-      </Col>
-    </Row>
+    <Acl
+      category="servicio-de-veterinaria-y-remonta-del-ejercito"
+      subCategory="equineMagazineProfiles"
+      name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles"
+      redirect
+    >
+      <Row gutter={[16, 16]}>
+        <Col span={24} md={6}>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="equineMagazineProfiles"
+            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/new"
+          >
+            <AddButton
+              onClick={() => onAddEquineMagazineProfile()}
+              title="Ficha de Revista Equina"
+              margin="0"
+            />
+          </Acl>
+        </Col>
+        <Divider />
+        <Col span={24}>
+          <EquineMagazineProfilesTable
+            equineMagazineProfiles={equineMagazineProfiles}
+            equineMagazineProfilesLoading={equineMagazineProfilesLoading}
+            onDeleteEquineMagazineProfile={onDeleteEquineMagazineProfile}
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };

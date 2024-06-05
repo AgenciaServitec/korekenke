@@ -88,6 +88,14 @@
       "/livestock-and-equines/:livestockAndEquineId": "Editar ganado y equino",
       "/livestock-and-equines#delete": "Eliminar ganado y equino",
       "/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card": "Pdf tarjeta de registro ganado y equino"
+    },
+    "equineMagazineProfiles": {
+      "label": "Fichas de revista equina",
+      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles": "Ficha de revista equina",
+      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/new": "Agregar ficha de revista equina",
+      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId": "Editar ficha de revista equina",
+      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles#delete": "Eliminar ficha de revista equina",
+      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile": "Pdf ficha de revista equina"
     }
   }
 }
