@@ -12,6 +12,7 @@ import {
   Select,
   TextArea,
   Title,
+  Upload,
 } from "../../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
@@ -25,6 +26,7 @@ import {
   updateLivestockAndEquine,
 } from "../../../../../firebase/collections";
 import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 
 export const LiveStockAndEquineIntegration = () => {
   const { livestockAndEquineId } = useParams();
@@ -50,6 +52,9 @@ export const LiveStockAndEquineIntegration = () => {
 
   const mapLiveStockAndEquine = (formData) => ({
     ...livestockAndEquine,
+    rightProfilePhoto: formData?.rightProfilePhoto || null,
+    frontPhoto: formData?.frontPhoto || null,
+    leftProfilePhoto: formData?.leftProfilePhoto || null,
     unit: formData.unit,
     greatUnit: formData.greatUnit,
     name: formData.name,
@@ -112,6 +117,9 @@ const LiveStockAndEquine = ({
   onGoBack,
 }) => {
   const schema = yup.object({
+    rightProfilePhoto: yup.mixed().required(),
+    frontPhoto: yup.mixed().required(),
+    leftProfilePhoto: yup.mixed().required(),
     unit: yup.string().required(),
     greatUnit: yup.string().required(),
     name: yup.string().required(),
@@ -127,7 +135,7 @@ const LiveStockAndEquine = ({
     raceOrLine: yup.string().required(),
     fur: yup.string().required(),
     squadron: yup.string().required(),
-    description: yup.string().required(),
+    description: yup.string(),
   });
 
   const {
@@ -147,6 +155,9 @@ const LiveStockAndEquine = ({
 
   const resetForm = () => {
     reset({
+      rightProfilePhoto: livestockAndEquine?.rightProfilePhoto || null,
+      frontPhoto: livestockAndEquine?.frontPhoto || null,
+      leftProfilePhoto: livestockAndEquine?.leftProfilePhoto || null,
       unit: livestockAndEquine?.unit || "",
       greatUnit: livestockAndEquine?.greatUnit || "",
       name: livestockAndEquine?.name || "",
@@ -190,6 +201,72 @@ const LiveStockAndEquine = ({
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row gutter={[16, 16]}>
+              <Col span={24} md={8}>
+                <Controller
+                  control={control}
+                  name="rightProfilePhoto"
+                  render={({ field: { onChange, value, onBlur, name } }) => (
+                    <Upload
+                      label="Foto perfil derecho"
+                      accept="image/*"
+                      buttonText="Subir foto"
+                      value={value}
+                      name={name}
+                      withThumbImage={false}
+                      bucket="servicioDeVeterinariaYRemontaDelEjercito"
+                      fileName={`right-profile-photo-${uuidv4()}`}
+                      filePath={`livestock-and-equines/${livestockAndEquine.id}/photos`}
+                      onChange={(file) => onChange(file)}
+                      required={required(name)}
+                      error={error(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={8}>
+                <Controller
+                  control={control}
+                  name="frontPhoto"
+                  render={({ field: { onChange, value, onBlur, name } }) => (
+                    <Upload
+                      label="Foto frontal"
+                      accept="image/*"
+                      buttonText="Subir foto"
+                      value={value}
+                      name={name}
+                      withThumbImage={false}
+                      bucket="servicioDeVeterinariaYRemontaDelEjercito"
+                      fileName={`front-photo-${uuidv4()}`}
+                      filePath={`livestock-and-equines/${livestockAndEquine.id}/photos`}
+                      onChange={(file) => onChange(file)}
+                      required={required(name)}
+                      error={error(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={8}>
+                <Controller
+                  control={control}
+                  name="leftProfilePhoto"
+                  render={({ field: { onChange, value, onBlur, name } }) => (
+                    <Upload
+                      label="Foto perfil izquierdo"
+                      accept="image/*"
+                      buttonText="Subir foto"
+                      value={value}
+                      name={name}
+                      withThumbImage={false}
+                      bucket="servicioDeVeterinariaYRemontaDelEjercito"
+                      fileName={`right-profile-photo-${uuidv4()}`}
+                      filePath={`livestock-and-equines/${livestockAndEquine.id}/photos`}
+                      onChange={(file) => onChange(file)}
+                      required={required(name)}
+                      error={error(name)}
+                    />
+                  )}
+                />
+              </Col>
               <Col span={6}>
                 <Controller
                   name="unit"
