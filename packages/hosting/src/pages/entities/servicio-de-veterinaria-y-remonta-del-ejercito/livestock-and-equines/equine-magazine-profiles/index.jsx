@@ -1,12 +1,25 @@
 import React from "react";
 import { Col, Divider, Row } from "antd";
-import { AddButton, Card } from "../../../../../components";
+import { AddButton } from "../../../../../components";
 import { EquineMagazineProfilesTable } from "./EquineMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { firestore } from "../../../../../firebase";
 
 export const EquineMagazineProfilesIntegration = () => {
   const { livestockOrEquineId } = useParams();
   const navigate = useNavigate();
+
+  const [
+    equineMagazineProfiles = [],
+    equineMagazineProfilesLoading,
+    equineMagazineProfilesError,
+  ] = useCollectionData(
+    firestore
+      .collection("livestock-and-equines")
+      .doc(livestockOrEquineId)
+      .collection("equine-magazine-profiles")
+  );
 
   const navigateTo = (equineMagazineProfileId) =>
     navigate(
@@ -29,6 +42,7 @@ export const EquineMagazineProfilesIntegration = () => {
       <Col span={24}>
         <EquineMagazineProfilesTable
           livestockOrEquineId={livestockOrEquineId}
+          equineMagazineProfiles={equineMagazineProfiles}
         />
       </Col>
     </Row>
