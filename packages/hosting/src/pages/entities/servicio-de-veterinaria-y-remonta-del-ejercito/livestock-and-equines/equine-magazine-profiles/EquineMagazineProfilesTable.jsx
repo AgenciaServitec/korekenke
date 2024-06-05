@@ -17,9 +17,9 @@ export const EquineMagazineProfilesTable = ({
 
   const columns = [
     {
-      title: "Fecha",
-      dataIndex: "date",
-      key: "date",
+      title: "Fecha creación",
+      dataIndex: "createAt",
+      key: "createAt",
       render: (_, equineMagazineProfile) => (
         <div>
           {moment(equineMagazineProfile?.createAt.toDate()).format(

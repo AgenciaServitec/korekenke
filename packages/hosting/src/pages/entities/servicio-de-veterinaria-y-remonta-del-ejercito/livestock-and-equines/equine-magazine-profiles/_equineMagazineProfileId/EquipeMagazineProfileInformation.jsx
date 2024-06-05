@@ -26,8 +26,7 @@ export const EquipeMagazineProfileInformation = ({ livestockAndEquine }) => {
         </strong>
       </Col>
       <Col span={24} md={12}>
-        N° Chip:
-        <strong>{livestockAndEquine?.chipNumber || ""}</strong>
+        N° Chip: <strong>{livestockAndEquine?.chipNumber || ""}</strong>
       </Col>
       <Col span={24} md={12}>
         Sexo:
@@ -37,7 +36,7 @@ export const EquipeMagazineProfileInformation = ({ livestockAndEquine }) => {
         </strong>
       </Col>
       <Col span={24} md={12}>
-        Raza o Tipo:
+        Raza o Tipo:{" "}
         <strong className="capitalize">
           {livestockAndEquine?.raceOrLine || ""}
         </strong>
