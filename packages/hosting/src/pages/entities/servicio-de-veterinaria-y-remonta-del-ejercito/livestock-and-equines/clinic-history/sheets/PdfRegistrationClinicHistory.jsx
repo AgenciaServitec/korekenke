@@ -7,6 +7,8 @@ import {
 import styled from "styled-components";
 import { notification, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
+import moment from "moment";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 
 export const PdfRegistrationClinicHistory = () => {
   const { livestockAndEquineId } = useParams();
@@ -32,23 +34,19 @@ export const PdfRegistrationClinicHistory = () => {
   if (clinicHistoryLoading || livestockAndEquineLoading)
     return <Spinner height="80vh" />;
 
-  console.log("Datos de equino: ", livestockAndEquine);
-  console.log("Datos clinicHistory: ", clinicHistory);
-
   return (
     <Container>
       <div className="sheet">
         <div className="header">
           <div className="header__top">
             <div>
-              <span>II DE</span>
-              <span>RC &quot;MDN&quot; - EPR</span>
+              <span>{livestockAndEquine.greatUnit}</span>
+              <span>{livestockAndEquine.unit}</span>
               <span>PEL VET</span>
-              <span>EL AGUSTINO</span>
             </div>
           </div>
           <h2 className="header__title">
-            HISTORIA CLÍNICA VETERINARIA DEL RC &quot;MDN&quot; EPR
+            HISTORIA CLÍNICA VETERINARIA DEL {livestockAndEquine.unit}
           </h2>
         </div>
         <div className="main">
@@ -57,29 +55,36 @@ export const PdfRegistrationClinicHistory = () => {
               <div>
                 <div>
                   <span>Nombre:</span>
-                  <span>Baral Nakatomy</span>
+                  <span className="capitalize">{livestockAndEquine.name}</span>
                 </div>
                 <div>
                   <span>Sexo:</span>
-                  <span>C</span>
+                  <span className="capitalize">
+                    {livestockAndEquine.gender}
+                  </span>
                 </div>
                 <div>
                   <span>Color:</span>
-                  <span>Castaño</span>
+                  <span className="capitalize">{livestockAndEquine.color}</span>
                 </div>
               </div>
               <div>
                 <div>
                   <span>N° de Matrícula:</span>
-                  <span>7-11</span>
+                  <span>{livestockAndEquine.registrationNumber}</span>
                 </div>
                 <div>
                   <span>Fecha de Nacimiento:</span>
-                  <span>25-09-2007</span>
+                  <span>
+                    {moment(
+                      livestockAndEquine.birthdate,
+                      DATE_FORMAT_TO_FIRESTORE
+                    ).format("DD/MM/YYYY")}
+                  </span>
                 </div>
                 <div>
                   <span>Escuadrón:</span>
-                  <span>B</span>
+                  <span>{livestockAndEquine.squadron}</span>
                 </div>
               </div>
             </div>
@@ -97,48 +102,28 @@ export const PdfRegistrationClinicHistory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>15/03/2024</td>
-                    <td>Manoteo</td>
-                    <td>SAA</td>
-                    <td>Pastillas</td>
-                    <td>Polpación Rectal</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>15/03/2024</td>
-                    <td>Manoteo</td>
-                    <td>SAA</td>
-                    <td>Pastillas</td>
-                    <td>Polpación Rectal</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>15/03/2024</td>
-                    <td>Manoteo</td>
-                    <td>SAA</td>
-                    <td>Pastillas</td>
-                    <td>Polpación Rectal</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
+                  {clinicHistory.map((_clinicHistory, index) => (
+                    <>
+                      <tr>
+                        <td>
+                          {moment(_clinicHistory.createAt.toDate()).format(
+                            "DD/MM/YYYY HH:mm"
+                          )}
+                        </td>
+                        <td>{_clinicHistory.symptomatology}</td>
+                        <td>{_clinicHistory.diagnosis}</td>
+                        <td>{_clinicHistory.treatment}</td>
+                        <td>{_clinicHistory.observation}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -163,12 +148,14 @@ const Container = styled.div`
         font-size: 0.9em;
         font-weight: 500;
         padding-right: 1em;
+
         div {
           display: flex;
           flex-direction: column;
           gap: 0.5em;
         }
       }
+
       &__title {
         text-align: center;
         font-size: 1.75em;
