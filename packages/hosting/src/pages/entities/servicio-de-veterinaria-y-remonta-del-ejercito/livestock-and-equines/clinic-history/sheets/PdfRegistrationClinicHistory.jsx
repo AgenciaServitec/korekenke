@@ -99,30 +99,23 @@ export const PdfRegistrationClinicHistory = () => {
                     <th>Diagnóstico</th>
                     <th>Tratamiento</th>
                     <th>Observación</th>
+                    <th style={{ width: "10em" }}>Revisado</th>
                   </tr>
                 </thead>
                 <tbody>
                   {clinicHistory.map((_clinicHistory, index) => (
-                    <>
-                      <tr>
-                        <td>
-                          {moment(_clinicHistory.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm"
-                          )}
-                        </td>
-                        <td>{_clinicHistory.symptomatology}</td>
-                        <td>{_clinicHistory.diagnosis}</td>
-                        <td>{_clinicHistory.treatment}</td>
-                        <td>{_clinicHistory.observation}</td>
-                      </tr>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </>
+                    <tr key={index}>
+                      <td>
+                        {moment(_clinicHistory.createAt.toDate()).format(
+                          "DD/MM/YYYY HH:mm"
+                        )}
+                      </td>
+                      <td>{_clinicHistory.symptomatology}</td>
+                      <td>{_clinicHistory.diagnosis}</td>
+                      <td>{_clinicHistory.treatment}</td>
+                      <td>{_clinicHistory.observation}</td>
+                      <td></td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
@@ -137,7 +130,7 @@ export const PdfRegistrationClinicHistory = () => {
 const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
 
   .sheet {
     .header {
@@ -158,7 +151,7 @@ const Container = styled.div`
 
       &__title {
         text-align: center;
-        font-size: 1.75em;
+        font-size: 1.7em;
       }
     }
 
