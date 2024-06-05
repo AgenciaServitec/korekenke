@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { firestore } from "../../../../../firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
+import { notification, Spinner } from "../../../../../components";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
@@ -13,6 +14,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
   ] = useDocumentData(
     firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
   );
+
+  useEffect(() => {
+    liveStockAndEquineError && notification({ type: "error" });
+  }, [liveStockAndEquineError]);
+
+  if (liveStockAndEquineLoading) return <Spinner height="80vh" />;
 
   console.log({ liveStockAndEquine });
 
