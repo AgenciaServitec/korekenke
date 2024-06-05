@@ -15,18 +15,18 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
   const [
-    liveStockAndEquine,
-    liveStockAndEquineLoading,
-    liveStockAndEquineError,
+    livestockAndEquine,
+    livestockAndEquineLoading,
+    livestockAndEquineError,
   ] = useDocumentData(
     firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
   );
 
   useEffect(() => {
-    liveStockAndEquineError && notification({ type: "error" });
-  }, [liveStockAndEquineError]);
+    livestockAndEquineError && notification({ type: "error" });
+  }, [livestockAndEquineError]);
 
-  if (liveStockAndEquineLoading) return <Spinner height="80vh" />;
+  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
 
   return (
     <Container>
@@ -55,21 +55,21 @@ export const PdfEquineLivestockRegistrationCard = () => {
                 <div className="column_image">
                   <img
                     src={
-                      liveStockAndEquine?.rightProfilePhoto?.url || ImgNoFound
+                      livestockAndEquine?.rightProfilePhoto?.url || ImgNoFound
                     }
                     alt="Perfil Izquierdo"
                   />
                 </div>
                 <div className="column_image">
                   <img
-                    src={liveStockAndEquine?.frontPhoto?.url || ImgNoFound}
+                    src={livestockAndEquine?.frontPhoto?.url || ImgNoFound}
                     alt="Perfil Frontal"
                   />
                 </div>
                 <div className="column_image">
                   <img
                     src={
-                      liveStockAndEquine?.leftProfilePhoto?.url || ImgNoFound
+                      livestockAndEquine?.leftProfilePhoto?.url || ImgNoFound
                     }
                     alt="Perfil Derecho"
                   />
@@ -90,13 +90,16 @@ export const PdfEquineLivestockRegistrationCard = () => {
               </div>
               <div className="section_information__column">
                 <ul>
-                  <li>: {liveStockAndEquine?.unit || ""}</li>
-                  <li>: {liveStockAndEquine?.greatUnit || ""}</li>
-                  <li>: {liveStockAndEquine?.name || ""}</li>
-                  <li>: {liveStockAndEquine?.registrationNumber || ""}</li>
-                  <li>: {liveStockAndEquine?.chipNumber || ""}</li>
-                  <li>: {liveStockAndEquine?.gender || ""}</li>
-                  <li>: {liveStockAndEquine?.color || ""}</li>
+                  <li>: {livestockAndEquine?.unit || ""}</li>
+                  <li>: {livestockAndEquine?.greatUnit || ""}</li>
+                  <li>: {livestockAndEquine?.name || ""}</li>
+                  <li>: {livestockAndEquine?.registrationNumber || ""}</li>
+                  <li>: {livestockAndEquine?.chipNumber || ""}</li>
+                  <li>
+                    :{" "}
+                    {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
+                  </li>
+                  <li>: {livestockAndEquine?.color || ""}</li>
                 </ul>
               </div>
               <div className="section_information__column">
@@ -113,24 +116,24 @@ export const PdfEquineLivestockRegistrationCard = () => {
                 <ul>
                   <li>
                     :{" "}
-                    {liveStockAndEquine?.birthdate
+                    {livestockAndEquine?.birthdate
                       ? moment(
-                          liveStockAndEquine?.birthdate,
+                          livestockAndEquine?.birthdate,
                           DATE_FORMAT_TO_FIRESTORE
                         ).format("DD/MM/YYYY")
                       : ""}
                   </li>
-                  <li>: {liveStockAndEquine?.height || ""} Mts</li>
-                  <li>: {liveStockAndEquine?.father || ""}</li>
-                  <li>: {liveStockAndEquine?.mother || ""}</li>
-                  <li>: {liveStockAndEquine?.origin || ""}</li>
-                  <li>: {liveStockAndEquine?.raceOrLine || ""}</li>
+                  <li>: {livestockAndEquine?.height || ""} Mts</li>
+                  <li>: {livestockAndEquine?.father || ""}</li>
+                  <li>: {livestockAndEquine?.mother || ""}</li>
+                  <li>: {livestockAndEquine?.origin || ""}</li>
+                  <li>: {livestockAndEquine?.raceOrLine || ""}</li>
                 </ul>
               </div>
             </div>
             <div className="section_description">
               <strong> Reseña: </strong> <br />
-              <p>{liveStockAndEquine?.description || ""}</p>
+              <p>{livestockAndEquine?.description || ""}</p>
             </div>
             <div className="section_signature">
               <div className="signature_content">

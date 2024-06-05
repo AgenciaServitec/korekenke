@@ -11,7 +11,7 @@ export const ClinicHistoryInformation = ({ livestockAndEquine }) => {
       <Col span={24} md={12}>
         Sexo:{" "}
         <strong className="capitalize">
-          {livestockAndEquine?.gender || ""}
+          {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
         </strong>
       </Col>
       <Col span={24} md={12}>

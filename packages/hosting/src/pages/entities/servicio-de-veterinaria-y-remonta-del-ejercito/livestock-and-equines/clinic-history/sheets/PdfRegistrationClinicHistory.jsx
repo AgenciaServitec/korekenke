@@ -60,7 +60,7 @@ export const PdfRegistrationClinicHistory = () => {
                 <div>
                   <span>Sexo:</span>
                   <span className="capitalize">
-                    {livestockAndEquine.gender}
+                    {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
                   </span>
                 </div>
                 <div>
