@@ -8,6 +8,12 @@ import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
 export const PdfRegistrationClinicHistory = () => {
   const { livestockAndEquineId, clinicHistoryId } = useParams();
 
+  const [
+    livestockAndEquine,
+    livestockAndEquineLoading,
+    livestockAndEquineError,
+  ] = useDocumentData(livestockAndEquinesRef.doc(livestockAndEquineId));
+
   const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
     useDocumentData(
       livestockAndEquinesRef
@@ -17,11 +23,14 @@ export const PdfRegistrationClinicHistory = () => {
     );
 
   useEffect(() => {
-    clinicHistoryError && notification({ type: "error" });
-  }, [clinicHistoryError]);
+    (clinicHistoryError || livestockAndEquineError) &&
+      notification({ type: "error" });
+  }, [clinicHistoryError, livestockAndEquineError]);
 
-  if (clinicHistoryLoading) return <Spinner height="80vh" />;
+  if (clinicHistoryLoading || livestockAndEquineLoading)
+    return <Spinner height="80vh" />;
 
+  console.log("Datos de equino: ", livestockAndEquine);
   console.log("Datos clinicHistory: ", clinicHistory);
 
   return (
