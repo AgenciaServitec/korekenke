@@ -48,6 +48,8 @@ export const LiveStockAndEquinesTable = ({
       title: "Sexo",
       dataIndex: "gender",
       key: "gender",
+      render: (_, livestockAndEquine) =>
+        livestockAndEquine.gender === "male" ? "Macho" : "Hembra",
     },
     {
       title: "Fecha de Nacimiento",
