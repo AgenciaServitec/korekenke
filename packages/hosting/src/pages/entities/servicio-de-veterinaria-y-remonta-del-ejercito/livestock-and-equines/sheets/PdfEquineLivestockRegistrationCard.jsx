@@ -55,7 +55,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                 <div className="column_image">
                   <img
                     src={
-                      liveStockAndEquine?.leftProfilePhoto?.url || ImgNoFound
+                      liveStockAndEquine?.rightProfilePhoto?.url || ImgNoFound
                     }
                     alt="Perfil Izquierdo"
                   />
@@ -69,7 +69,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                 <div className="column_image">
                   <img
                     src={
-                      liveStockAndEquine?.rightProfilePhoto?.url || ImgNoFound
+                      liveStockAndEquine?.leftProfilePhoto?.url || ImgNoFound
                     }
                     alt="Perfil Derecho"
                   />
@@ -130,10 +130,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
             </div>
             <div className="section_description">
               <strong> Reseña: </strong> <br />
-              <p>
-                <strong> ALAZAN </strong>Lucero cordon fino terminando en la
-                termilla, lepra entre los ollares, albo posterior derecho
-              </p>
+              <p>{liveStockAndEquine?.description || ""}</p>
             </div>
             <div className="section_signature">
               <div className="signature_content">
@@ -144,7 +141,6 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   <img
                     src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
                     alt="Perfil Izquierdo"
-                    style={{ maxWidth: "70%", height: "auto" }}
                   />
                 </div>
                 <div className="signature_info">
@@ -172,7 +168,6 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   <img
                     src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
                     alt="Perfil Izquierdo"
-                    style={{ maxWidth: "70%", height: "auto" }}
                   />
                 </div>
                 <div className="signature_info">
@@ -198,7 +193,6 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   <img
                     src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
                     alt="Perfil Izquierdo"
-                    style={{ maxWidth: "70%", height: "auto" }}
                   />
                 </div>
                 <div className="signature_info">
@@ -239,6 +233,9 @@ const Container = styled.div`
     height: 100%;
     padding: 1em;
     border: 4px inset #000;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
     .header {
       display: grid;
       grid-template-columns: auto 1fr auto;
@@ -290,7 +287,7 @@ const Container = styled.div`
       width: 100%;
       gap: 1em;
       position: relative;
-      padding: 0 2em;
+
       .column_image {
         width: 100%;
         height: 100%;
@@ -316,7 +313,7 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0 2em;
+
     margin-bottom: 1em;
     &__column {
       ul {
@@ -332,21 +329,10 @@ const Container = styled.div`
     }
   }
 
-  .column_information {
-    width: calc(50% - 10px);
-    margin-bottom: 1em;
-
-    div {
-      padding-left: 3em;
-      margin-bottom: 0.3em;
-    }
-  }
-
   .section_description {
-    padding: 0 2em;
     font-size: 0.9em;
     text-transform: uppercase;
-    margin-bottom: 3em;
+    margin-bottom: 1em;
     p {
       text-transform: uppercase;
     }
@@ -355,14 +341,23 @@ const Container = styled.div`
   .section_signature {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    gap: 4em;
-    padding: 0 2em;
+    justify-content: center;
+    align-items: end;
+    gap: 7em;
+
     .signature_content {
       text-align: center;
 
       .signature_tittle {
         font-size: 0.8em;
+        margin-bottom: 0.3em;
+      }
+
+      .signature_img {
+        img {
+          width: auto;
+          height: 5em;
+        }
       }
 
       .signature_info {
@@ -370,6 +365,8 @@ const Container = styled.div`
         border-top: 1px solid #000;
         display: grid;
         gap: 0.2em;
+        width: 19em;
+        padding-top: 0.3em;
         p {
           margin: 0;
           letter-spacing: -1px;
@@ -380,5 +377,9 @@ const Container = styled.div`
 `;
 
 const WrapperContent = styled.div`
-  padding: 0.8em 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 2em;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
 `;
