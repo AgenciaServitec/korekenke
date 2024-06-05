@@ -28,8 +28,6 @@ export const PdfEquineLivestockRegistrationCard = () => {
 
   if (liveStockAndEquineLoading) return <Spinner height="80vh" />;
 
-  console.log({ liveStockAndEquine });
-
   return (
     <Container>
       <div className="sheet">
