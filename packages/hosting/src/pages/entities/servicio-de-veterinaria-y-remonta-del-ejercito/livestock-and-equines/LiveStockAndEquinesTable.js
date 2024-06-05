@@ -3,6 +3,7 @@ import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../components";
 import {
   faEdit,
+  faHistory,
   faIdCard,
   faListCheck,
   faTrash,
@@ -15,6 +16,8 @@ export const LiveStockAndEquinesTable = ({
   onConfirmRemoveLiveStockAndEquine,
   onNavigateGoToPdfEquineLivestockRegistrationCard,
   onNavigateGoToEquineMagazineProfiles,
+  onNavigateGoToClinicHistory,
+  li,
 }) => {
   const columns = [
     {
@@ -49,22 +52,45 @@ export const LiveStockAndEquinesTable = ({
       key: "actions",
       render: (_, livestockAndEquine) => (
         <Space>
-          <IconAction
-            tooltipTitle="Ficha revista equina"
-            icon={faListCheck}
-            onClick={() =>
-              onNavigateGoToEquineMagazineProfiles(livestockAndEquine.id)
-            }
-          />
-          <IconAction
-            tooltipTitle="Ver tarjeta"
-            icon={faIdCard}
-            onClick={() =>
-              onNavigateGoToPdfEquineLivestockRegistrationCard(
-                livestockAndEquine.id
-              )
-            }
-          />
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="clinicHistory"
+            name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+          >
+            <IconAction
+              tooltipTitle="Historial clinico"
+              icon={faHistory}
+              onClick={() => onNavigateGoToClinicHistory(livestockAndEquine.id)}
+            />
+          </Acl>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="equineMagazineProfiles"
+            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+          >
+            <IconAction
+              tooltipTitle="Ficha revista equina"
+              icon={faListCheck}
+              onClick={() =>
+                onNavigateGoToEquineMagazineProfiles(livestockAndEquine.id)
+              }
+            />
+          </Acl>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="livestockAndEquines"
+            name="/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+          >
+            <IconAction
+              tooltipTitle="Ver tarjeta"
+              icon={faIdCard}
+              onClick={() =>
+                onNavigateGoToPdfEquineLivestockRegistrationCard(
+                  livestockAndEquine.id
+                )
+              }
+            />
+          </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="livestockAndEquines"

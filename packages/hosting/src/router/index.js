@@ -244,22 +244,22 @@ export const Router = () => {
           path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
           element={<A.PdfEquineMagazineProfilesSheets />}
         />
-      </Route>
 
-      <Route
-        exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history"
-        element={
-          <AdminLayout>
-            <A.ClinicHistoryIntegration />
-          </AdminLayout>
-        }
-      />
-      <Route
-        exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/sheets"
-        element={<A.Sheets />}
-      />
+        <Route
+          exact
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history"
+          element={
+            <AdminLayout>
+              <A.ClinicHistoryIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId/pdf-clinic-history"
+          element={<A.Sheets />}
+        />
+      </Route>
 
       <Route path="*" element={<Page404 />} />
     </Routes>

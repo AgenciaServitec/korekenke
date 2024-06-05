@@ -62,6 +62,9 @@ const LiveStockAndEquines = ({
   const onNavigateGoToEquineMagazineProfiles = (livestockAndEquineId) =>
     onNavigateTo(`${livestockAndEquineId}/equine-magazine-profiles`);
 
+  const onNavigateGoToClinicHistory = (livestockAndEquineId) =>
+    onNavigateTo(`${livestockAndEquineId}/clinic-history`);
+
   return (
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
@@ -100,6 +103,7 @@ const LiveStockAndEquines = ({
             onNavigateGoToEquineMagazineProfiles={
               onNavigateGoToEquineMagazineProfiles
             }
+            onNavigateGoToClinicHistory={onNavigateGoToClinicHistory}
           />
         </Col>
       </Row>

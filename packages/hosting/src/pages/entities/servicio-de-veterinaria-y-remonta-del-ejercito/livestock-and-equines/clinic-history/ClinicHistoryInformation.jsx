@@ -1,26 +1,41 @@
 import React from "react";
 import { Col, Row } from "antd";
 
-export const ClinicHistoryInformation = () => {
+export const ClinicHistoryInformation = ({ livestockAndEquine }) => {
+  console.log({ livestockAndEquine });
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={12}>
-        Nombre: Baral Nakatomy
+        Nombre:
+        <strong className="capitalize">{livestockAndEquine?.name || ""}</strong>
       </Col>
       <Col span={24} md={12}>
-        Sexo: C
+        Sexo:{" "}
+        <strong className="capitalize">
+          {livestockAndEquine?.gender || ""}
+        </strong>
       </Col>
       <Col span={24} md={12}>
-        Color: Castaño
+        Color:{" "}
+        <strong className="capitalize">
+          {livestockAndEquine?.color || ""}
+        </strong>
       </Col>
       <Col span={24} md={12}>
-        N° de Matrícula: 7-11
+        N° de Matrícula:{" "}
+        <strong className="capitalize">
+          {livestockAndEquine?.registrationNumber || ""}
+        </strong>
       </Col>
       <Col span={24} md={12}>
-        Fecha de Nacimiento: 25-09-2007
+        Fecha de Nacimiento:{" "}
+        <strong>{livestockAndEquine?.birthdate || ""}</strong>
       </Col>
       <Col span={24} md={12}>
-        Escuadrón: B
+        Escuadrón:{" "}
+        <strong className="capitalize">
+          {livestockAndEquine?.squadron || ""}
+        </strong>
       </Col>
     </Row>
   );

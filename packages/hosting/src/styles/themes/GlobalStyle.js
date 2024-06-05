@@ -82,7 +82,6 @@ const global = css`
   }
 
   .data-entry-modal {
-    background: #ededed;
     pointer-events: none;
   }
 `;

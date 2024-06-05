@@ -96,6 +96,14 @@
       "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId": "Editar ficha de revista equina",
       "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles#delete": "Eliminar ficha de revista equina",
       "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile": "Pdf ficha de revista equina"
+    },
+    "clinicHistory": {
+      "label": "Historial clinico",
+      "/livestock-and-equines/:livestockAndEquineId/clinic-history": "Historial clinico",
+      "/livestock-and-equines/:livestockAndEquineId/clinic-history/new": "Agregar historial clinico",
+      "/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId": "Editar historial clinico",
+      "/livestock-and-equines/:livestockAndEquineId/clinic-history#delete": "Eliminar historial clinico",
+      "/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId/pdf-clinic-history": "Pdf historial clinico"
     }
   }
 }

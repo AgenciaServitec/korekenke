@@ -56,7 +56,7 @@ export const EquineMagazineProfilesIntegration = () => {
       redirect
     >
       <Row gutter={[16, 16]}>
-        <Col span={24} md={6}>
+        <Col span={24} md={8}>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="equineMagazineProfiles"
