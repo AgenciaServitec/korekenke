@@ -3,6 +3,8 @@ import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../../components";
 import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
+import { orderBy } from "lodash";
+import moment from "moment";
 
 export const ClinicHistoryTable = ({
   clinicHistories,
@@ -15,9 +17,11 @@ export const ClinicHistoryTable = ({
 
   const columns = [
     {
-      title: "Fecha",
-      dataIndex: "date",
-      key: "date",
+      title: "Fecha creación",
+      dataIndex: "createAt",
+      key: "createAt",
+      render: (_, clinicHistory) =>
+        moment(clinicHistory.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Sintomatología",
@@ -85,7 +89,7 @@ export const ClinicHistoryTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={clinicHistories}
+      dataSource={orderBy(clinicHistories, "createAt", "desc")}
       pagination={false}
       scroll={{ x: "max-content" }}
       loading={loading}
