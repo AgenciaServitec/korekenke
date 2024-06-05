@@ -14,3 +14,6 @@ export { default as BodyCondition8 } from "./webp/body-condition-8.webp";
 export { default as BodyCondition9 } from "./webp/body-condition-9.webp";
 export { default as ToilleteImg } from "./webp/toillete.webp";
 export { default as HerradoImg } from "./webp/herrado.webp";
+export { default as LogoArmyPeru } from "./webp/logo.ejercito-del-peru.webp";
+export { default as LogoServicioVeterinarioRemontaEjercito } from "./webp/logo-servicio-veterinario-remonta-ejercito.webp";
+export { default as ImgNoFound } from "./webp/img-no-found.webp";
