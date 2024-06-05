@@ -522,6 +522,7 @@ const Container = styled.div`
 
   .active {
     background-color: rgb(135, 224, 135);
+    pointer-events: none;
   }
 
   .wrapper-condition-corporal {
