@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
 
 export const PdfRegistrationClinicHistory = () => {
-  const { livestockAndEquineId, clinicHistoryId } = useParams();
+  const { livestockAndEquineId } = useParams();
 
   const [
     livestockAndEquine,
@@ -15,11 +18,10 @@ export const PdfRegistrationClinicHistory = () => {
   ] = useDocumentData(livestockAndEquinesRef.doc(livestockAndEquineId));
 
   const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
-    useDocumentData(
+    useCollectionData(
       livestockAndEquinesRef
         .doc(livestockAndEquineId)
         .collection("clinic-history")
-        .doc(clinicHistoryId)
     );
 
   useEffect(() => {

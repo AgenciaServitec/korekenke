@@ -103,7 +103,7 @@
       "/livestock-and-equines/:livestockAndEquineId/clinic-history/new": "Agregar historial clinico",
       "/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId": "Editar historial clinico",
       "/livestock-and-equines/:livestockAndEquineId/clinic-history#delete": "Eliminar historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId/pdf-clinic-history": "Pdf historial clinico"
+      "/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
     }
   }
 }

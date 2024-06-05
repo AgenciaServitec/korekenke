@@ -1,8 +1,7 @@
 import React from "react";
 import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../../components";
-import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import moment from "moment";
 
@@ -13,8 +12,6 @@ export const ClinicHistoryTable = ({
   onSetIsVisibleModal,
   onSetClinicHistoryId,
 }) => {
-  const navigate = useNavigate();
-
   const columns = [
     {
       title: "Fecha creación",
@@ -43,18 +40,6 @@ export const ClinicHistoryTable = ({
       key: "action",
       render: (_, clinicHistory) => (
         <Space>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId/pdf-clinic-history"
-          >
-            <IconAction
-              tooltipTitle="Pdf"
-              icon={faFilePdf}
-              styled={{ color: (theme) => theme.colors.error }}
-              onClick={() => navigate(`${clinicHistory.id}/pdf-clinic-history`)}
-            />
-          </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="clinicHistory"

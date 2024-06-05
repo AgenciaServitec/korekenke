@@ -256,8 +256,8 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId/pdf-clinic-history"
-          element={<A.Sheets />}
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+          element={<A.PdfClinicHistorySheets />}
         />
       </Route>
 

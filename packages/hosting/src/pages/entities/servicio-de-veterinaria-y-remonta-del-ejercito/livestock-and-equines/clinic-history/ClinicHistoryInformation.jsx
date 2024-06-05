@@ -2,7 +2,6 @@ import React from "react";
 import { Col, Row } from "antd";
 
 export const ClinicHistoryInformation = ({ livestockAndEquine }) => {
-  console.log({ livestockAndEquine });
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={12}>

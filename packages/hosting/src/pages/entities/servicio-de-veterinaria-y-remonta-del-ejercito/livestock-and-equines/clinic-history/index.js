@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "antd";
+import { Col, Row, Space } from "antd";
 import {
   Acl,
   AddButton,
   Card,
+  IconAction,
   modalConfirm,
   notification,
 } from "../../../../../components";
@@ -17,9 +18,12 @@ import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import { updateClinicHistory } from "../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../providers";
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
 
 export const ClinicHistoryIntegration = () => {
   const { livestockAndEquineId } = useParams();
+  const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
     ""
@@ -102,21 +106,44 @@ export const ClinicHistoryIntegration = () => {
             <ClinicHistoryInformation livestockAndEquine={livestockAndEquine} />
           </Card>
         </Col>
-        <Col span={24} md={8}>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
-          >
-            <AddButton
-              onClick={() => {
-                setClinicHistoryId("new");
-                onSetVisibleHistoryClinicModal();
-              }}
-              title="Historia Clínica"
-              margin="0"
-            />
-          </Acl>
+        <Col span={24}>
+          <Row gutter={[16, 16]}>
+            <Col span={24} sm={8}>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+              >
+                <AddButton
+                  onClick={() => {
+                    setClinicHistoryId("new");
+                    onSetVisibleHistoryClinicModal();
+                  }}
+                  title="Historia Clínica"
+                  margin="0"
+                />
+              </Acl>
+            </Col>
+
+            <Col
+              span={24}
+              sm={16}
+              style={{ display: "flex", justifyContent: "end" }}
+            >
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+              >
+                <IconAction
+                  tooltipTitle="Pdf del historial clínico"
+                  icon={faFilePdf}
+                  styled={{ color: (theme) => theme.colors.error }}
+                  onClick={() => navigate("pdf-clinic-history")}
+                />
+              </Acl>
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <ClinicHistoryTable
