@@ -8,3 +8,4 @@ export { default as Genders } from "./genders.json";
 export { default as Relationships } from "./relationships.json";
 export { default as AssignmentForUsers } from "./assignmentForUsers.json";
 export { default as InitialEntities } from "./initialEntities.json";
+export * from "./equineMagazineProfiles.js";

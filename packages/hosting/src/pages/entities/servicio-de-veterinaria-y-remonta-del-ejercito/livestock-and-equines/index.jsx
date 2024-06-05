@@ -16,15 +16,11 @@ export const LiveStockAndEquinesIntegration = () => {
   const { livestockAndEquines } = useGlobalData();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (id = "new") => navigate(id);
+  const navigateTo = (pathname = "new") => navigate(pathname);
 
   const onAddEquine = () => navigateTo("new");
   const onEditEquine = (livestockAndEquine) =>
     navigateTo(livestockAndEquine.id);
-  const onNavigateGoToPdfEquineLivestockRegistrationCard = (
-    livestockAndEquineId
-  ) =>
-    navigate(`${livestockAndEquineId}/pdf-equine-livestock-registration-card`);
 
   const onConfirmDeleteEquine = async (livestockAndEquine) => {
     modalConfirm({
@@ -44,9 +40,7 @@ export const LiveStockAndEquinesIntegration = () => {
       onAddEquine={onAddEquine}
       onEditEquine={onEditEquine}
       onDeleteEquine={onConfirmDeleteEquine}
-      onNavigateGoToPdfEquineLivestockRegistrationCard={
-        onNavigateGoToPdfEquineLivestockRegistrationCard
-      }
+      onNavigateTo={navigateTo}
     />
   );
 };
@@ -56,8 +50,18 @@ const LiveStockAndEquines = ({
   onAddEquine,
   onEditEquine,
   onDeleteEquine,
-  onNavigateGoToPdfEquineLivestockRegistrationCard,
+  onNavigateTo,
 }) => {
+  const onNavigateGoToPdfEquineLivestockRegistrationCard = (
+    livestockAndEquineId
+  ) =>
+    onNavigateTo(
+      `${livestockAndEquineId}/pdf-equine-livestock-registration-card`
+    );
+
+  const onNavigateGoToEquineMagazineProfiles = (livestockAndEquineId) =>
+    onNavigateTo(`${livestockAndEquineId}/equine-magazine-profiles`);
+
   return (
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
@@ -92,6 +96,9 @@ const LiveStockAndEquines = ({
             onConfirmRemoveLiveStockAndEquine={onDeleteEquine}
             onNavigateGoToPdfEquineLivestockRegistrationCard={
               onNavigateGoToPdfEquineLivestockRegistrationCard
+            }
+            onNavigateGoToEquineMagazineProfiles={
+              onNavigateGoToEquineMagazineProfiles
             }
           />
         </Col>
