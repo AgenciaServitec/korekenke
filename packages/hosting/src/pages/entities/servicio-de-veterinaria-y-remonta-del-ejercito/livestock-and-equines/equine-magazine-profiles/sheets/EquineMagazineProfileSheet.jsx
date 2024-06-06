@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {
   HerradoImg,
-  LogoPrimary,
+  LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
   ToilleteImg,
 } from "../../../../../../images";
@@ -25,7 +25,7 @@ export const EquineMagazineProfileSheet = ({
         <div className="header">
           <div className="header__top">
             <img
-              src={LogoServicioVeterinarioRemontaEjercito}
+              src={LogoArmyPeru}
               alt="Logo de Servicio Veterinario y Remonta del Ejercito"
             />
             <h1 className="header__top-title">
@@ -369,15 +369,16 @@ const Container = styled.div`
           }
 
           tbody {
-            tr {
+            td {
               font-size: 0.8em;
             }
 
             td:first-child {
               width: 15em;
+              padding: 0;
               img {
                 width: 100%;
-                height: 100%;
+                height: 4.5em;
               }
             }
 
@@ -385,10 +386,18 @@ const Container = styled.div`
               width: 2em;
               font-size: 1.5em;
               font-weight: 700;
+              color: red;
             }
 
             td:nth-child(3) {
               width: 18em;
+              position: relative;
+              span:last-child {
+                position: absolute;
+                top: 50%;
+                right: 0.5em;
+                transform: translateY(-50%);
+              }
             }
 
             td:last-child {
