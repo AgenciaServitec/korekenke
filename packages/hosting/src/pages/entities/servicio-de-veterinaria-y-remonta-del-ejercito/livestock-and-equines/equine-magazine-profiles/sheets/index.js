@@ -6,7 +6,7 @@ import {
   Spinner,
 } from "../../../../../../components";
 import { PdfRegistrationClinicHistory } from "./PdfRegistrationClinicHistory";
-import { BodyWeightEstimationSheet2 } from "./BodyWeightEstimationSheet2";
+import { BodyWeightEstimationSheet } from "./BodyWeightEstimationSheet";
 import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
@@ -31,15 +31,13 @@ export const PdfEquineMagazineProfilesSheets = () => {
 
   if (equineMagazineProfileLoading) return <Spinner height="80vh" />;
 
-  console.log(equineMagazineProfile);
-
   return (
     <PDF>
       <Sheet layout="portrait">
         <PdfRegistrationClinicHistory />
       </Sheet>
       <Sheet layout="portrait">
-        <BodyWeightEstimationSheet2
+        <BodyWeightEstimationSheet
           equineMagazineProfile={equineMagazineProfile}
         />
       </Sheet>
