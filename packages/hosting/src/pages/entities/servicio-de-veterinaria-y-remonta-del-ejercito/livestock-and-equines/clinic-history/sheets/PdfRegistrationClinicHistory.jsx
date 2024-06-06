@@ -223,6 +223,7 @@ const Container = styled.div`
       }
 
       &__title {
+        text-transform: uppercase;
         text-align: center;
         font-size: 1.4em;
       }
