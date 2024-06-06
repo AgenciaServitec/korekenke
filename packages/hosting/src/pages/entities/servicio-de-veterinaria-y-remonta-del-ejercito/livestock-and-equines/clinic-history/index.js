@@ -18,7 +18,7 @@ import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import { updateClinicHistory } from "../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../providers";
-import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
 export const ClinicHistoryIntegration = () => {
@@ -45,6 +45,8 @@ export const ClinicHistoryIntegration = () => {
         .collection("clinic-history")
         .where("isDeleted", "==", false)
     );
+
+  const onNavigateGoTo = (pathname) => navigate(pathname);
 
   useEffect(() => {
     setLivestockAndEquine(
@@ -102,6 +104,16 @@ export const ClinicHistoryIntegration = () => {
     >
       <Container gutter={[16, 16]}>
         <Col span={24}>
+          <IconAction
+            icon={faArrowLeft}
+            onClick={() =>
+              onNavigateGoTo(
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines`
+              )
+            }
+          />
+        </Col>
+        <Col span={24}>
           <Card>
             <ClinicHistoryInformation livestockAndEquine={livestockAndEquine} />
           </Card>
@@ -139,7 +151,7 @@ export const ClinicHistoryIntegration = () => {
                   tooltipTitle="Pdf del historial clínico"
                   icon={faFilePdf}
                   styled={{ color: (theme) => theme.colors.error }}
-                  onClick={() => navigate("pdf-clinic-history")}
+                  onClick={() => onNavigateGoTo("pdf-clinic-history")}
                 />
               </Acl>
             </Col>
@@ -162,6 +174,7 @@ export const ClinicHistoryIntegration = () => {
           onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
           clinicHistoryId={clinicHistoryId}
           onSetClinicHistoryId={setClinicHistoryId}
+          onNavigateGoTo={onNavigateGoTo}
         />
       </Container>
     </Acl>
