@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {
   HerradoImg,
+  LogoPrimary,
   LogoServicioVeterinarioRemontaEjercito,
   ToilleteImg,
 } from "../../../../../../images";
@@ -9,6 +10,7 @@ import { EquineMagazineProfiles } from "../../../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import moment from "moment/moment";
+import { QRCode } from "antd";
 
 export const EquineMagazineProfileSheet = ({
   livestockAndEquine,
@@ -106,86 +108,71 @@ export const EquineMagazineProfileSheet = ({
             <table className="table-body-condition">
               <thead>
                 <tr>
-                  <th>CONDICIÓN CORPORAL</th>
+                  <th colSpan={5}>CONDICIÓN CORPORAL</th>
+                </tr>
+                <tr>
+                  <th colSpan={3}>PUNTAJE DE CONDICIÓN CORPORAL EN EQUINOS</th>
+                  <th>OBSERVACIÓN</th>
+                  <th>CALIFICACIÓN</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <table className="table-content">
-                      <thead>
-                        <tr>
-                          <th colSpan={3}>
-                            PUNTAJE DE CONDICIÓN CORPORAL EN EQUINOS
-                          </th>
-                          <th>OBSERVACIÓN</th>
-                          <th>CALIFICACIÓN</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {EquineMagazineProfiles.bodyCondition.map(
-                          (_bodyCondition, index) => (
-                            <tr
-                              key={index}
-                              className={
-                                _bodyCondition?.id ===
-                                  equineMagazineProfile?.bodyCondition?.id &&
-                                "active"
-                              }
-                            >
-                              <td>
-                                <img
-                                  src={_bodyCondition.img}
-                                  alt={`Imagen de ${_bodyCondition.name}`}
-                                />
-                              </td>
-                              <td>{_bodyCondition.id}</td>
-                              <td className="body-condition-name">
-                                <span>{_bodyCondition.name}</span>
-                                <span>
-                                  {_bodyCondition?.id ===
-                                  equineMagazineProfile?.bodyCondition?.id ? (
-                                    <FontAwesomeIcon
-                                      icon={faCircleCheck}
-                                      size="3x"
-                                      style={{ color: "green" }}
-                                    />
-                                  ) : (
-                                    ""
-                                  )}
-                                </span>
-                              </td>
-                              <td>
-                                <span>
-                                  {_bodyCondition?.id ===
-                                  equineMagazineProfile?.bodyCondition?.id
-                                    ? equineMagazineProfile?.bodyCondition
-                                        ?.observation
-                                    : ""}
-                                </span>
-                              </td>
-                              <td className="body-condition-qualification">
-                                <strong>
-                                  {_bodyCondition?.id ===
-                                  equineMagazineProfile?.bodyCondition
-                                    ?.qualification
-                                    ? _bodyCondition?.id
-                                    : ""}
-                                </strong>
-                              </td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
+                {EquineMagazineProfiles.bodyCondition.map(
+                  (_bodyCondition, index) => (
+                    <tr
+                      key={index}
+                      className={
+                        _bodyCondition?.id ===
+                          equineMagazineProfile?.bodyCondition?.id && "active"
+                      }
+                    >
+                      <td>
+                        <img
+                          src={_bodyCondition.img}
+                          alt={`Imagen de ${_bodyCondition.name}`}
+                        />
+                      </td>
+                      <td>{_bodyCondition.id}</td>
+                      <td className="body-condition-name">
+                        <span>{_bodyCondition.name}</span>
+                        <span>
+                          {_bodyCondition?.id ===
+                          equineMagazineProfile?.bodyCondition?.id ? (
+                            <FontAwesomeIcon
+                              icon={faCircleCheck}
+                              size="3x"
+                              style={{ color: "green" }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </span>
+                      </td>
+                      <td>
+                        <span>
+                          {_bodyCondition?.id ===
+                          equineMagazineProfile?.bodyCondition?.id
+                            ? equineMagazineProfile?.bodyCondition?.observation
+                            : ""}
+                        </span>
+                      </td>
+                      <td className="body-condition-qualification">
+                        <strong>
+                          {_bodyCondition?.id ===
+                          equineMagazineProfile?.bodyCondition?.qualification
+                            ? _bodyCondition?.id
+                            : ""}
+                        </strong>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
           <br />
           <div className="main-toillete">
-            <table className="table-toillete">
+            <table>
               <thead>
                 <tr>
                   <th colSpan={5}>TOILLETE</th>
@@ -193,52 +180,40 @@ export const EquineMagazineProfileSheet = ({
               </thead>
               <tbody>
                 <tr>
-                  <td>
+                  <td rowSpan={2}>
                     <img src={ToilleteImg} alt="Imagen de caballo" />
                   </td>
-                  <td>
-                    <table className="table-qualification">
-                      <thead>
-                        <tr>
-                          {EquineMagazineProfiles.toillete.map((_toillete) => (
-                            <th key={_toillete?.id}>{_toillete?.name}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          {EquineMagazineProfiles.toillete.map((_toillete) => (
-                            <td
-                              key={_toillete?.id}
-                              className={
-                                _toillete?.id ===
-                                  equineMagazineProfile?.toillete?.id &&
-                                "active"
-                              }
-                            >
-                              {_toillete?.id ===
-                              equineMagazineProfile?.toillete?.id ? (
-                                <FontAwesomeIcon
-                                  icon={faCircleCheck}
-                                  size="3x"
-                                  style={{ color: "green" }}
-                                />
-                              ) : (
-                                ""
-                              )}
-                            </td>
-                          ))}
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
+                  {EquineMagazineProfiles.toillete.map((_toillete) => (
+                    <th key={_toillete?.id}>{_toillete?.name}</th>
+                  ))}
+                </tr>
+                <tr>
+                  {EquineMagazineProfiles.toillete.map((_toillete) => (
+                    <td
+                      key={_toillete?.id}
+                      className={
+                        _toillete?.id === equineMagazineProfile?.toillete?.id &&
+                        "active"
+                      }
+                    >
+                      {_toillete?.id === equineMagazineProfile?.toillete?.id ? (
+                        <FontAwesomeIcon
+                          icon={faCircleCheck}
+                          size="3x"
+                          style={{ color: "green" }}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </td>
+                  ))}
                 </tr>
               </tbody>
             </table>
           </div>
           <br />
           <div className="main-horseshoe">
-            <table className="table-horseshoe">
+            <table>
               <thead>
                 <tr>
                   <th colSpan={5}>HERRADO</th>
@@ -246,49 +221,34 @@ export const EquineMagazineProfileSheet = ({
               </thead>
               <tbody>
                 <tr>
-                  <td>
+                  <td rowSpan={2}>
                     <img src={HerradoImg} alt="Imagen de caballo" />
                   </td>
-                  <td>
-                    <table className="table-qualification">
-                      <thead>
-                        <tr>
-                          {EquineMagazineProfiles.horseshoe.map(
-                            (_horseshoe) => (
-                              <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
-                            )
-                          )}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          {EquineMagazineProfiles.horseshoe.map(
-                            (_horseshoe) => (
-                              <td
-                                key={_horseshoe?.id}
-                                className={
-                                  _horseshoe?.id ===
-                                    equineMagazineProfile?.horseshoe?.id &&
-                                  "active"
-                                }
-                              >
-                                {_horseshoe?.id ===
-                                equineMagazineProfile?.horseshoe?.id ? (
-                                  <FontAwesomeIcon
-                                    icon={faCircleCheck}
-                                    size="3x"
-                                    style={{ color: "green" }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </td>
-                            )
-                          )}
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
+                  {EquineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                    <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
+                  ))}
+                </tr>
+                <tr>
+                  {EquineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                    <td
+                      key={_horseshoe?.id}
+                      className={
+                        _horseshoe?.id ===
+                          equineMagazineProfile?.horseshoe?.id && "active"
+                      }
+                    >
+                      {_horseshoe?.id ===
+                      equineMagazineProfile?.horseshoe?.id ? (
+                        <FontAwesomeIcon
+                          icon={faCircleCheck}
+                          size="3x"
+                          style={{ color: "green" }}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </td>
+                  ))}
                 </tr>
               </tbody>
             </table>
@@ -296,6 +256,16 @@ export const EquineMagazineProfileSheet = ({
         </div>
 
         <div className="signature">
+          <div className="signature-qr">
+            <QRCode
+              value={window.location.href}
+              icon={LogoServicioVeterinarioRemontaEjercito}
+              iconSize={25}
+              type="svg"
+              size={110}
+              bordered={false}
+            />
+          </div>
           <p>FIRMA DEL PROFESIONAL</p>
         </div>
       </div>
@@ -381,217 +351,81 @@ const Container = styled.div`
     }
 
     .main {
-      margin-bottom: 6em;
-
       .main-body-condition {
         &__title {
           text-align: center;
           font-size: 1.2em;
         }
 
-        .table-body-condition {
+        table {
           width: 100%;
 
           th,
           td {
             border: 1px solid #000;
-          }
-
-          > thead th {
-            padding: 0.3em 0;
-          }
-        }
-
-        .table-content {
-          width: 100%;
-
-          img {
-            width: 100%;
-            height: 45px;
-          }
-
-          .body-condition-name {
-            position: relative;
-            font-weight: 500;
-
-            span:last-child {
-              position: absolute;
-              top: 50%;
-              right: 0.5em;
-              transform: translateY(-50%);
-            }
-          }
-
-          .body-condition-qualification {
-            font-size: 1em;
-          }
-
-          th {
-            padding: 0.5em;
-            border-top: 0;
-          }
-
-          th:first-child,
-          td:first-child {
-            border-left: 0;
-          }
-
-          th:last-child,
-          td:last-child {
-            border-right: 0;
-          }
-
-          td {
-            border-bottom: 0;
-            text-align: center;
+            padding: 0.3em;
             text-transform: uppercase;
-            font-size: 0.8em;
-            padding: 0.5em;
-          }
-
-          th,
-          td {
-            width: auto;
-          }
-
-          td:first-child {
-            width: 15em;
-            padding: 0;
-          }
-
-          td:nth-child(2) {
-            width: 2em;
-            color: red;
-            font-size: 1.5em;
-            font-weight: 700;
-          }
-
-          td:nth-child(3) {
-            width: 18em;
-          }
-
-          td:last-child {
-            width: 2em;
-          }
-        }
-      }
-
-      .main-toillete {
-        .table-toillete {
-          width: 100%;
-
-          th {
-            padding: 0.3em 0;
-          }
-
-          th,
-          td {
-            border: 1px solid #000;
-          }
-
-          > tbody tr {
-            img {
-              width: 100%;
-              height: 100%;
-            }
-
-            > td:first-child {
-              width: 12em;
-              padding: 0.5em;
-            }
-          }
-        }
-
-        .table-qualification {
-          width: 100%;
-
-          th,
-          td {
-            width: 25%;
-            padding: 0.2em 0;
-          }
-
-          th {
-            border-top: 0;
-          }
-
-          td {
             text-align: center;
-            border-bottom: 0;
-          }
-
-          th:first-child,
-          td:first-child {
-            border-left: 0;
-          }
-
-          th:last-child,
-          td:last-child {
-            border-right: 0;
           }
 
           tbody {
-            height: 7em;
+            tr {
+              font-size: 0.8em;
+            }
+
+            td:first-child {
+              width: 15em;
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            td:nth-child(2) {
+              width: 2em;
+              font-size: 1.5em;
+              font-weight: 700;
+            }
+
+            td:nth-child(3) {
+              width: 18em;
+            }
+
+            td:last-child {
+              width: 2em;
+            }
           }
         }
       }
 
+      .main-toillete,
       .main-horseshoe {
-        .table-horseshoe {
+        table {
           width: 100%;
-
-          th {
-            padding: 0.3em 0;
-          }
 
           th,
           td {
             border: 1px solid #000;
-          }
-
-          > tbody tr {
-            img {
-              width: 100%;
-              height: 100%;
-            }
-
-            > td:first-child {
-              width: 12em;
-              padding: 0.5em;
-            }
-          }
-        }
-
-        .table-qualification {
-          width: 100%;
-
-          th,
-          td {
-            width: 25%;
-            padding: 0.2em 0;
-          }
-
-          th {
-            border-top: 0;
-          }
-
-          td {
+            padding: 0.3em;
+            text-transform: uppercase;
             text-align: center;
-            border-bottom: 0;
-          }
-
-          th:first-child,
-          td:first-child {
-            border-left: 0;
-          }
-
-          th:last-child,
-          td:last-child {
-            border-right: 0;
           }
 
           tbody {
-            height: 7em;
+            > tr:first-child {
+              td:first-child {
+                height: 7em;
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
+              }
+            }
+
+            td {
+              width: calc(100% / 5);
+            }
           }
         }
       }
@@ -599,7 +433,13 @@ const Container = styled.div`
 
     .signature {
       display: flex;
-      justify-content: flex-end;
+      align-items: flex-end;
+      justify-content: space-between;
+
+      .signature-qr {
+        width: 100px;
+        height: 100px;
+      }
 
       p {
         width: max-content;
