@@ -25,25 +25,27 @@ export const DrawerLayout = ({
   onSetIsVisibleDrawer,
   onNavigateTo,
 }) => {
-  const existPageAclsInAclsOfUser = (
+  const existsAclsInAclsOfUser = (
     category,
     subCategories = [],
     aclNames = []
   ) =>
-    subCategories.map((subCategory) => {
-      if (isEmpty(user.acls?.[category]?.[subCategory])) return false;
+    subCategories
+      .map((subCategory) => {
+        if (isEmpty(user.acls?.[category]?.[subCategory])) return false;
 
-      return user.acls?.[category]?.[subCategory].some((acl) =>
-        includes(aclNames, acl)
-      );
-    });
+        return user.acls?.[category]?.[subCategory].some((acl) =>
+          includes(aclNames, acl)
+        );
+      })
+      .some((acl) => acl);
 
   const items = [
     {
       label: "Home",
       key: "home",
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser("default", ["home"], ["/home"]),
+      isVisible: existsAclsInAclsOfUser("default", ["home"], ["/home"]),
       onClick: () => {
         onNavigateTo("/home");
         onSetIsVisibleDrawer(false);
@@ -53,7 +55,7 @@ export const DrawerLayout = ({
       label: "Control de Accesos (acls)",
       key: "group-acls",
       icon: <FontAwesomeIcon icon={faUsersCog} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(
+      isVisible: existsAclsInAclsOfUser(
         "accessControl",
         ["defaultRolesAcls", "manageAcls"],
         ["/default-roles-acls", "/manage-acls"]
@@ -62,7 +64,7 @@ export const DrawerLayout = ({
         {
           label: "Roles con Acls",
           key: "default-roles-acls",
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "accessControl",
             ["defaultRolesAcls"],
             ["/default-roles-acls"]
@@ -75,7 +77,7 @@ export const DrawerLayout = ({
         {
           label: "Administrador Acls",
           key: "manage-acls",
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "accessControl",
             ["manageAcls"],
             ["/manage-acls"]
@@ -91,7 +93,7 @@ export const DrawerLayout = ({
       label: "Administración",
       key: "manager",
       icon: <FontAwesomeIcon icon={faGears} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(
+      isVisible: existsAclsInAclsOfUser(
         "administration",
         ["users", "entities", "departments", "offices", "sections"],
         ["/users", "/entities", "/departments", "/sections", "/offices"]
@@ -101,7 +103,7 @@ export const DrawerLayout = ({
           label: "Usuarios",
           key: "users",
           icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "administration",
             ["users"],
             ["/users"]
@@ -115,7 +117,7 @@ export const DrawerLayout = ({
           label: "Entidades",
           key: "entities",
           icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "administration",
             ["entities"],
             ["/entities"]
@@ -129,7 +131,7 @@ export const DrawerLayout = ({
           label: "Departamentos",
           key: "departments",
           icon: <FontAwesomeIcon icon={faBuildingUser} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "administration",
             ["departments"],
             ["/departments"]
@@ -143,7 +145,7 @@ export const DrawerLayout = ({
           label: "Secciones",
           key: "sections",
           icon: <FontAwesomeIcon icon={faComputer} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "administration",
             ["sections"],
             ["/sections"]
@@ -157,7 +159,7 @@ export const DrawerLayout = ({
           label: "Oficinas",
           key: "offices",
           icon: <FontAwesomeIcon icon={faBriefcase} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "administration",
             ["offices"],
             ["/offices"]
@@ -173,7 +175,7 @@ export const DrawerLayout = ({
       label: "Jefatura de bienestar del ejército (COBIENE)",
       key: "jefatura-de-bienestar-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(
+      isVisible: existsAclsInAclsOfUser(
         "jefatura-de-bienestar-del-ejercito",
         ["correspondences", "inscriptions"],
         ["/correspondences", "/inscriptions"]
@@ -183,7 +185,7 @@ export const DrawerLayout = ({
           label: "Correspondencias",
           key: "correspondences",
           icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "jefatura-de-bienestar-del-ejercito",
             ["correspondences"],
             ["/correspondences"]
@@ -197,7 +199,7 @@ export const DrawerLayout = ({
           label: "Inscripciones",
           key: "inscriptions",
           icon: <FontAwesomeIcon icon={faIdCard} size="lg" />,
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "jefatura-de-bienestar-del-ejercito",
             ["inscriptions"],
             ["/inscriptions"]
@@ -206,7 +208,7 @@ export const DrawerLayout = ({
             {
               key: "military-circle",
               label: "Circulo Militar",
-              isVisible: existPageAclsInAclsOfUser(
+              isVisible: existsAclsInAclsOfUser(
                 "jefatura-de-bienestar-del-ejercito",
                 ["inscriptions"],
                 ["/inscriptions/cmsts"]
@@ -224,7 +226,7 @@ export const DrawerLayout = ({
       label: "Servicio de veterinaria y remonta del ejército",
       key: "servicio-de-veterinaria-y-remonta-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: existPageAclsInAclsOfUser(
+      isVisible: existsAclsInAclsOfUser(
         "servicio-de-veterinaria-y-remonta-del-ejercito",
         ["livestockAndEquines"],
         ["/livestock-and-equines"]
@@ -234,7 +236,7 @@ export const DrawerLayout = ({
           key: "livestock-and-equines",
           icon: <FontAwesomeIcon icon={faHorse} size="lg" />,
           label: "Ganados e equinos",
-          isVisible: existPageAclsInAclsOfUser(
+          isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["livestockAndEquines"],
             ["/livestock-and-equines"]
