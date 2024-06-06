@@ -244,6 +244,7 @@ const Container = styled.div`
     border: 5px solid #000;
     outline: 1px solid #000;
     outline-offset: 2px;
+    margin: auto;
 
     .header {
       display: grid;
