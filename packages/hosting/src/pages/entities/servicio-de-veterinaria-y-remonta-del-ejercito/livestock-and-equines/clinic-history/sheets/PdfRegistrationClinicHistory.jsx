@@ -213,6 +213,7 @@ const Container = styled.div`
         font-size: 1em;
         font-weight: 500;
         padding-right: 1em;
+        text-transform: uppercase;
 
         div {
           display: flex;
@@ -245,6 +246,7 @@ const Container = styled.div`
           div {
             display: flex;
             gap: 0.5em;
+            text-transform: uppercase;
             span:last-child {
               font-weight: 700;
             }
