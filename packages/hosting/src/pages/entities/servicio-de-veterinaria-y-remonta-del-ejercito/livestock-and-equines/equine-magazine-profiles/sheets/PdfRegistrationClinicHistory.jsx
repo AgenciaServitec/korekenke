@@ -5,17 +5,6 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 
 export const PdfRegistrationClinicHistory = () => {
-  const { liveStockEquinesId } = useParams();
-  const [equine, equineLoading, equineError] = useDocumentData(
-    firestore
-      .collection("livestock-and-equines")
-      .doc("3817zSlDzCIFyuI94txS")
-      .collection("clinic-history")
-      .doc(liveStockEquinesId)
-  );
-
-  console.log(equine);
-
   return (
     <Container>
       <div className="sheet">
