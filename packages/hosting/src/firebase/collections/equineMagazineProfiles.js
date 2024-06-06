@@ -1,44 +1,45 @@
-import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
+import { livestockAndEquinesRef } from "./livestockAndEquines";
 
-export const equineMagazineProfilesRef = (livestockOrEquineId) =>
-  firestore
-    .collection("livestock-and-equines")
-    .doc(livestockOrEquineId)
+export const equineMagazineProfilesRef = (livestockAndEquineId) =>
+  livestockAndEquinesRef
+    .doc(livestockAndEquineId)
     .collection("equine-magazine-profiles");
 
-export const getEquineMagazineProfileId = (livestockOrEquineId) =>
-  equineMagazineProfilesRef().doc().id;
+export const getEquineMagazineProfileId = (livestockAndEquineId) =>
+  equineMagazineProfilesRef(livestockAndEquineId).doc().id;
 
 export const fetchEquineMagazineProfile = async (
-  livestockOrEquineId,
+  livestockAndEquineId,
   equineMagazineProfileId
 ) =>
   fetchDocumentOnce(
-    equineMagazineProfilesRef(livestockOrEquineId).doc(equineMagazineProfileId)
+    equineMagazineProfilesRef(livestockAndEquineId).doc(equineMagazineProfileId)
   );
 
-export const fetchEquineMagazineProfiles = async (livestockOrEquineId) =>
-  fetchCollectionOnce(equineMagazineProfilesRef(livestockOrEquineId));
+export const fetchEquineMagazineProfiles = async (livestockAndEquineId) =>
+  fetchCollectionOnce(equineMagazineProfilesRef(livestockAndEquineId));
 
 export const addEquineMagazineProfile = async (
-  livestockOrEquineId,
+  livestockAndEquineId,
   equineMagazineProfile
 ) =>
   setDocument(
-    equineMagazineProfilesRef(livestockOrEquineId).doc(
+    equineMagazineProfilesRef(livestockAndEquineId).doc(
       equineMagazineProfile.id
     ),
     equineMagazineProfile
   );
 
 export const updateEquineMagazineProfile = async (
-  livestockOrEquineId,
+  livestockAndEquineId,
   equineMagazineProfileId,
   equineMagazineProfile
 ) =>
   updateDocument(
-    equineMagazineProfilesRef(livestockOrEquineId).doc(equineMagazineProfileId),
+    equineMagazineProfilesRef(livestockAndEquineId).doc(
+      equineMagazineProfileId
+    ),
     equineMagazineProfile
   );

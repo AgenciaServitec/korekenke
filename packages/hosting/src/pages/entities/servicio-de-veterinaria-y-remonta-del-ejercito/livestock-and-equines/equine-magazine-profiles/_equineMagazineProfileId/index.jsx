@@ -120,6 +120,8 @@ export const EquineMagazineProfileIntegration = () => {
             assignCreateProps(mapForm(formData))
           )
         : await updateEquineMagazineProfile(
+            livestockAndEquineId,
+            equineMagazineProfile.id,
             assignUpdateProps(mapForm(formData))
           );
 
