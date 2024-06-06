@@ -80,7 +80,7 @@ export const LiveStockAndEquinesTable = ({
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="equineMagazineProfiles"
-            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles"
           >
             <IconAction
               tooltipTitle="Ficha revista equina"
