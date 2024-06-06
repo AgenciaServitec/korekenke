@@ -549,10 +549,6 @@ const Container = styled.div`
         cursor: pointer;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
 
-        &:hover {
-          background: rgba(239, 239, 241, 0.85);
-        }
-
         .item-image {
           width: 10em;
           height: auto;
@@ -626,9 +622,7 @@ const Container = styled.div`
         cursor: pointer;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
         text-align: center;
-        &:hover {
-          background: rgba(239, 239, 241, 0.85);
-        }
+
         h5 {
           margin: 0;
         }
