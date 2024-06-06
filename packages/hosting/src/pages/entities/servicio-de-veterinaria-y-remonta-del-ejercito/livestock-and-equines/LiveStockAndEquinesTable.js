@@ -69,7 +69,7 @@ export const LiveStockAndEquinesTable = ({
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+            name="/livestock-and-equines/:livestockAndEquineId/clinic-history"
           >
             <IconAction
               tooltipTitle="Historial clinico"
