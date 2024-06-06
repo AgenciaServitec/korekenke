@@ -34,7 +34,7 @@ export const Router = () => {
           path="home"
           element={
             <AdminLayout>
-              <A.CorrespondencesIntegration />
+              <A.HomeIntegration />
             </AdminLayout>
           }
         />
