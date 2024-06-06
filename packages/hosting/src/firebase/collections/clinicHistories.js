@@ -2,38 +2,38 @@ import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
 
-export const clinicHistoriesRef = (livestockOrEquineId) =>
+export const clinicHistoriesRef = (livestockAndEquineId) =>
   firestore
     .collection("livestock-and-equines")
-    .doc(livestockOrEquineId)
+    .doc(livestockAndEquineId)
     .collection("clinic-history");
 
-export const getClinicHistoryId = (livestockOrEquineId) =>
+export const getClinicHistoryId = (livestockAndEquineId) =>
   clinicHistoriesRef().doc().id;
 
 export const fetchClinicHistory = async (
-  livestockOrEquineId,
+  livestockAndEquineId,
   clinicHistoryId
 ) =>
   fetchDocumentOnce(
-    clinicHistoriesRef(livestockOrEquineId).doc(clinicHistoryId)
+    clinicHistoriesRef(livestockAndEquineId).doc(clinicHistoryId)
   );
 
-export const fetchClinicHistories = async (livestockOrEquineId) =>
-  fetchCollectionOnce(clinicHistoriesRef(livestockOrEquineId));
+export const fetchClinicHistories = async (livestockAndEquineId) =>
+  fetchCollectionOnce(clinicHistoriesRef(livestockAndEquineId));
 
-export const addClinicHistory = async (livestockOrEquineId, clinicHistory) =>
+export const addClinicHistory = async (livestockAndEquineId, clinicHistory) =>
   setDocument(
-    clinicHistoriesRef(livestockOrEquineId).doc(clinicHistory.id),
+    clinicHistoriesRef(livestockAndEquineId).doc(clinicHistory.id),
     clinicHistory
   );
 
 export const updateClinicHistory = async (
-  livestockOrEquineId,
+  livestockAndEquineId,
   clinicHistoryId,
   clinicHistory
 ) =>
   updateDocument(
-    clinicHistoriesRef(livestockOrEquineId).doc(clinicHistoryId),
+    clinicHistoriesRef(livestockAndEquineId).doc(clinicHistoryId),
     clinicHistory
   );
