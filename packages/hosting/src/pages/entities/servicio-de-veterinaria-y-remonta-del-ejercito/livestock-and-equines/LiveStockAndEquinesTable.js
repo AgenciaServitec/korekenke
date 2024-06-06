@@ -3,9 +3,9 @@ import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../components";
 import {
   faEdit,
-  faHistory,
   faIdCard,
   faListCheck,
+  faNotesMedical,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, orderBy } from "lodash";
@@ -73,7 +73,7 @@ export const LiveStockAndEquinesTable = ({
           >
             <IconAction
               tooltipTitle="Historial clinico"
-              icon={faHistory}
+              icon={faNotesMedical}
               onClick={() => onNavigateGoToClinicHistory(livestockAndEquine.id)}
             />
           </Acl>

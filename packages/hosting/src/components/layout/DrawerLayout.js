@@ -235,7 +235,7 @@ export const DrawerLayout = ({
         {
           key: "livestock-and-equines",
           icon: <FontAwesomeIcon icon={faHorse} size="lg" />,
-          label: "Ganados e equinos",
+          label: "Ganados y equinos",
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["livestockAndEquines"],
