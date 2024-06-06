@@ -8,7 +8,7 @@ import {
   faListCheck,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { capitalize } from "lodash";
+import { capitalize, orderBy } from "lodash";
 import moment from "moment";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
@@ -138,7 +138,7 @@ export const LiveStockAndEquinesTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={livestockAndEquines}
+      dataSource={orderBy(livestockAndEquines, "createAt", "desc")}
       scroll={{ x: "max-content" }}
     />
   );
