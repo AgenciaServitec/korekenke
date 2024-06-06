@@ -9,6 +9,7 @@ import {
   faFileAlt,
   faGears,
   faHome,
+  faHorse,
   faIdCard,
   faNetworkWired,
   faShield,
@@ -231,6 +232,7 @@ export const DrawerLayout = ({
       children: [
         {
           key: "livestock-and-equines",
+          icon: <FontAwesomeIcon icon={faHorse} size="lg" />,
           label: "Ganados e equinos",
           isVisible: existPageAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
