@@ -21,10 +21,10 @@ export const addLivestockAndEquine = async (livestockAndEquine) =>
   );
 
 export const updateLivestockAndEquine = async (
-  livestockOrEquineId,
+  livestockAndEquineId,
   livestockAndEquine
 ) =>
   updateDocument(
-    livestockAndEquinesRef.doc(livestockOrEquineId),
+    livestockAndEquinesRef.doc(livestockAndEquineId),
     livestockAndEquine
   );
