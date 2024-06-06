@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
 import moment from "moment";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
 export const LiveStockAndEquinesTable = ({
   livestockAndEquines,
@@ -55,6 +56,10 @@ export const LiveStockAndEquinesTable = ({
       title: "Fecha de Nacimiento",
       dataIndex: "birthdate",
       key: "birthdate",
+      render: (_, livestockAndEquine) =>
+        moment(livestockAndEquine.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
+          "DD/MM/YYYY"
+        ),
     },
     {
       title: "Acciones",
