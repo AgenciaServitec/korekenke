@@ -132,8 +132,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
               </div>
             </div>
             <div className="section_description">
-              <strong> Reseña: </strong> <br />
-              <p>{livestockAndEquine?.description || ""}</p>
+              {livestockAndEquine?.description && (
+                <>
+                  <strong> Reseña: </strong> <br />
+                  <p>{livestockAndEquine.description || ""}</p>
+                </>
+              )}
             </div>
             <div className="section_signature">
               <div className="signature_content">
@@ -227,18 +231,20 @@ const Container = styled.div`
   display: grid;
   place-items: center;
   font-family: Arial, Helvetica, sans-serif;
-  border: 1px outset #000;
   font-size: 13px;
-  padding: 1px;
+  padding: 2em;
 
   .sheet {
     width: 100%;
     height: 100%;
     padding: 1em;
-    border: 4px inset #000;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
+    border: 5px solid #000;
+    outline: 1px solid #000;
+    outline-offset: 2px;
+
     .header {
       display: grid;
       grid-template-columns: auto 1fr auto;
@@ -258,11 +264,11 @@ const Container = styled.div`
           h2,
           h3 {
             margin: 0;
-            font-weight: 600;
+            font-weight: 500;
           }
           h2 {
-            font-size: 2.1em;
-            font-weight: 700;
+            font-size: 2em;
+            font-weight: 600;
           }
         }
       }
@@ -284,7 +290,7 @@ const Container = styled.div`
     .section_images_wrapper {
       display: grid;
       grid-template-columns: 1fr 13em 1fr;
-      grid-template-rows: 18em;
+      grid-template-rows: 17em;
       justify-content: center;
       margin: auto auto 1em auto;
       width: 100%;
@@ -323,18 +329,18 @@ const Container = styled.div`
         padding: 0;
         margin: 0;
         font-weight: 600;
-        font-size: 0.9em;
+        font-size: 0.8em;
         text-transform: uppercase;
         display: grid;
-        gap: 0.2em;
+        gap: 0.1em;
       }
     }
   }
 
   .section_description {
-    font-size: 0.9em;
     text-transform: uppercase;
     margin-bottom: 1em;
+    font-size: 0.75em;
     p {
       text-transform: uppercase;
     }
