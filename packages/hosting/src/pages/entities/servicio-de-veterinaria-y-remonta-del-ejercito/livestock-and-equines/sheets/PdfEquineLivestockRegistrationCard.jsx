@@ -344,7 +344,7 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: end;
+    align-items: start;
     gap: 7em;
 
     .signature_content {
