@@ -10,8 +10,6 @@ import { userFullName } from "../../utils/users/userFullName2";
 export const HomeIntegration = () => {
   const { authUser } = useAuthentication();
 
-  console.log({ authUser });
-
   return (
     <Container>
       <h1>BIENVENIDO(A) AL SISTEMA DE KOREKENKE</h1>
