@@ -11,6 +11,7 @@ import { useNavigate } from "react-router";
 import { clearLocalStorage, getLocalStorage } from "../../utils";
 import { useApiUserPost } from "../../api";
 import { assign } from "lodash";
+import { fetchRoleAcl } from "../../firebase/collections";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();
@@ -45,11 +46,14 @@ export const PrivacyPolicies = ({ prev }) => {
 
       const prevData = getLocalStorage("register");
 
+      const roleAclTypeUser = await fetchRoleAcl("user");
+
       await postUser(
         assign({}, prevData, {
           firstName: prevData.firstName.toLocaleLowerCase(),
           paternalSurname: prevData.paternalSurname.toLocaleLowerCase(),
           maternalSurname: prevData.maternalSurname.toLocaleLowerCase(),
+          acls: roleAclTypeUser?.acls || undefined,
           iAcceptPrivacyPolicies,
         })
       );
