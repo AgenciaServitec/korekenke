@@ -41,7 +41,7 @@ const Container = styled.section`
       margin: 0;
       padding: 0;
       border: none;
-      background: none;
+      background: white;
     }
   `}
 `;

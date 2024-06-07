@@ -9,6 +9,8 @@ import { notification, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
 import moment from "moment";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
+import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
+import { QRCode } from "antd";
 
 export const PdfRegistrationClinicHistory = () => {
   const { livestockAndEquineId } = useParams();
@@ -39,6 +41,14 @@ export const PdfRegistrationClinicHistory = () => {
       <div className="sheet">
         <div className="header">
           <div className="header__top">
+            <QRCode
+              value={window.location.href}
+              icon={LogoServicioVeterinarioRemontaEjercito}
+              iconSize={20}
+              type="svg"
+              size={100}
+              bordered={false}
+            />
             <div>
               <span>{livestockAndEquine.greatUnit}</span>
               <span>{livestockAndEquine.unit}</span>
@@ -208,7 +218,8 @@ const Container = styled.div`
     .header {
       &__top {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: flex-start;
         margin-bottom: 2em;
         font-size: 1em;
         font-weight: 500;
