@@ -205,12 +205,6 @@ export const Router = () => {
             </AdminLayout>
           }
         />
-        <Route
-          exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
-          element={<A.PdfEquineLivestockRegistrationCardSheet />}
-        />
-
         {/*  */}
         {/*<Route*/}
         {/*  exact*/}
@@ -241,12 +235,6 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
-          element={<A.PdfEquineMagazineProfilesSheets />}
-        />
-
-        <Route
-          exact
           path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history"
           element={
             <AdminLayout>
@@ -254,13 +242,22 @@ export const Router = () => {
             </AdminLayout>
           }
         />
-        <Route
-          exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
-          element={<A.PdfClinicHistorySheets />}
-        />
       </Route>
-
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+        element={<A.PdfEquineLivestockRegistrationCardSheet />}
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+        element={<A.PdfClinicHistorySheets />}
+      />
+      <Route
+        exact
+        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
+        element={<A.PdfEquineMagazineProfilesSheets />}
+      />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );

@@ -11,6 +11,7 @@ import {
 } from "../../../../../images";
 import moment from "moment";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
+import { QRCode } from "antd";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
@@ -139,83 +140,95 @@ export const PdfEquineLivestockRegistrationCard = () => {
                 </>
               )}
             </div>
-            <div className="section_signature">
-              <div className="signature_content">
-                <div className="signature_tittle">
-                  <strong> JEFE DEL SVETRE</strong>
+            <div className="section_bottom">
+              <div className="section_signature">
+                <div className="signature_content">
+                  <div className="signature_tittle">
+                    <strong> JEFE DEL SVETRE</strong>
+                  </div>
+                  <div className="signature_img">
+                    <img
+                      src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
+                      alt="Perfil Izquierdo"
+                    />
+                  </div>
+                  <div className="signature_info">
+                    <p>
+                      <strong>0-224163373</strong>
+                    </p>
+                    <p>
+                      <strong>JUAN CARLOS HOLGUIN AVILA</strong>
+                    </p>
+                    <p>
+                      <strong>CRL-EP</strong>
+                    </p>
+                    <p>
+                      <strong>
+                        JEFE DEL SERVICIO DE VETERINARIA Y REMONTA DEL EJERCITO
+                      </strong>
+                    </p>
+                  </div>
                 </div>
-                <div className="signature_img">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
-                    alt="Perfil Izquierdo"
-                  />
+                <div className="signature_content">
+                  <div className="signature_tittle">
+                    <strong> JEFE DE UNIDAD</strong>
+                  </div>
+                  <div className="signature_img">
+                    <img
+                      src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
+                      alt="Perfil Izquierdo"
+                    />
+                  </div>
+                  <div className="signature_info">
+                    <p>
+                      <strong>O-226561074-O+</strong>
+                    </p>
+                    <p>
+                      <strong>CARLOS OMAR RUIZ BARDALES</strong>
+                    </p>
+                    <p>
+                      <strong>Coronel de Caballeria </strong>
+                    </p>
+                    <p>
+                      <strong>Comandante del RC &quot;MDN&quot; EPR</strong>
+                    </p>
+                  </div>
                 </div>
-                <div className="signature_info">
-                  <p>
-                    <strong>0-224163373</strong>
-                  </p>
-                  <p>
-                    <strong>JUAN CARLOS HOLGUIN AVILA</strong>
-                  </p>
-                  <p>
-                    <strong>CRL-EP</strong>
-                  </p>
-                  <p>
-                    <strong>
-                      JEFE DEL SERVICIO DE VETERINARIA Y REMONTA DEL EJERCITO
-                    </strong>
-                  </p>
+                <div className="signature_content">
+                  <div className="signature_tittle">
+                    <strong> OFICIAL VETERINARIO</strong>
+                  </div>
+                  <div className="signature_img">
+                    <img
+                      src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
+                      alt="Perfil Izquierdo"
+                    />
+                  </div>
+                  <div className="signature_info">
+                    <p>
+                      <strong>O-126259900 - O+</strong>
+                    </p>
+                    <p>
+                      <strong>RODYNEL WALDIR GONZALES MAYTA</strong>
+                    </p>
+                    <p>
+                      <strong>TTE S VET</strong>
+                    </p>
+                    <p>
+                      <strong>JEFE PEL VET DEL RC &quot;MDN&quot;EPR</strong>
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="signature_content">
-                <div className="signature_tittle">
-                  <strong> JEFE DE UNIDAD</strong>
-                </div>
-                <div className="signature_img">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
-                    alt="Perfil Izquierdo"
-                  />
-                </div>
-                <div className="signature_info">
-                  <p>
-                    <strong>O-226561074-O+</strong>
-                  </p>
-                  <p>
-                    <strong>CARLOS OMAR RUIZ BARDALES</strong>
-                  </p>
-                  <p>
-                    <strong>Coronel de Caballeria </strong>
-                  </p>
-                  <p>
-                    <strong>Comandante del RC &quot;MDN&quot; EPR</strong>
-                  </p>
-                </div>
-              </div>
-              <div className="signature_content">
-                <div className="signature_tittle">
-                  <strong> OFICIAL VETERINARIO</strong>
-                </div>
-                <div className="signature_img">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
-                    alt="Perfil Izquierdo"
-                  />
-                </div>
-                <div className="signature_info">
-                  <p>
-                    <strong>O-126259900 - O+</strong>
-                  </p>
-                  <p>
-                    <strong>RODYNEL WALDIR GONZALES MAYTA</strong>
-                  </p>
-                  <p>
-                    <strong>TTE S VET</strong>
-                  </p>
-                  <p>
-                    <strong>JEFE PEL VET DEL RC &quot;MDN&quot;EPR</strong>
-                  </p>
-                </div>
+              <div className="section_qr">
+                <QRCode
+                  value={window.location.href}
+                  icon={LogoServicioVeterinarioRemontaEjercito}
+                  iconSize={20}
+                  type="svg"
+                  size={100}
+                  bordered={false}
+                />
               </div>
             </div>
           </WrapperContent>
@@ -344,6 +357,15 @@ const Container = styled.div`
     font-size: 0.75em;
     p {
       text-transform: uppercase;
+    }
+  }
+
+  .section_bottom {
+    display: flex;
+
+    .section_qr {
+      display: flex;
+      align-items: center;
     }
   }
 
