@@ -11,7 +11,6 @@ import {
 import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
 import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
-import { ClinicHistoryInformation } from "./ClinicHistoryInformation";
 import { firestore } from "../../../../../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
@@ -20,6 +19,7 @@ import { updateClinicHistory } from "../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../providers";
 import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
+import { LivestockAndEquineInformation } from "../../../../../components/ui/entities";
 
 export const ClinicHistoryIntegration = () => {
   const { livestockAndEquineId } = useParams();
@@ -115,7 +115,9 @@ export const ClinicHistoryIntegration = () => {
         </Col>
         <Col span={24}>
           <Card>
-            <ClinicHistoryInformation livestockAndEquine={livestockAndEquine} />
+            <LivestockAndEquineInformation
+              livestockAndEquine={livestockAndEquine}
+            />
           </Card>
         </Col>
         <Col span={24}>

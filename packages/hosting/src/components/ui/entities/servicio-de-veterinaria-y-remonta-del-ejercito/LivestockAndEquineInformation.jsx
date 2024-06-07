@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row } from "antd";
 import moment from "moment";
 
-export const EquipeMagazineProfileInformation = ({ livestockAndEquine }) => {
+export const LivestockAndEquineInformation = ({ livestockAndEquine }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={12}>
@@ -14,10 +14,10 @@ export const EquipeMagazineProfileInformation = ({ livestockAndEquine }) => {
         <strong>{` ${moment().diff(
           moment(moment(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm")),
           "years"
-        )} años y ${moment().diff(
+        )} años  (${moment().diff(
           moment(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm"),
           "months"
-        )} meses`}</strong>
+        )} meses)`}</strong>
       </Col>
       <Col span={24} md={12}>
         N° Matrícula:{" "}
