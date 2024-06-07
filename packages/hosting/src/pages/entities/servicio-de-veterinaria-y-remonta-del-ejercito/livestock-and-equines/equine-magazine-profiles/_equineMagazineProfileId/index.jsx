@@ -18,7 +18,6 @@ import {
   useFormUtils,
 } from "../../../../../../hooks";
 import { useNavigate } from "react-router-dom";
-import { EquipeMagazineProfileInformation } from "./EquipeMagazineProfileInformation";
 import styled from "styled-components";
 import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
@@ -31,6 +30,7 @@ import {
 } from "../../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../../providers";
 import { mediaQuery } from "../../../../../../styles";
+import { LivestockAndEquineInformation } from "../../../../../../components/ui/entities";
 
 export const EquineMagazineProfileIntegration = () => {
   const navigate = useNavigate();
@@ -147,7 +147,7 @@ export const EquineMagazineProfileIntegration = () => {
           bordered={false}
           type="inner"
         >
-          <EquipeMagazineProfileInformation
+          <LivestockAndEquineInformation
             livestockAndEquine={livestockAndEquine}
           />
         </Card>
