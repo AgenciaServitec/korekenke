@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import {
-  useCollectionData,
-  useDocumentData,
-} from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
@@ -12,29 +9,20 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
 import { QRCode } from "antd";
 
-export const PdfRegistrationClinicHistory = () => {
+export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { livestockAndEquineId } = useParams();
 
   const [
-    livestockAndEquine,
+    livestockAndEquine = {},
     livestockAndEquineLoading,
     livestockAndEquineError,
   ] = useDocumentData(livestockAndEquinesRef.doc(livestockAndEquineId));
 
-  const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
-    useCollectionData(
-      livestockAndEquinesRef
-        .doc(livestockAndEquineId)
-        .collection("clinic-history")
-    );
-
   useEffect(() => {
-    (clinicHistoryError || livestockAndEquineError) &&
-      notification({ type: "error" });
-  }, [clinicHistoryError, livestockAndEquineError]);
+    livestockAndEquineError && notification({ type: "error" });
+  }, [livestockAndEquineError]);
 
-  if (clinicHistoryLoading || livestockAndEquineLoading)
-    return <Spinner height="80vh" />;
+  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
 
   return (
     <Container>
@@ -113,12 +101,13 @@ export const PdfRegistrationClinicHistory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clinicHistory.map((_clinicHistory, index) => (
+                  {clinicHistories.map((_clinicHistory, index) => (
                     <tr key={index}>
                       <td>
-                        {moment(_clinicHistory.createAt.toDate()).format(
-                          "DD/MM/YYYY HH:mm"
-                        )}
+                        {_clinicHistory?.createAt &&
+                          moment(_clinicHistory.createAt.toDate()).format(
+                            "DD/MM/YYYY HH:mm"
+                          )}
                       </td>
                       <td>{_clinicHistory.symptomatology}</td>
                       <td>{_clinicHistory.diagnosis}</td>
@@ -127,78 +116,6 @@ export const PdfRegistrationClinicHistory = () => {
                       <td></td>
                     </tr>
                   ))}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
                 </tbody>
               </table>
             </div>
