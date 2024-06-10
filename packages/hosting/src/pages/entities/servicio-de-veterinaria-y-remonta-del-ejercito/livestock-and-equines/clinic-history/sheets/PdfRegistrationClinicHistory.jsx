@@ -12,29 +12,29 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
 import { QRCode } from "antd";
 
-export const PdfRegistrationClinicHistory = () => {
+export const PdfRegistrationClinicHistory = ({ clinicHistory }) => {
   const { livestockAndEquineId } = useParams();
 
   const [
-    livestockAndEquine,
+    livestockAndEquine = {},
     livestockAndEquineLoading,
     livestockAndEquineError,
   ] = useDocumentData(livestockAndEquinesRef.doc(livestockAndEquineId));
 
-  const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
-    useCollectionData(
-      livestockAndEquinesRef
-        .doc(livestockAndEquineId)
-        .collection("clinic-history")
-    );
-
-  useEffect(() => {
-    (clinicHistoryError || livestockAndEquineError) &&
-      notification({ type: "error" });
-  }, [clinicHistoryError, livestockAndEquineError]);
-
-  if (clinicHistoryLoading || livestockAndEquineLoading)
-    return <Spinner height="80vh" />;
+  // const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
+  //   useCollectionData(
+  //     livestockAndEquinesRef
+  //       .doc(livestockAndEquineId)
+  //       .collection("clinic-history")
+  //   );
+  //
+  // useEffect(() => {
+  //   (clinicHistoryError || livestockAndEquineError) &&
+  //     notification({ type: "error" });
+  // }, [clinicHistoryError, livestockAndEquineError]);
+  //
+  // if (clinicHistoryLoading || livestockAndEquineLoading)
+  //   return <Spinner height="80vh" />;
 
   return (
     <Container>
@@ -127,78 +127,6 @@ export const PdfRegistrationClinicHistory = () => {
                       <td></td>
                     </tr>
                   ))}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
                 </tbody>
               </table>
             </div>
