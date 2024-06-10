@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import CalendarAntd from "antd/lib/calendar";
 
 // interface Props {
@@ -11,7 +11,7 @@ import CalendarAntd from "antd/lib/calendar";
 export const Calendar = ({ defaultValue, fullscreen = false, ...props }) => (
   <CalendarStyled
     fullscreen={fullscreen}
-    defaultValue={defaultValue || moment()}
+    defaultValue={defaultValue || dayjs()}
     {...props}
   />
 );

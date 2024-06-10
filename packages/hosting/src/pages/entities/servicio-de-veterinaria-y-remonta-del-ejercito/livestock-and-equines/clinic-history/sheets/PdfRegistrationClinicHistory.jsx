@@ -4,7 +4,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
-import moment from "moment";
+import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
 import { QRCode } from "antd";
@@ -74,7 +74,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                 <div>
                   <span>Fecha nacimiento:</span>
                   <span>
-                    {moment(
+                    {dayjs(
                       livestockAndEquine.birthdate,
                       DATE_FORMAT_TO_FIRESTORE
                     ).format("DD/MM/YYYY")}
@@ -105,7 +105,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                     <tr key={index}>
                       <td>
                         {_clinicHistory?.createAt &&
-                          moment(_clinicHistory.createAt.toDate()).format(
+                          dayjs(_clinicHistory.createAt.toDate()).format(
                             "DD/MM/YYYY HH:mm"
                           )}
                       </td>

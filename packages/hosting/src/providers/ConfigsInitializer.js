@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
-import "moment/locale/es";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import esES from "antd/es/locale/es_ES";
+import { ConfigProvider } from "antd";
 import { setLocale } from "yup";
 import { yup } from "../config";
-import { ConfigProvider } from "antd";
+import * as dayjs from "dayjs";
+import es from "dayjs/locale/es";
+
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localeData from "dayjs/plugin/localeData";
+import weekday from "dayjs/plugin/weekday";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import weekYear from "dayjs/plugin/weekYear";
 
 export const ConfigsInitializer = ({ children }) => {
   const [locale] = useState(esES);
 
-  moment.updateLocale("es", {
-    week: {
-      dow: 1,
-    },
-  });
+  dayjs.extend(localizedFormat);
+  dayjs.extend(customParseFormat);
+  dayjs.extend(advancedFormat);
+  dayjs.extend(weekday);
+  dayjs.extend(localeData);
+  dayjs.extend(weekOfYear);
+  dayjs.extend(weekYear);
 
   useEffect(() => {
     setLocale(yup["es"]);
 
-    moment.locale("es");
+    dayjs.locale(es);
   }, []);
 
   return <ConfigProvider locale={locale}>{children}</ConfigProvider>;

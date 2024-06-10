@@ -9,16 +9,13 @@ import {
 import { EquineMagazineProfiles } from "../../../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import moment from "moment/moment";
+import dayjs from "dayjs";
 import { QRCode } from "antd";
 
 export const EquineMagazineProfileSheet = ({
   livestockAndEquine,
   equineMagazineProfile,
 }) => {
-  console.log({ livestockAndEquine });
-  console.log({ equineMagazineProfile });
-
   return (
     <Container>
       <div className="sheet">
@@ -51,9 +48,9 @@ export const EquineMagazineProfileSheet = ({
                     <td className="value">{livestockAndEquine?.name}</td>
                     <td className="name">EDAD</td>
                     <td className="value">
-                      {moment().diff(
-                        moment(
-                          moment(
+                      {dayjs().diff(
+                        dayjs(
+                          dayjs(
                             livestockAndEquine.birthdate,
                             "DD/MM/YYYY HH:mm"
                           )
@@ -64,11 +61,8 @@ export const EquineMagazineProfileSheet = ({
                     </td>
                     <td className="name">MESES</td>
                     <td className="value" colSpan={2}>
-                      {moment().diff(
-                        moment(
-                          livestockAndEquine.birthdate,
-                          "DD/MM/YYYY HH:mm"
-                        ),
+                      {dayjs().diff(
+                        dayjs(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm"),
                         "months"
                       )}
                     </td>

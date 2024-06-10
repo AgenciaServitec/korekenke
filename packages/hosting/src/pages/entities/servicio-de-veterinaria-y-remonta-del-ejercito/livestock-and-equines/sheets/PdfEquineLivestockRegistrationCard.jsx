@@ -9,7 +9,7 @@ import {
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
 } from "../../../../../images";
-import moment from "moment";
+import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { QRCode } from "antd";
 
@@ -118,7 +118,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   <li>
                     :{" "}
                     {livestockAndEquine?.birthdate
-                      ? moment(
+                      ? dayjs(
                           livestockAndEquine?.birthdate,
                           DATE_FORMAT_TO_FIRESTORE
                         ).format("DD/MM/YYYY")

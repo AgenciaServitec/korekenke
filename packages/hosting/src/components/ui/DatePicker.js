@@ -1,7 +1,7 @@
 import React from "react";
 import { DatePicker as AntdDatePicker } from "antd";
 import { ComponentContainer } from "./component-container";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const DatePicker = ({
   value = undefined,
@@ -19,7 +19,7 @@ export const DatePicker = ({
 }) => {
   const Container = ComponentContainer[variant];
 
-  value = value instanceof Date ? moment(value) : value;
+  value = value instanceof Date ? dayjs(value) : value;
 
   return (
     <Container

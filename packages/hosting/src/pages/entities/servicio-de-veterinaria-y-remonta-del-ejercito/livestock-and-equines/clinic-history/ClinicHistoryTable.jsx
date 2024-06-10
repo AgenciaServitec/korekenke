@@ -3,7 +3,7 @@ import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const ClinicHistoryTable = ({
   clinicHistories,
@@ -18,7 +18,7 @@ export const ClinicHistoryTable = ({
       dataIndex: "createAt",
       key: "createAt",
       render: (_, clinicHistory) =>
-        moment(clinicHistory.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+        dayjs(clinicHistory.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Sintomatología",

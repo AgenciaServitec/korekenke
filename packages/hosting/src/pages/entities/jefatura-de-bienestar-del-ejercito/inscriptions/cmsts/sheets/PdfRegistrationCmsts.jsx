@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { QRCode } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 import { LogoPrimary, PhotoNoFound } from "../../../../../../images";
 import { defaultTo, isEmpty } from "lodash";
 import {
@@ -94,16 +94,15 @@ export const PdfRegistrationCmsts = ({ user }) => {
                           {defaultTo(user?.placeBirth.district, "")}
                         </td>
                         <td>
-                          {user?.birthdate &&
-                            moment(user.birthdate).format("D")}
+                          {user?.birthdate && dayjs(user.birthdate).format("D")}
                         </td>
                         <td>
                           {user?.birthdate &&
-                            moment(user.birthdate).format("MM")}
+                            dayjs(user.birthdate).format("MM")}
                         </td>
                         <td>
                           {user?.birthdate &&
-                            moment(user.birthdate).format("YYYY")}
+                            dayjs(user.birthdate).format("YYYY")}
                         </td>
                       </tr>
                     </tbody>
@@ -289,7 +288,7 @@ export const PdfRegistrationCmsts = ({ user }) => {
                 <div className="signature-item__pdf-date">
                   <span>
                     {defaultTo(user?.houseLocation.district, "")}{" "}
-                    {moment().format("DD MMMM YYYY")}
+                    {dayjs().format("DD MMMM YYYY")}
                   </span>
                 </div>
               </div>
