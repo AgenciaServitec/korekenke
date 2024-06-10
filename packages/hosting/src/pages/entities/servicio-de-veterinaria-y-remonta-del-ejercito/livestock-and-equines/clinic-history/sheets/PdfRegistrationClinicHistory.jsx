@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import {
-  useCollectionData,
-  useDocumentData,
-} from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
