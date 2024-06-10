@@ -3,7 +3,7 @@ import { Space, Table, Tag } from "antd";
 import { Acl, IconAction } from "../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { capitalize } from "lodash";
-import moment from "moment";
+import dayjs from "dayjs";
 import { findDegree, findRole } from "../../../utils";
 
 export const UsersTable = ({
@@ -60,7 +60,7 @@ export const UsersTable = ({
       dataIndex: "createAt",
       key: "createAt",
       render: (_, user) =>
-        moment(user?.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+        dayjs(user?.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Acciones",

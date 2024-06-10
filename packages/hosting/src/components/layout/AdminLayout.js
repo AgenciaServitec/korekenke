@@ -6,7 +6,7 @@ import { HeaderLayout } from "./HeaderLayout";
 import { FooterLayout } from "./FooterLayout";
 import { useNavigate } from "react-router";
 import { BreadcrumbLayout } from "./Breadcrumb";
-import { useAuthentication, useChangeDefaultRole } from "../../providers";
+import { useAuthentication } from "../../providers";
 import { Spin } from "../ui";
 
 const { Content } = LayoutAntd;
@@ -14,7 +14,6 @@ const { Content } = LayoutAntd;
 export const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
   const { authUser, logout } = useAuthentication();
-  const { changeDefaultRole } = useChangeDefaultRole();
 
   const [isChangeRole, setIsChangeRole] = useState(false);
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
@@ -25,7 +24,7 @@ export const AdminLayout = ({ children }) => {
   const onChangeDefaultRole = async (role) => {
     try {
       setIsChangeRole(true);
-      await changeDefaultRole(role);
+      console.log("role: ", role);
     } finally {
       setOpenDropdown(false);
       setIsChangeRole(false);

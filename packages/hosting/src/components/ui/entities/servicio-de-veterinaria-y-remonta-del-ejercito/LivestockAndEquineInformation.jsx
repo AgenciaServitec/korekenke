@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Row } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const LivestockAndEquineInformation = ({ livestockAndEquine }) => {
   return (
@@ -11,11 +11,11 @@ export const LivestockAndEquineInformation = ({ livestockAndEquine }) => {
       </Col>
       <Col span={24} md={12}>
         Edad:
-        <strong>{` ${moment().diff(
-          moment(moment(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm")),
+        <strong>{` ${dayjs().diff(
+          dayjs(dayjs(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm")),
           "years"
-        )} años  (${moment().diff(
-          moment(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm"),
+        )} años  (${dayjs().diff(
+          dayjs(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm"),
           "months"
         )} meses)`}</strong>
       </Col>

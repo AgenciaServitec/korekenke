@@ -3,7 +3,7 @@ import { Space, Table } from "antd";
 import { Acl, IconAction } from "../../../../../components";
 import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
+import dayjs from "dayjs";
 import { orderBy } from "lodash";
 
 export const EquineMagazineProfilesTable = ({
@@ -22,7 +22,7 @@ export const EquineMagazineProfilesTable = ({
       key: "createAt",
       render: (_, equineMagazineProfile) => (
         <div>
-          {moment(equineMagazineProfile?.createAt.toDate()).format(
+          {dayjs(equineMagazineProfile?.createAt.toDate()).format(
             "DD/MM/YYYY HH:mm"
           )}
         </div>

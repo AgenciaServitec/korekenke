@@ -20,7 +20,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
 import { firestore } from "../../../../../firebase";
 import { useGlobalData } from "../../../../../providers";
 import { assign } from "lodash";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export const CorrespondenceIntegration = () => {
         destination: formData.destination,
         receivedBy: formData.receivedBy,
         class: formData.class,
-        dateCorrespondence: moment(formData.dateCorrespondence).format(
+        dateCorrespondence: dayjs(formData.dateCorrespondence).format(
           "YYYY-MM-DD HH:mm:ss"
         ),
         indicative: formData.indicative,
@@ -146,7 +146,7 @@ const Correspondence = ({
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
       dateCorrespondence: correspondence?.dateCorrespondence
-        ? moment(correspondence.dateCorrespondence, "YYYY-MM-DD HH:mm:ss")
+        ? dayjs(correspondence.dateCorrespondence, "YYYY-MM-DD HH:mm:ss")
         : undefined,
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,

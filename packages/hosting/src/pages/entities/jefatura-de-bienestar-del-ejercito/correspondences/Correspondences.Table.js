@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import styled, { css } from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import {
   Acl,
   IconAction,
@@ -33,10 +33,10 @@ const CorrespondencesTable = ({
           <Space direction="vertical">
             <div>
               <span>
-                {moment(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
+                {dayjs(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
               </span>
               <span>
-                {moment(correspondence.createAt.toDate()).format("h:mm a")}
+                {dayjs(correspondence.createAt.toDate()).format("h:mm a")}
               </span>
             </div>
             <div>{correspondencesStatus(correspondence.status)}</div>

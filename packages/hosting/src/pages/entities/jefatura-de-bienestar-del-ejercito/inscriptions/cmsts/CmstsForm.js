@@ -17,7 +17,7 @@ import { useAuthentication } from "../../../../../providers";
 import { assign } from "lodash";
 import { useFormUtils } from "../../../../../hooks";
 import { useApiUserPut } from "../../../../../api";
-import moment from "moment";
+import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
@@ -39,7 +39,7 @@ export const CmstsForm = () => {
       id: authUser.id,
       email: authUser.email,
       phone: authUser.phone,
-      birthdate: moment(formData.birthdate).format("YYYY-MM-DD HH:mm:ss"),
+      birthdate: dayjs(formData.birthdate).format("YYYY-MM-DD HH:mm:ss"),
       houseLocation: findPlaceByUbigeo(formData.houseLocation),
       placeBirth: findPlaceByUbigeo(formData.placeBirth),
       emergencyCellPhone: {
@@ -107,7 +107,7 @@ export const CmstsForm = () => {
       gender: authUser?.gender || "",
       placeBirth: authUser?.placeBirth?.ubigeo || null,
       birthdate: authUser?.birthdate
-        ? moment(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
+        ? dayjs(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
         : undefined,
       houseLocation: authUser?.houseLocation?.ubigeo || null,
       urbanization: authUser?.urbanization || "",

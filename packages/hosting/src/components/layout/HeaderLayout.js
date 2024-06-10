@@ -158,7 +158,6 @@ export const HeaderLayout = ({
                                 className="item-role"
                                 onClick={() => {
                                   onSetIsVisibleMoreRoles();
-                                  return onChangeDefaultRole(role);
                                 }}
                               >
                                 <img
