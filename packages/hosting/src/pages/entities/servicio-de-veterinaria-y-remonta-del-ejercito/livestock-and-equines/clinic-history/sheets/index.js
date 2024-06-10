@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PdfRegistrationClinicHistory } from "./PdfRegistrationClinicHistory";
-import { PDF, Sheet, Spinner } from "../../../../../../components";
+import {
+  notification,
+  PDF,
+  Sheet,
+  Spinner,
+} from "../../../../../../components";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../../firebase";
 import { useParams } from "react-router-dom";
@@ -17,6 +22,10 @@ export const PdfClinicHistorySheets = () => {
         .collection("clinic-history")
         .where("isDeleted", "==", false)
     );
+
+  useEffect(() => {
+    clinicHistoriesError && notification({ type: "error" });
+  }, [clinicHistoriesError]);
 
   if (clinicHistoriesLoading) return <Spinner height="80vh" />;
 

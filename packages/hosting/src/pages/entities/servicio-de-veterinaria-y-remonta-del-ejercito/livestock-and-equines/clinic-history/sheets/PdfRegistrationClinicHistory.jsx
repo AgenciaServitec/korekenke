@@ -21,20 +21,11 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
     livestockAndEquineError,
   ] = useDocumentData(livestockAndEquinesRef.doc(livestockAndEquineId));
 
-  // const [clinicHistory, clinicHistoryLoading, clinicHistoryError] =
-  //   useCollectionData(
-  //     livestockAndEquinesRef
-  //       .doc(livestockAndEquineId)
-  //       .collection("clinic-history")
-  //   );
-  //
-  // useEffect(() => {
-  //   (clinicHistoryError || livestockAndEquineError) &&
-  //     notification({ type: "error" });
-  // }, [clinicHistoryError, livestockAndEquineError]);
-  //
-  // if (clinicHistoryLoading || livestockAndEquineLoading)
-  //   return <Spinner height="80vh" />;
+  useEffect(() => {
+    livestockAndEquineError && notification({ type: "error" });
+  }, [livestockAndEquineError]);
+
+  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
 
   return (
     <Container>
