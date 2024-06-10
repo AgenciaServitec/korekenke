@@ -12,7 +12,7 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
 import { QRCode } from "antd";
 
-export const PdfRegistrationClinicHistory = ({ clinicHistory }) => {
+export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { livestockAndEquineId } = useParams();
 
   const [
@@ -113,12 +113,13 @@ export const PdfRegistrationClinicHistory = ({ clinicHistory }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {clinicHistory.map((_clinicHistory, index) => (
+                  {clinicHistories.map((_clinicHistory, index) => (
                     <tr key={index}>
                       <td>
-                        {moment(_clinicHistory.createAt.toDate()).format(
-                          "DD/MM/YYYY HH:mm"
-                        )}
+                        {_clinicHistory?.createAt &&
+                          moment(_clinicHistory.createAt.toDate()).format(
+                            "DD/MM/YYYY HH:mm"
+                          )}
                       </td>
                       <td>{_clinicHistory.symptomatology}</td>
                       <td>{_clinicHistory.diagnosis}</td>
