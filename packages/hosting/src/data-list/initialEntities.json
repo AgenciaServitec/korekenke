@@ -2,12 +2,12 @@
   {
     "id": "comandancia_general_del_ejercito",
     "name": "Comandancia General Del Ejército",
-    "organos": [
+    "organs": [
       {
-        "id": "secreatira_de_la_comandancia_general_del_ejercito",
+        "id": "secretaria_de_la_comandancia_general_del_ejercito",
         "name": "Secretaría De La Comandancia General Del Ejército",
         "category": "organo_de_administracion_interna",
-        "comandos": [
+        "commands": [
           {
             "id": "comando_de_personal_del_ejercito",
             "name": "Comando De Personal Del Ejército",
