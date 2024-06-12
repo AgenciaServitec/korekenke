@@ -34,7 +34,7 @@ export const Table = styled(TableAntd)`
         .ant-table-tbody {
         }
         .ant-table-summary {
-          background-color: ${({ theme }) => theme.bg.tertiary};
+          background-color: ${({ theme }) => theme.colors.tertiary};
         }
       }
     }

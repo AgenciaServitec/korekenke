@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
-import { Button, Form, notification, Upload } from "../../components";
+import { Button, Col, Form, notification, Row, Upload } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import { useFormUtils } from "../../hooks";
 import { useAuthentication } from "../../providers";

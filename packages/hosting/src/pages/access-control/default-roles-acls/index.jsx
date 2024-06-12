@@ -4,9 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAcl, useAsync, useDefaultFirestoreProps } from "../../../hooks";
 import { capitalize } from "lodash";
-import { Acl, Button, List, notification } from "../../../components";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
+import { Acl, Button, Col, List, notification, Row } from "../../../components";
 import { useGlobalData } from "../../../providers";
 import { updateRoleAcl } from "../../../firebase/collections";
 

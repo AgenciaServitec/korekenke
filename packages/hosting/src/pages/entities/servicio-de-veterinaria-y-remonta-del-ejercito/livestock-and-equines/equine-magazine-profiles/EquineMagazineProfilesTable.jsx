@@ -1,6 +1,5 @@
 import React from "react";
-import { Space, Table } from "antd";
-import { Acl, IconAction } from "../../../../../components";
+import { Acl, IconAction, Space, Table } from "../../../../../components";
 import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";

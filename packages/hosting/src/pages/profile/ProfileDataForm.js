@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useFormUtils } from "../../hooks";
 import {
   Button,
+  Col,
   Form,
   Input,
   notification,
   RadioGroup,
+  Row,
   Upload,
 } from "../../components";
 import { useAuthentication } from "../../providers";
@@ -20,6 +20,7 @@ import {
   useApiUserPut,
 } from "../../api";
 import { assign } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 export const ProfileDataForm = () => {
   const { authUser } = useAuthentication();
@@ -114,6 +115,7 @@ export const ProfileDataForm = () => {
                 buttonText="Subir foto"
                 value={value}
                 name={name}
+                fileName={`perfil-foto-${uuidv4()}`}
                 filePath={`users/${authUser.id}/profile`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}

@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { firestore } from "../../../../../firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
-import { notification, Spinner } from "../../../../../components";
+import { notification, QRCode, Spinner } from "../../../../../components";
 import {
   ImgNoFound,
   LogoArmyPeru,
@@ -11,7 +11,6 @@ import {
 } from "../../../../../images";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
-import { QRCode } from "antd";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();

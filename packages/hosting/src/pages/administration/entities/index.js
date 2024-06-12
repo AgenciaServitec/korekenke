@@ -1,9 +1,7 @@
 import React from "react";
-import Col from "antd/lib/col";
-import { Acl, Button, List, modalConfirm } from "../../../components";
+import { Acl, Button, Col, List, modalConfirm, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Row from "antd/lib/row";
 import { useGlobalData } from "../../../providers";
 import { useNavigate } from "react-router";
 import { useAcl, useDefaultFirestoreProps } from "../../../hooks";

@@ -17,6 +17,8 @@ import {
   Divider,
   Empty,
   Image,
+  QRCode,
+  Steps,
 } from "antd";
 
 export * from "./component-container";
@@ -79,4 +81,6 @@ export {
   Divider,
   Empty,
   Image,
+  QRCode,
+  Steps,
 };

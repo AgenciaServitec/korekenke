@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "antd";
 import {
   Acl,
   Button,
   Card,
+  Col,
   Form,
   InputNumber,
   notification,
+  Row,
   TextArea,
   Title,
 } from "../../../../../../components";

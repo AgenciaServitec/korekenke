@@ -1,9 +1,7 @@
 import React from "react";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
+import { Col, Image, Row } from "../../components";
 import { PhotoNoFound } from "../../images";
 import styled from "styled-components";
-import { Image } from "antd";
 
 export const ProfileInformation = ({ user }) => {
   return (

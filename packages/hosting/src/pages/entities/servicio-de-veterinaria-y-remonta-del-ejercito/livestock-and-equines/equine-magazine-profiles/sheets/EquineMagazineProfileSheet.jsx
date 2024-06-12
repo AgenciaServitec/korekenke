@@ -10,7 +10,7 @@ import { EquineMagazineProfiles } from "../../../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import dayjs from "dayjs";
-import { QRCode } from "antd";
+import { QRCode } from "../../../../../../components";
 
 export const EquineMagazineProfileSheet = ({
   livestockAndEquine,

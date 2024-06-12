@@ -1,7 +1,5 @@
 import React from "react";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
-import { Acl, Button, List, notification } from "../../../components";
+import { Acl, Button, Col, List, notification, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
