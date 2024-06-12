@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
-import { notification, Spinner } from "../../../../../../components";
+import { notification, QRCode, Spinner } from "../../../../../../components";
 import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
-import { QRCode } from "antd";
 
 export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { livestockAndEquineId } = useParams();

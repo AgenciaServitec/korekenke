@@ -5,13 +5,14 @@ import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
 import {
   Button,
+  Col,
   DataEntryModal,
   Form,
   Input,
   notification,
+  Row,
   TextArea,
 } from "../../../../../components";
-import { Col, Row } from "antd";
 import {
   addClinicHistory,
   getClinicHistoryId,

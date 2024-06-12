@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Title from "antd/es/typography/Title";
-import { Button, Form, InputCode, notification } from "../../components";
+import { Button, Form, InputCode, notification, Title } from "../../components";
 import styled from "styled-components";
 import { firebase } from "../../firebase";
 import { getLocalStorage } from "../../utils";

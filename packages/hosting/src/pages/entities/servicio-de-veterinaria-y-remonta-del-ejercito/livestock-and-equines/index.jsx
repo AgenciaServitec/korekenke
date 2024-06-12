@@ -1,11 +1,15 @@
 import React from "react";
-import Col from "antd/lib/col";
-import { Acl, Button, modalConfirm } from "../../../../components";
+import {
+  Acl,
+  Button,
+  Col,
+  modalConfirm,
+  Row,
+  Title,
+} from "../../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Row } from "antd";
 import { useNavigate } from "react-router";
-import Title from "antd/es/typography/Title";
 import { LiveStockAndEquinesTable } from "./LiveStockAndEquinesTable";
 import { useGlobalData } from "../../../../providers";
 import { updateLivestockAndEquine } from "../../../../firebase/collections";

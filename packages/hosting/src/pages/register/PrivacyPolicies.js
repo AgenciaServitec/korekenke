@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Title from "antd/es/typography/Title";
-import { Button, Checkbox, Form, notification } from "../../components";
+import { Button, Checkbox, Form, notification, Title } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";

@@ -1,9 +1,9 @@
 import React from "react";
 import { CmstsFamilyForm } from "./CmstsFamilyForm";
 import { CmstsForm } from "./CmstsForm";
-import { Col, Row } from "antd/lib";
-import Title from "antd/lib/typography/Title";
-import { Acl, Card } from "../../../../../components";
+import { Acl, Card, Col, Row, Title } from "../../../../../components";
+import styled from "styled-components";
+
 export const CmstsIntegration = () => {
   return (
     <Acl
@@ -45,8 +45,6 @@ export const CmstsIntegration = () => {
     </Acl>
   );
 };
-
-import styled from "styled-components";
 
 const Container = styled.div`
   .ant-card-head {

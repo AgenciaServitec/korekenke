@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
-import { Col, Divider, Row } from "antd";
 import {
   Acl,
   AddButton,
+  Col,
+  Divider,
   modalConfirm,
   notification,
+  Row,
 } from "../../../../../components";
 import { EquineMagazineProfilesTable } from "./EquineMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";

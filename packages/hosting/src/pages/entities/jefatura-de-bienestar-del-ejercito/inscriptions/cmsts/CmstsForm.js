@@ -2,15 +2,17 @@ import React, { useEffect } from "react";
 import {
   Acl,
   Button,
+  Col,
   DatePicker,
   Form,
   IconAction,
   Input,
   InputNumber,
   notification,
+  Row,
   Select,
+  Space,
 } from "../../../../../components";
-import { Col, Row } from "antd/lib";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { useAuthentication } from "../../../../../providers";
@@ -21,7 +23,6 @@ import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { Space } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UbigeosPeru } from "../../../../../data-list";
 

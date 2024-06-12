@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import Steps from "antd/lib/steps";
+import { Steps } from "../../components";
 import { mediaQuery } from "../../styles";
 import { AccessData } from "./AccessData";
 import { PersonalInformation } from "./PersonalInformation";

@@ -12,17 +12,17 @@ import {
   Acl,
   Button,
   CheckboxGroup,
+  Col,
   ComponentContainer,
   Form,
   Input,
   modalConfirm,
   notification,
+  Row,
   Select,
   Title,
   Upload,
 } from "../../../../components";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router-dom";
 import { mapAcls } from "../../../../utils";
 import { useAuthentication, useGlobalData } from "../../../../providers";
