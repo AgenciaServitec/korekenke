@@ -17,31 +17,9 @@ import {
   Divider,
   Empty,
   Image,
+  QRCode,
+  Steps,
 } from "antd";
-
-const { Link, Paragraph } = Typography;
-
-export {
-  Card,
-  Drawer,
-  Dropdown,
-  Layout,
-  Alert,
-  Link,
-  Paragraph,
-  Tag,
-  Row,
-  Col,
-  Spin,
-  Space,
-  Menu,
-  Result,
-  Tabs,
-  Radio,
-  Divider,
-  Empty,
-  Image,
-};
 
 export * from "./component-container";
 export * from "./calendar";
@@ -78,4 +56,31 @@ export * from "./table";
 export * from "./InputCode";
 export * from "./Acl";
 export * from "./sheet";
-export * from "./Legend";
+
+export { default as Legend } from "./Legend";
+
+const { Link, Paragraph } = Typography;
+
+export {
+  Card,
+  Drawer,
+  Dropdown,
+  Layout,
+  Alert,
+  Link,
+  Paragraph,
+  Tag,
+  Row,
+  Col,
+  Spin,
+  Space,
+  Menu,
+  Result,
+  Tabs,
+  Radio,
+  Divider,
+  Empty,
+  Image,
+  QRCode,
+  Steps,
+};

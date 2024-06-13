@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "antd/lib/button";
-import Result from "antd/lib/result";
+import { Button, Result } from "../../components";
 import { useNavigate } from "react-router";
 
 export const Page403 = () => {

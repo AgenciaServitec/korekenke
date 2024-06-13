@@ -1,10 +1,14 @@
 import React, { useEffect } from "react";
-import { Col, Row } from "antd/lib";
-import { Table } from "antd";
-import Title from "antd/es/typography/Title";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { usersRef } from "../../../../../../firebase/collections";
-import { Acl, notification } from "../../../../../../components";
+import {
+  Acl,
+  Col,
+  notification,
+  Row,
+  Table,
+  Title,
+} from "../../../../../../components";
 
 export const AllRegistered = () => {
   const [inscribedUsers = [], inscribedUsersLoading, inscribedUsersError] =

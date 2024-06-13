@@ -1,11 +1,10 @@
 import React from "react";
-import { Acl, Button, List } from "../../../components";
+import { Acl, Button, Col, List, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
 import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
-import { Col, Row } from "antd";
 import { updateOffice } from "../../../firebase/collections";
 
 export const OfficesIntegration = () => {

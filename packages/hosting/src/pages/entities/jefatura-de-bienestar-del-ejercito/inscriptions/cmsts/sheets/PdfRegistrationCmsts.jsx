@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { QRCode } from "antd";
+import { QRCode } from "../../../../../../components";
 import dayjs from "dayjs";
 import { LogoPrimary, PhotoNoFound } from "../../../../../../images";
 import { defaultTo, isEmpty } from "lodash";

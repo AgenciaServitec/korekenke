@@ -1,11 +1,12 @@
 import React from "react";
-import { Col, Row } from "antd/lib";
 import {
   Button,
+  Col,
   Form,
   Input,
   modalConfirm,
   notification,
+  Row,
   Select,
 } from "../../../../../components";
 import { Controller, useForm } from "react-hook-form";

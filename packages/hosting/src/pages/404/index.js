@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import Button from "antd/lib/button";
-import Result from "antd/lib/result";
-import { useAuthentication, useCommand } from "../../providers";
-import { pathnameWithCommand } from "../../utils";
+import { Button, Result } from "../../components";
+import {useAuthentication} from "../../providers";
+import {pathnameWithCommand} from "../../utils";
 
 export const Page404 = () => {
   const navigate = useNavigate();

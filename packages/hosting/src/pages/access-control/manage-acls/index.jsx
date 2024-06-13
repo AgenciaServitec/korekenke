@@ -16,16 +16,16 @@ import {
   Acl,
   Button,
   CheckboxGroup,
+  Col,
   ComponentContainer,
   Form,
   modalConfirm,
   notification,
   RadioGroup,
+  Row,
   Select,
   Title,
 } from "../../../components";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 import { mapAcls } from "../../../utils";
 import { useGlobalData } from "../../../providers";
 

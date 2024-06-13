@@ -22,6 +22,7 @@ import {
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
+import { InitialEntities } from "../../../../data-list";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
@@ -46,6 +47,7 @@ export const EntityIntegration = () => {
 
   const mapEntity = (formData) => ({
     ...entity,
+    commandId: formData.commandId,
     name: formData.name,
     entityManageId: formData.entityManageId,
   });
@@ -70,6 +72,7 @@ export const EntityIntegration = () => {
   };
 
   const schema = yup.object({
+    commandId: yup.string().required(),
     name: yup.string().required(),
     entityManageId: yup.string().required(),
   });
@@ -91,6 +94,7 @@ export const EntityIntegration = () => {
 
   const resetForm = () => {
     reset({
+      commandId: entity?.commandId || null,
       name: entity?.name || "",
       entityManageId: entity?.entityManageId || null,
     });
@@ -104,6 +108,13 @@ export const EntityIntegration = () => {
       )} ${capitalize(user.maternalSurname)}`,
       value: user.id,
     }));
+
+  const commandsView = InitialEntities[0]["organs"][0]["commands"].map(
+    (command) => ({
+      label: command.name,
+      value: command.id,
+    })
+  );
 
   const submitSaveEntity = (formData) => onSubmitSaveEntity(formData);
 
@@ -123,6 +134,23 @@ export const EntityIntegration = () => {
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveEntity)}>
             <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <Controller
+                  name="commandId"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Comando"
+                      value={value}
+                      options={commandsView}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
               <Col span={24}>
                 <Controller
                   name="name"
