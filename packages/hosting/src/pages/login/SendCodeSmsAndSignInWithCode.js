@@ -134,7 +134,7 @@ const SendCodeSmsAndSignInWithCode = ({
       {currentStep === 1 && (
         <div className="send-phone-code-wrapper">
           <div className="title-login">
-            <Title level={3}>Verificación Código COBIENE</Title>
+            <Title level={3}>Verificación Código</Title>
             <Title level={3}>+51 {phoneNumber}</Title>
           </div>
           <br />
@@ -211,10 +211,10 @@ const SendCodeSmsAndSignInWithCode = ({
 
 const Container = styled.div`
   .title-login {
-    text-align: center;
     color: ${({ theme }) => theme.colors.primary};
 
     h3 {
+      text-align: center;
       color: inherit;
     }
 

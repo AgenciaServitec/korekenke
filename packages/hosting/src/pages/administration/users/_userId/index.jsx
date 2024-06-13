@@ -25,7 +25,7 @@ import {
   useApiUserPut,
 } from "../../../../api";
 import { getTypeForAssignedToByRoleCode } from "../../../../utils";
-import { DegreesArmy } from "../../../../data-list";
+import { DegreesArmy, INITIAL_HIGHER_ENTITIES } from "../../../../data-list";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -111,6 +111,7 @@ export const UserIntegration = () => {
               }
             : user.assignedTo,
         degree: formData.degree,
+        commandsIds: formData.commandsIds,
         cgi: formData.cgi,
       }
     );
@@ -152,6 +153,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string(),
+    commandsIds: yup.array().required(),
     cgi: yup.boolean().required(),
   });
 
@@ -166,6 +168,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
     defaultValues: {
       phoneNumber: "",
       cgi: false,
+      commandsIds: null,
     },
   });
 
@@ -186,6 +189,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
       dni: user?.dni || "",
       phoneNumber: user?.phone?.number || "",
       degree: user?.degree || "",
+      commandsIds: !isEmpty(user?.commandsIds) ? user.commandsIds : null,
       cgi: user?.cgi || false,
     });
   };
@@ -204,7 +208,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="roleCode"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Rol"
@@ -230,7 +233,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="firstName"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Nombres"
@@ -247,7 +249,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="paternalSurname"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Apellido paterno"
@@ -264,7 +265,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="maternalSurname"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Apellido materno"
@@ -281,7 +281,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="email"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Email"
@@ -298,7 +297,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="cip"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <InputNumber
                     label="CIP"
@@ -349,7 +347,6 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
               <Controller
                 name="degree"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Seleccione grado"
@@ -359,6 +356,30 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                     error={error(name)}
                     required={required(name)}
                     options={DegreesArmy}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="commandsIds"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="¿A que comandos pertenece?"
+                    mode="multiple"
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    error={error(name)}
+                    required={required(name)}
+                    options={(
+                      INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands ||
+                      null
+                    ).map((command) => ({
+                      label: command.name,
+                      value: command.id,
+                    }))}
                   />
                 )}
               />

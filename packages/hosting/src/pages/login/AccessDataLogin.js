@@ -109,10 +109,10 @@ export const AccessDataLogin = ({ next }) => {
 
 const Container = styled.div`
   .title-login {
-    text-align: center;
     color: ${({ theme }) => theme.colors.primary};
 
     h3 {
+      text-align: center;
       color: inherit;
     }
   }

@@ -84,7 +84,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       number: formData.phoneNumber,
     },
     degree: formData.degree,
-    commandsIds: !isEmpty(formData?.commandsIds) ? formData.commandsIds : null,
+    commandsIds: formData.commandsIds,
     cgi: formData.cgi,
   });
 
@@ -94,7 +94,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       const userWithEmail = await userByEmail(formData.email);
       const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
 
-      if (userWithEmail)
+      if (userWithEmail || userWithPhoneNumber)
         return notification({
           type: "warning",
           title: `El ${
