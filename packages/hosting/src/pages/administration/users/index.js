@@ -27,7 +27,7 @@ export const Users = () => {
   const { users, rolesAcls } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
 
-  const navigateTo = (userId) => navigate(`/users/${userId}`);
+  const navigateTo = (userId) => navigate(userId);
 
   const onAddUser = () => navigateTo("new");
   const onEditUser = (user) => navigateTo(user.id);
@@ -70,7 +70,7 @@ export const Users = () => {
   return (
     <Acl redirect category="administration" subCategory="users" name="/users">
       <Row gutter={[16, 16]}>
-        <Acl name="/users/new">
+        <Acl category="administration" subCategory="users" name="/users/new">
           <>
             <Col span={24}>
               <AddButton onClick={onAddUser} title="Usuario" margin="0" />

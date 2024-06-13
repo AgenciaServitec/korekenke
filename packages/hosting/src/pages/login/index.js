@@ -3,19 +3,16 @@ import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { SendCodeSmsAndSignInWithCodeIntegration } from "./SendCodeSmsAndSignInWithCode";
 import { AccessDataLogin } from "./AccessDataLogin";
-import { useAuthentication } from "../../providers";
-import { useNavigate } from "react-router";
+import { useAuthentication, useCommand } from "../../providers";
 
 export const LoginIntegration = () => {
-  const navigate = useNavigate();
   const { authUser } = useAuthentication();
+  const { onNavigateInCommand } = useCommand();
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  const onNavigateTo = (url) => navigate(url);
-
   useEffect(() => {
-    authUser && onNavigateTo(authUser?.role?.initialPathname || "/home");
+    authUser && onNavigateInCommand(authUser.initialCommand.id);
   }, [authUser]);
 
   const next = () => {

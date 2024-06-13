@@ -3,11 +3,19 @@ import styled from "styled-components";
 import { useNavigate } from "react-router";
 import Button from "antd/lib/button";
 import Result from "antd/lib/result";
+import { useAuthentication, useCommand } from "../../providers";
+import { pathnameWithCommand } from "../../utils";
 
 export const Page404 = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+  const { currentCommand, onNavigateInCommand } = useCommand();
 
-  const onGoBack = () => navigate(-1);
+  const onNavigateToHome = () => {
+    authUser
+      ? onNavigateInCommand(authUser.initialCommand.id)
+      : navigate(pathnameWithCommand(currentCommand.id, "/home"));
+  };
 
   return (
     <Container>
@@ -16,7 +24,7 @@ export const Page404 = () => {
         title="404"
         subTitle="Lo sentimos, la página que visitaste no existe."
         extra={
-          <Button type="primary" onClick={() => onGoBack()}>
+          <Button type="primary" onClick={() => onNavigateToHome()}>
             Ir a pagina de inicio
           </Button>
         }

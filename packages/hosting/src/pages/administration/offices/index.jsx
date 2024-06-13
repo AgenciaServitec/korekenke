@@ -14,7 +14,7 @@ export const OfficesIntegration = () => {
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (officeId) => navigate(`/offices/${officeId}`);
+  const navigateTo = (officeId) => navigate(officeId);
 
   const onAddOffice = () => navigateTo("new");
 

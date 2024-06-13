@@ -18,11 +18,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { includes, isEmpty } from "lodash";
+import { pathnameWithCommand } from "../../utils";
 
 export const DrawerLayout = ({
   user,
   isVisibleDrawer,
   onSetIsVisibleDrawer,
+  currentCommand,
   onNavigateTo,
 }) => {
   const existsAclsInAclsOfUser = (
@@ -40,16 +42,23 @@ export const DrawerLayout = ({
       })
       .some((acl) => acl);
 
+  const onClickMenu = (pathname) => {
+    onSetIsVisibleDrawer(false);
+    onNavigateTo(pathnameWithCommand(currentCommand.id, `${pathname}`));
+  };
+
+  const onClickHome = () => {
+    onSetIsVisibleDrawer(false);
+    onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"));
+  };
+
   const items = [
     {
       label: "Home",
       key: "home",
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
       isVisible: existsAclsInAclsOfUser("default", ["home"], ["/home"]),
-      onClick: () => {
-        onNavigateTo("/home");
-        onSetIsVisibleDrawer(false);
-      },
+      onClick: () => onClickHome(),
     },
     {
       label: "Control de Accesos (acls)",
@@ -69,10 +78,7 @@ export const DrawerLayout = ({
             ["defaultRolesAcls"],
             ["/default-roles-acls"]
           ),
-          onClick: () => {
-            onNavigateTo("/default-roles-acls");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/default-roles-acls"),
         },
         {
           label: "Administrador Acls",
@@ -82,10 +88,7 @@ export const DrawerLayout = ({
             ["manageAcls"],
             ["/manage-acls"]
           ),
-          onClick: () => {
-            onNavigateTo("/manage-acls");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/manage-acls"),
         },
       ],
     },
@@ -108,10 +111,7 @@ export const DrawerLayout = ({
             ["users"],
             ["/users"]
           ),
-          onClick: () => {
-            onNavigateTo("/users");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/users"),
         },
         {
           label: "Entidades",
@@ -122,10 +122,7 @@ export const DrawerLayout = ({
             ["entities"],
             ["/entities"]
           ),
-          onClick: () => {
-            onNavigateTo("/entities");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/entities"),
         },
         {
           label: "Departamentos",
@@ -136,10 +133,7 @@ export const DrawerLayout = ({
             ["departments"],
             ["/departments"]
           ),
-          onClick: () => {
-            onNavigateTo("/departments");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/departments"),
         },
         {
           label: "Secciones",
@@ -150,10 +144,7 @@ export const DrawerLayout = ({
             ["sections"],
             ["/sections"]
           ),
-          onClick: () => {
-            onNavigateTo("/sections");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/sections"),
         },
         {
           label: "Oficinas",
@@ -164,10 +155,7 @@ export const DrawerLayout = ({
             ["offices"],
             ["/offices"]
           ),
-          onClick: () => {
-            onNavigateTo("/offices");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/offices"),
         },
       ],
     },
@@ -190,10 +178,7 @@ export const DrawerLayout = ({
             ["correspondences"],
             ["/correspondences"]
           ),
-          onClick: () => {
-            onNavigateTo("/correspondences");
-            onSetIsVisibleDrawer(false);
-          },
+          onClick: () => onClickMenu("/correspondences"),
         },
         {
           label: "Inscripciones",
@@ -213,10 +198,7 @@ export const DrawerLayout = ({
                 ["inscriptions"],
                 ["/inscriptions/cmsts"]
               ),
-              onClick: () => {
-                onNavigateTo("/inscriptions/cmsts");
-                onSetIsVisibleDrawer(false);
-              },
+              onClick: () => onClickMenu("/inscriptions/cmsts"),
             },
           ],
         },
@@ -241,12 +223,10 @@ export const DrawerLayout = ({
             ["livestockAndEquines"],
             ["/livestock-and-equines"]
           ),
-          onClick: () => {
-            onNavigateTo(
+          onClick: () =>
+            onClickMenu(
               "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
-            );
-            onSetIsVisibleDrawer(false);
-          },
+            ),
         },
       ],
     },

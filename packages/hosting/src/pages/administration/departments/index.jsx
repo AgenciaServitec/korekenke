@@ -17,7 +17,7 @@ export const DepartmentsIntegration = () => {
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
 
-  const navigateTo = (departmentId) => navigate(`/departments/${departmentId}`);
+  const navigateTo = (departmentId) => navigate(departmentId);
 
   const onAddDepartment = () => navigateTo("new");
   const onEditDepartment = (department) => navigateTo(department?.id);

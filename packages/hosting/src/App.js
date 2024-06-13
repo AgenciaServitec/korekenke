@@ -2,6 +2,7 @@ import React from "react";
 import { Router } from "./router";
 import {
   AuthenticationProvider,
+  CommandProvider,
   ConfigsInitializer,
   GlobalDataProvider,
   VersionProvider,
@@ -12,9 +13,11 @@ const App = () => {
     <VersionProvider>
       <ConfigsInitializer>
         <AuthenticationProvider>
-          <GlobalDataProvider>
-            <Router />
-          </GlobalDataProvider>
+          <CommandProvider>
+            <GlobalDataProvider>
+              <Router />
+            </GlobalDataProvider>
+          </CommandProvider>
         </AuthenticationProvider>
       </ConfigsInitializer>
     </VersionProvider>

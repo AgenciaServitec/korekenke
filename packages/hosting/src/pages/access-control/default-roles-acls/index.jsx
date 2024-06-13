@@ -9,8 +9,11 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useGlobalData } from "../../../providers";
 import { updateRoleAcl } from "../../../firebase/collections";
+import { pathnameWithCommand } from "../../../utils";
+import { useParams } from "react-router";
 
 export const DefaultRolesAclsIntegration = () => {
+  const { commandId } = useParams();
   const navigate = useNavigate();
   const { rolesAcls } = useGlobalData();
   const { assignDeleteProps } = useDefaultFirestoreProps();
@@ -39,11 +42,10 @@ export const DefaultRolesAclsIntegration = () => {
 
   const onEditRoleAcls = (roleAcls) => navigateToRoleAcls(roleAcls.id);
 
-  const navigateToRoleAcls = (roleAclsId = undefined) => {
-    const url = `/default-roles-acls/${roleAclsId}`;
-
-    navigate(url);
-  };
+  const navigateToRoleAcls = (roleAclsId = undefined) =>
+    navigate(
+      pathnameWithCommand(commandId, `/default-roles-acls/${roleAclsId}`)
+    );
 
   const onDeleteRoleAcls = async (roleAcls) => deleteRoleAcls(roleAcls);
 

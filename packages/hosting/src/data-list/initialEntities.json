@@ -5,11 +5,13 @@
     "organs": [
       {
         "id": "secretaria_de_la_comandancia_general_del_ejercito",
+        "code": "secretaria_de_la_comandancia_general_del_ejercito",
         "name": "Secretaría De La Comandancia General Del Ejército",
         "category": "organo_de_administracion_interna",
         "commands": [
           {
-            "id": "comando_de_personal_del_ejercito",
+            "id": "copere",
+            "code": "copere",
             "name": "Comando De Personal Del Ejército",
             "entities": [
               {
@@ -27,7 +29,8 @@
             ]
           },
           {
-            "id": "comando_de_educacion_y_doctrina_del_ejercito",
+            "id": "coede",
+            "code": "coede",
             "name": "Comando De Educación y Doctrina Del Ejército",
             "entities": [
               {
@@ -41,7 +44,8 @@
             ]
           },
           {
-            "id": "comando_logistico_del_ejercito",
+            "id": "cologe",
+            "code": "cologe",
             "name": "Comando Logístico Del Ejército",
             "entities": [
               {
@@ -75,7 +79,8 @@
             ]
           },
           {
-            "id": "comando_general_de_apoyo_del_ejercito",
+            "id": "cogae",
+            "code": "cogae",
             "name": "Comando General De Apoyo Del Ejército",
             "entities": [
               {
@@ -111,56 +116,69 @@
         ]
       },
       {
-        "id": "estado_mayor_general_del_ejercito",
+        "id": "emge",
+        "code": "emge",
         "name": "Estado Mayor General Del Ejército",
         "category": "organo_de_planeamiento_y_asesoramiento",
         "entities": [
           {
-            "id": "direccion_de_planeamiento_del_ejercito",
+            "id": "diplane",
+            "code": "diplane",
             "name": "Dirección De Planeamiento Del Ejército"
           },
           {
-            "id": "direccion_de_personal_del_ejercito",
+            "id": "dipere",
+            "code": "dipere",
             "name": "Dirección De Personal Del Ejército"
           },
           {
-            "id": "direccion_de_inteligencia_del_ejercito",
+            "id": "die",
+            "code": "die",
             "name": "Dirección De Inteligencia Del Ejército"
           },
           {
-            "id": "direccion_de_educacion_y_doctrina_del_ejercito",
+            "id": "diedoce",
+            "code": "diedoce",
             "name": "Dirección De Educación y Doctrina Del Ejército"
           },
           {
-            "id": "direccion_de_logistica_del_ejercito",
+            "id": "diloge",
+            "code": "diloge",
             "name": "Dirección De Logística Del Ejército"
           },
           {
-            "id": "direccion_de_apoyo_al_desarrollo_nacional_del_ejercito",
+            "id": "diradne",
+            "code": "diradne",
             "name": "Dirección De Apoyo Al Desarrollo Nacional Del Ejército"
           },
           {
-            "id": "direccion_de_telematica_y_estadistica_del_ejercito",
+            "id": "ditele",
+            "code": "ditele",
             "name": "Dirección De Telemática y Estadística Del Ejército"
           },
           {
-            "id": "direccion_de_informaciones_del_ejercito",
+            "id": "dinfe",
+            "code": "dinfe",
             "name": "Dirección De Informaciones Del Ejército"
           },
           {
-            "id": "direccion_de_ciencia_y_tecnologia_del_ejercito",
+            "id": "dicitece",
+            "code": "dicitece",
             "name": "Dirección De Ciencia y Tecnología Del Ejército"
           },
           {
-            "id": "direccion_de_relaciones_internacionales_del_ejercito",
+            "id": "drie",
+            "code": "drie",
             "name": "Dirección De Relaciones Internacionales Del Ejército"
           },
           {
-            "id": "direccion_de_salud_del_ejercito",
+            "id": "disale",
+            "code": "disale",
             "name": "Dirección De Salud Del Ejército"
           },
           {
             "id": "direccion_inversiones_del_ejercito",
+            "code": "direccion_inversiones_del_ejercito",
             "name": "Dirección Inversiones Del Ejército"
           }
         ]

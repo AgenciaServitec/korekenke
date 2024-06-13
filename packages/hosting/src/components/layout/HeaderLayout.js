@@ -7,12 +7,12 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { LogoPrimary, PhotoNoFound } from "../../images";
+import { ImgNoFound, LogoPrimary, PhotoNoFound } from "../../images";
 import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
-import { useGlobalData } from "../../providers";
+import { pathnameWithCommand } from "../../utils";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -24,28 +24,31 @@ export const HeaderLayout = ({
   openDropdown,
   onOpenDropdown,
   onNavigateTo,
-  onChangeDefaultRole,
+  onChangeDefaultCommand,
+  currentCommand,
   onLogout,
 }) => {
   const { token } = useToken();
-  const { rolesAcls } = useGlobalData();
-  const [isVisibleMoreRoles, setIsVisibleMoreRoles] = useState(false);
+  const [isVisibleMoreCommands, setIsVisibleMoreCommands] = useState(false);
 
-  const onSetIsVisibleMoreRoles = () =>
-    setIsVisibleMoreRoles(!isVisibleMoreRoles);
+  const onSetIsVisibleMoreCommands = () =>
+    setIsVisibleMoreCommands(!isVisibleMoreCommands);
 
-  const defaultRole = rolesAcls.find((role) => role?.id === user?.roleCode);
-
-  const lastRole = orderBy(
-    (user?.otherRoles || []).filter((role) => role.code !== defaultRole?.id),
-    "updateAt",
-    "desc"
+  const lastCommand = orderBy(
+    (user?.commands || []).filter(
+      (command) => command.id !== user.initialCommand.id
+    ),
+    "name",
+    "asc"
   )?.[0];
 
   const items = [
     {
       label: (
-        <Link to="/profile" style={{ color: "#000" }}>
+        <Link
+          to={pathnameWithCommand(currentCommand.id, "/profile")}
+          style={{ color: "#000" }}
+        >
           <div style={{ padding: ".4em 0" }}>Perfil</div>
         </Link>
       ),
@@ -79,7 +82,9 @@ export const HeaderLayout = ({
               src={LogoPrimary}
               width={40}
               alt="Korekenke"
-              onClick={() => onNavigateTo("/home")}
+              onClick={() =>
+                onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
+              }
               className="logo-img"
             />
           </div>
@@ -102,25 +107,27 @@ export const HeaderLayout = ({
           onOpenChange={onOpenDropdown}
           dropdownRender={(menu) => (
             <div style={contentStyle}>
-              {lastRole && (
+              {lastCommand && (
                 <>
-                  <ItemDefaultRole>
-                    {!isVisibleMoreRoles ? (
+                  <ItemDefaultCommand>
+                    {!isVisibleMoreCommands ? (
                       <>
-                        <div className="wrapper-default-roles">
-                          <div className="selected-role item-role">
+                        <div className="wrapper-default-commands">
+                          <div className="selected-command item-command">
                             <img
                               src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
-                              alt="Role seleccionado"
+                              alt="Comando seleccionado"
                             />
-                            <div className="text-role">
-                              <strong>{defaultRole?.name}</strong>
+                            <div className="text-command">
+                              <strong>{currentCommand?.name}</strong>
                             </div>
                           </div>
-                          <div className="last-role item-role">
+                          <div className="last-command item-command">
                             <div
                               className="item-img"
-                              onClick={() => onChangeDefaultRole(lastRole)}
+                              onClick={() =>
+                                onChangeDefaultCommand(lastCommand)
+                              }
                             >
                               <FontAwesomeIcon
                                 icon={faArrowsRotate}
@@ -128,44 +135,47 @@ export const HeaderLayout = ({
                                 className="icon-rotate"
                               />
                               <img
-                                src={lastRole.imgUrl}
-                                alt="Role seleccionado"
+                                src={ImgNoFound}
+                                alt="Commando seleccionado"
                               />
                             </div>
-                            <div className="text-role">
-                              <strong>{lastRole.name}</strong>
+                            <div className="text-command">
+                              <strong>{lastCommand.name}</strong>
                             </div>
                           </div>
                         </div>
-                        <div className="item-show-more-roles">
-                          <span onClick={() => onSetIsVisibleMoreRoles(false)}>
-                            Ver todos los roles
+                        <div className="item-show-more-commands">
+                          <span
+                            onClick={() => onSetIsVisibleMoreCommands(false)}
+                          >
+                            Ver todos los commandos
                           </span>
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="wrapper-go-back">
-                          <span onClick={() => onSetIsVisibleMoreRoles()}>
+                          <span onClick={() => onSetIsVisibleMoreCommands()}>
                             <FontAwesomeIcon icon={faArrowLeft} /> Regresar
                           </span>
                         </div>
-                        <div className="wrapper-more-roles">
+                        <div className="wrapper-more-commands">
                           <ul>
-                            {user.otherRoles.map((role, index) => (
+                            {user.commands.map((command, index) => (
                               <li
                                 key={index}
-                                className="item-role"
+                                className="item-command"
                                 onClick={() => {
-                                  onSetIsVisibleMoreRoles();
+                                  onChangeDefaultCommand(command);
+                                  onSetIsVisibleMoreCommands();
                                 }}
                               >
                                 <img
-                                  src={role.imgUrl}
-                                  alt="Role seleccionado"
+                                  src={ImgNoFound}
+                                  alt="Comando seleccionado"
                                 />
-                                <div className="text-role">
-                                  <strong>{role.name}</strong>
+                                <div className="text-command">
+                                  <strong>{command.name}</strong>
                                 </div>
                               </li>
                             ))}
@@ -173,7 +183,7 @@ export const HeaderLayout = ({
                         </div>
                       </>
                     )}
-                  </ItemDefaultRole>
+                  </ItemDefaultCommand>
                   <Divider
                     style={{
                       margin: 0,
@@ -191,7 +201,7 @@ export const HeaderLayout = ({
         >
           <Space key="user-avatar" align="center">
             <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
-            <span>({defaultRole?.name})</span>
+            <span>({currentCommand?.name})</span>
             <img
               src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
               alt="user"
@@ -203,11 +213,11 @@ export const HeaderLayout = ({
   );
 };
 
-const ItemDefaultRole = styled.div`
+const ItemDefaultCommand = styled.div`
   display: grid;
   gap: 1em;
   padding: 1em;
-  width: 20em;
+  width: 100%;
 
   @keyframes spin {
     100% {
@@ -215,7 +225,7 @@ const ItemDefaultRole = styled.div`
     }
   }
 
-  .wrapper-default-roles {
+  .wrapper-default-commands {
     width: 100%;
     border-radius: 1em;
     background: aliceblue;
@@ -224,12 +234,12 @@ const ItemDefaultRole = styled.div`
     justify-content: space-between;
     gap: 1em;
 
-    .item-role {
+    .item-command {
       width: 4em;
       cursor: pointer;
     }
 
-    .selected-role {
+    .selected-command {
       display: grid;
       place-items: center;
 
@@ -239,14 +249,14 @@ const ItemDefaultRole = styled.div`
         border-radius: 50%;
       }
 
-      .text-role {
+      .text-command {
         line-height: 1;
         text-align: center;
         font-size: 0.6em;
       }
     }
 
-    .last-role {
+    .last-command {
       display: grid;
       place-items: center;
 
@@ -271,7 +281,7 @@ const ItemDefaultRole = styled.div`
         }
       }
 
-      .text-role {
+      .text-command {
         line-height: 1;
         text-align: center;
         font-size: 0.6em;
@@ -279,7 +289,7 @@ const ItemDefaultRole = styled.div`
     }
   }
 
-  .item-show-more-roles {
+  .item-show-more-commands {
     color: dodgerblue;
     span {
       cursor: pointer;
@@ -292,7 +302,7 @@ const ItemDefaultRole = styled.div`
       cursor: pointer;
     }
   }
-  .wrapper-more-roles {
+  .wrapper-more-commands {
     ul {
       list-style: none;
       margin: 0;
@@ -300,7 +310,7 @@ const ItemDefaultRole = styled.div`
       justify-content: center;
       gap: 0.4em;
 
-      .item-role {
+      .item-command {
         display: grid;
         place-items: center;
         gap: 0.5em;
@@ -319,7 +329,7 @@ const ItemDefaultRole = styled.div`
           border-radius: 50%;
         }
 
-        .text-role {
+        .text-command {
           line-height: 1;
           text-align: center;
           font-size: 0.6em;

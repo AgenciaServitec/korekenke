@@ -25,62 +25,50 @@ export const CorrespondencesIntegration = () => {
     );
 
   useEffect(() => {
-    if (correspondencesError) {
-      console.error(correspondencesError);
-
+    correspondencesError &&
       notification({
         type: "error",
-        title: "Error al obtener las correspondencias",
       });
-    }
   }, [correspondencesError]);
 
-  const onDeleteCorrespondence = async (correspondenceId) => {
-    await correspondencesRef.doc(correspondenceId).update({
-      isDeleted: true,
-    });
+  const onNavigateTo = (correspondenceId) => navigate(correspondenceId);
 
-    notification({
-      type: "success",
-      title: "Correspondencia eliminada",
-    });
-  };
+  const onAddCorrespondence = () => onNavigateTo("new");
+  const onEditCorrespondence = (correspondenceId) =>
+    onNavigateTo(correspondenceId);
+  const onConfirmDeleteCorrespondence = async (correspondenceId) =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres eliminar la correspondencia?",
+      onOk: async () => {
+        await correspondencesRef.doc(correspondenceId).update({
+          isDeleted: true,
+        });
 
-  const onNavigateTo = (pathname) => navigate(pathname);
+        notification({
+          type: "success",
+          title: "Correspondencia eliminada",
+        });
+      },
+    });
 
   return (
     <Spin size="large" spinning={correspondencesLoading}>
       <Correspondence
-        onNavigateTo={onNavigateTo}
         correspondences={correspondences}
-        onDeleteCorrespondence={onDeleteCorrespondence}
+        onAddCorrespondence={onAddCorrespondence}
+        onEditCorrespondence={onEditCorrespondence}
+        onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
       />
     </Spin>
   );
 };
 
 const Correspondence = ({
-  onNavigateTo,
   correspondences,
-  onDeleteCorrespondence,
+  onAddCorrespondence,
+  onEditCorrespondence,
+  onConfirmDeleteCorrespondence,
 }) => {
-  const navigateToCorrespondencePage = (correspondenceId) =>
-    onNavigateTo(`/correspondences/${correspondenceId}`);
-
-  const onClickCorrespondenceAdd = () => navigateToCorrespondencePage("new");
-
-  const onConfirmDeleteCorrespondence = (correspondenceId) =>
-    modalConfirm({
-      title: "¿Estás seguro de que quieres eliminar la correspondencia?",
-      onOk: () => onDeleteCorrespondence(correspondenceId),
-    });
-
-  const onClickEditCorrespondence = (correspondenceId) =>
-    navigateToCorrespondencePage(correspondenceId);
-
-  const onClickDeleteCorrespondence = (correspondenceId) =>
-    onConfirmDeleteCorrespondence(correspondenceId);
-
   const filterCorrespondencesView = correspondences.filter(
     (reception) => reception
   );
@@ -97,7 +85,7 @@ const Correspondence = ({
           <Row justify="space-between" align="middle" gutter={[16, 16]}>
             <Col span={24}>
               <AddButton
-                onClick={onClickCorrespondenceAdd}
+                onClick={onAddCorrespondence}
                 title="correspondencia"
                 margin="0"
               />
@@ -107,8 +95,8 @@ const Correspondence = ({
         <div>
           <CorrespondencesTable
             correspondences={filterCorrespondencesView}
-            onClickEditCorrespondence={onClickEditCorrespondence}
-            onClickDeleteCorrespondence={onClickDeleteCorrespondence}
+            onClickEditCorrespondence={onEditCorrespondence}
+            onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
           />
         </div>
       </Container>

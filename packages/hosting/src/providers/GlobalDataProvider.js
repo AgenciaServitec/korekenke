@@ -5,8 +5,10 @@ import { useAuthentication } from "./AuthenticationProvider";
 import { notification, Spinner } from "../components";
 import { orderBy } from "lodash";
 import { usersByRoleCode } from "../utils";
+import { InitialEntities } from "../data-list";
 
 const GlobalDataContext = createContext({
+  commands: [],
   users: [],
   departmentUsers: [],
   sectionUsers: [],
@@ -22,6 +24,8 @@ const GlobalDataContext = createContext({
 
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
+
+  const commands = InitialEntities?.[0]?.organs?.[0]?.commands || [];
 
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser
@@ -85,6 +89,7 @@ export const GlobalDataProvider = ({ children }) => {
     sectionsError ||
     officesError ||
     livestockAndEquinesError;
+
   const loading =
     entitiesLoading ||
     rolesAclsLoading ||
@@ -94,6 +99,7 @@ export const GlobalDataProvider = ({ children }) => {
     sectionsLoading ||
     officesLoading ||
     livestockAndEquinesLoading;
+
   useEffect(() => {
     error && notification({ type: "error" });
   }, [error]);
@@ -103,6 +109,7 @@ export const GlobalDataProvider = ({ children }) => {
   return (
     <GlobalDataContext.Provider
       value={{
+        commands: orderBy(commands, (command) => [command.name], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
         departmentUsers: orderBy(
           usersByRoleCode(users, ["department_boss", "department_assistant"]),

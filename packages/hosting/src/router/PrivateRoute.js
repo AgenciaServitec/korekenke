@@ -9,7 +9,7 @@ export const PrivateRoute = () => {
   const location = useLocation();
   const params = useParams();
 
-  const isLoginPage = location.pathname === "/login";
+  const isLoginPage = location.pathname === "/";
 
   const validateAuthorizedRoute = () => {
     let result = false;

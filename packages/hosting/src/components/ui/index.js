@@ -19,6 +19,30 @@ import {
   Image,
 } from "antd";
 
+const { Link, Paragraph } = Typography;
+
+export {
+  Card,
+  Drawer,
+  Dropdown,
+  Layout,
+  Alert,
+  Link,
+  Paragraph,
+  Tag,
+  Row,
+  Col,
+  Spin,
+  Space,
+  Menu,
+  Result,
+  Tabs,
+  Radio,
+  Divider,
+  Empty,
+  Image,
+};
+
 export * from "./component-container";
 export * from "./calendar";
 export * from "./Button";
@@ -54,29 +78,4 @@ export * from "./table";
 export * from "./InputCode";
 export * from "./Acl";
 export * from "./sheet";
-
-export { default as Legend } from "./Legend";
-
-const { Link, Paragraph } = Typography;
-
-export {
-  Card,
-  Drawer,
-  Dropdown,
-  Layout,
-  Alert,
-  Link,
-  Paragraph,
-  Tag,
-  Row,
-  Col,
-  Spin,
-  Space,
-  Menu,
-  Result,
-  Tabs,
-  Radio,
-  Divider,
-  Empty,
-  Image,
-};
+export * from "./Legend";

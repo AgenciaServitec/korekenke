@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { isError, isObject } from "lodash";
+import { includes, isError, isObject, orderBy } from "lodash";
 import { notification, Spinner } from "../components";
 import {
   useCollectionData,
@@ -8,6 +8,7 @@ import {
 } from "react-firebase-hooks/firestore";
 import { rolesAclsRef, usersRef } from "../firebase/collections";
 import { authPersistence } from "../firebase/auth";
+import { InitialEntities } from "../data-list";
 
 const AuthenticationContext = createContext({
   authUser: null,
@@ -27,6 +28,7 @@ export const AuthenticationProvider = ({ children }) => {
   const [user, userLoading, userError] = useDocumentData(
     firebaseUser ? usersRef.doc(firebaseUser.uid) : null
   );
+
   const [rolesAcls, rolesAclsLoading, rolesAclsError] =
     useCollectionData(rolesAclsRef);
 
@@ -122,10 +124,24 @@ const mapAuthUser = (user, rolesAcls) => {
 
   if (!authUserRole) return mapAuthUserError("You don't have an assigned role");
 
-  // const authUserPathnames = findAuthUserPathnames(user);
+  const commands = InitialEntities?.[0]?.organs?.[0]?.commands || [];
+
+  const authUserCommands =
+    user.roleCode === "super_admin"
+      ? commands
+      : findAuthUserCommands(user, commands);
+
+  const [initialCommand] = orderBy(
+    authUserCommands,
+    [(command) => command.name],
+    ["asc"]
+  );
+
   return {
     ...user,
     role: authUserRole,
+    commands: authUserCommands,
+    initialCommand: initialCommand,
   };
 };
 
@@ -144,3 +160,6 @@ const findAuthUserRole = (user, rolesAcls = []) =>
 
 const findAuthUserPathnames = (user) =>
   (user?.acls || []).map((acl) => acl.split("#")[0]);
+
+const findAuthUserCommands = (user, commands = []) =>
+  commands.filter((command) => includes(user?.commandsIds || [], command.id));

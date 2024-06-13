@@ -1,44 +1,45 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LayoutAntd from "antd/lib/layout";
 import { DrawerLayout } from "./DrawerLayout";
 import { HeaderLayout } from "./HeaderLayout";
 import { FooterLayout } from "./FooterLayout";
 import { useNavigate } from "react-router";
 import { BreadcrumbLayout } from "./Breadcrumb";
-import { useAuthentication } from "../../providers";
-import { Spin } from "../ui";
+import { useAuthentication, useCommand } from "../../providers";
+import { Spin, Layout } from "../ui";
 
-const { Content } = LayoutAntd;
+const { Content } = Layout;
 
 export const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
   const { authUser, logout } = useAuthentication();
+  const { currentCommand, onChangeCommand } = useCommand();
 
-  const [isChangeRole, setIsChangeRole] = useState(false);
+  const [isChangeCommand, setIsChangeCommand] = useState(false);
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const onNavigateTo = (url) => navigate(url);
 
-  const onChangeDefaultRole = async (role) => {
+  const onChangeDefaultCommand = async (command) => {
     try {
-      setIsChangeRole(true);
-      console.log("role: ", role);
+      setIsChangeCommand(true);
+      onChangeCommand(command.id);
     } finally {
       setOpenDropdown(false);
-      setIsChangeRole(false);
+      setIsChangeCommand(false);
     }
   };
 
   return (
-    <Spin tip="Cargando..." spinning={isChangeRole} className="spin-item">
+    <Spin tip="Cargando..." spinning={isChangeCommand} className="spin-item">
       <LayoutContainer>
-        <LayoutAntd className="site-layout">
+        <Layout className="site-layout">
           <DrawerLayout
             user={authUser}
             isVisibleDrawer={isVisibleDrawer}
             onSetIsVisibleDrawer={setIsVisibleDrawer}
+            currentCommand={currentCommand}
             onNavigateTo={onNavigateTo}
           />
           <HeaderLayout
@@ -48,7 +49,8 @@ export const AdminLayout = ({ children }) => {
             setIsVisibleDrawer={setIsVisibleDrawer}
             openDropdown={openDropdown}
             onOpenDropdown={setOpenDropdown}
-            onChangeDefaultRole={onChangeDefaultRole}
+            onChangeDefaultCommand={onChangeDefaultCommand}
+            currentCommand={currentCommand}
             onLogout={logout}
           />
           <Content style={{ margin: "0 16px" }}>
@@ -58,13 +60,13 @@ export const AdminLayout = ({ children }) => {
             </div>
           </Content>
           <FooterLayout />
-        </LayoutAntd>
+        </Layout>
       </LayoutContainer>
     </Spin>
   );
 };
 
-const LayoutContainer = styled(LayoutAntd)`
+const LayoutContainer = styled(Layout)`
   min-width: 100vw;
   min-height: 100vh;
   .site-layout-background {

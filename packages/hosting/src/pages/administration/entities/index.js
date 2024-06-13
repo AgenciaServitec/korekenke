@@ -15,7 +15,7 @@ export const EntitiesIntegration = () => {
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const navigateTo = (entityId) => navigate(`/entities/${entityId}`);
+  const navigateTo = (entityId) => navigate(entityId);
 
   const onAddEntity = () => navigateTo("new");
   const onEditEntity = (entity) => navigateTo(entity.id);

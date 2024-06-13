@@ -20,9 +20,10 @@ import { useGlobalData } from "../../../../../providers";
 import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { LivestockAndEquineInformation } from "../../../../../components/ui/entities";
+import { pathnameWithCommand } from "../../../../../utils";
 
 export const ClinicHistoryIntegration = () => {
-  const { livestockAndEquineId } = useParams();
+  const { commandId, livestockAndEquineId } = useParams();
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
@@ -108,7 +109,10 @@ export const ClinicHistoryIntegration = () => {
             icon={faArrowLeft}
             onClick={() =>
               onNavigateGoTo(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines`
+                pathnameWithCommand(
+                  commandId,
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines`
+                )
               )
             }
           />

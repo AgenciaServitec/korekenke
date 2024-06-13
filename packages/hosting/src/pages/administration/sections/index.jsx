@@ -17,7 +17,7 @@ export const SectionsIntegration = () => {
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
 
-  const navigateTo = (sectionId) => navigate(`/sections/${sectionId}`);
+  const navigateTo = (sectionId) => navigate(sectionId);
 
   const onAddSection = () => navigateTo("new");
   const onEditSection = (section) => navigateTo(section?.id);

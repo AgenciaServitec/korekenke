@@ -6,11 +6,22 @@ import * as A from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
+  const pathBase = (path) => `/:commandId` + path;
+
   return (
     <Routes>
       <Route exact path="/" element={<A.LoginIntegration />} />
       <Route exact path="/register" element={<A.RegisterIntegration />} />
-      <Route path="/" element={<PrivateRoute />}>
+      <Route path={pathBase("/")} element={<PrivateRoute />}>
+        <Route
+          exact
+          path="home"
+          element={
+            <AdminLayout>
+              <A.HomeIntegration />
+            </AdminLayout>
+          }
+        />
         <Route
           exact
           path="users"
@@ -26,15 +37,6 @@ export const Router = () => {
           element={
             <AdminLayout>
               <A.UserIntegration />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
-          path="home"
-          element={
-            <AdminLayout>
-              <A.HomeIntegration />
             </AdminLayout>
           }
         />
@@ -245,17 +247,23 @@ export const Router = () => {
       </Route>
       <Route
         exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+        path={pathBase(
+          "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+        )}
         element={<A.PdfEquineLivestockRegistrationCardSheet />}
       />
       <Route
         exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+        path={pathBase(
+          "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+        )}
         element={<A.PdfClinicHistorySheets />}
       />
       <Route
         exact
-        path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
+        path={pathBase(
+          "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
+        )}
         element={<A.PdfEquineMagazineProfilesSheets />}
       />
       <Route path="*" element={<Page404 />} />

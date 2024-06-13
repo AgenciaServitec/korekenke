@@ -6,9 +6,14 @@ import { Link } from "react-router-dom";
 import { mediaQuery } from "../../styles";
 import { useAuthentication } from "../../providers";
 import { userFullName } from "../../utils/users/userFullName2";
+import { pathnameWithCommand } from "../../utils";
+import { useParams } from "react-router";
 
 export const HomeIntegration = () => {
   const { authUser } = useAuthentication();
+  const { commandId } = useParams();
+
+  const onNavigateGoTo = (pathname) => pathnameWithCommand(commandId, pathname);
 
   return (
     <Container>
@@ -22,7 +27,7 @@ export const HomeIntegration = () => {
             <h2>{userFullName(authUser)}</h2>
             <ul>
               <li>
-                <Link to="/profile">1. Perfil</Link>
+                <Link to={onNavigateGoTo("/profile")}>1. Perfil</Link>
               </li>
             </ul>
           </div>
@@ -46,10 +51,12 @@ export const HomeIntegration = () => {
             <h2>JEFATURA DE BIENESTAR DEL EJÉRCITO (COBIENE)</h2>
             <ul>
               <li>
-                <Link to="/correspondences">1. Correspondencias</Link>
+                <Link to={onNavigateGoTo("/correspondences")}>
+                  1. Correspondencias
+                </Link>
               </li>
               <li>
-                <Link to="/inscriptions/cmsts">
+                <Link to={onNavigateGoTo("/inscriptions/cmsts")}>
                   2. Inscripción Circulo Militar
                 </Link>
               </li>
@@ -64,7 +71,11 @@ export const HomeIntegration = () => {
             <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCTIO</h2>
             <ul>
               <li>
-                <Link to="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines">
+                <Link
+                  to={onNavigateGoTo(
+                    "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+                  )}
+                >
                   1. Ganado y Equinos
                 </Link>
               </li>

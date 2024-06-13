@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 
 export const Legend = ({ title, children }) => {
@@ -11,8 +11,6 @@ export const Legend = ({ title, children }) => {
     </Container>
   );
 };
-
-export default memo(Legend);
 
 const Container = styled.section`
   padding-top: 7px;

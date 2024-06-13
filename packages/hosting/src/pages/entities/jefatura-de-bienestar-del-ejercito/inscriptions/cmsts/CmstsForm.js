@@ -143,7 +143,7 @@ export const CmstsForm = () => {
           >
             <IconAction
               className="pointer"
-              onClick={() => onNavigateTo("/inscriptions/cmsts/sheet")}
+              onClick={() => onNavigateTo("sheet")}
               styled={{ color: (theme) => theme.colors.error }}
               icon={faFilePdf}
             />
@@ -153,10 +153,7 @@ export const CmstsForm = () => {
             subCategory="inscriptions"
             name="/inscriptions/cmsts/all"
           >
-            <Button
-              type="primary"
-              onClick={() => onNavigateTo("/inscriptions/cmsts/all")}
-            >
+            <Button type="primary" onClick={() => onNavigateTo("all")}>
               <FontAwesomeIcon icon={faAddressBook} /> &nbsp; Ver todos los
               inscritos
             </Button>
