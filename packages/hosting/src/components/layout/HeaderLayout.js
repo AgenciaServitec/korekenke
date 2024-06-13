@@ -171,11 +171,16 @@ export const HeaderLayout = ({
                                 }}
                               >
                                 <img
-                                  src={ImgNoFound}
+                                  src={command.logoImgUrl}
                                   alt="Comando seleccionado"
                                 />
                                 <div className="text-command">
-                                  <strong>{command.name}</strong>
+                                  <span>
+                                    <strong>{command.name}</strong>
+                                  </span>
+                                  <span>
+                                    <strong>{command.code}</strong>
+                                  </span>
                                 </div>
                               </li>
                             ))}
@@ -201,7 +206,9 @@ export const HeaderLayout = ({
         >
           <Space key="user-avatar" align="center">
             <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
-            <span>({currentCommand?.name})</span>
+            <span style={{ textTransform: "uppercase", fontWeight: "bold" }}>
+              ({currentCommand?.code})
+            </span>
             <img
               src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
               alt="user"
@@ -317,15 +324,16 @@ const ItemDefaultCommand = styled.div`
         cursor: pointer;
         padding: 0.3em;
         border-radius: 0.4em;
-        width: 4.2em;
+        width: 5em;
+        background-color: red;
 
         &:hover {
           background: #c3ddf6;
         }
 
         img {
-          width: 1.7em;
-          height: 1.7em;
+          width: 2em;
+          height: 2em;
           border-radius: 50%;
         }
 
@@ -333,6 +341,12 @@ const ItemDefaultCommand = styled.div`
           line-height: 1;
           text-align: center;
           font-size: 0.6em;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5em;
+          span:last-child {
+            text-transform: uppercase;
+          }
         }
       }
     }
