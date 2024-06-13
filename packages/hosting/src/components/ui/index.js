@@ -1,29 +1,30 @@
 import {
-  Typography,
-  Tag,
-  Row,
+  Alert,
+  Button,
   Card,
   Col,
-  Spin,
-  Menu,
+  Divider,
   Drawer,
   Dropdown,
-  Layout,
-  Alert,
-  Space,
-  Result,
-  Tabs,
-  Radio,
-  Divider,
   Empty,
   Image,
+  Layout,
+  Menu,
   QRCode,
+  Radio,
+  Result,
+  Row,
+  Space,
+  Spin,
   Steps,
+  Table,
+  Tabs,
+  Tag,
+  Typography,
 } from "antd";
 
 export * from "./component-container";
 export * from "./calendar";
-export * from "./Button";
 export * from "./CheckboxGroup";
 export * from "./DatePicker";
 export * from "./Form";
@@ -82,4 +83,6 @@ export {
   Image,
   QRCode,
   Steps,
+  Button,
+  Table,
 };

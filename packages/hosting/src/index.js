@@ -8,17 +8,43 @@ import { ScrollTop } from "./ScrollTop";
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter } from "react-router-dom";
 import { GlobalStyle, theme } from "./styles";
+import { ConfigProvider } from "antd";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+const config = {
+  components: {
+    Button: {
+      colorPrimary: theme.colors.primary,
+      colorPrimaryHover: theme.colors.secondary,
+      colorPrimaryActive: theme.colors.secondary,
+    },
+    Menu: {
+      colorPrimary: theme.colors.primary,
+      colorPrimaryHover: theme.colors.secondary,
+    },
+    Tabs: {
+      colorPrimary: theme.colors.primary,
+      colorPrimaryHover: theme.colors.secondary,
+      colorPrimaryActive: theme.colors.secondary,
+    },
+    Card: {
+      colorFillAlter: theme.colors.secondary,
+      colorTextHeading: "white",
+    },
+  },
+};
+
 root.render(
   <ThemeProvider theme={theme}>
-    <GlobalStyle />
-    <BrowserRouter>
-      <ScrollTop>
-        <App />
-      </ScrollTop>
-    </BrowserRouter>
+    <ConfigProvider theme={config}>
+      <GlobalStyle />
+      <BrowserRouter>
+        <ScrollTop>
+          <App />
+        </ScrollTop>
+      </BrowserRouter>
+    </ConfigProvider>
   </ThemeProvider>
 );
 
