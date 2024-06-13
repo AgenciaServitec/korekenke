@@ -32,6 +32,9 @@ const config = {
       colorFillAlter: theme.colors.secondary,
       colorTextHeading: "white",
     },
+    Steps: {
+      colorPrimary: theme.colors.primary,
+    },
   },
 };
 
