@@ -126,10 +126,7 @@ const mapAuthUser = (user, rolesAcls) => {
 
   const commands = InitialEntities?.[0]?.organs?.[0]?.commands || [];
 
-  const authUserCommands =
-    user.roleCode === "super_admin"
-      ? commands
-      : findAuthUserCommands(user, commands);
+  const authUserCommands = findAuthUserCommands(user, commands);
 
   const [initialCommand] = orderBy(
     authUserCommands,
