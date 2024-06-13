@@ -377,7 +377,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                       INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands ||
                       null
                     ).map((command) => ({
-                      label: command.name,
+                      label: `${command.name} (${command.code.toUpperCase()})`,
                       value: command.id,
                     }))}
                   />
