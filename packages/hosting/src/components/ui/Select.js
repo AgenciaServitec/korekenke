@@ -4,30 +4,6 @@ import { ComponentContainer } from "./component-container";
 import { lighten } from "polished";
 import styled, { css } from "styled-components";
 
-// export type SelectValue = string;
-//
-// type SelectFilterOption = (
-//   inputValue: SelectValue,
-//   optionLabel: string
-// ) => boolean;
-
-// type SelectOnChange = (value?: SelectValue) => void;
-
-// interface Props {
-//   name?: string;
-//   value?: SelectValue;
-//   required?: boolean;
-//   error?: FormError;
-//   label?: string;
-//   variant?: "outlined" | "filled";
-//   disabled?: boolean;
-//   allowClear?: boolean;
-//   children?: JSX.Element[];
-//   onChange?: SelectOnChange;
-//   filterOption?: SelectFilterOption;
-//   mode?: "multiple" | "tags";
-// }
-
 const defaultFilterOption = (inputValue, optionLabel) => {
   const labelParts = optionLabel.toLowerCase().split(" - ");
   return labelParts.some((part) => part.includes(inputValue.toLowerCase()));
