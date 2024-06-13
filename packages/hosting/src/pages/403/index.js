@@ -2,11 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { Button, Result } from "../../components";
 import { useNavigate } from "react-router";
+import { useAuthentication, useCommand } from "../../providers";
+import { pathnameWithCommand } from "../../utils";
 
 export const Page403 = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+  const { currentCommand, onNavigateInCommand } = useCommand();
 
-  const navigateToInitialPage = () => navigate("/");
+  const onNavigateToHome = () => {
+    authUser
+      ? onNavigateInCommand(authUser.initialCommand.id)
+      : navigate(pathnameWithCommand(currentCommand.id, "/home"));
+  };
 
   return (
     <Container>
@@ -15,7 +23,7 @@ export const Page403 = () => {
         title="403"
         subTitle="Lo sentimos, no está autorizado para acceder a esta página."
         extra={
-          <Button type="primary" onClick={() => navigateToInitialPage()}>
+          <Button type="primary" onClick={onNavigateToHome}>
             Ir a pagina de inicio
           </Button>
         }
