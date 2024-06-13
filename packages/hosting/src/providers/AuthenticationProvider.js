@@ -8,7 +8,7 @@ import {
 } from "react-firebase-hooks/firestore";
 import { rolesAclsRef, usersRef } from "../firebase/collections";
 import { authPersistence } from "../firebase/auth";
-import { InitialEntities } from "../data-list";
+import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 
 const AuthenticationContext = createContext({
   authUser: null,
@@ -124,7 +124,7 @@ const mapAuthUser = (user, rolesAcls) => {
 
   if (!authUserRole) return mapAuthUserError("You don't have an assigned role");
 
-  const commands = InitialEntities?.[0]?.organs?.[0]?.commands || [];
+  const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
   const authUserCommands = findAuthUserCommands(user, commands);
 

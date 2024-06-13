@@ -22,7 +22,7 @@ import {
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
-import { InitialEntities } from "../../../../data-list";
+import { INITIAL_HIGHER_ENTITIES } from "../../../../data-list";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
@@ -109,7 +109,7 @@ export const EntityIntegration = () => {
       value: user.id,
     }));
 
-  const commandsView = InitialEntities[0]["organs"][0]["commands"].map(
+  const commandsView = INITIAL_HIGHER_ENTITIES[0]["organs"][0]["commands"].map(
     (command) => ({
       label: command.name,
       value: command.id,

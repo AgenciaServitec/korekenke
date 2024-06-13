@@ -5,7 +5,7 @@ import { useAuthentication } from "./AuthenticationProvider";
 import { notification, Spinner } from "../components";
 import { orderBy } from "lodash";
 import { usersByRoleCode } from "../utils";
-import { InitialEntities } from "../data-list";
+import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 import {
   correspondencesRef,
   departmentsRef,
@@ -33,7 +33,7 @@ const GlobalDataContext = createContext({
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
-  const commands = InitialEntities?.[0]?.organs?.[0]?.commands || [];
+  const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser

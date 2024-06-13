@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isString } from "lodash";
-import { InitialEntities } from "../data-list";
+import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 
 const CommandContext = createContext({
   currentCommand: null,
@@ -15,7 +15,7 @@ export const CommandProvider = ({ children }) => {
   const location = useLocation();
   const { authUser } = useAuthentication();
 
-  const commands = InitialEntities?.[0]?.organs?.[0]?.commands || [];
+  const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
   const commandFromUrl =
     authUser && findCommandFromUrl(location.pathname, authUser.commands);

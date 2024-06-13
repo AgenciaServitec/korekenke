@@ -15,10 +15,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { DegreesArmy } from "../../data-list";
+import { DegreesArmy, INITIAL_HIGHER_ENTITIES } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
-import { firestore } from "../../firebase";
+import { usersRef } from "../../firebase/collections";
+import { isEmpty } from "lodash";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
@@ -34,6 +35,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string().required(),
+    commandsIds: yup.array().required(),
     cgi: yup.boolean(),
   });
 
@@ -47,6 +49,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     defaultValues: {
       phoneNumber: "",
       cgi: false,
+      commandsIds: null,
     },
   });
 
@@ -60,8 +63,11 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       paternalSurname: step1Data?.paternalSurname || "",
       maternalSurname: step1Data?.maternalSurname || "",
       email: step1Data?.email || "",
-      phoneNumber: step1Data?.phoneNumber || "",
+      phoneNumber: step1Data?.phone?.number || "",
       degree: step1Data?.degree || "",
+      commandsIds: !isEmpty(step1Data?.commandsIds)
+        ? step1Data.commandsIds
+        : null,
       cgi: step1Data?.cgi || false,
     });
   }, [currentStep]);
@@ -78,6 +84,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       number: formData.phoneNumber,
     },
     degree: formData.degree,
+    commandsIds: !isEmpty(formData?.commandsIds) ? formData.commandsIds : null,
     cgi: formData.cgi,
   });
 
@@ -87,7 +94,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       const userWithEmail = await userByEmail(formData.email);
       const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
 
-      if (userWithEmail || userWithPhoneNumber)
+      if (userWithEmail)
         return notification({
           type: "warning",
           title: `El ${
@@ -110,7 +117,10 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
 
   const userByEmail = async (email) => {
     const response = await fetchCollectionOnce(
-      firestore.collection("users").where("email", "==", email).limit(1)
+      usersRef
+        .where("isDeleted", "==", false)
+        .where("email", "==", email)
+        .limit(1)
     );
 
     return response[0];
@@ -118,9 +128,9 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
 
   const userByPhoneNumber = async (phoneNumber) => {
     const response = await fetchCollectionOnce(
-      firestore
-        .collection("users")
-        .where("phoneNumber", "==", phoneNumber)
+      usersRef
+        .where("isDeleted", "==", false)
+        .where("phone.number", "==", phoneNumber)
         .limit(1)
     );
 
@@ -136,7 +146,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
         <Controller
           name="firstName"
           control={control}
-          defaultValue=""
           render={({ field: { onChange, value, name } }) => (
             <Input
               label="Ingrese nombres"
@@ -152,7 +161,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
         <Controller
           name="paternalSurname"
           control={control}
-          defaultValue=""
           render={({ field: { onChange, value, name } }) => (
             <Input
               label="Ingrese apellido paterno"
@@ -168,7 +176,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
         <Controller
           name="maternalSurname"
           control={control}
-          defaultValue=""
           render={({ field: { onChange, value, name } }) => (
             <Input
               label="Ingrese apellido materno"
@@ -184,7 +191,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
         <Controller
           name="email"
           control={control}
-          defaultValue=""
           render={({ field: { onChange, value, name } }) => (
             <Input
               label="Ingrese email"
@@ -215,7 +221,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
         <Controller
           name="degree"
           control={control}
-          defaultValue=""
           render={({ field: { onChange, value, name } }) => (
             <Select
               label="Seleccione grado"
@@ -226,6 +231,28 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
               helperText={errorMessage(name)}
               required={required(name)}
               options={DegreesArmy}
+            />
+          )}
+        />
+        <Controller
+          name="commandsIds"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <Select
+              label="¿A que comandos pertenece?"
+              mode="multiple"
+              onChange={onChange}
+              value={value}
+              name={name}
+              error={error(name)}
+              helperText={errorMessage(name)}
+              required={required(name)}
+              options={(
+                INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || null
+              ).map((command) => ({
+                label: command.name,
+                value: command.id,
+              }))}
             />
           )}
         />

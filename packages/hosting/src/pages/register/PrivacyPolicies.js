@@ -8,7 +8,11 @@ import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { useNavigate } from "react-router";
 import { clearLocalStorage, getLocalStorage } from "../../utils";
-import { useApiUserPost } from "../../api";
+import {
+  apiErrorNotification,
+  getApiErrorResponse,
+  useApiUserPost,
+} from "../../api";
 import { assign } from "lodash";
 import { fetchRoleAcl } from "../../firebase/collections";
 
@@ -47,7 +51,7 @@ export const PrivacyPolicies = ({ prev }) => {
 
       const roleAclTypeUser = await fetchRoleAcl("user");
 
-      await postUser(
+      const response = await postUser(
         assign({}, prevData, {
           firstName: prevData.firstName.toLocaleLowerCase(),
           paternalSurname: prevData.paternalSurname.toLocaleLowerCase(),
@@ -57,7 +61,9 @@ export const PrivacyPolicies = ({ prev }) => {
         })
       );
 
-      if (!postUserResponse.ok) throw new Error("Register error");
+      if (!postUserResponse.ok) {
+        throw new Error(response);
+      }
 
       notification({ type: "success", title: "Registro exitoso" });
 
@@ -65,8 +71,8 @@ export const PrivacyPolicies = ({ prev }) => {
 
       onNavigateGoToLogin();
     } catch (e) {
-      console.error({ e });
-      notification({ type: "error" });
+      const errorResponse = await getApiErrorResponse(e);
+      apiErrorNotification(errorResponse);
     } finally {
       setSavingUser(false);
     }

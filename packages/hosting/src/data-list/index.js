@@ -1,3 +1,4 @@
+export { default as INITIAL_HIGHER_ENTITIES } from "./INITIAL_HIGHER_ENTITIES.json";
 export { default as countriesISO } from "./countriesISO.json";
 export { default as DegreesArmy } from "./degreesArmy.json";
 export { default as ApiErrors } from "./apiErrors.json";
@@ -7,5 +8,4 @@ export { default as CivilStatus } from "./civilStatus.json";
 export { default as Genders } from "./genders.json";
 export { default as Relationships } from "./relationships.json";
 export { default as AssignmentForUsers } from "./assignmentForUsers.json";
-export { default as InitialEntities } from "./initialEntities.json";
 export * from "./equineMagazineProfiles.js";
