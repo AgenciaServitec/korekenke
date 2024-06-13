@@ -1,5 +1,5 @@
 import React from "react";
-import { Drawer, Menu } from "antd";
+import { Drawer, Menu } from "../../components";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import {

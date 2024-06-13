@@ -1,8 +1,7 @@
 import React from "react";
 import { CmstsFamilyForm } from "./CmstsFamilyForm";
 import { CmstsForm } from "./CmstsForm";
-import { Acl, Card, Col, Row, Title } from "../../../../../components";
-import styled from "styled-components";
+import { Acl, Card, Col, Row } from "../../../../../components";
 
 export const CmstsIntegration = () => {
   return (
@@ -12,14 +11,14 @@ export const CmstsIntegration = () => {
       name="/inscriptions/cmsts"
       redirect
     >
-      <Container>
+      <div>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Card
               title={
-                <Title level={4} style={{ marginBottom: 0 }}>
+                <span style={{ fontSize: "1.5em" }}>
                   Circulo Militar de Superiores tecnicos y sub oficiales
-                </Title>
+                </span>
               }
               bordered={false}
               type="inner"
@@ -30,9 +29,7 @@ export const CmstsIntegration = () => {
           <Col span={24}>
             <Card
               title={
-                <Title level={4} style={{ marginBottom: 0 }}>
-                  Composición Familiar
-                </Title>
+                <span style={{ fontSize: "1.5em" }}>Composición Familiar</span>
               }
               bordered={false}
               type="inner"
@@ -41,19 +38,7 @@ export const CmstsIntegration = () => {
             </Card>
           </Col>
         </Row>
-      </Container>
+      </div>
     </Acl>
   );
 };
-
-const Container = styled.div`
-  .ant-card-head {
-    background: #03a9f32d;
-
-    //.ant-card-head-title {
-    //  h4 {
-    //    color: #fff;
-    //  }
-    //}
-  }
-`;

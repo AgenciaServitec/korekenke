@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "antd";
 import { Icon } from "./Icon";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "./index";
 
 export const AddButton = ({ title, margin, onClick }) => {
   return (

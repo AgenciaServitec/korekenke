@@ -119,7 +119,11 @@ export const ClinicHistoryIntegration = () => {
           />
         </Col>
         <Col span={24}>
-          <Card>
+          <Card
+            title={<span style={{ fontSize: "1.5em" }}>Datos del Equino</span>}
+            bordered={false}
+            type="inner"
+          >
             <LivestockAndEquineInformation
               livestockAndEquine={livestockAndEquine}
             />

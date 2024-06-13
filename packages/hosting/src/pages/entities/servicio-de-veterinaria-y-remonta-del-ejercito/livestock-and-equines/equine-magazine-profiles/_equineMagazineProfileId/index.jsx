@@ -9,7 +9,6 @@ import {
   notification,
   Row,
   TextArea,
-  Title,
 } from "../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -140,11 +139,7 @@ export const EquineMagazineProfileIntegration = () => {
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Card
-          title={
-            <Title level={4} style={{ marginBottom: 0 }}>
-              Datos del Equino
-            </Title>
-          }
+          title={<span style={{ fontSize: "1.5em" }}>Datos del Equino</span>}
           bordered={false}
           type="inner"
         >
@@ -267,9 +262,7 @@ const EquineMagazineProfile = ({
             <div className="wrapper-grid">
               <Card
                 title={
-                  <Title level={4} style={{ marginBottom: 0 }}>
-                    Condición Corporal
-                  </Title>
+                  <span style={{ fontSize: "1.5em" }}>Condición Corporal</span>
                 }
                 bordered={false}
                 type="inner"
@@ -313,11 +306,7 @@ const EquineMagazineProfile = ({
                 </div>
               </Card>
               <Card
-                title={
-                  <Title level={4} style={{ marginBottom: 0 }}>
-                    Toillete
-                  </Title>
-                }
+                title={<span style={{ fontSize: "1.5em" }}>Toillete</span>}
                 bordered={false}
                 type="inner"
               >
@@ -339,11 +328,7 @@ const EquineMagazineProfile = ({
                 </div>
               </Card>
               <Card
-                title={
-                  <Title level={4} style={{ marginBottom: 0 }}>
-                    Herrado
-                  </Title>
-                }
+                title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
                 bordered={false}
                 type="inner"
               >
@@ -370,9 +355,9 @@ const EquineMagazineProfile = ({
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Card
                 title={
-                  <Title level={4} style={{ marginBottom: 0 }}>
+                  <span style={{ fontSize: "1.5em" }}>
                     Estimación del peso corporal
-                  </Title>
+                  </span>
                 }
                 bordered={false}
                 type="inner"
