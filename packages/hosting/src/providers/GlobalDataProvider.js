@@ -6,6 +6,14 @@ import { notification, Spinner } from "../components";
 import { orderBy } from "lodash";
 import { usersByRoleCode } from "../utils";
 import { InitialEntities } from "../data-list";
+import {
+  correspondencesRef,
+  departmentsRef,
+  entitiesRef,
+  livestockAndEquinesRef,
+  sectionsRef,
+  usersRef,
+} from "../firebase/collections";
 
 const GlobalDataContext = createContext({
   commands: [],
@@ -35,27 +43,31 @@ export const GlobalDataProvider = ({ children }) => {
 
   const [users = [], usersLoading, usersError] = useCollectionData(
     authUser
-      ? firestore.collection("users").where("isDeleted", "==", false)
+      ? usersRef
+          .where("isDeleted", "==", false)
+          .where(
+            "commandsIds",
+            "array-contains-any",
+            authUser?.commandsIds || []
+          )
       : null
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
     authUser
-      ? firestore.collection("entities").where("isDeleted", "==", false)
+      ? entitiesRef
+          .where("isDeleted", "==", false)
+          .where("commandId", "in", authUser?.commandsIds || [])
       : null
   );
 
   const [departments = [], departmentsLoading, departmentsError] =
     useCollectionData(
-      authUser
-        ? firestore.collection("departments").where("isDeleted", "==", false)
-        : null
+      authUser ? departmentsRef.where("isDeleted", "==", false) : null
     );
 
   const [sections = [], sectionsLoading, sectionsError] = useCollectionData(
-    authUser
-      ? firestore.collection("sections").where("isDeleted", "==", false)
-      : null
+    authUser ? sectionsRef.where("isDeleted", "==", false) : null
   );
 
   const [offices = [], officesLoading, officesError] = useCollectionData(
@@ -69,15 +81,12 @@ export const GlobalDataProvider = ({ children }) => {
     livestockAndEquinesLoading,
     livestockAndEquinesError,
   ] = useCollectionData(
-    firestore
-      .collection("livestock-and-equines")
-      .where("isDeleted", "==", false) || null
+    livestockAndEquinesRef.where("isDeleted", "==", false) || null
   );
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
-      firestore.collection("correspondences").where("isDeleted", "==", false) ||
-        null
+      correspondencesRef.where("isDeleted", "==", false) || null
     );
 
   const error =
