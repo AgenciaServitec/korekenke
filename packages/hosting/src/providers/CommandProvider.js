@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isString } from "lodash";
@@ -29,6 +29,10 @@ export const CommandProvider = ({ children }) => {
   const currentCommandId = isCommandId(commandId, commands)
     ? commandId
     : "copere";
+
+  useEffect(() => {
+    authUser?.initialCommand && onChangeCommand(authUser.initialCommand.id);
+  }, [authUser?.initialCommand.id]);
 
   const onChangeCommand = (commandId) => {
     const command = commands.find((command) => command.id === commandId);
