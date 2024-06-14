@@ -13,6 +13,7 @@
             "id": "copere",
             "code": "copere",
             "name": "Comando De Personal Del Ejército",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/copere.webp",
             "entities": [
               {
                 "id": "jefatura_de_administracion_de_personal_civil_del_ejercito",
@@ -32,6 +33,7 @@
             "id": "coede",
             "code": "coede",
             "name": "Comando De Educación y Doctrina Del Ejército",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/coede.webp",
             "entities": [
               {
                 "id": "jefatura_de_educacion_del_ejercito",
@@ -47,6 +49,7 @@
             "id": "cologe",
             "code": "cologe",
             "name": "Comando Logístico Del Ejército",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cologe.webp",
             "entities": [
               {
                 "id": "servicio_de_comunicaciones_del_ejercito",
@@ -82,6 +85,7 @@
             "id": "cogae",
             "code": "cogae",
             "name": "Comando General De Apoyo Del Ejército",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/command-default.webp",
             "entities": [
               {
                 "id": "comando_de_operaciones_terrestres_del_ejercito",
