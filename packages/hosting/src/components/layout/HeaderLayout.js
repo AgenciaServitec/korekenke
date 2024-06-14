@@ -7,7 +7,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { ImgNoFound, LogoPrimary, PhotoNoFound } from "../../images";
+import { LogoPrimary, PhotoNoFound } from "../../images";
 import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
