@@ -85,7 +85,7 @@
             "id": "cogae",
             "code": "cogae",
             "name": "Comando General De Apoyo Del Ejército",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cologe.webp",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/command-default.webp",
             "entities": [
               {
                 "id": "comando_de_operaciones_terrestres_del_ejercito",

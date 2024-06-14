@@ -119,7 +119,12 @@ export const HeaderLayout = ({
                               alt="Comando seleccionado"
                             />
                             <div className="text-command">
-                              <strong>{currentCommand?.name}</strong>
+                              <span>
+                                <strong>{currentCommand?.name}</strong>
+                              </span>
+                              <span>
+                                <strong>{currentCommand?.code}</strong>
+                              </span>
                             </div>
                           </div>
                           <div className="last-command item-command">
@@ -135,12 +140,17 @@ export const HeaderLayout = ({
                                 className="icon-rotate"
                               />
                               <img
-                                src={ImgNoFound}
+                                src={lastCommand.logoImgUrl}
                                 alt="Commando seleccionado"
                               />
                             </div>
                             <div className="text-command">
-                              <strong>{lastCommand.name}</strong>
+                              <span>
+                                <strong>{lastCommand.name}</strong>
+                              </span>
+                              <span>
+                                <strong>{lastCommand.code}</strong>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -221,10 +231,10 @@ export const HeaderLayout = ({
 };
 
 const ItemDefaultCommand = styled.div`
+  width: 23.8em;
   display: grid;
   gap: 1em;
   padding: 1em;
-  width: 100%;
 
   @keyframes spin {
     100% {
@@ -236,36 +246,48 @@ const ItemDefaultCommand = styled.div`
     width: 100%;
     border-radius: 1em;
     background: aliceblue;
-    padding: 0.5em 0.1em;
+    padding: 0.5em;
     display: flex;
     justify-content: space-between;
     gap: 1em;
 
     .item-command {
-      width: 4em;
+      width: 5em;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 0.5em;
       cursor: pointer;
     }
 
     .selected-command {
       display: grid;
-      place-items: center;
+      grid-template-rows: 1fr 1fr;
+      gap: 0.5em;
 
       img {
+        place-self: center;
         width: 2.2em;
         height: 2.2em;
         border-radius: 50%;
       }
 
       .text-command {
+        display: grid;
+        grid-template-rows: 1fr 1em;
+        gap: 0.5em;
         line-height: 1;
         text-align: center;
-        font-size: 0.6em;
+        font-size: 0.45em;
+        span:last-child {
+          font-size: 1.2em;
+          text-transform: uppercase;
+        }
       }
     }
 
     .last-command {
       display: grid;
-      place-items: center;
+      grid-template-rows: 1fr 1fr;
 
       .item-img {
         position: relative;
@@ -289,9 +311,15 @@ const ItemDefaultCommand = styled.div`
       }
 
       .text-command {
+        display: grid;
+        grid-template-rows: 1fr 1em;
         line-height: 1;
         text-align: center;
-        font-size: 0.6em;
+        font-size: 0.45em;
+        span:last-child {
+          font-size: 1.2em;
+          text-transform: uppercase;
+        }
       }
     }
   }
@@ -319,32 +347,33 @@ const ItemDefaultCommand = styled.div`
 
       .item-command {
         display: grid;
-        place-items: center;
+        grid-template-rows: 1fr 1fr;
         gap: 0.5em;
         cursor: pointer;
-        padding: 0.3em;
+        padding: 0.2em;
         border-radius: 0.4em;
         width: 5em;
-        background-color: red;
 
         &:hover {
           background: #c3ddf6;
         }
 
         img {
-          width: 2em;
-          height: 2em;
+          width: 2.2em;
+          height: 2.2em;
           border-radius: 50%;
+          place-self: center;
         }
 
         .text-command {
+          display: grid;
+          grid-template-rows: 1fr 1em;
           line-height: 1;
           text-align: center;
-          font-size: 0.6em;
-          display: flex;
-          flex-direction: column;
+          font-size: 0.45em;
           gap: 0.5em;
           span:last-child {
+            font-size: 1.2em;
             text-transform: uppercase;
           }
         }
