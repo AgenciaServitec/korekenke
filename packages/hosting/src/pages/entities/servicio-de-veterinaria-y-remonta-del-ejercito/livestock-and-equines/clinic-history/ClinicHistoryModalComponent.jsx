@@ -20,6 +20,7 @@ import {
 } from "../../../../../firebase/collections";
 
 export const ClinicHistoryModalComponent = ({
+  authUser,
   currentHistoryClinic,
   livestockAndEquineId,
   clinicHistoryId,
@@ -34,6 +35,12 @@ export const ClinicHistoryModalComponent = ({
 
   const mapForm = (formData) => ({
     id: isNew ? getClinicHistoryId() : currentHistoryClinic.id,
+    checkedBy: {
+      fullName: `${authUser?.paternalSurname} ${authUser?.maternalSurname} ${authUser?.firstName}`,
+      id: authUser?.id,
+      cip: authUser?.cip,
+    },
+    status: "pending",
     symptomatology: formData.symptomatology,
     diagnosis: formData.diagnosis,
     treatment: formData.treatment,

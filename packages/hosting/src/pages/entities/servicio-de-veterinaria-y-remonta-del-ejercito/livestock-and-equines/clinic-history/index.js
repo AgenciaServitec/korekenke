@@ -17,13 +17,15 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import { updateClinicHistory } from "../../../../../firebase/collections";
-import { useGlobalData } from "../../../../../providers";
+import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { LivestockAndEquineInformation } from "../../../../../components/ui/entities";
 import { pathnameWithCommand } from "../../../../../utils";
+import { ClinicHistoryModalChecked } from "./ClinicHistoryModalChecked";
 
 export const ClinicHistoryIntegration = () => {
+  const { authUser } = useAuthentication();
   const { commandId, livestockAndEquineId } = useParams();
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
@@ -36,6 +38,7 @@ export const ClinicHistoryIntegration = () => {
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
   });
+
   const [livestockAndEquine, setLivestockAndEquine] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
 
@@ -179,6 +182,7 @@ export const ClinicHistoryIntegration = () => {
         </Col>
         <ClinicHistoryModalComponent
           key={isVisibleModal.historyClinicModal}
+          authUser={authUser}
           livestockAndEquineId={livestockAndEquineId}
           currentHistoryClinic={currentHistoryClinic}
           isVisibleModal={isVisibleModal}
@@ -186,6 +190,12 @@ export const ClinicHistoryIntegration = () => {
           clinicHistoryId={clinicHistoryId}
           onSetClinicHistoryId={setClinicHistoryId}
           onNavigateGoTo={onNavigateGoTo}
+        />
+        <ClinicHistoryModalChecked
+          key={isVisibleModal.historyClinicModal}
+          isVisibleModal={isVisibleModal}
+          livestockAndEquineId={livestockAndEquineId}
+          currentHistoryClinic={currentHistoryClinic}
         />
       </Container>
     </Acl>

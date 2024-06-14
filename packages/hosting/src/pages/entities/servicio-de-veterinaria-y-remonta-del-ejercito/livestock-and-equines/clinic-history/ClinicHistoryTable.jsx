@@ -1,5 +1,5 @@
 import React from "react";
-import { Acl, IconAction, Space, Table } from "../../../../../components";
+import { Acl, IconAction, Space, Table, Tag } from "../../../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import dayjs from "dayjs";
@@ -36,6 +36,25 @@ export const ClinicHistoryTable = ({
       key: "treatment",
       width: 300,
       dataIndex: "treatment",
+    },
+    {
+      title: "Estado",
+      key: "status",
+      dataIndex: "status",
+      render: (_, clinicHistory) =>
+        clinicHistory?.status && (
+          <Space>
+            <span>
+              <Tag
+                color={
+                  clinicHistory?.status === "pending" ? "warning" : "success"
+                }
+              >
+                {clinicHistory?.status}
+              </Tag>
+            </span>
+          </Space>
+        ),
     },
     {
       title: "Acciones",
