@@ -2,9 +2,9 @@ import React, { cloneElement, useState } from "react";
 import { Layout, Space, theme } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowLeft,
-  faArrowsRotate,
-  faBars,
+    faArrowLeft,
+    faArrowsRotate,
+    faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { LogoPrimary, PhotoNoFound } from "../../images";
@@ -18,216 +18,216 @@ const { Header } = Layout;
 const { useToken } = theme;
 
 export const HeaderLayout = ({
-  user,
-  isVisibleDrawer,
-  setIsVisibleDrawer,
-  openDropdown,
-  onOpenDropdown,
-  onNavigateTo,
-  onChangeDefaultCommand,
-  currentCommand,
-  onLogout,
-}) => {
-  const { token } = useToken();
-  const [isVisibleMoreCommands, setIsVisibleMoreCommands] = useState(false);
+                                 user,
+                                 isVisibleDrawer,
+                                 setIsVisibleDrawer,
+                                 openDropdown,
+                                 onOpenDropdown,
+                                 onNavigateTo,
+                                 onChangeDefaultCommand,
+                                 currentCommand,
+                                 onLogout,
+                             }) => {
+    const { token } = useToken();
+    const [isVisibleMoreCommands, setIsVisibleMoreCommands] = useState(false);
 
-  const onSetIsVisibleMoreCommands = () =>
-    setIsVisibleMoreCommands(!isVisibleMoreCommands);
+    const onSetIsVisibleMoreCommands = () =>
+        setIsVisibleMoreCommands(!isVisibleMoreCommands);
 
-  const lastCommand = orderBy(
-    (user?.commands || []).filter(
-      (command) => command.id !== user.initialCommand.id
-    ),
-    "name",
-    "asc"
-  )?.[0];
+    const lastCommand = orderBy(
+        (user?.commands || []).filter(
+            (command) => command.id !== user.initialCommand.id
+        ),
+        "name",
+        "asc"
+    )?.[0];
 
-  const items = [
-    {
-      label: (
-        <Link
-          to={pathnameWithCommand(currentCommand.id, "/profile")}
-          style={{ color: "#000" }}
-        >
-          <div style={{ padding: ".4em 0" }}>Perfil</div>
-        </Link>
-      ),
-      key: "1",
-    },
-    {
-      label: (
-        <div
-          onClick={() => onLogout()}
-          style={{ padding: ".4em 0", color: "red" }}
-        >
-          Cerrar sesion
-        </div>
-      ),
-      key: "3",
-    },
-  ];
+    const items = [
+        {
+            label: (
+                <Link
+                    to={pathnameWithCommand(currentCommand.id, "/profile")}
+                    style={{ color: "#000" }}
+                >
+                    <div style={{ padding: ".4em 0" }}>Perfil</div>
+                </Link>
+            ),
+            key: "1",
+        },
+        {
+            label: (
+                <div
+                    onClick={() => onLogout()}
+                    style={{ padding: ".4em 0", color: "red" }}
+                >
+                    Cerrar sesion
+                </div>
+            ),
+            key: "3",
+        },
+    ];
 
-  const contentStyle = {
-    backgroundColor: token.colorBgElevated,
-    borderRadius: token.borderRadiusLG,
-    boxShadow: token.boxShadowSecondary,
-  };
+    const contentStyle = {
+        backgroundColor: token.colorBgElevated,
+        borderRadius: token.borderRadiusLG,
+        boxShadow: token.boxShadowSecondary,
+    };
 
-  return (
-    <HeaderContainer>
-      <div className="right-item">
-        <Space align="center" size="large">
-          <div>
-            <img
-              src={LogoPrimary}
-              width={40}
-              alt="Korekenke"
-              onClick={() =>
-                onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
-              }
-              className="logo-img"
-            />
-          </div>
-          <div
-            style={{ fontSize: "1.7em", display: "flex", alignItems: "center" }}
-          >
-            <FontAwesomeIcon
-              icon={faBars}
-              onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
-              className="icon-item"
-            />
-          </div>
-        </Space>
-      </div>
-      <div className="user-items">
-        <Dropdown
-          trigger={["click"]}
-          menu={{ items }}
-          open={openDropdown}
-          onOpenChange={onOpenDropdown}
-          dropdownRender={(menu) => (
-            <div style={contentStyle}>
-              {lastCommand && (
-                <>
-                  <ItemDefaultCommand>
-                    {!isVisibleMoreCommands ? (
-                      <>
-                        <div className="wrapper-default-commands">
-                          <div className="selected-command item-command">
-                            <img
-                              src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
-                              alt="Comando seleccionado"
-                            />
-                            <div className="text-command">
+    return (
+        <HeaderContainer>
+            <div className="right-item">
+                <Space align="center" size="large">
+                    <div>
+                        <img
+                            src={LogoPrimary}
+                            width={40}
+                            alt="Korekenke"
+                            onClick={() =>
+                                onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
+                            }
+                            className="logo-img"
+                        />
+                    </div>
+                    <div
+                        style={{ fontSize: "1.7em", display: "flex", alignItems: "center" }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faBars}
+                            onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
+                            className="icon-item"
+                        />
+                    </div>
+                </Space>
+            </div>
+            <div className="user-items">
+                <Dropdown
+                    trigger={["click"]}
+                    menu={{ items }}
+                    open={openDropdown}
+                    onOpenChange={onOpenDropdown}
+                    dropdownRender={(menu) => (
+                        <div style={contentStyle}>
+                            {lastCommand && (
+                                <>
+                                    <ItemDefaultCommand>
+                                        {!isVisibleMoreCommands ? (
+                                            <>
+                                                <div className="wrapper-default-commands">
+                                                    <div className="selected-command item-command">
+                                                        <img
+                                                            src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
+                                                            alt="Comando seleccionado"
+                                                        />
+                                                        <div className="text-command">
                               <span>
                                 <strong>{currentCommand?.name}</strong>
                               </span>
-                              <span>
+                                                            <span>
                                 <strong>{currentCommand?.code}</strong>
                               </span>
-                            </div>
-                          </div>
-                          <div className="last-command item-command">
-                            <div
-                              className="item-img"
-                              onClick={() =>
-                                onChangeDefaultCommand(lastCommand)
-                              }
-                            >
-                              <FontAwesomeIcon
-                                icon={faArrowsRotate}
-                                type="light"
-                                className="icon-rotate"
-                              />
-                              <img
-                                src={lastCommand.logoImgUrl}
-                                alt="Commando seleccionado"
-                              />
-                            </div>
-                            <div className="text-command">
+                                                        </div>
+                                                    </div>
+                                                    <div className="last-command item-command">
+                                                        <div
+                                                            className="item-img"
+                                                            onClick={() =>
+                                                                onChangeDefaultCommand(lastCommand)
+                                                            }
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faArrowsRotate}
+                                                                type="light"
+                                                                className="icon-rotate"
+                                                            />
+                                                            <img
+                                                                src={lastCommand.logoImgUrl}
+                                                                alt="Commando seleccionado"
+                                                            />
+                                                        </div>
+                                                        <div className="text-command">
                               <span>
                                 <strong>{lastCommand.name}</strong>
                               </span>
-                              <span>
+                                                            <span>
                                 <strong>{lastCommand.code}</strong>
                               </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item-show-more-commands">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="item-show-more-commands">
                           <span
-                            onClick={() => onSetIsVisibleMoreCommands(false)}
+                              onClick={() => onSetIsVisibleMoreCommands(false)}
                           >
                             Ver todos los commandos
                           </span>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="wrapper-go-back">
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="wrapper-go-back">
                           <span onClick={() => onSetIsVisibleMoreCommands()}>
                             <FontAwesomeIcon icon={faArrowLeft} /> Regresar
                           </span>
-                        </div>
-                        <div className="wrapper-more-commands">
-                          <ul>
-                            {user.commands.map((command, index) => (
-                              <li
-                                key={index}
-                                className="item-command"
-                                onClick={() => {
-                                  onChangeDefaultCommand(command);
-                                  onSetIsVisibleMoreCommands();
-                                }}
-                              >
-                                <img
-                                  src={command.logoImgUrl}
-                                  alt="Comando seleccionado"
-                                />
-                                <div className="text-command">
+                                                </div>
+                                                <div className="wrapper-more-commands">
+                                                    <ul>
+                                                        {user.commands.map((command, index) => (
+                                                            <li
+                                                                key={index}
+                                                                className="item-command"
+                                                                onClick={() => {
+                                                                    onChangeDefaultCommand(command);
+                                                                    onSetIsVisibleMoreCommands();
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src={command.logoImgUrl}
+                                                                    alt="Comando seleccionado"
+                                                                />
+                                                                <div className="text-command">
                                   <span>
                                     <strong>{command.name}</strong>
                                   </span>
-                                  <span>
+                                                                    <span>
                                     <strong>{command.code}</strong>
                                   </span>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
+                                                                </div>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </>
+                                        )}
+                                    </ItemDefaultCommand>
+                                    <Divider
+                                        style={{
+                                            margin: 0,
+                                        }}
+                                    />
+                                </>
+                            )}
+                            {cloneElement(menu, {
+                                style: {
+                                    boxShadow: "none",
+                                },
+                            })}
                         </div>
-                      </>
                     )}
-                  </ItemDefaultCommand>
-                  <Divider
-                    style={{
-                      margin: 0,
-                    }}
-                  />
-                </>
-              )}
-              {cloneElement(menu, {
-                style: {
-                  boxShadow: "none",
-                },
-              })}
-            </div>
-          )}
-        >
-          <Space key="user-avatar" align="center">
-            <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
-            <span style={{ textTransform: "uppercase", fontWeight: "bold" }}>
+                >
+                    <Space key="user-avatar" align="center">
+                        <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
+                        <span style={{ textTransform: "uppercase", fontWeight: "bold" }}>
               ({currentCommand?.code})
             </span>
-            <img
-              src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
-              alt="user"
-            />
-          </Space>
-        </Dropdown>
-      </div>
-    </HeaderContainer>
-  );
+                        <img
+                            src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
+                            alt="user"
+                        />
+                    </Space>
+                </Dropdown>
+            </div>
+        </HeaderContainer>
+    );
 };
 
 const ItemDefaultCommand = styled.div`
