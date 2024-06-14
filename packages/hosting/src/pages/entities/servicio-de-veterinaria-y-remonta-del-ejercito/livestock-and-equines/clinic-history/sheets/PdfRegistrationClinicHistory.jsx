@@ -184,6 +184,25 @@ const Container = styled.div`
       &__table {
         table {
           width: 100%;
+          tr {
+            width: 100%;
+            td:first-child {
+              width: 87px;
+            }
+            td:nth-child(2),
+            td:nth-child(3),
+            td:nth-child(4) {
+              width: 120px;
+            }
+
+            td:nth-child(5) {
+              width: 160px;
+            }
+
+            td:nth-child(6) {
+              width: auto;
+            }
+          }
         }
         th,
         td {
