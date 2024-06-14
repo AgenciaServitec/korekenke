@@ -14,24 +14,27 @@ export const ClinicHistoryTable = ({
   const columns = [
     {
       title: "Fecha creación",
-      dataIndex: "createAt",
       key: "createAt",
+      dataIndex: "createAt",
       render: (_, clinicHistory) =>
         dayjs(clinicHistory.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Sintomatología",
       key: "symptomatology",
+      width: 300,
       dataIndex: "symptomatology",
     },
     {
       title: "Diagnóstico",
-      dataIndex: "diagnosis",
       key: "diagnosis",
+      width: 300,
+      dataIndex: "diagnosis",
     },
     {
       title: "Tratamiento",
       key: "treatment",
+      width: 300,
       dataIndex: "treatment",
     },
     {
