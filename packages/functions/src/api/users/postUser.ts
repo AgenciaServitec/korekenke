@@ -5,6 +5,7 @@ import {
 } from "../../utils";
 import { NextFunction, Request, Response } from "express";
 import { isEmpty, orderBy } from "lodash";
+import { Timestamp } from "@google-cloud/firestore";
 
 export const postUser = async (
   req: Request<unknown, unknown, User, unknown>,
@@ -83,6 +84,10 @@ const addUser = async (user: User): Promise<void> => {
               id: null,
             }
           : null,
+        commands: user.commands.map((command) => ({
+          ...command,
+          updateAt: Timestamp.now(),
+        })),
         initialCommand: initialCommand,
         iAcceptPrivacyPolicies: true,
       })

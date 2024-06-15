@@ -12,6 +12,7 @@ interface Command {
   code: string;
   name: string;
   logoImgUrl: string;
+  updateAt: FirebaseFirestore.Timestamp;
 }
 
 interface User extends DefaultFirestoreProps {
