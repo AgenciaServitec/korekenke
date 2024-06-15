@@ -45,19 +45,15 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? usersRef
           .where("isDeleted", "==", false)
-          .where(
-            "commandsIds",
-            "array-contains-any",
-            authUser?.commandsIds || []
-          )
+          .where("commands", "array-contains-any", authUser?.commands || [])
       : null
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
-    authUser
+    authUser || authUser?.initialCommand
       ? entitiesRef
           .where("isDeleted", "==", false)
-          .where("commandId", "in", authUser?.commandsIds || [])
+          .where("commandId", "==", authUser.initialCommand.id)
       : null
   );
 
