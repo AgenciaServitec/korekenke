@@ -31,6 +31,7 @@ export const HeaderLayout = ({
 }) => {
   const { token } = useToken();
   const { rolesAcls } = useGlobalData();
+
   const [isVisibleMoreCommands, setIsVisibleMoreCommands] = useState(false);
 
   const onSetIsVisibleMoreCommands = () =>
@@ -78,18 +79,7 @@ export const HeaderLayout = ({
   return (
     <HeaderContainer>
       <div className="right-item">
-        <Space align="center" size="large">
-          <div>
-            <img
-              src={LogoPrimary}
-              width={40}
-              alt="Korekenke"
-              onClick={() =>
-                onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
-              }
-              className="logo-img"
-            />
-          </div>
+        <Space align="center" className="items-wrapper">
           <div
             style={{ fontSize: "1.7em", display: "flex", alignItems: "center" }}
           >
@@ -98,6 +88,28 @@ export const HeaderLayout = ({
               onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
               className="icon-item"
             />
+          </div>
+          <div>
+            <img
+              src={currentCommand?.logoImgUrl || LogoPrimary}
+              width={40}
+              alt="Korekenke"
+              onClick={() =>
+                onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
+              }
+              className="logo-img"
+            />
+          </div>
+          <div>
+            <h3
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                margin: "0",
+              }}
+            >
+              {currentCommand?.code}
+            </h3>
           </div>
         </Space>
       </div>
@@ -217,7 +229,7 @@ export const HeaderLayout = ({
           )}
         >
           <Space key="user-avatar" align="center" style={{ lineHeight: "1em" }}>
-            <p>
+            <span>
               <h4 className="capitalize">{capitalize(userFullName(user))}</h4>
               <span className="capitalize">
                 (
@@ -225,9 +237,6 @@ export const HeaderLayout = ({
                   ?.name || ""}
                 )
               </span>
-            </p>
-            <span style={{ textTransform: "uppercase", fontWeight: "bold" }}>
-              ({currentCommand?.code})
             </span>
             <img
               src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
@@ -406,9 +415,15 @@ const HeaderContainer = styled(Header)`
   .right-item {
     display: flex;
     align-items: center;
-    .logo-img,
-    .icon-item {
-      cursor: pointer;
+
+    .items-wrapper {
+      .logo-img,
+      .icon-item {
+        cursor: pointer;
+      }
+      .icon-item {
+        margin-right: 1em;
+      }
     }
   }
 
