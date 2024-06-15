@@ -33,7 +33,7 @@ export const UserIntegration = () => {
   const { userId } = useParams();
   const { postUser, postUserResponse, postUserLoading } = useApiUserPost();
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
-  const { rolesAcls, users } = useGlobalData();
+  const { rolesAcls, users, commands } = useGlobalData();
 
   const [user, setUser] = useState({});
 
@@ -111,7 +111,9 @@ export const UserIntegration = () => {
               }
             : user.assignedTo,
         degree: formData.degree,
-        commandsIds: formData.commandsIds,
+        commands: commands.filter((command) =>
+          formData.commandsIds.includes(command.id)
+        ),
         cgi: formData.cgi,
       }
     );
@@ -189,7 +191,9 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
       dni: user?.dni || "",
       phoneNumber: user?.phone?.number || "",
       degree: user?.degree || "",
-      commandsIds: !isEmpty(user?.commandsIds) ? user.commandsIds : null,
+      commandsIds: !isEmpty(user?.commands)
+        ? user?.commands.map((command) => command.id)
+        : null,
       cgi: user?.cgi || false,
     });
   };
