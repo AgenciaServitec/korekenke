@@ -12,7 +12,8 @@ import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
-import { pathnameWithCommand } from "../../utils";
+import { pathnameWithCommand, userFullName } from "../../utils";
+import { useGlobalData } from "../../providers";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -29,6 +30,7 @@ export const HeaderLayout = ({
   onLogout,
 }) => {
   const { token } = useToken();
+  const { rolesAcls } = useGlobalData();
   const [isVisibleMoreCommands, setIsVisibleMoreCommands] = useState(false);
 
   const onSetIsVisibleMoreCommands = () =>
@@ -38,8 +40,8 @@ export const HeaderLayout = ({
     (user?.commands || []).filter(
       (command) => command.id !== user.initialCommand.id
     ),
-    "name",
-    "asc"
+    "updateAt",
+    "desc"
   )?.[0];
 
   const items = [
@@ -171,7 +173,7 @@ export const HeaderLayout = ({
                         </div>
                         <div className="wrapper-more-commands">
                           <ul>
-                            {user.commands.map((command, index) => (
+                            {(user?.commands || []).map((command, index) => (
                               <li
                                 key={index}
                                 className="item-command"
@@ -214,8 +216,16 @@ export const HeaderLayout = ({
             </div>
           )}
         >
-          <Space key="user-avatar" align="center">
-            <h4>{capitalize((user?.firstName || "").split(" ")[0] || "")}</h4>
+          <Space key="user-avatar" align="center" style={{ lineHeight: "1em" }}>
+            <p>
+              <h4 className="capitalize">{capitalize(userFullName(user))}</h4>
+              <span className="capitalize">
+                (
+                {rolesAcls.find((roleAcl) => roleAcl.id === user.roleCode)
+                  ?.name || ""}
+                )
+              </span>
+            </p>
             <span style={{ textTransform: "uppercase", fontWeight: "bold" }}>
               ({currentCommand?.code})
             </span>
