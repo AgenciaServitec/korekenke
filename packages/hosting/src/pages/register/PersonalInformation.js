@@ -23,6 +23,7 @@ import { isEmpty } from "lodash";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
+  const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
   const schema = yup.object({
     firstName: yup.string().required(),
@@ -84,7 +85,9 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       number: formData.phoneNumber,
     },
     degree: formData.degree,
-    commandsIds: formData.commandsIds,
+    commands: commands.filter((command) =>
+      formData.commandsIds.includes(command.id)
+    ),
     cgi: formData.cgi,
   });
 

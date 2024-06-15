@@ -4,7 +4,7 @@ import {
   getTypeForAssignedToByRoleCode,
 } from "../../utils";
 import { NextFunction, Request, Response } from "express";
-import { isEmpty } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 
 export const postUser = async (
   req: Request<unknown, unknown, User, unknown>,
@@ -58,6 +58,12 @@ export const postUser = async (
 const addUser = async (user: User): Promise<void> => {
   const { assignCreateProps } = defaultFirestoreProps();
 
+  const [initialCommand] = orderBy(
+    user.commands,
+    [(command) => command.name],
+    ["asc"]
+  );
+
   await firestore
     .collection("users")
     .doc(user.id)
@@ -77,6 +83,7 @@ const addUser = async (user: User): Promise<void> => {
               id: null,
             }
           : null,
+        initialCommand: initialCommand,
         iAcceptPrivacyPolicies: true,
       })
     );

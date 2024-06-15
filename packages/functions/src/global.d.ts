@@ -7,11 +7,20 @@ interface Role {
   updateAt: string;
 }
 
+interface Command {
+  id: string;
+  code: string;
+  name: string;
+  logoImgUrl: string;
+}
+
 interface User extends DefaultFirestoreProps {
   id: string;
   acls: string[];
   roleCode: string;
   otherRoles?: Role[];
+  commands: Command[];
+  initialCommand: Command;
   firstName: string;
   paternalSurname: string;
   maternalSurname: string;
