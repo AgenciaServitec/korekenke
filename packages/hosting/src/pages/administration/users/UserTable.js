@@ -1,7 +1,7 @@
 import React from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { capitalize } from "lodash";
+import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { findDegree, findRole } from "../../../utils";
 
@@ -97,7 +97,7 @@ export const UsersTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={users}
+      dataSource={orderBy(users, ["createAt"], ["desc"])}
       pagination={false}
       scroll={{ x: "max-content" }}
     />

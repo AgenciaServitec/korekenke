@@ -14,6 +14,7 @@ import {
   sectionsRef,
   usersRef,
 } from "../firebase/collections";
+import { useCommand } from "./CommandProvider";
 
 const GlobalDataContext = createContext({
   commands: [],
@@ -32,6 +33,7 @@ const GlobalDataContext = createContext({
 
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
+  const { currentCommand } = useCommand();
 
   const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
@@ -45,15 +47,15 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? usersRef
           .where("isDeleted", "==", false)
-          .where("commands", "array-contains-any", authUser?.commands || [])
+          .where("initialCommand.id", "==", currentCommand.id)
       : null
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
-    authUser || authUser?.initialCommand
+    authUser
       ? entitiesRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", authUser.initialCommand.id)
+          .where("commandId", "==", currentCommand.id)
       : null
   );
 
