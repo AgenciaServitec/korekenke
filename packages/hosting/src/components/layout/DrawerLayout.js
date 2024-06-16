@@ -163,11 +163,12 @@ export const DrawerLayout = ({
       label: "Jefatura de bienestar del ejército (COBIENE)",
       key: "jefatura-de-bienestar-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: existsAclsInAclsOfUser(
-        "jefatura-de-bienestar-del-ejercito",
-        ["correspondences", "inscriptions"],
-        ["/correspondences", "/inscriptions"]
-      ),
+      isVisible:
+        existsAclsInAclsOfUser(
+          "jefatura-de-bienestar-del-ejercito",
+          ["correspondences", "inscriptions"],
+          ["/correspondences", "/inscriptions"]
+        ) && currentCommand.id === "copere",
       children: [
         {
           label: "Correspondencias",
@@ -208,11 +209,12 @@ export const DrawerLayout = ({
       label: "Servicio de veterinaria y remonta del ejército",
       key: "servicio-de-veterinaria-y-remonta-del-ejercito",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: existsAclsInAclsOfUser(
-        "servicio-de-veterinaria-y-remonta-del-ejercito",
-        ["livestockAndEquines"],
-        ["/livestock-and-equines"]
-      ),
+      isVisible:
+        existsAclsInAclsOfUser(
+          "servicio-de-veterinaria-y-remonta-del-ejercito",
+          ["livestockAndEquines"],
+          ["/livestock-and-equines"]
+        ) && currentCommand.id === "coede",
       children: [
         {
           key: "livestock-and-equines",

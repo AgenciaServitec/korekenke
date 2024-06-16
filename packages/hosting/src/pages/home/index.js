@@ -4,7 +4,7 @@ import { faLock, faShield, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { mediaQuery } from "../../styles";
-import { useAuthentication } from "../../providers";
+import { useAuthentication, useCommand } from "../../providers";
 import { userFullName } from "../../utils/users/userFullName2";
 import { pathnameWithCommand } from "../../utils";
 import { useParams } from "react-router";
@@ -12,6 +12,9 @@ import { useParams } from "react-router";
 export const HomeIntegration = () => {
   const { authUser } = useAuthentication();
   const { commandId } = useParams();
+  const { currentCommand } = useCommand();
+
+  // console.log({ ...currentCommand });
 
   const onNavigateGoTo = (pathname) => pathnameWithCommand(commandId, pathname);
 
@@ -43,45 +46,49 @@ export const HomeIntegration = () => {
             </ul>
           </div>
         </div>
-        <div>
-          <div className="items-icon">
-            <FontAwesomeIcon icon={faShield} size="5x" />
-          </div>
+        {currentCommand.id === "copere" && (
           <div>
-            <h2>JEFATURA DE BIENESTAR DEL EJÉRCITO (COBIENE)</h2>
-            <ul>
-              <li>
-                <Link to={onNavigateGoTo("/correspondences")}>
-                  1. Correspondencias
-                </Link>
-              </li>
-              <li>
-                <Link to={onNavigateGoTo("/inscriptions/cmsts")}>
-                  2. Inscripción Circulo Militar
-                </Link>
-              </li>
-            </ul>
+            <div className="items-icon">
+              <FontAwesomeIcon icon={faShield} size="5x" />
+            </div>
+            <div>
+              <h2>JEFATURA DE BIENESTAR DEL EJÉRCITO (COBIENE)</h2>
+              <ul>
+                <li>
+                  <Link to={onNavigateGoTo("/correspondences")}>
+                    1. Correspondencias
+                  </Link>
+                </li>
+                <li>
+                  <Link to={onNavigateGoTo("/inscriptions/cmsts")}>
+                    2. Inscripción Circulo Militar
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="items-icon">
-            <FontAwesomeIcon icon={faShield} size="5x" />
-          </div>
+        )}
+        {currentCommand.id === "coede" && (
           <div>
-            <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCTIO</h2>
-            <ul>
-              <li>
-                <Link
-                  to={onNavigateGoTo(
-                    "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
-                  )}
-                >
-                  1. Ganado y Equinos
-                </Link>
-              </li>
-            </ul>
+            <div className="items-icon">
+              <FontAwesomeIcon icon={faShield} size="5x" />
+            </div>
+            <div>
+              <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCTIO</h2>
+              <ul>
+                <li>
+                  <Link
+                    to={onNavigateGoTo(
+                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+                    )}
+                  >
+                    1. Ganado y Equinos
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Container>
   );
