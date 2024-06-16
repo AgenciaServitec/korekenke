@@ -44,7 +44,7 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser
+    authUser && currentCommand
       ? usersRef
           .where("isDeleted", "==", false)
           .where("initialCommand.id", "==", currentCommand.id)
@@ -52,7 +52,7 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
-    authUser
+    authUser && currentCommand
       ? entitiesRef
           .where("isDeleted", "==", false)
           .where("commandId", "==", currentCommand.id)
