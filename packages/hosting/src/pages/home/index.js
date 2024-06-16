@@ -14,13 +14,13 @@ export const HomeIntegration = () => {
   const { commandId } = useParams();
   const { currentCommand } = useCommand();
 
-  // console.log({ ...currentCommand });
-
   const onNavigateGoTo = (pathname) => pathnameWithCommand(commandId, pathname);
 
   return (
     <Container>
-      <h1>BIENVENIDO(A) AL SISTEMA DE KOREKENKE</h1>
+      <h1 className="title">
+        ({currentCommand.code}) {currentCommand.name}
+      </h1>
       <div className="items">
         <div>
           <div className="items-icon">
@@ -95,10 +95,11 @@ export const HomeIntegration = () => {
 };
 
 const Container = styled.section`
-  h1 {
+  .title {
     text-align: center;
     font-size: 1.8em;
     font-weight: 500;
+    text-transform: uppercase;
   }
 
   .items {
