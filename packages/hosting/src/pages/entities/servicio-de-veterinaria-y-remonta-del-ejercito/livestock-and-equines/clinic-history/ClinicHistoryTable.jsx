@@ -66,12 +66,12 @@ export const ClinicHistoryTable = ({
       key: "action",
       render: (_, clinicHistory) => (
         <>
-          {clinicHistory?.status === "pending" ? (
+          {clinicHistory?.status === "pending" && (
             <Space>
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
-                name="/livestock-and-equines/:livestockAndEquineId/clinic-history?clinicHistoryId=:clinicHistoryId"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history#clinicHistoryReview"
               >
                 <IconAction
                   tooltipTitle="Revisar"
@@ -109,8 +109,6 @@ export const ClinicHistoryTable = ({
                 />
               </Acl>
             </Space>
-          ) : (
-            ""
           )}
         </>
       ),
