@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize } from "lodash";
+import { capitalize, concat, isEmpty } from "lodash";
 import {
   Acl,
   Button,
@@ -22,13 +22,15 @@ import {
   getOfficeId,
   updateOffice,
 } from "../../../../firebase/collections";
-import { findRole } from "../../../../utils";
+import { findRole, userFullName } from "../../../../utils";
+import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const OfficeIntegration = () => {
   const { officeId } = useParams();
   const navigate = useNavigate();
-  const { offices, users, sections, rolesAcls } = useGlobalData();
+  const { offices, officeUsers, sections, rolesAcls } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
 
   const [loading, setLoading] = useState(false);
   const [office, setOffice] = useState({});
@@ -53,8 +55,22 @@ export const OfficeIntegration = () => {
     bossId: formData.bossId,
   });
 
-  const onSubmitSaveOffice = async (formData) => {
+  const saveOffice = async (formData) => {
     try {
+      //Get users ids deselection
+      const usersIdsDeselected = (office?.membersIds || []).filter(
+        (memberId) => !(formData?.membersIds || []).includes(memberId)
+      );
+
+      //Update of assignTo of users
+      await updateAssignToUser({
+        oldUsersIds: usersIdsDeselected,
+        newUsersIds: formData.membersIds,
+        moduleId: office?.id,
+        users: officeUsers,
+      });
+
+      //Update of office
       isNew
         ? await addOffice(assignCreateProps(mapOffice(formData)))
         : await updateOffice(office.id, assignUpdateProps(mapOffice(formData)));
@@ -69,6 +85,32 @@ export const OfficeIntegration = () => {
     }
   };
 
+  const onGoBack = () => navigate(-1);
+
+  return (
+    <Office
+      isNew={isNew}
+      office={office}
+      sections={sections}
+      rolesAcls={rolesAcls}
+      officeUsers={officeUsers}
+      onSaveOffice={saveOffice}
+      onGoBack={onGoBack}
+      loading={loading}
+    />
+  );
+};
+
+const Office = ({
+  isNew,
+  onGoBack,
+  office,
+  sections,
+  rolesAcls,
+  officeUsers,
+  onSaveOffice,
+  loading,
+}) => {
   const schema = yup.object({
     name: yup.string().required(),
     description: yup.string().required(),
@@ -82,6 +124,8 @@ export const OfficeIntegration = () => {
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -102,23 +146,52 @@ export const OfficeIntegration = () => {
     });
   };
 
-  const sectionsView = sections.map((section) => ({
-    label: section.name,
-    value: section.id,
-  }));
-
-  const usersView = users.map((user) => ({
-    label: `${capitalize(user.firstName)} ${capitalize(
-      user.paternalSurname
-    )} ${capitalize(user.maternalSurname)} (${capitalize(
+  //VIEWS TO SELECTS
+  const mapOptionSelectMembers = (user) => ({
+    label: `${userFullName(user)} (${capitalize(
       findRole(rolesAcls, user?.roleCode)?.name || ""
     )})`,
     value: user.id,
-  }));
+    key: user.id,
+    roleCode: user.roleCode,
+  });
 
-  const submitSaveOffice = (formData) => onSubmitSaveOffice(formData);
+  const membersInEdition = officeUsers.filter((user) =>
+    !isEmpty(office?.membersIds) ? office.membersIds.includes(user.id) : false
+  );
 
-  const onGoBack = () => navigate(-1);
+  const userBosses = officeUsers.filter(
+    (user) => user.roleCode === "office_boss"
+  );
+
+  //LIST TO SELECTS
+  const usersViewForMembers = concat(
+    isNew ? [] : membersInEdition,
+    officeUsers.filter(
+      (user) => user.assignedTo.type === "office" && isEmpty(user.assignedTo.id)
+    )
+  ).map(mapOptionSelectMembers);
+
+  const bossesView = () =>
+    userBosses
+      .filter((user) => (watch("membersIds") || []).includes(user.id))
+      .map(mapOptionSelectMembers);
+
+  const onChangeMembersWithValidation = (onChange, value) => {
+    const _userBosses = userBosses.filter((user) => value.includes(user.id));
+
+    if (_userBosses.length > 0) {
+      setValue("bossId", _userBosses?.[0]?.id || "");
+    }
+
+    if (_userBosses.length <= 0) {
+      setValue("bossId", "");
+    }
+
+    return onChange(value);
+  };
+
+  const submitSaveOffice = (formData) => onSaveOffice(formData);
 
   return (
     <Acl
@@ -138,7 +211,6 @@ export const OfficeIntegration = () => {
                 <Controller
                   name="name"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Nombre"
@@ -155,7 +227,6 @@ export const OfficeIntegration = () => {
                 <Controller
                   name="description"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Descripción"
@@ -172,7 +243,6 @@ export const OfficeIntegration = () => {
                 <Controller
                   name="sectionId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Sección"
@@ -180,7 +250,10 @@ export const OfficeIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={sectionsView}
+                      options={sections.map((section) => ({
+                        label: section.name,
+                        value: section.id,
+                      }))}
                     />
                   )}
                 />
@@ -189,16 +262,17 @@ export const OfficeIntegration = () => {
                 <Controller
                   name="membersIds"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
                       label="Miembros"
                       value={value}
-                      onChange={onChange}
+                      onChange={(value) =>
+                        onChangeMembersWithValidation(onChange, value)
+                      }
                       error={error(name)}
                       required={required(name)}
-                      options={usersView}
+                      options={usersViewForMembers}
                     />
                   )}
                 />
@@ -207,7 +281,6 @@ export const OfficeIntegration = () => {
                 <Controller
                   name="bossId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Jefe"
@@ -215,7 +288,8 @@ export const OfficeIntegration = () => {
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
-                      options={usersView}
+                      options={bossesView()}
+                      disabled={!watch("membersIds")}
                     />
                   )}
                 />
