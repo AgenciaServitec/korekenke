@@ -18,11 +18,7 @@ export const EntitiesIntegration = () => {
   const onAddEntity = () => navigateTo("new");
   const onEditEntity = (entity) => navigateTo(entity.id);
   const onDeleteEntity = async (entity) =>
-    modalConfirm({
-      title: "¿Estás seguro de que quieres eliminar la entidad?",
-      onOK: async () =>
-        await updateEntity(entity.id, assignDeleteProps({ isDeleted: true })),
-    });
+    await updateEntity(entity.id, assignDeleteProps({ isDeleted: true }));
 
   return (
     <Acl
