@@ -1,15 +1,20 @@
 import React from "react";
-import { Acl, IconAction, Space, Table } from "../../../../../components";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Acl, IconAction, Space, Table, Tag } from "../../../../../components";
+import {
+  faClipboardCheck,
+  faEdit,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import dayjs from "dayjs";
 
 export const ClinicHistoryTable = ({
   clinicHistories,
-  loading,
   onConfirmRemoveClinicHistory,
   onSetIsVisibleModal,
+  onSetIsVisibleCheckModal,
   onSetClinicHistoryId,
+  loading,
 }) => {
   const columns = [
     {
@@ -38,37 +43,74 @@ export const ClinicHistoryTable = ({
       dataIndex: "treatment",
     },
     {
+      title: "Estado",
+      key: "status",
+      dataIndex: "status",
+      render: (_, clinicHistory) =>
+        clinicHistory?.status && (
+          <Space>
+            <span>
+              <Tag
+                color={
+                  clinicHistory?.status === "pending" ? "warning" : "success"
+                }
+              >
+                {clinicHistory?.status === "pending" ? "Pendiente" : "Revisado"}
+              </Tag>
+            </span>
+          </Space>
+        ),
+    },
+    {
       title: "Acciones",
       key: "action",
       render: (_, clinicHistory) => (
-        <Space>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
-          >
-            <IconAction
-              tooltipTitle="Editar"
-              icon={faEdit}
-              onClick={() => {
-                onSetClinicHistoryId(clinicHistory.id);
-                onSetIsVisibleModal();
-              }}
-            />
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history#delete"
-          >
-            <IconAction
-              tooltipTitle="Eliminar"
-              icon={faTrash}
-              styled={{ color: (theme) => theme.colors.error }}
-              onClick={() => onConfirmRemoveClinicHistory(clinicHistory)}
-            />
-          </Acl>
-        </Space>
+        <>
+          {clinicHistory?.status === "pending" && (
+            <Space>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history#clinicHistoryReview"
+              >
+                <IconAction
+                  tooltipTitle="Revisar"
+                  icon={faClipboardCheck}
+                  onClick={() => {
+                    onSetClinicHistoryId(clinicHistory.id);
+                    onSetIsVisibleCheckModal();
+                  }}
+                />
+              </Acl>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+              >
+                <IconAction
+                  tooltipTitle="Editar"
+                  icon={faEdit}
+                  onClick={() => {
+                    onSetClinicHistoryId(clinicHistory.id);
+                    onSetIsVisibleModal();
+                  }}
+                />
+              </Acl>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history#delete"
+              >
+                <IconAction
+                  tooltipTitle="Eliminar"
+                  icon={faTrash}
+                  styled={{ color: (theme) => theme.colors.error }}
+                  onClick={() => onConfirmRemoveClinicHistory(clinicHistory)}
+                />
+              </Acl>
+            </Space>
+          )}
+        </>
       ),
     },
   ];

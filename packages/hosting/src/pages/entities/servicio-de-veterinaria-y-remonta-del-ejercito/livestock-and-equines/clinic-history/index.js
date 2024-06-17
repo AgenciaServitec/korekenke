@@ -17,13 +17,15 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import { updateClinicHistory } from "../../../../../firebase/collections";
-import { useGlobalData } from "../../../../../providers";
+import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { LivestockAndEquineInformation } from "../../../../../components/ui/entities";
 import { pathnameWithCommand } from "../../../../../utils";
+import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 
 export const ClinicHistoryIntegration = () => {
+  const { authUser } = useAuthentication();
   const { commandId, livestockAndEquineId } = useParams();
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
@@ -35,7 +37,9 @@ export const ClinicHistoryIntegration = () => {
 
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
+    historyClinicCheckModal: false,
   });
+
   const [livestockAndEquine, setLivestockAndEquine] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
 
@@ -70,7 +74,10 @@ export const ClinicHistoryIntegration = () => {
     if (!clinicHistory) return setCurrentHistoryClinic(null);
 
     setCurrentHistoryClinic(clinicHistory);
-  }, [isVisibleModal.historyClinicModal]);
+  }, [
+    isVisibleModal.historyClinicModal,
+    isVisibleModal.historyClinicCheckModal,
+  ]);
 
   const onDeleteClinicHistory = async (clinicHistory) => {
     try {
@@ -95,6 +102,11 @@ export const ClinicHistoryIntegration = () => {
   const onSetVisibleHistoryClinicModal = () =>
     setIsVisibleModal({
       historyClinicModal: !isVisibleModal.historyClinicModal,
+    });
+
+  const onSetVisibleHistoryClinicCheckModal = () =>
+    setIsVisibleModal({
+      historyClinicCheckModal: !isVisibleModal.historyClinicCheckModal,
     });
 
   return (
@@ -171,21 +183,30 @@ export const ClinicHistoryIntegration = () => {
         <Col span={24}>
           <ClinicHistoryTable
             clinicHistories={clinicHistories}
-            loading={clinicHistoriesLoading}
             onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
             onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
+            onSetIsVisibleCheckModal={onSetVisibleHistoryClinicCheckModal}
             onSetClinicHistoryId={setClinicHistoryId}
+            loading={clinicHistoriesLoading}
           />
         </Col>
         <ClinicHistoryModalComponent
           key={isVisibleModal.historyClinicModal}
-          livestockAndEquineId={livestockAndEquineId}
-          currentHistoryClinic={currentHistoryClinic}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
-          clinicHistoryId={clinicHistoryId}
           onSetClinicHistoryId={setClinicHistoryId}
-          onNavigateGoTo={onNavigateGoTo}
+          clinicHistoryId={clinicHistoryId}
+          currentHistoryClinic={currentHistoryClinic}
+          livestockAndEquineId={livestockAndEquineId}
+        />
+        <ClinicHistoryCheckedModalComponent
+          key={isVisibleModal.historyClinicCheckModal}
+          user={authUser}
+          isVisibleModal={isVisibleModal}
+          onSetIsVisibleModal={onSetVisibleHistoryClinicCheckModal}
+          onSetClinicHistoryId={setClinicHistoryId}
+          livestockAndEquineId={livestockAndEquineId}
+          currentHistoryClinic={currentHistoryClinic}
         />
       </Container>
     </Acl>
