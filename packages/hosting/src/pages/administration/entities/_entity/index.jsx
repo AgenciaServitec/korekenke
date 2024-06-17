@@ -98,7 +98,7 @@ const Entity = ({
 }) => {
   const schema = yup.object({
     name: yup.string().required(),
-    abbreviation: yup.string().required(),
+    abbreviation: yup.string(),
     entityManageId: yup.string().required(),
   });
 
@@ -180,7 +180,7 @@ const Entity = ({
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Abreviatura"
+                      label="Siglas"
                       name={name}
                       value={value}
                       onChange={onChange}
