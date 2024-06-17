@@ -65,57 +65,54 @@ export const ClinicHistoryTable = ({
       title: "Acciones",
       key: "action",
       render: (_, clinicHistory) => (
-        <Space>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history?clinicHistoryId=:clinicHistoryId"
-          >
-            {clinicHistory?.status === "pending" ? (
-              <IconAction
-                tooltipTitle="Revisar"
-                icon={faClipboardCheck}
-                onClick={() => {
-                  onSetClinicHistoryId(clinicHistory.id);
-                  onSetIsVisibleCheckModal();
-                }}
-              />
-            ) : (
-              <IconAction
-                tooltipTitle="Revisado"
-                icon={faClipboardCheck}
-                style={{ color: "gray" }}
-                onClick={() => ""}
-              />
-            )}
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
-          >
-            <IconAction
-              tooltipTitle="Editar"
-              icon={faEdit}
-              onClick={() => {
-                onSetClinicHistoryId(clinicHistory.id);
-                onSetIsVisibleModal();
-              }}
-            />
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history#delete"
-          >
-            <IconAction
-              tooltipTitle="Eliminar"
-              icon={faTrash}
-              styled={{ color: (theme) => theme.colors.error }}
-              onClick={() => onConfirmRemoveClinicHistory(clinicHistory)}
-            />
-          </Acl>
-        </Space>
+        <>
+          {clinicHistory?.status === "pending" ? (
+            <Space>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history?clinicHistoryId=:clinicHistoryId"
+              >
+                <IconAction
+                  tooltipTitle="Revisar"
+                  icon={faClipboardCheck}
+                  onClick={() => {
+                    onSetClinicHistoryId(clinicHistory.id);
+                    onSetIsVisibleCheckModal();
+                  }}
+                />
+              </Acl>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+              >
+                <IconAction
+                  tooltipTitle="Editar"
+                  icon={faEdit}
+                  onClick={() => {
+                    onSetClinicHistoryId(clinicHistory.id);
+                    onSetIsVisibleModal();
+                  }}
+                />
+              </Acl>
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/livestock-and-equines/:livestockAndEquineId/clinic-history#delete"
+              >
+                <IconAction
+                  tooltipTitle="Eliminar"
+                  icon={faTrash}
+                  styled={{ color: (theme) => theme.colors.error }}
+                  onClick={() => onConfirmRemoveClinicHistory(clinicHistory)}
+                />
+              </Acl>
+            </Space>
+          ) : (
+            ""
+          )}
+        </>
       ),
     },
   ];

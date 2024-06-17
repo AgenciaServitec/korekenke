@@ -39,7 +39,7 @@ export const ClinicHistoryModalComponent = ({
       id: "",
       cip: "",
     },
-    status: "pending",
+    ...(isNew && { status: "pending" }),
     symptomatology: formData.symptomatology,
     diagnosis: formData.diagnosis,
     treatment: formData.treatment,
