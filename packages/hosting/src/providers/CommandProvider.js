@@ -3,6 +3,8 @@ import { useAuthentication } from "./AuthenticationProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isString } from "lodash";
 import { INITIAL_HIGHER_ENTITIES } from "../data-list";
+import { updateUser } from "../firebase/collections";
+import dayjs from "dayjs";
 
 const CommandContext = createContext({
   currentCommand: null,
@@ -34,11 +36,19 @@ export const CommandProvider = ({ children }) => {
     authUser?.initialCommand && onChangeCommand(authUser.initialCommand.id);
   }, [authUser?.initialCommand.id]);
 
-  const onChangeCommand = (commandId) => {
+  const onChangeCommand = async (commandId) => {
     const command = commands.find((command) => command.id === commandId);
 
-    if (command) {
+    if (command && authUser) {
       setCommand(command);
+
+      await updateUser(authUser.id, {
+        commands: [
+          ...authUser.commands.filter((_command) => _command.id !== command.id),
+          { ...command, updateAt: dayjs().format("YYYY-MM-DD HH:mm:ss") },
+        ],
+        initialCommand: command,
+      });
 
       const regex = new RegExp(`/${currentCommandId}/`, "g");
 

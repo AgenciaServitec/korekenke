@@ -185,7 +185,9 @@ export const HeaderLayout = ({
                         </div>
                         <div className="wrapper-more-commands">
                           <ul>
-                            {(user?.commands || []).map((command, index) => (
+                            {(
+                              orderBy(user?.commands, "updateAt", "desc") || []
+                            ).map((command, index) => (
                               <li
                                 key={index}
                                 className="item-command"
