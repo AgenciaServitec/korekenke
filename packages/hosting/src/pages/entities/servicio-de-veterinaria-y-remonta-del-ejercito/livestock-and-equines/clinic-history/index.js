@@ -201,7 +201,7 @@ export const ClinicHistoryIntegration = () => {
         />
         <ClinicHistoryCheckedModalComponent
           key={isVisibleModal.historyClinicCheckModal}
-          authUser={authUser}
+          user={authUser}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicCheckModal}
           onSetClinicHistoryId={setClinicHistoryId}

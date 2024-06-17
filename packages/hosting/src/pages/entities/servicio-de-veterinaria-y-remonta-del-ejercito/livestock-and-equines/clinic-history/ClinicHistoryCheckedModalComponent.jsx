@@ -4,18 +4,21 @@ import {
   Col,
   DataEntryModal,
   Form,
+  notification,
   Row,
   Select,
-  notification,
+  Tag,
 } from "../../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../hooks";
 import { clinicHistoriesRef } from "../../../../../firebase/collections";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ClinicHistoryCheckedModalComponent = ({
-  authUser,
+  user,
   isVisibleModal,
   onSetIsVisibleModal,
   onSetClinicHistoryId,
@@ -26,9 +29,9 @@ export const ClinicHistoryCheckedModalComponent = ({
 
   const mapForm = (formData) => ({
     checkedBy: {
-      fullName: `${authUser?.paternalSurname} ${authUser?.maternalSurname} ${authUser?.firstName}`,
-      id: authUser?.id,
-      cip: authUser?.cip,
+      fullName: `${user?.paternalSurname} ${user?.maternalSurname} ${user?.firstName}`,
+      id: user?.id,
+      cip: user?.cip,
     },
     status: formData.checked,
   });
@@ -92,7 +95,7 @@ const ClinicHistoryCheckedModal = ({
 
   const resetForm = () => {
     reset({
-      checked: currentHistoryClinic?.status || "",
+      checked: currentHistoryClinic?.status || undefined,
     });
   };
 
@@ -108,10 +111,15 @@ const ClinicHistoryCheckedModal = ({
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
+            <Tag color="red">
+              <FontAwesomeIcon icon={faWarning} size="lg" /> Al realizar el
+              cambio, no podras revertir esta acción
+            </Tag>
+          </Col>
+          <Col span={24}>
             <Controller
               name="checked"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value, name } }) => (
                 <Select
                   label="Revisar"
@@ -119,12 +127,12 @@ const ClinicHistoryCheckedModal = ({
                   value={value}
                   options={[
                     {
-                      label: "Revisado",
-                      value: "checked",
-                    },
-                    {
                       label: "Pendiente",
                       value: "pending",
+                    },
+                    {
+                      label: "Revisado",
+                      value: "checked",
                     },
                   ]}
                   onChange={onChange}
