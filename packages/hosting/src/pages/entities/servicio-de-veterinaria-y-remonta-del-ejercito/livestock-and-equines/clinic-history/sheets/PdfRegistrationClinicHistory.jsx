@@ -112,7 +112,9 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                       <td>{_clinicHistory.diagnosis}</td>
                       <td>{_clinicHistory.treatment}</td>
                       <td>{_clinicHistory.observation}</td>
-                      <td></td>
+                      <td className="checked-user">
+                        {_clinicHistory?.checkedBy?.fullName}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -184,6 +186,14 @@ const Container = styled.div`
       &__table {
         table {
           width: 100%;
+
+          td.checked-user {
+            font-size: 0.5em;
+            font-weight: 700;
+            text-transform: capitalize;
+            text-align: center;
+          }
+
           tr {
             width: 100%;
             td:first-child {

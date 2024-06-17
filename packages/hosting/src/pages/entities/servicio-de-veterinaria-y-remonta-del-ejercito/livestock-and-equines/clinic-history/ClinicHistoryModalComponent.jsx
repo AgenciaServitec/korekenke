@@ -20,13 +20,12 @@ import {
 } from "../../../../../firebase/collections";
 
 export const ClinicHistoryModalComponent = ({
-  authUser,
-  currentHistoryClinic,
-  livestockAndEquineId,
-  clinicHistoryId,
   isVisibleModal,
   onSetIsVisibleModal,
   onSetClinicHistoryId,
+  clinicHistoryId,
+  currentHistoryClinic,
+  livestockAndEquineId,
 }) => {
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
@@ -36,9 +35,9 @@ export const ClinicHistoryModalComponent = ({
   const mapForm = (formData) => ({
     id: isNew ? getClinicHistoryId() : currentHistoryClinic.id,
     checkedBy: {
-      fullName: `${authUser?.paternalSurname} ${authUser?.maternalSurname} ${authUser?.firstName}`,
-      id: authUser?.id,
-      cip: authUser?.cip,
+      fullName: "",
+      id: "",
+      cip: "",
     },
     status: "pending",
     symptomatology: formData.symptomatology,
@@ -79,12 +78,12 @@ export const ClinicHistoryModalComponent = ({
 
   return (
     <ClinicHistoryModal
-      currentHistoryClinic={currentHistoryClinic}
       isVisibleModal={isVisibleModal}
       onSetIsVisibleModal={onSetIsVisibleModal}
-      onSubmit={onSubmit}
-      loading={loading}
       onSetClinicHistoryId={onSetClinicHistoryId}
+      currentHistoryClinic={currentHistoryClinic}
+      loading={loading}
+      onSubmit={onSubmit}
     />
   );
 };

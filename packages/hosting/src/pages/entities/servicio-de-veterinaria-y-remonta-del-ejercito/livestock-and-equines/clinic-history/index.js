@@ -22,7 +22,7 @@ import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { LivestockAndEquineInformation } from "../../../../../components/ui/entities";
 import { pathnameWithCommand } from "../../../../../utils";
-import { ClinicHistoryModalChecked } from "./ClinicHistoryModalChecked";
+import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -37,6 +37,7 @@ export const ClinicHistoryIntegration = () => {
 
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
+    historyClinicCheckModal: false,
   });
 
   const [livestockAndEquine, setLivestockAndEquine] = useState({});
@@ -73,7 +74,10 @@ export const ClinicHistoryIntegration = () => {
     if (!clinicHistory) return setCurrentHistoryClinic(null);
 
     setCurrentHistoryClinic(clinicHistory);
-  }, [isVisibleModal.historyClinicModal]);
+  }, [
+    isVisibleModal.historyClinicModal,
+    isVisibleModal.historyClinicCheckModal,
+  ]);
 
   const onDeleteClinicHistory = async (clinicHistory) => {
     try {
@@ -98,6 +102,11 @@ export const ClinicHistoryIntegration = () => {
   const onSetVisibleHistoryClinicModal = () =>
     setIsVisibleModal({
       historyClinicModal: !isVisibleModal.historyClinicModal,
+    });
+
+  const onSetVisibleHistoryClinicCheckModal = () =>
+    setIsVisibleModal({
+      historyClinicCheckModal: !isVisibleModal.historyClinicCheckModal,
     });
 
   return (
@@ -174,26 +183,28 @@ export const ClinicHistoryIntegration = () => {
         <Col span={24}>
           <ClinicHistoryTable
             clinicHistories={clinicHistories}
-            loading={clinicHistoriesLoading}
             onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
             onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
+            onSetIsVisibleCheckModal={onSetVisibleHistoryClinicCheckModal}
             onSetClinicHistoryId={setClinicHistoryId}
+            loading={clinicHistoriesLoading}
           />
         </Col>
         <ClinicHistoryModalComponent
           key={isVisibleModal.historyClinicModal}
-          authUser={authUser}
-          livestockAndEquineId={livestockAndEquineId}
-          currentHistoryClinic={currentHistoryClinic}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
-          clinicHistoryId={clinicHistoryId}
           onSetClinicHistoryId={setClinicHistoryId}
-          onNavigateGoTo={onNavigateGoTo}
+          clinicHistoryId={clinicHistoryId}
+          currentHistoryClinic={currentHistoryClinic}
+          livestockAndEquineId={livestockAndEquineId}
         />
-        <ClinicHistoryModalChecked
-          key={isVisibleModal.historyClinicModal}
+        <ClinicHistoryCheckedModalComponent
+          key={isVisibleModal.historyClinicCheckModal}
+          authUser={authUser}
           isVisibleModal={isVisibleModal}
+          onSetIsVisibleModal={onSetVisibleHistoryClinicCheckModal}
+          onSetClinicHistoryId={setClinicHistoryId}
           livestockAndEquineId={livestockAndEquineId}
           currentHistoryClinic={currentHistoryClinic}
         />

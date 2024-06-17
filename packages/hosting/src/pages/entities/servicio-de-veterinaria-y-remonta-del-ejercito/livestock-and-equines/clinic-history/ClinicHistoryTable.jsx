@@ -1,15 +1,20 @@
 import React from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../../../components";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboardCheck,
+  faEdit,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import dayjs from "dayjs";
 
 export const ClinicHistoryTable = ({
   clinicHistories,
-  loading,
   onConfirmRemoveClinicHistory,
   onSetIsVisibleModal,
+  onSetIsVisibleCheckModal,
   onSetClinicHistoryId,
+  loading,
 }) => {
   const columns = [
     {
@@ -50,7 +55,7 @@ export const ClinicHistoryTable = ({
                   clinicHistory?.status === "pending" ? "warning" : "success"
                 }
               >
-                {clinicHistory?.status}
+                {clinicHistory?.status === "pending" ? "Pendiente" : "Revisado"}
               </Tag>
             </span>
           </Space>
@@ -61,6 +66,29 @@ export const ClinicHistoryTable = ({
       key: "action",
       render: (_, clinicHistory) => (
         <Space>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="clinicHistory"
+            name="/livestock-and-equines/:livestockAndEquineId/clinic-history?clinicHistoryId=:clinicHistoryId"
+          >
+            {clinicHistory?.status === "pending" ? (
+              <IconAction
+                tooltipTitle="Revisar"
+                icon={faClipboardCheck}
+                onClick={() => {
+                  onSetClinicHistoryId(clinicHistory.id);
+                  onSetIsVisibleCheckModal();
+                }}
+              />
+            ) : (
+              <IconAction
+                tooltipTitle="Revisado"
+                icon={faClipboardCheck}
+                style={{ color: "gray" }}
+                onClick={() => ""}
+              />
+            )}
+          </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="clinicHistory"
