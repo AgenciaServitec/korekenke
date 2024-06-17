@@ -133,13 +133,13 @@ export const GlobalDataProvider = ({ children }) => {
           (user) => [user.createAt],
           ["desc"]
         ),
-        entities,
-        departments,
-        sections,
-        rolesAcls,
-        offices,
-        correspondences: orderBy(correspondences, ["createAt"], ["desc"]),
-        livestockAndEquines,
+        entities: orderBy(entities, "createAt", "desc"),
+        departments: orderBy(departments, "createAt", "desc"),
+        sections: orderBy(sections, "createAt", "desc"),
+        rolesAcls: orderBy(rolesAcls, "createAt", "desc"),
+        offices: orderBy(offices, "createAt", "desc"),
+        correspondences: orderBy(correspondences, "createAt", "desc"),
+        livestockAndEquines: orderBy(livestockAndEquines, "createAt", "desc"),
       }}
     >
       {children}
