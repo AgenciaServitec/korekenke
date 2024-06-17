@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize, isEmpty } from "lodash";
+import { capitalize, isEmpty, lowerCase } from "lodash";
 import {
   addEntity,
   getEntityId,
@@ -51,6 +51,7 @@ export const EntityIntegration = () => {
     ...entity,
     commandId: currentCommand.id,
     name: formData.name,
+    abbreviation: lowerCase(formData.abbreviation),
     entityManageId: formData.entityManageId,
   });
 
@@ -97,6 +98,7 @@ const Entity = ({
 }) => {
   const schema = yup.object({
     name: yup.string().required(),
+    abbreviation: yup.string().required(),
     entityManageId: yup.string().required(),
   });
 
@@ -118,6 +120,7 @@ const Entity = ({
   const resetForm = () => {
     reset({
       name: entity?.name || "",
+      abbreviation: entity?.abbreviation || "",
       entityManageId: entity?.entityManageId || null,
     });
   };
@@ -161,6 +164,23 @@ const Entity = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Nombre"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="abbreviation"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Abreviatura"
                       name={name}
                       value={value}
                       onChange={onChange}
