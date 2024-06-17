@@ -111,7 +111,7 @@ export const EntityIntegration = () => {
 
   const commandsView = INITIAL_HIGHER_ENTITIES[0]["organs"][0]["commands"].map(
     (command) => ({
-      label: command.name,
+      label: `${command.name} (${command.code.toUpperCase()})`,
       value: command.id,
     })
   );
