@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGlobalData } from "../../../../providers";
+import { useCommand, useGlobalData } from "../../../../providers";
 import {
   Acl,
   Button,
@@ -16,24 +16,26 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize } from "lodash";
+import { capitalize, isEmpty } from "lodash";
 import {
   addEntity,
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
-import { INITIAL_HIGHER_ENTITIES } from "../../../../data-list";
+import { findRole, userFullName } from "../../../../utils";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
   const navigate = useNavigate();
-  const { entities, users } = useGlobalData();
+  const { entities, users, rolesAcls } = useGlobalData();
+  const { currentCommand } = useCommand();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
 
   const isNew = entityId === "new";
+  const onGoBack = () => navigate(-1);
 
   useEffect(() => {
     const _entity = isNew
@@ -47,12 +49,12 @@ export const EntityIntegration = () => {
 
   const mapEntity = (formData) => ({
     ...entity,
-    commandId: formData.commandId,
+    commandId: currentCommand.id,
     name: formData.name,
     entityManageId: formData.entityManageId,
   });
 
-  const onSubmitSaveEntity = async (formData) => {
+  const saveEntity = async (formData) => {
     try {
       setLoading(true);
 
@@ -71,8 +73,29 @@ export const EntityIntegration = () => {
     }
   };
 
+  return (
+    <Entity
+      isNew={isNew}
+      entity={entity}
+      rolesAcls={rolesAcls}
+      users={users}
+      loading={loading}
+      onSaveEntity={saveEntity}
+      onGoBack={onGoBack}
+    />
+  );
+};
+
+const Entity = ({
+  isNew,
+  entity,
+  rolesAcls,
+  users,
+  loading,
+  onSaveEntity,
+  onGoBack,
+}) => {
   const schema = yup.object({
-    commandId: yup.string().required(),
     name: yup.string().required(),
     entityManageId: yup.string().required(),
   });
@@ -94,31 +117,27 @@ export const EntityIntegration = () => {
 
   const resetForm = () => {
     reset({
-      commandId: entity?.commandId || null,
       name: entity?.name || "",
       entityManageId: entity?.entityManageId || null,
     });
   };
 
+  //LIST TO SELECTS
   const usersView = users
     .filter((user) => user.roleCode === "manager")
+    .filter(
+      (user) => user.assignedTo.type === "entity" && isEmpty(user.assignedTo.id)
+    )
     .map((user) => ({
-      label: `${capitalize(user.firstName)} ${capitalize(
-        user.paternalSurname
-      )} ${capitalize(user.maternalSurname)}`,
+      label: `${userFullName(user)} (${capitalize(
+        findRole(rolesAcls, user?.roleCode)?.name || ""
+      )})`,
       value: user.id,
+      key: user.id,
+      roleCode: user.roleCode,
     }));
 
-  const commandsView = INITIAL_HIGHER_ENTITIES[0]["organs"][0]["commands"].map(
-    (command) => ({
-      label: `${command.name} (${command.code.toUpperCase()})`,
-      value: command.id,
-    })
-  );
-
-  const submitSaveEntity = (formData) => onSubmitSaveEntity(formData);
-
-  const onGoBack = () => navigate(-1);
+  const submitSaveEntity = (formData) => onSaveEntity(formData);
 
   return (
     <Acl
@@ -134,23 +153,6 @@ export const EntityIntegration = () => {
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveEntity)}>
             <Row gutter={[16, 16]}>
-              <Col span={24}>
-                <Controller
-                  name="commandId"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Comando"
-                      value={value}
-                      options={commandsView}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
               <Col span={24}>
                 <Controller
                   name="name"
