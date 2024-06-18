@@ -16,7 +16,10 @@ import { firestore } from "../../../../../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
-import { updateClinicHistory } from "../../../../../firebase/collections";
+import {
+  fetchUser,
+  updateClinicHistory,
+} from "../../../../../firebase/collections";
 import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
@@ -33,15 +36,32 @@ export const ClinicHistoryIntegration = () => {
     ""
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { livestockAndEquines } = useGlobalData();
+  const { livestockAndEquines, departments } = useGlobalData();
 
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
     historyClinicCheckModal: false,
   });
-
   const [livestockAndEquine, setLivestockAndEquine] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
+  const [PEL_VET_DEL_RC_MDN_EPR_boss, setPEL_VET_DEL_RC_MDN_EPR_boss] =
+    useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const PEL_VET_DEL_RC_MDN_EPR_department = departments.find(
+        (department) => department.id === "BP0Z7ZSLIXyz1pGYFwhU"
+      );
+
+      if (!PEL_VET_DEL_RC_MDN_EPR_department) return;
+
+      const userBoss = await fetchUser(
+        PEL_VET_DEL_RC_MDN_EPR_department.bossId
+      );
+
+      setPEL_VET_DEL_RC_MDN_EPR_boss(userBoss);
+    })();
+  }, []);
 
   const [clinicHistories = [], clinicHistoriesLoading, clinicHistoriesError] =
     useCollectionData(
@@ -188,6 +208,8 @@ export const ClinicHistoryIntegration = () => {
             onSetIsVisibleCheckModal={onSetVisibleHistoryClinicCheckModal}
             onSetClinicHistoryId={setClinicHistoryId}
             loading={clinicHistoriesLoading}
+            user={authUser}
+            PEL_VET_DEL_RC_MDN_EPR_boss={PEL_VET_DEL_RC_MDN_EPR_boss}
           />
         </Col>
         <ClinicHistoryModalComponent

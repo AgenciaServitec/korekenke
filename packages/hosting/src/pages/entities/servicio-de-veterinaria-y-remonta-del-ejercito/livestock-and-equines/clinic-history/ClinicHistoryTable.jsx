@@ -15,6 +15,8 @@ export const ClinicHistoryTable = ({
   onSetIsVisibleCheckModal,
   onSetClinicHistoryId,
   loading,
+  user,
+  PEL_VET_DEL_RC_MDN_EPR_boss,
 }) => {
   const columns = [
     {
@@ -68,20 +70,22 @@ export const ClinicHistoryTable = ({
         <>
           {clinicHistory?.status === "pending" && (
             <Space>
-              <Acl
-                category="servicio-de-veterinaria-y-remonta-del-ejercito"
-                subCategory="clinicHistory"
-                name="/livestock-and-equines/:livestockAndEquineId/clinic-history#clinicHistoryReview"
-              >
-                <IconAction
-                  tooltipTitle="Revisar"
-                  icon={faClipboardCheck}
-                  onClick={() => {
-                    onSetClinicHistoryId(clinicHistory.id);
-                    onSetIsVisibleCheckModal();
-                  }}
-                />
-              </Acl>
+              {PEL_VET_DEL_RC_MDN_EPR_boss.id === user.id && (
+                <Acl
+                  category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                  subCategory="clinicHistory"
+                  name="/livestock-and-equines/:livestockAndEquineId/clinic-history#clinicHistoryReview"
+                >
+                  <IconAction
+                    tooltipTitle="Revisar"
+                    icon={faClipboardCheck}
+                    onClick={() => {
+                      onSetClinicHistoryId(clinicHistory.id);
+                      onSetIsVisibleCheckModal();
+                    }}
+                  />
+                </Acl>
+              )}
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
