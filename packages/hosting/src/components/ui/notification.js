@@ -20,6 +20,7 @@ export const notification = ({
   duration = 5,
   key,
   icon,
+  ...props
 }) => {
   if (type === "close") return key ? notificationAntd.close(key) : undefined;
 
@@ -32,6 +33,7 @@ export const notification = ({
     description: description || currentType.description,
     key: key,
     icon: icon,
+    ...props,
   });
 };
 
