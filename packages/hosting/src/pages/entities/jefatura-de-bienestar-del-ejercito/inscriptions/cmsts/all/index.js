@@ -11,6 +11,9 @@ import {
 } from "../../../../../../components";
 import { useGlobalData } from "../../../../../../providers";
 import { Tag } from "antd";
+import { userFullName } from "../../../../../../utils/users/userFullName2";
+import { CivilStatus, Genders } from "../../../../../../data-list";
+import dayjs from "dayjs";
 
 export const AllRegistered = () => {
   const { users } = useGlobalData();
@@ -29,7 +32,7 @@ export const AllRegistered = () => {
       title: "Apellidos y Nombres",
       key: "paternalSurname",
       sorter: (a, b) => a.paternalSurname.length - b.paternalSurname.length,
-      render: (_) => `${_.paternalSurname} ${_.maternalSurname} ${_.firstName}`,
+      render: (_) => userFullName(_),
     },
     {
       title: "CIP",
@@ -49,6 +52,7 @@ export const AllRegistered = () => {
         a?.civilStatus
           ? a.civilStatus.length - b.civilStatus.length
           : undefined,
+      render: (_, { civilStatus }) => CivilStatus[civilStatus],
     },
     {
       title: "Género",
@@ -56,22 +60,29 @@ export const AllRegistered = () => {
       key: "gender",
       sorter: (a, b) =>
         a?.gender ? a.gender.length - b.gender.length : undefined,
+      render: (_, { gender }) => Genders[gender]?.label,
     },
     {
       title: "Ubigeo de Nacimiento",
       dataIndex: "placeBirth",
       key: "placeBirth",
+      render: (_, { placeBirth }) =>
+        `${placeBirth?.department} - ${placeBirth?.province} - ${placeBirth?.district}`,
     },
     {
       title: "Fecha de Nacimiento",
       dataIndex: "birthdate",
       key: "birthdate",
       sortDirections: ["descend", "ascend"],
+      render: (_, { birthdate }) =>
+        dayjs(birthdate, "YYYY-MM-DD").format("DD/MM/YYYY"),
     },
     {
       title: "Ubigeo de Vivienda",
       dataIndex: "houseLocation",
       key: "houseLocation",
+      render: (_, { houseLocation }) =>
+        `${houseLocation?.department} - ${houseLocation?.province} - ${houseLocation?.district}`,
     },
     {
       title: "Urbanización",
