@@ -39,6 +39,7 @@ export const UsersTable = ({
       title: "Rol",
       dataIndex: "roleCode",
       key: "roleCode",
+      width: 130,
       render: (_, user) => (
         <strong className="capitalize">
           {findRole(rolesAcls, user?.roleCode)?.name || ""}
