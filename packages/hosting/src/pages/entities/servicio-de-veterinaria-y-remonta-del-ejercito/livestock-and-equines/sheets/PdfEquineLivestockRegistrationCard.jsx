@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
+import { findDegree } from "../../../../../utils";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
@@ -55,6 +56,8 @@ export const PdfEquineLivestockRegistrationCard = () => {
     users,
     entityRCMDNEPR?.entityManageId
   );
+
+  console.log(entityBossSVRE);
 
   return (
     <Container>
@@ -183,10 +186,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>0-{entityBossSVRE?.cip}</strong>
+                      <strong>{entityBossSVRE?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(entityBossSVRE)}</strong>
+                      <strong>{`${
+                        findDegree(entityBossSVRE.degree).label
+                      } ${userFullName(entityBossSVRE)}`}</strong>
                     </p>
                     <p>
                       <strong>CRL-EP</strong>
@@ -210,10 +215,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>O-{entityBossRCMDNEPR?.cip}-O+</strong>
+                      <strong>{entityBossRCMDNEPR?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(entityBossRCMDNEPR)}</strong>
+                      <strong>{`${
+                        findDegree(entityBossRCMDNEPR.degree).label
+                      } ${userFullName(entityBossRCMDNEPR)}`}</strong>
                     </p>
                     <p>
                       <strong>Coronel de Caballeria</strong>
@@ -237,10 +244,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>O-{unitBossPELVETRCMDNEPR?.cip}-O+</strong>
+                      <strong>{unitBossPELVETRCMDNEPR?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(unitBossPELVETRCMDNEPR)}</strong>
+                      <strong>{`${
+                        findDegree(unitBossPELVETRCMDNEPR.degree).label
+                      } ${userFullName(unitBossPELVETRCMDNEPR)}`}</strong>
                     </p>
                     <p>
                       <strong>TTE S VET</strong>
