@@ -18,6 +18,8 @@ import {
   useApiUserPatch,
 } from "../../../api";
 import { assign, isEmpty } from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 export const Users = () => {
   const navigate = useNavigate();
@@ -29,14 +31,43 @@ export const Users = () => {
 
   const onAddUser = () => navigateTo("new");
   const onEditUser = (user) => navigateTo(user.id);
+
+  // const removeUserOfGroup = (user) =>
+  //   modalConfirm({
+  //     title: `¿Estás seguro de que quieres desvincular al usuario ${
+  //       user.assignedTo.type === "entity"
+  //         ? "de la ENTIDAD"
+  //         : user.assignedTo.type === "department"
+  //         ? "del DEPARTAMENTO"
+  //         : user.assignedTo.type === "office"
+  //         ? "de la OFICINA"
+  //         : "de la SECCIÓN"
+  //     }?`,
+  //     onOk: async () => {
+  //       console.log({ user });
+  //     },
+  //   });
+
   const onDeleteUser = async (user) => {
     try {
       if (!isEmpty(user?.assignedTo?.id)) {
         return notification({
-          type: "warning",
+          type: "open",
+          icon: <FontAwesomeIcon icon={faWarning} color="orange" size="lg" />,
           title: "Este usuario está asignado como miembro",
           description:
             "Para eliminar, el usuario no debe estar como miembro en ningún grupo como (departamento, sección u oficina)",
+          // btn: (
+          //   <Space>
+          //     <Button
+          //       type="primary"
+          //       size="small"
+          //       onClick={() => removeUserOfGroup(user)}
+          //     >
+          //       Desvincular usuario
+          //     </Button>
+          //   </Space>
+          // ),
         });
       }
 
