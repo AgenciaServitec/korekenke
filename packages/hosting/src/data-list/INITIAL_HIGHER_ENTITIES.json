@@ -30,22 +30,6 @@
             ]
           },
           {
-            "id": "coede",
-            "code": "coede",
-            "name": "Comando De Educación y Doctrina Del Ejército",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/coede.webp",
-            "entities": [
-              {
-                "id": "jefatura_de_educacion_del_ejercito",
-                "name": "Jefatura De Educación Del Ejército"
-              },
-              {
-                "id": "jefatura_de_doctrina_del_ejercito",
-                "name": "Jefatura De Doctrina Del Ejército"
-              }
-            ]
-          },
-          {
             "id": "cologe",
             "code": "cologe",
             "name": "Comando Logístico Del Ejército",
@@ -78,42 +62,6 @@
               {
                 "id": "jefatura_de_patrimonio_del_ejercito",
                 "name": "Jefatura De Patrimonio Del Ejército"
-              }
-            ]
-          },
-          {
-            "id": "cogae",
-            "code": "cogae",
-            "name": "Comando General De Apoyo Del Ejército",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/command-default.webp",
-            "entities": [
-              {
-                "id": "comando_de_operaciones_terrestres_del_ejercito",
-                "name": "Comando De Operaciones Terrestres Del Ejército"
-              },
-              {
-                "id": "comando_de_apoyo_al_desarrollo_nacional_del_ejercito",
-                "name": "Comando De Apoyo Al Desarrollo Nacional Del Ejército"
-              },
-              {
-                "id": "comando_de_salud_del_ejercito",
-                "name": "Comando De Salud Del Ejército"
-              },
-              {
-                "id": "comando_de_reemplazos_y_movilizacion_del_ejercito",
-                "name": "Comando De Reemplazos y Movilización Del Ejército"
-              },
-              {
-                "id": "comando_administrativo_del_cuartel_general_del_ejercito",
-                "name": "Comando Administrativo Del Cuartel General Del Ejército"
-              },
-              {
-                "id": "oficina_generadora_de_recursos_del_ejercito",
-                "name": "Oficina Generadora De Recursos Del Ejército"
-              },
-              {
-                "id": "oficina_de_economia_del_ejercito",
-                "name": "Oficina De Economía Del Ejército"
               }
             ]
           }
