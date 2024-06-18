@@ -44,11 +44,7 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser && currentCommand
-      ? usersRef
-          .where("isDeleted", "==", false)
-          .where("initialCommand.id", "==", currentCommand.id)
-      : null
+    authUser ? usersRef.where("isDeleted", "==", false) : null
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
