@@ -174,14 +174,9 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {entityBossSVRE?.signaturePhoto ? (
+                    {entityBossSVRE?.signaturePhoto && (
                       <img
                         src={entityBossSVRE?.signaturePhoto.url}
-                        alt="Perfil Izquierdo"
-                      />
-                    ) : (
-                      <img
-                        src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
                         alt="Perfil Izquierdo"
                       />
                     )}
@@ -206,14 +201,9 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {entityBossRCMDNEPR?.signaturePhoto ? (
+                    {entityBossRCMDNEPR?.signaturePhoto && (
                       <img
                         src={entityBossRCMDNEPR?.signaturePhoto.url}
-                        alt="Perfil Izquierdo"
-                      />
-                    ) : (
-                      <img
-                        src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
                         alt="Perfil Izquierdo"
                       />
                     )}
@@ -238,14 +228,9 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {unitBossPELVETRCMDNEPR?.signaturePhoto ? (
+                    {unitBossPELVETRCMDNEPR?.signaturePhoto && (
                       <img
                         src={unitBossPELVETRCMDNEPR?.signaturePhoto.url}
-                        alt="Perfil Izquierdo"
-                      />
-                    ) : (
-                      <img
-                        src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
                         alt="Perfil Izquierdo"
                       />
                     )}
@@ -431,6 +416,7 @@ const Container = styled.div`
       }
 
       .signature_img {
+        height: 5em;
         img {
           width: auto;
           height: 5em;

@@ -98,8 +98,6 @@ export const LiveStockAndEquineIntegration = () => {
     }
   };
 
-  console.log({ departments });
-
   const departmentsView = departments.map((deparment) => ({
     label: deparment.name,
     value: deparment.id,
