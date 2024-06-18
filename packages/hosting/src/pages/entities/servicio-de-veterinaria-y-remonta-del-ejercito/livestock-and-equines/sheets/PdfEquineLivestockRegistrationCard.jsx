@@ -189,12 +189,10 @@ export const PdfEquineLivestockRegistrationCard = () => {
                       <strong>{entityBossSVRE?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{`${
-                        findDegree(entityBossSVRE.degree).label
-                      } ${userFullName(entityBossSVRE)}`}</strong>
+                      <strong>{userFullName(entityBossSVRE)}</strong>
                     </p>
                     <p>
-                      <strong>CRL-EP</strong>
+                      <strong>{findDegree(entityBossSVRE.degree).label}</strong>
                     </p>
                     <p>
                       <strong>JEFE DEL {entitySVRE?.name}</strong>
@@ -218,12 +216,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
                       <strong>{entityBossRCMDNEPR?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{`${
-                        findDegree(entityBossRCMDNEPR.degree).label
-                      } ${userFullName(entityBossRCMDNEPR)}`}</strong>
+                      <strong>{userFullName(entityBossRCMDNEPR)}</strong>
                     </p>
                     <p>
-                      <strong>Coronel de Caballeria</strong>
+                      <strong>
+                        {findDegree(entityBossRCMDNEPR.degree).label}
+                      </strong>
                     </p>
                     <p>
                       <strong>Comandante del {entityRCMDNEPR?.name}</strong>
@@ -247,12 +245,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
                       <strong>{unitBossPELVETRCMDNEPR?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{`${
-                        findDegree(unitBossPELVETRCMDNEPR.degree).label
-                      } ${userFullName(unitBossPELVETRCMDNEPR)}`}</strong>
+                      <strong>{userFullName(unitBossPELVETRCMDNEPR)}</strong>
                     </p>
                     <p>
-                      <strong>TTE S VET</strong>
+                      <strong>
+                        {findDegree(unitBossPELVETRCMDNEPR.degree).label}
+                      </strong>
                     </p>
                     <p>
                       <strong>JEFE {unitPELVETRCMDNEPR?.name}</strong>
