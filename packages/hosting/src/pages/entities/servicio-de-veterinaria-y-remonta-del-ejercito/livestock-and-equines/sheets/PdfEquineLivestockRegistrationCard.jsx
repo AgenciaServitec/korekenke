@@ -192,7 +192,9 @@ export const PdfEquineLivestockRegistrationCard = () => {
                       <strong>{userFullName(entityBossSVRE)}</strong>
                     </p>
                     <p>
-                      <strong>{findDegree(entityBossSVRE.degree).label}</strong>
+                      <strong>
+                        {findDegree(entityBossSVRE?.degree)?.label}
+                      </strong>
                     </p>
                     <p>
                       <strong>JEFE DEL {entitySVRE?.name}</strong>
@@ -220,7 +222,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     </p>
                     <p>
                       <strong>
-                        {findDegree(entityBossRCMDNEPR.degree).label}
+                        {findDegree(entityBossRCMDNEPR?.degree)?.label}
                       </strong>
                     </p>
                     <p>
@@ -249,7 +251,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     </p>
                     <p>
                       <strong>
-                        {findDegree(unitBossPELVETRCMDNEPR.degree).label}
+                        {findDegree(unitBossPELVETRCMDNEPR?.degree)?.label}
                       </strong>
                     </p>
                     <p>
