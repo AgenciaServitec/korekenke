@@ -77,7 +77,7 @@
       "/inscriptions/cmsts": "Menu: Inscripciones cmsts",
       "/inscriptions/cmsts/all": "Ver todos los inscripciones cmsts",
       "/inscriptions/cmsts/sheet/:cmstsEnrollmentId": "Imprimir hoja cmsts",
-      "/inscriptions/cmsts#btn-cmsts-enrollment": "Imprimir hoja cmsts"
+      "/inscriptions/cmsts#btn-cmsts-enrollment": "Boton: Inscribirme en Circulo Militar"
     }
   },
   "servicio-de-veterinaria-y-remonta-del-ejercito": {
