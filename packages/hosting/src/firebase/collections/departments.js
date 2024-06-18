@@ -12,8 +12,8 @@ export const fetchDepartment = async (id) =>
 export const fetchDepartments = async () =>
   fetchCollectionOnce(departmentsRef.where("isDeleted", "==", false));
 
-export const addDepartment = async (entity) =>
-  setDocument(departmentsRef.doc(entity.id), entity);
+export const addDepartment = async (department) =>
+  setDocument(departmentsRef.doc(department.id), department);
 
-export const updateDepartment = async (entityId, entity) =>
-  updateDocument(departmentsRef.doc(entityId), entity);
+export const updateDepartment = async (departmentId, department) =>
+  updateDocument(departmentsRef.doc(departmentId), department);
