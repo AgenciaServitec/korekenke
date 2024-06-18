@@ -214,7 +214,7 @@ export const DrawerLayout = ({
           "servicio-de-veterinaria-y-remonta-del-ejercito",
           ["livestockAndEquines"],
           ["/livestock-and-equines"]
-        ) && currentCommand.id === "coede",
+        ) && currentCommand.id === "cologe",
       children: [
         {
           key: "livestock-and-equines",

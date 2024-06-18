@@ -68,7 +68,7 @@ export const HomeIntegration = () => {
             </div>
           </div>
         )}
-        {currentCommand.id === "coede" && (
+        {currentCommand.id === "cologe" && (
           <div>
             <div className="items-icon">
               <FontAwesomeIcon icon={faShield} size="5x" />
