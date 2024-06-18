@@ -21,12 +21,11 @@ import { useFormUtils } from "../../../../../hooks";
 import { useApiUserPut } from "../../../../../api";
 import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { faAddressBook, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UbigeosPeru } from "../../../../../data-list";
 
-export const CmstsForm = () => {
+export const CmstsForm = ({ cmstsEnrollment }) => {
   const { authUser } = useAuthentication();
   const navigate = useNavigate();
 
@@ -140,24 +139,14 @@ export const CmstsForm = () => {
           <Acl
             category="jefatura-de-bienestar-del-ejercito"
             subCategory="inscriptions"
-            name="/inscriptions/cmsts/sheet"
+            name="/inscriptions/cmsts/sheet/:cmstsEnrollmentId"
           >
             <IconAction
               className="pointer"
-              onClick={() => onNavigateTo("sheet")}
+              onClick={() => onNavigateTo(`sheet/${cmstsEnrollment.id}`)}
               styled={{ color: (theme) => theme.colors.error }}
               icon={faFilePdf}
             />
-          </Acl>
-          <Acl
-            category="jefatura-de-bienestar-del-ejercito"
-            subCategory="inscriptions"
-            name="/inscriptions/cmsts/all"
-          >
-            <Button type="primary" onClick={() => onNavigateTo("all")}>
-              <FontAwesomeIcon icon={faAddressBook} /> &nbsp; Ver todos los
-              inscritos
-            </Button>
           </Acl>
         </Space>
       </Col>
@@ -423,7 +412,7 @@ export const CmstsForm = () => {
             </Col>
           </Row>
           <Row justify="end" gutter={[16, 16]}>
-            <Col xs={24} sm={6} md={4}>
+            <Col xs={24} sm={24} md={10} lg={6}>
               <Button
                 type="primary"
                 size="large"
@@ -431,7 +420,7 @@ export const CmstsForm = () => {
                 htmlType="submit"
                 loading={putUserLoading}
               >
-                Guardar
+                Guardar mi informacion personal
               </Button>
             </Col>
           </Row>

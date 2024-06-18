@@ -13,34 +13,11 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../../hooks";
-import { useApiUserPut } from "../../../../../api";
-import { assign } from "lodash";
-import { useAuthentication } from "../../../../../providers";
 import { CmstsTable } from "./CmstsTable";
 
-export const CmstsFamilyForm = () => {
-  const { authUser } = useAuthentication();
-  const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
-
-  const mapUserToApi = (formData) => {
-    return assign(
-      {},
-      {
-        id: authUser.id,
-        email: authUser.email,
-        phone: authUser.phone,
-        familyMembers: [
-          ...(authUser?.familyMembers || []),
-          { ...formData, id: formData.dni, cciiffs: +formData.cciiffs },
-        ],
-      }
-    );
-  };
-
+export const CmstsFamilyForm = ({ familyMembers, onSetFamilyMembers }) => {
   const exitsFamilyMember = (dni) =>
-    !!(authUser?.familyMembers || []).find(
-      (familyMember) => familyMember?.dni === dni
-    );
+    !!(familyMembers || []).find((familyMember) => familyMember?.dni === dni);
 
   const onSubmitSaveFamilyUser = async (formData) => {
     try {
@@ -52,13 +29,7 @@ export const CmstsFamilyForm = () => {
           title: "El DNI ya esta registrado.",
         });
 
-      const user = mapUserToApi(formData);
-
-      await putUser(user);
-
-      if (!putUserResponse.ok) {
-        throw new Error(JSON.stringify(putUserResponse));
-      }
+      onSetFamilyMembers((prevState) => [...prevState, formData]);
 
       notification({ type: "success" });
       clearForm();
@@ -100,7 +71,7 @@ export const CmstsFamilyForm = () => {
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  const onConfirmFamilyMember = (dni) =>
+  const onConfirmDeleteFamilyMember = (dni) =>
     modalConfirm({
       title: "¿Estás seguro de que quieres eliminar este familiar?",
       onOk: () => deleteFamilyMember(dni),
@@ -108,21 +79,11 @@ export const CmstsFamilyForm = () => {
 
   const deleteFamilyMember = async (dni) => {
     try {
-      const familyMembers = authUser.familyMembers.filter(
+      const _familyMembers = familyMembers.filter(
         (familyMember) => familyMember.dni !== dni
       );
 
-      const user = assign(
-        {},
-        {
-          id: authUser.id,
-          email: authUser.email,
-          phone: authUser.phone,
-          familyMembers: familyMembers,
-        }
-      );
-
-      await putUser(user);
+      onSetFamilyMembers(_familyMembers);
 
       notification({ type: "success" });
     } catch (e) {
@@ -275,13 +236,7 @@ export const CmstsFamilyForm = () => {
           </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
-              <Button
-                type="primary"
-                size="large"
-                block
-                htmlType="submit"
-                loading={putUserLoading}
-              >
+              <Button size="large" block htmlType="submit">
                 Añadir Familiar
               </Button>
             </Col>
@@ -289,7 +244,10 @@ export const CmstsFamilyForm = () => {
         </Form>
       </Col>
       <Col span={24}>
-        <CmstsTable onDeleteFamilyMember={onConfirmFamilyMember} />
+        <CmstsTable
+          familyMembers={familyMembers}
+          onDeleteFamilyMember={onConfirmDeleteFamilyMember}
+        />
       </Col>
     </Row>
   );

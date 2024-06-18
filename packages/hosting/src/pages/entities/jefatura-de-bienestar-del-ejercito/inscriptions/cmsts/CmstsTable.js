@@ -1,13 +1,8 @@
 import React from "react";
-import { useAuthentication } from "../../../../../providers";
 import { IconAction, Space, Table } from "../../../../../components";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-export const CmstsTable = ({ onDeleteFamilyMember }) => {
-  const { authUser } = useAuthentication();
-
-  const familyMembers = authUser?.familyMembers || [];
-
+export const CmstsTable = ({ familyMembers, onDeleteFamilyMember }) => {
   const columns = [
     {
       title: "Apellidos y Nombres",

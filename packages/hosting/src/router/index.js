@@ -186,11 +186,6 @@ export const Router = () => {
         />
         <Route
           exact
-          path="inscriptions/cmsts/sheet"
-          element={<A.InscriptionFile />}
-        />
-        <Route
-          exact
           path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
           element={
             <AdminLayout>
@@ -245,6 +240,11 @@ export const Router = () => {
           }
         />
       </Route>
+      <Route
+        exact
+        path={pathBase("/inscriptions/cmsts/sheet/:cmstsEnrollmentId")}
+        element={<A.InscriptionFile />}
+      />
       <Route
         exact
         path={pathBase(

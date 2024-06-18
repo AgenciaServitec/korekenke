@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { usersRef } from "../../../../../../firebase/collections";
+import { cmstsEnrollmentsRef } from "../../../../../../firebase/collections";
 import {
   Acl,
   Col,
@@ -9,14 +9,20 @@ import {
   Table,
   Title,
 } from "../../../../../../components";
+import { useGlobalData } from "../../../../../../providers";
+import { Tag } from "antd";
 
 export const AllRegistered = () => {
-  const [inscribedUsers = [], inscribedUsersLoading, inscribedUsersError] =
-    useCollectionData(usersRef.where("isDeleted", "==", false));
+  const { users } = useGlobalData();
+  const [
+    cmstsEnrollments = [],
+    cmstsEnrollmentsLoading,
+    cmstsEnrollmentsError,
+  ] = useCollectionData(cmstsEnrollmentsRef.where("isDeleted", "==", false));
 
   useEffect(() => {
-    inscribedUsersError && notification({ type: "error" });
-  }, [inscribedUsersError]);
+    cmstsEnrollmentsError && notification({ type: "error" });
+  }, [cmstsEnrollmentsError]);
 
   const columns = [
     {
@@ -79,10 +85,25 @@ export const AllRegistered = () => {
     },
     {
       title: "Celular de Emergencia",
+      dataIndex: "emergencyCellPhone",
       key: "emergencyCellPhone",
-      render: (_) => _.emergencyCellPhone?.number || "",
+      render: (emergencyCellPhone, _) => emergencyCellPhone?.number || "",
+    },
+    {
+      title: "Estado",
+      dataIndex: "status",
+      key: "status",
+      render: (status, _) => (
+        <Tag color="warning">{status === "pending" && "Pendiente"}</Tag>
+      ),
     },
   ];
+
+  const cmstsEnrollmentsView = cmstsEnrollments.map((cmstsEnrollment) => {
+    const user = users.find((user) => user.id === cmstsEnrollment.userId);
+
+    return { ...user, ...cmstsEnrollment };
+  });
 
   return (
     <Acl
@@ -98,8 +119,8 @@ export const AllRegistered = () => {
         <Col span={24}>
           <Table
             columns={columns}
-            dataSource={inscribedUsers}
-            loading={inscribedUsersLoading}
+            dataSource={cmstsEnrollmentsView}
+            loading={cmstsEnrollmentsLoading}
             virtual
             bordered
             size="small"

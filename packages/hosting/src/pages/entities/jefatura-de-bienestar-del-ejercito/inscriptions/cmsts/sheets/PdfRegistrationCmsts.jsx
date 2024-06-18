@@ -11,7 +11,7 @@ import {
   Relationships,
 } from "../../../../../../data-list";
 
-export const PdfRegistrationCmsts = ({ user }) => {
+export const PdfRegistrationCmsts = ({ user, cmstsEnrollment }) => {
   const findDegree = (degreeCode) =>
     DegreesArmy.flatMap((degreeArmy) => degreeArmy.options).find(
       (degree) => degree.value === degreeCode
@@ -194,8 +194,8 @@ export const PdfRegistrationCmsts = ({ user }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {(!isEmpty(user?.familyMembers)
-                      ? user.familyMembers
+                    {(!isEmpty(cmstsEnrollment?.familyMembers)
+                      ? cmstsEnrollment.familyMembers
                       : [1, 2, 3]
                     ).map((familyMember, index) => (
                       <tr key={index}>
