@@ -30,8 +30,6 @@ export const CmstsFamilyForm = ({ familyMembers, onSetFamilyMembers }) => {
         });
 
       onSetFamilyMembers((prevState) => [...prevState, formData]);
-
-      notification({ type: "success" });
       clearForm();
     } catch (e) {
       console.log("ErrorUpdateUser: ", e);
