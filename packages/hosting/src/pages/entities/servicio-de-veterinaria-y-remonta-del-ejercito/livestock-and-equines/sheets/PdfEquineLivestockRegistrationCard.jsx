@@ -11,9 +11,13 @@ import {
 } from "../../../../../images";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
+import { useGlobalData } from "../../../../../providers";
+import { userFullName } from "../../../../../utils/users/userFullName2";
+import { findDegree } from "../../../../../utils";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
+  const { departments, users, entities } = useGlobalData();
   const [
     livestockAndEquine,
     livestockAndEquineLoading,
@@ -27,6 +31,33 @@ export const PdfEquineLivestockRegistrationCard = () => {
   }, [livestockAndEquineError]);
 
   if (livestockAndEquineLoading) return <Spinner height="80vh" />;
+
+  const genericSearch = (group, id) => {
+    return group.find((_group) => _group.id === id);
+  };
+
+  const unitPELVETRCMDNEPR = genericSearch(
+    departments,
+    livestockAndEquine?.unit
+  );
+
+  const unitBossPELVETRCMDNEPR = genericSearch(
+    users,
+    unitPELVETRCMDNEPR?.bossId
+  );
+
+  const entitySVRE = genericSearch(entities, "lCBsn4NbEjt0lBtkBHeO");
+
+  const entityBossSVRE = genericSearch(users, entitySVRE?.entityManageId);
+
+  const entityRCMDNEPR = genericSearch(entities, "7zw9UxYVomBeXVyUayt6");
+
+  const entityBossRCMDNEPR = genericSearch(
+    users,
+    entityRCMDNEPR?.entityManageId
+  );
+
+  console.log(entityBossSVRE);
 
   return (
     <Container>
@@ -90,7 +121,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
               </div>
               <div className="section_information__column">
                 <ul>
-                  <li>: {livestockAndEquine?.unit || ""}</li>
+                  <li>: {unitPELVETRCMDNEPR?.name || ""}</li>
                   <li>: {livestockAndEquine?.greatUnit || ""}</li>
                   <li>: {livestockAndEquine?.name || ""}</li>
                   <li>: {livestockAndEquine?.registrationNumber || ""}</li>
@@ -146,25 +177,27 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    <img
-                      src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
-                      alt="Perfil Izquierdo"
-                    />
+                    {entityBossSVRE?.signaturePhoto && (
+                      <img
+                        src={entityBossSVRE?.signaturePhoto.url}
+                        alt="Perfil Izquierdo"
+                      />
+                    )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>0-224163373</strong>
+                      <strong>{entityBossSVRE?.cip}</strong>
                     </p>
                     <p>
-                      <strong>JUAN CARLOS HOLGUIN AVILA</strong>
-                    </p>
-                    <p>
-                      <strong>CRL-EP</strong>
+                      <strong>{userFullName(entityBossSVRE)}</strong>
                     </p>
                     <p>
                       <strong>
-                        JEFE DEL SERVICIO DE VETERINARIA Y REMONTA DEL EJERCITO
+                        {findDegree(entityBossSVRE?.degree)?.label}
                       </strong>
+                    </p>
+                    <p>
+                      <strong>JEFE DEL {entitySVRE?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -173,23 +206,27 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    <img
-                      src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
-                      alt="Perfil Izquierdo"
-                    />
+                    {entityBossRCMDNEPR?.signaturePhoto && (
+                      <img
+                        src={entityBossRCMDNEPR?.signaturePhoto.url}
+                        alt="Perfil Izquierdo"
+                      />
+                    )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>O-226561074-O+</strong>
+                      <strong>{entityBossRCMDNEPR?.cip}</strong>
                     </p>
                     <p>
-                      <strong>CARLOS OMAR RUIZ BARDALES</strong>
+                      <strong>{userFullName(entityBossRCMDNEPR)}</strong>
                     </p>
                     <p>
-                      <strong>Coronel de Caballeria </strong>
+                      <strong>
+                        {findDegree(entityBossRCMDNEPR?.degree)?.label}
+                      </strong>
                     </p>
                     <p>
-                      <strong>Comandante del RC &quot;MDN&quot; EPR</strong>
+                      <strong>Comandante del {entityRCMDNEPR?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -198,23 +235,27 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    <img
-                      src="https://cdn.shopify.com/s/files/1/0594/4639/5086/files/Line_Through_Name.jpg"
-                      alt="Perfil Izquierdo"
-                    />
+                    {unitBossPELVETRCMDNEPR?.signaturePhoto && (
+                      <img
+                        src={unitBossPELVETRCMDNEPR?.signaturePhoto.url}
+                        alt="Perfil Izquierdo"
+                      />
+                    )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>O-126259900 - O+</strong>
+                      <strong>{unitBossPELVETRCMDNEPR?.cip}</strong>
                     </p>
                     <p>
-                      <strong>RODYNEL WALDIR GONZALES MAYTA</strong>
+                      <strong>{userFullName(unitBossPELVETRCMDNEPR)}</strong>
                     </p>
                     <p>
-                      <strong>TTE S VET</strong>
+                      <strong>
+                        {findDegree(unitBossPELVETRCMDNEPR?.degree)?.label}
+                      </strong>
                     </p>
                     <p>
-                      <strong>JEFE PEL VET DEL RC &quot;MDN&quot;EPR</strong>
+                      <strong>JEFE {unitPELVETRCMDNEPR?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -384,6 +425,7 @@ const Container = styled.div`
       }
 
       .signature_img {
+        height: 5em;
         img {
           width: auto;
           height: 5em;
@@ -397,6 +439,7 @@ const Container = styled.div`
         gap: 0.2em;
         width: 19em;
         padding-top: 0.3em;
+        text-transform: uppercase;
         p {
           margin: 0;
           letter-spacing: -1px;
