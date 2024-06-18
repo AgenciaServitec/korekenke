@@ -32,7 +32,7 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 export const LiveStockAndEquineIntegration = () => {
   const { livestockAndEquineId } = useParams();
   const navigate = useNavigate();
-  const { livestockAndEquines } = useGlobalData();
+  const { livestockAndEquines, departments } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -98,11 +98,19 @@ export const LiveStockAndEquineIntegration = () => {
     }
   };
 
+  console.log({ departments });
+
+  const departmentsView = departments.map((deparment) => ({
+    label: deparment.name,
+    value: deparment.id,
+  }));
+
   const onGoBack = () => navigate(-1);
 
   return (
     <LiveStockAndEquine
       isNew={isNew}
+      departmentsView={departmentsView}
       livestockAndEquine={livestockAndEquine}
       onSaveLivestockAndEquine={onSaveLivestockAndEquine}
       loading={loading}
@@ -113,6 +121,7 @@ export const LiveStockAndEquineIntegration = () => {
 
 const LiveStockAndEquine = ({
   isNew,
+  departmentsView,
   livestockAndEquine,
   onSaveLivestockAndEquine,
   loading,
@@ -274,10 +283,11 @@ const LiveStockAndEquine = ({
                   name="unit"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
-                    <Input
+                    <Select
                       label="Unidad"
                       name={name}
                       value={value}
+                      options={departmentsView}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
