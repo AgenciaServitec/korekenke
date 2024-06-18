@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Acl,
   AddButton,
@@ -7,9 +7,14 @@ import {
   modalConfirm,
   notification,
   Row,
+  Select,
   Title,
 } from "../../../components";
-import { useAuthentication, useGlobalData } from "../../../providers";
+import {
+  useAuthentication,
+  useCommand,
+  useGlobalData,
+} from "../../../providers";
 import { useNavigate } from "react-router";
 import { UsersTable } from "./UserTable";
 import {
@@ -17,15 +22,18 @@ import {
   getApiErrorResponse,
   useApiUserPatch,
 } from "../../../api";
-import { assign, isEmpty } from "lodash";
+import { assign, isEmpty, concat } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 export const Users = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
-  const { users, rolesAcls } = useGlobalData();
+  const { users, rolesAcls, commands } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
+  const { currentCommand } = useCommand();
+
+  const [commandId, setCommandId] = useState(currentCommand.id || "all");
 
   const navigateTo = (userId) => navigate(userId);
 
@@ -96,6 +104,10 @@ export const Users = () => {
       },
     });
 
+  const usersView = users.filter((user) =>
+    commandId === "all" ? true : user.initialCommand.id === commandId
+  );
+
   return (
     <Acl redirect category="administration" subCategory="users" name="/users">
       <Row gutter={[16, 16]}>
@@ -110,9 +122,22 @@ export const Users = () => {
         <Col span={24}>
           <Title level={3}>Usuarios</Title>
         </Col>
+        <Col span={24} md={8}>
+          <Select
+            value={commandId}
+            onChange={(value) => setCommandId(value)}
+            options={concat(
+              [{ label: "Todos", value: "all" }],
+              commands.map((command) => ({
+                label: `${command.name} (${command.code.toUpperCase()})`,
+                value: command.id,
+              }))
+            )}
+          />
+        </Col>
         <Col span={24}>
           <UsersTable
-            users={users}
+            users={usersView}
             rolesAcls={rolesAcls}
             onEditUser={onEditUser}
             onConfirmRemoveUser={onConfirmRemoveUser}
