@@ -131,15 +131,24 @@ export const CmstsIntegration = () => {
 
           <>
             {!showSignUpCmsts && !cmstsEnrollment ? (
-              <Col span={24} style={{ display: "grid", placeItems: "center" }}>
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={() => setShowSignUpCmsts(true)}
+              <Acl
+                category="jefatura-de-bienestar-del-ejercito"
+                subCategory="inscriptions"
+                name="/inscriptions/cmsts#btn-cmsts-enrollment"
+              >
+                <Col
+                  span={24}
+                  style={{ display: "grid", placeItems: "center" }}
                 >
-                  Inscribirme en circulo militar
-                </Button>
-              </Col>
+                  <Button
+                    type="primary"
+                    size="large"
+                    onClick={() => setShowSignUpCmsts(true)}
+                  >
+                    Inscribirme en circulo militar
+                  </Button>
+                </Col>
+              </Acl>
             ) : (
               <>
                 <Col span={24}>
