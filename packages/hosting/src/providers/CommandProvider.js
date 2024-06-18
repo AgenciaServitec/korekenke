@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { isString } from "lodash";
 import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 import { updateUser } from "../firebase/collections";
-import dayjs from "dayjs";
+import { firestoreTimestamp } from "../firebase/firestore";
 
 const CommandContext = createContext({
   currentCommand: null,
@@ -45,7 +45,7 @@ export const CommandProvider = ({ children }) => {
       await updateUser(authUser.id, {
         commands: [
           ...authUser.commands.filter((_command) => _command.id !== command.id),
-          { ...command, updateAt: dayjs().format("YYYY-MM-DD HH:mm:ss") },
+          { ...command, updateAt: firestoreTimestamp.now() },
         ],
         initialCommand: command,
       });
