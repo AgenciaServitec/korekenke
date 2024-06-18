@@ -50,10 +50,10 @@ export const ClinicHistoryIntegration = () => {
   useEffect(() => {
     (async () => {
       const PEL_VET_DEL_RC_MDN_EPR_department = departments.find(
-        (department) => department.id === "BP0Z7ZSLIXyz1pGYFwhU"
+        (department) => department?.id === "BP0Z7ZSLIXyz1pGYFwhU"
       );
 
-      if (!PEL_VET_DEL_RC_MDN_EPR_department) return;
+      if (!PEL_VET_DEL_RC_MDN_EPR_department?.bossId) return;
 
       const userBoss = await fetchUser(
         PEL_VET_DEL_RC_MDN_EPR_department.bossId
