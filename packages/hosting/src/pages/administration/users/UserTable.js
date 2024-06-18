@@ -39,19 +39,39 @@ export const UsersTable = ({
       title: "Rol",
       dataIndex: "roleCode",
       key: "roleCode",
-      render: (_, user) =>
-        capitalize(findRole(rolesAcls, user?.roleCode)?.name || ""),
+      render: (_, user) => (
+        <strong className="capitalize">
+          {findRole(rolesAcls, user?.roleCode)?.name || ""}
+        </strong>
+      ),
+    },
+    {
+      title: "Commandos",
+      dataIndex: "commands",
+      key: "commands",
+      width: 200,
+      render: (_, user) => (
+        <Space style={{ display: "flex", flexWrap: "wrap" }}>
+          {user.commands.map((command) => (
+            <span key={command.id}>
+              <Tag color="blue" style={{ margin: 0 }}>
+                {command.code.toUpperCase()}
+              </Tag>
+            </span>
+          ))}
+        </Space>
+      ),
     },
     {
       title: "Estado",
       dataIndex: "status",
       key: "status",
       render: (_) => (
-        <Space>
-          <span>
-            <Tag color="yellow">Registrado</Tag>
-          </span>
-        </Space>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <Tag color="yellow" style={{ margin: "0" }}>
+            Registrado
+          </Tag>
+        </div>
       ),
     },
     {
