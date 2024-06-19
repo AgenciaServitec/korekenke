@@ -21,7 +21,6 @@ import {
   Row,
   Select,
   Title,
-  Upload,
 } from "../../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { mapAcls } from "../../../../utils";
@@ -80,7 +79,7 @@ export const RoleAclIntegration = () => {
   }, [saveRoleAclsSuccess]);
 
   const onSaveRoleAcls = async (formData) => {
-    const roleId = formData.roleId.toLowerCase().split(" ").join("_");
+    const roleId = formData.name.toLowerCase().split(" ").join("_");
     if (roleAclsId === "new") {
       const roleAcl = await fetchRoleAcl(roleId);
       if (roleAcl)
@@ -94,7 +93,6 @@ export const RoleAclIntegration = () => {
       assign({}, formData, {
         id: roleAcls?.id || roleId,
         name: formData.name.toLowerCase(),
-        avatarImage: formData?.avatarImage || null,
         acls: mapAcls(formData.acls),
       })
     );
@@ -130,10 +128,8 @@ const RoleAcl = ({
   onCancel,
 }) => {
   const schema = yup.object({
-    roleId: yup.string().required(),
     name: yup.string().required(),
     initialPathname: yup.string().required(),
-    avatarImage: yup.mixed().required(),
   });
 
   const {
@@ -153,9 +149,7 @@ const RoleAcl = ({
 
   const roleAclsToForm = (roleAcls) =>
     reset({
-      roleId: roleAcls?.id || "",
       name: roleAcls?.name || "",
-      avatarImage: roleAcls?.avatarImage || null,
       initialPathname: roleAcls?.initialPathname || "/home",
       acls: mapAcls(roleAcls?.acls),
     });
@@ -173,23 +167,6 @@ const RoleAcl = ({
     >
       <Form onSubmit={handleSubmit(onSubmitRoleAcls)}>
         <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Controller
-              name="roleId"
-              defaultValue=""
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Rol id en inglés"
-                  name={name}
-                  onChange={onChange}
-                  value={value}
-                  error={error(name)}
-                  disabled={!isNew}
-                />
-              )}
-            />
-          </Col>
           <Col span={24}>
             <Controller
               name="name"
@@ -227,26 +204,6 @@ const RoleAcl = ({
                       value: "/profile",
                     },
                   ]}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
-              control={control}
-              name="avatarImage"
-              render={({ field: { onChange, value, name } }) => (
-                <Upload
-                  label="Avatar"
-                  accept="image/*"
-                  buttonText="Subir foto"
-                  value={value}
-                  name={name}
-                  filePath={`default-roles/${user.id}`}
-                  withThumbImage={false}
-                  onChange={(file) => onChange(file)}
-                  required={required(name)}
-                  error={error(name)}
                 />
               )}
             />
