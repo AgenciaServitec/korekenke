@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Image, Row } from "../../components";
+import { Col, Image, Row, Tag } from "../../components";
 import { PhotoNoFound } from "../../images";
 import styled from "styled-components";
 
@@ -45,6 +45,16 @@ export const ProfileInformation = ({ user }) => {
         </Col>
         <Col span={24} md={12}>
           <DescriptionItem title="Celular" content={user?.phone?.number} />
+        </Col>
+        <Col span={24}>
+          <DescriptionItem
+            title="Commandos"
+            content={user?.commands.map((command, index) => (
+              <Tag key={index} color="green">
+                {command.name} ({command.code.toUpperCase()})
+              </Tag>
+            ))}
+          />
         </Col>
       </Row>
     </Container>
