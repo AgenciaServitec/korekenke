@@ -41,7 +41,7 @@
       "documents": "gs://korekenke-documents",
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito"
     },
-    "apiUrl": "https://korekenke-prod.web.app/api"
+    "apiUrl": "https://korekenke-dev.web.app/api"
   },
   "production": {
     "version": "0.0.1",
