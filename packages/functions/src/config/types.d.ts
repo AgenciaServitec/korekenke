@@ -25,7 +25,7 @@ interface NodeMailerConfig {
 }
 
 interface MailerConfig {
-  sendMailNotifyCDSError: {
+  sendMailNotifyKorekenkeError: {
     to: string;
   };
 }

@@ -3,8 +3,14 @@
     {
       "public": "packages/hosting/build",
       "target": "app",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "predeploy": ["yarn hosting build"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "predeploy": [
+        "yarn hosting build"
+      ],
       "headers": [
         {
           "source": "/index.html",
@@ -43,10 +49,15 @@
     "rules": "firestore.rules"
   },
   "extensions": {
+    "correspondence-documents": "firebase/storage-resize-images@0.2.3",
+    "storage-resize-images": "firebase/storage-resize-images@0.2.3",
+    "user-documents": "firebase/storage-resize-images@0.2.3",
     "storage-resize-images-photos": "firebase/storage-resize-images@0.1.33"
   },
   "functions": {
-    "predeploy": ["yarn functions build"],
+    "predeploy": [
+      "yarn functions build"
+    ],
     "source": "packages/functions"
   }
 }

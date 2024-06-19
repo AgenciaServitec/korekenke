@@ -11,7 +11,7 @@ export const config: Config = {
   development: {
     version: "0.0.1",
     mailer: {
-      sendMailNotifyCDSError: {
+      sendMailNotifyKorekenkeError: {
         to: "mariano260996@gmail.com",
       },
     },
@@ -23,7 +23,7 @@ export const config: Config = {
   production: {
     version: "0.0.1",
     mailer: {
-      sendMailNotifyCDSError: {
+      sendMailNotifyKorekenkeError: {
         to: "ti@korekenke.com",
       },
     },
