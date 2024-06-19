@@ -48,7 +48,7 @@ export const ProfileInformation = ({ user }) => {
         </Col>
         <Col span={24}>
           <DescriptionItem
-            title="Commandos"
+            title="Comandos"
             content={user?.commands.map((command, index) => (
               <Tag key={index} color="green">
                 {command.name} ({command.code.toUpperCase()})
