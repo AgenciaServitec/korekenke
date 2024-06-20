@@ -276,7 +276,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="unit"
                   control={control}
@@ -293,7 +293,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="greatUnit"
                   control={control}
@@ -309,7 +309,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="birthdate"
                   control={control}
@@ -326,7 +326,7 @@ const LiveStockAndEquine = ({
                 />
               </Col>
 
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="height"
                   control={control}
@@ -342,10 +342,8 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-            </Row>
 
-            <Row gutter={[16, 16]}>
-              <Col span={8}>
+              <Col span={24} md={8}>
                 <Controller
                   name="name"
                   control={control}
@@ -361,7 +359,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={8}>
+              <Col span={24} md={8}>
                 <Controller
                   name="father"
                   control={control}
@@ -377,7 +375,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={8}>
+              <Col span={24} md={8}>
                 <Controller
                   name="mother"
                   control={control}
@@ -393,9 +391,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-            </Row>
-            <Row gutter={[16, 16]}>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="registrationNumber"
                   control={control}
@@ -411,7 +407,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="chipNumber"
                   control={control}
@@ -427,7 +423,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="origin"
                   control={control}
@@ -443,7 +439,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="gender"
                   control={control}
@@ -469,9 +465,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-            </Row>
-            <Row gutter={[16, 16]}>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="raceOrLine"
                   control={control}
@@ -487,7 +481,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="fur"
                   control={control}
@@ -503,7 +497,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="color"
                   control={control}
@@ -519,7 +513,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={24} md={6}>
                 <Controller
                   name="squadron"
                   control={control}
