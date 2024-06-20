@@ -125,6 +125,12 @@ const Entity = ({
     });
   };
 
+  const commandsViewByUser = (commands) =>
+    commands
+      .map((command) => command.id)
+      .join(" - ")
+      .toUpperCase();
+
   //LIST TO SELECTS
   const usersView = users
     .filter((user) => user.roleCode === "manager")
@@ -134,7 +140,7 @@ const Entity = ({
     .map((user) => ({
       label: `${userFullName(user)} (${capitalize(
         findRole(rolesAcls, user?.roleCode)?.name || ""
-      )})`,
+      )}) (${commandsViewByUser(user?.commands)})`,
       value: user.id,
       key: user.id,
       roleCode: user.roleCode,
