@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize, isEmpty, lowerCase, upperCase } from "lodash";
+import { capitalize, isEmpty, lowerCase } from "lodash";
 import {
   addEntity,
   getEntityId,
