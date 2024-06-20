@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize, isEmpty, lowerCase } from "lodash";
+import { capitalize, isEmpty, lowerCase, upperCase } from "lodash";
 import {
   addEntity,
   getEntityId,
@@ -125,6 +125,12 @@ const Entity = ({
     });
   };
 
+  const commandsViewByUser = (commands) =>
+    commands
+      .map((command) => command.id)
+      .join(" - ")
+      .toUpperCase();
+
   //LIST TO SELECTS
   const usersView = users
     .filter((user) => user.roleCode === "manager")
@@ -134,7 +140,7 @@ const Entity = ({
     .map((user) => ({
       label: `${userFullName(user)} (${capitalize(
         findRole(rolesAcls, user?.roleCode)?.name || ""
-      )})`,
+      )}) (${commandsViewByUser(user?.commands)})`,
       value: user.id,
       key: user.id,
       roleCode: user.roleCode,
