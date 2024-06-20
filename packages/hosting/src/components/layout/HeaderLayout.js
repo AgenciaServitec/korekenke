@@ -100,7 +100,11 @@ export const HeaderLayout = ({
               className="logo-img"
             />
           </div>
-          <div>
+          <div
+            onClick={() =>
+              onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
+            }
+          >
             <h3
               style={{
                 textTransform: "uppercase",
