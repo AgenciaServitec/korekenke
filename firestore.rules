@@ -6,10 +6,10 @@ service cloud.firestore {
       allow read:if true;
       allow write, delete: if request.auth.uid != null;
     }
-    match /settings/default {
+    match /settings/roles-acls {
       allow read;
     }
-    match /settings-admin/default {
+    match /settings/default {
       allow read;
     }
   }
