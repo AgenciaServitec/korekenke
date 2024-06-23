@@ -18,13 +18,7 @@ export const OfficesIntegration = () => {
   const navigateTo = (officeId) => navigate(officeId);
 
   const onAddOffice = () => navigateTo("new");
-
-  const navigateToOffice = (officeId = undefined) => {
-    const url = `/offices/${officeId}`;
-    navigate(url);
-  };
-
-  const onEditOffice = (office) => navigateToOffice(office.id);
+  const onEditOffice = (office) => navigateTo(office.id);
   const onDeleteOffice = async (office) => {
     try {
       await updateOffice(office.id, assignDeleteProps({ isDeleted: true }));
