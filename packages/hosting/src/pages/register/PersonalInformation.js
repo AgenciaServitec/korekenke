@@ -19,7 +19,6 @@ import { DegreesArmy, INITIAL_HIGHER_ENTITIES } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
-import { isEmpty } from "lodash";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
@@ -36,7 +35,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string().required(),
-    commandsIds: yup.array().required(),
+    commandId: yup.string().required(),
     cgi: yup.boolean(),
   });
 
@@ -50,7 +49,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     defaultValues: {
       phoneNumber: "",
       cgi: false,
-      commandsIds: null,
+      commandId: null,
     },
   });
 
@@ -66,30 +65,32 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       email: step1Data?.email || "",
       phoneNumber: step1Data?.phone?.number || "",
       degree: step1Data?.degree || "",
-      commandsIds: !isEmpty(step1Data?.commandsIds)
-        ? step1Data.commandsIds
-        : null,
+      commandId: step1Data?.commands?.[0].id || null,
       cgi: step1Data?.cgi || false,
     });
   }, [currentStep]);
 
-  const mapUser = (formData) => ({
-    cip: formData.cip,
-    dni: formData.dni,
-    firstName: formData.firstName,
-    paternalSurname: formData.paternalSurname,
-    maternalSurname: formData.maternalSurname,
-    email: formData.email,
-    phone: {
-      prefix: "+51",
-      number: formData.phoneNumber,
-    },
-    degree: formData.degree,
-    commands: commands.filter((command) =>
-      formData.commandsIds.includes(command.id)
-    ),
-    cgi: formData.cgi,
-  });
+  const mapUser = (formData) => {
+    const command = commands.find(
+      (command) => formData.commandId === command.id
+    );
+
+    return {
+      cip: formData.cip,
+      dni: formData.dni,
+      firstName: formData.firstName,
+      paternalSurname: formData.paternalSurname,
+      maternalSurname: formData.maternalSurname,
+      email: formData.email,
+      phone: {
+        prefix: "+51",
+        number: formData.phoneNumber,
+      },
+      degree: formData.degree,
+      commands: command ? [command] : [],
+      cgi: formData.cgi,
+    };
+  };
 
   const onSubmitLogin = async (formData) => {
     try {
@@ -238,12 +239,11 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
           )}
         />
         <Controller
-          name="commandsIds"
+          name="commandId"
           control={control}
           render={({ field: { onChange, value, name } }) => (
             <Select
-              label="¿A que comandos pertenece?"
-              mode="multiple"
+              label="¿A que comando pertenece?"
               onChange={onChange}
               value={value}
               name={name}
