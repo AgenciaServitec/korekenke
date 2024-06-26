@@ -54,9 +54,9 @@ export const DepartmentIntegration = () => {
     name: formData.name,
     description: formData.description,
     entityId: formData.entityId,
-    membersIds: formData.membersIds,
-    bossId: formData.bossId,
-    secondBossId: formData.secondBossId,
+    membersIds: formData?.membersIds || [],
+    bossId: formData?.bossId || null,
+    secondBossId: formData?.secondBossId || null,
   });
 
   const onSaveDepartment = async (formData) => {
@@ -64,14 +64,16 @@ export const DepartmentIntegration = () => {
       setLoading(true);
 
       //Get users ids deselection
-      const usersIdsDeselected = (department?.membersIds || []).filter(
-        (memberId) => !(formData?.membersIds || []).includes(memberId)
-      );
+      const usersIdsDeselected = formData?.membersIds
+        ? (department?.membersIds || []).filter(
+            (memberId) => !formData.membersIds.includes(memberId)
+          )
+        : [];
 
       //Update of assignTo of users
       await updateAssignToUser({
         oldUsersIds: usersIdsDeselected,
-        newUsersIds: formData.membersIds,
+        newUsersIds: formData?.membersIds,
         moduleId: department?.id,
         users: departmentUsers,
       });
@@ -123,9 +125,9 @@ const Department = ({
     name: yup.string().required(),
     description: yup.string(),
     entityId: yup.string().required(),
-    membersIds: yup.array().required(),
-    bossId: yup.string().required(),
-    secondBossId: yup.string().notRequired(),
+    membersIds: yup.array().nullable(),
+    bossId: yup.string(),
+    secondBossId: yup.string(),
   });
 
   const {
@@ -137,6 +139,9 @@ const Department = ({
     setValue,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      membersIds: null,
+    },
   });
 
   const { required, error } = useFormUtils({ errors, schema });

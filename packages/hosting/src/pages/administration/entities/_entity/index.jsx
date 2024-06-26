@@ -52,7 +52,7 @@ export const EntityIntegration = () => {
     commandId: currentCommand.id,
     name: formData.name,
     abbreviation: lowerCase(formData.abbreviation),
-    entityManageId: formData.entityManageId,
+    entityManageId: formData?.entityManageId || null,
   });
 
   const saveEntity = async (formData) => {
@@ -99,7 +99,7 @@ const Entity = ({
   const schema = yup.object({
     name: yup.string().required(),
     abbreviation: yup.string(),
-    entityManageId: yup.string().required(),
+    entityManageId: yup.string().nullable(),
   });
 
   const {

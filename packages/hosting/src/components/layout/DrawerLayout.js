@@ -7,6 +7,7 @@ import {
   faBuildingUser,
   faComputer,
   faFileAlt,
+  faFileShield,
   faGears,
   faHome,
   faHorse,
@@ -247,6 +248,20 @@ export const DrawerLayout = ({
             onClickMenu(
               "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
             ),
+        },
+      ],
+    },
+    {
+      label: "Departamento de apoyo social",
+      key: "departamento-de-apoyo-social",
+      icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      isVisible: true,
+      children: [
+        {
+          key: "requests-list",
+          icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
+          label: "Lista de solicitudes",
+          isVisible: true,
         },
       ],
     },
