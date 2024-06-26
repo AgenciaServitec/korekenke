@@ -1,5 +1,13 @@
-import React from "react";
-import { Acl, Button, Col, List, notification, Row } from "../../../components";
+import React, { useState } from "react";
+import {
+  Acl,
+  Button,
+  Col,
+  List,
+  notification,
+  Row,
+  Select,
+} from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
@@ -7,13 +15,15 @@ import { useGlobalData } from "../../../providers";
 import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
 import { updateDepartment } from "../../../firebase/collections";
 import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
+import { concat } from "lodash";
 
 export const DepartmentsIntegration = () => {
   const navigate = useNavigate();
-  const { departments, departmentUsers } = useGlobalData();
+  const { departments, departmentUsers, entities } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
+  const [entityId, setEntityId] = useState("all");
 
   const navigateTo = (departmentId) => navigate(departmentId);
 
@@ -41,6 +51,10 @@ export const DepartmentsIntegration = () => {
     }
   };
 
+  const departmentsView = departments.filter((department) =>
+    entityId === "all" ? true : department.entityId === entityId
+  );
+
   return (
     <Acl
       category="administration"
@@ -65,9 +79,22 @@ export const DepartmentsIntegration = () => {
             </Button>
           </Acl>
         </Col>
+        <Col span={24} md={8}>
+          <Select
+            value={entityId}
+            onChange={(value) => setEntityId(value)}
+            options={concat(
+              [{ label: "Todos", value: "all" }],
+              entities.map((entity) => ({
+                label: entity.name,
+                value: entity.id,
+              }))
+            )}
+          />
+        </Col>
         <Col span={24}>
           <List
-            dataSource={departments}
+            dataSource={departmentsView}
             onDeleteItem={(department) => onDeleteDepartment(department)}
             onDeleteConfirmOptions={{
               title: "¿Seguro que deseas eliminar el departamento?",

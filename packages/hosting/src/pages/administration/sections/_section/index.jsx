@@ -171,7 +171,7 @@ const Section = ({
     isNew ? [] : membersInEdition,
     sectionUsers.filter(
       (user) =>
-        user.assignedTo.type === "section" && isEmpty(user.assignedTo.id)
+        user?.assignedTo?.type === "section" && isEmpty(user?.assignedTo?.id)
     )
   ).map(mapOptionSelectMembers);
 
