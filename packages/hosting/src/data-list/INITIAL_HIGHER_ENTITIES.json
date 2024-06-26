@@ -10,6 +10,18 @@
         "category": "organo_de_administracion_interna",
         "commands": [
           {
+            "id": "cobiene",
+            "code": "cobiene",
+            "name": "Comando de bienestar del ejercito",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/copere.webp",
+            "entities": [
+              {
+                "id": "departamento_de_apoyo_social",
+                "name": "DEPARTAMENTO DE APOYO SOCIAL"
+              }
+            ]
+          },
+          {
             "id": "copere",
             "code": "copere",
             "name": "Comando De Personal Del Ejército",
