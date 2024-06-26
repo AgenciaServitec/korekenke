@@ -15,14 +15,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { DegreesArmy, INITIAL_HIGHER_ENTITIES } from "../../data-list";
+import { DegreesArmy } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
-  const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
   const schema = yup.object({
     firstName: yup.string().required(),
@@ -35,7 +34,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string().required(),
-    commandId: yup.string().required(),
     cgi: yup.boolean(),
   });
 
@@ -49,7 +47,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     defaultValues: {
       phoneNumber: "",
       cgi: false,
-      commandId: null,
     },
   });
 
@@ -65,32 +62,24 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       email: step1Data?.email || "",
       phoneNumber: step1Data?.phone?.number || "",
       degree: step1Data?.degree || "",
-      commandId: step1Data?.commands?.[0].id || null,
       cgi: step1Data?.cgi || false,
     });
   }, [currentStep]);
 
-  const mapUser = (formData) => {
-    const command = commands.find(
-      (command) => formData.commandId === command.id
-    );
-
-    return {
-      cip: formData.cip,
-      dni: formData.dni,
-      firstName: formData.firstName,
-      paternalSurname: formData.paternalSurname,
-      maternalSurname: formData.maternalSurname,
-      email: formData.email,
-      phone: {
-        prefix: "+51",
-        number: formData.phoneNumber,
-      },
-      degree: formData.degree,
-      commands: command ? [command] : [],
-      cgi: formData.cgi,
-    };
-  };
+  const mapUser = (formData) => ({
+    cip: formData.cip,
+    dni: formData.dni,
+    firstName: formData.firstName,
+    paternalSurname: formData.paternalSurname,
+    maternalSurname: formData.maternalSurname,
+    email: formData.email,
+    phone: {
+      prefix: "+51",
+      number: formData.phoneNumber,
+    },
+    degree: formData.degree,
+    cgi: formData.cgi,
+  });
 
   const onSubmitLogin = async (formData) => {
     try {
@@ -235,27 +224,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
               helperText={errorMessage(name)}
               required={required(name)}
               options={DegreesArmy}
-            />
-          )}
-        />
-        <Controller
-          name="commandId"
-          control={control}
-          render={({ field: { onChange, value, name } }) => (
-            <Select
-              label="¿A que comando pertenece?"
-              onChange={onChange}
-              value={value}
-              name={name}
-              error={error(name)}
-              helperText={errorMessage(name)}
-              required={required(name)}
-              options={(
-                INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || null
-              ).map((command) => ({
-                label: `${command.name} (${command.code.toUpperCase()})`,
-                value: command.id,
-              }))}
             />
           )}
         />
