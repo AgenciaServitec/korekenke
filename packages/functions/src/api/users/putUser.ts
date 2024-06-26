@@ -5,9 +5,10 @@ import {
   firestore,
 } from "../../_firebase";
 import { NextFunction, Request, Response } from "express";
-import { isEmpty } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import assert from "assert";
 import { defaultFirestoreProps, logger } from "../../utils";
+import { Timestamp } from "@google-cloud/firestore";
 
 interface Params {
   userId: string;
@@ -62,10 +63,25 @@ export const putUser = async (
 };
 
 const updateUser = async (user: User): Promise<void> => {
+  const [initialCommand] = orderBy(
+    user?.commands,
+    [(command) => command.name],
+    ["asc"]
+  );
+
   await firestore
     .collection("users")
     .doc(user.id)
-    .update({ ...user });
+    .update({
+      ...user,
+      commands: user?.commands
+        ? user.commands.map((command) => ({
+            ...command,
+            updateAt: Timestamp.now(),
+          }))
+        : [],
+      initialCommand: initialCommand || null,
+    });
 };
 
 const updateUserAuth = async (

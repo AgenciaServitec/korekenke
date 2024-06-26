@@ -21,7 +21,7 @@ interface User extends DefaultFirestoreProps {
   roleCode: string;
   otherRoles?: Role[];
   commands: Command[];
-  initialCommand: Command;
+  initialCommand: Command | null;
   firstName: string;
   paternalSurname: string;
   maternalSurname: string;
