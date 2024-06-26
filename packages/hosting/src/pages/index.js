@@ -20,6 +20,10 @@ export * from "./access-control/default-roles-acls";
 export * from "./access-control/default-roles-acls/_roleAclsId";
 export * from "./access-control/manage-acls";
 
+//ENTITIES "departamento-de-apoyo-social"
+export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
+// export * from "./entities/departamento-de-apoyo-social/requests/university";
+
 //ENTITIES "jefatura-de-bienestar-del-ejercito"
 export * from "./entities/jefatura-de-bienestar-del-ejercito/correspondences";
 export * from "./entities/jefatura-de-bienestar-del-ejercito/correspondences/_correspondence";

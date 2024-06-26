@@ -266,6 +266,18 @@ export const Router = () => {
         )}
         element={<A.PdfEquineMagazineProfilesSheets />}
       />
+
+      <Route
+        exact
+        path={pathBase(
+          "/entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
+        )}
+        element={
+          <AdminLayout>
+            <A.InstituteAcademyIntegration />
+          </AdminLayout>
+        }
+      />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );
