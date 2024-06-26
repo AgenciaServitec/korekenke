@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# Korekenke app
+
+LINKS OLD PROJECT:
+
+[sistema.korekenke.mil.pe](https://sistema.korekenke.mil.pe/site/login/926730944)
+[tramites.cobiene.mil.pe](https://tramites.cobiene.mil.pe/site/login/926730944?)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
