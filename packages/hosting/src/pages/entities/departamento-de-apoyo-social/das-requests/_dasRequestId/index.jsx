@@ -10,38 +10,62 @@ import {
   Switch,
   Title,
   Upload,
+  notification,
 } from "../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../../../../hooks";
-import { InstitutesAndAcademies } from "../../../../../data-list";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
+import { institutions } from "../../../../../data-list";
 import { useAuthentication } from "../../../../../providers";
-import { firestore } from "../../../../../firebase";
 import { v4 as uuidv4 } from "uuid";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import {
+  addDasApplication,
+  fetchDasApplication,
+  getDasApplicationId,
+  updateDasApplication,
+} from "../../../../../firebase/collections/dasApplications";
 
 export const InstituteAcademyIntegration = () => {
+  const navigate = useNavigate();
   const { dasRequestId } = useParams();
   const { authUser } = useAuthentication();
-  const [familyOrHeadline, setFamilyOrHeadline] = useState(false);
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const [dasRequest, setDasRequest] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [headline, setHeadline] = useState(false);
+  const [requestType, setRequestType] = useState("institute");
 
-  const onType = (value) => {
-    console.log(value);
-    setFamilyOrHeadline(value);
-  };
+  const onGoBack = () => navigate(-1);
+
+  const isNew = dasRequestId === "new";
+
+  useEffect(() => {
+    const _dasRequest = isNew
+      ? { id: getDasApplicationId() }
+      : (async () => {
+          fetchDasApplication(dasRequestId).then((response) => {
+            if (!response) return onGoBack();
+            return;
+          });
+        })();
+
+    setDasRequest(_dasRequest);
+  }, []);
 
   const mapForm = (formData) => ({
-    id: firestore.collection().doc().id,
+    ...dasRequest,
     headline: {
+      id: authUser.id,
       firstName: formData.firstName,
       paternalSurname: formData.paternalSurname,
       maternalSurname: formData.maternalSurname,
       cip: formData.cip,
       degree: formData.degree,
-      phoneNumber: {
+      phone: {
         prefix: "+51",
-        number: formData.phone,
+        number: formData.phoneNumber,
       },
       currentService: formData.currentService,
       email: formData.email,
@@ -50,51 +74,66 @@ export const InstituteAcademyIntegration = () => {
       firstName: formData.firstNameFamily,
       paternalSurname: formData.paternalSurnameFamily,
       maternalSurname: formData.maternalSurnameFamily,
-      cif: formData.cifFamily,
+      cif: formData.cif,
       email: formData.emailFamily,
       relationship: formData.relationship,
       documents: {
-        copyCIF: formData.copyCIFFamily,
-        copyDNI: formData.copyDNIFamily,
-        copyLiquidacionHaberesHeadline: formData.copyLiquidacionHaberesHeadline,
+        copyCif: formData.copyCif || null,
+        copyDni: formData.copyDni || null,
       },
     },
-    instituteOrAcademy: {
-      name: formData.instituteOrAcademyName,
+    institution: {
+      type: dasRequest?.institution?.type || requestType,
+      name: formData.institutionId,
+      specialty: formData.specialty,
+      processType: formData.processType,
+    },
+    applicant: {
+      to: dasRequest?.applicant?.to || headline ? "headline" : "familiar",
+      documents: {
+        copyLiquidacionHaberesHeadline:
+          formData.copyLiquidacionHaberesHeadline || null,
+        copyConstanciaIngresoUniv: formData.copyConstanciaIngresoUniv || null,
+        copyConsolidadoNotasUniv: formData.copyConsolidadoNotasUniv || null,
+        copyBoletaPagoMatriculaUniv:
+          formData.copyBoletaPagoMatriculaUniv || null,
+      },
     },
   });
 
   const saveInstituteOrAcademy = async (formData) => {
     try {
-      console.log(mapForm(formData));
-    } catch (e) {
-      console.log(e);
-    }
+      setLoading(true);
 
-    console.log(mapForm(formData));
+      isNew
+        ? await addDasApplication(assignCreateProps(mapForm(formData)))
+        : await updateDasApplication(
+            dasRequest.id,
+            assignUpdateProps(mapForm(formData))
+          );
+
+      notification({ type: "success" });
+    } catch (e) {
+      console.error("ErrorSaveDasRequest: ", e);
+      notification({ type: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Title level={2}>
-          Solicitud para tarifa preferencial en instituto - academia
-        </Title>
-      </Col>
-      <Col span={24}>
-        <Row justify="end" gutter={[16, 16]}>
-          <Switch
-            checkedChildren="Titular"
-            unCheckedChildren="Familiar"
-            onChange={onType}
-          />
-        </Row>
+        <Title level={2}>Solicitud para Institución</Title>
       </Col>
       <Col span={24}>
         <InstituteAcademy
           user={authUser}
-          familyOrHeadline={familyOrHeadline}
           onSaveInstituteOrAcademy={saveInstituteOrAcademy}
+          dasRequest={dasRequest}
+          loading={loading}
+          onSetHeadline={setHeadline}
+          onSetRequestType={setRequestType}
         />
       </Col>
     </Row>
@@ -103,38 +142,118 @@ export const InstituteAcademyIntegration = () => {
 
 const InstituteAcademy = ({
   user,
-  familyOrHeadline,
   onSaveInstituteOrAcademy,
+  dasRequest,
+  loading,
+  onSetHeadline,
+  onSetRequestType,
 }) => {
   const schema = yup.object({
-    firstName: yup.string().required(),
-    paternalSurname: yup.string().required(),
-    maternalSurname: yup.string().required(),
-    cip: yup.string().required(),
-    degree: yup.string().required(),
-    phoneNumber: yup.string().required().required(),
-    currentService: yup.string(),
-    email: yup.string(),
-    firstNameFamily: yup.string().required(),
-    paternalSurnameFamily: yup.string().required(),
-    maternalSurnameFamily: yup.string().required(),
-    cif: yup.string().required(),
-    emailFamily: yup.string(),
-    relationship: yup.string().required(),
-    copyCIF: yup.mixed().required(),
-    copyDNI: yup.mixed().required(),
+    isHeadline: yup.boolean().required(),
+    requestType: yup.string().required(),
+    headline: yup.object({
+      firstName: yup.string().required(),
+      paternalSurname: yup.string().required(),
+      maternalSurname: yup.string().required(),
+      cip: yup.string().required(),
+      degree: yup.string().required(),
+      phoneNumber: yup.string().required(),
+      currentService: yup.string(),
+      email: yup.string().email(),
+    }),
+
+    familiar: yup.object({
+      firstName: yup.string().when("isHeadline", {
+        is: true,
+        then: yup.string().nullable(),
+        otherwise: yup.string().required(),
+      }),
+      paternalSurname: yup.string().when("isHeadline", {
+        is: true,
+        then: yup.string().nullable(),
+        otherwise: yup.string().required(),
+      }),
+      maternalSurname: yup.string().when("isHeadline", {
+        is: true,
+        then: yup.string().nullable(),
+        otherwise: yup.string().required(),
+      }),
+      cif: yup.string().when("isHeadline", {
+        is: true,
+        then: yup.string().nullable(),
+        otherwise: yup.string().min(9).max(9).required(),
+      }),
+      email: yup.string().email().when("isHeadline", {
+        is: true,
+        then: yup.string().email().nullable(),
+        otherwise: yup.string().email().required(),
+      }),
+      relationship: yup.string().when("isHeadline", {
+        is: true,
+        then: yup.string().nullable(),
+        otherwise: yup.string().required(),
+      }),
+      documents: yup.object({
+        copyCif: yup.mixed().when("isHeadline", {
+          is: true,
+          then: yup.mixed().nullable(),
+          otherwise: yup.mixed().required(),
+        }),
+        copyDni: yup.mixed().when("isHeadline", {
+          is: true,
+          then: yup.mixed().nullable(),
+          otherwise: yup.mixed().required(),
+        }),
+      }),
+    }),
+    institutionId: yup.string().when("requestType", {
+      is: "institutes",
+      then: yup.string().required(),
+      otherwise: yup.string().notRequired(),
+    }),
+    specialty: yup.string().required(),
+    processType: yup.string().when("requestType", {
+      is: "universities",
+      then: yup.string().required(),
+      otherwise: yup.string().notRequired(),
+    }),
+    copyLiquidacionHaberesHeadline: yup.mixed().when("requestType", {
+      is: "britanico",
+      then: yup.mixed().required(),
+      otherwise: yup.mixed().notRequired(),
+    }),
+    copyConstanciaIngresoUniv: yup.mixed().when("requestType", {
+      is: "universities",
+      then: yup.mixed().required(),
+      otherwise: yup.mixed().notRequired(),
+    }),
+    copyConsolidadoNotasUniv: yup.mixed().when("requestType", {
+      is: "universities",
+      then: yup.mixed().required(),
+      otherwise: yup.mixed().notRequired(),
+    }),
+    copyBoletaPagoMatriculaUniv: yup.mixed().when("requestType", {
+      is: "universities",
+      then: yup.mixed().required(),
+      otherwise: yup.mixed().notRequired(),
+    }),
   });
 
   const {
     formState: { errors },
     handleSubmit,
     control,
+    watch,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { isHeadline: true },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
+
+  console.log(error);
+  console.log(errors);
 
   useEffect(() => {
     resetForm();
@@ -152,13 +271,77 @@ const InstituteAcademy = ({
       email: user.email || "",
       copyCIF: null,
       copyDNI: null,
+      requestType: "institutes",
+      processType: dasRequest?.applicant?.processType || "entry",
     });
   };
+
+  useEffect(() => {
+    onSetHeadline(watch("headline"));
+  }, [watch("headline")]);
+
+  useEffect(() => {
+    onSetRequestType(watch("requestType"));
+  }, [watch("requestType")]);
+
+  const _isHeadline = watch("isHeadline") === true;
+  const isUniversity = watch("requestType") === "universities";
 
   const onSubmit = (formData) => onSaveInstituteOrAcademy(formData);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Controller
+            name="isHeadline"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value, name } }) => (
+              <Switch
+                name={name}
+                value={value}
+                checkedChildren="Titular"
+                unCheckedChildren="Familiar"
+                onChange={onChange}
+                error={error(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24} md={12}>
+          <Controller
+            name="requestType"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value, name } }) => (
+              <Select
+                label="Tipo de Solicitud"
+                name={name}
+                value={value}
+                options={[
+                  {
+                    label: "Tarifa Preferencial en Instituto",
+                    value: "institutes",
+                  },
+                  {
+                    label: "Tarifa Preferencial en Academia",
+                    value: "academies",
+                  },
+                  {
+                    label: "Recategorización en Universidad",
+                    value: "universities",
+                  },
+                ]}
+                onChange={onChange}
+                error={error(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+      </Row>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Card
@@ -312,7 +495,7 @@ const InstituteAcademy = ({
             </Row>
           </Card>
         </Col>
-        {!familyOrHeadline && (
+        {!_isHeadline && (
           <Col span={24}>
             <Card
               title={<span style={{ fontSize: "1.5em" }}>Datos Familiar</span>}
@@ -322,7 +505,7 @@ const InstituteAcademy = ({
               <Row gutter={[16, 16]}>
                 <Col span={24} md={8}>
                   <Controller
-                    name="firstNameFamily"
+                    name="familiar.firstName"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
@@ -339,7 +522,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col span={24} md={8}>
                   <Controller
-                    name="paternalSurnameFamily"
+                    name="familiar.paternalSurname"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
@@ -356,7 +539,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col span={24} md={8}>
                   <Controller
-                    name="maternalSurnameFamily"
+                    name="familiar.maternalSurname"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
@@ -373,7 +556,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col span={24} md={8}>
                   <Controller
-                    name="cifFamily"
+                    name="familiar.cif"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
@@ -390,7 +573,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col span={24} md={8}>
                   <Controller
-                    name="emailFamily"
+                    name="familiar.email"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
@@ -407,7 +590,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col span={24} md={8}>
                   <Controller
-                    name="relationship"
+                    name="familiar.relationship"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
@@ -422,32 +605,99 @@ const InstituteAcademy = ({
                     )}
                   />
                 </Col>
+                <Col sm={24} md={12}>
+                  <Controller
+                    name="familiar.documents.copyCIF"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Upload
+                        label="Copia CIF (Familiar)"
+                        accept="image/*"
+                        name={name}
+                        value={value}
+                        bucket="departamentoDeApoyoSocial"
+                        fileName={`cif-foto-${uuidv4()}`}
+                        filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                        buttonText="Subir archivo"
+                        error={error(name)}
+                        required={required(name)}
+                        onChange={(file) => onChange(file)}
+                      />
+                    )}
+                  />
+                </Col>
+                <Col sm={24} md={12}>
+                  <Controller
+                    name="familiar.documents.copyDNI"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Upload
+                        label="Copia de DNI (Familiar)"
+                        accept="image/*"
+                        name={name}
+                        value={value}
+                        bucket="departamentoDeApoyoSocial"
+                        fileName={`dni-foto-${uuidv4()}`}
+                        filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                        buttonText="Subir archivo"
+                        error={error(name)}
+                        required={required(name)}
+                        onChange={(file) => onChange(file)}
+                      />
+                    )}
+                  />
+                </Col>
               </Row>
             </Card>
           </Col>
         )}
         <Col span={24}>
           <Card
-            title={
-              <span style={{ fontSize: "1.5em" }}>
-                Datos Instituto - Academia
-              </span>
-            }
+            title={<span style={{ fontSize: "1.5em" }}>Datos Institución</span>}
             bordered={false}
             type="inner"
           >
             <Row gutter={[16, 16]}>
-              <Col span={24} md={12}>
+              {isUniversity && (
+                <Col span={24} md={8}>
+                  <Controller
+                    name="processType"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value, name } }) => (
+                      <Select
+                        label="Tipo de Proceso"
+                        name={name}
+                        value={value}
+                        options={[
+                          {
+                            label: "Ingresante",
+                            value: "entry",
+                          },
+                          {
+                            label: "Egresado",
+                            value: "graduate",
+                          },
+                        ]}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              )}
+              <Col span={24} md={8}>
                 <Controller
-                  name="name"
+                  name="institutionId"
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Institutos - Academias"
+                      label="Instituciones"
                       name={name}
                       value={value}
-                      options={InstitutesAndAcademies}
+                      options={institutions?.[watch("requestType")] || []}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
@@ -455,7 +705,7 @@ const InstituteAcademy = ({
                   )}
                 />
               </Col>
-              <Col span={24} md={12}>
+              <Col span={24} md={8}>
                 <Controller
                   name="specialty"
                   control={control}
@@ -475,58 +725,112 @@ const InstituteAcademy = ({
             </Row>
           </Card>
         </Col>
-        {!familyOrHeadline && (
+        {(isUniversity || watch("institutionId") === "britanico") && (
           <Col span={24}>
             <Card
               title={
                 <span style={{ fontSize: "1.5em" }}>
-                  Documentos del Familiar
+                  Documentos del Aplicante
                 </span>
               }
               bordered={false}
               type="inner"
             >
               <Row gutter={[16, 16]}>
-                <Col sm={24} md={12}>
-                  <Controller
-                    name="copyCIF"
-                    control={control}
-                    render={({ field: { onChange, value, name } }) => (
-                      <Upload
-                        label="Copia CIF (Familiar)"
-                        accept="image/*"
-                        name={name}
-                        value={value}
-                        fileName={`cif-foto-${uuidv4()}`}
-                        filePath={`das-applicants/876543/files`}
-                        buttonText="Subir archivo"
-                        error={error(name)}
-                        required={required(name)}
-                        onChange={(file) => onChange(file)}
-                      />
+                {isUniversity && (
+                  <>
+                    {watch("processType") === "graduate" && (
+                      <Col sm={24} md={12}>
+                        <Controller
+                          name="copyConsolidadoNotasUniversity"
+                          control={control}
+                          render={({ field: { onChange, value, name } }) => (
+                            <Upload
+                              label="Copias de Consolidado de notas (último ciclo)"
+                              accept="image/*"
+                              name={name}
+                              value={value}
+                              bucket="departamentoDeApoyoSocial"
+                              fileName={`cif-foto-${uuidv4()}`}
+                              filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                              buttonText="Subir archivo"
+                              error={error(name)}
+                              required={required(name)}
+                              onChange={(file) => onChange(file)}
+                            />
+                          )}
+                        />
+                      </Col>
                     )}
-                  />
-                </Col>
-                <Col sm={24} md={12}>
-                  <Controller
-                    name="copyDNI"
-                    control={control}
-                    render={({ field: { onChange, value, name } }) => (
-                      <Upload
-                        label="Copia de DNI (Familiar)"
-                        accept="image/*"
-                        name={name}
-                        value={value}
-                        fileName={`dni-foto-${uuidv4()}`}
-                        filePath={`das-applicants/76543/files`}
-                        buttonText="Subir archivo"
-                        error={error(name)}
-                        required={required(name)}
-                        onChange={(file) => onChange(file)}
-                      />
+                    {watch("processType") === "entry" && (
+                      <Col sm={24} md={12}>
+                        <Controller
+                          name="CopyCertificateAdmissionUniversity"
+                          control={control}
+                          render={({ field: { onChange, value, name } }) => (
+                            <Upload
+                              label="Copia de Constancia de Ingreso de la Universidad"
+                              accept="image/*"
+                              name={name}
+                              value={value}
+                              bucket="departamentoDeApoyoSocial"
+                              fileName={`cif-foto-${uuidv4()}`}
+                              filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                              buttonText="Subir archivo"
+                              error={error(name)}
+                              required={required(name)}
+                              onChange={(file) => onChange(file)}
+                            />
+                          )}
+                        />
+                      </Col>
                     )}
-                  />
-                </Col>
+                    <Col sm={24} md={12}>
+                      <Controller
+                        name="CopyUniversityTuitionPaymenReceipt"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Upload
+                            label="Copia de boleta pago matricula de la Universidad"
+                            accept="image/*"
+                            name={name}
+                            value={value}
+                            bucket="departamentoDeApoyoSocial"
+                            fileName={`dni-foto-${uuidv4()}`}
+                            filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                            buttonText="Subir archivo"
+                            error={error(name)}
+                            required={required(name)}
+                            onChange={(file) => onChange(file)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </>
+                )}
+                {watch("institutionId") === "britanico" && (
+                  <Col sm={24} md={12}>
+                    <Controller
+                      name="copyLiquidacionHaberesHeadline"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Upload
+                          label="Copia de Liquidación de Haberes del Titular"
+                          accept="image/*"
+                          name={name}
+                          value={value}
+                          bucket="departamentoDeApoyoSocial"
+                          fileName={`dni-foto-${uuidv4()}`}
+                          filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                          buttonText="Subir archivo"
+                          error={error(name)}
+                          required={required(name)}
+                          onChange={(file) => onChange(file)}
+                        />
+                      )}
+                    />
+                  </Col>
+                )}
               </Row>
             </Card>
           </Col>
@@ -539,8 +843,8 @@ const InstituteAcademy = ({
             size="large"
             block
             htmlType="submit"
-            disabled={""}
-            loading={""}
+            disabled={loading}
+            loading={loading}
           >
             Guardar
           </Button>
