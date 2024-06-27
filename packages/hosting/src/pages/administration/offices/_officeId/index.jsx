@@ -112,9 +112,9 @@ const Office = ({
   loading,
 }) => {
   const schema = yup.object({
-    name: yup.string(),
+    name: yup.string().required(),
     description: yup.string(),
-    sectionId: yup.string(),
+    sectionId: yup.string().required(),
     membersIds: yup.array().nullable(),
     bossId: yup.string(),
   });

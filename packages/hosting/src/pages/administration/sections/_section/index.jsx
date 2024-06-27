@@ -114,8 +114,8 @@ const Section = ({
   loading,
 }) => {
   const schema = yup.object({
-    name: yup.string(),
-    departmentId: yup.string(),
+    name: yup.string().required(),
+    departmentId: yup.string().required(),
     membersIds: yup.array().nullable(),
     bossId: yup.string(),
   });
