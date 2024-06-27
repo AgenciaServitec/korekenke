@@ -52,8 +52,8 @@ export const SectionIntegration = () => {
     ...section,
     name: formData.name,
     departmentId: formData.departmentId,
-    membersIds: formData.membersIds,
-    bossId: formData.bossId,
+    membersIds: formData?.membersIds || [],
+    bossId: formData.bossId || null,
   });
 
   const onSaveSection = async (formData) => {
@@ -116,10 +116,10 @@ const Section = ({
   loading,
 }) => {
   const schema = yup.object({
-    name: yup.string().required(),
-    departmentId: yup.string().required(),
-    membersIds: yup.array().required(),
-    bossId: yup.string().required(),
+    name: yup.string(),
+    departmentId: yup.string(),
+    membersIds: yup.array().nullable(),
+    bossId: yup.string(),
   });
 
   const {
