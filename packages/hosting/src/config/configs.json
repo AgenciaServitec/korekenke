@@ -40,7 +40,7 @@
     "buckets": {
       "documents": "gs://korekenke-documents",
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito",
-      "dasApplicants": "gs://das-applicants"
+      "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social"
     },
     "apiUrl": "https://korekenke-dev.web.app/api"
   },
@@ -60,7 +60,7 @@
     "buckets": {
       "documents": "gs://korekenke-documents",
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito",
-      "dasApplicants": "gs://das-applicants"
+      "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social"
     },
     "apiUrl": "https://korekenke-prod.web.app/api"
   }
