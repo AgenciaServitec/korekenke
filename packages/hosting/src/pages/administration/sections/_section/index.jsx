@@ -60,12 +60,10 @@ export const SectionIntegration = () => {
     try {
       setLoading(true);
 
-      //Get users ids deselection
       const usersIdsDeselected = (section?.membersIds || []).filter(
         (memberId) => !(formData?.membersIds || []).includes(memberId)
       );
 
-      //Update of assignTo of users
       await updateAssignToUser({
         oldUsersIds: usersIdsDeselected,
         newUsersIds: formData.membersIds,
