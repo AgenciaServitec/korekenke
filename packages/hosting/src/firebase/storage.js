@@ -13,7 +13,9 @@ import { currentConfig } from "../config";
 export const buckets = {
   default: storage,
   documents: firebase.app().storage(currentConfig.buckets.documents),
-  dasApplicants: firebase.app().storage(currentConfig.buckets.dasApplicants),
+  departamentoDeApoyoSocial: firebase
+    .app()
+    .storage(currentConfig.buckets.departamentoDeApoyoSocial),
   servicioDeVeterinariaYRemontaDelEjercito: firebase
     .app()
     .storage(currentConfig.buckets.servicioDeVeterinariaYRemontaDelEjercito),
