@@ -51,8 +51,8 @@ export const OfficeIntegration = () => {
     name: formData.name,
     description: formData.description,
     sectionId: formData.sectionId,
-    membersIds: formData.membersIds,
-    bossId: formData.bossId,
+    membersIds: formData?.membersIds || [],
+    bossId: formData.bossId || null,
   });
 
   const saveOffice = async (formData) => {
@@ -113,10 +113,10 @@ const Office = ({
 }) => {
   const schema = yup.object({
     name: yup.string().required(),
-    description: yup.string().required(),
+    description: yup.string(),
     sectionId: yup.string().required(),
-    membersIds: yup.array().required(),
-    bossId: yup.string().required(),
+    membersIds: yup.array().nullable(),
+    bossId: yup.string(),
   });
 
   const {
