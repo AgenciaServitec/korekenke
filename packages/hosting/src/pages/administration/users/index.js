@@ -105,7 +105,7 @@ export const Users = () => {
     });
 
   const usersView = users.filter((user) =>
-    commandId === "all" ? true : user.initialCommand.id === commandId
+    commandId === "all" ? true : user?.initialCommand?.id === commandId
   );
 
   return (

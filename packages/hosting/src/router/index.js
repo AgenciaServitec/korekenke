@@ -6,13 +6,11 @@ import * as A from "../pages";
 import { Page404 } from "../pages/404";
 
 export const Router = () => {
-  const pathBase = (path) => `/:commandId` + path;
-
   return (
     <Routes>
       <Route exact path="/" element={<A.LoginIntegration />} />
       <Route exact path="/register" element={<A.RegisterIntegration />} />
-      <Route path={pathBase("/")} element={<PrivateRoute />}>
+      <Route path="/" element={<PrivateRoute />}>
         <Route
           exact
           path="home"
@@ -242,28 +240,22 @@ export const Router = () => {
       </Route>
       <Route
         exact
-        path={pathBase("/inscriptions/cmsts/sheet/:cmstsEnrollmentId")}
+        path="/inscriptions/cmsts/sheet/:cmstsEnrollmentId"
         element={<A.InscriptionFile />}
       />
       <Route
         exact
-        path={pathBase(
-          "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
-        )}
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
         element={<A.PdfEquineLivestockRegistrationCardSheet />}
       />
       <Route
         exact
-        path={pathBase(
-          "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
-        )}
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
         element={<A.PdfClinicHistorySheets />}
       />
       <Route
         exact
-        path={pathBase(
-          "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
-        )}
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
         element={<A.PdfEquineMagazineProfilesSheets />}
       />
       <Route

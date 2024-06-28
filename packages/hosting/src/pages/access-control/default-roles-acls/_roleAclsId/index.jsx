@@ -24,7 +24,7 @@ import {
 } from "../../../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { mapAcls } from "../../../../utils";
-import { useAuthentication, useGlobalData } from "../../../../providers";
+import { useGlobalData } from "../../../../providers";
 import {
   addRoleAcl,
   fetchRoleAcl,
@@ -36,7 +36,6 @@ export const RoleAclIntegration = () => {
   const navigate = useNavigate();
   const { roleAclsId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { authUser } = useAuthentication();
 
   const { rolesAcls } = useGlobalData();
   const [roleAcls, setRoleAcls] = useState({});
@@ -110,7 +109,6 @@ export const RoleAclIntegration = () => {
   return (
     <RoleAcl
       isNew={roleAclsId === "new"}
-      user={authUser}
       roleAcls={roleAcls}
       savingRoleAcls={saveRoleAclsLoading}
       onSaveRoleAcls={onSaveRoleAcls}
@@ -121,7 +119,6 @@ export const RoleAclIntegration = () => {
 
 const RoleAcl = ({
   isNew,
-  user,
   roleAcls,
   savingRoleAcls,
   onSaveRoleAcls,
@@ -139,6 +136,10 @@ const RoleAcl = ({
     reset,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      "acls.default.home": ["/home"],
+      "acls.default.profile": ["/profile"],
+    },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
@@ -253,6 +254,10 @@ const RoleAcl = ({
                                   onChange={onChange}
                                   error={error(name)}
                                   required={required(name)}
+                                  disabled={[
+                                    "acls.default.home",
+                                    "acls.default.profile",
+                                  ].includes(name)}
                                 />
                               )}
                             />

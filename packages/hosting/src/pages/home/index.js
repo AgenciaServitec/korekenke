@@ -6,20 +6,17 @@ import { Link } from "react-router-dom";
 import { mediaQuery } from "../../styles";
 import { useAuthentication, useCommand } from "../../providers";
 import { userFullName } from "../../utils/users/userFullName2";
-import { pathnameWithCommand } from "../../utils";
-import { useParams } from "react-router";
 
 export const HomeIntegration = () => {
   const { authUser } = useAuthentication();
-  const { commandId } = useParams();
   const { currentCommand } = useCommand();
 
-  const onNavigateGoTo = (pathname) => pathnameWithCommand(commandId, pathname);
+  const onNavigateGoTo = (pathname) => pathname;
 
   return (
     <Container>
       <h1 className="title">
-        ({currentCommand.code}) {currentCommand.name}
+        ({currentCommand?.code}) {currentCommand?.name}
       </h1>
       <div className="items">
         <div>
@@ -35,7 +32,27 @@ export const HomeIntegration = () => {
             </ul>
           </div>
         </div>
-        {currentCommand.id === "copere" && (
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faShield} size="5x" />
+          </div>
+          <div>
+            <h2>{currentCommand.entities[0].name}</h2>
+            <ul>
+              <li>
+                <Link to={onNavigateGoTo("/das-requests")}>
+                  1. Lista de solicitudes
+                </Link>
+              </li>
+              <li>
+                <Link to={onNavigateGoTo("/das-requests/new")}>
+                  2. Realizar una solicitud
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {currentCommand?.id === "copere" && (
           <div>
             <div className="items-icon">
               <FontAwesomeIcon icon={faShield} size="5x" />
@@ -57,7 +74,7 @@ export const HomeIntegration = () => {
             </div>
           </div>
         )}
-        {currentCommand.id === "cologe" && (
+        {currentCommand?.id === "cologe" && (
           <div>
             <div className="items-icon">
               <FontAwesomeIcon icon={faShield} size="5x" />
