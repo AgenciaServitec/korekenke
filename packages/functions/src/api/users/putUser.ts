@@ -52,8 +52,8 @@ export const putUser = async (
       }
     }
 
-    await updateUserAuth(user, changeEmail, changePhoneNumber);
     await updateUser(assignUpdateProps(user));
+    await updateUserAuth(user, changeEmail, changePhoneNumber);
 
     res.sendStatus(200).end();
   } catch (error) {

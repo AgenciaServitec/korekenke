@@ -52,20 +52,18 @@ export const SectionIntegration = () => {
     ...section,
     name: formData.name,
     departmentId: formData.departmentId,
-    membersIds: formData.membersIds,
-    bossId: formData.bossId,
+    membersIds: formData?.membersIds || [],
+    bossId: formData.bossId || null,
   });
 
   const onSaveSection = async (formData) => {
     try {
       setLoading(true);
 
-      //Get users ids deselection
       const usersIdsDeselected = (section?.membersIds || []).filter(
         (memberId) => !(formData?.membersIds || []).includes(memberId)
       );
 
-      //Update of assignTo of users
       await updateAssignToUser({
         oldUsersIds: usersIdsDeselected,
         newUsersIds: formData.membersIds,
@@ -118,8 +116,8 @@ const Section = ({
   const schema = yup.object({
     name: yup.string().required(),
     departmentId: yup.string().required(),
-    membersIds: yup.array().required(),
-    bossId: yup.string().required(),
+    membersIds: yup.array().nullable(),
+    bossId: yup.string(),
   });
 
   const {

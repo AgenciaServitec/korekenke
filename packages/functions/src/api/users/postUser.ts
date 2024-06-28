@@ -4,7 +4,8 @@ import {
   getTypeForAssignedToByRoleCode,
 } from "../../utils";
 import { NextFunction, Request, Response } from "express";
-import { isEmpty } from "lodash";
+import { isEmpty, orderBy } from "lodash";
+import { Timestamp } from "@google-cloud/firestore";
 
 export const postUser = async (
   req: Request<unknown, unknown, User, unknown>,
@@ -45,8 +46,8 @@ export const postUser = async (
 
     const userId = firestore.collection("users").doc().id;
 
-    await addUserAuth({ ...user, id: userId });
     await addUser({ ...user, id: userId });
+    await addUserAuth({ ...user, id: userId });
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -57,6 +58,12 @@ export const postUser = async (
 
 const addUser = async (user: User): Promise<void> => {
   const { assignCreateProps } = defaultFirestoreProps();
+
+  const [initialCommand] = orderBy(
+    user?.commands,
+    [(command) => command.name],
+    ["asc"]
+  );
 
   await firestore
     .collection("users")
@@ -77,9 +84,15 @@ const addUser = async (user: User): Promise<void> => {
               id: null,
             }
           : null,
-        commands: [],
-        initialCommand: null,
+        commands: user?.commands
+          ? user.commands.map((command) => ({
+              ...command,
+              updateAt: Timestamp.now(),
+            }))
+          : null,
+        initialCommand: initialCommand || null,
         iAcceptPrivacyPolicies: true,
+        status: "registered",
       })
     );
 };

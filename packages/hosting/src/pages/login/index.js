@@ -4,15 +4,19 @@ import { mediaQuery } from "../../styles";
 import { SendCodeSmsAndSignInWithCodeIntegration } from "./SendCodeSmsAndSignInWithCode";
 import { AccessDataLogin } from "./AccessDataLogin";
 import { useAuthentication, useCommand } from "../../providers";
+import { useNavigate } from "react-router";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
   const { onNavigateInCommand } = useCommand();
+  const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
-    authUser && onNavigateInCommand(authUser.initialCommand.id);
+    authUser
+      ? onNavigateInCommand(authUser?.initialCommand?.id)
+      : navigate("/");
   }, [authUser]);
 
   const next = () => {

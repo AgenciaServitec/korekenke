@@ -111,9 +111,11 @@ export const UserIntegration = () => {
               }
             : user.assignedTo,
         degree: formData.degree,
-        commands: commands.filter((command) =>
-          formData.commandsIds.includes(command.id)
-        ),
+        commands: formData?.commandsIds
+          ? commands.filter((command) =>
+              formData.commandsIds.includes(command.id)
+            )
+          : null,
         cgi: formData.cgi,
       }
     );
@@ -154,8 +156,8 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
       .max(9)
       .required()
       .transform((value) => (value === null ? "" : value)),
-    degree: yup.string(),
-    commandsIds: yup.array().required(),
+    degree: yup.string().required(),
+    commandsIds: yup.array().nullable(),
     cgi: yup.boolean().required(),
   });
 
