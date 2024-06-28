@@ -19,7 +19,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { includes, isEmpty } from "lodash";
-import { pathnameWithCommand } from "../../utils";
 
 export const DrawerLayout = ({
   user,
@@ -45,12 +44,12 @@ export const DrawerLayout = ({
 
   const onClickMenu = (pathname) => {
     onSetIsVisibleDrawer(false);
-    onNavigateTo(pathnameWithCommand(currentCommand.id, `${pathname}`));
+    onNavigateTo(pathname);
   };
 
   const onClickHome = () => {
     onSetIsVisibleDrawer(false);
-    onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"));
+    onNavigateTo("/home");
   };
 
   const items = [
@@ -169,7 +168,7 @@ export const DrawerLayout = ({
           "jefatura-de-bienestar-del-ejercito",
           ["correspondences", "inscriptions"],
           ["/correspondences", "/inscriptions"]
-        ) && currentCommand.id === "copere",
+        ) && currentCommand?.id === "copere",
       children: [
         {
           label: "Correspondencias",
@@ -215,7 +214,7 @@ export const DrawerLayout = ({
           "servicio-de-veterinaria-y-remonta-del-ejercito",
           ["livestockAndEquines"],
           ["/livestock-and-equines"]
-        ) && currentCommand.id === "cologe",
+        ) && currentCommand?.id === "cologe",
       children: [
         {
           key: "livestock-and-equines",

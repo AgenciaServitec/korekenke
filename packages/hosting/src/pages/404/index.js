@@ -2,18 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { Button, Result } from "../../components";
-import { useAuthentication, useCommand } from "../../providers";
-import { pathnameWithCommand } from "../../utils";
+import { useAuthentication } from "../../providers";
 
 export const Page404 = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
-  const { currentCommand, onNavigateInCommand } = useCommand();
 
   const onNavigateToHome = () => {
-    authUser
-      ? onNavigateInCommand(authUser.initialCommand.id)
-      : navigate(pathnameWithCommand(currentCommand.id, "/home"));
+    authUser ? navigate("/home") : navigate("/");
   };
 
   return (

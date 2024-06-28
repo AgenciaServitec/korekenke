@@ -12,7 +12,7 @@ import { mediaQuery } from "../../styles";
 import { capitalize, orderBy } from "lodash";
 import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
-import { pathnameWithCommand, userFullName } from "../../utils";
+import { userFullName } from "../../utils";
 import { useGlobalData } from "../../providers";
 
 const { Header } = Layout;
@@ -48,10 +48,7 @@ export const HeaderLayout = ({
   const items = [
     {
       label: (
-        <Link
-          to={pathnameWithCommand(currentCommand.id, "/profile")}
-          style={{ color: "#000" }}
-        >
+        <Link to="/profile" style={{ color: "#000" }}>
           <div style={{ padding: ".4em 0" }}>Perfil</div>
         </Link>
       ),
@@ -94,17 +91,11 @@ export const HeaderLayout = ({
               src={currentCommand?.logoImgUrl || LogoPrimary}
               width={40}
               alt="Korekenke"
-              onClick={() =>
-                onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
-              }
+              onClick={() => onNavigateTo("/home")}
               className="logo-img"
             />
           </div>
-          <div
-            onClick={() =>
-              onNavigateTo(pathnameWithCommand(currentCommand.id, "/home"))
-            }
-          >
+          <div onClick={() => onNavigateTo("/home")}>
             <h3
               style={{
                 textTransform: "uppercase",
