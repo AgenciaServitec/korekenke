@@ -77,9 +77,10 @@ const addUser = async (user: User): Promise<void> => {
               id: null,
             }
           : null,
-        commands: [],
+        commands: null,
         initialCommand: null,
         iAcceptPrivacyPolicies: true,
+        status: "registered",
       })
     );
 };
