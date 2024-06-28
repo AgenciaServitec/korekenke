@@ -34,8 +34,7 @@ export const InstituteAcademyIntegration = () => {
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const [dasRequest, setDasRequest] = useState({});
   const [loading, setLoading] = useState(false);
-  const [headline, setHeadline] = useState(false);
-  const [requestType, setRequestType] = useState("institute");
+  const [headline, setHeadline] = useState(true);
 
   const onGoBack = () => navigate(-1);
 
@@ -56,48 +55,20 @@ export const InstituteAcademyIntegration = () => {
 
   const mapForm = (formData) => ({
     ...dasRequest,
+    status: isNew ? "pending" : dasRequest.status,
     headline: {
       id: authUser.id,
-      firstName: formData.firstName,
-      paternalSurname: formData.paternalSurname,
-      maternalSurname: formData.maternalSurname,
-      cip: formData.cip,
-      degree: formData.degree,
+      ...formData.headline,
       phone: {
         prefix: "+51",
-        number: formData.phoneNumber,
-      },
-      currentService: formData.currentService,
-      email: formData.email,
-    },
-    familiar: {
-      firstName: formData.firstNameFamily,
-      paternalSurname: formData.paternalSurnameFamily,
-      maternalSurname: formData.maternalSurnameFamily,
-      cif: formData.cif,
-      email: formData.emailFamily,
-      relationship: formData.relationship,
-      documents: {
-        copyCif: formData.copyCif || null,
-        copyDni: formData.copyDni || null,
+        number: formData.headline.phoneNumber,
       },
     },
-    institution: {
-      type: dasRequest?.institution?.type || requestType,
-      name: formData.institutionId,
-      specialty: formData.specialty,
-      processType: formData.processType,
-    },
+    familiar: formData?.familiar || null,
+    institution: formData?.institution || null,
     applicant: {
-      to: dasRequest?.applicant?.to || headline ? "headline" : "familiar",
-      documents: {
-        copyLiquidacionHaberesHeadline:
-          formData.copyLiquidacionHaberesHeadline || null,
-        copyConstanciaIngresoUniv: formData.copyConstanciaIngresoUniv || null,
-        copyConsolidadoNotasUniv: formData.copyConsolidadoNotasUniv || null,
-        copyBoletaPagoMatriculaUniv:
-          formData.copyBoletaPagoMatriculaUniv || null,
-      },
+      ...formData.applicant,
+      to: headline ? "headline" : "familiar",
     },
   });
 
@@ -132,8 +103,8 @@ export const InstituteAcademyIntegration = () => {
           onSaveInstituteOrAcademy={saveInstituteOrAcademy}
           dasRequest={dasRequest}
           loading={loading}
+          headline={headline}
           onSetHeadline={setHeadline}
-          onSetRequestType={setRequestType}
         />
       </Col>
     </Row>
@@ -145,9 +116,12 @@ const InstituteAcademy = ({
   onSaveInstituteOrAcademy,
   dasRequest,
   loading,
+  headline,
   onSetHeadline,
-  onSetRequestType,
 }) => {
+  const [_processType, setProcessType] = useState("entry");
+  const [_requestType, setRequestType] = useState("institutes");
+
   const schema = yup.object({
     isHeadline: yup.boolean().required(),
     requestType: yup.string().required(),
@@ -161,81 +135,81 @@ const InstituteAcademy = ({
       currentService: yup.string(),
       email: yup.string().email(),
     }),
-
-    familiar: yup.object({
-      firstName: yup.string().when("isHeadline", {
-        is: true,
-        then: yup.string().nullable(),
-        otherwise: yup.string().required(),
+    familiar: headline
+      ? yup.object().nullable()
+      : yup.object({
+          firstName: headline
+            ? yup.string().notRequired()
+            : yup.string().required(),
+          paternalSurname: yup.string().when("isHeadline", {
+            is: true,
+            then: yup.string().nullable(),
+            otherwise: yup.string().required(),
+          }),
+          maternalSurname: yup.string().when("isHeadline", {
+            is: true,
+            then: yup.string().nullable(),
+            otherwise: yup.string().required(),
+          }),
+          cif: yup.string().when("isHeadline", {
+            is: true,
+            then: yup.string().nullable(),
+            otherwise: yup.string().min(9).max(9).required(),
+          }),
+          email: yup.string().email().when("isHeadline", {
+            is: true,
+            then: yup.string().email().nullable(),
+            otherwise: yup.string().email().required(),
+          }),
+          relationship: yup.string().when("isHeadline", {
+            is: true,
+            then: yup.string().nullable(),
+            otherwise: yup.string().required(),
+          }),
+          documents: yup.object({
+            copyCif: yup.mixed().when("isHeadline", {
+              is: true,
+              then: yup.mixed().nullable(),
+              otherwise: yup.mixed().required(),
+            }),
+            copyDni: yup.mixed().when("isHeadline", {
+              is: true,
+              then: yup.mixed().nullable(),
+              otherwise: yup.mixed().required(),
+            }),
+          }),
+        }),
+    institution: yup.object({
+      institutionId: yup.string().required(),
+      specialty: yup.string().required(),
+      processType: yup.string().when("requestType", {
+        is: "universities",
+        then: yup.string().required(),
+        otherwise: yup.string().notRequired(),
       }),
-      paternalSurname: yup.string().when("isHeadline", {
-        is: true,
-        then: yup.string().nullable(),
-        otherwise: yup.string().required(),
-      }),
-      maternalSurname: yup.string().when("isHeadline", {
-        is: true,
-        then: yup.string().nullable(),
-        otherwise: yup.string().required(),
-      }),
-      cif: yup.string().when("isHeadline", {
-        is: true,
-        then: yup.string().nullable(),
-        otherwise: yup.string().min(9).max(9).required(),
-      }),
-      email: yup.string().email().when("isHeadline", {
-        is: true,
-        then: yup.string().email().nullable(),
-        otherwise: yup.string().email().required(),
-      }),
-      relationship: yup.string().when("isHeadline", {
-        is: true,
-        then: yup.string().nullable(),
-        otherwise: yup.string().required(),
-      }),
+    }),
+    applicant: yup.object({
       documents: yup.object({
-        copyCif: yup.mixed().when("isHeadline", {
-          is: true,
-          then: yup.mixed().nullable(),
-          otherwise: yup.mixed().required(),
-        }),
-        copyDni: yup.mixed().when("isHeadline", {
-          is: true,
-          then: yup.mixed().nullable(),
-          otherwise: yup.mixed().required(),
-        }),
+        copyLiquidacionHaberesHeadline: yup
+          .mixed()
+          .when("institution.institutionId", {
+            is: "britanico",
+            then: yup.mixed().required(),
+            otherwise: yup.mixed().notRequired(),
+          }),
+        copyConstanciaIngresoUniv:
+          _processType === "entry"
+            ? yup.mixed().required()
+            : yup.mixed().notRequired(),
+        copyConsolidadoNotasUniv:
+          _processType === "graduate"
+            ? yup.mixed().required()
+            : yup.mixed().notRequired(),
+        copyBoletaPagoMatriculaUniv:
+          _requestType === "universities"
+            ? yup.mixed().required()
+            : yup.mixed().notRequired(),
       }),
-    }),
-    institutionId: yup.string().when("requestType", {
-      is: "institutes",
-      then: yup.string().required(),
-      otherwise: yup.string().notRequired(),
-    }),
-    specialty: yup.string().required(),
-    processType: yup.string().when("requestType", {
-      is: "universities",
-      then: yup.string().required(),
-      otherwise: yup.string().notRequired(),
-    }),
-    copyLiquidacionHaberesHeadline: yup.mixed().when("requestType", {
-      is: "britanico",
-      then: yup.mixed().required(),
-      otherwise: yup.mixed().notRequired(),
-    }),
-    copyConstanciaIngresoUniv: yup.mixed().when("requestType", {
-      is: "universities",
-      then: yup.mixed().required(),
-      otherwise: yup.mixed().notRequired(),
-    }),
-    copyConsolidadoNotasUniv: yup.mixed().when("requestType", {
-      is: "universities",
-      then: yup.mixed().required(),
-      otherwise: yup.mixed().notRequired(),
-    }),
-    copyBoletaPagoMatriculaUniv: yup.mixed().when("requestType", {
-      is: "universities",
-      then: yup.mixed().required(),
-      otherwise: yup.mixed().notRequired(),
     }),
   });
 
@@ -247,45 +221,69 @@ const InstituteAcademy = ({
     reset,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { isHeadline: true },
+    defaultValues: {
+      isHeadline: true,
+    },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  console.log(error);
-  console.log(errors);
-
   useEffect(() => {
     resetForm();
-  }, []);
+  }, [dasRequest, _requestType]);
 
   const resetForm = () => {
     reset({
-      firstName: user.firstName || "",
-      paternalSurname: user.paternalSurname || "",
-      maternalSurname: user.maternalSurname || "",
-      cip: user.cip || "",
-      degree: user.degree || "",
-      phoneNumber: user.phone.number || "",
-      currentService: user.currentService || "",
-      email: user.email || "",
-      copyCIF: null,
-      copyDNI: null,
-      requestType: "institutes",
-      processType: dasRequest?.applicant?.processType || "entry",
+      isHeadline: true,
+      headline: {
+        firstName: user.firstName || "",
+        paternalSurname: user.paternalSurname || "",
+        maternalSurname: user.maternalSurname || "",
+        cip: user.cip || "",
+        degree: user.degree || "",
+        phoneNumber: user.phone.number || "",
+        currentService: user.currentService || "",
+        email: user.email || "",
+      },
+      familiar: dasRequest?.familiar
+        ? {
+            firstName: dasRequest?.familiar?.firstName || "",
+            paternalSurname: dasRequest?.familiar?.paternalSurname || "",
+            maternalSurname: dasRequest?.familiar?.maternalSurname || "",
+            cif: dasRequest?.familiar?.cif || "",
+            email: dasRequest?.familiar?.email || "",
+            relationship: dasRequest?.familiar?.relationship || "",
+            documents: {
+              copyCif: dasRequest?.familiar?.documents?.copyCif || null,
+              copyDni: dasRequest?.familiar?.documents?.copyDni || null,
+            },
+          }
+        : null,
+      institution: {
+        institutionId: dasRequest?.institution?.institutionId || "",
+        specialty: dasRequest?.institution?.specialty || "",
+        processType: dasRequest?.institution?.processType || "entry",
+      },
+      applicant: {
+        documents: {
+          copyLiquidacionHaberesHeadline:
+            dasRequest?.applicant?.documents?.copyLiquidacionHaberesHeadline ||
+            null,
+          copyConstanciaIngresoUniv:
+            dasRequest?.applicant?.documents?.copyConstanciaIngresoUniv || null,
+          copyConsolidadoNotasUniv:
+            dasRequest?.applicant?.documents?.copyConsolidadoNotasUniv || null,
+          copyBoletaPagoMatriculaUniv:
+            dasRequest?.applicant?.documents?.copyBoletaPagoMatriculaUniv ||
+            null,
+        },
+      },
+      requestType: dasRequest?.requestType || "institutes",
     });
   };
 
-  useEffect(() => {
-    onSetHeadline(watch("headline"));
-  }, [watch("headline")]);
-
-  useEffect(() => {
-    onSetRequestType(watch("requestType"));
-  }, [watch("requestType")]);
-
   const _isHeadline = watch("isHeadline") === true;
-  const isUniversity = watch("requestType") === "universities";
+  const isUniversity = _requestType === "universities";
 
   const onSubmit = (formData) => onSaveInstituteOrAcademy(formData);
 
@@ -296,14 +294,16 @@ const InstituteAcademy = ({
           <Controller
             name="isHeadline"
             control={control}
-            defaultValue=""
             render={({ field: { onChange, value, name } }) => (
               <Switch
                 name={name}
                 value={value}
                 checkedChildren="Titular"
                 unCheckedChildren="Familiar"
-                onChange={onChange}
+                onChange={(value) => {
+                  onChange(value);
+                  onSetHeadline(value);
+                }}
                 error={error(name)}
                 required={required(name)}
               />
@@ -314,7 +314,6 @@ const InstituteAcademy = ({
           <Controller
             name="requestType"
             control={control}
-            defaultValue=""
             render={({ field: { onChange, value, name } }) => (
               <Select
                 label="Tipo de Solicitud"
@@ -334,7 +333,10 @@ const InstituteAcademy = ({
                     value: "universities",
                   },
                 ]}
-                onChange={onChange}
+                onChange={(value) => {
+                  onChange(value);
+                  setRequestType(value);
+                }}
                 error={error(name)}
                 required={required(name)}
               />
@@ -352,9 +354,8 @@ const InstituteAcademy = ({
             <Row gutter={[16, 16]}>
               <Col span={24} md={8}>
                 <Controller
-                  name="firstName"
+                  name="headline.firstName"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Nombres"
@@ -370,9 +371,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={8}>
                 <Controller
-                  name="paternalSurname"
+                  name="headline.paternalSurname"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Apellido Paterno"
@@ -388,9 +388,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={8}>
                 <Controller
-                  name="maternalSurname"
+                  name="headline.maternalSurname"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Apellido Materno"
@@ -406,9 +405,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={8}>
                 <Controller
-                  name="cip"
+                  name="headline.cip"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="N° CIP"
@@ -424,9 +422,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={8}>
                 <Controller
-                  name="degree"
+                  name="headline.degree"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Grado"
@@ -442,9 +439,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={8}>
                 <Controller
-                  name="phoneNumber"
+                  name="headline.phoneNumber"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Celular"
@@ -460,9 +456,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={12}>
                 <Controller
-                  name="currentService"
+                  name="headline.currentService"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Actual Servicio"
@@ -477,9 +472,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={12}>
                 <Controller
-                  name="email"
+                  name="headline.email"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Correo Electrónico"
@@ -495,6 +489,7 @@ const InstituteAcademy = ({
             </Row>
           </Card>
         </Col>
+
         {!_isHeadline && (
           <Col span={24}>
             <Card
@@ -507,7 +502,6 @@ const InstituteAcademy = ({
                   <Controller
                     name="familiar.firstName"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Input
                         label="Nombres"
@@ -524,7 +518,6 @@ const InstituteAcademy = ({
                   <Controller
                     name="familiar.paternalSurname"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Input
                         label="Apellido Paterno"
@@ -541,7 +534,6 @@ const InstituteAcademy = ({
                   <Controller
                     name="familiar.maternalSurname"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Input
                         label="Apellido Materno"
@@ -558,7 +550,6 @@ const InstituteAcademy = ({
                   <Controller
                     name="familiar.cif"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Input
                         label="N° CIF"
@@ -575,7 +566,6 @@ const InstituteAcademy = ({
                   <Controller
                     name="familiar.email"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Input
                         label="Correo Electrónico"
@@ -592,7 +582,6 @@ const InstituteAcademy = ({
                   <Controller
                     name="familiar.relationship"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Input
                         label="Parentesco"
@@ -607,7 +596,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col sm={24} md={12}>
                   <Controller
-                    name="familiar.documents.copyCIF"
+                    name="familiar.documents.copyCif"
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
@@ -628,7 +617,7 @@ const InstituteAcademy = ({
                 </Col>
                 <Col sm={24} md={12}>
                   <Controller
-                    name="familiar.documents.copyDNI"
+                    name="familiar.documents.copyDni"
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
@@ -651,6 +640,7 @@ const InstituteAcademy = ({
             </Card>
           </Col>
         )}
+
         <Col span={24}>
           <Card
             title={<span style={{ fontSize: "1.5em" }}>Datos Institución</span>}
@@ -661,9 +651,8 @@ const InstituteAcademy = ({
               {isUniversity && (
                 <Col span={24} md={8}>
                   <Controller
-                    name="processType"
+                    name="institution.processType"
                     control={control}
-                    defaultValue=""
                     render={({ field: { onChange, value, name } }) => (
                       <Select
                         label="Tipo de Proceso"
@@ -679,7 +668,10 @@ const InstituteAcademy = ({
                             value: "graduate",
                           },
                         ]}
-                        onChange={onChange}
+                        onChange={(value) => {
+                          onChange(value);
+                          setProcessType(value);
+                        }}
                         error={error(name)}
                         required={required(name)}
                       />
@@ -689,9 +681,8 @@ const InstituteAcademy = ({
               )}
               <Col span={24} md={8}>
                 <Controller
-                  name="institutionId"
+                  name="institution.institutionId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Instituciones"
@@ -707,9 +698,8 @@ const InstituteAcademy = ({
               </Col>
               <Col span={24} md={8}>
                 <Controller
-                  name="specialty"
+                  name="institution.specialty"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Especialidad"
@@ -725,7 +715,9 @@ const InstituteAcademy = ({
             </Row>
           </Card>
         </Col>
-        {(isUniversity || watch("institutionId") === "britanico") && (
+
+        {(isUniversity ||
+          watch("institution.institutionId") === "britanico") && (
           <Col span={24}>
             <Card
               title={
@@ -739,10 +731,10 @@ const InstituteAcademy = ({
               <Row gutter={[16, 16]}>
                 {isUniversity && (
                   <>
-                    {watch("processType") === "graduate" && (
+                    {watch("institution.processType") === "graduate" && (
                       <Col sm={24} md={12}>
                         <Controller
-                          name="copyConsolidadoNotasUniversity"
+                          name="applicant.documents.copyConsolidadoNotasUniv"
                           control={control}
                           render={({ field: { onChange, value, name } }) => (
                             <Upload
@@ -750,9 +742,10 @@ const InstituteAcademy = ({
                               accept="image/*"
                               name={name}
                               value={value}
+                              withThumbImage={false}
                               bucket="departamentoDeApoyoSocial"
-                              fileName={`cif-foto-${uuidv4()}`}
-                              filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                              fileName={`copyConsolidadoNotasUniv-foto-${uuidv4()}`}
+                              filePath={`das-applicants/${dasRequest.id}/files`}
                               buttonText="Subir archivo"
                               error={error(name)}
                               required={required(name)}
@@ -762,10 +755,10 @@ const InstituteAcademy = ({
                         />
                       </Col>
                     )}
-                    {watch("processType") === "entry" && (
+                    {watch("institution.processType") === "entry" && (
                       <Col sm={24} md={12}>
                         <Controller
-                          name="CopyCertificateAdmissionUniversity"
+                          name="applicant.documents.copyConstanciaIngresoUniv"
                           control={control}
                           render={({ field: { onChange, value, name } }) => (
                             <Upload
@@ -773,9 +766,10 @@ const InstituteAcademy = ({
                               accept="image/*"
                               name={name}
                               value={value}
+                              withThumbImage={false}
                               bucket="departamentoDeApoyoSocial"
-                              fileName={`cif-foto-${uuidv4()}`}
-                              filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                              fileName={`copyConstanciaIngresoUniv-foto-${uuidv4()}`}
+                              filePath={`das-applicants/${dasRequest.id}/files`}
                               buttonText="Subir archivo"
                               error={error(name)}
                               required={required(name)}
@@ -787,7 +781,7 @@ const InstituteAcademy = ({
                     )}
                     <Col sm={24} md={12}>
                       <Controller
-                        name="CopyUniversityTuitionPaymenReceipt"
+                        name="applicant.documents.copyBoletaPagoMatriculaUniv"
                         control={control}
                         render={({ field: { onChange, value, name } }) => (
                           <Upload
@@ -795,9 +789,10 @@ const InstituteAcademy = ({
                             accept="image/*"
                             name={name}
                             value={value}
+                            withThumbImage={false}
                             bucket="departamentoDeApoyoSocial"
-                            fileName={`dni-foto-${uuidv4()}`}
-                            filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                            fileName={`copyBoletaPagoMatriculaUniv-foto-${uuidv4()}`}
+                            filePath={`das-applicants/${dasRequest.id}/files`}
                             buttonText="Subir archivo"
                             error={error(name)}
                             required={required(name)}
@@ -808,10 +803,10 @@ const InstituteAcademy = ({
                     </Col>
                   </>
                 )}
-                {watch("institutionId") === "britanico" && (
+                {watch("institution.institutionId") === "britanico" && (
                   <Col sm={24} md={12}>
                     <Controller
-                      name="copyLiquidacionHaberesHeadline"
+                      name="applicant.documents.copyLiquidacionHaberesHeadline"
                       control={control}
                       render={({ field: { onChange, value, name } }) => (
                         <Upload
@@ -819,9 +814,10 @@ const InstituteAcademy = ({
                           accept="image/*"
                           name={name}
                           value={value}
+                          withThumbImage={false}
                           bucket="departamentoDeApoyoSocial"
-                          fileName={`dni-foto-${uuidv4()}`}
-                          filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
+                          fileName={`copyLiquidacionHaberesHeadline-foto-${uuidv4()}`}
+                          filePath={`das-applicants/${dasRequest.id}/files`}
                           buttonText="Subir archivo"
                           error={error(name)}
                           required={required(name)}
