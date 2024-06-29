@@ -53,7 +53,7 @@ export const UsersTable = ({
       width: 200,
       render: (_, user) => (
         <Space style={{ display: "flex", flexWrap: "wrap" }}>
-          {user.commands.map((command) => (
+          {(user?.commands || []).map((command) => (
             <span key={command.id}>
               <Tag color="blue" style={{ margin: 0 }}>
                 {command.code.toUpperCase()}

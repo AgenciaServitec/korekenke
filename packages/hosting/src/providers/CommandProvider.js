@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
-import { useLocation, useNavigate } from "react-router-dom";
-import { isString } from "lodash";
 import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 import { updateUser } from "../firebase/collections";
 import { firestoreTimestamp } from "../firebase/firestore";
+import { useNavigate } from "react-router";
 
 const CommandContext = createContext({
   currentCommand: null,
@@ -14,30 +13,16 @@ const CommandContext = createContext({
 
 export const CommandProvider = ({ children }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { authUser } = useAuthentication();
 
   const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
-  const commandFromUrl =
-    authUser && findCommandFromUrl(location.pathname, authUser.commands);
+  const [command, setCommand] = useState(authUser?.initialCommand || null);
 
-  const [command, setCommand] = useState(
-    commandFromUrl || authUser?.initialCommand || null
-  );
-
-  const [commandId] = location.pathname.slice(1).split("/");
-
-  const currentCommandId = isCommandId(commandId, commands)
-    ? commandId
-    : "copere";
-
-  useEffect(() => {
-    authUser?.initialCommand && onChangeCommand(authUser.initialCommand.id);
-  }, [authUser?.initialCommand.id]);
-
-  const onChangeCommand = async (commandId) => {
+  const onChangeCommand = async (commandId = null) => {
     const command = commands.find((command) => command.id === commandId);
+
+    if (!command) return navigate("/home");
 
     if (command && authUser) {
       setCommand(command);
@@ -50,27 +35,21 @@ export const CommandProvider = ({ children }) => {
         initialCommand: command,
       });
 
-      const regex = new RegExp(`/${currentCommandId}/`, "g");
-
       const newPathname =
-        location.pathname === "/" ||
-        location.pathname === "/register" ||
-        !isCommandId(location.pathname.slice(1).split("/")[0], commands)
-          ? `/${commandId}${authUser?.role?.initialPathname || "/home"}`
-          : location.pathname.replace(regex, `/${commandId}/`);
+        location.pathname === "/" || location.pathname === "/register"
+          ? "/home"
+          : location.pathname;
 
       navigate(newPathname + location.search);
     }
   };
 
-  const onNavigateInCommand = (commandId) => {
-    commandId && onChangeCommand(commandId);
-  };
+  const onNavigateInCommand = (commandId) => onChangeCommand(commandId);
 
   return (
     <CommandContext.Provider
       value={{
-        currentCommand: command ? mapCurrentCommand(command) : null,
+        currentCommand: command ? mapCurrentCommand(command) : defaultCommand,
         onChangeCommand,
         onNavigateInCommand,
       }}
@@ -86,19 +65,16 @@ const mapCurrentCommand = (command) => ({
   ...command,
 });
 
-const findCommandFromUrl = (pathname, commands = []) => {
-  const commandId = pathname.slice(1).split("/")[0];
-
-  return commands.find((command) => command.id === commandId);
+const defaultCommand = {
+  id: "ep",
+  code: "ep",
+  name: "Ejército del Perú",
+  logoImgUrl:
+    "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/logo-ep.png",
+  entities: [
+    {
+      id: "departamento_de_apoyo_social",
+      name: "DEPARTAMENTO DE APOYO SOCIAL",
+    },
+  ],
 };
-
-const isCommandId = (data, commands) =>
-  isString(data) &&
-  (
-    commands?.map((comand) => comand.id) || [
-      "copere",
-      "coede",
-      "cologe",
-      "cogae",
-    ]
-  ).includes(data);

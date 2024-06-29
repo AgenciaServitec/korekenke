@@ -13,10 +13,12 @@ import { currentConfig } from "../config";
 export const buckets = {
   default: storage,
   documents: firebase.app().storage(currentConfig.buckets.documents),
-  dasApplicants: firebase.app().storage(currentConfig.buckets.dasApplicants),
   servicioDeVeterinariaYRemontaDelEjercito: firebase
     .app()
     .storage(currentConfig.buckets.servicioDeVeterinariaYRemontaDelEjercito),
+  departamentoDeApoyoSocial: firebase
+    .app()
+    .storage(currentConfig.buckets.departamentoDeApoyoSocial),
 };
 
 export const imageResizes = ["423x304", "313x370"];
