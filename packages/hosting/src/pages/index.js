@@ -34,3 +34,6 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livesto
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/_equineMagazineProfileId";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/sheets";
+
+//ENTITIES "departamento-de-apoyo-social"
+export * from "./entities/departamento-de-apoyo-social/das-requests";
