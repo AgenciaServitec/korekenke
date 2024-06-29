@@ -22,10 +22,20 @@ import {
   getApiErrorResponse,
   useApiUserPatch,
 } from "../../../api";
-import { assign, isEmpty, concat } from "lodash";
+import { assign, concat, isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { Button, Space } from "antd";
+import {
+  fetchDepartment,
+  fetchOffice,
+  fetchSection,
+  updateDepartment,
+  updateEntity,
+  updateOffice,
+  updateSection,
+} from "../../../firebase/collections";
+import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
 
 export const Users = () => {
   const navigate = useNavigate();
@@ -33,6 +43,7 @@ export const Users = () => {
   const { users, rolesAcls, commands } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
   const { currentCommand } = useCommand();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
 
   const [commandId, setCommandId] = useState(currentCommand.id || "all");
 
@@ -40,6 +51,91 @@ export const Users = () => {
 
   const onAddUser = () => navigateTo("new");
   const onEditUser = (user) => navigateTo(user.id);
+
+  const updateModuleAndUser = async (
+    moduleType = undefined,
+    moduleId,
+    user
+  ) => {
+    if (!moduleType || !moduleId) return;
+
+    switch (moduleType) {
+      case "entity": {
+        await updateEntity(moduleId, { entityManageId: null });
+
+        //Update of assignTo of users
+        await updateAssignToUser({
+          oldUsersIds: [user.id],
+          moduleId: moduleId,
+          users: users,
+        });
+
+        await removeUser(user);
+        break;
+      }
+      case "department": {
+        const department = await fetchDepartment(moduleId);
+
+        //Update of assignTo of users
+        await updateAssignToUser({
+          oldUsersIds: [user.id],
+          moduleId: moduleId,
+          users: users,
+        });
+
+        await updateDepartment(moduleId, {
+          ...(department.bossId === user.id && { bossId: null }),
+          ...(department.secondBossId === user.id && { secondBossId: null }),
+          membersIds: department.membersIds.filter(
+            (memberId) => memberId !== user.id
+          ),
+        });
+
+        await removeUser(user);
+        break;
+      }
+      case "section": {
+        const section = await fetchSection(moduleId);
+
+        //Update of assignTo of users
+        await updateAssignToUser({
+          oldUsersIds: [user.id],
+          moduleId: moduleId,
+          users: users,
+        });
+
+        await updateSection(moduleId, {
+          ...(section.bossId === user.id && { bossId: null }),
+          membersIds: section.membersIds.filter(
+            (memberId) => memberId !== user.id
+          ),
+        });
+
+        await removeUser(user);
+        break;
+      }
+      case "office": {
+        const office = await fetchOffice(moduleId);
+
+        //Update of assignTo of users
+        await updateAssignToUser({
+          oldUsersIds: [user.id],
+          moduleId: moduleId,
+          users: users,
+        });
+
+        await updateOffice(moduleId, {
+          ...(office.bossId === user.id && { bossId: null }),
+          membersIds: office.membersIds.filter(
+            (memberId) => memberId !== user.id
+          ),
+        });
+
+        await removeUser(user);
+        break;
+      }
+    }
+  };
 
   const removeUserOfGroup = (user) =>
     modalConfirm({
@@ -51,22 +147,38 @@ export const Users = () => {
           : user.assignedTo.type === "office"
           ? "de la OFICINA"
           : "de la SECCIÓN"
-      }?`,
+      } y eliminar?`,
       onOk: async () => {
-        console.log({ user });
+        await updateModuleAndUser(
+          user.assignedTo.type,
+          user.assignedTo.id,
+          user
+        );
       },
     });
 
+  const removeUser = async (user) => {
+    const response = await patchUser(user);
+    if (!patchUserResponse.ok) {
+      throw new Error(response);
+    }
+
+    notification({
+      type: "success",
+      title: "¡Usuario eliminado exitosamente!",
+    });
+  };
+
   const onDeleteUser = async (user) => {
     try {
-      console.log({ user });
       if (!isEmpty(user?.assignedTo?.id)) {
         return notification({
           type: "open",
+          duration: 10,
           icon: <FontAwesomeIcon icon={faWarning} color="orange" size="lg" />,
           title: "Este usuario está asignado como miembro",
           description:
-            "Para eliminar, el usuario no debe estar como miembro en ningún grupo como (departamento, sección u oficina)",
+            "Para eliminar, el usuario no debe estar como miembro o jefe en (entidad, departamento, sección u oficina)",
           btn: (
             <Space>
               <Button
@@ -74,7 +186,7 @@ export const Users = () => {
                 size="small"
                 onClick={() => removeUserOfGroup(user)}
               >
-                Desvincular usuario
+                Desvincular y eliminar usuario
               </Button>
             </Space>
           ),
@@ -83,15 +195,7 @@ export const Users = () => {
 
       const user_ = assign({}, user, { updateBy: authUser?.email });
 
-      // const response = await patchUser(user_);
-      // if (!patchUserResponse.ok) {
-      //   throw new Error(response);
-      // }
-      //
-      // notification({
-      //   type: "success",
-      //   title: "User deleted successfully!",
-      // });
+      await removeUser(user_);
     } catch (e) {
       const errorResponse = await getApiErrorResponse(e);
       apiErrorNotification(errorResponse);
