@@ -260,7 +260,7 @@ export const Router = () => {
       />
       <Route
         exact
-        path={pathBase("/entities/departamento-de-apoyo-social/das-requests")}
+        path="/entities/departamento-de-apoyo-social/das-requests"
         element={
           <AdminLayout>
             <A.DasRequestsListIntegration />
