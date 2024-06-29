@@ -1,9 +1,15 @@
 import React from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../components";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faEdit,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { findDegree, findRole } from "../../../utils";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const UsersTable = ({
   users,
@@ -11,6 +17,21 @@ export const UsersTable = ({
   onEditUser,
   onConfirmRemoveUser,
 }) => {
+  const getModuleByUserAssignedTo = (assignedTo = null) => {
+    if (!assignedTo?.id) return null;
+
+    switch (assignedTo?.type) {
+      case "entity":
+        return { module: "Entidad", url: `/entities/${assignedTo.id}` };
+      case "department":
+        return { module: "Departamento", url: `/departments/${assignedTo.id}` };
+      case "section":
+        return { module: "Sección", url: `/sections/${assignedTo.id}` };
+      case "office":
+        return { module: "Oficina", url: `/offices/${assignedTo.id}` };
+    }
+  };
+
   const columns = [
     {
       title: "Nombres y Apellidos",
@@ -47,21 +68,24 @@ export const UsersTable = ({
       ),
     },
     {
-      title: "Commandos",
-      dataIndex: "commands",
-      key: "commands",
-      width: 200,
-      render: (_, user) => (
-        <Space style={{ display: "flex", flexWrap: "wrap" }}>
-          {(user?.commands || []).map((command) => (
-            <span key={command.id}>
-              <Tag color="blue" style={{ margin: 0 }}>
-                {command.code.toUpperCase()}
-              </Tag>
-            </span>
-          ))}
-        </Space>
-      ),
+      title: "Vinculado a",
+      key: "linked",
+      render: (_, user) => {
+        const assignedTo = getModuleByUserAssignedTo(user.assignedTo);
+
+        return (
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {assignedTo && (
+              <div>
+                <Link to={assignedTo.url}>
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} />{" "}
+                  {assignedTo.module}
+                </Link>
+              </div>
+            )}
+          </div>
+        );
+      },
     },
     {
       title: "Estado",
@@ -81,6 +105,23 @@ export const UsersTable = ({
       key: "createAt",
       render: (_, user) =>
         dayjs(user?.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+    },
+    {
+      title: "Commandos",
+      dataIndex: "commands",
+      key: "commands",
+      width: 200,
+      render: (_, user) => (
+        <Space style={{ display: "flex", flexWrap: "wrap" }}>
+          {(user?.commands || []).map((command) => (
+            <span key={command.id}>
+              <Tag color="blue" style={{ margin: 0 }}>
+                {command.code.toUpperCase()}
+              </Tag>
+            </span>
+          ))}
+        </Space>
+      ),
     },
     {
       title: "Acciones",
