@@ -243,6 +243,8 @@ export const DrawerLayout = ({
           icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
           label: "Lista de solicitudes",
           isVisible: true,
+          onClick: () =>
+            onClickMenu("/entities/departamento-de-apoyo-social/das-requests"),
         },
       ],
     },
