@@ -16,13 +16,14 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { capitalize, isEmpty, lowerCase } from "lodash";
+import { capitalize, lowerCase } from "lodash";
 import {
   addEntity,
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
 import { findRole, userFullName } from "../../../../utils";
+import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();
@@ -30,6 +31,7 @@ export const EntityIntegration = () => {
   const { entities, users, rolesAcls } = useGlobalData();
   const { currentCommand } = useCommand();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
@@ -58,6 +60,23 @@ export const EntityIntegration = () => {
   const saveEntity = async (formData) => {
     try {
       setLoading(true);
+
+      const usersEntityManager = users.filter(
+        (user) => user.roleCode === "manager"
+      );
+
+      //Update of assignTo of users
+      await updateAssignToUser({
+        oldUsersIds: [
+          entity?.entityManageId &&
+          formData?.entityManageId !== entity?.entityManageId
+            ? entity?.entityManageId
+            : null,
+        ],
+        newUsersIds: [formData.entityManageId],
+        moduleId: entity?.id,
+        users: usersEntityManager,
+      });
 
       isNew
         ? await addEntity(assignCreateProps(mapEntity(formData)))
@@ -134,9 +153,7 @@ const Entity = ({
   //LIST TO SELECTS
   const usersView = users
     .filter((user) => user.roleCode === "manager")
-    .filter(
-      (user) => user.assignedTo.type === "entity" && isEmpty(user.assignedTo.id)
-    )
+    .filter((user) => user.assignedTo.type === "entity")
     .map((user) => ({
       label: `${userFullName(user)} (${capitalize(
         findRole(rolesAcls, user?.roleCode)?.name || ""

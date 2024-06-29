@@ -25,6 +25,7 @@ import {
 import { assign, isEmpty, concat } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
+import { Button, Space } from "antd";
 
 export const Users = () => {
   const navigate = useNavigate();
@@ -40,24 +41,25 @@ export const Users = () => {
   const onAddUser = () => navigateTo("new");
   const onEditUser = (user) => navigateTo(user.id);
 
-  // const removeUserOfGroup = (user) =>
-  //   modalConfirm({
-  //     title: `¿Estás seguro de que quieres desvincular al usuario ${
-  //       user.assignedTo.type === "entity"
-  //         ? "de la ENTIDAD"
-  //         : user.assignedTo.type === "department"
-  //         ? "del DEPARTAMENTO"
-  //         : user.assignedTo.type === "office"
-  //         ? "de la OFICINA"
-  //         : "de la SECCIÓN"
-  //     }?`,
-  //     onOk: async () => {
-  //       console.log({ user });
-  //     },
-  //   });
+  const removeUserOfGroup = (user) =>
+    modalConfirm({
+      title: `¿Estás seguro de que quieres desvincular al usuario ${
+        user.assignedTo.type === "entity"
+          ? "de la ENTIDAD"
+          : user.assignedTo.type === "department"
+          ? "del DEPARTAMENTO"
+          : user.assignedTo.type === "office"
+          ? "de la OFICINA"
+          : "de la SECCIÓN"
+      }?`,
+      onOk: async () => {
+        console.log({ user });
+      },
+    });
 
   const onDeleteUser = async (user) => {
     try {
+      console.log({ user });
       if (!isEmpty(user?.assignedTo?.id)) {
         return notification({
           type: "open",
@@ -65,31 +67,31 @@ export const Users = () => {
           title: "Este usuario está asignado como miembro",
           description:
             "Para eliminar, el usuario no debe estar como miembro en ningún grupo como (departamento, sección u oficina)",
-          // btn: (
-          //   <Space>
-          //     <Button
-          //       type="primary"
-          //       size="small"
-          //       onClick={() => removeUserOfGroup(user)}
-          //     >
-          //       Desvincular usuario
-          //     </Button>
-          //   </Space>
-          // ),
+          btn: (
+            <Space>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => removeUserOfGroup(user)}
+              >
+                Desvincular usuario
+              </Button>
+            </Space>
+          ),
         });
       }
 
       const user_ = assign({}, user, { updateBy: authUser?.email });
 
-      const response = await patchUser(user_);
-      if (!patchUserResponse.ok) {
-        throw new Error(response);
-      }
-
-      notification({
-        type: "success",
-        title: "User deleted successfully!",
-      });
+      // const response = await patchUser(user_);
+      // if (!patchUserResponse.ok) {
+      //   throw new Error(response);
+      // }
+      //
+      // notification({
+      //   type: "success",
+      //   title: "User deleted successfully!",
+      // });
     } catch (e) {
       const errorResponse = await getApiErrorResponse(e);
       apiErrorNotification(errorResponse);
