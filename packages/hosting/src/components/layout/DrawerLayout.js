@@ -233,7 +233,7 @@ export const DrawerLayout = ({
       ],
     },
     {
-      label: "Departamento de apoyo social",
+      label: "Departamento de apoyo social (DAS)",
       key: "departamento-de-apoyo-social",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
       isVisible: true,
@@ -243,6 +243,16 @@ export const DrawerLayout = ({
           icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
           label: "Lista de solicitudes",
           isVisible: true,
+        },
+        {
+          label: "Realizar Solicitud",
+          key: "application-request",
+          icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
+          isVisible: true,
+          onClick: () =>
+            onClickMenu(
+              "/entities/departamento-de-apoyo-social/das-requests/new"
+            ),
         },
       ],
     },

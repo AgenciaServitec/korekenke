@@ -258,12 +258,13 @@ export const Router = () => {
         path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
         element={<A.PdfEquineMagazineProfilesSheets />}
       />
+
       <Route
         exact
-        path={pathBase("/entities/departamento-de-apoyo-social/das-requests")}
+        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
         element={
           <AdminLayout>
-            <A.DasRequestsListIntegration />
+            <A.InstituteAcademyIntegration />
           </AdminLayout>
         }
       />
