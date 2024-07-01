@@ -21,6 +21,7 @@ import {
   Tabs,
   Tag,
   Typography,
+  Switch,
 } from "antd";
 
 export * from "./component-container";
@@ -85,4 +86,5 @@ export {
   Steps,
   Button,
   Table,
+  Switch,
 };

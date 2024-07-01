@@ -1,5 +1,7 @@
 {
   "son": "Hijo (a)",
-  "husband": "Hermano (a)",
-  "brother": "Esposo (a)"
+  "brother": "Hermano (a)",
+  "husband": "Esposo (a)",
+  "father": "Padre",
+  "mother": "Madre"
 }
