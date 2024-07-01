@@ -16,7 +16,7 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
-import { institutions } from "../../../../../data-list";
+import { Relationships, institutions } from "../../../../../data-list";
 import { useAuthentication } from "../../../../../providers";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router";
@@ -26,6 +26,7 @@ import {
   getDasApplicationId,
   updateDasApplication,
 } from "../../../../../firebase/collections/dasApplications";
+import styled from "styled-components";
 
 export const InstituteAcademyIntegration = () => {
   const navigate = useNavigate();
@@ -84,6 +85,7 @@ export const InstituteAcademyIntegration = () => {
           );
 
       notification({ type: "success" });
+      onGoBack();
     } catch (e) {
       console.error("ErrorSaveDasRequest: ", e);
       notification({ type: "error" });
@@ -235,6 +237,7 @@ const InstituteAcademy = ({
   const resetForm = () => {
     reset({
       isHeadline: true,
+      requestType: dasRequest?.requestType || _requestType,
       headline: {
         firstName: user.firstName || "",
         paternalSurname: user.paternalSurname || "",
@@ -278,9 +281,17 @@ const InstituteAcademy = ({
             null,
         },
       },
-      requestType: dasRequest?.requestType || "institutes",
     });
   };
+
+  const relationShipsView = [];
+
+  for (const relation in Relationships) {
+    relationShipsView.push({
+      label: Relationships[relation],
+      value: relation,
+    });
+  }
 
   const _isHeadline = watch("isHeadline") === true;
   const isUniversity = _requestType === "universities";
@@ -289,27 +300,7 @@ const InstituteAcademy = ({
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Controller
-            name="isHeadline"
-            control={control}
-            render={({ field: { onChange, value, name } }) => (
-              <Switch
-                name={name}
-                value={value}
-                checkedChildren="Titular"
-                unCheckedChildren="Familiar"
-                onChange={(value) => {
-                  onChange(value);
-                  onSetHeadline(value);
-                }}
-                error={error(name)}
-                required={required(name)}
-              />
-            )}
-          />
-        </Col>
+      <Row gutter={[16, 16]} justify="space-between">
         <Col span={24} md={12}>
           <Controller
             name="requestType"
@@ -340,6 +331,30 @@ const InstituteAcademy = ({
                 error={error(name)}
                 required={required(name)}
               />
+            )}
+          />
+        </Col>
+        <Col span={24} md={4}>
+          <Controller
+            name="isHeadline"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <Container>
+                <span>Titular o Familiar</span>
+                <Switch
+                  name={name}
+                  value={value}
+                  checkedChildren="Titular"
+                  unCheckedChildren="Familiar"
+                  size="2x"
+                  onChange={(value) => {
+                    onChange(value);
+                    onSetHeadline(value);
+                  }}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              </Container>
             )}
           />
         </Col>
@@ -583,10 +598,11 @@ const InstituteAcademy = ({
                     name="familiar.relationship"
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
-                      <Input
+                      <Select
                         label="Parentesco"
                         name={name}
                         value={value}
+                        options={relationShipsView}
                         onChange={onChange}
                         error={error(name)}
                         required={required(name)}
@@ -738,6 +754,7 @@ const InstituteAcademy = ({
                           control={control}
                           render={({ field: { onChange, value, name } }) => (
                             <Upload
+                              key={watch("processType")}
                               label="Copias de Consolidado de notas (último ciclo)"
                               accept="image/*"
                               name={name}
@@ -762,6 +779,7 @@ const InstituteAcademy = ({
                           control={control}
                           render={({ field: { onChange, value, name } }) => (
                             <Upload
+                              key={watch("processType")}
                               label="Copia de Constancia de Ingreso de la Universidad"
                               accept="image/*"
                               name={name}
@@ -785,6 +803,7 @@ const InstituteAcademy = ({
                         control={control}
                         render={({ field: { onChange, value, name } }) => (
                           <Upload
+                            key={watch("processType")}
                             label="Copia de boleta pago matricula de la Universidad"
                             accept="image/*"
                             name={name}
@@ -810,6 +829,7 @@ const InstituteAcademy = ({
                       control={control}
                       render={({ field: { onChange, value, name } }) => (
                         <Upload
+                          key={watch("processType")}
                           label="Copia de Liquidación de Haberes del Titular"
                           accept="image/*"
                           name={name}
@@ -849,3 +869,14 @@ const InstituteAcademy = ({
     </Form>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2em;
+  span {
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+`;
