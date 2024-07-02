@@ -272,6 +272,16 @@ export const Router = () => {
 
       <Route
         exact
+        path="/entities/departamento-de-apoyo-social/das-requests"
+        element={
+          <AdminLayout>
+            <A.DasRequestsListIntegration />
+          </AdminLayout>
+        }
+      />
+
+      <Route
+        exact
         path="/surveys/organizational-climate-studies"
         element={
           <AdminLayout>
