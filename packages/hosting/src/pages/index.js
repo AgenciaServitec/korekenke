@@ -22,6 +22,7 @@ export * from "./access-control/manage-acls";
 
 //SURVEYS ""
 export * from "./surveys/organizational-climate-studies";
+export * from "./surveys/organizational-climate-studies/_organizationalClimateStudyId";
 
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
