@@ -7,6 +7,7 @@ import {
   Input,
   Row,
   Select,
+  Steps,
   Title,
   notification,
 } from "../../../../components";
@@ -16,13 +17,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { Surveys } from "../../../../data-list";
 import { firestore } from "../../../../firebase";
+import { getOrganizationalClimateStudyId } from "../../../../firebase/collections/organizationalClimateStudies";
 
 export const OrganizationalClimateStudyIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
 
-  const mapForm = (formData) => ({
-    id: firestore.collection("organizational-climate-studies-surveys").doc().id,
+  const mapForm = (formData, organizationalClimateStudyId) => ({
+    id: organizationalClimateStudyId,
     questions: {
       ...formData.questions,
     },
@@ -36,10 +38,14 @@ export const OrganizationalClimateStudyIntegration = () => {
       setLoading(true);
       console.log(mapForm(formData));
 
+      const organizationalClimateStudyId = getOrganizationalClimateStudyId();
+
       await firestore
         .collection("organizational-climate-studies-surveys")
-        .doc(formData.id)
-        .set(assignCreateProps(mapForm(formData)));
+        .doc(organizationalClimateStudyId)
+        .set(
+          assignCreateProps(mapForm(formData, organizationalClimateStudyId))
+        );
 
       notification({ type: "success" });
     } catch (e) {
@@ -139,7 +145,7 @@ const OrganizationalClimateStudies = ({
 
   useEffect(() => {
     resetForm();
-  }, [loading]);
+  }, []);
 
   const resetForm = () => {
     reset({
@@ -195,88 +201,148 @@ const OrganizationalClimateStudies = ({
     });
   };
 
+  const [current, setCurrent] = useState(0);
+
+  const steps = [
+    {
+      title: "Preguntas",
+      content: (
+        <QuestionsOrganizationalStudies
+          control={control}
+          error={error}
+          required={required}
+        />
+      ),
+    },
+    {
+      title: "Items",
+      content: (
+        <ItemsOrganizationalStudies
+          control={control}
+          error={error}
+          required={required}
+        />
+      ),
+    },
+  ];
+
+  const items = steps.map((item) => ({
+    key: item.title,
+    title: item.title,
+  }));
+
   const onSubmit = (formData) => onSaveOrganizationalClimateStudies(formData);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <Row gutter={[16, 16]}>
-        {Surveys.questions.map((question, index) => {
-          return question?.options ? (
-            <Col key={index} span={24} md={6}>
-              <Controller
-                name={question.code}
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <Select
-                    label={question.label}
-                    name={name}
-                    value={value}
-                    options={question.options}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
+    <>
+      <Steps current={current} items={items} />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row gutter={[16, 16]}>{steps[current].content}</Row>
+        <Row justify="space-between" gutter={[16, 16]}>
+          {current > 0 && (
+            <Col xs={24} sm={6} md={4}>
+              <Button
+                type="primary"
+                size="large"
+                block
+                onClick={() => setCurrent(current - 1)}
+              >
+                Atrás
+              </Button>
             </Col>
-          ) : (
-            <Col key={index} span={24} md={6}>
-              <Controller
-                name={question.code}
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label={question.label}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
+          )}
+          {current < steps.length - 1 && (
+            <Col xs={24} sm={6} md={4}>
+              <Button
+                type="primary"
+                size="large"
+                block
+                onClick={() => setCurrent(current + 1)}
+              >
+                Siguiente
+              </Button>
             </Col>
-          );
-        })}
-      </Row>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Title level={4}>Items</Title>
-        </Col>
-        {Surveys.items.options.map((option, index) => (
-          <Col span={24} key={index}>
-            <Controller
-              name={option.code}
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <Select
-                  variant="outlined"
-                  label={option.label}
-                  name={name}
-                  value={value}
-                  options={Surveys.items.responses}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-        ))}
-      </Row>
-      <Row justify="end" gutter={[16, 16]}>
-        <Col xs={24} sm={6} md={4}>
-          <Button
-            type="primary"
-            size="large"
-            block
-            htmlType="submit"
-            loading={loading}
-          >
-            Guardar
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+          )}
+
+          {current > 0 && (
+            <Col xs={24} sm={6} md={4}>
+              <Button
+                type="primary"
+                size="large"
+                block
+                htmlType="submit"
+                loading={loading}
+              >
+                Guardar
+              </Button>
+            </Col>
+          )}
+        </Row>
+      </Form>
+    </>
   );
+};
+
+const QuestionsOrganizationalStudies = ({ control, error, required }) => {
+  return Surveys.questions.map((question, index) => {
+    return question?.options ? (
+      <Col key={index} span={24} md={12}>
+        <Controller
+          name={question.code}
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <Select
+              label={question.label}
+              name={name}
+              value={value}
+              options={question.options}
+              onChange={onChange}
+              error={error(name)}
+              required={required(name)}
+            />
+          )}
+        />
+      </Col>
+    ) : (
+      <Col key={index} span={24} md={12}>
+        <Controller
+          name={question.code}
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <Input
+              label={question.label}
+              name={name}
+              value={value}
+              onChange={onChange}
+              error={error(name)}
+              required={required(name)}
+            />
+          )}
+        />
+      </Col>
+    );
+  });
+};
+
+const ItemsOrganizationalStudies = ({ control, error, required }) => {
+  return Surveys.items.options.map((option, index) => (
+    <Col key={index} span={24} md={12}>
+      <Controller
+        name={option.code}
+        control={control}
+        render={({ field: { onChange, value, name } }) => (
+          <Select
+            variant="outlined"
+            label={option.label}
+            name={name}
+            value={value}
+            options={Surveys.items.responses}
+            onChange={onChange}
+            error={error(name)}
+            required={required(name)}
+          />
+        )}
+      />
+    </Col>
+  ));
 };
