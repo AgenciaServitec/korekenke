@@ -1,5 +1,11 @@
-import React from "react";
-import { Col, modalConfirm, Row, Title } from "../../../../components";
+import React, { useEffect } from "react";
+import {
+  Col,
+  modalConfirm,
+  notification,
+  Row,
+  Title,
+} from "../../../../components";
 import { DasRequestsListTable } from "./DasRequestsListTable";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../firebase";
@@ -15,6 +21,10 @@ export const DasRequestsListIntegration = () => {
     useCollectionData(
       firestore.collection("das-applications").where("isDeleted", "==", false)
     );
+
+  useEffect(() => {
+    dasApplicationsError && notification({ type: "error" });
+  }, [dasApplicationsError]);
 
   const navigateTo = (pathname = "new") => navigate(pathname);
   const onEditDasRequest = (dasRequest) => navigateTo(dasRequest.id);
@@ -35,6 +45,7 @@ export const DasRequestsListIntegration = () => {
       dasApplications={dasApplications}
       onEditDasRequest={onEditDasRequest}
       onDeleteDasRequest={onConfirmDeleteDasRequest}
+      dasApplicationsLoading={dasApplicationsLoading}
     />
   );
 };
@@ -43,6 +54,7 @@ const DasRequestsList = ({
   dasApplications,
   onEditDasRequest,
   onDeleteDasRequest,
+  dasApplicationsLoading,
 }) => {
   return (
     <Row gutter={[0, 24]}>
@@ -54,6 +66,7 @@ const DasRequestsList = ({
           dasApplications={dasApplications}
           onEditDasRequest={onEditDasRequest}
           onDeleteDasRequest={onDeleteDasRequest}
+          dasApplicationsLoading={dasApplicationsLoading}
         />
       </Col>
     </Row>

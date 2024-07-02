@@ -8,6 +8,7 @@ export const DasRequestsListTable = ({
   dasApplications,
   onEditDasRequest,
   onDeleteDasRequest,
+  dasApplicationsLoading,
 }) => {
   const columns = [
     {
@@ -61,6 +62,7 @@ export const DasRequestsListTable = ({
   ];
   return (
     <Table
+      loading={dasApplicationsLoading}
       columns={columns}
       scroll={{ x: "max-content" }}
       dataSource={dasApplications}
