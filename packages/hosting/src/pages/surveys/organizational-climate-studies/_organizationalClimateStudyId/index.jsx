@@ -250,6 +250,7 @@ const OrganizationalClimateStudies = ({
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <Select
+                  variant="outlined"
                   label={option.label}
                   name={name}
                   value={value}
