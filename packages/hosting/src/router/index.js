@@ -4,7 +4,6 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { OrganizationalClimateStudyIntegration } from "../pages";
 
 export const Router = () => {
   return (
@@ -266,6 +265,16 @@ export const Router = () => {
         element={
           <AdminLayout>
             <A.InstituteAcademyIntegration />
+          </AdminLayout>
+        }
+      />
+
+      <Route
+        exact
+        path="/entities/departamento-de-apoyo-social/das-requests"
+        element={
+          <AdminLayout>
+            <A.DasRequestsListIntegration />
           </AdminLayout>
         }
       />
