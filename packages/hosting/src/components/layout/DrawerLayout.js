@@ -13,6 +13,7 @@ import {
   faHorse,
   faIdCard,
   faNetworkWired,
+  faPoll,
   faShield,
   faUsers,
   faUsersCog,
@@ -156,6 +157,21 @@ export const DrawerLayout = ({
             ["/offices"]
           ),
           onClick: () => onClickMenu("/offices"),
+        },
+      ],
+    },
+    {
+      label: "Encuestas",
+      key: "surveys",
+      icon: <FontAwesomeIcon icon={faPoll} size="lg" />,
+      isVisible: true,
+      children: [
+        {
+          label: "Estudio del Clima Organizacional",
+          key: "organizational-climate-studies",
+          icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
+          isVisible: true,
+          onClick: () => onClickMenu("/surveys/organizational-climate-studies"),
         },
       ],
     },

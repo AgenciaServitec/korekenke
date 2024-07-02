@@ -20,6 +20,9 @@ export * from "./access-control/default-roles-acls";
 export * from "./access-control/default-roles-acls/_roleAclsId";
 export * from "./access-control/manage-acls";
 
+//SURVEYS ""
+export * from "./surveys/organizational-climate-studies";
+
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
 
