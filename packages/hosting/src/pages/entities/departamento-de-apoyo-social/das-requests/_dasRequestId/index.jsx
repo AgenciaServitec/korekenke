@@ -138,7 +138,7 @@ const InstituteAcademy = ({
       email: yup.string().email(),
     }),
     familiar: headline
-      ? yup.object().nullable()
+      ? yup.object().nullable().notRequired()
       : yup.object({
           firstName: headline
             ? yup.string().notRequired()
@@ -187,7 +187,7 @@ const InstituteAcademy = ({
       processType: yup.string().when("requestType", {
         is: "universities",
         then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
+        otherwise: yup.string().notRequired().nullable(),
       }),
     }),
     applicant: yup.object({
@@ -197,20 +197,20 @@ const InstituteAcademy = ({
           .when("institution.institutionId", {
             is: "britanico",
             then: yup.mixed().required(),
-            otherwise: yup.mixed().notRequired(),
+            otherwise: yup.mixed().notRequired().nullable(),
           }),
         copyConstanciaIngresoUniv:
           _processType === "entry"
             ? yup.mixed().required()
-            : yup.mixed().notRequired(),
+            : yup.mixed().notRequired().nullable(),
         copyConsolidadoNotasUniv:
           _processType === "graduate"
             ? yup.mixed().required()
-            : yup.mixed().notRequired(),
+            : yup.mixed().notRequired().nullable(),
         copyBoletaPagoMatriculaUniv:
           _requestType === "universities"
             ? yup.mixed().required()
-            : yup.mixed().notRequired(),
+            : yup.mixed().notRequired().nullable(),
       }),
     }),
   });
@@ -227,6 +227,8 @@ const InstituteAcademy = ({
       isHeadline: true,
     },
   });
+
+  console.log({ errors });
 
   const { required, error } = useFormUtils({ errors, schema });
 
