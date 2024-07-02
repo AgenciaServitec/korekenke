@@ -9,4 +9,5 @@ export { default as Genders } from "./genders.json";
 export { default as Relationships } from "./relationships.json";
 export { default as AssignmentForUsers } from "./assignmentForUsers.json";
 export { default as institutions } from "./institutions.json";
+export { default as Surveys } from "./surveys.json";
 export * from "./equineMagazineProfiles.js";

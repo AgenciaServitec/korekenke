@@ -268,6 +268,16 @@ export const Router = () => {
           </AdminLayout>
         }
       />
+
+      <Route
+        exact
+        path="/surveys/organizational-climate-studies"
+        element={
+          <AdminLayout>
+            <A.OrganizationalClimateStudiesIntegration />
+          </AdminLayout>
+        }
+      />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );
