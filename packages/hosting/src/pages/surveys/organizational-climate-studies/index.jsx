@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../firebase";
 import {
@@ -17,7 +17,6 @@ import { orderBy } from "lodash";
 import { useDefaultFirestoreProps } from "../../../hooks";
 
 export const OrganizationalClimateStudiesIntegration = () => {
-  const { _organizationalClimateStudyId } = useParams();
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
