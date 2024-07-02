@@ -1,0 +1,895 @@
+{
+  "questions": [
+    {
+      "label": "Nombre de la Organización de Salud",
+      "code": "questions.establishment",
+      "description": "",
+      "options": null
+    },
+    {
+      "label": "Tipo de Organización",
+      "code": "questions.type",
+      "description": "",
+      "options": [
+        {
+          "label": "DIRESA",
+          "value": 1
+        },
+        {
+          "label": "DISA",
+          "value": 2
+        },
+        {
+          "label": "GERESA",
+          "value": 3
+        },
+        {
+          "label": "Hospital",
+          "value": 4
+        },
+        {
+          "label": "Instituto",
+          "value": 5
+        },
+        {
+          "label": "Red",
+          "value": 6
+        },
+        {
+          "label": "Micro red",
+          "value": 7
+        },
+        {
+          "label": "Establecimiento de Salud",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "label": "Sub Sector",
+      "code": "questions.subsector",
+      "description": "Sub Sector al que pertenece la organización de salud",
+      "options": [
+        {
+          "label": "MINSA",
+          "value": 1
+        },
+        {
+          "label": "ESSALUD",
+          "value": 2
+        },
+        {
+          "label": "FFAA",
+          "value": 3
+        },
+        {
+          "label": "PNP",
+          "value": 4
+        },
+        {
+          "label": "Privado",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "label": "Ubicación Geográfica",
+      "code": "questions.ubigeus",
+      "description": "",
+      "options": [
+        {
+          "label": "Costa",
+          "value": 1
+        },
+        {
+          "label": "Sierra",
+          "value": 2
+        },
+        {
+          "label": "Selva",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "label": "Edad",
+      "code": "questions.age",
+      "description": "",
+      "options": null
+    },
+    {
+      "label": "Sexo",
+      "code": "questions.gender",
+      "description": "",
+      "options": [
+        {
+          "label": "Femenino",
+          "value": 1
+        },
+        {
+          "label": "Masculino",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "label": "Grupo Ocupacional",
+      "code": "questions.occupationalGroup",
+      "description": "",
+      "options": [
+        {
+          "label": "Administrativo",
+          "value": 1
+        },
+        {
+          "label": "Asistencial",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "label": "Profesión",
+      "code": "questions.profession",
+      "description": "",
+      "options": [
+        {
+          "label": "Abogado",
+          "value": "abogado"
+        },
+        {
+          "label": "Administrador De Red",
+          "value": "administrador_de_red"
+        },
+        {
+          "label": "Arquitecto",
+          "value": "arquitecto"
+        },
+        {
+          "label": "Artesano",
+          "value": "artesano"
+        },
+        {
+          "label": "Asesor",
+          "value": "asesor"
+        },
+        {
+          "label": "Asist Administivo",
+          "value": "asist_administivo"
+        },
+        {
+          "label": "Asist Contable",
+          "value": "asist_contable"
+        },
+        {
+          "label": "Asist Serv Comunicaciones",
+          "value": "asist_serv_comunicaciones"
+        },
+        {
+          "label": "Asist Serv de Salud",
+          "value": "asist_serv_de_salud"
+        },
+        {
+          "label": "Asist Serv Ec Fin",
+          "value": "asist_serv_ec_fin"
+        },
+        {
+          "label": "Asist Serv Econo Finac",
+          "value": "asist_serv_econo_finac"
+        },
+        {
+          "label": "Asist Serv Ed Cult",
+          "value": "asist_serv_ed_cult"
+        },
+        {
+          "label": "Asist Serv Infraest",
+          "value": "asist_serv_infraest"
+        },
+        {
+          "label": "Asist Serv Juridico",
+          "value": "asist_serv_juridico"
+        },
+        {
+          "label": "Asist Serv Rec Naturales",
+          "value": "asist_serv_rec_naturales"
+        },
+        {
+          "label": "Asist Serv Social",
+          "value": "asist_serv_social"
+        },
+        {
+          "label": "Asistente Social",
+          "value": "asistente_social"
+        },
+        {
+          "label": "Auditor",
+          "value": "auditor"
+        },
+        {
+          "label": "Aux Agropecuaria",
+          "value": "aux_agropecuaria"
+        },
+        {
+          "label": "Aux Artesania",
+          "value": "aux_artesania"
+        },
+        {
+          "label": "Aux Asistencia Social",
+          "value": "aux_asistencia_social"
+        },
+        {
+          "label": "Aux Biblioteca",
+          "value": "aux_biblioteca"
+        },
+        {
+          "label": "Aux Contabilidad",
+          "value": "aux_contabilidad"
+        },
+        {
+          "label": "Aux Educacion",
+          "value": "aux_educacion"
+        },
+        {
+          "label": "Aux Electricidad",
+          "value": "aux_electricidad"
+        },
+        {
+          "label": "Aux Enfermeria",
+          "value": "aux_enfermeria"
+        },
+        {
+          "label": "Aux Estadistica",
+          "value": "aux_estadistica"
+        },
+        {
+          "label": "Aux Farmacia",
+          "value": "aux_farmacia"
+        },
+        {
+          "label": "Aux Laboratorio",
+          "value": "aux_laboratorio"
+        },
+        {
+          "label": "Aux Mantenimiento",
+          "value": "aux_mantenimiento"
+        },
+        {
+          "label": "Aux Mecanica",
+          "value": "aux_mecanica"
+        },
+        {
+          "label": "Aux Morgue",
+          "value": "aux_morgue"
+        },
+        {
+          "label": "Aux Nutricion",
+          "value": "aux_nutricion"
+        },
+        {
+          "label": "Aux Publicaciones",
+          "value": "aux_publicaciones"
+        },
+        {
+          "label": "Aux Sistadministrativ",
+          "value": "aux_sistadministrativ"
+        },
+        {
+          "label": "Bibliotecario",
+          "value": "bibliotecario"
+        },
+        {
+          "label": "Biologo",
+          "value": "biologo"
+        },
+        {
+          "label": "Cajero",
+          "value": "cajero"
+        },
+        {
+          "label": "Capellan",
+          "value": "capellan"
+        },
+        {
+          "label": "Chofer",
+          "value": "chofer"
+        },
+        {
+          "label": "Cirujano Dentista",
+          "value": "cirujano_dentista"
+        },
+        {
+          "label": "Contador",
+          "value": "contador"
+        },
+        {
+          "label": "Dibujante",
+          "value": "dibujante"
+        },
+        {
+          "label": "Director Adminis",
+          "value": "director_adminis"
+        },
+        {
+          "label": "Director Ejecutivo",
+          "value": "director_ejecutivo"
+        },
+        {
+          "label": "Director General",
+          "value": "director_general"
+        },
+        {
+          "label": "Director Prog Sectorial",
+          "value": "director_prog_sectorial"
+        },
+        {
+          "label": "Director Sistadm",
+          "value": "director_sistadm"
+        },
+        {
+          "label": "Director Tecnico",
+          "value": "director_tecnico"
+        },
+        {
+          "label": "Docente De Escuela Sup",
+          "value": "docente_de_escuela_sup"
+        },
+        {
+          "label": "Economista",
+          "value": "economista"
+        },
+        {
+          "label": "Educador",
+          "value": "educador"
+        },
+        {
+          "label": "Electricista",
+          "value": "electricista"
+        },
+        {
+          "label": "Enfermeria",
+          "value": "enfermeria"
+        },
+        {
+          "label": "Espec Administ",
+          "value": "espec_administ"
+        },
+        {
+          "label": "Espec Audicy Lenguaje",
+          "value": "espec_audic_y_lenguaje"
+        },
+        {
+          "label": "Espec Capacitacion",
+          "value": "espec_capacitacion"
+        },
+        {
+          "label": "Espec Educacion",
+          "value": "espec_educacion"
+        },
+        {
+          "label": "Espec Finanzas",
+          "value": "espec_finanzas"
+        },
+        {
+          "label": "Espec Prod Soc",
+          "value": "espec_prod_soc"
+        },
+        {
+          "label": "Espec Promocion Social",
+          "value": "espec_promocion_social"
+        },
+        {
+          "label": "Espec Racionalizacion",
+          "value": "espec_racionalizacion"
+        },
+        {
+          "label": "Estadistico",
+          "value": "estadistico"
+        },
+        {
+          "label": "Experto Sist Adm",
+          "value": "experto_sist_adm"
+        },
+        {
+          "label": "Fisioterapista Clinico Esc Sup",
+          "value": "fisioterapista_clinico_esc_sup"
+        },
+        {
+          "label": "Fogonero",
+          "value": "fogonero"
+        },
+        {
+          "label": "Ingeniero",
+          "value": "ingeniero"
+        },
+        {
+          "label": "Inspector Sanitario",
+          "value": "inspector_sanitario"
+        },
+        {
+          "label": "Jefe De Division",
+          "value": "jefe_de_division"
+        },
+        {
+          "label": "Jefe Gabinete Asesores",
+          "value": "jefe_gabinete_asesores"
+        },
+        {
+          "label": "Jefe Inst Publ Descentral",
+          "value": "jefe_inst_publ_descentral"
+        },
+        {
+          "label": "Laboratorista Clin",
+          "value": "laboratorista_clin"
+        },
+        {
+          "label": "Mecanico",
+          "value": "mecanico"
+        },
+        {
+          "label": "Mecanico Dental",
+          "value": "mecanico_dental"
+        },
+        {
+          "label": "Mecanico Electronico",
+          "value": "mecanico_electronico"
+        },
+        {
+          "label": "Medico",
+          "value": "medico"
+        },
+        {
+          "label": "Nutricionista",
+          "value": "nutricionista"
+        },
+        {
+          "label": "Obstetriz",
+          "value": "obstetriz"
+        },
+        {
+          "label": "Oficinista",
+          "value": "oficinista"
+        },
+        {
+          "label": "Operad Central Telef",
+          "value": "operad_central_telef"
+        },
+        {
+          "label": "Operad Eq  Elec",
+          "value": "operad_eq__elec"
+        },
+        {
+          "label": "Operad Eq De Imprenta",
+          "value": "operad_eq_de_imprenta"
+        },
+        {
+          "label": "Operad Equipo Medico",
+          "value": "operad_equipo_medico"
+        },
+        {
+          "label": "Operad Maq Industrial",
+          "value": "operad_maq_industrial"
+        },
+        {
+          "label": "Operad P A D I",
+          "value": "operad_p_a_d_i"
+        },
+        {
+          "label": "Operad Radio",
+          "value": "operad_radio"
+        },
+        {
+          "label": "Periodista",
+          "value": "periodista"
+        },
+        {
+          "label": "Prog De Sistemas Pad",
+          "value": "prog_de_sistemas_pad"
+        },
+        {
+          "label": "Promotor Social",
+          "value": "promotor_social"
+        },
+        {
+          "label": "Psicologo",
+          "value": "psicologo"
+        },
+        {
+          "label": "Quimico",
+          "value": "quimico"
+        },
+        {
+          "label": "Quimico Farmaceutico",
+          "value": "quimico_farmaceutico"
+        },
+        {
+          "label": "Relacionador Publico",
+          "value": "relacionador_publico"
+        },
+        {
+          "label": "Residente",
+          "value": "residente"
+        },
+        {
+          "label": "Secretaria",
+          "value": "secretaria"
+        },
+        {
+          "label": "Secretario General",
+          "value": "secretario_general"
+        },
+        {
+          "label": "Seguridad Interna",
+          "value": "seguridad_interna"
+        },
+        {
+          "label": "Sociologo",
+          "value": "sociologo"
+        },
+        {
+          "label": "Sub Jefe Inst Publ Descent",
+          "value": "sub_jefe_inst_publ_descent"
+        },
+        {
+          "label": "Sub-Director",
+          "value": "sub_director"
+        },
+        {
+          "label": "Sup Conserv Y Serv ",
+          "value": "sup_conserv_y_serv_"
+        },
+        {
+          "label": "Sup Prog Sectorial",
+          "value": "sup_prog_sectorial"
+        },
+        {
+          "label": "Sup Taller",
+          "value": "sup_taller"
+        },
+        {
+          "label": "Tec Abogacia",
+          "value": "tec_abogacia"
+        },
+        {
+          "label": "Tec Administrativo",
+          "value": "tec_administrativo"
+        },
+        {
+          "label": "Tec Administrativo",
+          "value": "tec_administrativo"
+        },
+        {
+          "label": "Tec Agropecuario",
+          "value": "tec_agropecuario"
+        },
+        {
+          "label": "Tec Almacen",
+          "value": "tec_almacen"
+        },
+        {
+          "label": "Tec Analisis Clinico",
+          "value": "tec_analisis_clinico"
+        },
+        {
+          "label": "Tec Archivo",
+          "value": "tec_archivo"
+        },
+        {
+          "label": "Tec Archivo",
+          "value": "tec_archivo"
+        },
+        {
+          "label": "Tec Artes Graficas",
+          "value": "tec_artes_graficas"
+        },
+        {
+          "label": "Tec Asistencia Social",
+          "value": "tec_asistencia_social"
+        },
+        {
+          "label": "Tec Biblioteca",
+          "value": "tec_biblioteca"
+        },
+        {
+          "label": "Tec Biologia",
+          "value": "tec_biologia"
+        },
+        {
+          "label": "Tec Capac Y Difusion",
+          "value": "tec_capac_y_difusion"
+        },
+        {
+          "label": "Tec Computacion Informatica",
+          "value": "tec_computacion_informatica"
+        },
+        {
+          "label": "Tec Electricista",
+          "value": "tec_electricista"
+        },
+        {
+          "label": "Tec Enfermeria",
+          "value": "tec_enfermeria"
+        },
+        {
+          "label": "Tec Estadistica",
+          "value": "tec_estadistica"
+        },
+        {
+          "label": "Tec Farmacia",
+          "value": "tec_farmacia"
+        },
+        {
+          "label": "Tec Finanzas",
+          "value": "tec_finanzas"
+        },
+        {
+          "label": "Tec Fisioterapia",
+          "value": "tec_fisioterapia"
+        },
+        {
+          "label": "Tec Impresiones",
+          "value": "tec_impresiones"
+        },
+        {
+          "label": "Tec Ingenieria",
+          "value": "tec_ingenieria"
+        },
+        {
+          "label": "Tec Laboratorio",
+          "value": "tec_laboratorio"
+        },
+        {
+          "label": "Tec Laboratorio",
+          "value": "tec_laboratorio"
+        },
+        {
+          "label": "Tec Nutricion",
+          "value": "tec_nutricion"
+        },
+        {
+          "label": "Tec Planificacion",
+          "value": "tec_planificacion"
+        },
+        {
+          "label": "Tec Protesis Ortop",
+          "value": "tec_protesis_ortop"
+        },
+        {
+          "label": "Tec Racionalizacion",
+          "value": "tec_racionalizacion"
+        },
+        {
+          "label": "Tec Rayos X",
+          "value": "tec_rayos_x"
+        },
+        {
+          "label": "Tec Saneamiento",
+          "value": "tec_saneamiento"
+        },
+        {
+          "label": "Tec Sanitario",
+          "value": "tec_sanitario"
+        },
+        {
+          "label": "Tec Seguridad",
+          "value": "tec_seguridad"
+        },
+        {
+          "label": "Tec Transporte",
+          "value": "tec_transporte"
+        },
+        {
+          "label": "Tecnologo Medico",
+          "value": "tecnologo_medico"
+        },
+        {
+          "label": "Terapista",
+          "value": "terapista"
+        },
+        {
+          "label": "Tesorero",
+          "value": "tesorero"
+        },
+        {
+          "label": "Topografo",
+          "value": "topografo"
+        },
+        {
+          "label": "Trabajador De Servicios",
+          "value": "trabajador_de_servicios"
+        },
+        {
+          "label": "Trabajador Social Esc Sup",
+          "value": "trabajador_social_esc_sup"
+        },
+        {
+          "label": "Veterinario",
+          "value": "veterinario"
+        }
+      ]
+    },
+    {
+      "label": "Condición",
+      "code": "questions.condition",
+      "description": "",
+      "options": [
+        {
+          "label": "Nombrado",
+          "value": 1
+        },
+        {
+          "label": "Contratado",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "label": "Tiempo trabajando en la Institución",
+      "code": "questions.dwellTime",
+      "description": "",
+      "options": null
+    },
+    {
+      "label": "Tiempo trabajando en el Puesto Actual",
+      "code": "questions.timeInCurrentPosition",
+      "description": "",
+      "options": null
+    }
+  ],
+  "items": {
+    "options": [
+      {
+        "label": "Mi centro de labores me ofrece la oportunidad de hacer lo que mejor que sé hacer",
+        "code": "items.item1"
+      },
+      {
+        "label": "No me río de bromas",
+        "code": "items.item2"
+      },
+      {
+        "label": "Mi jefe inmediato trata de obtener información antes de tomar una decisión",
+        "code": "items.item3"
+      },
+      {
+        "label": "La innovación es característica de nuestra organización",
+        "code": "items.item4"
+      },
+      {
+        "label": "Mis compañeros de trabajo toman iniciativas para la solución de problemas",
+        "code": "items.item5"
+      },
+      {
+        "label": "Mi remuneración es adecuada en relación con el trabajo que realizo",
+        "code": "items.item6"
+      },
+      {
+        "label": "Mi jefe está disponible cuando se le necesita",
+        "code": "items.item7"
+      },
+      {
+        "label": "Mi jefe inmediato se preocupa por crear un ambiente laboral agradable",
+        "code": "items.item8"
+      },
+      {
+        "label": "Siempre las cosas me salen perfectas",
+        "code": "items.item9"
+      },
+      {
+        "label": "Conozco las tareas o funciones específicas que debo realizar en mi organización",
+        "code": "items.item10"
+      },
+      {
+        "label": "Mi trabajo es evaluado en forma adecuada",
+        "code": "items.item11"
+      },
+      {
+        "label": "Es fácil para mis compañeros de trabajo que sus nuevas ideas sean consideradas",
+        "code": "items.item12"
+      },
+      {
+        "label": "Las tareas que desempeño  corresponden a mi función",
+        "code": "items.item13"
+      },
+      {
+        "label": "En mi organización participo en la toma de decisiones",
+        "code": "items.item14"
+      },
+      {
+        "label": "Siempre estoy sonriente",
+        "code": "items.item15"
+      },
+      {
+        "label": "Los premios y reconocimientos son distribuidos en forma justa",
+        "code": "items.item16"
+      },
+      {
+        "label": "Mi institución es flexible y se adapta bien a los cambios",
+        "code": "items.item17"
+      },
+      {
+        "label": "La limpieza de los ambientes es adecuada",
+        "code": "items.item18"
+      },
+      {
+        "label": "Nuestros directivos contribuyen a crear condiciones adecuadas para el progreso de mi organización",
+        "code": "items.item19"
+      },
+      {
+        "label": "Mi contribución juega un papel importante en el éxito de mi organización de salud",
+        "code": "items.item20"
+      },
+      {
+        "label": "Existen incentivos laborales para que yo trate de hacer mejor mi trabajo",
+        "code": "items.item21"
+      },
+      {
+        "label": "Nunca cometo errores",
+        "code": "items.item22"
+      },
+      {
+        "label": "Estoy comprometido con mi organización de salud",
+        "code": "items.item23"
+      },
+      {
+        "label": "Las otras áreas o servicios me ayudan cuando las necesito",
+        "code": "items.item24"
+      },
+      {
+        "label": "En términos generales me siento satisfecho con mi ambiente de trabajo",
+        "code": "items.item25"
+      },
+      {
+        "label": "Puedo contar con mis compañeros de trabajo cuando los necesito",
+        "code": "items.item26"
+      },
+      {
+        "label": "Mi salario y beneficios son razonables",
+        "code": "items.item27"
+      },
+      {
+        "label": "Siempre que he encontrado algo lo he devuelto a su dueño",
+        "code": "items.item28"
+      },
+      {
+        "label": "Mi jefe inmediato se comunica regularmente con los trabajadores para recabar apreciaciones técnicas o percepciones relacionadas al trabajo",
+        "code": "items.item29"
+      },
+      {
+        "label": "Mi jefe inmediato me comunica si estoy realizando  bien o mal mi trabajo",
+        "code": "items.item30"
+      },
+      {
+        "label": "Me interesa el desarrollo de mi organización de salud",
+        "code": "items.item31"
+      },
+      {
+        "label": "Nunca he mentido",
+        "code": "items.item32"
+      },
+      {
+        "label": "Recibo buen trato en mi establecimiento de salud",
+        "code": "items.item33"
+      },
+      {
+        "label": "Presto atención a los comunicados que emiten mis jefes",
+        "code": "items.item34"
+      }
+    ],
+    "responses": [
+      {
+        "label": "Nunca",
+        "value": 1
+      },
+      {
+        "label": "A Veces",
+        "value": 2
+      },
+      {
+        "label": "Frecuentemente",
+        "value": 3
+      },
+      {
+        "label": "Siempre",
+        "value": 4
+      }
+    ]
+  }
+}
