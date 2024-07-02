@@ -31,8 +31,11 @@ export const Outlined = ({
   helperText,
   disabled = false,
 }) => (
-  <>
-    <Container
+  <div>
+    <label htmlFor={componentId} className="item-label">
+      {label}
+    </label>
+    <Wrapper
       value={typeof value === "object" ? !isEmpty(value) : !!toString(value)}
       error={error}
       required={required}
@@ -42,32 +45,18 @@ export const Outlined = ({
       disabled={disabled}
     >
       <div className="item-wrapper">{children}</div>
-      <label htmlFor={componentId} className="item-label">
-        {label}
-      </label>
-    </Container>
+    </Wrapper>
     {helperText && (
       <Error error={error}>{capitalize(startCase(helperText))}</Error>
     )}
-  </>
+  </div>
 );
 
-const labelAnimate = css`
-  padding: 0 5px;
-  border-radius: ${({ theme }) => theme.border_radius.xx_small};
-  top: -9px;
-  left: 6px;
-  bottom: auto;
-  font-weight: 600;
-  font-size: ${({ theme }) => theme.font_sizes.x_small};
-  background-color: ${({ theme }) => theme.colors.white};
-`;
-
-const Container = styled.div`
+const Wrapper = styled.div`
   ${({ theme, error, required, disabled, value, animation, hidden }) => css`
     position: relative;
     width: inherit;
-    border-radius: ${theme.border_radius.xxx_small};
+    border-radius: ${theme.border_radius.xx_small};
     background: ${disabled ? theme.colors.light : theme.colors.white};
     border: 1px solid ${error ? theme.colors.error : theme.colors.gray};
     animation: ${error && keyframes.shake} 340ms
@@ -96,11 +85,8 @@ const Container = styled.div`
   }
 
     .item-label {
-      position: absolute;
-      top: 0;
-      left: 10px;
-      bottom: 0;
-      z-index: 100;
+        margin-bottom: .2em;
+        z-index: 100;
       pointer-events: none;
       display: flex;
       align-items: center;
@@ -115,10 +101,6 @@ const Container = styled.div`
           display: none;
         `
       }
-
-      ${animation && labelAnimate};
-
-      ${value && labelAnimate};
 
       ${
         required &&
@@ -149,7 +131,6 @@ const Container = styled.div`
 
       &:focus-within + .item-label,
       &:-webkit-autofill + .item-label {
-        ${labelAnimate};
 
         color: ${error ? theme.colors.error : lighten(0.1, theme.colors.font1)};
 
@@ -159,6 +140,7 @@ const Container = styled.div`
             color: ${theme.colors.error};
           `
         }
+        
         &:after {
           color: ${
             error ? theme.colors.error : lighten(0.1, theme.colors.font1)
