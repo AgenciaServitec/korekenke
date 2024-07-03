@@ -4,6 +4,7 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
+import { OrganizationalClimateStudiesSheets } from "../pages";
 
 export const Router = () => {
   return (
@@ -298,6 +299,11 @@ export const Router = () => {
             <A.OrganizationalClimateStudyIntegration />
           </AdminLayout>
         }
+      />
+      <Route
+        exact
+        path="/surveys/organizational-climate-studies/sheets"
+        element={<A.OrganizationalClimateStudiesSheets />}
       />
       <Route path="*" element={<Page404 />} />
     </Routes>

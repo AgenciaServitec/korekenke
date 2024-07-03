@@ -57,7 +57,9 @@ export const OrganizationalClimateStudiesIntegration = () => {
           tooltipTitle="PDF"
           icon={faFilePdf}
           styled={{ color: (theme) => theme.colors.error }}
-          onClick={() => console.log("PDF")}
+          onClick={() =>
+            navigate("/surveys/organizational-climate-studies/sheets")
+          }
         />
       </Col>
       <Divider />
