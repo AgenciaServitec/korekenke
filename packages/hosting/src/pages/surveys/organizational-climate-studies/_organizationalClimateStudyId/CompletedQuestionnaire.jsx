@@ -15,7 +15,7 @@ export const CompletedQuestionnaire = () => {
       <Col span={24}>
         <Container>
           <Title level={4}>
-            Ha completado el formulario satisfactoriamente
+            Felicidades, ha completado la encuesta exitosamente!
           </Title>
           <FontAwesomeIcon icon={faThumbsUp} size="8x" />
         </Container>
