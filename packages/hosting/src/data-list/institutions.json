@@ -1,144 +1,144 @@
 {
   "institutes": [
     {
-      "label": "Centro de Altos Estudios de la Moda",
-      "value": "centro-de-altos-estudios-de-la-moda"
+      "id": "centro-de-altos-estudios-de-la-moda",
+      "name": "Centro de Altos Estudios de la Moda"
     },
     {
-      "label": "Británico",
-      "value": "britanico"
+      "id": "britanico",
+      "name": "Británico"
     },
     {
-      "label": "CEPEA",
-      "value": "cepea"
+      "id": "cepea",
+      "name": "CEPEA"
     },
     {
-      "label": "CEPEBAN",
-      "value": "cepeban"
+      "id": "cepeban",
+      "name": "CEPEBAN"
     },
     {
-      "label": "CESCA",
-      "value": "cesca"
+      "id": "cesca",
+      "name": "CESCA"
     },
     {
-      "label": "CETPRO 'GAMOR",
-      "value": "cetpro-gamor"
+      "id": "cetpro-gamor",
+      "name": "CETPRO 'GAMOR"
     },
     {
-      "label": "CEVATUR PERU",
-      "value": "cevatur-peru"
+      "id": "cevatur-peru",
+      "name": "CEVATUR PERU"
     },
     {
-      "label": "Corporación Educativa San Vicente",
-      "value": "corporacion-educativa-san-vicente"
+      "id": "corporacion-educativa-san-vicente",
+      "name": "Corporación Educativa San Vicente"
     },
     {
-      "label": "D'GALLIA",
-      "value": "d-gallia"
+      "id": "d-gallia",
+      "name": "D'GALLIA"
     },
     {
-      "label": "Daniel A. Carrión",
-      "value": "daniel-a-carrion"
+      "id": "daniel-a-carrion",
+      "name": "Daniel A. Carrión"
     },
     {
-      "label": "Desarrollo Gerencial",
-      "value": "desarrollo-gerencial"
+      "id": "desarrollo-gerencial",
+      "name": "Desarrollo Gerencial"
     },
     {
-      "label": "Desarrollo Profesional y Técnico",
-      "value": "desarrollo-profesional-y-tecnico"
+      "id": "desarrollo-profesional-y-tecnico",
+      "name": "Desarrollo Profesional y Técnico"
     },
     {
-      "label": "Internacional de Gerencia (EIGER",
-      "value": "internacional-de-gerencia-eiger"
+      "id": "internacional-de-gerencia-eiger",
+      "name": "Internacional de Gerencia (EIGER"
     },
     {
-      "label": "AKRON",
-      "value": "akron"
+      "id": "akron",
+      "name": "AKRON"
     },
     {
-      "label": "EUROIDIOMAS",
-      "value": "euroidiomas"
+      "id": "euroidiomas",
+      "name": "EUROIDIOMAS"
     },
     {
-      "label": "Headway Collegue",
-      "value": "headway-collegue"
+      "id": "headway-collegue",
+      "name": "Headway Collegue"
     },
     {
-      "label": "INTECI",
-      "value": "inteci"
+      "id": "inteci",
+      "name": "INTECI"
     },
     {
-      "label": "Lectura Veloz (ILVEM",
-      "value": "lectura-veloz-ilvem"
+      "id": "lectura-veloz-ilvem",
+      "name": "Lectura Veloz (ILVEM"
     },
     {
-      "label": "Latino",
-      "value": "latino"
+      "id": "latino",
+      "name": "Latino"
     },
     {
-      "label": "Libertador",
-      "value": "libertador"
+      "id": "libertador",
+      "name": "Libertador"
     },
     {
-      "label": "Interamericano para el Desarrollo Humano y Empresarial",
-      "value": "interamericano-para-el-desarrollo-humano-y-empresarial"
+      "id": "interamericano-para-el-desarrollo-humano-y-empresarial",
+      "name": "Interamericano para el Desarrollo Humano y Empresarial"
     },
     {
-      "label": "PRIVATEACHER",
-      "value": "privateacher"
+      "id": "privateacher",
+      "name": "PRIVATEACHER"
     },
     {
-      "label": "San Ignacio de Loyola",
-      "value": "san-ignacio-de-loyola"
+      "id": "san-ignacio-de-loyola",
+      "name": "San Ignacio de Loyola"
     },
     {
-      "label": "ICPNA",
-      "value": "icpna"
+      "id": "icpna",
+      "name": "ICPNA"
     },
     {
-      "label": "Markayachay",
-      "value": "markayachay"
+      "id": "markayachay",
+      "name": "Markayachay"
     },
     {
-      "label": "Instituto de Formación Empresarial y Extensión Profesional IFEEP",
-      "value": "instituto-de-formacion-empresarial-y-extension-profesional-ifeep"
+      "id": "instituto-de-formacion-empresarial-y-extension-profesional-ifeep",
+      "name": "Instituto de Formación Empresarial y Extensión Profesional IFEEP"
     },
     {
-      "label": "Internacional de Graduados - EIGRA",
-      "value": "internacional-de-graduados-eigra"
+      "id": "internacional-de-graduados-eigra",
+      "name": "Internacional de Graduados - EIGRA"
     },
     {
-      "label": "GUIDE",
-      "value": "guide"
+      "id": "guide",
+      "name": "GUIDE"
     },
     {
-      "label": "Alianza Francesa",
-      "value": "alianza-francesa"
+      "id": "alianza-francesa",
+      "name": "Alianza Francesa"
     },
     {
-      "label": "SISE",
-      "value": "sise"
+      "id": "sise",
+      "name": "SISE"
     }
   ],
   "academies": [
     {
-      "label": "Pitagoras",
-      "value": "pitagoras"
+      "id": "pitagoras",
+      "name": "Pitagoras"
     },
     {
-      "label": "Trilce",
-      "value": "trilce"
+      "id": "trilce",
+      "name": "Trilce"
     }
   ],
   "universities": [
     {
-      "label": "UTP",
-      "value": "utp"
+      "id": "utp",
+      "name": "UTP"
     },
     {
-      "label": "Universidad Cesar Vallejo",
-      "value": "ucv"
+      "id": "ucv",
+      "name": "Universidad Cesar Vallejo"
     }
   ]
 }
