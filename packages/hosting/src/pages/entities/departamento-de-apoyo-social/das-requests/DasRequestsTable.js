@@ -29,20 +29,22 @@ export const DasRequestsTable = ({
       title: "Institución",
       key: "institution",
       render: (_, dasRequest) => {
-        if (dasRequest.requestType === "institutes")
-          return institutions.institutes.find(
-            (institution) => institution.id === dasRequest?.institution?.id
-          )?.name;
-
-        if (dasRequest.requestType === "academies")
-          return institutions.academies.find(
-            (academy) => academy.id === dasRequest?.institution?.id
-          )?.name;
-
-        if (dasRequest.requestType === "universities")
-          return institutions.universities.find(
-            (university) => university.id === dasRequest?.institution?.id
-          )?.name;
+        switch (dasRequest.requestType) {
+          case "institutes":
+            return institutions.institutes.find(
+              (institution) => institution.id === dasRequest?.institution?.id
+            )?.name;
+          case "academies":
+            return institutions.academies.find(
+              (academy) => academy.id === dasRequest?.institution?.id
+            )?.name;
+          case "universities":
+            return institutions.universities.find(
+              (university) => university.id === dasRequest?.institution?.id
+            )?.name;
+          default:
+            return "";
+        }
       },
     },
     {
