@@ -40,12 +40,20 @@ export const HomeIntegration = () => {
             <h2>{currentCommand.entities[0].name}</h2>
             <ul>
               <li>
-                <Link to={onNavigateGoTo("/das-requests")}>
+                <Link
+                  to={onNavigateGoTo(
+                    "/entities/departamento-de-apoyo-social/das-requests"
+                  )}
+                >
                   1. Lista de solicitudes
                 </Link>
               </li>
               <li>
-                <Link to={onNavigateGoTo("/das-requests/new")}>
+                <Link
+                  to={onNavigateGoTo(
+                    "/entities/departamento-de-apoyo-social/das-requests/new"
+                  )}
+                >
                   2. Realizar una solicitud
                 </Link>
               </li>

@@ -1,2 +1,1 @@
-export * from "./requests/institutes-and-academies";
-export * from "./requests/university";
+export * from "./das-requests";

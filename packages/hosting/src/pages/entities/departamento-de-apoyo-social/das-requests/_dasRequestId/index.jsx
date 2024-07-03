@@ -28,11 +28,12 @@ import {
 } from "../../../../../firebase/collections/dasApplications";
 import styled from "styled-components";
 
-export const InstituteAcademyIntegration = () => {
+export const DasRequestIntegration = () => {
   const navigate = useNavigate();
   const { dasRequestId } = useParams();
   const { authUser } = useAuthentication();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+
   const [dasRequest, setDasRequest] = useState({});
   const [loading, setLoading] = useState(false);
   const [headline, setHeadline] = useState(true);
@@ -42,20 +43,21 @@ export const InstituteAcademyIntegration = () => {
   const isNew = dasRequestId === "new";
 
   useEffect(() => {
-    const _dasRequest = isNew
-      ? { id: getDasApplicationId() }
+    isNew
+      ? setDasRequest({ id: getDasApplicationId() })
       : (async () => {
           fetchDasApplication(dasRequestId).then((response) => {
             if (!response) return onGoBack();
+            setDasRequest(response);
+            setHeadline(response?.applicant?.to === "headline");
             return;
           });
         })();
-
-    setDasRequest(_dasRequest);
   }, []);
 
   const mapForm = (formData) => ({
     ...dasRequest,
+    requestType: formData.requestType,
     status: isNew ? "pending" : dasRequest.status,
     headline: {
       id: authUser.id,
@@ -100,7 +102,7 @@ export const InstituteAcademyIntegration = () => {
         <Title level={2}>Solicitud para Institución</Title>
       </Col>
       <Col span={24}>
-        <InstituteAcademy
+        <DasRequest
           user={authUser}
           onSaveInstituteOrAcademy={saveInstituteOrAcademy}
           dasRequest={dasRequest}
@@ -113,7 +115,7 @@ export const InstituteAcademyIntegration = () => {
   );
 };
 
-const InstituteAcademy = ({
+const DasRequest = ({
   user,
   onSaveInstituteOrAcademy,
   dasRequest,
@@ -121,12 +123,12 @@ const InstituteAcademy = ({
   headline,
   onSetHeadline,
 }) => {
-  const [_processType, setProcessType] = useState("entry");
   const [_requestType, setRequestType] = useState("institutes");
+  const [_processType, setProcessType] = useState(null);
 
   const schema = yup.object({
-    isHeadline: yup.boolean().required(),
     requestType: yup.string().required(),
+    isHeadline: yup.boolean().required(),
     headline: yup.object({
       firstName: yup.string().required(),
       paternalSurname: yup.string().required(),
@@ -182,7 +184,7 @@ const InstituteAcademy = ({
           }),
         }),
     institution: yup.object({
-      institutionId: yup.string().required(),
+      id: yup.string().required(),
       specialty: yup.string().required(),
       processType: yup.string().when("requestType", {
         is: "universities",
@@ -192,13 +194,11 @@ const InstituteAcademy = ({
     }),
     applicant: yup.object({
       documents: yup.object({
-        copyLiquidacionHaberesHeadline: yup
-          .mixed()
-          .when("institution.institutionId", {
-            is: "britanico",
-            then: yup.mixed().required(),
-            otherwise: yup.mixed().notRequired().nullable(),
-          }),
+        copyLiquidacionHaberesHeadline: yup.mixed().when("institution.id", {
+          is: "britanico",
+          then: yup.mixed().required(),
+          otherwise: yup.mixed().notRequired().nullable(),
+        }),
         copyConstanciaIngresoUniv:
           _processType === "entry"
             ? yup.mixed().required()
@@ -238,17 +238,19 @@ const InstituteAcademy = ({
 
   const resetForm = () => {
     reset({
-      isHeadline: true,
+      isHeadline: headline,
       requestType: dasRequest?.requestType || _requestType,
       headline: {
-        firstName: user.firstName || "",
-        paternalSurname: user.paternalSurname || "",
-        maternalSurname: user.maternalSurname || "",
-        cip: user.cip || "",
-        degree: user.degree || "",
-        phoneNumber: user.phone.number || "",
-        currentService: user.currentService || "",
-        email: user.email || "",
+        firstName: dasRequest?.headline?.firstName || user?.firstName,
+        paternalSurname:
+          dasRequest?.headline?.paternalSurname || user?.paternalSurname,
+        maternalSurname:
+          dasRequest?.headline?.maternalSurname || user?.maternalSurname,
+        cip: dasRequest?.headline?.cip || user?.cip,
+        degree: dasRequest?.headline?.degree || user?.degree,
+        phoneNumber: dasRequest?.headline?.phone.number || user?.phone.number,
+        currentService: dasRequest?.headline?.currentService || "",
+        email: dasRequest?.headline?.email || user?.email,
       },
       familiar: dasRequest?.familiar
         ? {
@@ -265,7 +267,7 @@ const InstituteAcademy = ({
           }
         : null,
       institution: {
-        institutionId: dasRequest?.institution?.institutionId || "",
+        id: dasRequest?.institution?.id || "",
         specialty: dasRequest?.institution?.specialty || "",
         processType: dasRequest?.institution?.processType || "entry",
       },
@@ -622,6 +624,7 @@ const InstituteAcademy = ({
                         accept="image/*"
                         name={name}
                         value={value}
+                        withThumbImage={false}
                         bucket="departamentoDeApoyoSocial"
                         fileName={`cif-foto-${uuidv4()}`}
                         filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
@@ -643,6 +646,7 @@ const InstituteAcademy = ({
                         accept="image/*"
                         name={name}
                         value={value}
+                        withThumbImage={false}
                         bucket="departamentoDeApoyoSocial"
                         fileName={`dni-foto-${uuidv4()}`}
                         filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
@@ -658,7 +662,6 @@ const InstituteAcademy = ({
             </Card>
           </Col>
         )}
-
         <Col span={24}>
           <Card
             title={<span style={{ fontSize: "1.5em" }}>Datos Institución</span>}
@@ -699,14 +702,19 @@ const InstituteAcademy = ({
               )}
               <Col span={24} md={8}>
                 <Controller
-                  name="institution.institutionId"
+                  name="institution.id"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Instituciones"
                       name={name}
                       value={value}
-                      options={institutions?.[watch("requestType")] || []}
+                      options={(institutions?.[watch("requestType")] || []).map(
+                        (institution) => ({
+                          label: institution.name,
+                          value: institution.id,
+                        })
+                      )}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
@@ -734,8 +742,7 @@ const InstituteAcademy = ({
           </Card>
         </Col>
 
-        {(isUniversity ||
-          watch("institution.institutionId") === "britanico") && (
+        {(isUniversity || watch("institution.id") === "britanico") && (
           <Col span={24}>
             <Card
               title={
@@ -824,7 +831,7 @@ const InstituteAcademy = ({
                     </Col>
                   </>
                 )}
-                {watch("institution.institutionId") === "britanico" && (
+                {watch("institution.id") === "britanico" && (
                   <Col sm={24} md={12}>
                     <Controller
                       name="applicant.documents.copyLiquidacionHaberesHeadline"
