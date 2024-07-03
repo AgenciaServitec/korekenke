@@ -49,6 +49,7 @@ export const DasRequestIntegration = () => {
           fetchDasApplication(dasRequestId).then((response) => {
             if (!response) return onGoBack();
             setDasRequest(response);
+            setHeadline(response?.applicant?.to === "headline");
             return;
           });
         })();
@@ -124,8 +125,6 @@ const DasRequest = ({
 }) => {
   const [_requestType, setRequestType] = useState("institutes");
   const [_processType, setProcessType] = useState(null);
-
-  console.log({ _requestType });
 
   const schema = yup.object({
     requestType: yup.string().required(),
@@ -239,7 +238,7 @@ const DasRequest = ({
 
   const resetForm = () => {
     reset({
-      isHeadline: true,
+      isHeadline: headline,
       requestType: dasRequest?.requestType || _requestType,
       headline: {
         firstName: dasRequest?.headline?.firstName || user?.firstName,
@@ -625,6 +624,7 @@ const DasRequest = ({
                         accept="image/*"
                         name={name}
                         value={value}
+                        withThumbImage={false}
                         bucket="departamentoDeApoyoSocial"
                         fileName={`cif-foto-${uuidv4()}`}
                         filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
@@ -646,6 +646,7 @@ const DasRequest = ({
                         accept="image/*"
                         name={name}
                         value={value}
+                        withThumbImage={false}
                         bucket="departamentoDeApoyoSocial"
                         fileName={`dni-foto-${uuidv4()}`}
                         filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
