@@ -6,7 +6,7 @@ import {
   Row,
   Title,
 } from "../../../../components";
-import { DasRequestsListTable } from "./DasRequestsListTable";
+import { DasRequestsTable } from "./DasRequestsTable";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../firebase";
 import { useNavigate } from "react-router";
@@ -62,7 +62,7 @@ const DasRequestsList = ({
         <Title level={3}>Lista de Solicitudes</Title>
       </Col>
       <Col span={24}>
-        <DasRequestsListTable
+        <DasRequestsTable
           dasApplications={dasApplications}
           onEditDasRequest={onEditDasRequest}
           onDeleteDasRequest={onDeleteDasRequest}
