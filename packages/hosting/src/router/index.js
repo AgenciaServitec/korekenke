@@ -278,6 +278,11 @@ export const Router = () => {
       />
       <Route
         exact
+        path="/entities/departamento-de-apoyo-social/das-requests/sheets/universities/discount-agreement-granted-university"
+        element={<A.PdfDiscountAgreementGrantedUniversitySheets />}
+      />
+      <Route
+        exact
         path="/surveys/organizational-climate-studies"
         element={
           <AdminLayout>

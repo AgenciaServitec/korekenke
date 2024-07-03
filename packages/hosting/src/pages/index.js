@@ -26,6 +26,7 @@ export * from "./surveys/organizational-climate-studies/_organizationalClimateSt
 
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
+export * from "./entities/departamento-de-apoyo-social/das-requests/sheets/universities/discount-agreement-granted-university";
 
 //ENTITIES "jefatura-de-bienestar-del-ejercito"
 export * from "./entities/jefatura-de-bienestar-del-ejercito/correspondences";
