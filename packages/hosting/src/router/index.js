@@ -258,17 +258,6 @@ export const Router = () => {
         path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
         element={<A.PdfEquineMagazineProfilesSheets />}
       />
-
-      <Route
-        exact
-        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
-        element={
-          <AdminLayout>
-            <A.InstituteAcademyIntegration />
-          </AdminLayout>
-        }
-      />
-
       <Route
         exact
         path="/entities/departamento-de-apoyo-social/das-requests"
@@ -278,7 +267,15 @@ export const Router = () => {
           </AdminLayout>
         }
       />
-
+      <Route
+        exact
+        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
+        element={
+          <AdminLayout>
+            <A.DasRequestIntegration />
+          </AdminLayout>
+        }
+      />
       <Route
         exact
         path="/surveys/organizational-climate-studies"
