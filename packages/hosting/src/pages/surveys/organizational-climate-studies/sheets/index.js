@@ -22,18 +22,30 @@ export const OrganizationalClimateStudiesSheets = () => {
 
   if (organizationClimateStudiesLoading) return <Spinner height="80vh" />;
 
+  const organizationClimateStudiesView = orderBy(
+    organizationClimateStudies,
+    ["createAt"],
+    ["desc"]
+  ).map((organizationClimateStudy, index) => ({
+    ...organizationClimateStudy,
+    number: index + 1,
+  }));
+
   return (
     <PDF>
-      {chunk(
-        orderBy(organizationClimateStudies, ["createAt"], ["desc"]),
-        20
-      ).map((organizationClimateStudy, index) => (
-        <Sheet key={index} layout="landscape">
-          <OrganizationalClimateStudiesSheet
-            organizationClimateStudies={organizationClimateStudies}
-          />
-        </Sheet>
-      ))}
+      {chunk(organizationClimateStudiesView, 25).map(
+        (_organizationClimateStudies, index) => (
+          <Sheet key={index} layout="landscape">
+            <OrganizationalClimateStudiesSheet
+              organizationClimateStudies={orderBy(
+                _organizationClimateStudies,
+                ["createAt"],
+                ["desc"]
+              )}
+            />
+          </Sheet>
+        )
+      )}
     </PDF>
   );
 };

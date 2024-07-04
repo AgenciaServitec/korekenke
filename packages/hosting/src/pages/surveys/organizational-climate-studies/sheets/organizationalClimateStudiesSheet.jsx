@@ -69,7 +69,7 @@ export const OrganizationalClimateStudiesSheet = ({
                   {organizationClimateStudies.map(
                     (organizationClimateStudy, index) => (
                       <tr key={index}>
-                        <td>{index + 1}</td>
+                        <td>{organizationClimateStudy.number}</td>
                         <td>
                           {organizationClimateStudy.questions.establishment}
                         </td>
