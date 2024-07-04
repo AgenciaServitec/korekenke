@@ -17,11 +17,11 @@ export const OrganizationalClimateStudiesSheet = ({
               <table>
                 <thead>
                   <tr>
+                    <th>N°</th>
                     <th>Establecimiento</th>
                     <th>Tipo</th>
                     <th>Sector</th>
                     <th>Ubigeo</th>
-                    <th>Numero de encuenta</th>
                     <th>Edad</th>
                     <th>Sexo</th>
                     <th>Grupo</th>
@@ -69,13 +69,13 @@ export const OrganizationalClimateStudiesSheet = ({
                   {organizationClimateStudies.map(
                     (organizationClimateStudy, index) => (
                       <tr key={index}>
+                        <td>{organizationClimateStudy.number}</td>
                         <td>
                           {organizationClimateStudy.questions.establishment}
                         </td>
                         <td>{organizationClimateStudy.questions.type}</td>
                         <td>{organizationClimateStudy.questions.subsector}</td>
                         <td>{organizationClimateStudy.questions.ubigeus}</td>
-                        <td>{index + 1}</td>
                         <td>{organizationClimateStudy.questions.age}</td>
                         <td>{organizationClimateStudy.questions.gender}</td>
                         <td>
@@ -203,6 +203,13 @@ const Container = styled.div`
           height: 3em;
           padding: 0.5em;
           font-size: 0.6em;
+          &:nth-child(2) {
+            width: 50px;
+          }
+
+          &:nth-child(9) {
+            width: 50px;
+          }
         }
       }
     }
