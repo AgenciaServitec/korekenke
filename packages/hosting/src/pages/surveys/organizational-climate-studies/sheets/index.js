@@ -3,6 +3,7 @@ import { OrganizationalClimateStudiesSheet } from "./organizationalClimateStudie
 import { notification, PDF, Sheet, Spinner } from "../../../../components";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../firebase";
+import { chunk, orderBy } from "lodash";
 
 export const OrganizationalClimateStudiesSheets = () => {
   const [
@@ -23,11 +24,16 @@ export const OrganizationalClimateStudiesSheets = () => {
 
   return (
     <PDF>
-      <Sheet layout="landscape">
-        <OrganizationalClimateStudiesSheet
-          organizationClimateStudies={organizationClimateStudies}
-        />
-      </Sheet>
+      {chunk(
+        orderBy(organizationClimateStudies, ["createAt"], ["desc"]),
+        20
+      ).map((organizationClimateStudy, index) => (
+        <Sheet key={index} layout="landscape">
+          <OrganizationalClimateStudiesSheet
+            organizationClimateStudies={organizationClimateStudies}
+          />
+        </Sheet>
+      ))}
     </PDF>
   );
 };
