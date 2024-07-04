@@ -38,9 +38,6 @@ export const InstitutionInformation = ({
     resolver: yupResolver(schema),
   });
 
-  console.log("dasRequest: ", dasRequest);
-  console.log("errors: ", errors);
-
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   useEffect(() => {
@@ -50,7 +47,11 @@ export const InstitutionInformation = ({
   const resetForm = () => {
     reset({
       institution: {
-        id: dasRequest?.institution?.id || "",
+        id: (institutions?.[dasRequest.requestType] || []).find(
+          (institution) => institution.id === dasRequest?.institution?.id
+        )
+          ? dasRequest?.institution?.id
+          : null,
         specialty: dasRequest?.institution?.specialty || "",
         processType: dasRequest?.institution?.processType || "",
       },

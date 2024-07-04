@@ -110,7 +110,7 @@ export const PersonalInformation = ({
         number: formData.headline.phoneNumber,
       },
     },
-    familiar: formData?.familiar || null,
+    familiar: dasRequest?.isHeadline ? null : formData?.familiar || null,
   });
 
   const onSubmit = (formData) =>

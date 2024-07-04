@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
-import { UniversityApplicantDocuments } from "./components";
-import { InstituteApplicantDocuments } from "./components/InstituteApplicantDocuments";
+import {
+  UniversityApplicantDocuments,
+  InstituteApplicantDocuments,
+  NoDocuments,
+} from "./components";
 
 export const ApplicantDocumentsStep4 = ({ onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");
@@ -46,10 +49,8 @@ export const ApplicantDocumentsStep4 = ({ onNextStep, onPrevStep }) => {
             onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
           />
         );
-      case "academies":
-        return <div>Academia</div>;
       default:
-        return null;
+        return <NoDocuments onPrevStep={onPrevStep} onNextStep={onNextStep} />;
     }
   };
 

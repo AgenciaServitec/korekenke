@@ -1,24 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Row,
-  Select,
-  Switch,
-  Title,
-  Upload,
-  notification,
-} from "../../../../../components";
-import * as yup from "yup";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
-import { Relationships, institutions } from "../../../../../data-list";
+import { Col, notification, Row, Title } from "../../../../../components";
+import { useDefaultFirestoreProps } from "../../../../../hooks";
 import { useAuthentication } from "../../../../../providers";
-import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router";
 import {
   addDasApplication,
@@ -30,9 +13,10 @@ import styled from "styled-components";
 import { Steps } from "antd";
 import { TypeRequestStep1 } from "./typeRequestStep1";
 import { PersonalInformationStep2 } from "./PersonalInformationStep2";
-import { InstitutionInformation } from "./components/common/InstitutionInformation";
 import { InstitutionInformationStep3 } from "./InstitutionInformationStep3";
 import { ApplicantDocumentsStep4 } from "./ApplicantDocumentsStep4";
+import { Step5DataSummary } from "./Step5DataSummary";
+import { Step6DasRequestSuccess } from "./Step6DasRequestSuccess";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -53,6 +37,7 @@ export const DasRequestIntegration = () => {
     setCurrentStep(currentStep - 1);
   };
 
+  const onGoToHome = () => navigate("/home");
   const onGoBack = () => navigate(-1);
 
   const isNew = dasRequestId === "new";
@@ -117,6 +102,7 @@ export const DasRequestIntegration = () => {
       currentStep={currentStep}
       onNextStep={onNextStep}
       onPrevStep={onPrevStep}
+      onGoToHome={onGoToHome}
       saveDasApplication={saveDasApplication}
     />
   );
@@ -127,6 +113,7 @@ const DasRequest = ({
   currentStep,
   onNextStep,
   onPrevStep,
+  onGoToHome,
   saveDasApplication,
 }) => {
   const stepsItems = [
@@ -147,8 +134,12 @@ const DasRequest = ({
       description: "Paso 4",
     },
     {
-      title: "Completado",
+      title: "Resumen",
       description: "Paso 5",
+    },
+    {
+      title: "Completado",
+      description: "Paso 6",
     },
   ];
 
@@ -180,9 +171,25 @@ const DasRequest = ({
           />
         );
       case 4:
-        return <div>Step 5</div>;
+        return (
+          <Step5DataSummary onNextStep={onNextStep} onPrevStep={onPrevStep} />
+        );
+      case 5:
+        return (
+          <Step6DasRequestSuccess
+            onGoToHome={onGoToHome}
+            onNextStep={onNextStep}
+            onPrevStep={onPrevStep}
+          />
+        );
       default:
-        return <div>Step 1</div>;
+        return (
+          <PersonalInformationStep2
+            onNextStep={onNextStep}
+            onPrevStep={onPrevStep}
+            user={user}
+          />
+        );
     }
   };
 

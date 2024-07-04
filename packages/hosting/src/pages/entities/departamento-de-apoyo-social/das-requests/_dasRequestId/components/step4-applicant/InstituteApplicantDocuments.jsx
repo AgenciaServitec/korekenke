@@ -8,11 +8,11 @@ import {
   Row,
   Upload,
   Alert,
-} from "../../../../../../components";
+} from "../../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../../../../../hooks";
+import { useFormUtils } from "../../../../../../../hooks";
 import { v4 as uuidv4 } from "uuid";
 
 export const InstituteApplicantDocuments = ({
@@ -52,8 +52,10 @@ export const InstituteApplicantDocuments = ({
       applicant: {
         documents: {
           copyLiquidacionHaberesHeadline:
-            dasRequest?.applicant?.documents?.copyLiquidacionHaberesHeadline ||
-            null,
+            dasRequest?.institution?.id === "britanico"
+              ? dasRequest?.applicant?.documents
+                  ?.copyLiquidacionHaberesHeadline || null
+              : null,
         },
       },
     });

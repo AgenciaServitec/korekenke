@@ -1,2 +1,2 @@
 export * from "./common";
-export * from "./UniversityApplicantDocuments";
+export * from "./step4-applicant";
