@@ -29,7 +29,12 @@ export const Step6DasRequestSuccess = ({ onGoToHome }) => {
           </div>
         </Col>
         <Col span={24} md={12} lg={6} style={{ margin: "auto" }}>
-          <Button type="primary" size="large" block>
+          <Button
+            type="primary"
+            size="large"
+            block
+            onClick={() => onGoToHome()}
+          >
             Ir a inicio
           </Button>
         </Col>
