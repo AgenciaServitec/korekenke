@@ -7,18 +7,6 @@ import { lighten } from "polished";
 
 const { Text } = Typography;
 
-// interface Props {
-//   value?: string | number | boolean | Record<string, unknown> | Moment;
-//   required?: boolean;
-//   hidden?: boolean;
-//   error?: FormError;
-//   label?: string;
-//   disabled?: boolean;
-//   componentId?: string;
-//   children?: React.ReactNode;
-//   animation?: boolean;
-// }
-
 export const Outlined = ({
   value,
   required,
@@ -27,20 +15,21 @@ export const Outlined = ({
   label,
   children,
   componentId,
-  animation,
   helperText,
   disabled = false,
 }) => (
-  <div>
+  <Container
+    error={error}
+    required={required}
+    disabled={disabled}
+    hidden={hidden}
+  >
     <label htmlFor={componentId} className="item-label">
       {label}
     </label>
     <Wrapper
       value={typeof value === "object" ? !isEmpty(value) : !!toString(value)}
       error={error}
-      required={required}
-      hidden={hidden}
-      animation={animation}
       className={classNames({ "scroll-error-anchor": error })}
       disabled={disabled}
     >
@@ -49,11 +38,55 @@ export const Outlined = ({
     {helperText && (
       <Error error={error}>{capitalize(startCase(helperText))}</Error>
     )}
-  </div>
+  </Container>
 );
 
+const Container = styled.div`
+  ${({ theme, error, required, disabled, hidden }) => css`
+    width: 100%;
+
+    .item-label,
+    .item-label:after {
+      color: ${error
+        ? theme.colors.error
+        : disabled
+        ? theme.colors.gray
+        : lighten(0.1, theme.colors.font1)};
+    }
+
+    .item-label {
+      margin-bottom: 0.3em;
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      background-color: transparent;
+      color: ${error ? theme.colors.error : theme.colors.body};
+      font-size: ${theme.font_sizes.small};
+      transition: all ease-in-out 150ms, opacity 150ms;
+
+      ${hidden &&
+      css`
+        display: none;
+      `};
+
+      ${required &&
+      css`
+        &:after {
+          display: inline-block;
+          margin-left: 0.2rem;
+          color: ${error ? theme.colors.error : theme.colors.body};
+          font-size: ${theme.font_sizes.small};
+          line-height: 1;
+          content: "*";
+        }
+      `};
+    }
+  `};
+`;
+
 const Wrapper = styled.div`
-  ${({ theme, error, required, disabled, value, animation, hidden }) => css`
+  ${({ theme, error, disabled, value }) => css`
     position: relative;
     width: inherit;
     border-radius: ${theme.border_radius.xx_small};
@@ -64,98 +97,20 @@ const Wrapper = styled.div`
 
     &:hover,
     &:focus-within {
-      border-color: ${
-        error
-          ? theme.colors.error
-          : disabled
-          ? theme.colors.gray
-          : lighten(0.1, theme.colors.primary)
-      };}
-
-    .item-label,
-    .item-label:after {
-      color: ${
-        error
-          ? theme.colors.error
-          : disabled
-          ? theme.colors.gray
-          : lighten(0.1, theme.colors.font1)
-      };
-    }
-  }
-
-    .item-label {
-        margin-bottom: .2em;
-        z-index: 100;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      background-color: transparent;
-      color: ${error ? theme.colors.error : theme.colors.body};
-      font-size: ${theme.font_sizes.small};
-      transition: all ease-in-out 150ms, opacity 150ms;
-
-      ${
-        hidden &&
-        css`
-          display: none;
-        `
-      }
-
-      ${
-        required &&
-        css`
-          ::after {
-            display: inline-block;
-            margin-left: 0.2rem;
-            color: ${error ? theme.colors.error : theme.colors.body};
-            font-size: ${theme.font_sizes.small};
-            line-height: 1;
-            content: "*";
-          }
-        `
-      }
+      border-color: ${error
+        ? theme.colors.error
+        : disabled
+        ? theme.colors.gray
+        : lighten(0.1, theme.colors.primary)};
     }
 
     .item-wrapper {
-      &:hover + .item-label,
-      &:hover + .item-label:after {
-        color: ${
-          error
-            ? theme.colors.error
-            : disabled
-            ? theme.colors.body
-            : lighten(0.1, theme.colors.primary)
-        };
-      }
-
-      &:focus-within + .item-label,
-      &:-webkit-autofill + .item-label {
-
-        color: ${error ? theme.colors.error : lighten(0.1, theme.colors.font1)};
-
-        ${
-          error &&
-          css`
-            color: ${theme.colors.error};
-          `
-        }
-        
-        &:after {
-          color: ${
-            error ? theme.colors.error : lighten(0.1, theme.colors.font1)
-          };
-        }
-      }
-
       input:-webkit-autofill {
         -webkit-text-fill-color: #fff;
-        ${
-          value &&
-          css`
-            -webkit-text-fill-color: ${({ theme }) => theme.colors.font1};
-          `
-        };
+        ${value &&
+        css`
+          -webkit-text-fill-color: ${({ theme }) => theme.colors.font1};
+        `};
 
         &:focus {
           -webkit-text-fill-color: ${({ theme }) => theme.colors.font1};
