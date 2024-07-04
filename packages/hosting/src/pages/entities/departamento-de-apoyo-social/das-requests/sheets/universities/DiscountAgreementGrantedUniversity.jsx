@@ -182,7 +182,7 @@ const Container = styled.div`
           margin-bottom: 1em;
           text-indent: 3em;
           text-align: justify;
-          
+
           span {
             font-weight: 500;
           }
