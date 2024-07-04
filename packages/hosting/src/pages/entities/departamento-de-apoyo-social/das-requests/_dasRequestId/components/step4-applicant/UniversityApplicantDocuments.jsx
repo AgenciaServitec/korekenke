@@ -7,11 +7,11 @@ import {
   Form,
   Row,
   Upload,
-} from "../../../../../../components";
+} from "../../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../../../../../hooks";
+import { useFormUtils } from "../../../../../../../hooks";
 import { v4 as uuidv4 } from "uuid";
 
 export const UniversityApplicantDocuments = ({
@@ -56,9 +56,15 @@ export const UniversityApplicantDocuments = ({
       applicant: {
         documents: {
           copyConstanciaIngresoUniv:
-            dasRequest?.applicant?.documents?.copyConstanciaIngresoUniv || null,
+            dasRequest?.institution?.processType === "entry"
+              ? dasRequest?.applicant?.documents?.copyConstanciaIngresoUniv ||
+                null
+              : null,
           copyConsolidadoNotasUniv:
-            dasRequest?.applicant?.documents?.copyConsolidadoNotasUniv || null,
+            dasRequest?.institution?.processType === "graduate"
+              ? dasRequest?.applicant?.documents?.copyConsolidadoNotasUniv ||
+                null
+              : null,
           copyBoletaPagoMatriculaUniv:
             dasRequest?.applicant?.documents?.copyBoletaPagoMatriculaUniv ||
             null,
