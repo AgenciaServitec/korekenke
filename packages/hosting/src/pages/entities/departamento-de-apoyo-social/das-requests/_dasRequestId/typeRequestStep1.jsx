@@ -16,7 +16,7 @@ import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
 import { isBoolean } from "lodash";
 
-export const TypeRequestStep1 = ({ onSetCurrentStep }) => {
+export const TypeRequestStep1 = ({ onNextStep }) => {
   const [loading, setLoading] = useState(false);
 
   const dasRequest = getLocalStorage("dasRequest");
@@ -57,10 +57,11 @@ export const TypeRequestStep1 = ({ onSetCurrentStep }) => {
     try {
       setLoading(true);
       setLocalStorage("dasRequest", {
+        ...dasRequest,
         ...formData,
       });
 
-      onSetCurrentStep();
+      onNextStep();
     } catch (e) {
       console.error("Step1: ", e);
     } finally {
@@ -114,7 +115,7 @@ export const TypeRequestStep1 = ({ onSetCurrentStep }) => {
                   <Container>
                     <RadioGroup
                       variant="outlined"
-                      label="Eres Titular o Familiar"
+                      label="¿La solicitud es para el Titular o Familiar?"
                       options={[
                         {
                           label: "Titular",
@@ -138,7 +139,7 @@ export const TypeRequestStep1 = ({ onSetCurrentStep }) => {
             </Col>
           </Row>
           <Row justify="end" gutter={[16, 16]}>
-            <Col xs={24} sm={6} md={4}>
+            <Col xs={24} sm={12} md={6}>
               <Button
                 type="primary"
                 size="large"
