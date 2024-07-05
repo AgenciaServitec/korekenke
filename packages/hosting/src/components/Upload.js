@@ -32,6 +32,7 @@ export const Upload = ({
   label,
   required = false,
   resize = "1480x2508",
+  additionalFields = null,
   value,
   onChange,
   onUploading,
@@ -63,6 +64,7 @@ export const Upload = ({
     assert(url, "Missing url");
 
     const file = {
+      ...additionalFields,
       uid,
       name,
       url,
