@@ -7,6 +7,7 @@ import {
   DescuentoConvenioInstitutoApplicantDocuments,
   NoDocuments,
 } from "./components";
+import { DescuentoConvenioPostgradoUniversidadApplicantDocuments } from "./components/step4-applicant/DescuentoConvenioPostgradoUniversidadApplicantDocuments";
 
 export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");
@@ -43,6 +44,15 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
       case "descuento_por_convenio_en_instituto":
         return (
           <DescuentoConvenioInstitutoApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "descuento_por_convenio_postgrado_en_universidad":
+        return (
+          <DescuentoConvenioPostgradoUniversidadApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
