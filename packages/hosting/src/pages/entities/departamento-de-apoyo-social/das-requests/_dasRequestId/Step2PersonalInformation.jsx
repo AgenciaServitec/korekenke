@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
-import { PersonalInformation } from "./components/common/PersonalInformation";
+import { PersonalInformation } from "./components";
 
 export const Step2PersonalInformation = ({ user, onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");

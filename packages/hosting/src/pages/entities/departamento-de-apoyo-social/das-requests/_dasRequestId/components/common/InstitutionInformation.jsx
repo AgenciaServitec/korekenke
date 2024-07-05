@@ -51,6 +51,7 @@ export const InstitutionInformation = ({
   const resetForm = () => {
     reset({
       institution: {
+        type: _dasRequest.institutionId,
         id: (institutions?.[_dasRequest.institutionId] || []).find(
           (institution) => institution.id === dasRequest?.institution?.id
         )

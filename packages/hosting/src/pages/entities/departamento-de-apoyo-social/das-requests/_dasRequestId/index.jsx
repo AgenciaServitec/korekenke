@@ -87,7 +87,6 @@ export const DasRequestIntegration = () => {
           );
 
       notification({ type: "success" });
-      onGoBack();
     } catch (e) {
       console.error("ErrorSaveDasRequest: ", e);
       notification({ type: "error" });
@@ -103,6 +102,7 @@ export const DasRequestIntegration = () => {
       onNextStep={onNextStep}
       onPrevStep={onPrevStep}
       onGoToHome={onGoToHome}
+      loading={loading}
       saveDasApplication={saveDasApplication}
     />
   );
@@ -114,6 +114,7 @@ const DasRequest = ({
   onNextStep,
   onPrevStep,
   onGoToHome,
+  loading,
   saveDasApplication,
 }) => {
   const stepsItems = [
@@ -172,7 +173,12 @@ const DasRequest = ({
         );
       case 4:
         return (
-          <Step5DataSummary onNextStep={onNextStep} onPrevStep={onPrevStep} />
+          <Step5DataSummary
+            onNextStep={onNextStep}
+            onPrevStep={onPrevStep}
+            loading={loading}
+            onSaveDasApplication={saveDasApplication}
+          />
         );
       case 5:
         return (

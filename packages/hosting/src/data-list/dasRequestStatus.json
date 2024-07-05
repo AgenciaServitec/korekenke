@@ -1,0 +1,14 @@
+{
+  "pending": {
+    "id": "pending",
+    "name": "Pendiente"
+  },
+  "rejected": {
+    "id": "rejected",
+    "name": "Rechazado"
+  },
+  "rejected": {
+    "id": "approved",
+    "name": "Aprobrado"
+  }
+}
