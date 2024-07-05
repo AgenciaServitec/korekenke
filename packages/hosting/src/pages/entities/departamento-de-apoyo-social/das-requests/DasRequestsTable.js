@@ -2,9 +2,10 @@ import React from "react";
 import { IconAction, Space, Table } from "../../../../components";
 import { userFullName } from "../../../../utils";
 import dayjs from "dayjs";
-import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
-import { institutions } from "../../../../data-list";
+import { DasRequestStatus, institutions } from "../../../../data-list";
+import { Tag } from "antd";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -29,17 +30,15 @@ export const DasRequestsTable = ({
       title: "Institución",
       key: "institution",
       render: (_, dasRequest) => {
-        switch (dasRequest.requestType) {
+        const institutionType = dasRequest?.institution?.type;
+
+        switch (institutionType) {
           case "institutes":
-            return institutions.institutes.find(
+            return (institutions?.[institutionType] || []).find(
               (institution) => institution.id === dasRequest?.institution?.id
             )?.name;
-          case "academies":
-            return institutions.academies.find(
-              (academy) => academy.id === dasRequest?.institution?.id
-            )?.name;
           case "universities":
-            return institutions.universities.find(
+            return (institutions?.[institutionType] || []).find(
               (university) => university.id === dasRequest?.institution?.id
             )?.name;
           default:
@@ -53,6 +52,13 @@ export const DasRequestsTable = ({
       render: (_, dasRequest) => dasRequest.headline.email,
     },
     {
+      title: "Estado",
+      key: "status",
+      render: (_, dasRequest) => (
+        <Tag color="orange">{DasRequestStatus[dasRequest.status]?.name}</Tag>
+      ),
+    },
+    {
       title: "Opciones",
       key: "options",
       render: (_, dasRequest) => (
@@ -63,11 +69,11 @@ export const DasRequestsTable = ({
             styled={{ color: (theme) => theme.colors.error }}
             onClick={() => console.log("PDF")}
           />
-          <IconAction
-            tooltipTitle="Editar"
-            icon={faEdit}
-            onClick={() => onEditDasRequest(dasRequest)}
-          />
+          {/*<IconAction*/}
+          {/*  tooltipTitle="Editar"*/}
+          {/*  icon={faEdit}*/}
+          {/*  onClick={() => onEditDasRequest(dasRequest)}*/}
+          {/*/>*/}
           <IconAction
             tooltipTitle="Eliminar"
             icon={faTrash}
