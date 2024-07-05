@@ -1,7 +1,7 @@
 {
   "questions": [
     {
-      "label": "Nombre de la Organización de Salud",
+      "label": "Nombre de la Organización",
       "code": "questions.establishment",
       "description": "",
       "options": null
