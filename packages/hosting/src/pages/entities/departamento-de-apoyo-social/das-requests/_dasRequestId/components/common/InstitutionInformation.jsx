@@ -13,7 +13,7 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { institutions } from "../../../../../../../data-list";
+import { DasRequestList, institutions } from "../../../../../../../data-list";
 
 export const InstitutionInformation = ({
   onPrevStep,
@@ -40,6 +40,10 @@ export const InstitutionInformation = ({
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
+  const _dasRequest = DasRequestList.find(
+    (_dasRequest) => _dasRequest.id === dasRequest.requestType
+  );
+
   useEffect(() => {
     resetForm();
   }, []);
@@ -47,7 +51,7 @@ export const InstitutionInformation = ({
   const resetForm = () => {
     reset({
       institution: {
-        id: (institutions?.[dasRequest.requestType] || []).find(
+        id: (institutions?.[_dasRequest.institutionId] || []).find(
           (institution) => institution.id === dasRequest?.institution?.id
         )
           ? dasRequest?.institution?.id
@@ -119,7 +123,7 @@ export const InstitutionInformation = ({
                         name={name}
                         value={value}
                         options={(
-                          institutions?.[dasRequest.requestType] || []
+                          institutions?.[_dasRequest.institutionId] || []
                         ).map((institution) => ({
                           label: institution.name,
                           value: institution.id,

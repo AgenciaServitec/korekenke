@@ -1,3 +1,3 @@
 export * from "./NoDocuments";
-export * from "./InstituteApplicantDocuments";
-export * from "./UniversityApplicantDocuments";
+export * from "./DescuentoConvenioInstitutoApplicantDocuments";
+export * from "./DescuentoConvenioUniversidadApplicantDocuments";

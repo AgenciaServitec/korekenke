@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
 import {
-  UniversityApplicantDocuments,
-  InstituteApplicantDocuments,
+  DescuentoConvenioUniversidadApplicantDocuments,
+  DescuentoConvenioInstitutoApplicantDocuments,
   NoDocuments,
 } from "./components";
 
-export const ApplicantDocumentsStep4 = ({ onNextStep, onPrevStep }) => {
+export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");
 
   const [loadingStep4, setLoadingStep4] = useState(false);
@@ -31,18 +31,18 @@ export const ApplicantDocumentsStep4 = ({ onNextStep, onPrevStep }) => {
 
   const showApplicantDocumentByRequestType = () => {
     switch (dasRequest?.requestType) {
-      case "universities":
+      case "descuento_por_convenio_en_universidad":
         return (
-          <UniversityApplicantDocuments
+          <DescuentoConvenioUniversidadApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
             onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
           />
         );
-      case "institutes":
+      case "descuento_por_convenio_en_instituto":
         return (
-          <InstituteApplicantDocuments
+          <DescuentoConvenioInstitutoApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}

@@ -15,8 +15,9 @@ import { useFormUtils } from "../../../../../hooks";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
 import { isBoolean } from "lodash";
+import { DasRequestList } from "../../../../../data-list";
 
-export const TypeRequestStep1 = ({ onNextStep }) => {
+export const Step1TypeRequest = ({ onNextStep }) => {
   const [loading, setLoading] = useState(false);
 
   const dasRequest = getLocalStorage("dasRequest");
@@ -85,20 +86,10 @@ export const TypeRequestStep1 = ({ onNextStep }) => {
                     variant="outlined"
                     name={name}
                     value={value}
-                    options={[
-                      {
-                        label: "Tarifa Preferencial en Instituto",
-                        value: "institutes",
-                      },
-                      {
-                        label: "Tarifa Preferencial en Academia",
-                        value: "academies",
-                      },
-                      {
-                        label: "Recategorización en Universidad",
-                        value: "universities",
-                      },
-                    ]}
+                    options={DasRequestList.map((_dasRequest) => ({
+                      label: _dasRequest.name,
+                      value: _dasRequest.id,
+                    }))}
                     onChange={onChange}
                     error={error(name)}
                     helperText={errorMessage(name)}
