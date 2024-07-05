@@ -9,14 +9,12 @@ import {
   InputNumber,
   Row,
   Select,
-  Upload,
 } from "../../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
 import { Relationships } from "../../../../../../../data-list";
-import { v4 as uuidv4 } from "uuid";
 
 export const PersonalInformation = ({
   user,
@@ -45,10 +43,6 @@ export const PersonalInformation = ({
           cif: yup.string().min(9).max(9).required(),
           email: yup.string().email().required(),
           relationship: yup.string().required(),
-          documents: yup.object({
-            copyCif: yup.mixed().required(),
-            copyDni: yup.mixed().required(),
-          }),
         }),
   });
 
@@ -89,10 +83,6 @@ export const PersonalInformation = ({
             cif: dasRequest?.familiar?.cif || "",
             email: dasRequest?.familiar?.email || "",
             relationship: dasRequest?.familiar?.relationship || "",
-            documents: {
-              copyCif: dasRequest?.familiar?.documents?.copyCif || undefined,
-              copyDni: dasRequest?.familiar?.documents?.copyDni || undefined,
-            },
           }
         : null,
     });
@@ -385,52 +375,6 @@ export const PersonalInformation = ({
                           error={error(name)}
                           helperText={errorMessage(name)}
                           required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col sm={24} md={12}>
-                    <Controller
-                      name="familiar.documents.copyCif"
-                      control={control}
-                      render={({ field: { onChange, value, name } }) => (
-                        <Upload
-                          label="Copia CIF (Familiar)"
-                          accept="image/*"
-                          name={name}
-                          value={value}
-                          withThumbImage={false}
-                          bucket="departamentoDeApoyoSocial"
-                          fileName={`cif-foto-${uuidv4()}`}
-                          filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
-                          buttonText="Subir archivo"
-                          error={error(name)}
-                          helperText={errorMessage(name)}
-                          required={required(name)}
-                          onChange={(file) => onChange(file)}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col sm={24} md={12}>
-                    <Controller
-                      name="familiar.documents.copyDni"
-                      control={control}
-                      render={({ field: { onChange, value, name } }) => (
-                        <Upload
-                          label="Copia de DNI (Familiar)"
-                          accept="image/*"
-                          name={name}
-                          value={value}
-                          withThumbImage={false}
-                          bucket="departamentoDeApoyoSocial"
-                          fileName={`dni-foto-${uuidv4()}`}
-                          filePath={`departamento-de-apoyo-social/${dasRequest.id}/files`}
-                          buttonText="Subir archivo"
-                          error={error(name)}
-                          helperText={errorMessage(name)}
-                          required={required(name)}
-                          onChange={(file) => onChange(file)}
                         />
                       )}
                     />
