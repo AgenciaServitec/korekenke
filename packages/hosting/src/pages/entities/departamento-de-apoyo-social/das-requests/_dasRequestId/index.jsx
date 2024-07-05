@@ -26,7 +26,6 @@ export const DasRequestIntegration = () => {
 
   const [dasRequest, setDasRequest] = useState({});
   const [loading, setLoading] = useState(false);
-  const [headline, setHeadline] = useState(true);
 
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -49,7 +48,6 @@ export const DasRequestIntegration = () => {
           fetchDasApplication(dasRequestId).then((response) => {
             if (!response) return onGoBack();
             setDasRequest(response);
-            setHeadline(response?.applicant?.to === "headline");
             return;
           });
         })();
@@ -71,7 +69,7 @@ export const DasRequestIntegration = () => {
     institution: formData?.institution || null,
     applicant: {
       ...formData.applicant,
-      to: headline ? "headline" : "familiar",
+      to: formData?.isHeadline ? "headline" : "familiar",
     },
   });
 
