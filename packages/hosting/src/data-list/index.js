@@ -11,3 +11,4 @@ export { default as AssignmentForUsers } from "./assignmentForUsers.json";
 export { default as institutions } from "./institutions.json";
 export { default as Surveys } from "./surveys.json";
 export * from "./equineMagazineProfiles.js";
+export { default as DasRequestList } from "./dasRequest.json";

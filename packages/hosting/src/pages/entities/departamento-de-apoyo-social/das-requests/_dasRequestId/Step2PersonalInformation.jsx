@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
-import { InstitutionInformation } from "./components/common/InstitutionInformation";
+import { PersonalInformation } from "./components/common/PersonalInformation";
 
-export const InstitutionInformationStep3 = ({ onNextStep, onPrevStep }) => {
+export const Step2PersonalInformation = ({ user, onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");
 
-  const [loadingStep3, setLoadingStep3] = useState(false);
+  const [loadingStep2, setLoadingStep2] = useState(false);
 
-  const onSaveInstitutionInformationStep3 = (formData) => {
+  const onSavePersonalInformationStep2 = (formData) => {
     try {
-      setLoadingStep3(true);
+      setLoadingStep2(true);
       setLocalStorage("dasRequest", {
         ...dasRequest,
         ...formData,
@@ -19,20 +19,21 @@ export const InstitutionInformationStep3 = ({ onNextStep, onPrevStep }) => {
 
       onNextStep();
     } catch (e) {
-      console.error("onSaveInstitutionInformationStep3: ", e);
+      console.error("onSavePersonalInformationStep2: ", e);
     } finally {
-      setLoadingStep3(false);
+      setLoadingStep2(false);
     }
   };
 
   return (
     <Container>
       <div className="form-wrapper">
-        <InstitutionInformation
+        <PersonalInformation
+          user={user}
           onPrevStep={onPrevStep}
           dasRequest={dasRequest}
-          loadingStep3={loadingStep3}
-          onSaveInstitutionInformationStep3={onSaveInstitutionInformationStep3}
+          loadingStep2={loadingStep2}
+          onSavePersonalInformationStep2={onSavePersonalInformationStep2}
         />
       </div>
     </Container>

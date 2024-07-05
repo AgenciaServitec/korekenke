@@ -61,9 +61,6 @@ export const PersonalInformation = ({
     resolver: yupResolver(schema),
   });
 
-  console.log("dasRequest: ", dasRequest);
-  console.log("errors: ", errors);
-
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   useEffect(() => {

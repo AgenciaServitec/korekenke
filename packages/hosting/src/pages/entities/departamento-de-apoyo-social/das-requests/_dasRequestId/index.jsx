@@ -11,10 +11,10 @@ import {
 } from "../../../../../firebase/collections/dasApplications";
 import styled from "styled-components";
 import { Steps } from "antd";
-import { TypeRequestStep1 } from "./typeRequestStep1";
-import { PersonalInformationStep2 } from "./PersonalInformationStep2";
-import { InstitutionInformationStep3 } from "./InstitutionInformationStep3";
-import { ApplicantDocumentsStep4 } from "./ApplicantDocumentsStep4";
+import { Step1TypeRequest } from "./Step1TypeRequest";
+import { Step2PersonalInformation } from "./Step2PersonalInformation";
+import { Step3InstitutionInformation } from "./Step3InstitutionInformation";
+import { Step4ApplicantDocuments } from "./Step4ApplicantDocuments";
 import { Step5DataSummary } from "./Step5DataSummary";
 import { Step6DasRequestSuccess } from "./Step6DasRequestSuccess";
 
@@ -146,10 +146,10 @@ const DasRequest = ({
   const showStep = () => {
     switch (currentStep) {
       case 0:
-        return <TypeRequestStep1 onNextStep={onNextStep} />;
+        return <Step1TypeRequest onNextStep={onNextStep} />;
       case 1:
         return (
-          <PersonalInformationStep2
+          <Step2PersonalInformation
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
             user={user}
@@ -157,7 +157,7 @@ const DasRequest = ({
         );
       case 2:
         return (
-          <InstitutionInformationStep3
+          <Step3InstitutionInformation
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
             user={user}
@@ -165,7 +165,7 @@ const DasRequest = ({
         );
       case 3:
         return (
-          <ApplicantDocumentsStep4
+          <Step4ApplicantDocuments
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
           />
@@ -184,7 +184,7 @@ const DasRequest = ({
         );
       default:
         return (
-          <PersonalInformationStep2
+          <Step2PersonalInformation
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
             user={user}
@@ -218,6 +218,7 @@ const DasRequest = ({
 
 const Container = styled.div`
   width: 100%;
+  min-height: 70vh;
 
   .ant-steps-item-title {
     line-height: 1.3;
