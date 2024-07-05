@@ -31,6 +31,12 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
         copyDniHeadline: dasRequest?.isHeadline
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
+        copyCifFamiliar: dasRequest?.isHeadline
+          ? yup.mixed().notRequired().nullable()
+          : yup.mixed().required(),
+        copyDniFamiliar: dasRequest?.isHeadline
+          ? yup.mixed().notRequired().nullable()
+          : yup.mixed().required(),
       }),
     }),
   });
@@ -64,6 +70,10 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
             dasRequest?.applicant?.documents?.copyCipHeadline || null,
           copyDniHeadline:
             dasRequest?.applicant?.documents?.copyDniHeadline || null,
+          copyCifFamiliar:
+            dasRequest?.applicant?.documents?.copyCifFamiliar || null,
+          copyDniFamiliar:
+            dasRequest?.applicant?.documents?.copyDniFamiliar || null,
         },
       },
     });
@@ -178,6 +188,56 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
                             withThumbImage={false}
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyDniHeadline-photo-${uuidv4()}`}
+                            filePath={`das-applicants/${dasRequest.id}/files`}
+                            buttonText="Subir archivo"
+                            error={error(name)}
+                            helperText={errorMessage(name)}
+                            required={required(name)}
+                            onChange={(file) => onChange(file)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </>
+                )}
+                {!isHeadline && (
+                  <>
+                    <Col sm={24} md={12}>
+                      <Controller
+                        name="applicant.documents.copyCifFamiliar"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Upload
+                            label="Copia de CIF del Familiar"
+                            accept="image/*"
+                            name={name}
+                            value={value}
+                            withThumbImage={false}
+                            bucket="departamentoDeApoyoSocial"
+                            fileName={`copyCifFamiliar-photo-${uuidv4()}`}
+                            filePath={`das-applicants/${dasRequest.id}/files`}
+                            buttonText="Subir archivo"
+                            error={error(name)}
+                            helperText={errorMessage(name)}
+                            required={required(name)}
+                            onChange={(file) => onChange(file)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col sm={24} md={12}>
+                      <Controller
+                        name="applicant.documents.copyDniFamiliar"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Upload
+                            label="Copia de DNI del Familiar"
+                            accept="image/*"
+                            name={name}
+                            value={value}
+                            withThumbImage={false}
+                            bucket="departamentoDeApoyoSocial"
+                            fileName={`copyDniFamiliar-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
                             buttonText="Subir archivo"
                             error={error(name)}
