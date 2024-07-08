@@ -14,7 +14,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
 
-export const UniversityStudyScholarshipApplicantDocuments = ({
+export const BecaEstudiosUniversidadApplicantDocuments = ({
   onPrevStep,
   dasRequest,
   loadingStep4,

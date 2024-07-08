@@ -8,7 +8,7 @@ import {
   MediaBecaInstitutoApplicantDocuments,
   BecaEstudiosInstitutoApplicantDocuments,
   NoDocuments,
-  UniversityStudyScholarshipApplicantDocuments,
+  BecaEstudiosUniversidadApplicantDocuments,
 } from "./components";
 import { DescuentoConvenioPostgradoUniversidadApplicantDocuments } from "./components/step4-applicant/DescuentoConvenioPostgradoUniversidadApplicantDocuments";
 
@@ -82,7 +82,7 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
         );
       case "beca_de_estudios_en_universidad":
         return (
-          <UniversityStudyScholarshipApplicantDocuments
+          <BecaEstudiosUniversidadApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
