@@ -5,6 +5,8 @@ import { mediaQuery } from "../../../../../styles";
 import {
   DescuentoConvenioUniversidadApplicantDocuments,
   DescuentoConvenioInstitutoApplicantDocuments,
+  MediaBecaInstitutoApplicantDocuments,
+  BecaEstudiosInstitutoApplicantDocuments,
   NoDocuments,
   UniversityStudyScholarshipApplicantDocuments,
 } from "./components";
@@ -54,6 +56,24 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
       case "descuento_por_convenio_postgrado_en_universidad":
         return (
           <DescuentoConvenioPostgradoUniversidadApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "media_beca_en_instituto":
+        return (
+          <MediaBecaInstitutoApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "beca_de_estudios_en_instituto":
+        return (
+          <BecaEstudiosInstitutoApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
