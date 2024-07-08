@@ -7,3 +7,4 @@ export * from "./MediaBecaPostgradoUniversidadApplicantDocuments";
 export * from "./MediaBecaPostgradoUniversidadApplicantDocuments";
 export * from "./BecaEstudiosUniversidadApplicantDocuments";
 export * from "./MediaBecaUniversidadApplicantDocuments";
+export * from "./BecaEstudioPostgradoUniversidadApplicantDocuments";
