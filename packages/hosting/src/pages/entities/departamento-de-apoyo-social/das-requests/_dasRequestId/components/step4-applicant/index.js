@@ -4,3 +4,4 @@ export * from "./DescuentoConvenioUniversidadApplicantDocuments";
 export * from "./MediaBecaInstitutoApplicantDocuments";
 export * from "./BecaEstudiosInstitutoApplicantDocuments";
 export * from "./BecaEstudiosUniversidadApplicantDocuments";
+export * from "./MediaBecaUniversidadApplicantDocuments";
