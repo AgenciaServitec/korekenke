@@ -82,6 +82,15 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
             onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
           />
         );
+      case "media_beca_para_postgrado_en_universidad":
+        return (
+          <MediaBecaPostgradoUniversidadApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
       default:
         return <NoDocuments onPrevStep={onPrevStep} onNextStep={onNextStep} />;
     }
