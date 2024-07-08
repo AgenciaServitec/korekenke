@@ -14,31 +14,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
 import { v4 as uuidv4 } from "uuid";
 
-export const DescuentoConvenioUniversidadApplicantDocuments = ({
+export const MediaBecaPostgradoUniversidadApplicantDocuments = ({
   onPrevStep,
   dasRequest,
   loadingStep4,
   onSaveApplicantDocumentsStep4,
 }) => {
-  const isHeadline = dasRequest?.isHeadline;
-  const processType = dasRequest?.institution?.processType === "entry";
-
   const schema = yup.object({
     applicant: yup.object({
       documents: yup.object({
-        copyConstanciaIngresoUniv: processType
+        copyBoletaPagoMatriculaUniv: dasRequest?.isHeadline
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
-        copyConsolidadoNotasUniv: processType
-          ? yup.mixed().notRequired().nullable()
-          : yup.mixed().required(),
-        copyBoletaPagoMatriculaUniv: processType
+        copyLiquidacionHaberesHeadline: dasRequest?.isHeadline
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
-        copyUltimaBoletaPagoUniv: processType
-          ? yup.mixed().notRequired().nullable()
-          : yup.mixed().required(),
-        copyLiquidacionHaberesHeadline: yup.mixed().required(),
         copyCipHeadline: dasRequest?.isHeadline
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
@@ -74,12 +64,6 @@ export const DescuentoConvenioUniversidadApplicantDocuments = ({
     reset({
       applicant: {
         documents: {
-          copyConstanciaIngresoUniv:
-            dasRequest?.applicant?.documents?.copyConstanciaIngresoUniv || null,
-          copyConsolidadoNotasUniv:
-            dasRequest?.applicant?.documents?.copyConsolidadoNotasUniv || null,
-          copyUltimaBoletaPagoUniv:
-            dasRequest?.applicant?.documents?.copyUltimaBoletaPagoUniv || null,
           copyBoletaPagoMatriculaUniv:
             dasRequest?.applicant?.documents?.copyBoletaPagoMatriculaUniv ||
             null,
@@ -98,10 +82,10 @@ export const DescuentoConvenioUniversidadApplicantDocuments = ({
       },
     });
   };
-
   const mapFormData = (formData) => ({
     applicant: formData?.applicant || null,
   });
+  const isHeadline = dasRequest?.isHeadline;
 
   const onSubmit = (formData) =>
     onSaveApplicantDocumentsStep4(mapFormData(formData));
@@ -121,110 +105,30 @@ export const DescuentoConvenioUniversidadApplicantDocuments = ({
               type="inner"
             >
               <Row gutter={[16, 16]}>
-                {processType && (
-                  <>
-                    <Col sm={24} md={12}>
-                      <Controller
-                        name="applicant.documents.copyConstanciaIngresoUniv"
-                        control={control}
-                        render={({ field: { onChange, value, name } }) => (
-                          <Upload
-                            label="Copia de Constancia de Ingreso de la Univ"
-                            accept="image/*"
-                            name={name}
-                            value={value}
-                            withThumbImage={false}
-                            bucket="departamentoDeApoyoSocial"
-                            fileName={`copyConstanciaIngresoUniv-photo-${uuidv4()}`}
-                            filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
-                            buttonText="Subir archivo"
-                            error={error(name)}
-                            helperText={errorMessage(name)}
-                            required={required(name)}
-                            onChange={(file) => onChange(file)}
-                          />
-                        )}
+                <Col sm={24} md={12}>
+                  <Controller
+                    name="applicant.documents.copyBoletaPagoMatriculaUniv"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Upload
+                        label="Copia de Boleta del pago de matrícula de la Univ"
+                        accept="image/*"
+                        name={name}
+                        value={value}
+                        withThumbImage={false}
+                        bucket="departamentoDeApoyoSocial"
+                        fileName={`copyBoletaPagoMatriculaUniv-photo-${uuidv4()}`}
+                        filePath={`das-applicants/${dasRequest.id}/files`}
+                        additionalFields={{ numberCopies: 2 }}
+                        buttonText="Subir archivo"
+                        error={error(name)}
+                        helperText={errorMessage(name)}
+                        required={required(name)}
+                        onChange={(file) => onChange(file)}
                       />
-                    </Col>
-                    <Col sm={24} md={12}>
-                      <Controller
-                        name="applicant.documents.copyBoletaPagoMatriculaUniv"
-                        control={control}
-                        render={({ field: { onChange, value, name } }) => (
-                          <Upload
-                            label="Copia de Boleta pago matrícula de la Univ"
-                            accept="image/*"
-                            name={name}
-                            value={value}
-                            withThumbImage={false}
-                            bucket="departamentoDeApoyoSocial"
-                            fileName={`copyBoletaPagoMatriculaUniv-photo-${uuidv4()}`}
-                            filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
-                            buttonText="Subir archivo"
-                            error={error(name)}
-                            helperText={errorMessage(name)}
-                            required={required(name)}
-                            onChange={(file) => onChange(file)}
-                          />
-                        )}
-                      />
-                    </Col>
-                  </>
-                )}
-                {!processType && (
-                  <>
-                    <Col sm={24} md={12}>
-                      <Controller
-                        name="applicant.documents.copyConsolidadoNotasUniv"
-                        control={control}
-                        render={({ field: { onChange, value, name } }) => (
-                          <Upload
-                            label="Copia de Consolidado de notas (último ciclo)"
-                            accept="image/*"
-                            name={name}
-                            value={value}
-                            withThumbImage={false}
-                            bucket="departamentoDeApoyoSocial"
-                            fileName={`copyConsolidadoNotasUniv-photo-${uuidv4()}`}
-                            filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
-                            buttonText="Subir archivo"
-                            error={error(name)}
-                            helperText={errorMessage(name)}
-                            required={required(name)}
-                            onChange={(file) => onChange(file)}
-                          />
-                        )}
-                      />
-                    </Col>
-                    <Col sm={24} md={12}>
-                      <Controller
-                        name="applicant.documents.copyUltimaBoletaPagoUniv"
-                        control={control}
-                        render={({ field: { onChange, value, name } }) => (
-                          <Upload
-                            label="Copia de la última boleta de pago de la Univ"
-                            accept="image/*"
-                            name={name}
-                            value={value}
-                            withThumbImage={false}
-                            bucket="departamentoDeApoyoSocial"
-                            fileName={`copyUltimaBoletaPagoUniv-photo-${uuidv4()}`}
-                            filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
-                            buttonText="Subir archivo"
-                            error={error(name)}
-                            helperText={errorMessage(name)}
-                            required={required(name)}
-                            onChange={(file) => onChange(file)}
-                          />
-                        )}
-                      />
-                    </Col>
-                  </>
-                )}
+                    )}
+                  />
+                </Col>
                 <Col sm={24} md={12}>
                   <Controller
                     name="applicant.documents.copyLiquidacionHaberesHeadline"

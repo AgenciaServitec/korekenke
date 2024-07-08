@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
 import { v4 as uuidv4 } from "uuid";
 
-export const DescuentoConvenioUniversidadApplicantDocuments = ({
+export const MediaBecaUniversidadApplicantDocuments = ({
   onPrevStep,
   dasRequest,
   loadingStep4,
