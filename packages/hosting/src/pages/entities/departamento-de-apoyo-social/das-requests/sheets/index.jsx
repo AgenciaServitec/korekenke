@@ -7,6 +7,9 @@ import { StudyScholarshipAwardedByUniversitySheet } from "./universities/StudySc
 import { StudyScholarshipPostgraduateStudiesUniversitySheet } from "./universities/StudyScholarshipPostgraduateStudiesUniversity";
 import { HalfScholarshipAwardedByUniversitySheet } from "./universities/HalfScholarshipAwardedByUniversity";
 import { HalfScholarshipPostgraduateStudiesUniversitySheet } from "./universities/HalfScholarshipPostgraduateStudiesUniversity";
+import { DiscountAgreementGrantedInstituteSheet } from "./universities/DiscountAgreementGrantedInstitute";
+import { InstituteStudyHalfScolarshipSheet } from "./universities/InstituteStudyHalfScolarship";
+import { InstituteStudyScolarshipSheet } from "./universities/InstituteStudyScolarship";
 
 export const DasRequestSheets = () => {
   const { dasRequestId } = useParams();
@@ -18,6 +21,9 @@ export const DasRequestSheets = () => {
     request4: <StudyScholarshipPostgraduateStudiesUniversitySheet />,
     request5: <HalfScholarshipAwardedByUniversitySheet />,
     request6: <HalfScholarshipPostgraduateStudiesUniversitySheet />,
+    request7: <DiscountAgreementGrantedInstituteSheet />,
+    request8: <InstituteStudyHalfScolarshipSheet />,
+    request9: <InstituteStudyScolarshipSheet />,
   };
 
   return (
