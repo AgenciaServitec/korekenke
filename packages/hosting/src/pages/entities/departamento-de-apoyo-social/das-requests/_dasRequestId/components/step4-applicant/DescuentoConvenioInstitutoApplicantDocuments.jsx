@@ -7,7 +7,6 @@ import {
   Form,
   Row,
   Upload,
-  Alert,
 } from "../../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -24,10 +23,18 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
   const schema = yup.object({
     applicant: yup.object({
       documents: yup.object({
-        copyLiquidacionHaberesHeadline:
-          dasRequest.institution.id === "britanico"
-            ? yup.mixed().required()
-            : yup.mixed().notRequired().nullable(),
+        copyCipHeadline: dasRequest?.isHeadline
+          ? yup.mixed().required()
+          : yup.mixed().notRequired().nullable(),
+        copyDniHeadline: dasRequest?.isHeadline
+          ? yup.mixed().required()
+          : yup.mixed().notRequired().nullable(),
+        copyCifFamiliar: dasRequest?.isHeadline
+          ? yup.mixed().notRequired().nullable()
+          : yup.mixed().required(),
+        copyDniFamiliar: dasRequest?.isHeadline
+          ? yup.mixed().notRequired().nullable()
+          : yup.mixed().required(),
       }),
     }),
   });
@@ -51,11 +58,14 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
     reset({
       applicant: {
         documents: {
-          copyLiquidacionHaberesHeadline:
-            dasRequest?.institution?.id === "britanico"
-              ? dasRequest?.applicant?.documents
-                  ?.copyLiquidacionHaberesHeadline || null
-              : null,
+          copyCipHeadline:
+            dasRequest?.applicant?.documents?.copyCipHeadline || null,
+          copyDniHeadline:
+            dasRequest?.applicant?.documents?.copyDniHeadline || null,
+          copyCifFamiliar:
+            dasRequest?.applicant?.documents?.copyCifFamiliar || null,
+          copyDniFamiliar:
+            dasRequest?.applicant?.documents?.copyDniFamiliar || null,
         },
       },
     });
@@ -64,6 +74,8 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
   const mapFormData = (formData) => ({
     applicant: formData?.applicant || null,
   });
+
+  const isHeadline = dasRequest?.isHeadline;
 
   const onSubmit = (formData) =>
     onSaveApplicantDocumentsStep4(mapFormData(formData));
@@ -84,38 +96,109 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
             >
               <Row gutter={[16, 16]}>
                 <>
-                  {dasRequest.institution.id === "britanico" ? (
-                    <Col sm={24} md={12}>
-                      <Controller
-                        name="applicant.documents.copyLiquidacionHaberesHeadline"
-                        control={control}
-                        render={({ field: { onChange, value, name } }) => (
-                          <Upload
-                            label="Copia de Liquidación de Haberes del Titular"
-                            accept="image/*"
-                            name={name}
-                            value={value}
-                            withThumbImage={false}
-                            bucket="departamentoDeApoyoSocial"
-                            fileName={`copyLiquidacionHaberesHeadline-photo-${uuidv4()}`}
-                            filePath={`das-applicants/${dasRequest.id}/files`}
-                            buttonText="Subir archivo"
-                            error={error(name)}
-                            helperText={errorMessage(name)}
-                            required={required(name)}
-                            onChange={(file) => onChange(file)}
-                          />
-                        )}
-                      />
-                    </Col>
-                  ) : (
-                    <Alert
-                      message="Los documentos no son necesarios para este instituto,
-                      puedes continuar de manera normal"
-                      type="info"
-                      showIcon
-                      style={{ margin: "auto" }}
-                    />
+                  {isHeadline && (
+                    <>
+                      <Col sm={24} md={12}>
+                        <Controller
+                          name="applicant.documents.copyCipHeadline"
+                          control={control}
+                          render={({ field: { onChange, value, name } }) => (
+                            <Upload
+                              label="Copia de CIP del Titular"
+                              accept="image/*"
+                              name={name}
+                              value={value}
+                              withThumbImage={false}
+                              bucket="departamentoDeApoyoSocial"
+                              fileName={`copyCipHeadline-photo-${uuidv4()}`}
+                              filePath={`das-applicants/${dasRequest.id}/files`}
+                              additionalFields={{ numberCopies: 2 }}
+                              buttonText="Subir archivo"
+                              error={error(name)}
+                              helperText={errorMessage(name)}
+                              required={required(name)}
+                              onChange={(file) => onChange(file)}
+                            />
+                          )}
+                        />
+                      </Col>
+                      <Col sm={24} md={12}>
+                        <Controller
+                          name="applicant.documents.copyDniHeadline"
+                          control={control}
+                          render={({ field: { onChange, value, name } }) => (
+                            <Upload
+                              label="Copia de DNI del Titular"
+                              accept="image/*"
+                              name={name}
+                              value={value}
+                              withThumbImage={false}
+                              bucket="departamentoDeApoyoSocial"
+                              fileName={`copyDniHeadline-photo-${uuidv4()}`}
+                              filePath={`das-applicants/${dasRequest.id}/files`}
+                              additionalFields={{ numberCopies: 2 }}
+                              buttonText="Subir archivo"
+                              error={error(name)}
+                              helperText={errorMessage(name)}
+                              required={required(name)}
+                              onChange={(file) => onChange(file)}
+                            />
+                          )}
+                        />
+                      </Col>
+                    </>
+                  )}
+                  {!isHeadline && (
+                    <>
+                      <Col sm={24} md={12}>
+                        <Controller
+                          name="applicant.documents.copyCifFamiliar"
+                          control={control}
+                          render={({ field: { onChange, value, name } }) => (
+                            <Upload
+                              label="Copia de CIF del Familiar"
+                              accept="image/*"
+                              name={name}
+                              value={value}
+                              withThumbImage={false}
+                              bucket="departamentoDeApoyoSocial"
+                              fileName={`copyCifFamiliar-photo-${uuidv4()}`}
+                              filePath={`das-applicants/${dasRequest.id}/files`}
+                              additionalFields={{ numberCopies: 2 }}
+                              buttonText="Subir archivo"
+                              error={error(name)}
+                              helperText={errorMessage(name)}
+                              required={required(name)}
+                              onChange={(file) => onChange(file)}
+                            />
+                          )}
+                        />
+                      </Col>
+                      <Col sm={24} md={12}>
+                        <Controller
+                          name="applicant.documents.copyDniFamiliar"
+                          control={control}
+                          render={({ field: { onChange, value, name } }) => (
+                            <Upload
+                              label="Copia de DNI del Familiar"
+                              accept="image/*"
+                              name={name}
+                              value={value}
+                              withThumbImage={false}
+                              bucket="departamentoDeApoyoSocial"
+                              fileName={`copyDniFamiliar-photo-${uuidv4()}`}
+                              filePath={`das-applicants/${dasRequest.id}/files`}
+                              additionalFields={{ numberCopies: 2 }}
+                              buttonText="Subir archivo"
+                              error={error(name)}
+                              helperText={errorMessage(name)}
+                              required={required(name)}
+                              onChange={(file) => onChange(file)}
+                            />
+                          )}
+                        />
+                      </Col>
+                    </>
                   )}
                 </>
               </Row>
