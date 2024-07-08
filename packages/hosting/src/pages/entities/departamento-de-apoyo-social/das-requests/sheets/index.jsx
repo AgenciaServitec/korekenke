@@ -28,15 +28,7 @@ export const DasRequestSheets = () => {
 
   return (
     <PDF>
-      <Sheet>
-        <DiscountAgreementGrantedInstituteSheet />
-      </Sheet>
-      <Sheet>
-        <InstituteStudyScolarshipSheet />
-      </Sheet>
-      <Sheet>
-        <InstituteStudyHalfScolarshipSheet />
-      </Sheet>
+      <Sheet>{dasRequestContent[dasRequestId]}</Sheet>
     </PDF>
   );
 };
