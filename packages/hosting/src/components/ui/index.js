@@ -22,6 +22,7 @@ import {
   Tag,
   Typography,
   Switch,
+  Collapse,
 } from "antd";
 
 export * from "./component-container";
@@ -87,4 +88,5 @@ export {
   Button,
   Table,
   Switch,
+  Collapse,
 };
