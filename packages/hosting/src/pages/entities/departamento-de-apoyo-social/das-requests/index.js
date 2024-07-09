@@ -12,14 +12,22 @@ import { firestore } from "../../../../firebase";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
+import { useAuthentication } from "../../../../providers";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+
+  const dasApplicationsRef = firestore
+    .collection("das-applications")
+    .where("isDeleted", "==", false);
 
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
     useCollectionData(
-      firestore.collection("das-applications").where("isDeleted", "==", false)
+      ["super_admin"].includes(authUser.roleCode)
+        ? dasApplicationsRef || null
+        : dasApplicationsRef.where("headline.id", "==", authUser.id)
     );
 
   useEffect(() => {
