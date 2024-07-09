@@ -212,7 +212,7 @@ const DasRequest = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Title level={2} align="center">
-              Solicitud para Instituciónes
+              Solicitud DAS
             </Title>
           </Col>
           <Col span={24} md={20} style={{ margin: "auto" }}>
