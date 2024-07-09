@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
+import { Card } from "../../../../../components";
 import {
+  NoDocuments,
   DescuentoConvenioUniversidadApplicantDocuments,
   DescuentoConvenioInstitutoApplicantDocuments,
   MediaBecaInstitutoApplicantDocuments,
   BecaEstudiosInstitutoApplicantDocuments,
-  NoDocuments,
+  MediaBecaPostgradoUniversidadApplicantDocuments,
+  DescuentoConvenioPostgradoUniversidadApplicantDocuments,
   BecaEstudiosUniversidadApplicantDocuments,
   MediaBecaUniversidadApplicantDocuments,
+  BecaEstudioPostgradoUniversidadApplicantDocuments,
 } from "./components";
-import { DescuentoConvenioPostgradoUniversidadApplicantDocuments } from "./components/step4-applicant/DescuentoConvenioPostgradoUniversidadApplicantDocuments";
 
 export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");
@@ -45,36 +48,9 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
             onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
           />
         );
-      case "descuento_por_convenio_en_instituto":
-        return (
-          <DescuentoConvenioInstitutoApplicantDocuments
-            onPrevStep={onPrevStep}
-            dasRequest={dasRequest}
-            loadingStep4={loadingStep4}
-            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
-          />
-        );
       case "descuento_por_convenio_postgrado_en_universidad":
         return (
           <DescuentoConvenioPostgradoUniversidadApplicantDocuments
-            onPrevStep={onPrevStep}
-            dasRequest={dasRequest}
-            loadingStep4={loadingStep4}
-            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
-          />
-        );
-      case "media_beca_en_instituto":
-        return (
-          <MediaBecaInstitutoApplicantDocuments
-            onPrevStep={onPrevStep}
-            dasRequest={dasRequest}
-            loadingStep4={loadingStep4}
-            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
-          />
-        );
-      case "beca_de_estudios_en_instituto":
-        return (
-          <BecaEstudiosInstitutoApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -90,9 +66,54 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
             onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
           />
         );
+      case "beca_de_estudio_para_postgrado_en_universidad":
+        return (
+          <BecaEstudioPostgradoUniversidadApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
       case "media_beca_en_universidad":
         return (
           <MediaBecaUniversidadApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "media_beca_para_postgrado_en_universidad":
+        return (
+          <MediaBecaPostgradoUniversidadApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "descuento_por_convenio_en_instituto":
+        return (
+          <DescuentoConvenioInstitutoApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "beca_de_estudios_en_instituto":
+        return (
+          <BecaEstudiosInstitutoApplicantDocuments
+            onPrevStep={onPrevStep}
+            dasRequest={dasRequest}
+            loadingStep4={loadingStep4}
+            onSaveApplicantDocumentsStep4={onSaveApplicantDocumentsStep4}
+          />
+        );
+      case "media_beca_en_instituto":
+        return (
+          <MediaBecaInstitutoApplicantDocuments
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -106,7 +127,17 @@ export const Step4ApplicantDocuments = ({ onNextStep, onPrevStep }) => {
 
   return (
     <Container>
-      <div className="form-wrapper">{showApplicantDocumentByRequestType()}</div>
+      <div className="form-wrapper">
+        <Card
+          title={
+            <span style={{ fontSize: "1.5em" }}>Documentos del aplicante</span>
+          }
+          bordered={false}
+          type="inner"
+        >
+          {showApplicantDocumentByRequestType()}
+        </Card>
+      </div>
     </Container>
   );
 };

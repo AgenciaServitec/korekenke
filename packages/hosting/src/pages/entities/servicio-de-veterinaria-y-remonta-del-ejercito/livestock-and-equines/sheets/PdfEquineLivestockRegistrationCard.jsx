@@ -57,8 +57,6 @@ export const PdfEquineLivestockRegistrationCard = () => {
     entityRCMDNEPR?.entityManageId
   );
 
-  console.log(entityBossSVRE);
-
   return (
     <Container>
       <div className="sheet">

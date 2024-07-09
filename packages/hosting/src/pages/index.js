@@ -46,3 +46,4 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livesto
 
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests";
+export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";

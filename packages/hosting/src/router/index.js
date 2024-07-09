@@ -4,7 +4,6 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { OrganizationalClimateStudiesSheets } from "../pages";
 
 export const Router = () => {
   return (
@@ -238,7 +237,44 @@ export const Router = () => {
             </AdminLayout>
           }
         />
+        <Route
+          exact
+          path="entities/departamento-de-apoyo-social/das-requests"
+          element={
+            <AdminLayout>
+              <A.DasRequestsListIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
+          element={
+            <AdminLayout>
+              <A.DasRequestIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="surveys/organizational-climate-studies"
+          element={
+            <AdminLayout>
+              <A.OrganizationalClimateStudiesIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="surveys/organizational-climate-studies/:organizationalClimateStudyId"
+          element={
+            <AdminLayout>
+              <A.OrganizationalClimateStudyIntegration />
+            </AdminLayout>
+          }
+        />
       </Route>
+      {/*SHEETS*/}
       <Route
         exact
         path="/inscriptions/cmsts/sheet/:cmstsEnrollmentId"
@@ -281,24 +317,6 @@ export const Router = () => {
         exact
         path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
-      />
-      <Route
-        exact
-        path="/surveys/organizational-climate-studies"
-        element={
-          <AdminLayout>
-            <A.OrganizationalClimateStudiesIntegration />
-          </AdminLayout>
-        }
-      />
-      <Route
-        exact
-        path="/surveys/organizational-climate-studies/:organizationalClimateStudyId"
-        element={
-          <AdminLayout>
-            <A.OrganizationalClimateStudyIntegration />
-          </AdminLayout>
-        }
       />
       <Route
         exact

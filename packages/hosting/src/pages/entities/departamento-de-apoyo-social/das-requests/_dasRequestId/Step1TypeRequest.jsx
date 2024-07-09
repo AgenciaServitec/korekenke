@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../hooks";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
-import { isBoolean } from "lodash";
+import { isBoolean, omit } from "lodash";
 import { DasRequestList } from "../../../../../data-list";
 
 export const Step1TypeRequest = ({ onNextStep }) => {
@@ -32,6 +32,7 @@ export const Step1TypeRequest = ({ onNextStep }) => {
     handleSubmit,
     control,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -44,6 +45,14 @@ export const Step1TypeRequest = ({ onNextStep }) => {
   useEffect(() => {
     resetForm();
   }, []);
+
+  useEffect(() => {
+    if (dasRequest?.requestType) {
+      if (dasRequest.requestType !== watch("requestType")) {
+        setLocalStorage("dasRequest", omit(dasRequest, ["applicant"]));
+      }
+    }
+  }, [getLocalStorage("dasRequest")]);
 
   const resetForm = () => {
     reset({
@@ -58,8 +67,9 @@ export const Step1TypeRequest = ({ onNextStep }) => {
     try {
       setLoading(true);
       setLocalStorage("dasRequest", {
-        ...dasRequest,
+        ...getLocalStorage("dasRequest"),
         ...formData,
+        to: formData?.isHeadline ? "headline" : "familiar",
       });
 
       onNextStep();

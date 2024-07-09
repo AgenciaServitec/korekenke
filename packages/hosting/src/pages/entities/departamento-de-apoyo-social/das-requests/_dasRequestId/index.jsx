@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, notification, Row, Title } from "../../../../../components";
+import { Acl, Col, notification, Row, Title } from "../../../../../components";
 import { useDefaultFirestoreProps } from "../../../../../hooks";
 import { useAuthentication } from "../../../../../providers";
 import { useNavigate, useParams } from "react-router";
@@ -35,6 +35,7 @@ export const DasRequestIntegration = () => {
   const onPrevStep = () => {
     setCurrentStep(currentStep - 1);
   };
+  const onGoToStep = (index) => setCurrentStep(index);
 
   const onGoToHome = () => navigate("/home");
   const onGoBack = () => navigate(-1);
@@ -99,6 +100,7 @@ export const DasRequestIntegration = () => {
       currentStep={currentStep}
       onNextStep={onNextStep}
       onPrevStep={onPrevStep}
+      onGoToStep={onGoToStep}
       onGoToHome={onGoToHome}
       loading={loading}
       saveDasApplication={saveDasApplication}
@@ -111,6 +113,7 @@ const DasRequest = ({
   currentStep,
   onNextStep,
   onPrevStep,
+  onGoToStep,
   onGoToHome,
   loading,
   saveDasApplication,
@@ -174,6 +177,7 @@ const DasRequest = ({
           <Step5DataSummary
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
+            onGoToStep={onGoToStep}
             loading={loading}
             onSaveDasApplication={saveDasApplication}
           />
@@ -198,25 +202,32 @@ const DasRequest = ({
   };
 
   return (
-    <Container>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Title level={2} align="center">
-            Solicitud para Instituciónes
-          </Title>
-        </Col>
-        <Col span={24} md={20} style={{ margin: "auto" }}>
-          <Steps
-            labelPlacement="vertical"
-            current={currentStep}
-            items={stepsItems}
-          />
-          <br />
-          <br />
-        </Col>
-        <Col span={24}>{showStep()}</Col>
-      </Row>
-    </Container>
+    <Acl
+      category="departamento-de-apoyo-social"
+      subCategory="dasRequests"
+      name="/das-requests/new"
+      redirect
+    >
+      <Container>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Title level={2} align="center">
+              Solicitud DAS
+            </Title>
+          </Col>
+          <Col span={24} md={20} style={{ margin: "auto" }}>
+            <Steps
+              labelPlacement="vertical"
+              current={currentStep}
+              items={stepsItems}
+            />
+            <br />
+            <br />
+          </Col>
+          <Col span={24}>{showStep()}</Col>
+        </Row>
+      </Container>
+    </Acl>
   );
 };
 

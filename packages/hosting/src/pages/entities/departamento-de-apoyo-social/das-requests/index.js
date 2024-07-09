@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+  Acl,
   Col,
   modalConfirm,
   notification,
@@ -12,14 +13,22 @@ import { firestore } from "../../../../firebase";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
+import { useAuthentication } from "../../../../providers";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+
+  const dasApplicationsRef = firestore
+    .collection("das-applications")
+    .where("isDeleted", "==", false);
 
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
     useCollectionData(
-      firestore.collection("das-applications").where("isDeleted", "==", false)
+      ["super_admin"].includes(authUser.roleCode)
+        ? dasApplicationsRef || null
+        : dasApplicationsRef.where("headline.id", "==", authUser.id)
     );
 
   useEffect(() => {
@@ -57,18 +66,25 @@ const DasRequestsList = ({
   dasApplicationsLoading,
 }) => {
   return (
-    <Row gutter={[0, 24]}>
-      <Col span={24}>
-        <Title level={3}>Lista de Solicitudes</Title>
-      </Col>
-      <Col span={24}>
-        <DasRequestsTable
-          dasApplications={dasApplications}
-          onEditDasRequest={onEditDasRequest}
-          onDeleteDasRequest={onDeleteDasRequest}
-          dasApplicationsLoading={dasApplicationsLoading}
-        />
-      </Col>
-    </Row>
+    <Acl
+      category="departamento-de-apoyo-social"
+      subCategory="dasRequests"
+      name="/das-requests"
+      redirect
+    >
+      <Row gutter={[0, 24]}>
+        <Col span={24}>
+          <Title level={3}>Lista de Solicitudes</Title>
+        </Col>
+        <Col span={24}>
+          <DasRequestsTable
+            dasApplications={dasApplications}
+            onEditDasRequest={onEditDasRequest}
+            onDeleteDasRequest={onDeleteDasRequest}
+            dasApplicationsLoading={dasApplicationsLoading}
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };

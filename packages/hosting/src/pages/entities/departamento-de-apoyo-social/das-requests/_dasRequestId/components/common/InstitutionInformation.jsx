@@ -64,7 +64,13 @@ export const InstitutionInformation = ({
   };
 
   const mapFormData = (formData) => ({
-    institution: formData?.institution || null,
+    institution:
+      {
+        ...formData?.institution,
+        ...(institutions?.[formData?.institution?.type] || []).find(
+          (institution) => institution.id === formData?.institution?.id
+        ),
+      } || null,
   });
 
   const onSubmit = (formData) =>
