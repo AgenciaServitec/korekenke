@@ -279,7 +279,7 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId/sheets"
+        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
       />
       <Route

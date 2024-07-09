@@ -1,14 +1,41 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../../images";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
+import dayjs from "dayjs";
+import {
+  DasRequestList,
+  DegreesArmy,
+  institutions,
+} from "../../../../../data-list";
+import { userFullName } from "../../../../../utils/users/userFullName2";
 
-export const DiscountAgreementGrantedUniversitySheet = () => {
+export const StudyScholarshipPostgraduateStudiesUniversitySheet = ({
+  data,
+}) => {
+  const { headline, createAt, familiar, institution, requestType } = data;
+
+  const createdDate = dayjs(createAt.toDate());
+
+  const emptyContent = "...............";
+
+  const findRequestName = DasRequestList.find(
+    (_requestType) => _requestType.id === data.requestType
+  ).name;
+
+  const findDegree = DegreesArmy.flatMap(
+    (degreeArmy) => degreeArmy.options
+  ).find((degree) => degree.value === headline.degree).label;
+
+  const institutionView = institutions[institution?.type].find(
+    (_institution) => _institution.id === institution?.id
+  ).name;
+
   return (
     <Container>
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Modelo de solicitud - Descuento por convenio en universidad</h2>
+          <h2>Beca de estudio para post grado en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -16,8 +43,8 @@ export const DiscountAgreementGrantedUniversitySheet = () => {
             <div className="request-type__text">
               <p>SOLICITA:</p>
               <p>
-                Descuento por convenio otorgado por la Universidad
-                <span> Universidad Peruana de Ciencias Aplicadas</span>
+                {requestType && findRequestName}
+                <span> {institutionView || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -28,22 +55,22 @@ export const DiscountAgreementGrantedUniversitySheet = () => {
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> Angel Emilio Gala Flores </span>, Grado
-              <span> General del Ejército </span> CIP
-              <span> 987054021 </span> en actual servicio
-              <span> Servicio text contenido </span> con Telf.
-              <span> 987654321 </span> ante Ud. con el debido respeto me
-              presento y expongo:
+              <span> {userFullName(headline)} </span>, Grado
+              <span> {findDegree || emptyContent} </span> CIP
+              <span> {headline?.cip || emptyContent} </span> en actual servicio
+              <span> {headline?.currentService || emptyContent} </span> con
+              Telf.
+              <span> {headline?.phoneNumber || emptyContent} </span> ante Ud.
+              con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
               Que teniendo conocimiento del convenio de cooperación
               interinstitucional con la Universidad
-              <span> Universidad Peruana de Ciencias Aplicadas </span>
+              <span> {institutionView || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
-              corresponda dar las facilidades para obtener el descuento por
-              convenio en beneficion de mi <span> No se que va aquí </span> para
-              seguir estudios en la especialidad de
-              <span> Ingeniería de Sistemas</span>.
+              corresponda dar las facilidades para obtener la beca de estudios
+              para seguir estudios de post grado en la especialidad de
+              <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
               <p>
@@ -53,19 +80,23 @@ export const DiscountAgreementGrantedUniversitySheet = () => {
             </div>
             <div className="request-content__footer">
               <p className="date">
-                Lima, <span>03</span> de <span>07</span> del <span>2024</span>
+                Lima, <span>{createdDate.format("DD")}</span> de{" "}
+                <span>{createdDate.format("MM")}</span> del
+                <span>{createdDate.format("YYYY")}</span>
               </p>
-              <div>
-                <div className="signature">
+              <div className="signature">
+                <div className="signature__item">
+                  <div></div>
                   <p>Firma</p>
                 </div>
-                <div className="signature">
+                <div className="signature__item">
+                  <div></div>
                   <p>Post Firma</p>
                 </div>
-                <div className="cip">
-                  <span>987654300</span>
-                  <p>CIP</p>
-                </div>
+              </div>
+              <div className="cip">
+                <span>{headline?.cip || ""}</span>
+                <p>CIP</p>
               </div>
             </div>
           </div>
@@ -123,9 +154,6 @@ const Container = styled.div`
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;
-        -webkit-text-stroke-width: 1px;
-        -webkit-text-stroke-color: #000;
-        color: red;
       }
 
       img {
@@ -202,6 +230,7 @@ const Container = styled.div`
           display: flex;
           flex-direction: column;
           align-items: flex-end;
+          gap: 1em;
 
           .date {
             margin-bottom: 1em;
@@ -211,26 +240,39 @@ const Container = styled.div`
           }
 
           & > div {
-            width: 12em;
             display: flex;
-            flex-direction: column;
-            gap: 1em;
           }
 
           .signature {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            height: 7em;
-            font-weight: 500;
-            p {
-              border-top: 1px dotted #000;
-              text-align: center;
-              padding-top: 0.5em;
+            gap: 1em;
+
+            &__item {
+              width: 12em;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+              font-weight: 500;
+
+              div {
+                height: 6em;
+              }
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+
+              p {
+                border-top: 1px dotted #000;
+                text-align: center;
+                padding-top: 0.5em;
+              }
             }
           }
 
           .cip {
+            width: 12em;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
