@@ -297,7 +297,25 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId/sheets"
+        path="/entities/departamento-de-apoyo-social/das-requests"
+        element={
+          <AdminLayout>
+            <A.DasRequestsListIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
+        element={
+          <AdminLayout>
+            <A.DasRequestIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
       />
       <Route

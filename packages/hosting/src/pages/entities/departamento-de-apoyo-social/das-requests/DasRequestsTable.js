@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { DasRequestStatus, institutions } from "../../../../data-list";
+import { useNavigate } from "react-router";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -12,6 +13,10 @@ export const DasRequestsTable = ({
   onDeleteDasRequest,
   dasApplicationsLoading,
 }) => {
+  const navigate = useNavigate();
+
+  const navigateTo = (pathname) => navigate(pathname);
+
   const columns = [
     {
       title: "Fecha creación",
@@ -80,7 +85,9 @@ export const DasRequestsTable = ({
               tooltipTitle="PDF"
               icon={faFilePdf}
               styled={{ color: (theme) => theme.colors.error }}
-              onClick={() => console.log("PDF")}
+              onClick={() =>
+                navigateTo(`${dasRequest.id}/${dasRequest.requestType}/sheets`)
+              }
             />
           </Acl>
           {/*<IconAction*/}
