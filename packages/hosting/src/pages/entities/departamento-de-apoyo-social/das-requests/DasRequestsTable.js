@@ -1,6 +1,6 @@
 import React from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
-import { userFullName } from "../../../../utils";
+import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
 import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
@@ -24,6 +24,15 @@ export const DasRequestsTable = ({
       title: "Titular",
       key: "name",
       render: (_, dasRequest) => userFullName(dasRequest.headline),
+    },
+    {
+      title: "Solicitud",
+      key: "requestType",
+      render: (_, dasRequest) => (
+        <div className="capitalize">
+          {findDasRequest(dasRequest.requestType)?.name}
+        </div>
+      ),
     },
     {
       title: "Institución",
