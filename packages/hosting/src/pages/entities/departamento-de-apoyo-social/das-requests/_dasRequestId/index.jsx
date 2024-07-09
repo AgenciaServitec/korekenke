@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, notification, Row, Title } from "../../../../../components";
+import { Acl, Col, notification, Row, Title } from "../../../../../components";
 import { useDefaultFirestoreProps } from "../../../../../hooks";
 import { useAuthentication } from "../../../../../providers";
 import { useNavigate, useParams } from "react-router";
@@ -202,25 +202,32 @@ const DasRequest = ({
   };
 
   return (
-    <Container>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Title level={2} align="center">
-            Solicitud para Instituciónes
-          </Title>
-        </Col>
-        <Col span={24} md={20} style={{ margin: "auto" }}>
-          <Steps
-            labelPlacement="vertical"
-            current={currentStep}
-            items={stepsItems}
-          />
-          <br />
-          <br />
-        </Col>
-        <Col span={24}>{showStep()}</Col>
-      </Row>
-    </Container>
+    <Acl
+      category="departamento-de-apoyo-social"
+      subCategory="dasRequests"
+      name="/das-requests/new"
+      redirect
+    >
+      <Container>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Title level={2} align="center">
+              Solicitud para Instituciónes
+            </Title>
+          </Col>
+          <Col span={24} md={20} style={{ margin: "auto" }}>
+            <Steps
+              labelPlacement="vertical"
+              current={currentStep}
+              items={stepsItems}
+            />
+            <br />
+            <br />
+          </Col>
+          <Col span={24}>{showStep()}</Col>
+        </Row>
+      </Container>
+    </Acl>
   );
 };
 

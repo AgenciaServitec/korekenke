@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+  Acl,
   Col,
   modalConfirm,
   notification,
@@ -65,18 +66,25 @@ const DasRequestsList = ({
   dasApplicationsLoading,
 }) => {
   return (
-    <Row gutter={[0, 24]}>
-      <Col span={24}>
-        <Title level={3}>Lista de Solicitudes</Title>
-      </Col>
-      <Col span={24}>
-        <DasRequestsTable
-          dasApplications={dasApplications}
-          onEditDasRequest={onEditDasRequest}
-          onDeleteDasRequest={onDeleteDasRequest}
-          dasApplicationsLoading={dasApplicationsLoading}
-        />
-      </Col>
-    </Row>
+    <Acl
+      category="departamento-de-apoyo-social"
+      subCategory="dasRequests"
+      name="/das-requests"
+      redirect
+    >
+      <Row gutter={[0, 24]}>
+        <Col span={24}>
+          <Title level={3}>Lista de Solicitudes</Title>
+        </Col>
+        <Col span={24}>
+          <DasRequestsTable
+            dasApplications={dasApplications}
+            onEditDasRequest={onEditDasRequest}
+            onDeleteDasRequest={onDeleteDasRequest}
+            dasApplicationsLoading={dasApplicationsLoading}
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };

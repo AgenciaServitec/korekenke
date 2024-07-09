@@ -1,11 +1,10 @@
 import React from "react";
-import { IconAction, Space, Table } from "../../../../components";
+import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
 import { userFullName } from "../../../../utils";
 import dayjs from "dayjs";
 import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { DasRequestStatus, institutions } from "../../../../data-list";
-import { Tag } from "antd";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -63,23 +62,35 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
-          <IconAction
-            tooltipTitle="PDF"
-            icon={faFilePdf}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => console.log("PDF")}
-          />
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId/sheets"
+          >
+            <IconAction
+              tooltipTitle="PDF"
+              icon={faFilePdf}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() => console.log("PDF")}
+            />
+          </Acl>
           {/*<IconAction*/}
           {/*  tooltipTitle="Editar"*/}
           {/*  icon={faEdit}*/}
           {/*  onClick={() => onEditDasRequest(dasRequest)}*/}
           {/*/>*/}
-          <IconAction
-            tooltipTitle="Eliminar"
-            icon={faTrash}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => onDeleteDasRequest(dasRequest)}
-          />
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests#delete"
+          >
+            <IconAction
+              tooltipTitle="Eliminar"
+              icon={faTrash}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() => onDeleteDasRequest(dasRequest)}
+            />
+          </Acl>
         </Space>
       ),
     },

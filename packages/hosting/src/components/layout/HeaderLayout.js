@@ -227,7 +227,9 @@ export const HeaderLayout = ({
         >
           <Space key="user-avatar" align="center" style={{ lineHeight: "1em" }}>
             <span>
-              <h4 className="capitalize">{capitalize(userFullName(user))}</h4>
+              <h4 className="capitalize">
+                {capitalize(userFullName(user) || "")}
+              </h4>
               <span className="capitalize">
                 (
                 {rolesAcls.find((roleAcl) => roleAcl.id === user.roleCode)
