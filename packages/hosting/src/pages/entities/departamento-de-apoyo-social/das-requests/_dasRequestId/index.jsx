@@ -35,6 +35,7 @@ export const DasRequestIntegration = () => {
   const onPrevStep = () => {
     setCurrentStep(currentStep - 1);
   };
+  const onGoToStep = (index) => setCurrentStep(index);
 
   const onGoToHome = () => navigate("/home");
   const onGoBack = () => navigate(-1);
@@ -99,6 +100,7 @@ export const DasRequestIntegration = () => {
       currentStep={currentStep}
       onNextStep={onNextStep}
       onPrevStep={onPrevStep}
+      onGoToStep={onGoToStep}
       onGoToHome={onGoToHome}
       loading={loading}
       saveDasApplication={saveDasApplication}
@@ -111,6 +113,7 @@ const DasRequest = ({
   currentStep,
   onNextStep,
   onPrevStep,
+  onGoToStep,
   onGoToHome,
   loading,
   saveDasApplication,
@@ -174,6 +177,7 @@ const DasRequest = ({
           <Step5DataSummary
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
+            onGoToStep={onGoToStep}
             loading={loading}
             onSaveDasApplication={saveDasApplication}
           />

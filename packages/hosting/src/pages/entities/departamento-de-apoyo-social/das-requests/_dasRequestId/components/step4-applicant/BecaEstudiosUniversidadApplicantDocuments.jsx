@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   Button,
@@ -20,6 +20,8 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
   loadingStep4,
   onSaveApplicantDocumentsStep4,
 }) => {
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   const isHeadline = dasRequest?.isHeadline;
   const processType = dasRequest?.institution?.processType === "entry";
 
@@ -138,12 +140,17 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyConstanciaIngresoUniv-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label:
+                                "Copia de Constancia de Ingreso de la Univ",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -162,12 +169,17 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyBoletaPagoMatriculaUniv-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label:
+                                "Copia de Boleta pago matrícula de la Univ",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -190,12 +202,17 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyConsolidadoNotasUniv-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label:
+                                "Copia de Consolidado de notas (último ciclo)",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -214,12 +231,17 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyUltimaBoletaPagoUniv-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label:
+                                "Copia de la última boleta de pago de la Univ",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -240,12 +262,16 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                         bucket="departamentoDeApoyoSocial"
                         fileName={`copyLiquidacionHaberesHeadline-photo-${uuidv4()}`}
                         filePath={`das-applicants/${dasRequest.id}/files`}
-                        additionalFields={{ numberCopies: 2 }}
+                        additionalFields={{
+                          numberCopies: 2,
+                          label: "Copia de Liquidación de Haberes del Titular",
+                        }}
                         buttonText="Subir archivo"
                         error={error(name)}
                         helperText={errorMessage(name)}
                         required={required(name)}
                         onChange={(file) => onChange(file)}
+                        onUploading={setUploadingImage}
                       />
                     )}
                   />
@@ -266,12 +292,16 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyCipHeadline-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label: "Copia de CIP del Titular",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -290,12 +320,16 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyDniHeadline-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label: "Copia de DNI del Titular",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -318,12 +352,16 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyCifFamiliar-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label: "Copia de CIF del Familiar",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -342,12 +380,16 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                             bucket="departamentoDeApoyoSocial"
                             fileName={`copyDniFamiliar-photo-${uuidv4()}`}
                             filePath={`das-applicants/${dasRequest.id}/files`}
-                            additionalFields={{ numberCopies: 2 }}
+                            additionalFields={{
+                              numberCopies: 2,
+                              label: "Copia de DNI del Familiar",
+                            }}
                             buttonText="Subir archivo"
                             error={error(name)}
                             helperText={errorMessage(name)}
                             required={required(name)}
                             onChange={(file) => onChange(file)}
+                            onUploading={setUploadingImage}
                           />
                         )}
                       />
@@ -357,12 +399,14 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
               </Row>
             </Card>
           </Col>
+        </Row>
+        <Row gutter={[16, 16]} align="end">
           <Col xs={24} sm={12} md={6}>
             <Button
               type="primary"
               size="large"
               block
-              disabled={loadingStep4}
+              disabled={loadingStep4 || uploadingImage}
               onClick={onPrevStep}
             >
               Atras
@@ -374,7 +418,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
               size="large"
               block
               htmlType="submit"
-              disabled={loadingStep4}
+              disabled={loadingStep4 || uploadingImage}
               loading={loadingStep4}
             >
               Siguiente
