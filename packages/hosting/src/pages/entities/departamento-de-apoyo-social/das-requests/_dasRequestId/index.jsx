@@ -29,6 +29,10 @@ export const DasRequestIntegration = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStep]);
+
   const onNextStep = () => {
     setCurrentStep(currentStep + 1);
   };
