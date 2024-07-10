@@ -17,6 +17,7 @@ import { Step3InstitutionInformation } from "./Step3InstitutionInformation";
 import { Step4ApplicantDocuments } from "./Step4ApplicantDocuments";
 import { Step5DataSummary } from "./Step5DataSummary";
 import { Step6DasRequestSuccess } from "./Step6DasRequestSuccess";
+import { EditDasRequestIntegration } from "./EditDasRequest";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -100,12 +101,15 @@ export const DasRequestIntegration = () => {
 
   return (
     <DasRequest
+      isNew={isNew}
+      dasRequest={dasRequest}
       user={authUser}
       currentStep={currentStep}
       onNextStep={onNextStep}
       onPrevStep={onPrevStep}
       onGoToStep={onGoToStep}
       onGoToHome={onGoToHome}
+      onGoBack={onGoBack}
       loading={loading}
       saveDasApplication={saveDasApplication}
     />
@@ -113,12 +117,15 @@ export const DasRequestIntegration = () => {
 };
 
 const DasRequest = ({
+  isNew,
+  dasRequest,
   user,
   currentStep,
   onNextStep,
   onPrevStep,
   onGoToStep,
   onGoToHome,
+  onGoBack,
   loading,
   saveDasApplication,
 }) => {
@@ -214,21 +221,32 @@ const DasRequest = ({
     >
       <Container>
         <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Title level={2} align="center">
-              Solicitud DAS
-            </Title>
-          </Col>
-          <Col span={24} md={20} style={{ margin: "auto" }}>
-            <Steps
-              labelPlacement="vertical"
-              current={currentStep}
-              items={stepsItems}
-            />
-            <br />
-            <br />
-          </Col>
-          <Col span={24}>{showStep()}</Col>
+          {isNew ? (
+            <>
+              <Col span={24}>
+                <Title level={2} align="center">
+                  Solicitud DAS
+                </Title>
+              </Col>
+              <Col span={24} md={20} style={{ margin: "auto" }}>
+                <Steps
+                  labelPlacement="vertical"
+                  current={currentStep}
+                  items={stepsItems}
+                />
+                <br />
+                <br />
+              </Col>
+              <Col span={24}>{showStep()}</Col>
+            </>
+          ) : (
+            <Col span={24}>
+              <EditDasRequestIntegration
+                dasRequest={dasRequest}
+                onGoBack={onGoBack}
+              />
+            </Col>
+          )}
         </Row>
       </Container>
     </Acl>

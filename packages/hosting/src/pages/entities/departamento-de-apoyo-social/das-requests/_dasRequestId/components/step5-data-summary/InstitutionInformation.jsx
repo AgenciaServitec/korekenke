@@ -18,7 +18,7 @@ export const InstitutionInformation = ({ institution }) => {
         <Col span={24} sm={8}>
           <div className="wrapper-item">
             <span className="label">Institución</span>
-            <span className="value capitalize">{institution.name}</span>
+            <span className="value capitalize">{institution?.name}</span>
           </div>
         </Col>
         <Col span={24} sm={8}>

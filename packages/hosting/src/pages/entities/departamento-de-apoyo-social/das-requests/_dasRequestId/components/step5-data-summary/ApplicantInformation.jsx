@@ -3,6 +3,8 @@ import { Col, Row, Image } from "../../../../../../../components";
 import styled from "styled-components";
 
 export const ApplicantInformation = ({ applicant }) => {
+  if (!applicant) return null;
+
   const { documents } = applicant;
 
   return (
