@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import {
+  Acl,
   Button,
   Col,
   Collapse,
   IconAction,
+  modalConfirm,
+  notification,
   Row,
   Title,
 } from "../../../../../../components";
@@ -22,24 +25,80 @@ import {
   PersonalInformationModal,
   ObservationForInformationInstitutionModal,
 } from "./components";
+import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 
 export const EditDasRequestIntegration = ({
   dasRequest,
   onGoBack,
   onSaveDasApplication,
 }) => {
+  const [approvedLoading, setApprovedLoading] = useState(false);
+
+  const updateDasRequest = async (dasRequest, status) => {
+    try {
+      setApprovedLoading(true);
+      await updateDasApplication(dasRequest.id, {
+        status: status,
+      });
+
+      notification({ type: "success" });
+    } catch (e) {
+      console.error("approvedDasRequestError:", e);
+    } finally {
+      setApprovedLoading(false);
+    }
+  };
+
+  const onConfirmDesApprovedDasRequest = (dasRequest) =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres desaprobar la solicitud?",
+      onOk: () => updateDasRequest(dasRequest, "pending"),
+    });
+
+  const onConfirmApprovedDasRequest = (dasRequest) => {
+    const { headline, institution, applicant } = dasRequest;
+
+    if (
+      [
+        headline?.observation?.status,
+        institution?.observation?.status,
+        applicant?.observation?.status,
+      ].includes("pending")
+    ) {
+      return notification({
+        type: "warning",
+        title:
+          "Para realizar la aprobacion, no debe hacer observaciones en la solictud",
+      });
+    }
+
+    return modalConfirm({
+      title: "¿Estás seguro de que quieres aprobar la solicitud?",
+      onOk: () => updateDasRequest(dasRequest, "approved"),
+    });
+  };
+
   return (
     <DasRequestModalProvider>
       <EditDasRequest
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onSaveDasApplication={onSaveDasApplication}
+        onConfirmApprovedDasRequest={onConfirmApprovedDasRequest}
+        onConfirmDesApprovedDasRequest={onConfirmDesApprovedDasRequest}
+        approvedLoading={approvedLoading}
       />
     </DasRequestModalProvider>
   );
 };
 
-const EditDasRequest = ({ dasRequest, onGoBack }) => {
+const EditDasRequest = ({
+  dasRequest,
+  onGoBack,
+  onConfirmApprovedDasRequest,
+  onConfirmDesApprovedDasRequest,
+  approvedLoading,
+}) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
 
@@ -152,23 +211,64 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
               type="primary"
               size="large"
               block
-              disabled={loadingUpload}
+              disabled={loadingUpload || approvedLoading}
               onClick={() => onGoBack()}
             >
               Cancelar
             </Button>
           </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Button
-              type="primary"
-              size="large"
-              block
-              loading={loadingUpload}
-              onClick={() => console.log("PROGRAMAR FUNCIONALIDAD")}
-            >
-              Aprobar solicitud
-            </Button>
-          </Col>
+          {dasRequest?.status === "approved" && (
+            <Col xs={24} sm={12} md={6}>
+              <Acl
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#noApproved"
+              >
+                <Button
+                  danger
+                  size="large"
+                  block
+                  loading={loadingUpload || approvedLoading}
+                  disabled={
+                    !![
+                      dasRequest.headline?.observation?.status,
+                      dasRequest.institution?.observation?.status,
+                      dasRequest.applicant?.observation?.status,
+                    ].includes("approved")
+                  }
+                  onClick={() => onConfirmDesApprovedDasRequest(dasRequest)}
+                >
+                  Desaprobar solicitud
+                </Button>
+              </Acl>
+            </Col>
+          )}
+          {dasRequest?.status === "pending" && (
+            <Col xs={24} sm={12} md={6}>
+              <Acl
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#approved"
+              >
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  loading={loadingUpload || approvedLoading}
+                  disabled={
+                    !![
+                      dasRequest.headline?.observation?.status,
+                      dasRequest.institution?.observation?.status,
+                      dasRequest.applicant?.observation?.status,
+                    ].includes("pending")
+                  }
+                  onClick={() => onConfirmApprovedDasRequest(dasRequest)}
+                >
+                  Aprobar solicitud
+                </Button>
+              </Acl>
+            </Col>
+          )}
         </Row>
       </div>
     </Container>

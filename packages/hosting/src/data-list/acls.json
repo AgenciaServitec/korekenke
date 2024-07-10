@@ -80,6 +80,8 @@
       "/das-requests": "Menu: Solicitudes",
       "/das-requests/new": "Agregar solicitud",
       "/das-requests/:dasRequestId": "Editar solicitud",
+      "/das-requests/:dasRequestId#approved": "Aprobar solicitud",
+      "/das-requests/:dasRequestId#noApproved": "No aprobar solicitud",
       "/das-requests#delete": "Eliminar solicitud",
       "/das-requests/:dasRequestId/sheets": "Pdfs de la solicitud"
     }
