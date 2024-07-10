@@ -5,6 +5,32 @@ import { Surveys } from "../../../../data-list";
 export const OrganizationalClimateStudiesSheet = ({
   organizationClimateStudies,
 }) => {
+  const escalaL = (items) => {
+    let include = [];
+    let exclude = [];
+
+    Object.entries(items)
+      .map(([key, value]) => {
+        if (
+          key === "item2" ||
+          key === "item9" ||
+          key === "item15" ||
+          key === "item22" ||
+          key === "item28" ||
+          key === "item32"
+        ) {
+          return value;
+        }
+      })
+      .filter((item) => {
+        if (item === 2 || item === 3) include.push(item);
+        if (item === 1 || item === 4) exclude.push(item);
+      });
+
+    if (include.length >= 1 && include.length <= 3) return "Incluir";
+    if (exclude.length >= 4 && exclude.length <= 6) return "Excluir";
+  };
+
   return (
     <Container>
       <div className="sheet">
@@ -63,6 +89,7 @@ export const OrganizationalClimateStudiesSheet = ({
                     <th>Item 32</th>
                     <th>Item 33</th>
                     <th>Item 34</th>
+                    <th>Escala L</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -130,6 +157,7 @@ export const OrganizationalClimateStudiesSheet = ({
                         <td>{organizationClimateStudy.items.item32}</td>
                         <td>{organizationClimateStudy.items.item33}</td>
                         <td>{organizationClimateStudy.items.item34}</td>
+                        <td>{escalaL(organizationClimateStudy.items)}</td>
                       </tr>
                     )
                   )}

@@ -62,6 +62,17 @@
       "/sections#delete": "Eliminar sección"
     }
   },
+  "surveys": {
+    "label": "Encuestas",
+    "organizational-climate-studies": {
+      "label": "Estudio del Clima Organizacional",
+      "/organizational-climate-studies": "Menu: Estudio del Clima Organizacional",
+      "/organizational-climate-studies/list": "Lista Estudio del Clima Organizacional",
+      "/organizational-climate-studies/new": "Agregar Estudio del Clima Organizacional",
+      "/organizational-climate-studies/:organizationalClimateStudyId": "Editar Estudio del Clima Organizacional",
+      "/organizational-climate-studies/sheets": "Pdf de Estudio del Clima Organizacional"
+    }
+  },
   "jefatura-de-bienestar-del-ejercito": {
     "label": "Jefatura de bienestar del ejército",
     "correspondences": {

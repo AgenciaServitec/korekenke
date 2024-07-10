@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../firebase";
 import {
+  Acl,
   AddButton,
   Col,
   Divider,
@@ -46,34 +47,56 @@ export const OrganizationalClimateStudiesIntegration = () => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={22}>
-        <AddButton
-          onClick={() => onAddOrganizationalClimateStudy()}
-          title="Estudio del clima organizacional"
-          margin="0"
-        />
+        <Acl
+          category="surveys"
+          subCategory="organizational-climate-studies"
+          name="/organizational-climate-studies/new"
+        >
+          <AddButton
+            onClick={() => onAddOrganizationalClimateStudy()}
+            title="Estudio del clima organizacional"
+            margin="0"
+          />
+        </Acl>
       </Col>
       <Col span={24} md={2}>
-        <IconAction
-          tooltipTitle="PDF"
-          icon={faFilePdf}
-          styled={{ color: (theme) => theme.colors.error }}
-          onClick={() =>
-            navigate("/surveys/organizational-climate-studies/sheets")
-          }
-        />
+        <Acl
+          category="surveys"
+          subCategory="organizational-climate-studies"
+          name="/organizational-climate-studies/sheets"
+        >
+          <IconAction
+            tooltipTitle="PDF"
+            icon={faFilePdf}
+            styled={{ color: (theme) => theme.colors.error }}
+            onClick={() =>
+              navigate("/surveys/organizational-climate-studies/sheets")
+            }
+          />
+        </Acl>
       </Col>
       <Divider />
       <Col span={24}>
-        <List
-          dataSource={orderBy(organizationalClimateStudies, "createAt", "desc")}
-          loading={organizationalClimateStudiesLoading}
-          onDeleteItem={(organizationClimateStudy) =>
-            onDeleteOrganizationClimateStudy(organizationClimateStudy)
-          }
-          itemTitle={(organizationalClimateStudy) =>
-            organizationalClimateStudy.questions.establishment
-          }
-        />
+        <Acl
+          category="surveys"
+          subCategory="organizational-climate-studies"
+          name="/organizational-climate-studies/list"
+        >
+          <List
+            dataSource={orderBy(
+              organizationalClimateStudies,
+              "createAt",
+              "desc"
+            )}
+            loading={organizationalClimateStudiesLoading}
+            onDeleteItem={(organizationClimateStudy) =>
+              onDeleteOrganizationClimateStudy(organizationClimateStudy)
+            }
+            itemTitle={(organizationalClimateStudy) =>
+              organizationalClimateStudy.questions.establishment
+            }
+          />
+        </Acl>
       </Col>
     </Row>
   );

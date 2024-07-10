@@ -164,7 +164,11 @@ export const DrawerLayout = ({
       label: "Encuestas",
       key: "surveys",
       icon: <FontAwesomeIcon icon={faPoll} size="lg" />,
-      isVisible: true,
+      isVisible: existsAclsInAclsOfUser(
+        "surveys",
+        ["organizational-climate-studies"],
+        ["/organizational-climate-studies"]
+      ),
       children: [
         {
           label: "Estudio del Clima Organizacional",
