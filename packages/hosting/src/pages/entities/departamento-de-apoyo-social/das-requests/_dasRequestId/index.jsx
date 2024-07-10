@@ -68,7 +68,7 @@ export const DasRequestIntegration = () => {
       ...formData.headline,
       phone: {
         prefix: "+51",
-        number: formData.headline.phoneNumber,
+        number: formData?.headline?.phoneNumber,
       },
     },
     familiar: formData?.familiar || null,
@@ -87,7 +87,7 @@ export const DasRequestIntegration = () => {
         ? await addDasApplication(assignCreateProps(mapForm(formData)))
         : await updateDasApplication(
             dasRequest.id,
-            assignUpdateProps(mapForm(formData))
+            assignUpdateProps(formData)
           );
 
       notification({ type: "success" });
@@ -111,7 +111,7 @@ export const DasRequestIntegration = () => {
       onGoToHome={onGoToHome}
       onGoBack={onGoBack}
       loading={loading}
-      saveDasApplication={saveDasApplication}
+      onSaveDasApplication={saveDasApplication}
     />
   );
 };
@@ -127,7 +127,7 @@ const DasRequest = ({
   onGoToHome,
   onGoBack,
   loading,
-  saveDasApplication,
+  onSaveDasApplication,
 }) => {
   const stepsItems = [
     {
@@ -190,7 +190,7 @@ const DasRequest = ({
             onPrevStep={onPrevStep}
             onGoToStep={onGoToStep}
             loading={loading}
-            onSaveDasApplication={saveDasApplication}
+            onSaveDasApplication={onSaveDasApplication}
           />
         );
       case 5:

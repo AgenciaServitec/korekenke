@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { getLocalStorage, setLocalStorage } from "../../../../../utils";
 import { mediaQuery } from "../../../../../styles";
 import { PersonalInformation } from "./components";
-import { WindowScroller } from "react-virtualized";
 
 export const Step2PersonalInformation = ({ user, onNextStep, onPrevStep }) => {
   const dasRequest = getLocalStorage("dasRequest");

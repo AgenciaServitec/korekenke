@@ -22,24 +22,23 @@ import {
 } from "./components/edit-components/DasRequest.ModalProvider";
 import { PersonalInformationModal } from "./components/edit-components";
 
-export const EditDasRequestIntegration = ({ dasRequest, onGoBack }) => {
-  const onSendDasRequest = () => {
-    console.log({ dasRequest });
-    // onSaveDasApplication({ ...dasRequest, status: "pending" });
-  };
-
+export const EditDasRequestIntegration = ({
+  dasRequest,
+  onGoBack,
+  onSaveDasApplication,
+}) => {
   return (
     <DasRequestModalProvider>
       <EditDasRequest
         dasRequest={dasRequest}
         onGoBack={onGoBack}
-        onSendDasRequest={onSendDasRequest}
+        onSaveDasApplication={onSaveDasApplication}
       />
     </DasRequestModalProvider>
   );
 };
 
-const EditDasRequest = ({ dasRequest, onGoBack, onSendDasRequest }) => {
+const EditDasRequest = ({ dasRequest, onGoBack }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
 
@@ -52,7 +51,7 @@ const EditDasRequest = ({ dasRequest, onGoBack, onSendDasRequest }) => {
       onRenderBody: () => (
         <PersonalInformationModal
           dasRequest={dasRequest}
-          setLoadingUpload={setLoadingUpload}
+          onCloseDasRequestModal={onCloseDasRequestModal}
         />
       ),
     });
@@ -147,9 +146,9 @@ const EditDasRequest = ({ dasRequest, onGoBack, onSendDasRequest }) => {
               size="large"
               block
               loading={loadingUpload}
-              onClick={onSendDasRequest}
+              onClick={() => console.log("PROGRAMAR FUNCIONALIDAD")}
             >
-              Actualizar solicitud
+              Aprobar solicitud
             </Button>
           </Col>
         </Row>
