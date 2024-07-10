@@ -11,7 +11,7 @@ export const RequestType = ({ dasRequest }) => {
           <div className="wrapper-item">
             <span className="label">Tipo</span>
             <span className="value">
-              {findDasRequest(dasRequest.requestType).name}
+              {findDasRequest(dasRequest?.requestType)?.name}
             </span>
           </div>
         </Col>

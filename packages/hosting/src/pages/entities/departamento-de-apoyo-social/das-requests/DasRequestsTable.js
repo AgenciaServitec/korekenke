@@ -2,7 +2,7 @@ import React from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
 import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
-import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { DasRequestStatus, institutions } from "../../../../data-list";
 import { useNavigate } from "react-router";
@@ -90,11 +90,17 @@ export const DasRequestsTable = ({
               }
             />
           </Acl>
-          {/*<IconAction*/}
-          {/*  tooltipTitle="Editar"*/}
-          {/*  icon={faEdit}*/}
-          {/*  onClick={() => onEditDasRequest(dasRequest)}*/}
-          {/*/>*/}
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId"
+          >
+            <IconAction
+              tooltipTitle="Editar"
+              icon={faEdit}
+              onClick={() => onEditDasRequest(dasRequest)}
+            />
+          </Acl>
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
