@@ -11,13 +11,13 @@ import {
 } from "../../../../../firebase/collections/dasApplications";
 import styled from "styled-components";
 import { Steps } from "antd";
-import { Step1TypeRequest } from "./Step1TypeRequest";
-import { Step2PersonalInformation } from "./Step2PersonalInformation";
-import { Step3InstitutionInformation } from "./Step3InstitutionInformation";
-import { Step4ApplicantDocuments } from "./Step4ApplicantDocuments";
-import { Step5DataSummary } from "./Step5DataSummary";
-import { Step6DasRequestSuccess } from "./Step6DasRequestSuccess";
-import { EditDasRequestIntegration } from "./EditDasRequest";
+import { Step1TypeRequest } from "./steps/Step1TypeRequest";
+import { Step2PersonalInformation } from "./steps/Step2PersonalInformation";
+import { Step3InstitutionInformation } from "./steps/Step3InstitutionInformation";
+import { Step4ApplicantDocuments } from "./steps/Step4ApplicantDocuments";
+import { Step5DataSummary } from "./steps/Step5DataSummary";
+import { Step6DasRequestSuccess } from "./steps/Step6DasRequestSuccess";
+import { EditDasRequestIntegration } from "./editing/EditDasRequest";
 import { omit } from "lodash";
 
 export const DasRequestIntegration = () => {
