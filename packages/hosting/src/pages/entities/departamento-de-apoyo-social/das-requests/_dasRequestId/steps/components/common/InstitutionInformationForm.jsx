@@ -44,7 +44,7 @@ export const InstitutionInformationForm = ({
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   const _dasRequest = DasRequestList.find(
-    (_dasRequest) => _dasRequest.id === dasRequest.requestType
+    (_dasRequest) => _dasRequest.id === dasRequest?.requestType
   );
 
   useEffect(() => {
@@ -54,8 +54,8 @@ export const InstitutionInformationForm = ({
   const resetForm = () => {
     reset({
       institution: {
-        type: _dasRequest.institutionId,
-        id: (institutions?.[_dasRequest.institutionId] || []).find(
+        type: _dasRequest?.institutionId,
+        id: (institutions?.[_dasRequest?.institutionId] || []).find(
           (institution) => institution.id === dasRequest?.institution?.id
         )
           ? dasRequest?.institution?.id
@@ -133,7 +133,7 @@ export const InstitutionInformationForm = ({
                         name={name}
                         value={value}
                         options={(
-                          institutions?.[_dasRequest.institutionId] || []
+                          institutions?.[_dasRequest?.institutionId] || []
                         ).map((institution) => ({
                           label: institution.name,
                           value: institution.id,
