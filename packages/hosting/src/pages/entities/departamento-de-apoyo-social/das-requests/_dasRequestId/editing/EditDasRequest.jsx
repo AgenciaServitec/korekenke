@@ -20,6 +20,7 @@ import {
   DasRequestModalProvider,
   useDasRequestModal,
   PersonalInformationModal,
+  ObservationForInformationInstitutionModal,
 } from "./components";
 
 export const EditDasRequestIntegration = ({
@@ -51,6 +52,18 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
       onRenderBody: () => (
         <PersonalInformationModal
           dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
+
+  const onObservationInstitutionData = () => {
+    onShowDasRequestModal({
+      title: "Agregar Observación",
+      width: "50%",
+      onRenderBody: () => (
+        <ObservationForInformationInstitutionModal
           onCloseDasRequestModal={onCloseDasRequestModal}
         />
       ),
@@ -97,7 +110,12 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
         <InstitutionInformation institution={dasRequest?.institution} />
       ),
       extra: (
-        <IconAction icon={faEdit} size={33} onClick={() => console.log(2)} />
+        <div style={{ display: "flex" }}>
+          <Button type="primary" onClick={onObservationInstitutionData}>
+            Agregar Observación
+          </Button>
+          <IconAction icon={faEdit} size={33} onClick={() => console.log(2)} />
+        </div>
       ),
     },
     {
