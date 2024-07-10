@@ -4,6 +4,8 @@ import {
   Col,
   Collapse,
   IconAction,
+  modalConfirm,
+  notification,
   Row,
   Title,
 } from "../../../../../../components";
@@ -21,24 +23,72 @@ import {
   useDasRequestModal,
   PersonalInformationModal,
 } from "./components";
+import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 
 export const EditDasRequestIntegration = ({
   dasRequest,
   onGoBack,
   onSaveDasApplication,
 }) => {
+  const [approvedLoading, setApprovedLoading] = useState(false);
+
+  const approvedDasRequest = async () => {
+    try {
+      setApprovedLoading(true);
+      await updateDasApplication(dasRequest.id, {
+        status: "approved",
+      });
+
+      notification({ type: "success" });
+    } catch (e) {
+      console.error("approvedDasRequestError:", e);
+    } finally {
+      setApprovedLoading(false);
+    }
+  };
+
+  const onConfirmApprovedDasRequest = (dasRequest) => {
+    const { headline, institution, applicant } = dasRequest;
+
+    if (
+      [
+        headline?.observation?.status,
+        institution?.observation?.status,
+        applicant?.observation?.status,
+      ].includes("pending")
+    ) {
+      return notification({
+        type: "warning",
+        title:
+          "Para realizar la aprobacion, no debe hacer observaciones en la solictud",
+      });
+    }
+
+    return modalConfirm({
+      title: "¿Estás seguro de que quieres aprobar la solicitud?",
+      onOk: () => approvedDasRequest(dasRequest),
+    });
+  };
+
   return (
     <DasRequestModalProvider>
       <EditDasRequest
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onSaveDasApplication={onSaveDasApplication}
+        onConfirmApprovedDasRequest={onConfirmApprovedDasRequest}
+        approvedLoading={approvedLoading}
       />
     </DasRequestModalProvider>
   );
 };
 
-const EditDasRequest = ({ dasRequest, onGoBack }) => {
+const EditDasRequest = ({
+  dasRequest,
+  onGoBack,
+  onConfirmApprovedDasRequest,
+  approvedLoading,
+}) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
 
@@ -134,7 +184,7 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
               type="primary"
               size="large"
               block
-              disabled={loadingUpload}
+              disabled={loadingUpload || approvedLoading}
               onClick={() => onGoBack()}
             >
               Cancelar
@@ -145,8 +195,15 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
               type="primary"
               size="large"
               block
-              loading={loadingUpload}
-              onClick={() => console.log("PROGRAMAR FUNCIONALIDAD")}
+              loading={loadingUpload || approvedLoading}
+              disabled={
+                !![
+                  dasRequest.headline?.observation?.status,
+                  dasRequest.institution?.observation?.status,
+                  dasRequest.applicant?.observation?.status,
+                ].includes("pending")
+              }
+              onClick={() => onConfirmApprovedDasRequest(dasRequest)}
             >
               Aprobar solicitud
             </Button>

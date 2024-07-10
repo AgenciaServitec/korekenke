@@ -67,9 +67,11 @@ export const DasRequestsTable = ({
     {
       title: "Estado",
       key: "status",
-      render: (_, dasRequest) => (
-        <Tag color="orange">{DasRequestStatus[dasRequest.status]?.name}</Tag>
-      ),
+      render: (_, dasRequest) => {
+        const requestStatus = DasRequestStatus[dasRequest.status];
+
+        return <Tag color={requestStatus.color}>{requestStatus?.name}</Tag>;
+      },
     },
     {
       title: "Opciones",
