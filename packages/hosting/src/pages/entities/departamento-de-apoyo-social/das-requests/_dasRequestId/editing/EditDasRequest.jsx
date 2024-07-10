@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Acl,
   Button,
   Col,
   Collapse,
@@ -32,11 +33,11 @@ export const EditDasRequestIntegration = ({
 }) => {
   const [approvedLoading, setApprovedLoading] = useState(false);
 
-  const approvedDasRequest = async () => {
+  const updateDasRequest = async (dasRequest, status) => {
     try {
       setApprovedLoading(true);
       await updateDasApplication(dasRequest.id, {
-        status: "approved",
+        status: status,
       });
 
       notification({ type: "success" });
@@ -46,6 +47,12 @@ export const EditDasRequestIntegration = ({
       setApprovedLoading(false);
     }
   };
+
+  const onConfirmDesApprovedDasRequest = (dasRequest) =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres desaprobar la solicitud?",
+      onOk: () => updateDasRequest(dasRequest, "pending"),
+    });
 
   const onConfirmApprovedDasRequest = (dasRequest) => {
     const { headline, institution, applicant } = dasRequest;
@@ -66,7 +73,7 @@ export const EditDasRequestIntegration = ({
 
     return modalConfirm({
       title: "¿Estás seguro de que quieres aprobar la solicitud?",
-      onOk: () => approvedDasRequest(dasRequest),
+      onOk: () => updateDasRequest(dasRequest, "approved"),
     });
   };
 
@@ -77,6 +84,7 @@ export const EditDasRequestIntegration = ({
         onGoBack={onGoBack}
         onSaveDasApplication={onSaveDasApplication}
         onConfirmApprovedDasRequest={onConfirmApprovedDasRequest}
+        onConfirmDesApprovedDasRequest={onConfirmDesApprovedDasRequest}
         approvedLoading={approvedLoading}
       />
     </DasRequestModalProvider>
@@ -87,6 +95,7 @@ const EditDasRequest = ({
   dasRequest,
   onGoBack,
   onConfirmApprovedDasRequest,
+  onConfirmDesApprovedDasRequest,
   approvedLoading,
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
@@ -190,24 +199,58 @@ const EditDasRequest = ({
               Cancelar
             </Button>
           </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Button
-              type="primary"
-              size="large"
-              block
-              loading={loadingUpload || approvedLoading}
-              disabled={
-                !![
-                  dasRequest.headline?.observation?.status,
-                  dasRequest.institution?.observation?.status,
-                  dasRequest.applicant?.observation?.status,
-                ].includes("pending")
-              }
-              onClick={() => onConfirmApprovedDasRequest(dasRequest)}
-            >
-              Aprobar solicitud
-            </Button>
-          </Col>
+          {dasRequest?.status === "approved" && (
+            <Col xs={24} sm={12} md={6}>
+              <Acl
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#noApproved"
+              >
+                <Button
+                  danger
+                  size="large"
+                  block
+                  loading={loadingUpload || approvedLoading}
+                  disabled={
+                    !![
+                      dasRequest.headline?.observation?.status,
+                      dasRequest.institution?.observation?.status,
+                      dasRequest.applicant?.observation?.status,
+                    ].includes("approved")
+                  }
+                  onClick={() => onConfirmDesApprovedDasRequest(dasRequest)}
+                >
+                  Desaprobar solicitud
+                </Button>
+              </Acl>
+            </Col>
+          )}
+          {dasRequest?.status === "pending" && (
+            <Col xs={24} sm={12} md={6}>
+              <Acl
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#approved"
+              >
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  loading={loadingUpload || approvedLoading}
+                  disabled={
+                    !![
+                      dasRequest.headline?.observation?.status,
+                      dasRequest.institution?.observation?.status,
+                      dasRequest.applicant?.observation?.status,
+                    ].includes("pending")
+                  }
+                  onClick={() => onConfirmApprovedDasRequest(dasRequest)}
+                >
+                  Aprobar solicitud
+                </Button>
+              </Acl>
+            </Col>
+          )}
         </Row>
       </div>
     </Container>
