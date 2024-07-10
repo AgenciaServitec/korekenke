@@ -1,14 +1,39 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoArmyPeru, LogoPrimary } from "../../../../../../images";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
+import dayjs from "dayjs";
+import {
+  DasRequestList,
+  DegreesArmy,
+  institutions,
+} from "../../../../../data-list";
+import { userFullName } from "../../../../../utils/users/userFullName2";
 
-export const StudyScholarshipAwardedByUniversitySheet = () => {
+export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
+  const { headline, createAt, familiar, institution, requestType } = data;
+
+  const createdDate = dayjs(createAt.toDate());
+
+  const emptyContent = "...............";
+
+  const findRequestName = DasRequestList.find(
+    (_requestType) => _requestType.id === requestType
+  ).name;
+
+  const findDegree = DegreesArmy.flatMap(
+    (degreeArmy) => degreeArmy.options
+  ).find((degree) => degree.value === headline.degree).label;
+
+  const institutionView = institutions[institution?.type].find(
+    (_institution) => _institution.id === institution?.id
+  ).name;
+
   return (
     <Container>
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Modelo de solicitud - Descuento por convenio en universidad</h2>
+          <h2>Media beca en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -16,8 +41,8 @@ export const StudyScholarshipAwardedByUniversitySheet = () => {
             <div className="request-type__text">
               <p>SOLICITA:</p>
               <p>
-                Beca de estudio otorgado por la Universidad
-                <span> Universidad Peruana de Ciencias Aplicadas</span>
+                {requestType && findRequestName}
+                <span> {institutionView || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -28,22 +53,23 @@ export const StudyScholarshipAwardedByUniversitySheet = () => {
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> Angel Emilio Gala Flores </span>, Grado
-              <span> General del Ejército </span> CIP
-              <span> 987054021 </span> en actual servicio
-              <span> Servicio text contenido </span> con Telf.
-              <span> 987654321 </span> ante Ud. con el debido respeto me
-              presento y expongo:
+              <span> {userFullName(headline)} </span>, Grado
+              <span> {findDegree || emptyContent} </span> CIP
+              <span> {headline?.cip || emptyContent} </span> en actual servicio
+              <span> {headline?.currentService || emptyContent} </span> con
+              Telf.
+              <span> {headline?.phoneNumber || emptyContent} </span> ante Ud.
+              con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
-              Que teniendo conocimiento del convenio de cooperación
-              interinstitucional con la Universidad
-              <span> Universidad Peruana de Ciencias Aplicadas </span>
+              Que teniendo conocimiento del convenio de cooperación con la
+              Universidad
+              <span> {institutionView || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
-              convenio en beneficio de mi <span> No se que va aquí </span> para
+              convenio en befeneficio de mi <span>{emptyContent}</span> para
               seguir estudios en la especialidad de
-              <span> Ingeniería de Sistemas</span>.
+              <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
               <p>
@@ -53,26 +79,30 @@ export const StudyScholarshipAwardedByUniversitySheet = () => {
             </div>
             <div className="request-content__footer">
               <p className="date">
-                Lima, <span>03</span> de <span>07</span> del <span>2024</span>
+                Lima, <span>{createdDate.format("DD")}</span> de{" "}
+                <span>{createdDate.format("MM")}</span> del
+                <span>{createdDate.format("YYYY")}</span>
               </p>
-              <div>
-                <div className="signature">
+              <div className="signature">
+                <div className="signature__item">
+                  <div></div>
                   <p>Firma</p>
                 </div>
-                <div className="signature">
+                <div className="signature__item">
+                  <div></div>
                   <p>Post Firma</p>
                 </div>
-                <div className="cip">
-                  <span>987654300</span>
-                  <p>CIP</p>
-                </div>
+              </div>
+              <div className="cip">
+                <span>{headline?.cip || ""}</span>
+                <p>CIP</p>
               </div>
             </div>
           </div>
         </div>
         <div className="footer">
           <div className="footer__documents-certificates">
-            <h3>Ingresantes</h3>
+            <h3>Requisitos: Ingresantes</h3>
             <ul>
               <li>02 Copias de Constancia de Ingreso de la Univ.</li>
               <li>02 Copias de boleta pago matricula de la Univ.</li>
@@ -82,7 +112,7 @@ export const StudyScholarshipAwardedByUniversitySheet = () => {
             </ul>
           </div>
           <div className="footer__documents-certificates">
-            <h3>Requisitos: Antiguos</h3>
+            <h3>Requisitos: Egresados</h3>
             <ul>
               <li>02 Copias de Consolidado de notas (último ciclo)</li>
               <li>02 Copias de la ultima boleta de pago de la Univ.</li>
@@ -123,9 +153,6 @@ const Container = styled.div`
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;
-        -webkit-text-stroke-width: 1px;
-        -webkit-text-stroke-color: #000;
-        color: red;
       }
 
       img {
@@ -202,6 +229,7 @@ const Container = styled.div`
           display: flex;
           flex-direction: column;
           align-items: flex-end;
+          gap: 1em;
 
           .date {
             margin-bottom: 1em;
@@ -211,26 +239,39 @@ const Container = styled.div`
           }
 
           & > div {
-            width: 12em;
             display: flex;
-            flex-direction: column;
-            gap: 1em;
           }
 
           .signature {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            height: 7em;
-            font-weight: 500;
-            p {
-              border-top: 1px dotted #000;
-              text-align: center;
-              padding-top: 0.5em;
+            gap: 1em;
+
+            &__item {
+              width: 12em;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+              font-weight: 500;
+
+              div {
+                height: 6em;
+              }
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+
+              p {
+                border-top: 1px dotted #000;
+                text-align: center;
+                padding-top: 0.5em;
+              }
             }
           }
 
           .cip {
+            width: 12em;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;

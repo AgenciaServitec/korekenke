@@ -32,16 +32,17 @@ export const DrawerLayout = ({
     category,
     subCategories = [],
     aclNames = []
-  ) =>
-    subCategories
+  ) => {
+    return subCategories
       .map((subCategory) => {
-        if (isEmpty(user.acls?.[category]?.[subCategory])) return false;
+        if (isEmpty(user?.acls?.[category]?.[subCategory])) return false;
 
         return user.acls?.[category]?.[subCategory].some((acl) =>
           includes(aclNames, acl)
         );
       })
       .some((acl) => acl);
+  };
 
   const onClickMenu = (pathname) => {
     onSetIsVisibleDrawer(false);
@@ -256,13 +257,21 @@ export const DrawerLayout = ({
       label: "Departamento de apoyo social (DAS)",
       key: "departamento-de-apoyo-social",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
-      isVisible: true,
+      isVisible: existsAclsInAclsOfUser(
+        "departamento-de-apoyo-social",
+        ["dasRequests"],
+        ["/das-requests", "/das-requests/new"]
+      ),
       children: [
         {
           key: "requests-list",
           icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
           label: "Lista de solicitudes",
-          isVisible: true,
+          isVisible: existsAclsInAclsOfUser(
+            "departamento-de-apoyo-social",
+            ["dasRequests"],
+            ["/das-requests"]
+          ),
           onClick: () =>
             onClickMenu("/entities/departamento-de-apoyo-social/das-requests"),
         },
@@ -270,7 +279,11 @@ export const DrawerLayout = ({
           label: "Realizar Solicitud",
           key: "application-request",
           icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
-          isVisible: true,
+          isVisible: existsAclsInAclsOfUser(
+            "departamento-de-apoyo-social",
+            ["dasRequests"],
+            ["/das-requests/new"]
+          ),
           onClick: () =>
             onClickMenu(
               "/entities/departamento-de-apoyo-social/das-requests/new"

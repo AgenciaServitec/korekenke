@@ -73,6 +73,17 @@
       "/organizational-climate-studies/sheets": "Pdf de Estudio del Clima Organizacional"
     }
   },
+  "departamento-de-apoyo-social": {
+    "label": "Departamento de apoyo social (DAS)",
+    "dasRequests": {
+      "label": "Solicitudes DAS",
+      "/das-requests": "Menu: Solicitudes",
+      "/das-requests/new": "Agregar solicitud",
+      "/das-requests/:dasRequestId": "Editar solicitud",
+      "/das-requests#delete": "Eliminar solicitud",
+      "/das-requests/:dasRequestId/sheets": "Pdfs de la solicitud"
+    }
+  },
   "jefatura-de-bienestar-del-ejercito": {
     "label": "Jefatura de bienestar del ejército",
     "correspondences": {

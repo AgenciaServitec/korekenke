@@ -1,0 +1,11 @@
+{
+  "entry": {
+    "name": "Ingresante"
+  },
+  "studying": {
+    "name": "Cursando"
+  },
+  "graduate": {
+    "name": "Egresado"
+  }
+}

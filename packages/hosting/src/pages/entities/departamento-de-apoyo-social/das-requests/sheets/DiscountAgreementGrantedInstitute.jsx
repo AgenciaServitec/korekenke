@@ -1,21 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../../images";
+import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
 
-export const InstituteStudyHalfScolarshipSheet = () => {
+export const DiscountAgreementGrantedInstituteSheet = () => {
   return (
     <Container>
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="" />
-          <h2>Modelo de solicitud - Media Beca de estudios en instituto</h2>
+          <h2>Descuento por convenio en instituto</h2>
           <img src={LogoPrimary} alt="" />
         </div>
         <div className="main">
           <div className="request">
             <span className="requests1">SOLICITA: </span>
-            <span className="scolarship">
-              MEDIA BECA DE ESTUDIO otorgada por el INSTITUTO ..........
+            <span className="discount">
+              Descuento por convenio otorgado por el INSTITUTO ..........
             </span>
           </div>
           <div className="general">
@@ -40,10 +40,10 @@ export const InstituteStudyHalfScolarshipSheet = () => {
           <span>
             Que teniendo conocimiento que el INSTITUTO
             ..........................................................................
-            por intermedio del COBIENE-DAS está otorgando BECA DE ESTUDIO por
-            convenio al personal militar y civil del Ejército, solicito a Ud.,
-            Mi General disponer a quien corresponda se me inscriba a fin de
-            obtener este beneficio, para
+            por intermedio del COBIENE-DAS está otorgando descuento por convenio
+            al personal militar y civil del Ejército, solicito a Ud., Mi General
+            disponer a quien corresponda se me inscriba a fin de obtener este
+            beneficio, para
             ....................................................................,
             en la especialidad o carrera de ...................................
             .
@@ -107,9 +107,6 @@ const Container = styled.div`
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;
-        -webkit-text-stroke-width: 1px;
-        -webkit-text-stroke-color: #000;
-        color: red;
       }
 
       img {
@@ -124,7 +121,7 @@ const Container = styled.div`
         gap: 1em;
         display: flex;
         width: 400px;
-        margin-left: 220px;
+        margin-left: auto;
         margin-top: 2em;
         margin-bottom: 2em;
         font-size: 16px;

@@ -1,11 +1,11 @@
 import React from "react";
-import { IconAction, Space, Table } from "../../../../components";
-import { userFullName } from "../../../../utils";
+import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
+import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
 import { faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { DasRequestStatus, institutions } from "../../../../data-list";
-import { Tag } from "antd";
+import { useNavigate } from "react-router";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -13,6 +13,10 @@ export const DasRequestsTable = ({
   onDeleteDasRequest,
   dasApplicationsLoading,
 }) => {
+  const navigate = useNavigate();
+
+  const navigateTo = (pathname) => navigate(pathname);
+
   const columns = [
     {
       title: "Fecha creación",
@@ -25,6 +29,15 @@ export const DasRequestsTable = ({
       title: "Titular",
       key: "name",
       render: (_, dasRequest) => userFullName(dasRequest.headline),
+    },
+    {
+      title: "Solicitud",
+      key: "requestType",
+      render: (_, dasRequest) => (
+        <div className="capitalize">
+          {findDasRequest(dasRequest.requestType)?.name}
+        </div>
+      ),
     },
     {
       title: "Institución",
@@ -63,23 +76,37 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
-          <IconAction
-            tooltipTitle="PDF"
-            icon={faFilePdf}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => console.log("PDF")}
-          />
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId/sheets"
+          >
+            <IconAction
+              tooltipTitle="PDF"
+              icon={faFilePdf}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() =>
+                navigateTo(`${dasRequest.id}/${dasRequest.requestType}/sheets`)
+              }
+            />
+          </Acl>
           {/*<IconAction*/}
           {/*  tooltipTitle="Editar"*/}
           {/*  icon={faEdit}*/}
           {/*  onClick={() => onEditDasRequest(dasRequest)}*/}
           {/*/>*/}
-          <IconAction
-            tooltipTitle="Eliminar"
-            icon={faTrash}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => onDeleteDasRequest(dasRequest)}
-          />
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests#delete"
+          >
+            <IconAction
+              tooltipTitle="Eliminar"
+              icon={faTrash}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() => onDeleteDasRequest(dasRequest)}
+            />
+          </Acl>
         </Space>
       ),
     },
