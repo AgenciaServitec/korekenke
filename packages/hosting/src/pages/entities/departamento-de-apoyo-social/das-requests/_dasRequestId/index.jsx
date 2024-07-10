@@ -18,6 +18,7 @@ import { Step4ApplicantDocuments } from "./Step4ApplicantDocuments";
 import { Step5DataSummary } from "./Step5DataSummary";
 import { Step6DasRequestSuccess } from "./Step6DasRequestSuccess";
 import { EditDasRequestIntegration } from "./EditDasRequest";
+import { omit } from "lodash";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -61,11 +62,12 @@ export const DasRequestIntegration = () => {
 
   const mapForm = (formData) => ({
     ...dasRequest,
+    isHeadline: formData.isHeadline,
     requestType: formData.requestType,
     status: isNew ? "pending" : dasRequest.status,
     headline: {
       id: authUser.id,
-      ...formData.headline,
+      ...omit(formData.headline, "phoneNumber"),
       phone: {
         prefix: "+51",
         number: formData?.headline?.phoneNumber,
