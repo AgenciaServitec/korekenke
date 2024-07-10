@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { faLock, faShield, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLock,
+  faPoll,
+  faShield,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { mediaQuery } from "../../styles";
@@ -111,6 +116,21 @@ export const HomeIntegration = () => {
             <h2>SEGURIDAD</h2>
             <ul>
               <li>Tu información 100% segura en nuestra base de datos</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faPoll} size="5x" />
+          </div>
+          <div>
+            <h2>Encuesta</h2>
+            <ul>
+              <li>
+                <Link to="/surveys/organizational-climate-studies/new">
+                  1. Realizar encuesta de estudio del clima organizacional
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
