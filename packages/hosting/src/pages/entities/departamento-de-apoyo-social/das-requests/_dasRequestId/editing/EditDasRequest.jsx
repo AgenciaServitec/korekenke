@@ -11,8 +11,8 @@ import styled from "styled-components";
 import { mediaQuery } from "../../../../../../styles";
 import {
   ApplicantInformation,
-  InstitutionInformationForm,
-  PersonalInformationForm,
+  InstitutionInformation,
+  PersonalInformation,
   RequestType,
 } from "../steps/components";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -74,7 +74,7 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
           Informacion personal
         </Title>
       ),
-      children: <PersonalInformationForm dasRequest={dasRequest} />,
+      children: <PersonalInformation dasRequest={dasRequest} />,
       extra: (
         <IconAction
           icon={faEdit}
@@ -94,7 +94,7 @@ const EditDasRequest = ({ dasRequest, onGoBack }) => {
         </Title>
       ),
       children: (
-        <InstitutionInformationForm institution={dasRequest?.institution} />
+        <InstitutionInformation institution={dasRequest?.institution} />
       ),
       extra: (
         <IconAction icon={faEdit} size={33} onClick={() => console.log(2)} />
