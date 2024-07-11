@@ -12,6 +12,9 @@ import {
   TextArea,
 } from "../../../../../../../components";
 import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { orderBy } from "lodash";
+import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
+import { v1 as uuidv1 } from "uuid";
 
 export const ObservationForInstitucionalDataModal = ({
   dasRequest,
@@ -19,13 +22,23 @@ export const ObservationForInstitucionalDataModal = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
-  const mapForm = (formData) => ({
+  const observationsMap = (formData) => ({
     institution: {
       ...dasRequest.institution,
-      observation: {
-        message: formData.observation.message,
-        status: dasRequest.institution?.observation?.status || "pending",
-      },
+      observations: orderBy(
+        [
+          ...(dasRequest?.institution?.observations || []),
+          {
+            id: uuidv1(),
+            message: formData.observation.message,
+            status: "pending",
+            isDeleted: false,
+            createAt: firestoreTimestamp.now(),
+          },
+        ],
+        ["createAt"],
+        "desc"
+      ),
     },
   });
 
@@ -33,13 +46,14 @@ export const ObservationForInstitucionalDataModal = ({
     try {
       setLoading(true);
 
-      await updateDasApplication(dasRequest.id, mapForm(formData));
+      await updateDasApplication(dasRequest.id, observationsMap(formData));
 
       onCloseDasRequestModal();
 
-      notification({ type: "success" });
+      notification({ type: "success", message: "Observacion a sido guardada" });
     } catch (e) {
       console.error(e);
+      notification({ type: "error", message: "Error al guardar observacion" });
     } finally {
       setLoading(false);
     }
@@ -87,7 +101,7 @@ const ObservationForInstitucionalData = ({
             defaultValue=""
             render={({ field: { onChange, value, name } }) => (
               <TextArea
-                label="Observación"
+                label="Mensaje"
                 name={name}
                 value={value}
                 rows={5}
@@ -110,7 +124,7 @@ const ObservationForInstitucionalData = ({
             disabled={loading}
             loading={loading}
           >
-            Enviar
+            Agregar
           </Button>
         </Col>
       </Row>
