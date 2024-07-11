@@ -10,7 +10,6 @@ import {
   notification,
   Row,
   Title,
-  Alert,
 } from "../../../../../../components";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../../../styles";
@@ -20,7 +19,6 @@ import {
   PersonalInformation,
   RequestType,
 } from "../steps/components";
-import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import {
   DasRequestModalProvider,
