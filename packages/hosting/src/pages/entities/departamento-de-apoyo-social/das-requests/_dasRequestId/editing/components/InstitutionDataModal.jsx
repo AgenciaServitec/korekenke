@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Button,
-  Card,
   Col,
   Form,
   Input,
-  InputNumber,
+  modalConfirm,
   notification,
   Row,
   Select,
@@ -22,9 +21,6 @@ export const InstitutionDataModal = ({
   onCloseDasRequestModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [processType, setProcessType] = useState(
-    dasRequest?.institution?.processType
-  );
 
   const mapForm = (formData) => ({
     ...dasRequest,
@@ -38,14 +34,12 @@ export const InstitutionDataModal = ({
     },
     applicant: {
       documents:
-        processType === dasRequest?.institution?.processType
+        formData.institution.processType ===
+        dasRequest?.institution?.processType
           ? { ...dasRequest?.applicant?.documents }
           : null,
     },
   });
-
-  const changeTypeProcess =
-    processType !== dasRequest?.institution?.processType;
 
   const updateInstitutionData = async (formData) => {
     try {
@@ -53,20 +47,10 @@ export const InstitutionDataModal = ({
 
       await updateDasApplication(dasRequest.id, mapForm(formData));
 
+      dasRequest.institution.processType === formData.institution.processType &&
+        notification({ type: "success" });
+
       onCloseDasRequestModal();
-
-      changeTypeProcess &&
-        notification({
-          type: "warning",
-          title: "Datos actualizados correctamente",
-          description:
-            "Suba nuevamente sus documentos debido al cambio de proceso",
-        });
-
-      !changeTypeProcess &&
-        notification({
-          type: "success",
-        });
     } catch (e) {
       console.error(e);
     } finally {
@@ -77,7 +61,6 @@ export const InstitutionDataModal = ({
   return (
     <InstitutionData
       dasRequest={dasRequest}
-      onSetProcessType={setProcessType}
       loading={loading}
       onCloseDasRequestModal={onCloseDasRequestModal}
       onUpdateInstitutionData={updateInstitutionData}
@@ -87,7 +70,6 @@ export const InstitutionDataModal = ({
 
 const InstitutionData = ({
   dasRequest,
-  onSetProcessType,
   loading,
   onCloseDasRequestModal,
   onUpdateInstitutionData,
@@ -104,7 +86,6 @@ const InstitutionData = ({
     formState: { errors },
     handleSubmit,
     control,
-    watch,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
@@ -116,10 +97,6 @@ const InstitutionData = ({
     resetForm();
   }, []);
 
-  useEffect(() => {
-    onSetProcessType(watch("institution.processType"));
-  }, [watch("institution.processType")]);
-
   const resetForm = () => {
     reset({
       institution: {
@@ -130,12 +107,29 @@ const InstitutionData = ({
     });
   };
 
-  const onSubmit = (formData) => {
+  const onConfirmEditInstitutionData = (formData) => {
+    if (
+      dasRequest.institution.processType !== formData.institution.processType
+    ) {
+      return modalConfirm({
+        title:
+          "Al cambiar el tipo de proceso tiene que volver a subir sus documentos",
+        onOk: () => {
+          onUpdateInstitutionData(formData);
+          notification({
+            type: "warning",
+            title: "Datos actualizados correctamente",
+            description: "No olvide subir nuevamente sus documentos.",
+          });
+        },
+      });
+    }
+
     onUpdateInstitutionData(formData);
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onConfirmEditInstitutionData)}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Controller
