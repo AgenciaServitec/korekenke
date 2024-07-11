@@ -9,6 +9,7 @@ import {
   notification,
   Row,
   Title,
+  Alert,
 } from "../../../../../../components";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../../../styles";
@@ -18,11 +19,12 @@ import {
   PersonalInformation,
   RequestType,
 } from "../steps/components";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import {
   DasRequestModalProvider,
   useDasRequestModal,
   PersonalInformationModal,
+  ObservationPersonalInformationModal,
 } from "./components";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 
@@ -115,6 +117,18 @@ const EditDasRequest = ({
       ),
     });
   };
+  const onObservationPersonalInformation = (dasRequest) => {
+    onShowDasRequestModal({
+      title: "Observacion",
+      width: "50%",
+      onRenderBody: () => (
+        <ObservationPersonalInformationModal
+          dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
 
   const items = [
     {
@@ -133,16 +147,38 @@ const EditDasRequest = ({
           Informacion personal
         </Title>
       ),
-      children: <PersonalInformation dasRequest={dasRequest} />,
+
+      children: (
+        <>
+          <PersonalInformation dasRequest={dasRequest} />
+          {dasRequest.headline?.observation && (
+            <>
+              <br />
+              <Alert
+                message="Observación"
+                description={dasRequest.headline.observation.message}
+                type="info"
+                showIcon
+              />
+            </>
+          )}
+        </>
+      ),
       extra: (
-        <IconAction
-          icon={faEdit}
-          size={33}
-          onClick={() => {
-            console.log("OPEN");
-            return onEditPersonalInformation(dasRequest);
-          }}
-        />
+        <div style={{ display: "flex", gap: "0.5em" }}>
+          {!dasRequest.headline?.observation && (
+            <IconAction
+              icon={faEye}
+              size={33}
+              onClick={() => onObservationPersonalInformation(dasRequest)}
+            />
+          )}
+          <IconAction
+            icon={faEdit}
+            size={33}
+            onClick={() => onEditPersonalInformation(dasRequest)}
+          />
+        </div>
       ),
     },
     {
