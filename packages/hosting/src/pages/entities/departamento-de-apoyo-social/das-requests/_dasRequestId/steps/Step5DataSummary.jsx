@@ -15,8 +15,8 @@ import {
 import { mediaQuery } from "../../../../../../styles";
 import {
   ApplicantInformation,
-  InstitutionInformationForm,
-  PersonalInformationForm,
+  InstitutionInformation,
+  PersonalInformation,
   RequestType,
 } from "./components";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -50,7 +50,7 @@ export const Step5DataSummary = ({
           Informacion personal
         </Title>
       ),
-      children: <PersonalInformationForm dasRequest={dasRequest} />,
+      children: <PersonalInformation dasRequest={dasRequest} />,
       extra: (
         <IconAction icon={faEdit} size={33} onClick={() => onGoToStep(1)} />
       ),
@@ -63,7 +63,7 @@ export const Step5DataSummary = ({
         </Title>
       ),
       children: (
-        <InstitutionInformationForm institution={dasRequest?.institution} />
+        <InstitutionInformation institution={dasRequest?.institution} />
       ),
       extra: (
         <IconAction icon={faEdit} size={33} onClick={() => onGoToStep(2)} />

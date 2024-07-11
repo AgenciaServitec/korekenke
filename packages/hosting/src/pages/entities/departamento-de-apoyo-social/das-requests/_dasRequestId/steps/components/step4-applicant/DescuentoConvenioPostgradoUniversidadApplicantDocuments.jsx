@@ -14,10 +14,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../../hooks";
 
 export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
+  isNew,
   onPrevStep,
   dasRequest,
-  loadingStep4,
-  onSaveApplicantDocumentsStep4,
+  loading,
+  onSaveApplicantDocuments,
 }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
 
@@ -87,7 +88,7 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
   const isHeadline = dasRequest?.isHeadline;
 
   const onSubmit = (formData) => {
-    onSaveApplicantDocumentsStep4(mapFormData(formData));
+    onSaveApplicantDocuments(mapFormData(formData));
   };
 
   return (
@@ -277,10 +278,10 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
               type="primary"
               size="large"
               block
-              disabled={loadingStep4 || uploadingImage}
+              disabled={loading || uploadingImage}
               onClick={onPrevStep}
             >
-              Atras
+              {isNew ? "Atras" : "Cancelar"}
             </Button>
           </Col>
           <Col xs={24} sm={12} md={6}>
@@ -289,10 +290,10 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
               size="large"
               block
               htmlType="submit"
-              disabled={loadingStep4 || uploadingImage}
-              loading={loadingStep4}
+              disabled={loading || uploadingImage}
+              loading={loading}
             >
-              Siguiente
+              {isNew ? "Siguiente" : "Guardar"}
             </Button>
           </Col>
         </Row>

@@ -33,16 +33,20 @@ export const NoDocuments = ({ onPrevStep, onNextStep }) => {
             </Row>
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Button type="primary" size="large" block onClick={onPrevStep}>
-            Atras
-          </Button>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Button type="primary" size="large" block onClick={onNextStep}>
-            Siguiente
-          </Button>
-        </Col>
+        {onPrevStep && (
+          <Col xs={24} sm={12} md={6}>
+            <Button type="primary" size="large" block onClick={onPrevStep}>
+              Atras
+            </Button>
+          </Col>
+        )}
+        {onNextStep && (
+          <Col xs={24} sm={12} md={6}>
+            <Button type="primary" size="large" block onClick={onNextStep}>
+              Siguiente
+            </Button>
+          </Col>
+        )}
       </Row>
     </Container>
   );

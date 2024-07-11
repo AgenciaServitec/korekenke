@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Acl,
-  Alert,
   Button,
   Col,
   Collapse,
@@ -21,6 +20,7 @@ import {
 } from "../steps/components";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import {
+  ApplicantDocumentsModal,
   DasRequestModalProvider,
   InstitutionDataModal,
   ObservationForInstitucionalDataModal,
@@ -33,6 +33,7 @@ import { ObservationsList } from "./components/ObservationsList";
 import { useDevice } from "../../../../../../hooks";
 
 export const EditDasRequestIntegration = ({
+  isNew,
   dasRequest,
   onGoBack,
   onSaveDasApplication,
@@ -86,6 +87,7 @@ export const EditDasRequestIntegration = ({
   return (
     <DasRequestModalProvider>
       <EditDasRequest
+        isNew={isNew}
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onSaveDasApplication={onSaveDasApplication}
@@ -98,6 +100,7 @@ export const EditDasRequestIntegration = ({
 };
 
 const EditDasRequest = ({
+  isNew,
   dasRequest,
   onGoBack,
   onConfirmApprovedDasRequest,
@@ -161,6 +164,22 @@ const EditDasRequest = ({
       ),
     });
   };
+
+  const onEditApplicantDocuments = (dasRequest) => {
+    onShowDasRequestModal({
+      title: "Documentos",
+      width: `${isMobile ? "80%" : "50%"}`,
+      onRenderBody: () => (
+        <ApplicantDocumentsModal
+          isNew={isNew}
+          dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
+
+  console.log({ dasRequest });
 
   const items = [
     {
@@ -244,13 +263,32 @@ const EditDasRequest = ({
           Documentos de aplicante
         </Title>
       ),
-      children: <ApplicantInformation applicant={dasRequest?.applicant} />,
+      children: (
+        <>
+          <ApplicantInformation applicant={dasRequest?.applicant} />
+          <ObservationsList
+            section="applicant"
+            observations={dasRequest?.applicant?.observations}
+            dasRequest={dasRequest}
+          />
+        </>
+      ),
       extra: (
-        <IconAction icon={faEdit} size={33} onClick={() => console.log(3)} />
+        <div style={{ display: "flex", gap: "0.5em" }}>
+          {/*<IconAction*/}
+          {/*  icon={faEye}*/}
+          {/*  size={33}*/}
+          {/*  onClick={() => onObservationInstitutionData(dasRequest)}*/}
+          {/*/>*/}
+          <IconAction
+            icon={faEdit}
+            size={33}
+            onClick={() => onEditApplicantDocuments(dasRequest)}
+          />
+        </div>
       ),
     },
   ];
-
   return (
     <Container>
       <div className="card-wrapper">

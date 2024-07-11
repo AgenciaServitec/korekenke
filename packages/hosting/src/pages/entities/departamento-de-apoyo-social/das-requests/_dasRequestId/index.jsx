@@ -243,6 +243,7 @@ const DasRequest = ({
           ) : (
             <Col span={24}>
               <EditDasRequestIntegration
+                isNew={isNew}
                 dasRequest={dasRequest}
                 onGoBack={onGoBack}
               />
