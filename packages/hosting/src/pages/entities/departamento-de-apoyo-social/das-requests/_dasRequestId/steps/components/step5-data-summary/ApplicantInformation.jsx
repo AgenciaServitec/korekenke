@@ -14,7 +14,7 @@ export const ApplicantInformation = ({ applicant }) => {
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <div className="images-wrapper">
-            {Object.entries(documents).map(([key, values]) => {
+            {Object.entries(documents || {}).map(([key, values]) => {
               return (
                 values?.label &&
                 values?.url && (
