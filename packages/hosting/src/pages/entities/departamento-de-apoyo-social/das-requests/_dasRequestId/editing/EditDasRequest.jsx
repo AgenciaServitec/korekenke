@@ -22,13 +22,14 @@ import {
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import {
   DasRequestModalProvider,
-  useDasRequestModal,
-  PersonalInformationModal,
-  ObservationPersonalInformationModal,
-  ObservationForInstitucionalDataModal,
   InstitutionDataModal,
+  ObservationForInstitucionalDataModal,
+  ObservationPersonalInformationModal,
+  PersonalInformationModal,
+  useDasRequestModal,
 } from "./components";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
+import { ObservationsList } from "./components/ObservationsList";
 
 export const EditDasRequestIntegration = ({
   dasRequest,
@@ -119,6 +120,7 @@ const EditDasRequest = ({
       ),
     });
   };
+
   const onObservationPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
       title: "Observacion",
@@ -179,28 +181,20 @@ const EditDasRequest = ({
       children: (
         <>
           <PersonalInformation dasRequest={dasRequest} />
-          {dasRequest.headline?.observation && (
-            <>
-              <br />
-              <Alert
-                message="Observación"
-                description={dasRequest.headline.observation.message}
-                type="info"
-                showIcon
-              />
-            </>
-          )}
+          <ObservationsList
+            section="headline"
+            observations={dasRequest?.headline?.observations}
+            dasRequest={dasRequest}
+          />
         </>
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          {!dasRequest.headline?.observation && (
-            <IconAction
-              icon={faEye}
-              size={33}
-              onClick={() => onObservationPersonalInformation(dasRequest)}
-            />
-          )}
+          <IconAction
+            icon={faEye}
+            size={33}
+            onClick={() => onObservationPersonalInformation(dasRequest)}
+          />
           <IconAction
             icon={faEdit}
             size={33}
@@ -235,13 +229,11 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex" }}>
-          {!dasRequest.institution?.observation && (
-            <IconAction
-              icon={faEye}
-              size={33}
-              onClick={() => onObservationInstitutionData(dasRequest)}
-            />
-          )}
+          <IconAction
+            icon={faEye}
+            size={33}
+            onClick={() => onObservationInstitutionData(dasRequest)}
+          />
           <IconAction
             icon={faEdit}
             size={33}

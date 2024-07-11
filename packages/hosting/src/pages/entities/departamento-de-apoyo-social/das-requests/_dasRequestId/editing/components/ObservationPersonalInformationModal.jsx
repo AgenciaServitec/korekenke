@@ -12,6 +12,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
 import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { v1 as uuidv1 } from "uuid";
+import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
+import { orderBy } from "lodash";
 
 export const ObservationPersonalInformationModal = ({
   dasRequest,
@@ -34,21 +37,33 @@ export const ObservationPersonalInformationModal = ({
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
-  const mapform = (formData) => ({
-    headline: {
-      ...dasRequest.headline,
-      observation: {
-        status: "pending",
-        message: formData.observation.message,
+  const observationsMap = (formData) => {
+    return {
+      headline: {
+        ...dasRequest.headline,
+        observations: orderBy(
+          [
+            ...(dasRequest?.headline?.observations || []),
+            {
+              id: uuidv1(),
+              message: formData.observation.message,
+              status: "pending",
+              isDeleted: false,
+              createAt: firestoreTimestamp.now(),
+            },
+          ],
+          ["createAt"],
+          "desc"
+        ),
       },
-    },
-  });
+    };
+  };
 
   const onSubmit = async (formData) => {
     try {
       setLoading(true);
 
-      await updateDasApplication(dasRequest.id, mapform(formData));
+      await updateDasApplication(dasRequest.id, observationsMap(formData));
       onCloseDasRequestModal();
 
       notification({

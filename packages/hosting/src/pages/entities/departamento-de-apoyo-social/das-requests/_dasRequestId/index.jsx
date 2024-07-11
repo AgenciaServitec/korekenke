@@ -5,7 +5,6 @@ import { useAuthentication } from "../../../../../providers";
 import { useNavigate, useParams } from "react-router";
 import {
   addDasApplication,
-  fetchDasApplication,
   getDasApplicationId,
   updateDasApplication,
 } from "../../../../../firebase/collections/dasApplications";
@@ -19,6 +18,7 @@ import { Step5DataSummary } from "./steps/Step5DataSummary";
 import { Step6DasRequestSuccess } from "./steps/Step6DasRequestSuccess";
 import { EditDasRequestIntegration } from "./editing/EditDasRequest";
 import { omit } from "lodash";
+import { firestore } from "../../../../../firebase";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -52,11 +52,10 @@ export const DasRequestIntegration = () => {
     isNew
       ? setDasRequest({ id: getDasApplicationId() })
       : (async () => {
-          fetchDasApplication(dasRequestId).then((response) => {
-            if (!response) return onGoBack();
-            setDasRequest(response);
-            return;
-          });
+          await firestore
+            .collection("das-applications")
+            .doc(dasRequestId)
+            .onSnapshot((snapshot) => setDasRequest(snapshot.data()));
         })();
   }, []);
 
