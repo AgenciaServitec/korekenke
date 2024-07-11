@@ -31,6 +31,7 @@ import {
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 import { ObservationsList } from "./components/ObservationsList";
 import { useDevice } from "../../../../../../hooks";
+import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -179,7 +180,18 @@ const EditDasRequest = ({
     });
   };
 
-  console.log({ dasRequest });
+  const onObservationApplicantDocuments = (dasRequest) => {
+    onShowDasRequestModal({
+      title: "Agregar Observación",
+      width: `${isMobile ? "80%" : "50%"}`,
+      onRenderBody: () => (
+        <ObservationForApplicantDocumentsModal
+          dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
 
   const items = [
     {
@@ -275,11 +287,11 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          {/*<IconAction*/}
-          {/*  icon={faEye}*/}
-          {/*  size={33}*/}
-          {/*  onClick={() => onObservationInstitutionData(dasRequest)}*/}
-          {/*/>*/}
+          <IconAction
+            icon={faEye}
+            size={33}
+            onClick={() => onObservationApplicantDocuments(dasRequest)}
+          />
           <IconAction
             icon={faEdit}
             size={33}
