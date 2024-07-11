@@ -11,12 +11,14 @@ import {
 } from "../../../../../firebase/collections/dasApplications";
 import styled from "styled-components";
 import { Steps } from "antd";
-import { Step1TypeRequest } from "./Step1TypeRequest";
-import { Step2PersonalInformation } from "./Step2PersonalInformation";
-import { Step3InstitutionInformation } from "./Step3InstitutionInformation";
-import { Step4ApplicantDocuments } from "./Step4ApplicantDocuments";
-import { Step5DataSummary } from "./Step5DataSummary";
-import { Step6DasRequestSuccess } from "./Step6DasRequestSuccess";
+import { Step1TypeRequest } from "./steps/Step1TypeRequest";
+import { Step2PersonalInformation } from "./steps/Step2PersonalInformation";
+import { Step3InstitutionInformation } from "./steps/Step3InstitutionInformation";
+import { Step4ApplicantDocuments } from "./steps/Step4ApplicantDocuments";
+import { Step5DataSummary } from "./steps/Step5DataSummary";
+import { Step6DasRequestSuccess } from "./steps/Step6DasRequestSuccess";
+import { EditDasRequestIntegration } from "./editing/EditDasRequest";
+import { omit } from "lodash";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -60,14 +62,15 @@ export const DasRequestIntegration = () => {
 
   const mapForm = (formData) => ({
     ...dasRequest,
+    isHeadline: formData.isHeadline,
     requestType: formData.requestType,
     status: isNew ? "pending" : dasRequest.status,
     headline: {
       id: authUser.id,
-      ...formData.headline,
+      ...omit(formData.headline, "phoneNumber"),
       phone: {
         prefix: "+51",
-        number: formData.headline.phoneNumber,
+        number: formData?.headline?.phoneNumber,
       },
     },
     familiar: formData?.familiar || null,
@@ -86,7 +89,7 @@ export const DasRequestIntegration = () => {
         ? await addDasApplication(assignCreateProps(mapForm(formData)))
         : await updateDasApplication(
             dasRequest.id,
-            assignUpdateProps(mapForm(formData))
+            assignUpdateProps(formData)
           );
 
       notification({ type: "success" });
@@ -100,27 +103,33 @@ export const DasRequestIntegration = () => {
 
   return (
     <DasRequest
+      isNew={isNew}
+      dasRequest={dasRequest}
       user={authUser}
       currentStep={currentStep}
       onNextStep={onNextStep}
       onPrevStep={onPrevStep}
       onGoToStep={onGoToStep}
       onGoToHome={onGoToHome}
+      onGoBack={onGoBack}
       loading={loading}
-      saveDasApplication={saveDasApplication}
+      onSaveDasApplication={saveDasApplication}
     />
   );
 };
 
 const DasRequest = ({
+  isNew,
+  dasRequest,
   user,
   currentStep,
   onNextStep,
   onPrevStep,
   onGoToStep,
   onGoToHome,
+  onGoBack,
   loading,
-  saveDasApplication,
+  onSaveDasApplication,
 }) => {
   const stepsItems = [
     {
@@ -183,7 +192,7 @@ const DasRequest = ({
             onPrevStep={onPrevStep}
             onGoToStep={onGoToStep}
             loading={loading}
-            onSaveDasApplication={saveDasApplication}
+            onSaveDasApplication={onSaveDasApplication}
           />
         );
       case 5:
@@ -214,21 +223,32 @@ const DasRequest = ({
     >
       <Container>
         <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Title level={2} align="center">
-              Solicitud DAS
-            </Title>
-          </Col>
-          <Col span={24} md={20} style={{ margin: "auto" }}>
-            <Steps
-              labelPlacement="vertical"
-              current={currentStep}
-              items={stepsItems}
-            />
-            <br />
-            <br />
-          </Col>
-          <Col span={24}>{showStep()}</Col>
+          {isNew ? (
+            <>
+              <Col span={24}>
+                <Title level={2} align="center">
+                  Solicitud DAS
+                </Title>
+              </Col>
+              <Col span={24} md={20} style={{ margin: "auto" }}>
+                <Steps
+                  labelPlacement="vertical"
+                  current={currentStep}
+                  items={stepsItems}
+                />
+                <br />
+                <br />
+              </Col>
+              <Col span={24}>{showStep()}</Col>
+            </>
+          ) : (
+            <Col span={24}>
+              <EditDasRequestIntegration
+                dasRequest={dasRequest}
+                onGoBack={onGoBack}
+              />
+            </Col>
+          )}
         </Row>
       </Container>
     </Acl>
