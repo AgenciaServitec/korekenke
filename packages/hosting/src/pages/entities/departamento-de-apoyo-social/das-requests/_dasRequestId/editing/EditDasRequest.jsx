@@ -217,17 +217,21 @@ const EditDasRequest = ({
         </Title>
       ),
       children: (
-        <>
-          <InstitutionInformation institution={dasRequest?.institution} />
-          {dasRequest.institution?.observation && (
-            <Alert
-              message="Tienes una observación pendiente"
-              type="warning"
-              showIcon
-              style={{ margin: "auto" }}
-            />
-          )}
-        </>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <InstitutionInformation institution={dasRequest?.institution} />
+          </Col>
+          <Col span={24}>
+            {dasRequest.institution?.observation && (
+              <Alert
+                message={`Observación: ${dasRequest.institution?.observation?.message}`}
+                type="warning"
+                showIcon
+                style={{ margin: "auto" }}
+              />
+            )}
+          </Col>
+        </Row>
       ),
       extra: (
         <div style={{ display: "flex" }}>
