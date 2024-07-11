@@ -87,7 +87,7 @@ export const ObservationPersonalInformationModal = ({
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <TextArea
-                label="Observacion"
+                label="Mensaje"
                 name={name}
                 value={value}
                 onChange={onChange}
@@ -101,18 +101,7 @@ export const ObservationPersonalInformationModal = ({
         </Col>
       </Row>
       <Row justify="end" gutter={[16, 16]}>
-        <Col xs={24} sm={12} md={6}>
-          <Button
-            type="primary"
-            size="large"
-            block
-            disabled={loading}
-            onClick={onCloseDasRequestModal}
-          >
-            Cancelar
-          </Button>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col span={24}>
           <Button
             type="primary"
             size="large"
@@ -121,7 +110,7 @@ export const ObservationPersonalInformationModal = ({
             disabled={loading}
             loading={loading}
           >
-            Guardar
+            Agregar
           </Button>
         </Col>
       </Row>
