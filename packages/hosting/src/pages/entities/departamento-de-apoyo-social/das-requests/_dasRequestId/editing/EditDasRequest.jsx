@@ -225,7 +225,7 @@ const EditDasRequest = ({
             {dasRequest.institution?.observation && (
               <Alert
                 message={`Observación: ${dasRequest.institution?.observation?.message}`}
-                type="warning"
+                type="info"
                 showIcon
                 style={{ margin: "auto" }}
               />

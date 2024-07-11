@@ -22,7 +22,9 @@ export const InstitutionDataModal = ({
   onCloseDasRequestModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [processType, setProcessType] = useState("");
+  const [processType, setProcessType] = useState(
+    dasRequest?.institution?.processType
+  );
 
   const mapForm = (formData) => ({
     ...dasRequest,
@@ -42,6 +44,9 @@ export const InstitutionDataModal = ({
     },
   });
 
+  const changeTypeProcess =
+    processType !== dasRequest?.institution?.processType;
+
   const updateInstitutionData = async (formData) => {
     try {
       setLoading(true);
@@ -50,7 +55,18 @@ export const InstitutionDataModal = ({
 
       onCloseDasRequestModal();
 
-      notification({ type: "success" });
+      changeTypeProcess &&
+        notification({
+          type: "warning",
+          title: "Datos actualizados correctamente",
+          description:
+            "Suba nuevamente sus documentos debido al cambio de proceso",
+        });
+
+      !changeTypeProcess &&
+        notification({
+          type: "success",
+        });
     } catch (e) {
       console.error(e);
     } finally {
