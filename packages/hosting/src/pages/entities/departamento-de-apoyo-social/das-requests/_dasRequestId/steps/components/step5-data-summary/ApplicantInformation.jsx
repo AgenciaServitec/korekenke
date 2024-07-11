@@ -7,6 +7,8 @@ export const ApplicantInformation = ({ applicant }) => {
 
   const { documents } = applicant;
 
+  if (!documents) return null;
+
   return (
     <Container>
       <Row gutter={[16, 16]}>
