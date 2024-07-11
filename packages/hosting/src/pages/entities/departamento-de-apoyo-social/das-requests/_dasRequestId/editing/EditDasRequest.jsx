@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Acl,
+  Alert,
   Button,
   Col,
   Collapse,
@@ -9,7 +10,6 @@ import {
   notification,
   Row,
   Title,
-  Alert,
 } from "../../../../../../components";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../../../styles";
@@ -25,6 +25,8 @@ import {
   useDasRequestModal,
   PersonalInformationModal,
   ObservationPersonalInformationModal,
+  ObservationForInstitucionalDataModal,
+  InstitutionDataModal,
 } from "./components";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 
@@ -130,6 +132,32 @@ const EditDasRequest = ({
     });
   };
 
+  const onEditInstitutionData = (dasRequest) => {
+    onShowDasRequestModal({
+      title: "Agregar Observación",
+      width: "50%",
+      onRenderBody: () => (
+        <InstitutionDataModal
+          dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
+
+  const onObservationInstitutionData = (dasRequest) => {
+    onShowDasRequestModal({
+      title: "Agregar Observación",
+      width: "50%",
+      onRenderBody: () => (
+        <ObservationForInstitucionalDataModal
+          dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
+
   const items = [
     {
       key: 1,
@@ -189,10 +217,37 @@ const EditDasRequest = ({
         </Title>
       ),
       children: (
-        <InstitutionInformation institution={dasRequest?.institution} />
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <InstitutionInformation institution={dasRequest?.institution} />
+          </Col>
+          <Col span={24}>
+            {dasRequest.institution?.observation && (
+              <Alert
+                message={`Observación: ${dasRequest.institution?.observation?.message}`}
+                type="info"
+                showIcon
+                style={{ margin: "auto" }}
+              />
+            )}
+          </Col>
+        </Row>
       ),
       extra: (
-        <IconAction icon={faEdit} size={33} onClick={() => console.log(2)} />
+        <div style={{ display: "flex" }}>
+          {!dasRequest.institution?.observation && (
+            <IconAction
+              icon={faEye}
+              size={33}
+              onClick={() => onObservationInstitutionData(dasRequest)}
+            />
+          )}
+          <IconAction
+            icon={faEdit}
+            size={33}
+            onClick={() => onEditInstitutionData(dasRequest)}
+          />
+        </div>
       ),
     },
     {
