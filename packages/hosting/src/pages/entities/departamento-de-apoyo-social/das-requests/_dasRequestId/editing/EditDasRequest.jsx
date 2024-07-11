@@ -30,6 +30,7 @@ import {
 } from "./components";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 import { ObservationsList } from "./components/ObservationsList";
+import { useDevice } from "../../../../../../hooks";
 
 export const EditDasRequestIntegration = ({
   dasRequest,
@@ -105,6 +106,7 @@ const EditDasRequest = ({
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
+  const { isMobile } = useDevice();
 
   const [loadingUpload, setLoadingUpload] = useState(false);
 
@@ -150,7 +152,7 @@ const EditDasRequest = ({
   const onObservationInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
       title: "Agregar Observación",
-      width: "50%",
+      width: `${isMobile ? "80%" : "50%"}`,
       onRenderBody: () => (
         <ObservationForInstitucionalDataModal
           dasRequest={dasRequest}
@@ -211,24 +213,17 @@ const EditDasRequest = ({
         </Title>
       ),
       children: (
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <InstitutionInformation institution={dasRequest?.institution} />
-          </Col>
-          <Col span={24}>
-            {dasRequest.institution?.observation && (
-              <Alert
-                message={`Observación: ${dasRequest.institution?.observation?.message}`}
-                type="info"
-                showIcon
-                style={{ margin: "auto" }}
-              />
-            )}
-          </Col>
-        </Row>
+        <>
+          <InstitutionInformation institution={dasRequest?.institution} />
+          <ObservationsList
+            section="institution"
+            observations={dasRequest?.institution?.observations}
+            dasRequest={dasRequest}
+          />
+        </>
       ),
       extra: (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", gap: "0.5em" }}>
           <IconAction
             icon={faEye}
             size={33}
