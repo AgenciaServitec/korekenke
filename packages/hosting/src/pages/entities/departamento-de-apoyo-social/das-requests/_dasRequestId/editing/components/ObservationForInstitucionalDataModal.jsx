@@ -1,10 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../../../../hooks";
 import {
-  Alert,
   Button,
   Col,
   Form,
@@ -14,45 +13,23 @@ import {
 } from "../../../../../../../components";
 import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
 
-export const ObservationForInformationInstitutionModal = ({
+export const ObservationForInstitucionalDataModal = ({
   dasRequest,
   onCloseDasRequestModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  console.log("Das Request: ", { dasRequest });
-
-  const schema = yup.object({
-    observation: yup.object({
-      message: yup.string().required(),
-    }),
-  });
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    control,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      isHeadline: true,
-    },
-  });
-
-  const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   const mapForm = (formData) => ({
     institution: {
       ...dasRequest.institution,
       observation: {
         message: formData.observation.message,
-        status: "pending",
+        status: dasRequest.institution?.observation?.status || "pending",
       },
     },
   });
 
-  console.log("Observación: ", dasRequest?.institution?.observation);
-
-  const onAddObservation = async (formData) => {
+  const addObservationForInstitucionalData = async (formData) => {
     try {
       setLoading(true);
 
@@ -68,8 +45,36 @@ export const ObservationForInformationInstitutionModal = ({
     }
   };
 
+  return (
+    <ObservationForInstitucionalData
+      onAddObservationForInstitucionalData={addObservationForInstitucionalData}
+      loading={loading}
+    />
+  );
+};
+
+const ObservationForInstitucionalData = ({
+  onAddObservationForInstitucionalData,
+  loading,
+}) => {
+  const schema = yup.object({
+    observation: yup.object({
+      message: yup.string().required(),
+    }),
+  });
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
   const onSubmit = (formData) => {
-    onAddObservation(formData);
+    onAddObservationForInstitucionalData(formData);
   };
 
   return (

@@ -24,10 +24,10 @@ import {
   DasRequestModalProvider,
   useDasRequestModal,
   PersonalInformationModal,
-  ObservationForInformationInstitutionModal,
+  ObservationForInstitucionalDataModal,
+  InstitutionDataModal,
 } from "./components";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
-import { InstitutionModalInformationModal } from "./components/InstitutionModalInformationModal";
 
 export const EditDasRequestIntegration = ({
   dasRequest,
@@ -119,12 +119,12 @@ const EditDasRequest = ({
     });
   };
 
-  const onEditInstitutionData = () => {
+  const onEditInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
       title: "Agregar Observación",
       width: "50%",
       onRenderBody: () => (
-        <InstitutionModalInformationModal
+        <InstitutionDataModal
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
         />
@@ -132,12 +132,12 @@ const EditDasRequest = ({
     });
   };
 
-  const onObservationInstitutionData = () => {
+  const onObservationInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
       title: "Agregar Observación",
       width: "50%",
       onRenderBody: () => (
-        <ObservationForInformationInstitutionModal
+        <ObservationForInstitucionalDataModal
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
         />
@@ -200,10 +200,14 @@ const EditDasRequest = ({
             <IconAction
               icon={faEye}
               size={33}
-              onClick={onObservationInstitutionData}
+              onClick={() => onObservationInstitutionData(dasRequest)}
             />
           )}
-          <IconAction icon={faEdit} size={33} onClick={onEditInstitutionData} />
+          <IconAction
+            icon={faEdit}
+            size={33}
+            onClick={() => onEditInstitutionData(dasRequest)}
+          />
         </div>
       ),
     },
