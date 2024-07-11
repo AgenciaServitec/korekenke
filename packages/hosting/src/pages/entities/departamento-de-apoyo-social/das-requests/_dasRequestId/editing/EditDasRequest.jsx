@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Acl,
+  Alert,
   Button,
   Col,
   Collapse,
@@ -18,7 +19,7 @@ import {
   PersonalInformation,
   RequestType,
 } from "../steps/components";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import {
   DasRequestModalProvider,
   useDasRequestModal,
@@ -26,6 +27,7 @@ import {
   ObservationForInformationInstitutionModal,
 } from "./components";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
+import { InstitutionModalInformationModal } from "./components/InstitutionModalInformationModal";
 
 export const EditDasRequestIntegration = ({
   dasRequest,
@@ -117,12 +119,26 @@ const EditDasRequest = ({
     });
   };
 
+  const onEditInstitutionData = () => {
+    onShowDasRequestModal({
+      title: "Agregar Observación",
+      width: "50%",
+      onRenderBody: () => (
+        <InstitutionModalInformationModal
+          dasRequest={dasRequest}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+        />
+      ),
+    });
+  };
+
   const onObservationInstitutionData = () => {
     onShowDasRequestModal({
       title: "Agregar Observación",
       width: "50%",
       onRenderBody: () => (
         <ObservationForInformationInstitutionModal
+          dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
         />
       ),
@@ -166,14 +182,28 @@ const EditDasRequest = ({
         </Title>
       ),
       children: (
-        <InstitutionInformation institution={dasRequest?.institution} />
+        <>
+          <InstitutionInformation institution={dasRequest?.institution} />
+          {dasRequest.institution?.observation && (
+            <Alert
+              message="Tienes una observación pendiente"
+              type="warning"
+              showIcon
+              style={{ margin: "auto" }}
+            />
+          )}
+        </>
       ),
       extra: (
         <div style={{ display: "flex" }}>
-          <Button type="primary" onClick={onObservationInstitutionData}>
-            Agregar Observación
-          </Button>
-          <IconAction icon={faEdit} size={33} onClick={() => console.log(2)} />
+          {!dasRequest.institution?.observation && (
+            <IconAction
+              icon={faEye}
+              size={33}
+              onClick={onObservationInstitutionData}
+            />
+          )}
+          <IconAction icon={faEdit} size={33} onClick={onEditInstitutionData} />
         </div>
       ),
     },

@@ -1,29 +1,36 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../../../../hooks";
 import {
+  Alert,
   Button,
   Col,
   Form,
+  notification,
   Row,
   TextArea,
 } from "../../../../../../../components";
+import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
 
 export const ObservationForInformationInstitutionModal = ({
+  dasRequest,
   onCloseDasRequestModal,
-  onSaveDasApplication,
 }) => {
+  const [loading, setLoading] = useState(false);
+  console.log("Das Request: ", { dasRequest });
+
   const schema = yup.object({
-    observation: yup.string().required(),
+    observation: yup.object({
+      message: yup.string().required(),
+    }),
   });
 
   const {
     formState: { errors },
     handleSubmit,
     control,
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -33,20 +40,36 @@ export const ObservationForInformationInstitutionModal = ({
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
-  useEffect(() => {
-    resetForm();
-  }, []);
+  const mapForm = (formData) => ({
+    institution: {
+      ...dasRequest.institution,
+      observation: {
+        message: formData.observation.message,
+        status: "pending",
+      },
+    },
+  });
 
-  const resetForm = () => {
-    reset({
-      observation: "",
-    });
+  console.log("Observación: ", dasRequest?.institution?.observation);
+
+  const onAddObservation = async (formData) => {
+    try {
+      setLoading(true);
+
+      await updateDasApplication(dasRequest.id, mapForm(formData));
+
+      onCloseDasRequestModal();
+
+      notification({ type: "success" });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSubmit = (formData) => {
-    onSaveDasApplication(formData);
-    console.log(formData);
-    onCloseDasRequestModal();
+    onAddObservation(formData);
   };
 
   return (
@@ -54,7 +77,7 @@ export const ObservationForInformationInstitutionModal = ({
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Controller
-            name="observation"
+            name="observation.message"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value, name } }) => (
@@ -79,8 +102,8 @@ export const ObservationForInformationInstitutionModal = ({
             size="large"
             block
             htmlType="submit"
-            disabled={""}
-            loading={""}
+            disabled={loading}
+            loading={loading}
           >
             Enviar
           </Button>
