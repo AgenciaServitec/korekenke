@@ -136,8 +136,8 @@
       ]
     },
     {
-      "label": "Profesión",
-      "code": "questions.profession",
+      "label": "Personal",
+      "code": "questions.personal",
       "description": "",
       "options": [
         {
