@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   Button,
@@ -23,6 +23,8 @@ export const PersonalInformationForm = ({
   loadingStep2,
   onSavePersonalInformationStep2,
 }) => {
+  const [relationship, setRelationship] = useState("");
+
   const schema = yup.object({
     headline: yup.object({
       firstName: yup.string().required(),
@@ -40,11 +42,16 @@ export const PersonalInformationForm = ({
           firstName: yup.string().required(),
           paternalSurname: yup.string().required(),
           maternalSurname: yup.string().required(),
-          cif: yup.string().min(9).max(9).required(),
           email: yup.string().email().required(),
           relationship: yup.string().required(),
+          cif:
+            relationship === "brother"
+              ? yup.string().min(9).max(9).nullable().notRequired()
+              : yup.string().min(9).max(9).required(),
         }),
   });
+
+  console.log("Parentesco: ", relationship);
 
   const {
     formState: { errors },
@@ -324,14 +331,23 @@ export const PersonalInformationForm = ({
                   </Col>
                   <Col span={24} md={8}>
                     <Controller
-                      name="familiar.cif"
+                      name="familiar.relationship"
                       control={control}
                       render={({ field: { onChange, value, name } }) => (
-                        <InputNumber
-                          label="N° CIF"
+                        <Select
+                          label="Parentesco"
                           name={name}
                           value={value}
-                          onChange={onChange}
+                          options={Object.entries(Relationships).map(
+                            ([key, value]) => ({
+                              label: value,
+                              value: key,
+                            })
+                          )}
+                          onChange={(value) => {
+                            setRelationship(value);
+                            onChange(value);
+                          }}
                           error={error(name)}
                           helperText={errorMessage(name)}
                           required={required(name)}
@@ -356,29 +372,25 @@ export const PersonalInformationForm = ({
                       )}
                     />
                   </Col>
-                  <Col span={24} md={8}>
-                    <Controller
-                      name="familiar.relationship"
-                      control={control}
-                      render={({ field: { onChange, value, name } }) => (
-                        <Select
-                          label="Parentesco"
-                          name={name}
-                          value={value}
-                          options={Object.entries(Relationships).map(
-                            ([key, value]) => ({
-                              label: value,
-                              value: key,
-                            })
-                          )}
-                          onChange={onChange}
-                          error={error(name)}
-                          helperText={errorMessage(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
+                  {relationship !== "brother" && (
+                    <Col span={24} md={8}>
+                      <Controller
+                        name="familiar.cif"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <InputNumber
+                            label="N° CIF"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            helperText={errorMessage(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  )}
                 </Row>
               </Card>
             </Col>
