@@ -26,7 +26,7 @@ export const DasRequestsListIntegration = () => {
 
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
     useCollectionData(
-      ["super_admin"].includes(authUser.roleCode)
+      ["super_admin", "manager", "department_boss"].includes(authUser.roleCode)
         ? dasApplicationsRef || null
         : dasApplicationsRef.where("headline.id", "==", authUser.id)
     );
