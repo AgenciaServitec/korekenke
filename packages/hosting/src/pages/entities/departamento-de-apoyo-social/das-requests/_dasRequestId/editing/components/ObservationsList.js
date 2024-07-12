@@ -70,7 +70,7 @@ export const ObservationsList = ({
 
   return (
     <Container>
-      <Divider />
+      {observationsView.length > 0 && <Divider />}
       {observationsView.map((observation, index) => (
         <div key={index}>
           <Alert
@@ -101,7 +101,7 @@ export const ObservationsList = ({
                   subCategory="dasRequests"
                   name="/das-requests/:dasRequestId#resolverObservation"
                 >
-                  {observation.status === "pending" &&
+                  {observation.status === "pending" && (
                     <Button
                       size="small"
                       type="primary"
@@ -109,7 +109,7 @@ export const ObservationsList = ({
                     >
                       Resolver
                     </Button>
-                  }
+                  )}
                 </Acl>
                 <Acl
                   redirect

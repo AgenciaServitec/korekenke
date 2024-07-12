@@ -46,7 +46,7 @@ const Container = styled.div`
 
     .item-card {
       border: 1px solid #a1a0a0;
-      border-radius: 1em;
+      border-radius: 0.7em;
       display: grid;
       grid-template-rows: auto 1fr;
       overflow: hidden;

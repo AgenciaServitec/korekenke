@@ -9,6 +9,7 @@ import {
   notification,
   Row,
   Title,
+  Tag,
 } from "../../../../../../components";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../../../styles";
@@ -32,6 +33,8 @@ import { updateDasApplication } from "../../../../../../firebase/collections/das
 import { ObservationsList } from "./components/ObservationsList";
 import { useDevice } from "../../../../../../hooks";
 import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
+import { DasRequestList } from "../../../../../../data-list";
+import { findDasRequest } from "../../../../../../utils";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -315,12 +318,21 @@ const EditDasRequest = ({
       ),
     },
   ];
+
   return (
     <Container>
       <div className="card-wrapper">
         <Row justify="end" gutter={[16, 16]}>
           <Col span={24}>
-            <Title level={2}>Solicitud DAS</Title>
+            <Title level={2}>
+              Solicitud: {findDasRequest(dasRequest?.requestType)?.name}
+              &nbsp;
+              <Tag
+                color={dasRequest.status === "pending" ? "orange" : "success"}
+              >
+                {dasRequest.status === "pending" ? "Pendiente" : "Aprovado"}
+              </Tag>
+            </Title>
           </Col>
           <Col span={24}>
             <Collapse
@@ -342,57 +354,47 @@ const EditDasRequest = ({
             </Button>
           </Col>
           {dasRequest?.status === "approved" && (
-            <Col xs={24} sm={12} md={6}>
-              <Acl
-                category="departamento-de-apoyo-social"
-                subCategory="dasRequests"
-                name="/das-requests/:dasRequestId#noApproved"
-              >
-                <Button
-                  danger
-                  size="large"
-                  block
-                  loading={loadingUpload || approvedLoading}
-                  disabled={
-                    !![
-                      dasRequest.headline?.observation?.status,
-                      dasRequest.institution?.observation?.status,
-                      dasRequest.applicant?.observation?.status,
-                    ].includes("approved")
-                  }
-                  onClick={() => onConfirmDesApprovedDasRequest(dasRequest)}
-                >
-                  Desaprobar solicitud
-                </Button>
-              </Acl>
-            </Col>
+            <Acl
+              category="departamento-de-apoyo-social"
+              subCategory="dasRequests"
+              name="/das-requests/:dasRequestId#noApproved"
+            >
+              {dasRequest.status === "approved" && (
+                <Col xs={24} sm={12} md={6}>
+                  <Button
+                    danger
+                    size="large"
+                    block
+                    loading={loadingUpload || approvedLoading}
+                    disabled={dasRequest.status === "pending"}
+                    onClick={() => onConfirmDesApprovedDasRequest(dasRequest)}
+                  >
+                    Desaprobar solicitud
+                  </Button>
+                </Col>
+              )}
+            </Acl>
           )}
-          {dasRequest?.status === "pending" && (
-            <Col xs={24} sm={12} md={6}>
-              <Acl
-                category="departamento-de-apoyo-social"
-                subCategory="dasRequests"
-                name="/das-requests/:dasRequestId#approved"
-              >
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#approved"
+          >
+            {dasRequest?.status === "pending" && (
+              <Col xs={24} sm={12} md={6}>
                 <Button
                   type="primary"
                   size="large"
                   block
                   loading={loadingUpload || approvedLoading}
-                  disabled={
-                    !![
-                      dasRequest.headline?.observation?.status,
-                      dasRequest.institution?.observation?.status,
-                      dasRequest.applicant?.observation?.status,
-                    ].includes("pending")
-                  }
+                  disabled={dasRequest.status === "approved"}
                   onClick={() => onConfirmApprovedDasRequest(dasRequest)}
                 >
                   Aprobar solicitud
                 </Button>
-              </Acl>
-            </Col>
-          )}
+              </Col>
+            )}
+          </Acl>
         </Row>
       </div>
     </Container>
@@ -401,6 +403,7 @@ const EditDasRequest = ({
 
 const Container = styled.div`
   width: 100%;
+
   .card-wrapper {
     width: 100%;
     margin: auto;
