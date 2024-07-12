@@ -153,6 +153,10 @@ const InstitutionData = ({
                     label: "Egresado",
                     value: "graduate",
                   },
+                  {
+                    label: "Antiguo",
+                    value: "ancient",
+                  },
                 ]}
                 onChange={onChange}
                 error={error(name)}
