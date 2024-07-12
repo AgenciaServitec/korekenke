@@ -43,6 +43,7 @@ export const DasRequestIntegration = () => {
   };
   const onGoToStep = (index) => setCurrentStep(index);
 
+  const onNavigateTo = (pathname) => navigate(pathname);
   const onGoToHome = () => navigate("/home");
   const onGoBack = () => navigate(-1);
 
@@ -111,6 +112,7 @@ export const DasRequestIntegration = () => {
       onGoToStep={onGoToStep}
       onGoToHome={onGoToHome}
       onGoBack={onGoBack}
+      onNavigateTo={onNavigateTo}
       loading={loading}
       onSaveDasApplication={saveDasApplication}
     />
@@ -127,6 +129,7 @@ const DasRequest = ({
   onGoToStep,
   onGoToHome,
   onGoBack,
+  onNavigateTo,
   loading,
   onSaveDasApplication,
 }) => {
@@ -246,6 +249,7 @@ const DasRequest = ({
                 isNew={isNew}
                 dasRequest={dasRequest}
                 onGoBack={onGoBack}
+                onNavigateTo={onNavigateTo}
               />
             </Col>
           )}

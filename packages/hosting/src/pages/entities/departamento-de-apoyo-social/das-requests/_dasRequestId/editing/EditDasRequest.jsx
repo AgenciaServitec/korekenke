@@ -8,8 +8,9 @@ import {
   modalConfirm,
   notification,
   Row,
-  Title,
+  Spinner,
   Tag,
+  Title,
 } from "../../../../../../components";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../../../styles";
@@ -19,7 +20,7 @@ import {
   PersonalInformation,
   RequestType,
 } from "../steps/components";
-import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import {
   ApplicantDocumentsModal,
   DasRequestModalProvider,
@@ -33,14 +34,14 @@ import { updateDasApplication } from "../../../../../../firebase/collections/das
 import { ObservationsList } from "./components/ObservationsList";
 import { useDevice } from "../../../../../../hooks";
 import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
-import { DasRequestList } from "../../../../../../data-list";
 import { findDasRequest } from "../../../../../../utils";
+import { isEmpty } from "lodash";
 
 export const EditDasRequestIntegration = ({
   isNew,
   dasRequest,
   onGoBack,
-  onSaveDasApplication,
+  onNavigateTo,
 }) => {
   const [approvedLoading, setApprovedLoading] = useState(false);
 
@@ -69,11 +70,10 @@ export const EditDasRequestIntegration = ({
     const { headline, institution, applicant } = dasRequest;
 
     if (
-      [
-        headline?.observation?.status,
-        institution?.observation?.status,
-        applicant?.observation?.status,
-      ].includes("pending")
+      headline?.observations.length +
+        institution?.observations.length +
+        applicant?.observations.length >
+      0
     ) {
       return notification({
         type: "warning",
@@ -88,13 +88,15 @@ export const EditDasRequestIntegration = ({
     });
   };
 
+  if (isEmpty(dasRequest)) return <Spinner height="80vh" />;
+
   return (
     <DasRequestModalProvider>
       <EditDasRequest
         isNew={isNew}
         dasRequest={dasRequest}
         onGoBack={onGoBack}
-        onSaveDasApplication={onSaveDasApplication}
+        onNavigateTo={onNavigateTo}
         onConfirmApprovedDasRequest={onConfirmApprovedDasRequest}
         onConfirmDesApprovedDasRequest={onConfirmDesApprovedDasRequest}
         approvedLoading={approvedLoading}
@@ -107,6 +109,7 @@ const EditDasRequest = ({
   isNew,
   dasRequest,
   onGoBack,
+  onNavigateTo,
   onConfirmApprovedDasRequest,
   onConfirmDesApprovedDasRequest,
   approvedLoading,
@@ -114,8 +117,6 @@ const EditDasRequest = ({
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
   const { isMobile } = useDevice();
-
-  const [loadingUpload, setLoadingUpload] = useState(false);
 
   const onEditPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
@@ -304,11 +305,18 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          <IconAction
-            icon={faEye}
-            size={33}
-            onClick={() => onObservationApplicantDocuments(dasRequest)}
-          />
+          <Acl
+            redirect
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#addObservation"
+          >
+            <IconAction
+              icon={faEye}
+              size={33}
+              onClick={() => onObservationApplicantDocuments(dasRequest)}
+            />
+          </Acl>
           <IconAction
             icon={faEdit}
             size={33}
@@ -324,15 +332,33 @@ const EditDasRequest = ({
       <div className="card-wrapper">
         <Row justify="end" gutter={[16, 16]}>
           <Col span={24}>
-            <Title level={2}>
-              Solicitud: {findDasRequest(dasRequest?.requestType)?.name}
-              &nbsp;
-              <Tag
-                color={dasRequest.status === "pending" ? "orange" : "success"}
-              >
-                {dasRequest.status === "pending" ? "Pendiente" : "Aprovado"}
-              </Tag>
-            </Title>
+            <div className="header-wrapper">
+              <Title level={2}>
+                Solicitud: {findDasRequest(dasRequest?.requestType)?.name}
+                &nbsp;
+                <Tag
+                  color={dasRequest.status === "pending" ? "orange" : "success"}
+                >
+                  {dasRequest.status === "pending" ? "Pendiente" : "Aprovado"}
+                </Tag>
+              </Title>
+              <div className="actions-items">
+                <Acl
+                  category="departamento-de-apoyo-social"
+                  subCategory="dasRequests"
+                  name="/das-requests/:dasRequestId/sheets"
+                >
+                  <IconAction
+                    tooltipTitle="PDF"
+                    icon={faFilePdf}
+                    styled={{ color: (theme) => theme.colors.error }}
+                    onClick={() =>
+                      onNavigateTo(`${dasRequest.requestType}/sheets`)
+                    }
+                  />
+                </Acl>
+              </div>
+            </div>
           </Col>
           <Col span={24}>
             <Collapse
@@ -347,7 +373,7 @@ const EditDasRequest = ({
               type="primary"
               size="large"
               block
-              disabled={loadingUpload || approvedLoading}
+              disabled={approvedLoading}
               onClick={() => onGoBack()}
             >
               Cancelar
@@ -365,7 +391,7 @@ const EditDasRequest = ({
                     danger
                     size="large"
                     block
-                    loading={loadingUpload || approvedLoading}
+                    loading={approvedLoading}
                     disabled={dasRequest.status === "pending"}
                     onClick={() => onConfirmDesApprovedDasRequest(dasRequest)}
                   >
@@ -386,7 +412,7 @@ const EditDasRequest = ({
                   type="primary"
                   size="large"
                   block
-                  loading={loadingUpload || approvedLoading}
+                  loading={approvedLoading}
                   disabled={dasRequest.status === "approved"}
                   onClick={() => onConfirmApprovedDasRequest(dasRequest)}
                 >
@@ -409,6 +435,13 @@ const Container = styled.div`
     margin: auto;
     ${mediaQuery.minDesktop} {
       width: 70%;
+    }
+
+    .header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+      flex-wrap: wrap;
     }
 
     .ant-collapse-header {
