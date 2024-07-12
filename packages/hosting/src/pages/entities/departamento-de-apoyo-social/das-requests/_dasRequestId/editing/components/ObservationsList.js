@@ -43,17 +43,7 @@ export const ObservationsList = ({
     return modalConfirm({
       title: "¿Estás seguro de que quieres cerrar esta observación?",
       onOk: async () => {
-        const observation = findObservation(observationId);
-        const observations = excludeObservation(observationId);
-
-        if (!observation) return;
-
-        const newObservations = [
-          ...observations,
-          { ...observation, isDeleted: true },
-        ];
-
-        await updatedObservations(newObservations);
+        await updatedObservations(excludeObservation(observationId));
       },
     });
   };
@@ -104,13 +94,15 @@ export const ObservationsList = ({
             showIcon
             action={
               <Space direction="vertical">
-                <Button
-                  size="small"
-                  type="primary"
-                  onClick={() => onResolverObservation(observation.id)}
-                >
-                  Resolver
-                </Button>
+                {observation.status === "pending" && (
+                  <Button
+                    size="small"
+                    type="primary"
+                    onClick={() => onResolverObservation(observation.id)}
+                  >
+                    Resolver
+                  </Button>
+                )}
                 {observation.status === "resolved" && (
                   <Button
                     size="small"
