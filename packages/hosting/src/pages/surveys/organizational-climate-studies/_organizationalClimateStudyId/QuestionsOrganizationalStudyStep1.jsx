@@ -21,7 +21,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
       age: yup.number().required(),
       gender: yup.number().required(),
       occupationalGroup: yup.number().required(),
-      profession: yup.string().required(),
+      personal: yup.string().required(),
       condition: yup.number().required(),
       dwellTime: yup.number().required(),
       timeInCurrentPosition: yup.number().required(),
@@ -53,7 +53,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
         age: stepData1?.questions?.age || "",
         gender: stepData1?.questions?.gender || "",
         occupationalGroup: stepData1?.questions?.occupationalGroup || "",
-        profession: stepData1?.questions?.profession || "",
+        personal: stepData1?.questions?.personal || "",
         condition: stepData1?.questions?.condition || "",
         dwellTime: stepData1?.questions?.dwellTime || "",
         timeInCurrentPosition:
