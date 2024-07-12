@@ -223,11 +223,18 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          <IconAction
-            icon={faEye}
-            size={33}
-            onClick={() => onObservationPersonalInformation(dasRequest)}
-          />
+          <Acl
+            redirect
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#addObservation"
+          >
+            <IconAction
+              icon={faEye}
+              size={33}
+              onClick={() => onObservationPersonalInformation(dasRequest)}
+            />
+          </Acl>
           <IconAction
             icon={faEdit}
             size={33}
@@ -255,11 +262,18 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          <IconAction
-            icon={faEye}
-            size={33}
-            onClick={() => onObservationInstitutionData(dasRequest)}
-          />
+          <Acl
+            redirect
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#addObservation"
+          >
+            <IconAction
+              icon={faEye}
+              size={33}
+              onClick={() => onObservationInstitutionData(dasRequest)}
+            />
+          </Acl>
           <IconAction
             icon={faEdit}
             size={33}

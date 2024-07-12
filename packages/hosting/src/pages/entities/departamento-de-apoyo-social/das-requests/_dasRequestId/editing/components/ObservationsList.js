@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Acl,
   Alert,
   Button,
   Divider,
@@ -94,24 +95,38 @@ export const ObservationsList = ({
             showIcon
             action={
               <Space direction="vertical">
-                {observation.status === "pending" && (
-                  <Button
-                    size="small"
-                    type="primary"
-                    onClick={() => onResolverObservation(observation.id)}
-                  >
-                    Resolver
-                  </Button>
-                )}
-                {observation.status === "resolved" && (
-                  <Button
-                    size="small"
-                    danger
-                    onClick={() => onCloseObservation(observation.id)}
-                  >
-                    Cerrar
-                  </Button>
-                )}
+                <Acl
+                  redirect
+                  category="departamento-de-apoyo-social"
+                  subCategory="dasRequests"
+                  name="/das-requests/:dasRequestId#resolverObservation"
+                >
+                  {observation.status === "pending" &&
+                    <Button
+                      size="small"
+                      type="primary"
+                      onClick={() => onResolverObservation(observation.id)}
+                    >
+                      Resolver
+                    </Button>
+                  }
+                </Acl>
+                <Acl
+                  redirect
+                  category="departamento-de-apoyo-social"
+                  subCategory="dasRequests"
+                  name="/das-requests/:dasRequestId#closeObservation"
+                >
+                  {observation.status === "resolved" && (
+                    <Button
+                      size="small"
+                      danger
+                      onClick={() => onCloseObservation(observation.id)}
+                    >
+                      Cerrar
+                    </Button>
+                  )}
+                </Acl>
               </Space>
             }
           />

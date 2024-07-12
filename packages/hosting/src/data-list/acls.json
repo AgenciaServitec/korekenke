@@ -83,7 +83,10 @@
       "/das-requests/:dasRequestId#approved": "Aprobar solicitud",
       "/das-requests/:dasRequestId#noApproved": "No aprobar solicitud",
       "/das-requests#delete": "Eliminar solicitud",
-      "/das-requests/:dasRequestId/sheets": "Pdfs de la solicitud"
+      "/das-requests/:dasRequestId/sheets": "Pdfs de la solicitud",
+      "/das-requests/:dasRequestId#addObservation": "Solicitud: Agregar observación",
+      "/das-requests/:dasRequestId#resolverObservation": "Solicitud: Resolver observación",
+      "/das-requests/:dasRequestId#closeObservation": "Solicitud: Cerrar observación"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {
