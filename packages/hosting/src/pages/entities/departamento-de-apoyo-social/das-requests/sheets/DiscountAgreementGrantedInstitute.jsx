@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
-import {QRCode} from "../../../../../components";
+import { QRCode } from "../../../../../components";
 
 export const DiscountAgreementGrantedInstituteSheet = () => {
   return (
