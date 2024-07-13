@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Image } from "../../../../../../../../components";
+import { Col, Image, Row } from "../../../../../../../../components";
 import styled from "styled-components";
 
 export const ApplicantInformation = ({ applicant }) => {

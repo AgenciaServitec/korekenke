@@ -174,7 +174,7 @@ export const OrganizationalClimateStudiesSheet = ({
 const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-size: 11px;
 
   .sheet {
     .header {
