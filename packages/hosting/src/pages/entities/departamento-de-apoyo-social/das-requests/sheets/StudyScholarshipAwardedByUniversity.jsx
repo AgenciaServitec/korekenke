@@ -8,7 +8,7 @@ import {
   institutions,
 } from "../../../../../data-list";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import {QRCode} from "../../../../../components";
+import { QRCode } from "../../../../../components";
 
 export const StudyScholarshipAwardedByUniversitySheet = ({ data }) => {
   const { headline, createAt, familiar, institution, requestType } = data;

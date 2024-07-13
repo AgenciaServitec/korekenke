@@ -8,7 +8,7 @@ import {
   institutions,
 } from "../../../../../data-list";
 import { userFullName } from "../../../../../utils";
-import {QRCode} from "../../../../../components";
+import { QRCode } from "../../../../../components";
 
 export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({ data }) => {
   const { headline, createAt, familiar, institution, requestType } = data;
