@@ -8,6 +8,7 @@ import {
   institutions,
 } from "../../../../../data-list";
 import { userFullName } from "../../../../../utils/users/userFullName2";
+import { QRCode } from "../../../../../components";
 
 export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
   const { headline, createAt, familiar, institution, requestType } = data;
@@ -101,26 +102,14 @@ export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
           </div>
         </div>
         <div className="footer">
-          <div className="footer__documents-certificates">
-            <h3>Requisitos: Ingresantes</h3>
-            <ul>
-              <li>02 Copias de Constancia de Ingreso de la Univ.</li>
-              <li>02 Copias de boleta pago matricula de la Univ.</li>
-              <li>02 Copias de Liquidación de Haberes del Titular</li>
-              <li>02 Copias de CIP y DNI (Titular)</li>
-              <li>02 Copias de CIF y DNI (Familiar)</li>
-            </ul>
-          </div>
-          <div className="footer__documents-certificates">
-            <h3>Requisitos: Egresados</h3>
-            <ul>
-              <li>02 Copias de Consolidado de notas (último ciclo)</li>
-              <li>02 Copias de la ultima boleta de pago de la Univ.</li>
-              <li>02 Copias de Liquidación de Haberes del Titular</li>
-              <li>02 Copias de CIP y DNI (Titular)</li>
-              <li>02 Copias de CIF y DNI (Familiar)</li>
-            </ul>
-          </div>
+          <QRCode
+            value={window.location.href}
+            icon={LogoArmyPeru}
+            iconSize={25}
+            type="svg"
+            size={110}
+            bordered={false}
+          />
         </div>
       </div>
     </Container>
