@@ -9,13 +9,13 @@ import {
   Row,
   TextArea,
   UploadMultiple,
-} from "../../../components";
+} from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../../hooks";
+import { useFormUtils } from "../../../../hooks";
 import { v4 as uuidv4 } from "uuid";
-import { updateDasApplication } from "../../../firebase/collections/dasApplications";
+import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
 
 export const ReplyDasRequestModal = ({
   visibleModal,

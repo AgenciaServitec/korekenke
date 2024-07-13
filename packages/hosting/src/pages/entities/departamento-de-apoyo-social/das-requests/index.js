@@ -14,7 +14,8 @@ import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
 import { useAuthentication } from "../../../../providers";
-import { ReplyDasRequestModal } from "../ReplyDasRequest";
+import { ReplyDasRequestModal } from "./ReplyDasRequest";
+import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ export const DasRequestsListIntegration = () => {
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
+  const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
+    useState(false);
   const [dasRequest, setDasRequest] = useState(null);
 
   const dasApplicationsRef = firestore
@@ -54,8 +57,13 @@ export const DasRequestsListIntegration = () => {
   };
 
   const onAddReplyDasRequest = (dasRequest) => {
-    setVisibleReplyModal(true);
     setDasRequest(dasRequest);
+    setVisibleReplyModal(true);
+  };
+
+  const onShowReplyDasRequestInformation = (dasRequest) => {
+    setDasRequest(dasRequest);
+    setVisibleReplyInformationModal(true);
   };
 
   return (
@@ -65,9 +73,12 @@ export const DasRequestsListIntegration = () => {
       onDeleteDasRequest={onConfirmDeleteDasRequest}
       dasApplicationsLoading={dasApplicationsLoading}
       dasRequest={dasRequest}
-      onAddReplyDasRequest={onAddReplyDasRequest}
       visibleReplyModal={visibleReplyModal}
-      setVisibleReplyModal={setVisibleReplyModal}
+      onSetVisibleReplyModal={setVisibleReplyModal}
+      visibleReplyInformationModal={visibleReplyInformationModal}
+      onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
+      onAddReplyDasRequest={onAddReplyDasRequest}
+      onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
     />
   );
 };
@@ -80,7 +91,10 @@ const DasRequestsList = ({
   dasRequest,
   onAddReplyDasRequest,
   visibleReplyModal,
-  setVisibleReplyModal,
+  onSetVisibleReplyModal,
+  visibleReplyInformationModal,
+  onSetVisibleReplyInformationModal,
+  onShowReplyDasRequestInformation,
 }) => {
   return (
     <Acl
@@ -100,11 +114,17 @@ const DasRequestsList = ({
             onDeleteDasRequest={onDeleteDasRequest}
             dasApplicationsLoading={dasApplicationsLoading}
             onAddReplyDasRequest={onAddReplyDasRequest}
+            onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
           />
         </Col>
+        <ReplyDasRequestInformationModal
+          visibleModal={visibleReplyInformationModal}
+          onSetVisibleModal={onSetVisibleReplyInformationModal}
+          response={dasRequest?.response}
+        />
         <ReplyDasRequestModal
           visibleModal={visibleReplyModal}
-          onSetVisibleModal={setVisibleReplyModal}
+          onSetVisibleModal={onSetVisibleReplyModal}
           dasRequest={dasRequest}
         />
       </Row>

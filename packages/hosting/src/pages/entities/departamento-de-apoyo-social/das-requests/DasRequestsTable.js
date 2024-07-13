@@ -4,6 +4,7 @@ import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
 import {
   faEdit,
+  faEye,
   faFilePdf,
   faReply,
   faTrash,
@@ -18,6 +19,7 @@ export const DasRequestsTable = ({
   onDeleteDasRequest,
   dasApplicationsLoading,
   onAddReplyDasRequest,
+  onShowReplyDasRequestInformation,
 }) => {
   const navigate = useNavigate();
 
@@ -85,15 +87,33 @@ export const DasRequestsTable = ({
       render: (_, dasRequest) => {
         return (
           dasRequest?.response && (
-            <Tag
-              color={
-                dasRequest?.response?.type === "positive" ? "green" : "red"
-              }
+            <div
+              style={{
+                display: "flex",
+                gap: ".5em",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
             >
-              {dasRequest?.response?.type === "positive"
-                ? "Positivo"
-                : "Negativo"}
-            </Tag>
+              <div>
+                <Tag
+                  color={
+                    dasRequest?.response?.type === "positive" ? "green" : "red"
+                  }
+                >
+                  {dasRequest?.response?.type === "positive"
+                    ? "Positivo"
+                    : "Negativo"}
+                </Tag>
+              </div>
+              <IconAction
+                tooltipTitle="Ver detalle de respuesta"
+                icon={faEye}
+                size={30}
+                styled={{ color: (theme) => theme.colors.info }}
+                onClick={() => onShowReplyDasRequestInformation(dasRequest)}
+              />
+            </div>
           )
         );
       },
