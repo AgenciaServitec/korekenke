@@ -57,28 +57,7 @@
       "label": "Sub Sector",
       "code": "questions.subsector",
       "description": "Sub Sector al que pertenece la organización de salud",
-      "options": [
-        {
-          "label": "MINSA",
-          "value": 1
-        },
-        {
-          "label": "ESSALUD",
-          "value": 2
-        },
-        {
-          "label": "FFAA",
-          "value": 3
-        },
-        {
-          "label": "PNP",
-          "value": 4
-        },
-        {
-          "label": "Privado",
-          "value": 5
-        }
-      ]
+      "options": null
     },
     {
       "label": "Ubicación Geográfica",
