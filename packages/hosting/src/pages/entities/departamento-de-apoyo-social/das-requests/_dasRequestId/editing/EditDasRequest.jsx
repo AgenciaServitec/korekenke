@@ -36,6 +36,8 @@ import { useDevice } from "../../../../../../hooks";
 import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
 import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
+import { ReplyDasRequestModal } from "../../ReplyDasRequest";
+import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -44,6 +46,9 @@ export const EditDasRequestIntegration = ({
   onNavigateTo,
 }) => {
   const [approvedLoading, setApprovedLoading] = useState(false);
+  const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
+  const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
+    useState(false);
 
   const updateDasRequest = async (dasRequest, status) => {
     try {
@@ -77,7 +82,7 @@ export const EditDasRequestIntegration = ({
       return notification({
         type: "warning",
         title:
-          "Para realizar la aprobacion, no debe hacer observaciones en la solictud",
+          "Para realizar la aprobacion, no debe hacer observaciones en la solicitud",
       });
     }
 
@@ -99,6 +104,10 @@ export const EditDasRequestIntegration = ({
         onConfirmApprovedDasRequest={onConfirmApprovedDasRequest}
         onConfirmDesApprovedDasRequest={onConfirmDesApprovedDasRequest}
         approvedLoading={approvedLoading}
+        visibleReplyModal={visibleReplyModal}
+        onSetVisibleReplyModal={onSetVisibleReplyModal}
+        visibleReplyInformationModal={visibleReplyInformationModal}
+        setVisibleReplyInformationModal={setVisibleReplyInformationModal}
       />
     </DasRequestModalProvider>
   );
@@ -112,6 +121,10 @@ const EditDasRequest = ({
   onConfirmApprovedDasRequest,
   onConfirmDesApprovedDasRequest,
   approvedLoading,
+  visibleReplyModal,
+  onSetVisibleReplyModal,
+  visibleReplyInformationModal,
+  setVisibleReplyInformationModal,
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
@@ -213,7 +226,6 @@ const EditDasRequest = ({
           Informacion personal
         </Title>
       ),
-
       children: (
         <>
           <PersonalInformation dasRequest={dasRequest} />
@@ -342,6 +354,26 @@ const EditDasRequest = ({
                 </Tag>
               </Title>
               <div className="actions-items">
+                <div className="item">
+                  <Tag
+                    color={
+                      dasRequest?.response?.type === "positive"
+                        ? "green"
+                        : "red"
+                    }
+                  >
+                    {dasRequest?.response?.type === "positive"
+                      ? "Positivo"
+                      : "Negativo"}
+                  </Tag>
+                  <IconAction
+                    tooltipTitle="Ver detalle de respuesta"
+                    icon={faEye}
+                    size={30}
+                    styled={{ color: (theme) => theme.colors.info }}
+                    onClick={() => setVisibleReplyInformationModal(true)}
+                  />
+                </div>
                 <Acl
                   category="departamento-de-apoyo-social"
                   subCategory="dasRequests"
@@ -412,13 +444,23 @@ const EditDasRequest = ({
                   block
                   loading={approvedLoading}
                   disabled={dasRequest.status === "approved"}
-                  onClick={() => onConfirmApprovedDasRequest(dasRequest)}
+                  onClick={() => onSetVisibleReplyModal(dasRequest)}
                 >
                   Responder solicitud
                 </Button>
               </Col>
             )}
           </Acl>
+          <ReplyDasRequestInformationModal
+            visibleModal={visibleReplyInformationModal}
+            onSetVisibleModal={setVisibleReplyInformationModal}
+            response={dasRequest?.response}
+          />
+          <ReplyDasRequestModal
+            visibleModal={visibleReplyModal}
+            onSetVisibleModal={onSetVisibleReplyModal}
+            dasRequest={dasRequest}
+          />
         </Row>
       </div>
     </Container>
@@ -440,6 +482,15 @@ const Container = styled.div`
       justify-content: space-between;
       gap: 1em;
       flex-wrap: wrap;
+      .actions-items {
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+        .item {
+          display: flex;
+          align-items: center;
+        }
+      }
     }
 
     .ant-collapse-header {
