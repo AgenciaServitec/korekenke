@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import {QRCode} from "../../../../../components";
 
 export const DiscountAgreementGrantedInstituteSheet = () => {
   return (
@@ -71,14 +72,14 @@ export const DiscountAgreementGrantedInstituteSheet = () => {
           </strong>
         </div>
         <div className="footer">
-          <span>
-            <strong>PIEZAS ADJUNTAS:</strong>
-          </span>
-
-          <ul>
-            <li>2 COPIAS DE CIP Y DNI (TITULAR)</li>
-            <li>2 COPIAS DE CIF Y DNI (FAMILIAR)</li>
-          </ul>
+          <QRCode
+            value={window.location.href}
+            icon={LogoArmyPeru}
+            iconSize={25}
+            type="svg"
+            size={110}
+            bordered={false}
+          />
         </div>
       </div>
     </Container>
