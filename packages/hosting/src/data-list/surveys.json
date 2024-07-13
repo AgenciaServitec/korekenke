@@ -726,6 +726,10 @@
         {
           "label": "Contratado",
           "value": 2
+        },
+        {
+          "label": "Retirado",
+          "value": 3
         }
       ]
     },
