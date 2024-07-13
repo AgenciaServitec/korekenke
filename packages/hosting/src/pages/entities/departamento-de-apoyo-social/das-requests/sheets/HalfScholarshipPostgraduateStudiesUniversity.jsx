@@ -61,10 +61,10 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener la media beca de
               estudios en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para
-              seguir estudios en la especialidad de para seguir estudios de post
-              grado en la especialidad de para seguir estudios de post grado en
-              la especialidad de
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
+              especialidad de para seguir estudios de post grado en la
+              especialidad de para seguir estudios de post grado en la
+              especialidad de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">
@@ -93,7 +93,7 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
           </div>
         </div>
         <div className="footer">
-        <QRCode
+          <QRCode
             value={window.location.href}
             icon={LogoArmyPeru}
             iconSize={25}

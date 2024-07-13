@@ -91,7 +91,7 @@ export const StudyScholarshipPostgraduateStudiesUniversitySheet = ({
           </div>
         </div>
         <div className="footer">
-        <QRCode
+          <QRCode
             value={window.location.href}
             icon={LogoArmyPeru}
             iconSize={25}

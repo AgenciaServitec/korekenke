@@ -46,7 +46,10 @@ export const DiscountAgreementGrantedUniversitySheet = ({
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)} </span>, Grado
-              <span> {findDegree(headline?.degree).label || emptyContent} </span>
+              <span>
+                {" "}
+                {findDegree(headline?.degree).label || emptyContent}{" "}
+              </span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -61,8 +64,8 @@ export const DiscountAgreementGrantedUniversitySheet = ({
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para
-              seguir estudios en la especialidad de
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
+              especialidad de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">
@@ -91,7 +94,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
           </div>
         </div>
         <div className="footer">
-        <QRCode
+          <QRCode
             value={window.location.href}
             icon={LogoArmyPeru}
             iconSize={25}

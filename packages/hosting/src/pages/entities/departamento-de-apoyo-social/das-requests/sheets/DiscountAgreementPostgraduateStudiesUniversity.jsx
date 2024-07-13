@@ -34,7 +34,10 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
               <p>SOLICITA:</p>
               <p>
                 {requestType && findDasRequest(requestType).name}
-                <span> {findInstitution(institution).name || emptyContent} </span>
+                <span>
+                  {" "}
+                  {findInstitution(institution).name || emptyContent}{" "}
+                </span>
               </p>
             </div>
           </div>
@@ -46,7 +49,10 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(data?.headline)} </span>, Grado
-              <span> {findDegree(headline?.degree).label || emptyContent} </span>
+              <span>
+                {" "}
+                {findDegree(headline?.degree).label || emptyContent}{" "}
+              </span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -61,8 +67,8 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para
-              seguir estudios de POST GRADO en la especialidad de
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios de
+              POST GRADO en la especialidad de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">

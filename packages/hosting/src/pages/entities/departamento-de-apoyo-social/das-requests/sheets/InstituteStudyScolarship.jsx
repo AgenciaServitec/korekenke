@@ -58,8 +58,8 @@ export const InstituteStudyScolarshipSheet = ({ data, dataFamiliar }) => {
               convenio al personal militar y civil del Ejército, solicito a Ud.,
               Mi General disponer a quien corresponda se me inscriba a fin de
               obtener este beneficio de mi
-              <span> {dataFamiliar(familiar)} </span>, en la
-              especialidad o carrera de
+              <span> {dataFamiliar(familiar)} </span>, en la especialidad o
+              carrera de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">
@@ -88,7 +88,7 @@ export const InstituteStudyScolarshipSheet = ({ data, dataFamiliar }) => {
           </div>
         </div>
         <div className="footer">
-        <QRCode
+          <QRCode
             value={window.location.href}
             icon={LogoArmyPeru}
             iconSize={25}

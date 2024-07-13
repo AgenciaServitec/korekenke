@@ -61,8 +61,8 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para
-              seguir estudios en la especialidad de
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
+              especialidad de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">
@@ -91,7 +91,7 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
           </div>
         </div>
         <div className="footer">
-        <QRCode
+          <QRCode
             value={window.location.href}
             icon={LogoArmyPeru}
             iconSize={25}
