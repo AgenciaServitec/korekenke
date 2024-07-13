@@ -135,7 +135,11 @@ const EditDasRequest = ({
 
   const onObservationPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
+<<<<<<< HEAD
       title: "Agregar Observacion",
+=======
+      title: "Observacion",
+>>>>>>> ceceada (updated cif not required when is brother in editing modal and refactored the modal design)
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <ObservationPersonalInformationModal
@@ -148,7 +152,11 @@ const EditDasRequest = ({
 
   const onEditInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
+<<<<<<< HEAD
       title: "Datos de Institución",
+=======
+      title: "Agregar Observación",
+>>>>>>> ceceada (updated cif not required when is brother in editing modal and refactored the modal design)
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <InstitutionDataModal

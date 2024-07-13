@@ -24,7 +24,11 @@ export const PersonalInformationForm = ({
   onSavePersonalInformationStep2,
 }) => {
   const [relationship, setRelationship] = useState(
+<<<<<<< HEAD
     dasRequest?.familiar?.relationship || "",
+=======
+    dasRequest?.familiar?.relationship || ""
+>>>>>>> ceceada (updated cif not required when is brother in editing modal and refactored the modal design)
   );
 
   const schema = yup.object({
@@ -63,6 +67,8 @@ export const PersonalInformationForm = ({
   });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
+  console.log(errors);
 
   useEffect(() => {
     resetForm();

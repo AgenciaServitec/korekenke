@@ -25,7 +25,11 @@ export const PersonalInformationModal = ({
   const [loading, setLoading] = useState(false);
 
   const [relationship, setRelationship] = useState(
+<<<<<<< HEAD
     dasRequest?.familiar?.relationship || "",
+=======
+    dasRequest?.familiar?.relationship || ""
+>>>>>>> ceceada (updated cif not required when is brother in editing modal and refactored the modal design)
   );
 
   const schema = yup.object({
@@ -219,7 +223,11 @@ export const PersonalInformationModal = ({
                       ([key, value]) => ({
                         label: value,
                         value: key,
+<<<<<<< HEAD
                       }),
+=======
+                      })
+>>>>>>> ceceada (updated cif not required when is brother in editing modal and refactored the modal design)
                     )}
                     onChange={(value) => {
                       setRelationship(value);
