@@ -2,31 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
-import {
-  DasRequestList,
-  DegreesArmy,
-  institutions,
-} from "../../../../../data-list";
 import { userFullName } from "../../../../../utils/users/userFullName2";
+import {
+  findDasRequest,
+  findDegree,
+  findInstitution,
+} from "../../../../../utils";
 
-export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
+export const HalfScholarshipAwardedByUniversitySheet = ({
+  data,
+  dataFamiliar,
+}) => {
   const { headline, createAt, familiar, institution, requestType } = data;
 
   const createdDate = dayjs(createAt.toDate());
 
   const emptyContent = "...............";
-
-  const findRequestName = DasRequestList.find(
-    (_requestType) => _requestType.id === requestType
-  ).name;
-
-  const findDegree = DegreesArmy.flatMap(
-    (degreeArmy) => degreeArmy.options
-  ).find((degree) => degree.value === headline.degree).label;
-
-  const institutionView = institutions[institution?.type].find(
-    (_institution) => _institution.id === institution?.id
-  ).name;
 
   return (
     <Container>
@@ -41,8 +32,8 @@ export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
             <div className="request-type__text">
               <p>SOLICITA:</p>
               <p>
-                {requestType && findRequestName}
-                <span> {institutionView || emptyContent}</span>
+                {requestType && findDasRequest(requestType).name}
+                <span>{findInstitution(institution).name || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -54,21 +45,23 @@ export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)} </span>, Grado
-              <span> {findDegree || emptyContent} </span> CIP
+              <span>{findDegree(headline?.degree).label || emptyContent}</span>
+              CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
               Telf.
-              <span> {headline?.phoneNumber || emptyContent} </span> ante Ud.
+              <span> {headline?.phone?.number || emptyContent} </span> ante Ud.
               con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
               Que teniendo conocimiento del convenio de cooperación con la
               Universidad
-              <span> {institutionView || emptyContent} </span>
+              <span> {findInstitution(institution).name || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
-              convenio en befeneficio de mi <span>{emptyContent}</span> para
-              seguir estudios en la especialidad de
+              convenio en befeneficio de mi
+              <span>{dataFamiliar(familiar)}</span> para seguir
+              estudios en la especialidad de
               <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
@@ -79,7 +72,7 @@ export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
             </div>
             <div className="request-content__footer">
               <p className="date">
-                Lima, <span>{createdDate.format("DD")}</span> de{" "}
+                Lima, <span>{createdDate.format("DD")}</span> de
                 <span>{createdDate.format("MM")}</span> del
                 <span>{createdDate.format("YYYY")}</span>
               </p>
@@ -87,10 +80,6 @@ export const HalfScholarshipAwardedByUniversitySheet = ({ data }) => {
                 <div className="signature__item">
                   <div></div>
                   <p>Firma</p>
-                </div>
-                <div className="signature__item">
-                  <div></div>
-                  <p>Post Firma</p>
                 </div>
               </div>
               <div className="cip">
