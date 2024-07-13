@@ -12,6 +12,8 @@ import {
 import { orderBy } from "lodash";
 import { DasRequestStatus, institutions } from "../../../../data-list";
 import { useNavigate } from "react-router";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import styled from "styled-components";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -68,9 +70,37 @@ export const DasRequestsTable = ({
       },
     },
     {
-      title: "Email",
+      title: "Contácto",
       key: "email",
-      render: (_, dasRequest) => dasRequest.headline.email,
+      render: (_, dasRequest) => (
+        <div className="contact">
+          <div className="contact__item">
+            <a href={`mailto:${dasRequest.headline.email}`}>
+              {dasRequest.headline.email}
+            </a>
+          </div>
+          <div className="contact__item">
+            <IconAction
+              tooltipTitle="Whatsapp"
+              icon={faWhatsapp}
+              size={27}
+              styled={{ color: (theme) => theme.colors.success }}
+              onClick={() =>
+                window.open(
+                  `https://api.whatsapp.com/send?phone=${dasRequest.headline.phone.prefix.replace(
+                    "+",
+                    ""
+                  )}${dasRequest.headline.phone.number}`
+                )
+              }
+            />
+            <span>
+              {dasRequest.headline.phone.prefix} &nbsp;
+              {dasRequest.headline.phone.number}
+            </span>
+          </div>
+        </div>
+      ),
     },
     {
       title: "Estado",
@@ -177,11 +207,23 @@ export const DasRequestsTable = ({
     },
   ];
   return (
-    <Table
-      loading={dasApplicationsLoading}
-      columns={columns}
-      scroll={{ x: "max-content" }}
-      dataSource={orderBy(dasApplications, "createAt", "desc")}
-    />
+    <Container>
+      <Table
+        loading={dasApplicationsLoading}
+        columns={columns}
+        scroll={{ x: "max-content" }}
+        dataSource={orderBy(dasApplications, "createAt", "desc")}
+      />
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  .contact {
+    &__item {
+      display: flex;
+      align-items: center;
+    }
+  }
+`;
