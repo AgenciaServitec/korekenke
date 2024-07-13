@@ -70,10 +70,9 @@ export const EditDasRequestIntegration = ({
     const { headline, institution, applicant } = dasRequest;
 
     if (
-      headline?.observations.length +
-        institution?.observations.length +
-        applicant?.observations.length >
-      0
+      !isEmpty(headline?.observations) ||
+      !isEmpty(institution?.observations) ||
+      !isEmpty(applicant?.observations)
     ) {
       return notification({
         type: "warning",
@@ -370,7 +369,6 @@ const EditDasRequest = ({
           </Col>
           <Col xs={24} sm={12} md={6}>
             <Button
-              type="primary"
               size="large"
               block
               disabled={approvedLoading}
@@ -416,7 +414,7 @@ const EditDasRequest = ({
                   disabled={dasRequest.status === "approved"}
                   onClick={() => onConfirmApprovedDasRequest(dasRequest)}
                 >
-                  Aprobar solicitud
+                  Responder solicitud
                 </Button>
               </Col>
             )}

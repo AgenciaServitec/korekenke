@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   Col,
@@ -14,11 +14,15 @@ import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
 import { useAuthentication } from "../../../../providers";
+import { ReplyDasRequestModal } from "../ReplyDasRequest";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+
+  const [visibleReplyModal, setVisibleReplyModal] = useState(false);
+  const [dasRequest, setDasRequest] = useState(null);
 
   const dasApplicationsRef = firestore
     .collection("das-applications")
@@ -49,12 +53,21 @@ export const DasRequestsListIntegration = () => {
     });
   };
 
+  const onAddReplyDasRequest = (dasRequest) => {
+    setVisibleReplyModal(true);
+    setDasRequest(dasRequest);
+  };
+
   return (
     <DasRequestsList
       dasApplications={dasApplications}
       onEditDasRequest={onEditDasRequest}
       onDeleteDasRequest={onConfirmDeleteDasRequest}
       dasApplicationsLoading={dasApplicationsLoading}
+      dasRequest={dasRequest}
+      onAddReplyDasRequest={onAddReplyDasRequest}
+      visibleReplyModal={visibleReplyModal}
+      setVisibleReplyModal={setVisibleReplyModal}
     />
   );
 };
@@ -64,6 +77,10 @@ const DasRequestsList = ({
   onEditDasRequest,
   onDeleteDasRequest,
   dasApplicationsLoading,
+  dasRequest,
+  onAddReplyDasRequest,
+  visibleReplyModal,
+  setVisibleReplyModal,
 }) => {
   return (
     <Acl
@@ -82,8 +99,14 @@ const DasRequestsList = ({
             onEditDasRequest={onEditDasRequest}
             onDeleteDasRequest={onDeleteDasRequest}
             dasApplicationsLoading={dasApplicationsLoading}
+            onAddReplyDasRequest={onAddReplyDasRequest}
           />
         </Col>
+        <ReplyDasRequestModal
+          visibleModal={visibleReplyModal}
+          onSetVisibleModal={setVisibleReplyModal}
+          dasRequest={dasRequest}
+        />
       </Row>
     </Acl>
   );

@@ -2,7 +2,12 @@ import React from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
 import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
-import { faEdit, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faFilePdf,
+  faReply,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { DasRequestStatus, institutions } from "../../../../data-list";
 import { useNavigate } from "react-router";
@@ -12,6 +17,7 @@ export const DasRequestsTable = ({
   onEditDasRequest,
   onDeleteDasRequest,
   dasApplicationsLoading,
+  onAddReplyDasRequest,
 }) => {
   const navigate = useNavigate();
 
@@ -74,10 +80,41 @@ export const DasRequestsTable = ({
       },
     },
     {
+      title: "Respuesta",
+      key: "status",
+      render: (_, dasRequest) => {
+        return (
+          dasRequest?.response && (
+            <Tag
+              color={
+                dasRequest?.response?.type === "positive" ? "green" : "red"
+              }
+            >
+              {dasRequest?.response?.type === "positive"
+                ? "Positivo"
+                : "Negativo"}
+            </Tag>
+          )
+        );
+      },
+    },
+    {
       title: "Opciones",
       key: "options",
       render: (_, dasRequest) => (
         <Space>
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#reply"
+          >
+            <IconAction
+              tooltipTitle="Responder solicitud"
+              icon={faReply}
+              styled={{ color: (theme) => theme.colors.primary }}
+              onClick={() => onAddReplyDasRequest(dasRequest)}
+            />
+          </Acl>
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
