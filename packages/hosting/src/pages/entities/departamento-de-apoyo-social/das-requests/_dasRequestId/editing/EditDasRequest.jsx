@@ -209,6 +209,10 @@ const EditDasRequest = ({
     });
   };
 
+  const isPositiveOrApproved =
+    dasRequest?.status === "approved" ||
+    dasRequest?.response?.type === "positive";
+
   const items = [
     {
       key: 1,
@@ -238,23 +242,27 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          <Acl
-            redirect
-            category="departamento-de-apoyo-social"
-            subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#addObservation"
-          >
-            <IconAction
-              icon={faEye}
-              size={33}
-              onClick={() => onObservationPersonalInformation(dasRequest)}
-            />
-          </Acl>
-          <IconAction
-            icon={faEdit}
-            size={33}
-            onClick={() => onEditPersonalInformation(dasRequest)}
-          />
+          {!isPositiveOrApproved && (
+            <>
+              <Acl
+                redirect
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#addObservation"
+              >
+                <IconAction
+                  icon={faEye}
+                  size={33}
+                  onClick={() => onObservationPersonalInformation(dasRequest)}
+                />
+              </Acl>
+              <IconAction
+                icon={faEdit}
+                size={33}
+                onClick={() => onEditPersonalInformation(dasRequest)}
+              />
+            </>
+          )}
         </div>
       ),
     },
@@ -277,23 +285,27 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          <Acl
-            redirect
-            category="departamento-de-apoyo-social"
-            subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#addObservation"
-          >
-            <IconAction
-              icon={faEye}
-              size={33}
-              onClick={() => onObservationInstitutionData(dasRequest)}
-            />
-          </Acl>
-          <IconAction
-            icon={faEdit}
-            size={33}
-            onClick={() => onEditInstitutionData(dasRequest)}
-          />
+          {!isPositiveOrApproved && (
+            <>
+              <Acl
+                redirect
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#addObservation"
+              >
+                <IconAction
+                  icon={faEye}
+                  size={33}
+                  onClick={() => onObservationInstitutionData(dasRequest)}
+                />
+              </Acl>
+              <IconAction
+                icon={faEdit}
+                size={33}
+                onClick={() => onEditInstitutionData(dasRequest)}
+              />
+            </>
+          )}
         </div>
       ),
     },
@@ -316,23 +328,27 @@ const EditDasRequest = ({
       ),
       extra: (
         <div style={{ display: "flex", gap: "0.5em" }}>
-          <Acl
-            redirect
-            category="departamento-de-apoyo-social"
-            subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#addObservation"
-          >
-            <IconAction
-              icon={faEye}
-              size={33}
-              onClick={() => onObservationApplicantDocuments(dasRequest)}
-            />
-          </Acl>
-          <IconAction
-            icon={faEdit}
-            size={33}
-            onClick={() => onEditApplicantDocuments(dasRequest)}
-          />
+          {!isPositiveOrApproved && (
+            <>
+              <Acl
+                redirect
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#addObservation"
+              >
+                <IconAction
+                  icon={faEye}
+                  size={33}
+                  onClick={() => onObservationApplicantDocuments(dasRequest)}
+                />
+              </Acl>
+              <IconAction
+                icon={faEdit}
+                size={33}
+                onClick={() => onEditApplicantDocuments(dasRequest)}
+              />
+            </>
+          )}
         </div>
       ),
     },
@@ -434,9 +450,9 @@ const EditDasRequest = ({
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#approved"
+            name="/das-requests/:dasRequestId#reply"
           >
-            {dasRequest?.status === "pending" && (
+            {!isPositiveOrApproved && (
               <Col xs={24} sm={12} md={6}>
                 <Button
                   type="primary"

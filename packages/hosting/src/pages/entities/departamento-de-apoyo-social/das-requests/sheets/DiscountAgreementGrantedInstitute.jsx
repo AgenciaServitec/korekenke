@@ -8,6 +8,7 @@ import {
   findInstitution,
 } from "../../../../../utils";
 import { userFullName } from "../../../../../utils/users/userFullName2";
+import { QRCode } from "../../../../../components";
 
 export const DiscountAgreementGrantedInstituteSheet = ({
   data,
@@ -45,7 +46,10 @@ export const DiscountAgreementGrantedInstituteSheet = ({
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)} </span>, Grado
-              <span> {findDegree(headline?.degree).label || emptyContent} </span>
+              <span>
+                {" "}
+                {findDegree(headline?.degree).label || emptyContent}{" "}
+              </span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -59,9 +63,9 @@ export const DiscountAgreementGrantedInstituteSheet = ({
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio instituto en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para
-              seguir estudios en la especialidad de para seguir estudios de post
-              grado en la especialidad de
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
+              especialidad de para seguir estudios de post grado en la
+              especialidad de
               <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
@@ -90,26 +94,14 @@ export const DiscountAgreementGrantedInstituteSheet = ({
           </div>
         </div>
         <div className="footer">
-          <div className="footer__documents-certificates">
-            <h3>Ingresantes</h3>
-            <ul>
-              <li>02 Copias de Constancia de Ingreso de la Univ.</li>
-              <li>02 Copias de boleta pago matricula de la Univ.</li>
-              <li>02 Copias de Liquidación de Haberes del Titular</li>
-              <li>02 Copias de CIP y DNI (Titular)</li>
-              <li>02 Copias de CIF y DNI (Familiar)</li>
-            </ul>
-          </div>
-          <div className="footer__documents-certificates">
-            <h3>Requisitos: Antiguos</h3>
-            <ul>
-              <li>02 Copias de Consolidado de notas (último ciclo)</li>
-              <li>02 Copias de la ultima boleta de pago de la Univ.</li>
-              <li>02 Copias de Liquidación de Haberes del Titular</li>
-              <li>02 Copias de CIP y DNI (Titular)</li>
-              <li>02 Copias de CIF y DNI (Familiar)</li>
-            </ul>
-          </div>
+          <QRCode
+            value={window.location.href}
+            icon={LogoArmyPeru}
+            iconSize={25}
+            type="svg"
+            size={110}
+            bordered={false}
+          />
         </div>
       </div>
     </Container>
