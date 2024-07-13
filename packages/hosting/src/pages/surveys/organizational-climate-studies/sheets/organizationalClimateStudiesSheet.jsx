@@ -51,7 +51,7 @@ export const OrganizationalClimateStudiesSheet = ({
                     <th>Edad</th>
                     <th>Sexo</th>
                     <th>Grupo</th>
-                    <th>Profesion</th>
+                    <th>Personal</th>
                     <th>Condicion</th>
                     <th>Tiempo de permanencia</th>
                     <th>Tiempo de puesto</th>
@@ -110,9 +110,9 @@ export const OrganizationalClimateStudiesSheet = ({
                         </td>
                         <td>
                           {Surveys.questions[7].options.find(
-                            (_profession) =>
-                              _profession.value ===
-                              organizationClimateStudy?.questions?.profession
+                            (_personal) =>
+                              _personal.value ===
+                              organizationClimateStudy?.questions?.personal
                           )?.label || ""}
                         </td>
                         <td>{organizationClimateStudy.questions.condition}</td>

@@ -12,36 +12,44 @@
       "description": "",
       "options": [
         {
-          "label": "DIRESA",
+          "label": "CASA MILITAR",
           "value": 1
         },
         {
-          "label": "DISA",
+          "label": "MINISTERIO",
           "value": 2
         },
         {
-          "label": "GERESA",
+          "label": "CGE",
           "value": 3
         },
         {
-          "label": "Hospital",
+          "label": "REGION MILITAR",
           "value": 4
         },
         {
-          "label": "Instituto",
+          "label": "GRAN UNIDAD",
           "value": 5
         },
         {
-          "label": "Red",
+          "label": "UNIDAD",
           "value": 6
         },
         {
-          "label": "Micro red",
+          "label": "DEPARTAMNETO",
           "value": 7
         },
         {
-          "label": "Establecimiento de Salud",
+          "label": "SECCION",
           "value": 8
+        },
+        {
+          "label": "GRUPO",
+          "value": 9
+        },
+        {
+          "label": "PATRULLA",
+          "value": 10
         }
       ]
     },
@@ -82,7 +90,7 @@
           "value": 1
         },
         {
-          "label": "Sierra",
+          "label": "Sierra (Andes)",
           "value": 2
         },
         {
@@ -128,8 +136,8 @@
       ]
     },
     {
-      "label": "Profesión",
-      "code": "questions.profession",
+      "label": "Personal",
+      "code": "questions.personal",
       "description": "",
       "options": [
         {
