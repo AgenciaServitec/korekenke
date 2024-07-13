@@ -23,7 +23,9 @@ export const PersonalInformationForm = ({
   loadingStep2,
   onSavePersonalInformationStep2,
 }) => {
-  const [relationship, setRelationship] = useState("");
+  const [relationship, setRelationship] = useState(
+    dasRequest?.familiar?.relationship || ""
+  );
 
   const schema = yup.object({
     headline: yup.object({
@@ -46,12 +48,10 @@ export const PersonalInformationForm = ({
           relationship: yup.string().required(),
           cif:
             relationship === "brother"
-              ? yup.string().min(9).max(9).nullable().notRequired()
+              ? yup.string().nullable().notRequired()
               : yup.string().min(9).max(9).required(),
         }),
   });
-
-  console.log("Parentesco: ", relationship);
 
   const {
     formState: { errors },
@@ -63,6 +63,8 @@ export const PersonalInformationForm = ({
   });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
+  console.log(errors);
 
   useEffect(() => {
     resetForm();
@@ -87,7 +89,7 @@ export const PersonalInformationForm = ({
             firstName: dasRequest?.familiar?.firstName || "",
             paternalSurname: dasRequest?.familiar?.paternalSurname || "",
             maternalSurname: dasRequest?.familiar?.maternalSurname || "",
-            cif: dasRequest?.familiar?.cif || "",
+            cif: dasRequest?.familiar?.cif ? dasRequest?.familiar?.cif : "",
             email: dasRequest?.familiar?.email || "",
             relationship: dasRequest?.familiar?.relationship || "",
           }
@@ -382,6 +384,7 @@ export const PersonalInformationForm = ({
                             label="N° CIF"
                             name={name}
                             value={value}
+                            hidden={true}
                             onChange={onChange}
                             error={error(name)}
                             helperText={errorMessage(name)}

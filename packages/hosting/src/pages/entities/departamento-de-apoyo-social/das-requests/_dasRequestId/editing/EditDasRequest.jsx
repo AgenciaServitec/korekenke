@@ -116,12 +116,12 @@ const EditDasRequest = ({
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
-  const { isMobile } = useDevice();
+  const { isTablet } = useDevice();
 
   const onEditPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
       title: "Informacion personal",
-      width: "50%",
+      width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <PersonalInformationModal
           dasRequest={dasRequest}
@@ -134,7 +134,7 @@ const EditDasRequest = ({
   const onObservationPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
       title: "Observacion",
-      width: "50%",
+      width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <ObservationPersonalInformationModal
           dasRequest={dasRequest}
@@ -147,7 +147,7 @@ const EditDasRequest = ({
   const onEditInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
       title: "Agregar Observación",
-      width: "50%",
+      width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <InstitutionDataModal
           dasRequest={dasRequest}
@@ -160,7 +160,7 @@ const EditDasRequest = ({
   const onObservationInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
       title: "Agregar Observación",
-      width: `${isMobile ? "80%" : "50%"}`,
+      width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <ObservationForInstitucionalDataModal
           dasRequest={dasRequest}
@@ -173,7 +173,7 @@ const EditDasRequest = ({
   const onEditApplicantDocuments = (dasRequest) => {
     onShowDasRequestModal({
       title: "Documentos",
-      width: `${isMobile ? "80%" : "50%"}`,
+      width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <ApplicantDocumentsModal
           isNew={isNew}
@@ -187,7 +187,7 @@ const EditDasRequest = ({
   const onObservationApplicantDocuments = (dasRequest) => {
     onShowDasRequestModal({
       title: "Agregar Observación",
-      width: `${isMobile ? "80%" : "50%"}`,
+      width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <ObservationForApplicantDocumentsModal
           dasRequest={dasRequest}
