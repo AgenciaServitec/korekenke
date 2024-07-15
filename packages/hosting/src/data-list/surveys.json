@@ -521,7 +521,7 @@
         },
         {
           "label": "Sup Conserv Y Serv ",
-          "value": "sup_conserv_y_serv_"
+          "value": "sup_conserv_y_serv"
         },
         {
           "label": "Sup Prog Sectorial",
@@ -540,10 +540,6 @@
           "value": "tec_administrativo"
         },
         {
-          "label": "Tec Administrativo",
-          "value": "tec_administrativo"
-        },
-        {
           "label": "Tec Agropecuario",
           "value": "tec_agropecuario"
         },
@@ -554,10 +550,6 @@
         {
           "label": "Tec Analisis Clinico",
           "value": "tec_analisis_clinico"
-        },
-        {
-          "label": "Tec Archivo",
-          "value": "tec_archivo"
         },
         {
           "label": "Tec Archivo",
@@ -618,10 +610,6 @@
         {
           "label": "Tec Ingenieria",
           "value": "tec_ingenieria"
-        },
-        {
-          "label": "Tec Laboratorio",
-          "value": "tec_laboratorio"
         },
         {
           "label": "Tec Laboratorio",
