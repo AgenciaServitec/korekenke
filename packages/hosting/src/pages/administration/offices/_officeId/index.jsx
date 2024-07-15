@@ -22,7 +22,7 @@ import {
   getOfficeId,
   updateOffice,
 } from "../../../../firebase/collections";
-import { findRole, userFullName } from "../../../../utils";
+import { findRole, getNameId, userFullName } from "../../../../utils";
 import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const OfficeIntegration = () => {
@@ -49,6 +49,7 @@ export const OfficeIntegration = () => {
   const mapOffice = (formData) => ({
     ...office,
     name: formData.name,
+    nameId: getNameId(formData.name),
     description: formData.description,
     sectionId: formData.sectionId,
     membersIds: formData?.membersIds || [],
