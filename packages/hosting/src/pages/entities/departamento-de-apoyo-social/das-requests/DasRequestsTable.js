@@ -45,32 +45,36 @@ export const DasRequestsTable = ({
       render: (_, dasRequest) => userFullName(dasRequest.headline),
     },
     {
-      title: "Solicitud",
+      title: "Solicitud / Institución",
       key: "requestType",
-      render: (_, dasRequest) => (
-        <div className="capitalize">
-          {findDasRequest(dasRequest.requestType)?.name}
-        </div>
-      ),
-    },
-    {
-      title: "Institución",
-      key: "institution",
       render: (_, dasRequest) => {
+        let institutionData = null;
         const institutionType = dasRequest?.institution?.type;
 
         switch (institutionType) {
           case "institutes":
-            return (institutions?.[institutionType] || []).find(
+            institutionData = (institutions?.[institutionType] || []).find(
               (institution) => institution.id === dasRequest?.institution?.id
-            )?.name;
+            );
+            break;
           case "universities":
-            return (institutions?.[institutionType] || []).find(
+            institutionData = (institutions?.[institutionType] || []).find(
               (university) => university.id === dasRequest?.institution?.id
-            )?.name;
+            );
+            break;
           default:
-            return "";
+            institutionData = "";
+            break;
         }
+
+        return (
+          <div className="capitalize">
+            <div>{findDasRequest(dasRequest.requestType)?.name}</div>
+            <div>
+              <strong>{institutionData?.name}</strong>
+            </div>
+          </div>
+        );
       },
     },
     {
