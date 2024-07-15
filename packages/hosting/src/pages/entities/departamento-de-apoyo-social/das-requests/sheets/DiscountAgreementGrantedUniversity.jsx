@@ -77,24 +77,13 @@ export const DiscountAgreementGrantedUniversitySheet = ({
                 <span> {createdDate.format("MM")} </span> del
                 <span> {createdDate.format("YYYY")} </span>
               </p>
-              <div className="signature">
-                <SignatureSheet
-                  signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                  signatureUrl={headline.signaturePhoto.url}
-                  name={userFullName(headline)}
-                />
-                <div className="cip">
-                  <p>
-                    CIP: <span>{headline?.cip || ""}</span>
-                  </p>
-                </div>
-                <div className="cip">
-                  <p>
-                    Grado:{" "}
-                    <span>{findDegree(headline?.degree)?.label || ""}</span>
-                  </p>
-                </div>
-              </div>
+              <SignatureSheet
+                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
+                signatureUrl={headline.signaturePhoto.url}
+                name={userFullName(headline)}
+                cip={headline?.cip}
+                degree={findDegree(headline?.degree)?.label}
+              />
             </div>
           </div>
         </div>
