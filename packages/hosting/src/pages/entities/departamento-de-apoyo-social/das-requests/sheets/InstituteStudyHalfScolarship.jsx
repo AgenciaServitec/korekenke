@@ -15,7 +15,7 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
 
   const createdDate = dayjs(createAt.toDate());
 
-  const emptyContent = "...............";
+  const emptyContent = ".............................";
 
   return (
     <Container>

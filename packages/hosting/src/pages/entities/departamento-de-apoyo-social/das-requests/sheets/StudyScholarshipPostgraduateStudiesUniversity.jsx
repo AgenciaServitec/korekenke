@@ -18,7 +18,7 @@ export const StudyScholarshipPostgraduateStudiesUniversitySheet = ({
 
   const createdDate = dayjs(createAt.toDate());
 
-  const emptyContent = "...............";
+  const emptyContent = ".............................";
 
   return (
     <Container>
