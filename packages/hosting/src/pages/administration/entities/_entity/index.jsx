@@ -22,7 +22,7 @@ import {
   getEntityId,
   updateEntity,
 } from "../../../../firebase/collections";
-import { findRole, userFullName } from "../../../../utils";
+import { findRole, getNameId, userFullName } from "../../../../utils";
 import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const EntityIntegration = () => {
@@ -53,6 +53,7 @@ export const EntityIntegration = () => {
     ...entity,
     commandId: currentCommand.id,
     name: formData.name,
+    nameId: getNameId(formData.name),
     abbreviation: lowerCase(formData.abbreviation),
     entityManageId: formData?.entityManageId || null,
   });
