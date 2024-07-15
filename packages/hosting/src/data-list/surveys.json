@@ -521,7 +521,7 @@
         },
         {
           "label": "Sup Conserv Y Serv ",
-          "value": "sup_conserv_y_serv_"
+          "value": "sup_conserv_y_serv"
         },
         {
           "label": "Sup Prog Sectorial",
@@ -540,10 +540,6 @@
           "value": "tec_administrativo"
         },
         {
-          "label": "Tec Administrativo",
-          "value": "tec_administrativo"
-        },
-        {
           "label": "Tec Agropecuario",
           "value": "tec_agropecuario"
         },
@@ -554,10 +550,6 @@
         {
           "label": "Tec Analisis Clinico",
           "value": "tec_analisis_clinico"
-        },
-        {
-          "label": "Tec Archivo",
-          "value": "tec_archivo"
         },
         {
           "label": "Tec Archivo",
@@ -618,10 +610,6 @@
         {
           "label": "Tec Ingenieria",
           "value": "tec_ingenieria"
-        },
-        {
-          "label": "Tec Laboratorio",
-          "value": "tec_laboratorio"
         },
         {
           "label": "Tec Laboratorio",
@@ -728,139 +716,139 @@
   "items": {
     "options": [
       {
-        "label": "Mi centro de labores me ofrece la oportunidad de hacer lo que mejor que sé hacer",
+        "label": "Mi centro de labores me ofrece la oportunidad de hacer lo que mejor que sé hacer.",
         "code": "items.item1"
       },
       {
-        "label": "No me río de bromas",
+        "label": "¿Me río de bromas?.",
         "code": "items.item2"
       },
       {
-        "label": "Mi jefe inmediato trata de obtener información antes de tomar una decisión",
+        "label": "Mi jefe inmediato trata de obtener información antes de tomar una decisión.",
         "code": "items.item3"
       },
       {
-        "label": "La innovación es característica de nuestra organización",
+        "label": "La innovación es característica de nuestra organización.",
         "code": "items.item4"
       },
       {
-        "label": "Mis compañeros de trabajo toman iniciativas para la solución de problemas",
+        "label": "Mis compañeros de trabajo toman iniciativas para la solución de problemas.",
         "code": "items.item5"
       },
       {
-        "label": "Mi remuneración es adecuada en relación con el trabajo que realizo",
+        "label": "Mi remuneración es adecuada en relación con el trabajo que realizo.",
         "code": "items.item6"
       },
       {
-        "label": "Mi jefe está disponible cuando se le necesita",
+        "label": "Mi jefe está disponible cuando se le necesita.",
         "code": "items.item7"
       },
       {
-        "label": "Mi jefe inmediato se preocupa por crear un ambiente laboral agradable",
+        "label": "Mi jefe inmediato se preocupa por crear un ambiente laboral agradable.",
         "code": "items.item8"
       },
       {
-        "label": "Siempre las cosas me salen perfectas",
+        "label": "Las cosas me salen perfectas.",
         "code": "items.item9"
       },
       {
-        "label": "Conozco las tareas o funciones específicas que debo realizar en mi organización",
+        "label": "Conozco las tareas o funciones específicas que debo realizar en mi dependencia.",
         "code": "items.item10"
       },
       {
-        "label": "Mi trabajo es evaluado en forma adecuada",
+        "label": "Mi trabajo es evaluado en forma adecuada.",
         "code": "items.item11"
       },
       {
-        "label": "Es fácil para mis compañeros de trabajo que sus nuevas ideas sean consideradas",
+        "label": "Es fácil para mis compañeros de trabajo que sus nuevas ideas sean consideradas.",
         "code": "items.item12"
       },
       {
-        "label": "Las tareas que desempeño  corresponden a mi función",
+        "label": "Las tareas que desempeño  corresponden a mi función.",
         "code": "items.item13"
       },
       {
-        "label": "En mi organización participo en la toma de decisiones",
+        "label": "En mi organización participo en la toma de decisiones.",
         "code": "items.item14"
       },
       {
-        "label": "Siempre estoy sonriente",
+        "label": "Estoy sonriente.",
         "code": "items.item15"
       },
       {
-        "label": "Los premios y reconocimientos son distribuidos en forma justa",
+        "label": "Los premios y reconocimientos son distribuidos en forma justa.",
         "code": "items.item16"
       },
       {
-        "label": "Mi institución es flexible y se adapta bien a los cambios",
+        "label": "Mi institución es flexible y se adapta bien a los cambios.",
         "code": "items.item17"
       },
       {
-        "label": "La limpieza de los ambientes es adecuada",
+        "label": "La limpieza de los ambientes es adecuada.",
         "code": "items.item18"
       },
       {
-        "label": "Nuestros directivos contribuyen a crear condiciones adecuadas para el progreso de mi organización",
+        "label": "Nuestros directivos contribuyen a crear condiciones adecuadas para el progreso de mi dependencia.",
         "code": "items.item19"
       },
       {
-        "label": "Mi contribución juega un papel importante en el éxito de mi organización de salud",
+        "label": "Mi contribución juega un papel importante en el éxito de mi dependencia.",
         "code": "items.item20"
       },
       {
-        "label": "Existen incentivos laborales para que yo trate de hacer mejor mi trabajo",
+        "label": "Existen incentivos laborales para que yo trate de hacer mejor mi trabajo.",
         "code": "items.item21"
       },
       {
-        "label": "Nunca cometo errores",
+        "label": "Cometo errores.",
         "code": "items.item22"
       },
       {
-        "label": "Estoy comprometido con mi organización de salud",
+        "label": "Estoy comprometido con mi dependencia.",
         "code": "items.item23"
       },
       {
-        "label": "Las otras áreas o servicios me ayudan cuando las necesito",
+        "label": "Las otras áreas o servicios me ayudan cuando las necesito.",
         "code": "items.item24"
       },
       {
-        "label": "En términos generales me siento satisfecho con mi ambiente de trabajo",
+        "label": "En términos generales me siento satisfecho con mi ambiente de trabajo.",
         "code": "items.item25"
       },
       {
-        "label": "Puedo contar con mis compañeros de trabajo cuando los necesito",
+        "label": "Puedo contar con mis compañeros de trabajo cuando los necesito.",
         "code": "items.item26"
       },
       {
-        "label": "Mi salario y beneficios son razonables",
+        "label": "Mi salario y beneficios son razonables.",
         "code": "items.item27"
       },
       {
-        "label": "Siempre que he encontrado algo lo he devuelto a su dueño",
+        "label": "Cuando he encontrado algo lo he devuelto a su dueño.",
         "code": "items.item28"
       },
       {
-        "label": "Mi jefe inmediato se comunica regularmente con los trabajadores para recabar apreciaciones técnicas o percepciones relacionadas al trabajo",
+        "label": "Mi jefe inmediato se comunica regularmente con los trabajadores para recabar apreciaciones técnicas o percepciones relacionadas al trabajo.",
         "code": "items.item29"
       },
       {
-        "label": "Mi jefe inmediato me comunica si estoy realizando  bien o mal mi trabajo",
+        "label": "Mi jefe inmediato me comunica si estoy realizando bien o mal mi trabajo.",
         "code": "items.item30"
       },
       {
-        "label": "Me interesa el desarrollo de mi organización de salud",
+        "label": "Me interesa el desarrollo de mi dependencia.",
         "code": "items.item31"
       },
       {
-        "label": "Nunca he mentido",
+        "label": "He mentido.",
         "code": "items.item32"
       },
       {
-        "label": "Recibo buen trato en mi establecimiento de salud",
+        "label": "Recibo buen trato en mi dependencia.",
         "code": "items.item33"
       },
       {
-        "label": "Presto atención a los comunicados que emiten mis jefes",
+        "label": "Presto atención a los comunicados que emiten mis jefes.",
         "code": "items.item34"
       }
     ],

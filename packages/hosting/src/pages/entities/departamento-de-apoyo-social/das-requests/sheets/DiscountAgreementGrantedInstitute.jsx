@@ -8,7 +8,7 @@ import {
   findInstitution,
 } from "../../../../../utils";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import { QRCode } from "../../../../../components";
+import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const DiscountAgreementGrantedInstituteSheet = ({
   data,
@@ -18,7 +18,7 @@ export const DiscountAgreementGrantedInstituteSheet = ({
 
   const createdDate = dayjs(createAt.toDate());
 
-  const emptyContent = "...............";
+  const emptyContent = ".............................";
 
   return (
     <Container>
@@ -80,16 +80,13 @@ export const DiscountAgreementGrantedInstituteSheet = ({
                 <span> {createdDate.format("MM")} </span> del
                 <span> {createdDate.format("YYYY")} </span>
               </p>
-              <div className="signature">
-                <div className="signature__item">
-                  <div></div>
-                  <p>Firma</p>
-                </div>
-              </div>
-              <div className="cip">
-                <span>{headline?.cip || ""}</span>
-                <p>CIP</p>
-              </div>
+              <SignatureSheet
+                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
+                signatureUrl={headline.signaturePhoto.url}
+                name={userFullName(headline)}
+                cip={headline?.cip}
+                degree={findDegree(headline?.degree)?.label}
+              />
             </div>
           </div>
         </div>

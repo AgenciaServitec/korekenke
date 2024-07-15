@@ -264,18 +264,6 @@ export const DrawerLayout = ({
       ),
       children: [
         {
-          key: "requests-list",
-          icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
-          label: "Lista de solicitudes",
-          isVisible: existsAclsInAclsOfUser(
-            "departamento-de-apoyo-social",
-            ["dasRequests"],
-            ["/das-requests"]
-          ),
-          onClick: () =>
-            onClickMenu("/entities/departamento-de-apoyo-social/das-requests"),
-        },
-        {
           label: "Realizar Solicitud",
           key: "application-request",
           icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
@@ -288,6 +276,18 @@ export const DrawerLayout = ({
             onClickMenu(
               "/entities/departamento-de-apoyo-social/das-requests/new"
             ),
+        },
+        {
+          key: "requests-list",
+          icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
+          label: "Lista de solicitudes",
+          isVisible: existsAclsInAclsOfUser(
+            "departamento-de-apoyo-social",
+            ["dasRequests"],
+            ["/das-requests"]
+          ),
+          onClick: () =>
+            onClickMenu("/entities/departamento-de-apoyo-social/das-requests"),
         },
       ],
     },

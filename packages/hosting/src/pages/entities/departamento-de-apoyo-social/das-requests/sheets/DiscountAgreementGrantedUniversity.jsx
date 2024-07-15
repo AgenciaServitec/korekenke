@@ -5,7 +5,7 @@ import { userFullName } from "../../../../../utils/users/userFullName2";
 import dayjs from "dayjs";
 import { findDasRequest, findInstitution } from "../../../../../utils";
 import { findDegree } from "../../../../../utils";
-import { QRCode } from "../../../../../components";
+import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const DiscountAgreementGrantedUniversitySheet = ({
   dasRequest,
@@ -15,7 +15,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
 
   const createdDate = dayjs(createAt.toDate());
 
-  const emptyContent = "...............";
+  const emptyContent = ".............................";
 
   return (
     <Container>
@@ -77,25 +77,13 @@ export const DiscountAgreementGrantedUniversitySheet = ({
                 <span> {createdDate.format("MM")} </span> del
                 <span> {createdDate.format("YYYY")} </span>
               </p>
-              <div className="signature">
-                <div className="signature__item">
-                  <div>
-                    <img
-                      src={
-                        headline?.signaturePhoto?.thumbUrl ||
-                        headline.signaturePhoto.url
-                      }
-                      alt="signature photo"
-                    />
-                  </div>
-                  <p>{userFullName(headline)}</p>
-                </div>
-              </div>
-              <div className="cip">
-                <p>
-                  CIP: <span>{headline?.cip || ""}</span>
-                </p>
-              </div>
+              <SignatureSheet
+                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
+                signatureUrl={headline.signaturePhoto.url}
+                name={userFullName(headline)}
+                cip={headline?.cip}
+                degree={findDegree(headline?.degree)?.label}
+              />
             </div>
           </div>
         </div>
@@ -231,23 +219,22 @@ const Container = styled.div`
 
           .signature {
             display: flex;
-            gap: 1em;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 0.3em;
 
             &__item {
-              width: 12em;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
               font-weight: 500;
-              gap: 0.5em;
 
               div {
+                width: 12em;
                 height: 6em;
-              }
-
-              img {
-                width: 100%;
-                height: 100%;
+                padding-bottom: 0.5em;
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
               }
 
               p {
