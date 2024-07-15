@@ -1,14 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../../images";
-import { userFullName } from "../../../../../../utils/users/userFullName2";
+import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import { userFullName } from "../../../../../utils/users/userFullName2";
 import dayjs from "dayjs";
-import {
-  findDasRequest,
-  findInstitution,
-} from "../../../../../../utils/dasRequests";
-import { findDegree } from "../../../../../../utils";
-import { QRCode } from "../../../../../../components";
+import { findDasRequest, findInstitution } from "../../../../../utils";
+import { findDegree } from "../../../../../utils";
+import { QRCode } from "../../../../../components";
 
 export const DiscountAgreementGrantedUniversitySheet = ({
   data,

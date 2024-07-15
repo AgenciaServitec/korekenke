@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { notification, PDF, Sheet, Spinner } from "../../../../../components";
 import { useParams } from "react-router";
-import { DiscountAgreementGrantedUniversitySheet } from "./descuento-por-convenio-en-universidad";
+import { DiscountAgreementGrantedUniversitySheet } from "./DiscountAgreementGrantedUniversity";
 import { DiscountAgreementPostgraduateStudiesUniversitySheet } from "./DiscountAgreementPostgraduateStudiesUniversity";
 import { StudyScholarshipAwardedByUniversitySheet } from "./StudyScholarshipAwardedByUniversity";
 import { StudyScholarshipPostgraduateStudiesUniversitySheet } from "./StudyScholarshipPostgraduateStudiesUniversity";
