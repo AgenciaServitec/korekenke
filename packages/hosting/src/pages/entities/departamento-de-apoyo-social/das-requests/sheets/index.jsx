@@ -15,9 +15,13 @@ import { firestore } from "../../../../../firebase";
 import { ApplicantDocumentsSheet } from "./common/ApplicantDocumentsSheet";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findRelationShip } from "../../../../../utils";
+import { useGlobalData } from "../../../../../providers";
 
 export const DasRequestSheets = () => {
   const { requestType, dasRequestId } = useParams();
+  const { users } = useGlobalData();
+
+  // const [entityManage, setEntityManage] = useState(null);
 
   const [dasRequest = {} || null, dasRequestLoading, dasRequestError] =
     useDocumentData(firestore.collection("das-applications").doc(dasRequestId));
@@ -25,6 +29,19 @@ export const DasRequestSheets = () => {
   useEffect(() => {
     dasRequestError && notification({ type: "error" });
   }, [dasRequestError]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const _entities = await fetchEntities();
+  //     console.log("_entities: ", _entities);
+  //     const manageDas = _entities.find(
+  //       (entity) => entity?.nameId === "departamento-de-apoyo-social"
+  //     );
+  //     const _entityManage = await fetchUser(manageDas?.entityManageId);
+  //
+  //     setEntityManage(_entityManage);
+  //   })();
+  // }, []);
 
   if (dasRequestLoading) return <Spinner height="80vh" />;
 
@@ -39,104 +56,114 @@ export const DasRequestSheets = () => {
     return "persona";
   };
 
+  const user = users.find((user) => user?.id === dasRequest?.headline?.id);
+
+  const dasRequestView = {
+    ...dasRequest,
+    headline: {
+      ...dasRequest.headline,
+      ...user,
+    },
+  };
+
   const dasRequestContent = {
     descuento_por_convenio_en_universidad: (
       <>
         <Sheet>
           <DiscountAgreementGrantedUniversitySheet
-            data={dasRequest}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     descuento_por_convenio_postgrado_en_universidad: (
       <>
         <Sheet>
           <DiscountAgreementPostgraduateStudiesUniversitySheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     beca_de_estudios_en_universidad: (
       <>
         <Sheet>
           <StudyScholarshipAwardedByUniversitySheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     beca_de_estudio_para_postgrado_en_universidad: (
       <>
         <Sheet>
           <StudyScholarshipPostgraduateStudiesUniversitySheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     media_beca_en_universidad: (
       <>
         <Sheet>
           <HalfScholarshipAwardedByUniversitySheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     media_beca_para_postgrado_en_universidad: (
       <>
         <Sheet>
           <HalfScholarshipPostgraduateStudiesUniversitySheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     descuento_por_convenio_en_instituto: (
       <>
         <Sheet>
           <DiscountAgreementGrantedInstituteSheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     beca_de_estudios_en_instituto: (
       <>
         <Sheet>
           <InstituteStudyScolarshipSheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
     media_beca_en_instituto: (
       <>
         <Sheet>
           <InstituteStudyHalfScolarshipSheet
-            data={dasRequest}
+            data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
-        <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
+        <ApplicantDocumentsSheet applicant={dasRequestView.applicant} />
       </>
     ),
   };
