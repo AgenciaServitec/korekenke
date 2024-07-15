@@ -22,7 +22,7 @@ import {
   getSectionId,
   updateSection,
 } from "../../../../firebase/collections";
-import { findRole, userFullName } from "../../../../utils";
+import { findRole, getNameId, userFullName } from "../../../../utils";
 import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const SectionIntegration = () => {
@@ -51,6 +51,7 @@ export const SectionIntegration = () => {
   const mapSection = (formData) => ({
     ...section,
     name: formData.name,
+    nameId: getNameId(formData.name),
     departmentId: formData.departmentId,
     membersIds: formData?.membersIds || [],
     bossId: formData.bossId || null,
