@@ -13,6 +13,8 @@ import { InstituteStudyScolarshipSheet } from "./InstituteStudyScolarship";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
 import { ApplicantDocumentsSheet } from "./common/ApplicantDocumentsSheet";
+import { userFullName } from "../../../../../utils/users/userFullName2";
+import { findRelationShip } from "../../../../../utils";
 
 export const DasRequestSheets = () => {
   const { requestType, dasRequestId } = useParams();
@@ -26,11 +28,25 @@ export const DasRequestSheets = () => {
 
   if (dasRequestLoading) return <Spinner height="80vh" />;
 
+  const dataFamiliar = (familiar) => {
+    const existCifInFamiliar = familiar?.cif ? `con CIF ${familiar?.cif}` : "";
+
+    if (familiar)
+      return `${findRelationShip(familiar)} ${userFullName(
+        familiar
+      )} ${existCifInFamiliar}`;
+
+    return "persona";
+  };
+
   const dasRequestContent = {
     descuento_por_convenio_en_universidad: (
       <>
         <Sheet>
-          <DiscountAgreementGrantedUniversitySheet data={dasRequest} />
+          <DiscountAgreementGrantedUniversitySheet
+            data={dasRequest}
+            dataFamiliar={dataFamiliar}
+          />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
       </>
@@ -40,6 +56,7 @@ export const DasRequestSheets = () => {
         <Sheet>
           <DiscountAgreementPostgraduateStudiesUniversitySheet
             data={dasRequest}
+            dataFamiliar={dataFamiliar}
           />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
@@ -48,7 +65,10 @@ export const DasRequestSheets = () => {
     beca_de_estudios_en_universidad: (
       <>
         <Sheet>
-          <StudyScholarshipAwardedByUniversitySheet data={dasRequest} />
+          <StudyScholarshipAwardedByUniversitySheet
+            data={dasRequest}
+            dataFamiliar={dataFamiliar}
+          />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
       </>
@@ -58,6 +78,7 @@ export const DasRequestSheets = () => {
         <Sheet>
           <StudyScholarshipPostgraduateStudiesUniversitySheet
             data={dasRequest}
+            dataFamiliar={dataFamiliar}
           />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
@@ -66,7 +87,10 @@ export const DasRequestSheets = () => {
     media_beca_en_universidad: (
       <>
         <Sheet>
-          <HalfScholarshipAwardedByUniversitySheet data={dasRequest} />
+          <HalfScholarshipAwardedByUniversitySheet
+            data={dasRequest}
+            dataFamiliar={dataFamiliar}
+          />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
       </>
@@ -76,6 +100,7 @@ export const DasRequestSheets = () => {
         <Sheet>
           <HalfScholarshipPostgraduateStudiesUniversitySheet
             data={dasRequest}
+            dataFamiliar={dataFamiliar}
           />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
@@ -84,7 +109,10 @@ export const DasRequestSheets = () => {
     descuento_por_convenio_en_instituto: (
       <>
         <Sheet>
-          <DiscountAgreementGrantedInstituteSheet data={dasRequest} />
+          <DiscountAgreementGrantedInstituteSheet
+            data={dasRequest}
+            dataFamiliar={dataFamiliar}
+          />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
       </>
@@ -92,7 +120,10 @@ export const DasRequestSheets = () => {
     beca_de_estudios_en_instituto: (
       <>
         <Sheet>
-          <InstituteStudyScolarshipSheet data={dasRequest} />
+          <InstituteStudyScolarshipSheet
+            data={dasRequest}
+            dataFamiliar={dataFamiliar}
+          />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
       </>
@@ -100,7 +131,10 @@ export const DasRequestSheets = () => {
     media_beca_en_instituto: (
       <>
         <Sheet>
-          <InstituteStudyHalfScolarshipSheet data={dasRequest} />
+          <InstituteStudyHalfScolarshipSheet
+            data={dasRequest}
+            dataFamiliar={dataFamiliar}
+          />
         </Sheet>
         <ApplicantDocumentsSheet applicant={dasRequest.applicant} />
       </>
