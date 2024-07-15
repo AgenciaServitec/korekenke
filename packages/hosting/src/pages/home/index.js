@@ -110,17 +110,6 @@ export const HomeIntegration = () => {
         )}
         <div>
           <div className="items-icon">
-            <FontAwesomeIcon icon={faLock} size="5x" />
-          </div>
-          <div>
-            <h2>SEGURIDAD</h2>
-            <ul>
-              <li>Tu información 100% segura en nuestra base de datos</li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <div className="items-icon">
             <FontAwesomeIcon icon={faPoll} size="5x" />
           </div>
           <div>
@@ -131,6 +120,17 @@ export const HomeIntegration = () => {
                   1. Realizar encuesta de estudio del clima organizacional
                 </Link>
               </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faLock} size="5x" />
+          </div>
+          <div>
+            <h2>SEGURIDAD</h2>
+            <ul>
+              <li>Tu información 100% segura en nuestra base de datos</li>
             </ul>
           </div>
         </div>
