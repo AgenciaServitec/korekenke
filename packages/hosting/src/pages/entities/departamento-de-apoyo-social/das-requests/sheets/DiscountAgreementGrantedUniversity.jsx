@@ -5,7 +5,7 @@ import { userFullName } from "../../../../../utils/users/userFullName2";
 import dayjs from "dayjs";
 import { findDasRequest, findInstitution } from "../../../../../utils";
 import { findDegree } from "../../../../../utils";
-import { QRCode } from "../../../../../components";
+import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const DiscountAgreementGrantedUniversitySheet = ({
   dasRequest,
@@ -77,31 +77,13 @@ export const DiscountAgreementGrantedUniversitySheet = ({
                 <span> {createdDate.format("MM")} </span> del
                 <span> {createdDate.format("YYYY")} </span>
               </p>
-              <div className="signature">
-                <div className="signature__item">
-                  <div>
-                    <img
-                      src={
-                        headline?.signaturePhoto?.thumbUrl ||
-                        headline.signaturePhoto.url
-                      }
-                      alt="signature photo"
-                    />
-                  </div>
-                  <p>{userFullName(headline)}</p>
-                </div>
-                <div className="cip">
-                  <p>
-                    CIP: <span>{headline?.cip || ""}</span>
-                  </p>
-                </div>
-                <div className="cip">
-                  <p>
-                    Grado:{" "}
-                    <span>{findDegree(headline?.degree)?.label || ""}</span>
-                  </p>
-                </div>
-              </div>
+              <SignatureSheet
+                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
+                signatureUrl={headline.signaturePhoto.url}
+                name={userFullName(headline)}
+                cip={headline?.cip}
+                degree={findDegree(headline?.degree)?.label}
+              />
             </div>
           </div>
         </div>
