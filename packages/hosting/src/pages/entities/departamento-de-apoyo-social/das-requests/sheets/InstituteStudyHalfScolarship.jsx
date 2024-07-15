@@ -8,7 +8,7 @@ import {
   findDegree,
   findInstitution,
 } from "../../../../../utils";
-import { QRCode } from "../../../../../components";
+import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
   const { headline, createAt, familiar, institution, requestType } = data;
@@ -74,16 +74,13 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
                 <span> {createdDate.format("MM")} </span> del
                 <span> {createdDate.format("YYYY")} </span>
               </p>
-              <div className="signature">
-                <div className="signature__item">
-                  <div></div>
-                  <p>Firma</p>
-                </div>
-              </div>
-              <div className="cip">
-                <span>{headline?.cip || ""}</span>
-                <p>CIP</p>
-              </div>
+              <SignatureSheet
+                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
+                signatureUrl={headline.signaturePhoto.url}
+                name={userFullName(headline)}
+                cip={headline?.cip}
+                degree={findDegree(headline?.degree)?.label}
+              />
             </div>
           </div>
         </div>
