@@ -31,6 +31,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
               <p>SOLICITA:</p>
               <p>
                 {requestType && findDasRequest(requestType).name}
+                <br />
                 <span>{findInstitution(institution).name || emptyContent}</span>
               </p>
             </div>
@@ -144,7 +145,7 @@ const Container = styled.div`
         margin: 1.5em 0;
 
         &__text {
-          width: 30em;
+          max-width: 30em;
           display: flex;
           gap: 0.5em;
 
