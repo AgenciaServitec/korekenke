@@ -16,7 +16,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
     questions: yup.object({
       establishment: yup.string().required(),
       type: yup.number().required(),
-      subsector: yup.number().required(),
+      subsector: yup.string().required(),
       ubigeus: yup.number().required(),
       age: yup.number().required(),
       gender: yup.number().required(),
