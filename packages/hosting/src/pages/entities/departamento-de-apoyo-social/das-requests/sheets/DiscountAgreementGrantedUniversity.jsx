@@ -8,10 +8,10 @@ import { findDegree } from "../../../../../utils";
 import { QRCode } from "../../../../../components";
 
 export const DiscountAgreementGrantedUniversitySheet = ({
-  data,
+  dasRequest,
   dataFamiliar,
 }) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -79,13 +79,22 @@ export const DiscountAgreementGrantedUniversitySheet = ({
               </p>
               <div className="signature">
                 <div className="signature__item">
-                  <div></div>
-                  <p>Firma</p>
+                  <div>
+                    <img
+                      src={
+                        headline?.signaturePhoto?.thumbUrl ||
+                        headline.signaturePhoto.url
+                      }
+                      alt="signature photo"
+                    />
+                  </div>
+                  <p>{userFullName(headline)}</p>
                 </div>
               </div>
               <div className="cip">
-                <span>{headline?.cip || ""}</span>
-                <p>CIP</p>
+                <p>
+                  CIP: <span>{headline?.cip || ""}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -207,7 +216,7 @@ const Container = styled.div`
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 1em;
+          gap: 0.5em;
 
           .date {
             margin-bottom: 1em;
@@ -230,6 +239,7 @@ const Container = styled.div`
               flex-direction: column;
               justify-content: flex-end;
               font-weight: 500;
+              gap: 0.5em;
 
               div {
                 height: 6em;
@@ -258,11 +268,6 @@ const Container = styled.div`
 
             span {
               width: 100%;
-            }
-
-            p {
-              border-top: 1px dotted #000;
-              padding-top: 0.5em;
             }
           }
         }
