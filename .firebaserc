@@ -35,10 +35,10 @@
     },
     "korekenke-dev": {
       "extensionInstances": {
-        "correspondence-documents": "8d20c304d5a488a400b9a362ee6a747745e650a5d84a0faf634b2694e56f0456",
+        "correspondence-documents": "080419e8bb82f3c62e688a1385617e8899d13f4a9f8fb385f01d7c72a985a7eb",
+        "storage-resize-images-photos": "bff455afa0533a6d99776f7844274560f514a179046823ec6c6629ef69c31e34",
         "storage-resize-images": "7f9cc15c6d6cb2cbac1704fe8bd7f54769d9a268b4b452625c08926fe026b838",
-        "user-documents": "0d6f57647a53a991ea6ec4010f8f1d454358f899ac97fde3020e4722db177401",
-        "storage-resize-images-photos": "ce5da84c9d7f0042ce8167992e8e612496502a297508678ca130850861cbbc3f"
+        "user-documents": "0d6f57647a53a991ea6ec4010f8f1d454358f899ac97fde3020e4722db177401"
       }
     }
   }

@@ -183,6 +183,7 @@ const DasRequest = ({
       case 3:
         return (
           <Step4ApplicantDocuments
+            isNew={isNew}
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
           />
@@ -200,9 +201,9 @@ const DasRequest = ({
       case 5:
         return (
           <Step6DasRequestSuccess
-            onGoToHome={onGoToHome}
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
+            onGoToHome={onGoToHome}
           />
         );
       default:
