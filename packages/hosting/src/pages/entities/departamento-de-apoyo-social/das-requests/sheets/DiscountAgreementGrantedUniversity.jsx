@@ -90,11 +90,17 @@ export const DiscountAgreementGrantedUniversitySheet = ({
                   </div>
                   <p>{userFullName(headline)}</p>
                 </div>
-              </div>
-              <div className="cip">
-                <p>
-                  CIP: <span>{headline?.cip || ""}</span>
-                </p>
+                <div className="cip">
+                  <p>
+                    CIP: <span>{headline?.cip || ""}</span>
+                  </p>
+                </div>
+                <div className="cip">
+                  <p>
+                    Grado:{" "}
+                    <span>{findDegree(headline?.degree)?.label || ""}</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -231,23 +237,22 @@ const Container = styled.div`
 
           .signature {
             display: flex;
-            gap: 1em;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 0.3em;
 
             &__item {
-              width: 12em;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
               font-weight: 500;
-              gap: 0.5em;
 
               div {
+                width: 12em;
                 height: 6em;
-              }
-
-              img {
-                width: 100%;
-                height: 100%;
+                padding-bottom: 0.5em;
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
               }
 
               p {
