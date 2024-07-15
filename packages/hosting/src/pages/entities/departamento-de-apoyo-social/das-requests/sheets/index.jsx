@@ -141,5 +141,5 @@ export const DasRequestSheets = () => {
     ),
   };
 
-  return <PDF>{dasRequestContent[requestType]}</PDF>;
+  return <PDF>{dasRequestContent?.[requestType]}</PDF>;
 };
