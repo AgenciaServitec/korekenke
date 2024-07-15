@@ -34,6 +34,7 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
               <p>SOLICITA:</p>
               <p>
                 {requestType && findDasRequest(requestType).name}
+                <br />
                 <span>{findInstitution(institution).name || emptyContent}</span>
               </p>
             </div>
@@ -146,7 +147,7 @@ const Container = styled.div`
         margin: 1.5em 0;
 
         &__text {
-          width: 30em;
+          max-width: 30em;
           display: flex;
           gap: 0.5em;
 
@@ -221,22 +222,22 @@ const Container = styled.div`
 
           .signature {
             display: flex;
-            gap: 1em;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 0.3em;
 
             &__item {
-              width: 12em;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
               font-weight: 500;
 
               div {
+                width: 12em;
                 height: 6em;
-              }
-
-              img {
-                width: 100%;
-                height: 100%;
+                padding-bottom: 0.5em;
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
               }
 
               p {
@@ -254,10 +255,7 @@ const Container = styled.div`
             justify-content: flex-end;
             font-weight: 500;
             text-align: center;
-            p {
-              border-top: 1px dotted #000;
-              padding-top: 0.5em;
-            }
+
             span {
               width: 100%;
             }
