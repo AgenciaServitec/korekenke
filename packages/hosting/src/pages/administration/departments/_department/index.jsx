@@ -23,7 +23,7 @@ import {
   getDepartmentId,
   updateDepartment,
 } from "../../../../firebase/collections";
-import { findRole, userFullName } from "../../../../utils";
+import { findRole, getNameId, userFullName } from "../../../../utils";
 import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const DepartmentIntegration = () => {
@@ -52,6 +52,7 @@ export const DepartmentIntegration = () => {
   const mapDepartment = (formData) => ({
     ...department,
     name: formData.name,
+    nameId: getNameId(formData.name),
     description: formData.description,
     entityId: formData.entityId,
     membersIds: formData?.membersIds || [],
