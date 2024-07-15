@@ -47,19 +47,19 @@ export const HomeIntegration = () => {
               <li>
                 <Link
                   to={onNavigateGoTo(
-                    "/entities/departamento-de-apoyo-social/das-requests"
+                    "/entities/departamento-de-apoyo-social/das-requests/new"
                   )}
                 >
-                  1. Lista de solicitudes
+                  1. Realizar una solicitud
                 </Link>
               </li>
               <li>
                 <Link
                   to={onNavigateGoTo(
-                    "/entities/departamento-de-apoyo-social/das-requests/new"
+                    "/entities/departamento-de-apoyo-social/das-requests"
                   )}
                 >
-                  2. Realizar una solicitud
+                  2. Lista de solicitudes
                 </Link>
               </li>
             </ul>
