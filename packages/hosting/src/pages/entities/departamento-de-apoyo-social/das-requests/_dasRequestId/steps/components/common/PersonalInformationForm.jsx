@@ -239,7 +239,7 @@ export const PersonalInformationForm = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Input
-                        label="Actual Servicio"
+                        label="Actual Servicio (En donde trabajas)"
                         name={name}
                         value={value}
                         onChange={onChange}

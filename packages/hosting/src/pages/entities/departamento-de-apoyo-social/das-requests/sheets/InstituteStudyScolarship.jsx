@@ -1,84 +1,101 @@
 import React from "react";
 import styled from "styled-components";
 import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import dayjs from "dayjs";
+import { userFullName } from "../../../../../utils/users/userFullName2";
+import {
+  findDasRequest,
+  findDegree,
+  findInstitution,
+} from "../../../../../utils";
+import { QRCode } from "../../../../../components";
 
-export const InstituteStudyScolarshipSheet = () => {
+export const InstituteStudyScolarshipSheet = ({ data, dataFamiliar }) => {
+  const { headline, createAt, familiar, institution, requestType } = data;
+
+  const createdDate = dayjs(createAt.toDate());
+
+  const emptyContent = "...............";
+
   return (
     <Container>
       <div className="sheet">
         <div className="header">
-          <img src={LogoArmyPeru} alt="" />
-          <h2>Beca de estudios en instituto</h2>
-          <img src={LogoPrimary} alt="" />
+          <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
+          <h2>Beca de estudio en instituto</h2>
+          <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
-          <div className="request">
-            <span className="requests1">SOLICITA: </span>
-            <span className="scolarship">
-              BECA DE ESTUDIO otorgada por el INSTITUTO ..........
-            </span>
+          <div className="request-type">
+            <div className="request-type__text">
+              <p>SOLICITA:</p>
+              <p>
+                {requestType && findDasRequest(requestType).name}
+                <span>{findInstitution(institution).name || emptyContent}</span>
+              </p>
+            </div>
           </div>
-          <div className="general">
-            <h2>
-              SEÑOR GENERAL DE BRIGADA CMDTE GRAL DEL COMANDO DE BIENESTAR DEL
-              EJÉRCITO (DEPARTAMENTO DE APOYO SOCIAL)
+          <div className="request-content">
+            <h2 className="request-content__title">
+              Señor General De Brigada Cmdte Gral Del Comando De Bienestar Del
+              Ejército (Departamento De Apoyo Social)
             </h2>
+            <p className="request-content__introduction">
+              <span className="first-word">S.G.</span>
+              <span>{userFullName(headline)}</span>, Grado
+              <span>{findDegree(headline?.degree).label || emptyContent}</span>
+              CIP
+              <span> {headline?.cip || emptyContent} </span> en actual servicio
+              <span> {headline?.currentService || emptyContent} </span> con
+              Telf.
+              <span> {headline?.phone?.number || emptyContent} </span> ante Ud.
+              con el debido respeto me presento y expongo:
+            </p>
+            <p className="request-content__body">
+              Que teniendo conocimiento que el instituto
+              <span> {findInstitution(institution).name || emptyContent} </span>
+              por intermedio del COBIENE-DAS está otorgando BECA DE ESTUDIO por
+              convenio al personal militar y civil del Ejército, solicito a Ud.,
+              Mi General disponer a quien corresponda se me inscriba a fin de
+              obtener este beneficio de mi
+              <span> {dataFamiliar(familiar)} </span>, en la especialidad o
+              carrera de
+              <span> {institution.specialty || emptyContent} </span>.
+            </p>
+            <div className="request-content__message">
+              <p>
+                <span>POR LO EXPUESTO:</span> A Ud. respetuosamente solicito
+                acceder a mi pedido.
+              </p>
+            </div>
+            <div className="request-content__footer">
+              <p className="date">
+                Lima, <span> {createdDate.format("DD")} </span> de
+                <span> {createdDate.format("MM")} </span> del
+                <span> {createdDate.format("YYYY")} </span>
+              </p>
+              <div className="signature">
+                <div className="signature__item">
+                  <div></div>
+                  <p>Firma</p>
+                </div>
+              </div>
+              <div className="cip">
+                <span>{headline?.cip || ""}</span>
+                <p>CIP</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="description">
-          <p>S.G.</p>
-          <span>
-            ..........................................................................................................&nbsp;
-            &nbsp; Grado ......................................&nbsp; con
-            CIP.............................. en actual servicio
-            ..............................................................................
-            con teléf.&nbsp; .................. ante UD. con el debido respeto
-            me presento y expongo:
-          </span>
-          <br />
-          <br />
-          <span>
-            Que teniendo conocimiento que el INSTITUTO
-            ..........................................................................
-            por intermedio del COBIENE-DAS está otorgando BECA DE ESTUDIO por
-            convenio al personal militar y civil del Ejército, solicito a Ud.,
-            Mi General disponer a quien corresponda se me inscriba a fin de
-            obtener este beneficio, para
-            ....................................................................,
-            en la especialidad o carrera de ...................................
-            .
-          </span>
-        </div>
-        <div className="end-description">
-          <span>
-            POR LO EXPUESTO:
-            <br />A Ud.respuestuosamente solicito acceder a mi pedido.
-          </span>
-        </div>
-        <div className="date">
-          <span>Lima, ..... de .............. del 20.....</span>
-        </div>
-        <div className="firm">
-          <strong>FIRMA</strong>
-        </div>
-        <div className="post-firm">
-          <strong>
-            Post FIRMA: ...........................................
-          </strong>
-          <br />
-          <strong>
-            CIP: .........................................................
-          </strong>
         </div>
         <div className="footer">
-          <span>
-            <strong>PIEZAS ADJUNTAS:</strong>
-          </span>
-
-          <ul>
-            <li>2 COPIAS DE CIP Y DNI (TITULAR)</li>
-            <li>2 COPIAS DE CIF Y DNI (FAMILIAR)</li>
-          </ul>
+          <QRCode
+            value={window.location.href}
+            icon={LogoArmyPeru}
+            iconSize={25}
+            type="svg"
+            size={110}
+            bordered={false}
+          />
         </div>
       </div>
     </Container>
@@ -89,12 +106,17 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   padding: 2em;
 
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   .sheet {
-    width: 90%;
-    margin: auto;
+    width: 100%;
 
     .header {
       display: grid;
@@ -102,7 +124,6 @@ const Container = styled.div`
       place-items: center;
 
       h2 {
-        font-stretch: extra-condensed;
         font-size: 1.5em;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
@@ -110,75 +131,156 @@ const Container = styled.div`
       }
 
       img {
-        width: 4em;
-        height: auto;
+        width: auto;
+        height: 5em;
         object-fit: contain;
       }
     }
 
     .main {
-      .request {
-        gap: 1em;
+      .request-type {
         display: flex;
-        width: 400px;
-        margin-left: 270px;
-        margin-top: 2em;
-        margin-bottom: 2em;
-        font-size: 16px;
+        justify-content: flex-end;
+        margin: 1.5em 0;
+
+        &__text {
+          width: 30em;
+          display: flex;
+          gap: 0.5em;
+
+          span {
+            font-weight: 500;
+          }
+        }
       }
-      .general {
-        margin-bottom: 2em;
-        h2 {
-          font-size: 14px;
+
+      .request-content {
+        &__title {
+          font-size: 1.1em;
           text-align: center;
-          line-height: 1em;
+          text-transform: uppercase;
+          line-height: 1.5;
+          margin-bottom: 1em;
+        }
+
+        &__introduction {
+          line-height: 1.5;
+          margin-bottom: 1em;
+          text-align: justify;
+
+          .first-word {
+            display: block;
+            text-align: left;
+            border: none;
+            font-weight: normal;
+          }
+          span {
+            font-weight: 500;
+          }
+        }
+
+        &__body {
+          line-height: 1.5;
+          margin-bottom: 1em;
+          text-indent: 3em;
+          text-align: justify;
+
+          span {
+            font-weight: 500;
+          }
+        }
+
+        &__message {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 1em;
+
+          span {
+            display: block;
+          }
+        }
+
+        &__footer {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 1em;
+
+          .date {
+            margin-bottom: 1em;
+            span {
+              font-weight: 500;
+            }
+          }
+
+          & > div {
+            display: flex;
+          }
+
+          .signature {
+            display: flex;
+            gap: 1em;
+
+            &__item {
+              width: 12em;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+              font-weight: 500;
+
+              div {
+                height: 6em;
+              }
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+
+              p {
+                border-top: 1px dotted #000;
+                text-align: center;
+                padding-top: 0.5em;
+              }
+            }
+          }
+
+          .cip {
+            width: 12em;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            font-weight: 500;
+            text-align: center;
+
+            span {
+              width: 100%;
+            }
+
+            p {
+              border-top: 1px dotted #000;
+              padding-top: 0.5em;
+            }
+          }
         }
       }
     }
 
-    .description {
-      font-size: 16px;
-      font-family: Arial, Helvetica, sans-serif;
-      text-align: justify;
-      line-height: 1.6em;
-    }
-
-    .end-description {
-      font-size: 16px;
-      margin-top: 2em;
-      width: 400px;
-      margin-left: auto;
-    }
-
-    .date {
-      margin-top: 2em;
-      margin-left: auto;
-      width: 200px;
-      font-size: 16px;
-    }
-
-    .firm {
-      border-top: 3px solid black;
-      width: 200px;
-      text-align: center;
-      margin-left: auto;
-      margin-top: 5em;
-      padding-top: 0.8em;
-    }
-
-    .post-firm {
-      margin-top: 4em;
-      line-height: 2em;
-      width: 230px;
-      margin-left: auto;
-    }
-
     .footer {
-      margin-top: 2em;
-      font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
 
-      ul {
-        list-style-type: none;
+      &__documents-certificates {
+        h3 {
+          font-size: 1em;
+          text-transform: uppercase;
+          text-decoration: underline;
+        }
+        ul {
+          list-style: none;
+          line-height: 1.5;
+        }
       }
     }
   }

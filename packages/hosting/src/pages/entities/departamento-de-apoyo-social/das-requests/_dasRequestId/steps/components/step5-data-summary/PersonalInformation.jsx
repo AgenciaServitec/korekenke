@@ -57,7 +57,7 @@ export const PersonalInformation = ({ dasRequest }) => {
         </Col>
         <Col span={24} sm={8}>
           <div className="wrapper-item">
-            <span className="label">Servicio actual</span>
+            <span className="label">Servicio actual (En donde trabajas)</span>
             <span className="value capitalize">
               {headline?.currentService || ""}
             </span>

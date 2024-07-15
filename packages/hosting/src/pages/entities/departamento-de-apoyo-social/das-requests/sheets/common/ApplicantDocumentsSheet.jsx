@@ -7,13 +7,9 @@ export const ApplicantDocumentsSheet = ({ applicant = null }) => {
   const applicantDocuments = Object.entries(applicant.documents).map(
     ([key, values]) => ({
       nameField: key,
-      documents: values?.numberCopies
-        ? Array(values?.numberCopies).fill(values)
-        : null,
+      documents: values?.numberCopies ? Array(1).fill(values) : null,
     })
   );
-
-  console.log(applicantDocuments);
 
   return (
     <>
