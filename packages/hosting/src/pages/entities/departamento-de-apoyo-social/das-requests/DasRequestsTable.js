@@ -157,20 +157,18 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
-          {!isPositiveOrApproved(dasRequest) && (
-            <Acl
-              category="departamento-de-apoyo-social"
-              subCategory="dasRequests"
-              name="/das-requests/:dasRequestId#reply"
-            >
-              <IconAction
-                tooltipTitle="Responder solicitud"
-                icon={faReply}
-                styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => onAddReplyDasRequest(dasRequest)}
-              />
-            </Acl>
-          )}
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#reply"
+          >
+            <IconAction
+              tooltipTitle="Responder solicitud"
+              icon={faReply}
+              styled={{ color: (theme) => theme.colors.primary }}
+              onClick={() => onAddReplyDasRequest(dasRequest)}
+            />
+          </Acl>
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
