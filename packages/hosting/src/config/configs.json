@@ -38,8 +38,8 @@
     "publicHostingUrl": "-",
     "publicStorageUrl": "-",
     "buckets": {
-      "documents": "gs://korekenke-documents",
-      "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito",
+      "documents": "gs://korekenke-documents-dev",
+      "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito-dev",
       "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social"
     },
     "apiUrl": "https://korekenke-dev.web.app/api"
