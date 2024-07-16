@@ -37,7 +37,7 @@ export const DasRequestsTable = ({
         entitiesRef.where("nameId", "==", "departamento-de-apoyo-social")
       );
 
-      setEntity(entities[0]);
+      setEntity(entities?.[0]);
     })();
   }, []);
 

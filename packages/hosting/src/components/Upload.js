@@ -118,8 +118,8 @@ export const Upload = ({
   const uploadErrorMessage = () =>
     notification({
       type: "error",
-      title: " Error uploading the file",
-      description: "Try again!",
+      title: "Error al cargar el archivo",
+      description: "¡Intentar otra vez!",
     });
 
   const addFileToFiles = (file) =>
@@ -146,7 +146,7 @@ export const Upload = ({
   const onRemove = async (file) =>
     new Promise((resolve) => {
       modalConfirm({
-        content: "The image will be deleted.",
+        content: "La imagen será eliminada.",
         onOk: async () => {
           await deleteFile(file);
           resolve(true);
@@ -165,7 +165,9 @@ export const Upload = ({
   const beforeUpload = () => {
     if (isEmpty(files)) return true;
 
-    AntdMessage.error(`Delete current file before uploading new file!`);
+    AntdMessage.error(
+      `¡Elimine el archivo actual antes de cargar un archivo nuevo!`
+    );
 
     return AntdUpload.LIST_IGNORE;
   };
