@@ -60,7 +60,7 @@
     "buckets": {
       "documents": "gs://korekenke-documents",
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito",
-      "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social"
+      "departamentoDeApoyoSocial": "gs://departamento-apoyo-social"
     },
     "apiUrl": "https://korekenke-prod.web.app/api"
   }
