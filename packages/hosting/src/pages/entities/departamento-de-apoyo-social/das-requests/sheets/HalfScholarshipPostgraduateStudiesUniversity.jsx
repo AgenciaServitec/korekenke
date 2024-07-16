@@ -82,7 +82,7 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
               </p>
               <SignatureSheet
                 signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline.signaturePhoto.url}
+                signatureUrl={headline?.signaturePhoto.url}
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}

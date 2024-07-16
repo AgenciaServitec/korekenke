@@ -13,6 +13,8 @@ export const DiscountAgreementGrantedUniversitySheet = ({
 }) => {
   const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
+  console.log(dasRequest);
+
   const createdDate = dayjs(createAt.toDate());
 
   const emptyContent = ".............................";
@@ -80,7 +82,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
               </p>
               <SignatureSheet
                 signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline.signaturePhoto.url}
+                signatureUrl={headline?.signaturePhoto?.url}
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}
