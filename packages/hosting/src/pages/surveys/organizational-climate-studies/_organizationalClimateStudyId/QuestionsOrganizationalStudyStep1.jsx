@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
 import { Surveys } from "../../../../data-list";
+import { useNavigate } from "react-router";
 
 export const QuestionsOrganizationalStudyStep1 = ({
   onSetCurrent,
@@ -12,6 +13,10 @@ export const QuestionsOrganizationalStudyStep1 = ({
   stepData1,
   onSetStepData1,
 }) => {
+  const navigate = useNavigate();
+
+  const onGoBack = () => navigate(-1);
+
   const schema = yup.object({
     questions: yup.object({
       establishment: yup.string().required(),
@@ -78,7 +83,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Select
-                    label={question.label}
+                    label={`${index + 1}. ${question.label}`}
                     name={name}
                     value={value}
                     options={question.options}
@@ -96,7 +101,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label={question.label}
+                    label={`${index + 1}. ${question.label}`}
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -110,6 +115,11 @@ export const QuestionsOrganizationalStudyStep1 = ({
         })}
       </Row>
       <Row justify="end" gutter={[16, 16]}>
+        <Col xs={24} sm={6} md={4}>
+          <Button size="large" block onClick={onGoBack} loading={loading}>
+            Cancelar
+          </Button>
+        </Col>
         <Col xs={24} sm={6} md={4}>
           <Button
             type="primary"

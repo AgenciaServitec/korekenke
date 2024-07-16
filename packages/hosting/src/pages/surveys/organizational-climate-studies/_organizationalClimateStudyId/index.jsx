@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row, Steps, Title, notification } from "../../../../components";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import { firestore } from "../../../../firebase";
@@ -7,9 +7,12 @@ import { QuestionsOrganizationalStudyStep1 } from "./QuestionsOrganizationalStud
 import { ItemsOrganizationalStudyStep2 } from "./ItemsOrganizationalStudyStep2";
 import { useAuthentication } from "../../../../providers";
 import { CompletedQuestionnaire } from "./CompletedQuestionnaire";
+import { useParams } from "react-router";
+import { EditOrganizationClimateStudyId } from "./EditOrganizationClimateStudyId";
 
 export const OrganizationalClimateStudyIntegration = () => {
   const { authUser } = useAuthentication();
+  const { organizationalClimateStudyId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -86,10 +89,18 @@ export const OrganizationalClimateStudyIntegration = () => {
           Cuestionario para el estudio del Clima Organizacional
         </Title>
       </Col>
-      <Col span={10}>
-        <Steps current={current} items={items} />
-      </Col>
-      <Col span={24}>{steps[current].content}</Col>
+      {organizationalClimateStudyId !== "new" ? (
+        <Col span={24}>
+          <EditOrganizationClimateStudyId />
+        </Col>
+      ) : (
+        <>
+          <Col span={10}>
+            <Steps current={current} items={items} />
+          </Col>
+          <Col span={24}>{steps[current].content}</Col>
+        </>
+      )}
     </Row>
   );
 };
