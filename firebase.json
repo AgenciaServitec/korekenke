@@ -49,10 +49,10 @@
     "rules": "firestore.rules"
   },
   "extensions": {
-    "correspondence-documents": "firebase/storage-resize-images@0.2.3",
-    "storage-resize-images": "firebase/storage-resize-images@0.2.3",
-    "user-documents": "firebase/storage-resize-images@0.2.3",
-    "storage-resize-images-photos": "firebase/storage-resize-images@0.1.33"
+    "correspondence-documents": "firebase/storage-resize-images@0.2.5",
+    "storage-resize-images-photos": "firebase/storage-resize-images@0.2.5",
+    "storage-resize-images": "firebase/storage-resize-images@0.2.5",
+    "user-documents": "firebase/storage-resize-images@0.2.5"
   },
   "functions": {
     "predeploy": [

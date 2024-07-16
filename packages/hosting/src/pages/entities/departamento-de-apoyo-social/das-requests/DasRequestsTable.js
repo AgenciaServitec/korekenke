@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
 import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
@@ -14,6 +14,9 @@ import { DasRequestStatus, institutions } from "../../../../data-list";
 import { useNavigate } from "react-router";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import styled from "styled-components";
+import { entitiesRef } from "../../../../firebase/collections";
+import { fetchCollectionOnce } from "../../../../firebase/firestore";
+import { useAuthentication } from "../../../../providers";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -24,6 +27,19 @@ export const DasRequestsTable = ({
   onShowReplyDasRequestInformation,
 }) => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+
+  const [entity, setEntity] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const entities = await fetchCollectionOnce(
+        entitiesRef.where("nameId", "==", "departamento-de-apoyo-social")
+      );
+
+      setEntity(entities?.[0]);
+    })();
+  }, []);
 
   const navigateTo = (pathname) => navigate(pathname);
 
@@ -161,18 +177,20 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
-          <Acl
-            category="departamento-de-apoyo-social"
-            subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#reply"
-          >
-            <IconAction
-              tooltipTitle="Responder solicitud"
-              icon={faReply}
-              styled={{ color: (theme) => theme.colors.primary }}
-              onClick={() => onAddReplyDasRequest(dasRequest)}
-            />
-          </Acl>
+          {entity?.entityManageId === authUser?.id && (
+            <Acl
+              category="departamento-de-apoyo-social"
+              subCategory="dasRequests"
+              name="/das-requests/:dasRequestId#reply"
+            >
+              <IconAction
+                tooltipTitle="Responder solicitud"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.primary }}
+                onClick={() => onAddReplyDasRequest(dasRequest)}
+              />
+            </Acl>
+          )}
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"

@@ -19,6 +19,7 @@ import { Step6DasRequestSuccess } from "./steps/Step6DasRequestSuccess";
 import { EditDasRequestIntegration } from "./editing/EditDasRequest";
 import { omit } from "lodash";
 import { firestore } from "../../../../../firebase";
+import { setLocalStorage } from "../../../../../utils";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -50,14 +51,19 @@ export const DasRequestIntegration = () => {
   const isNew = dasRequestId === "new";
 
   useEffect(() => {
-    isNew
-      ? setDasRequest({ id: getDasApplicationId() })
-      : (async () => {
-          await firestore
-            .collection("das-applications")
-            .doc(dasRequestId)
-            .onSnapshot((snapshot) => setDasRequest(snapshot.data()));
-        })();
+    if (isNew) {
+      const dasApplicationId = getDasApplicationId();
+
+      setLocalStorage("dasRequest", { id: dasApplicationId });
+      setDasRequest({ id: dasApplicationId });
+    } else {
+      (async () => {
+        await firestore
+          .collection("das-applications")
+          .doc(dasRequestId)
+          .onSnapshot((snapshot) => setDasRequest(snapshot.data()));
+      })();
+    }
   }, []);
 
   const mapForm = (formData) => ({
@@ -183,6 +189,7 @@ const DasRequest = ({
       case 3:
         return (
           <Step4ApplicantDocuments
+            isNew={isNew}
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
           />
@@ -200,9 +207,9 @@ const DasRequest = ({
       case 5:
         return (
           <Step6DasRequestSuccess
-            onGoToHome={onGoToHome}
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
+            onGoToHome={onGoToHome}
           />
         );
       default:

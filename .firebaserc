@@ -20,25 +20,20 @@
     }
   },
   "etags": {
-    "vida-organic-stores-dev": {
+    "korekenke-dev": {
       "extensionInstances": {
-        "storage-resize-images-photos": "ea176abf15c07510a2405d45e2e64242d0a5f8d20263d2090d8f4bebde36c151"
+        "correspondence-documents": "07c9763ce97fa855195bd11c0932bb5ba7bb174b5af3d8474e1984c6fda9bf2b",
+        "storage-resize-images-photos": "a28847f6cf8a994d6548b122ea3d7495b0a44ea1aa2bbdecca3b7862af8ae7d8",
+        "storage-resize-images": "7f9cc15c6d6cb2cbac1704fe8bd7f54769d9a268b4b452625c08926fe026b838",
+        "user-documents": "0d6f57647a53a991ea6ec4010f8f1d454358f899ac97fde3020e4722db177401"
       }
     },
     "korekenke-prod": {
       "extensionInstances": {
-        "correspondence-documents": "0e51b616caa350e5ad765d65a9e6f3c658b6e09136e9ba046d094a55b0bab9dd",
+        "correspondence-documents": "392f55899ce14652f41a790b79476d8d82e6dda105e6266e8ccf0bda49bf387c",
+        "storage-resize-images-photos": "0f8f5a7a0358255c9d6e90e23c8e57f47a889edc5a83bd0396b22e435026d46e",
         "storage-resize-images": "d764308d3189ec2d3a735e564d6d02a239f99c051482a3a226e4648548ee8646",
-        "user-documents": "77cb750f9cb48d3108dbc690db0fc4ba57c56781338aa8a68657622d5ab9a008",
-        "storage-resize-images-photos": "2db32f6ecefb9c67b5f7d9f9ae12ff78234d2f9b23fac461fe5fbf23e80ac800"
-      }
-    },
-    "korekenke-dev": {
-      "extensionInstances": {
-        "correspondence-documents": "8d20c304d5a488a400b9a362ee6a747745e650a5d84a0faf634b2694e56f0456",
-        "storage-resize-images": "7f9cc15c6d6cb2cbac1704fe8bd7f54769d9a268b4b452625c08926fe026b838",
-        "user-documents": "0d6f57647a53a991ea6ec4010f8f1d454358f899ac97fde3020e4722db177401",
-        "storage-resize-images-photos": "ce5da84c9d7f0042ce8167992e8e612496502a297508678ca130850861cbbc3f"
+        "user-documents": "77cb750f9cb48d3108dbc690db0fc4ba57c56781338aa8a68657622d5ab9a008"
       }
     }
   }
