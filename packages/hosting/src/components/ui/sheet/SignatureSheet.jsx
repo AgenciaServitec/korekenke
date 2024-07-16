@@ -11,7 +11,12 @@ export const SignatureSheet = ({
     <div className="signature">
       <div className="signature__item">
         <div>
-          <img src={signaturethumbUrl || signatureUrl} alt="signature photo" />
+          {signaturethumbUrl && (
+            <img
+              src={signaturethumbUrl || signatureUrl}
+              alt="signature photo"
+            />
+          )}
         </div>
         <p>{name}</p>
       </div>
