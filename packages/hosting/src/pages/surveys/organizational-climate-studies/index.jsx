@@ -71,21 +71,33 @@ export const OrganizationalClimateStudiesIntegration = () => {
       key: "actions",
       render: (_, organizationClimateStudy) => (
         <Space>
-          <IconAction
-            tooltipTitle="Ver"
-            icon={faEye}
-            onClick={() =>
-              onEditOrganizationalClimateStudy(organizationClimateStudy.id)
-            }
-          />
-          <IconAction
-            tooltipTitle="Eliminar"
-            icon={faTrash}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() =>
-              onDeleteOrganizationClimateStudy(organizationClimateStudy)
-            }
-          />
+          <Acl
+            category="surveys"
+            subCategory="organizational-climate-studies"
+            name="/organizational-climate-studies/:organizationalClimateStudyId"
+          >
+            <IconAction
+              tooltipTitle="Ver"
+              icon={faEye}
+              onClick={() =>
+                onEditOrganizationalClimateStudy(organizationClimateStudy.id)
+              }
+            />
+          </Acl>
+          <Acl
+            category="surveys"
+            subCategory="organizational-climate-studies"
+            name="/organizational-climate-studies#deleted"
+          >
+            <IconAction
+              tooltipTitle="Eliminar"
+              icon={faTrash}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() =>
+                onDeleteOrganizationClimateStudy(organizationClimateStudy)
+              }
+            />
+          </Acl>
         </Space>
       ),
     },

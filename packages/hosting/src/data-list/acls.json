@@ -67,8 +67,9 @@
     "organizational-climate-studies": {
       "label": "Estudio del Clima Organizacional",
       "/organizational-climate-studies": "Menu: Estudio del Clima Organizacional",
-      "/organizational-climate-studies/list": "Lista Estudio del Clima Organizacional",
+      "/organizational-climate-studies/list": "Lista Estudios del Clima Organizacional",
       "/organizational-climate-studies/new": "Agregar Estudio del Clima Organizacional",
+      "/organizational-climate-studies#deleted": "Eliminar Estudio del Clima Organizacional",
       "/organizational-climate-studies/:organizationalClimateStudyId": "Editar Estudio del Clima Organizacional",
       "/organizational-climate-studies/sheets": "Pdf de Estudio del Clima Organizacional"
     }
