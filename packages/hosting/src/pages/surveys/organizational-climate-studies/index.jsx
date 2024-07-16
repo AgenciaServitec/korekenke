@@ -73,8 +73,13 @@ export const OrganizationalClimateStudiesIntegration = () => {
       render: (_, organizationClimateStudy) => (
         <Space>
           <Acl
+<<<<<<< HEAD
             category="public"
             subCategory="survey-organizational-climate-studies"
+=======
+            category="surveys"
+            subCategory="organizational-climate-studies"
+>>>>>>> 34d4231 (added acls to edit and deleted)
             name="/organizational-climate-studies/:organizationalClimateStudyId"
           >
             <IconAction
@@ -86,8 +91,13 @@ export const OrganizationalClimateStudiesIntegration = () => {
             />
           </Acl>
           <Acl
+<<<<<<< HEAD
             category="public"
             subCategory="survey-organizational-climate-studies"
+=======
+            category="surveys"
+            subCategory="organizational-climate-studies"
+>>>>>>> 34d4231 (added acls to edit and deleted)
             name="/organizational-climate-studies#deleted"
           >
             <IconAction
