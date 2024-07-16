@@ -14,11 +14,7 @@ import {
   Table,
 } from "../../../components";
 import { updateOrganizationalClimateStudy } from "../../../firebase/collections/organizationalClimateStudies";
-import {
-  faEye,
-  faFilePdf,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEye, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { useDefaultFirestoreProps } from "../../../hooks";
 import dayjs from "dayjs";
