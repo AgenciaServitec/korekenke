@@ -370,26 +370,28 @@ const EditDasRequest = ({
                 </Tag>
               </Title>
               <div className="actions-items">
-                <div className="item">
-                  <Tag
-                    color={
-                      dasRequest?.response?.type === "positive"
-                        ? "green"
-                        : "red"
-                    }
-                  >
-                    {dasRequest?.response?.type === "positive"
-                      ? "Positivo"
-                      : "Negativo"}
-                  </Tag>
-                  <IconAction
-                    tooltipTitle="Ver detalle de respuesta"
-                    icon={faEye}
-                    size={30}
-                    styled={{ color: (theme) => theme.colors.info }}
-                    onClick={() => setVisibleReplyInformationModal(true)}
-                  />
-                </div>
+                {dasRequest?.response && (
+                  <div className="item">
+                    <Tag
+                      color={
+                        dasRequest?.response?.type === "positive"
+                          ? "green"
+                          : "red"
+                      }
+                    >
+                      {dasRequest?.response?.type === "positive"
+                        ? "Positivo"
+                        : "Negativo"}
+                    </Tag>
+                    <IconAction
+                      tooltipTitle="Ver detalle de respuesta"
+                      icon={faEye}
+                      size={30}
+                      styled={{ color: (theme) => theme.colors.info }}
+                      onClick={() => setVisibleReplyInformationModal(true)}
+                    />
+                  </div>
+                )}
                 <Acl
                   category="departamento-de-apoyo-social"
                   subCategory="dasRequests"

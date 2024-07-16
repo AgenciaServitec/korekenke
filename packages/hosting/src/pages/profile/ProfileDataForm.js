@@ -63,6 +63,7 @@ export const ProfileDataForm = () => {
       const response = await putUser(
         assign({}, formData, {
           id: authUser.id,
+          profilePhoto: formData?.profilePhoto || null,
           phone: { prefix: "+51", number: formData.phoneNumber },
         })
       );

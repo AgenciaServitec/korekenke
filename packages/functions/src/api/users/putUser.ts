@@ -63,25 +63,10 @@ export const putUser = async (
 };
 
 const updateUser = async (user: User): Promise<void> => {
-  const [initialCommand] = orderBy(
-    user?.commands,
-    [(command) => command.name],
-    ["asc"]
-  );
-
   await firestore
     .collection("users")
     .doc(user.id)
-    .update({
-      ...user,
-      commands: user?.commands
-        ? user.commands.map((command) => ({
-            ...command,
-            updateAt: Timestamp.now(),
-          }))
-        : [],
-      initialCommand: initialCommand || null,
-    });
+    .update({ ...user });
 };
 
 const updateUserAuth = async (
