@@ -130,7 +130,7 @@ export const ItemsOrganizationalStudyStep2 = ({
               render={({ field: { onChange, value, name } }) => (
                 <RadioGroup
                   variant="outlined"
-                  label={option.label}
+                  label={`${index + 12}. ${option.label}`}
                   name={name}
                   value={value}
                   options={Surveys.items.responses}

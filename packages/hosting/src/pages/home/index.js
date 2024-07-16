@@ -120,6 +120,11 @@ export const HomeIntegration = () => {
                   1. Realizar encuesta de estudio del clima organizacional
                 </Link>
               </li>
+              <li>
+                <Link to="/surveys/organizational-climate-studies">
+                  2. Lista de estudio del clima organizacional
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
