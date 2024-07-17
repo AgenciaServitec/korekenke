@@ -63,7 +63,7 @@
     }
   },
   "public": {
-    "label": "Publico",
+    "label": "Público",
     "correspondences": {
       "label": "Correspondencias",
       "/correspondences": "Menu: Correspondencias",

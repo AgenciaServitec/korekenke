@@ -202,7 +202,7 @@ export const DrawerLayout = ({
       key: "surveys",
       icon: <FontAwesomeIcon icon={faPoll} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
-        "surveys",
+        "public",
         ["organizational-climate-studies"],
         ["/organizational-climate-studies"]
       ),
