@@ -53,7 +53,7 @@ export const CorrespondencesIntegration = () => {
 
   return (
     <Spin size="large" spinning={correspondencesLoading}>
-      <Correspondence
+      <Correspondences
         correspondences={correspondences}
         onAddCorrespondence={onAddCorrespondence}
         onEditCorrespondence={onEditCorrespondence}
@@ -63,7 +63,7 @@ export const CorrespondencesIntegration = () => {
   );
 };
 
-const Correspondence = ({
+const Correspondences = ({
   correspondences,
   onAddCorrespondence,
   onEditCorrespondence,
@@ -75,7 +75,7 @@ const Correspondence = ({
 
   return (
     <Acl
-      category="correspondences"
+      category="public"
       subCategory="correspondences"
       name="/correspondences"
       redirect

@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import {
+  faClipboardList,
+  faFileAlt,
   faLock,
   faPoll,
   faShield,
@@ -108,6 +110,24 @@ export const HomeIntegration = () => {
             </div>
           </div>
         )}
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faClipboardList} size="5x" />
+          </div>
+          <div>
+            <h2>Correspondencias</h2>
+            <ul>
+              <li>
+                <Link to="/correspondences/new">
+                  1. Realizar correspondencia
+                </Link>
+              </li>
+              <li>
+                <Link to="/correspondences">2. Lista de correspondencias</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div>
           <div className="items-icon">
             <FontAwesomeIcon icon={faPoll} size="5x" />
