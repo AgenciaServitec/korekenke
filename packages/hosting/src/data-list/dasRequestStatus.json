@@ -5,13 +5,13 @@
     "color": "orange"
   },
   "rejected": {
-    "id": "rejected",
-    "name": "Rechazado",
-    "color": "red"
+    "id": "inProgress",
+    "name": "En proceso",
+    "color": "blue"
   },
   "approved": {
-    "id": "approved",
-    "name": "Aprobrado",
+    "id": "finalized",
+    "name": "Finalizado",
     "color": "green"
   }
 }
