@@ -30,8 +30,8 @@ export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestI
 export * from "./entities/departamento-de-apoyo-social/das-requests/sheets";
 
 //ENTITIES "jefatura-de-bienestar-del-ejercito"
-export * from "./entities/jefatura-de-bienestar-del-ejercito/correspondences";
-export * from "./entities/jefatura-de-bienestar-del-ejercito/correspondences/_correspondence";
+export * from "./correspondences";
+export * from "./correspondences/_correspondence";
 export * from "./entities/jefatura-de-bienestar-del-ejercito/inscriptions";
 
 //ENTITIES "servicio-de-veterinaria-y-remonta-del-ejercito"

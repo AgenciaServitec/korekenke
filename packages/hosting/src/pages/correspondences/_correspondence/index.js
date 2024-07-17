@@ -12,13 +12,13 @@ import {
   TextArea,
   Title,
   UploadMultiple,
-} from "../../../../../components";
+} from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
-import { firestore } from "../../../../../firebase";
-import { useGlobalData } from "../../../../../providers";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { firestore } from "../../../firebase";
+import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import dayjs from "dayjs";
 
@@ -26,21 +26,19 @@ export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
   const { correspondenceId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-
   const { correspondences } = useGlobalData();
 
   const [correspondence, setCorrespondence] = useState({});
   const [savingCorrespondence, setSavingCorrespondence] = useState(false);
 
+  const isNew = correspondenceId === "new";
+
   const onGoBack = () => navigate(-1);
 
   useEffect(() => {
-    const correspondence_ =
-      correspondenceId === "new"
-        ? { id: firestore.collection("correspondences").doc().id }
-        : correspondences.find(
-            (reception) => reception.id === correspondenceId
-          );
+    const correspondence_ = isNew
+      ? { id: firestore.collection("correspondences").doc().id }
+      : correspondences.find((reception) => reception.id === correspondenceId);
 
     if (!correspondence_) return onGoBack();
 
@@ -54,11 +52,10 @@ export const CorrespondenceIntegration = () => {
       await firestore
         .collection("correspondences")
         .doc(correspondence.id)
-        .set(
-          correspondenceId === "new"
+        .update(
+          isNew
             ? assignCreateProps(mapCorrespondence(correspondence, formData))
-            : assignUpdateProps(mapCorrespondence(correspondence, formData)),
-          { merge: true }
+            : assignUpdateProps(mapCorrespondence(correspondence, formData))
         );
 
       notification({ type: "success" });
@@ -94,6 +91,7 @@ export const CorrespondenceIntegration = () => {
 
   return (
     <Correspondence
+      isNew={isNew}
       correspondence={correspondence}
       onSaveCorrespondence={onSaveCorrespondence}
       onGoBack={onGoBack}
@@ -103,6 +101,7 @@ export const CorrespondenceIntegration = () => {
 };
 
 const Correspondence = ({
+  isNew,
   correspondence,
   onSaveCorrespondence,
   savingCorrespondence,
@@ -158,9 +157,11 @@ const Correspondence = ({
 
   return (
     <Acl
-      category="jefatura-de-bienestar-del-ejercito"
+      category="public"
       subCategory="correspondences"
-      name="/correspondences"
+      name={
+        isNew ? "/correspondences/new" : "/correspondences/:correspondenceId"
+      }
       redirect
     >
       <Row gutter={[16, 16]}>

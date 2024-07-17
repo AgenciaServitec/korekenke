@@ -7,10 +7,10 @@ import {
   notification,
   Row,
   Spin,
-} from "../../../../components/ui";
+} from "../../components/ui";
 import CorrespondencesTable from "./Correspondences.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { correspondencesRef } from "../../../../firebase/collections";
+import { correspondencesRef } from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 
@@ -75,7 +75,7 @@ const Correspondence = ({
 
   return (
     <Acl
-      category="jefatura-de-bienestar-del-ejercito"
+      category="correspondences"
       subCategory="correspondences"
       name="/correspondences"
       redirect

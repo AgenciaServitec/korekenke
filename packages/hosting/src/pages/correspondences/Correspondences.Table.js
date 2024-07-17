@@ -7,7 +7,7 @@ import {
   Space,
   TableVirtualized,
   Tag,
-} from "../../../../components/ui";
+} from "../../components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
