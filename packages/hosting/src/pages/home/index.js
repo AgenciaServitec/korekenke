@@ -50,7 +50,7 @@ export const HomeIntegration = () => {
                     "/entities/departamento-de-apoyo-social/das-requests/new"
                   )}
                 >
-                  1. Realizar una solicitud
+                  1. Realizar una solicitud convenio descuento
                 </Link>
               </li>
               <li>
@@ -59,7 +59,7 @@ export const HomeIntegration = () => {
                     "/entities/departamento-de-apoyo-social/das-requests"
                   )}
                 >
-                  2. Lista de solicitudes
+                  2. Tu lista de solicitudes
                 </Link>
               </li>
             </ul>
