@@ -132,16 +132,10 @@ export const InstitutionInformationForm = ({
                     name="institution.id"
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
-                      <Select
+                      <Input
                         label="Instituciones"
                         name={name}
                         value={value}
-                        options={(
-                          institutions?.[_dasRequest?.institutionId] || []
-                        ).map((institution) => ({
-                          label: institution.name,
-                          value: institution.id,
-                        }))}
                         onChange={onChange}
                         error={error(name)}
                         helperText={errorMessage(name)}
