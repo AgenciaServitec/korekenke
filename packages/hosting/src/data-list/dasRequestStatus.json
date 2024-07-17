@@ -1,16 +1,13 @@
 {
   "pending": {
-    "id": "pending",
     "name": "Pendiente",
     "color": "orange"
   },
-  "rejected": {
-    "id": "inProgress",
+  "inProgress": {
     "name": "En proceso",
     "color": "blue"
   },
-  "approved": {
-    "id": "finalized",
+  "finalized": {
     "name": "Finalizado",
     "color": "green"
   }

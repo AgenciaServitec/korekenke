@@ -132,7 +132,7 @@ export const DasRequestsTable = ({
       render: (_, dasRequest) => {
         const requestStatus = DasRequestStatus[dasRequest.status];
 
-        return <Tag color={requestStatus.color}>{requestStatus?.name}</Tag>;
+        return <Tag color={requestStatus?.color}>{requestStatus?.name}</Tag>;
       },
     },
     {
