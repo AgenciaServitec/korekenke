@@ -17,10 +17,14 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
-import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import dayjs from "dayjs";
+import {
+  getCorrespondenceId,
+  updateCorrespondence,
+} from "../../../firebase/collections";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
@@ -37,7 +41,7 @@ export const CorrespondenceIntegration = () => {
 
   useEffect(() => {
     const correspondence_ = isNew
-      ? { id: firestore.collection("correspondences").doc().id }
+      ? { id: getCorrespondenceId() }
       : correspondences.find((reception) => reception.id === correspondenceId);
 
     if (!correspondence_) return onGoBack();
@@ -49,17 +53,14 @@ export const CorrespondenceIntegration = () => {
     try {
       setSavingCorrespondence(true);
 
-      await firestore
-        .collection("correspondences")
-        .doc(correspondence.id)
-        .update(
-          isNew
-            ? assignCreateProps(mapCorrespondence(correspondence, formData))
-            : assignUpdateProps(mapCorrespondence(correspondence, formData))
-        );
+      await updateCorrespondence(
+        correspondence.id,
+        isNew
+          ? assignCreateProps(mapCorrespondence(correspondence, formData))
+          : assignUpdateProps(mapCorrespondence(correspondence, formData))
+      );
 
       notification({ type: "success" });
-
       onGoBack();
     } catch (e) {
       console.log("ErrorSaveReception: ", e);
@@ -78,7 +79,7 @@ export const CorrespondenceIntegration = () => {
         receivedBy: formData.receivedBy,
         class: formData.class,
         dateCorrespondence: dayjs(formData.dateCorrespondence).format(
-          "YYYY-MM-DD HH:mm:ss"
+          DATE_FORMAT_TO_FIRESTORE
         ),
         indicative: formData.indicative,
         issue: formData.issue,
@@ -145,7 +146,7 @@ const Correspondence = ({
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
       dateCorrespondence: correspondence?.dateCorrespondence
-        ? dayjs(correspondence.dateCorrespondence, "YYYY-MM-DD HH:mm:ss")
+        ? dayjs(correspondence.dateCorrespondence, DATE_FORMAT_TO_FIRESTORE)
         : undefined,
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,

@@ -75,7 +75,6 @@ const RowHeaderContainer = styled(RowContainer)`
     color: ${theme.colors.light};
     font-size: ${theme.font_sizes.small};
     font-weight: ${theme.font_weight.medium};
-    border-radius: 0.7em 0.7em 0 0;
 
     .cell-header {
       background: ${theme.colors.tertiary};
@@ -83,11 +82,11 @@ const RowHeaderContainer = styled(RowContainer)`
     }
 
     .cell-header:first-child {
-      border-top-left-radius: ${theme.border_radius.medium};
+      border-top-left-radius: ${theme.border_radius.small};
     }
 
     .cell-header:last-child {
-      border-top-right-radius: ${theme.border_radius.medium};
+      border-top-right-radius: ${theme.border_radius.small};
     }
   `}
 `;

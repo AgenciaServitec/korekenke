@@ -10,12 +10,17 @@ import {
 } from "../../components/ui";
 import CorrespondencesTable from "./Correspondences.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { correspondencesRef } from "../../firebase/collections";
+import {
+  correspondencesRef,
+  updateCorrespondence,
+} from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
+import { useDefaultFirestoreProps } from "../../hooks";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
@@ -40,13 +45,13 @@ export const CorrespondencesIntegration = () => {
     modalConfirm({
       title: "¿Estás seguro de que quieres eliminar la correspondencia?",
       onOk: async () => {
-        await correspondencesRef.doc(correspondenceId).update({
-          isDeleted: true,
-        });
+        await updateCorrespondence(
+          correspondenceId,
+          assignDeleteProps({ isDeleted: true })
+        );
 
         notification({
           type: "success",
-          title: "Correspondencia eliminada",
         });
       },
     });

@@ -39,7 +39,6 @@ const CorrespondencesTable = ({
                 {dayjs(correspondence.createAt.toDate()).format("h:mm a")}
               </span>
             </div>
-            <div>{correspondencesStatus(correspondence.status)}</div>
           </Space>
         </CorrespondenceContainer>
       ),
@@ -111,6 +110,14 @@ const CorrespondencesTable = ({
             ))}
           </Space>
         </div>
+      ),
+    },
+    {
+      title: "Estado",
+      align: "center",
+      width: ["130px", "15%"],
+      render: (correspondence) => (
+        <div>{correspondencesStatus(correspondence.status)}</div>
       ),
     },
     {
