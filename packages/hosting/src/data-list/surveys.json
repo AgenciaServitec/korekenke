@@ -1,7 +1,7 @@
 {
   "questions": [
     {
-      "label": "Nombre de la Organización",
+      "label": "Nombre de la Organización (Núcleo, RRMM, GGUU)",
       "code": "questions.establishment",
       "description": "",
       "options": null
@@ -12,49 +12,33 @@
       "description": "",
       "options": [
         {
-          "label": "CASA MILITAR",
+          "label": "CGE",
           "value": 1
         },
         {
-          "label": "MINISTERIO",
+          "label": "REGIÓN MILITAR",
           "value": 2
         },
         {
-          "label": "CGE",
+          "label": "COMANDO NÚCLEO",
           "value": 3
         },
         {
-          "label": "REGION MILITAR",
+          "label": "GRAN UNIDAD",
           "value": 4
         },
         {
-          "label": "GRAN UNIDAD",
+          "label": "UNIDAD",
           "value": 5
         },
         {
-          "label": "UNIDAD",
+          "label": "PATRULLA OPNES",
           "value": 6
-        },
-        {
-          "label": "DEPARTAMNETO",
-          "value": 7
-        },
-        {
-          "label": "SECCION",
-          "value": 8
-        },
-        {
-          "label": "GRUPO",
-          "value": 9
-        },
-        {
-          "label": "PATRULLA",
-          "value": 10
         }
       ]
     },
     {
-      "label": "Sub Sector",
+      "label": "Sub Sector (UU, Cia. Dpto u Oficina)",
       "code": "questions.subsector",
       "description": "Sub Sector al que pertenece la organización de salud",
       "options": null
