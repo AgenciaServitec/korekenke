@@ -105,12 +105,72 @@
       "description": "",
       "options": [
         {
-          "label": "Administrativo",
+          "label": "GENERAL EP",
           "value": 1
         },
         {
-          "label": "Asistencial",
+          "label": "CORONEL EP",
           "value": 2
+        },
+        {
+          "label": "TTE CORONEL CMTE EP",
+          "value": 3
+        },
+        {
+          "label": "MAYOR EP",
+          "value": 4
+        },
+        {
+          "label": "CAPITÁN EP",
+          "value": 5
+        },
+        {
+          "label": "TENIENTE EP",
+          "value": 6
+        },
+        {
+          "label": "SUB TENIENTE EP",
+          "value": 7
+        },
+        {
+          "label": "TÉCNICOS PERSSON. MILITAR",
+          "value": 8
+        },
+        {
+          "label": "SUB OFICIALES PERSONAL MILITAR",
+          "value": 9
+        },
+        {
+          "label": "TROPA REE",
+          "value": 10
+        },
+        {
+          "label": "TROPA S.A. ACUARTELADO",
+          "value": 11
+        },
+        {
+          "label": "TROPA S.A.N.A. FEMENINO",
+          "value": 12
+        },
+        {
+          "label": "AUXILIARES PERSON. CIVIL",
+          "value": 13
+        },
+        {
+          "label": "TÉCNICOS PERSON. CIVIL",
+          "value": 14
+        },
+        {
+          "label": "PROFESIONALES",
+          "value": 15
+        },
+        {
+          "label": "PROFESIONAL SALUD",
+          "value": 16
+        },
+        {
+          "label": "DOCENTES DE COLEGIOS",
+          "value": 16
         }
       ]
     },
