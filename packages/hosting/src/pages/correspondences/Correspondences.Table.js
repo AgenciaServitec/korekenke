@@ -17,6 +17,7 @@ import {
   faPrint,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { CorrespondencesStatus } from "../../data-list";
 
 const CorrespondencesTable = ({
   correspondences,
@@ -116,9 +117,16 @@ const CorrespondencesTable = ({
       title: "Estado",
       align: "center",
       width: ["130px", "15%"],
-      render: (correspondence) => (
-        <div>{correspondencesStatus(correspondence.status)}</div>
-      ),
+      render: (correspondence) => {
+        const status = CorrespondencesStatus?.[correspondence?.status];
+        return (
+          <Space>
+            <Tag color={status?.color} style={{ margin: 0 }}>
+              {status?.name}
+            </Tag>
+          </Space>
+        );
+      },
     },
     {
       title: "⚙️",
@@ -173,23 +181,6 @@ const CorrespondencesTable = ({
 };
 
 export default memo(CorrespondencesTable);
-
-const correspondencesStatus = (status) => {
-  switch (status) {
-    case "pending":
-      return (
-        <Tag color="processing" style={{ margin: 0 }}>
-          <FontAwesomeIcon icon={faCircleInfo} /> Pendiente
-        </Tag>
-      );
-    case "accepted":
-      return (
-        <Tag color="success" style={{ margin: 0 }}>
-          <FontAwesomeIcon icon={faCheckCircle} /> Aceptado
-        </Tag>
-      );
-  }
-};
 
 const CorrespondenceContainer = styled.div`
   ${({ theme }) => css`

@@ -14,3 +14,4 @@ export * from "./equineMagazineProfiles.js";
 export { default as DasRequestList } from "./dasRequest.json";
 export { default as DasRequestStatus } from "./dasRequestStatus.json";
 export { default as ProcessTypeInInstitution } from "./processTypeInInstitution.json";
+export { default as CorrespondencesStatus } from "./correspondencesStatus.json";
