@@ -12,35 +12,38 @@ import {
   TextArea,
   Title,
   UploadMultiple,
-} from "../../../../../components";
+} from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
-import { firestore } from "../../../../../firebase";
-import { useGlobalData } from "../../../../../providers";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import dayjs from "dayjs";
+import {
+  addCorrespondence,
+  getCorrespondenceId,
+  updateCorrespondence,
+} from "../../../firebase/collections";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
   const { correspondenceId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-
   const { correspondences } = useGlobalData();
 
   const [correspondence, setCorrespondence] = useState({});
   const [savingCorrespondence, setSavingCorrespondence] = useState(false);
 
+  const isNew = correspondenceId === "new";
+
   const onGoBack = () => navigate(-1);
 
   useEffect(() => {
-    const correspondence_ =
-      correspondenceId === "new"
-        ? { id: firestore.collection("correspondences").doc().id }
-        : correspondences.find(
-            (reception) => reception.id === correspondenceId
-          );
+    const correspondence_ = isNew
+      ? { id: getCorrespondenceId() }
+      : correspondences.find((reception) => reception.id === correspondenceId);
 
     if (!correspondence_) return onGoBack();
 
@@ -51,18 +54,16 @@ export const CorrespondenceIntegration = () => {
     try {
       setSavingCorrespondence(true);
 
-      await firestore
-        .collection("correspondences")
-        .doc(correspondence.id)
-        .set(
-          correspondenceId === "new"
-            ? assignCreateProps(mapCorrespondence(correspondence, formData))
-            : assignUpdateProps(mapCorrespondence(correspondence, formData)),
-          { merge: true }
-        );
+      isNew
+        ? await addCorrespondence(
+            assignCreateProps(mapCorrespondence(correspondence, formData))
+          )
+        : await updateCorrespondence(
+            correspondence.id,
+            assignUpdateProps(mapCorrespondence(correspondence, formData))
+          );
 
       notification({ type: "success" });
-
       onGoBack();
     } catch (e) {
       console.log("ErrorSaveReception: ", e);
@@ -81,19 +82,20 @@ export const CorrespondenceIntegration = () => {
         receivedBy: formData.receivedBy,
         class: formData.class,
         dateCorrespondence: dayjs(formData.dateCorrespondence).format(
-          "YYYY-MM-DD HH:mm:ss"
+          DATE_FORMAT_TO_FIRESTORE
         ),
         indicative: formData.indicative,
         issue: formData.issue,
         classification: formData.classification,
-        photos: formData.photos,
-        documents: formData.documents,
-        status: "pending",
+        photos: formData?.photos || null,
+        documents: formData?.documents || null,
+        status: correspondence?.status || "notDecreed",
       }
     );
 
   return (
     <Correspondence
+      isNew={isNew}
       correspondence={correspondence}
       onSaveCorrespondence={onSaveCorrespondence}
       onGoBack={onGoBack}
@@ -103,6 +105,7 @@ export const CorrespondenceIntegration = () => {
 };
 
 const Correspondence = ({
+  isNew,
   correspondence,
   onSaveCorrespondence,
   savingCorrespondence,
@@ -146,7 +149,7 @@ const Correspondence = ({
       classification: correspondence?.classification || "",
       issue: correspondence?.issue || "",
       dateCorrespondence: correspondence?.dateCorrespondence
-        ? dayjs(correspondence.dateCorrespondence, "YYYY-MM-DD HH:mm:ss")
+        ? dayjs(correspondence.dateCorrespondence, DATE_FORMAT_TO_FIRESTORE)
         : undefined,
       photos: correspondence?.photos || null,
       documents: correspondence?.documents || null,
@@ -158,9 +161,11 @@ const Correspondence = ({
 
   return (
     <Acl
-      category="jefatura-de-bienestar-del-ejercito"
+      category="public"
       subCategory="correspondences"
-      name="/correspondences"
+      name={
+        isNew ? "/correspondences/new" : "/correspondences/:correspondenceId"
+      }
       redirect
     >
       <Row gutter={[16, 16]}>
@@ -174,7 +179,6 @@ const Correspondence = ({
                 <Controller
                   name="destination"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Destinatario"
@@ -191,7 +195,6 @@ const Correspondence = ({
                 <Controller
                   name="receivedBy"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Recibido Por:"
@@ -208,7 +211,6 @@ const Correspondence = ({
                 <Controller
                   name="class"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Clase"
@@ -225,7 +227,6 @@ const Correspondence = ({
                 <Controller
                   name="dateCorrespondence"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <DatePicker
                       label="Fecha"
@@ -242,7 +243,6 @@ const Correspondence = ({
                 <Controller
                   name="indicative"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Indicativo"
@@ -259,7 +259,6 @@ const Correspondence = ({
                 <Controller
                   name="classification"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Clasificación"
@@ -276,7 +275,6 @@ const Correspondence = ({
                 <Controller
                   name="issue"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <TextArea
                       label="Asunto"
@@ -296,17 +294,16 @@ const Correspondence = ({
                 <Controller
                   name="photos"
                   control={control}
-                  defaultValue={[]}
                   render={({ field: { onChange, value, name } }) => (
                     <UploadMultiple
                       label="Fotos (523x404)"
+                      isImage={true}
                       accept="image/*"
-                      bucket="documents"
                       resize="423x304"
                       name={name}
                       value={value}
+                      bucket="documents"
                       filePath={`correspondences/${correspondence.id}/photos`}
-                      isImage={true}
                       buttonText="Subir imagen"
                       error={error(name)}
                       required={required(name)}
@@ -320,7 +317,6 @@ const Correspondence = ({
                 <Controller
                   name="documents"
                   control={control}
-                  defaultValue={[]}
                   render={({ field: { onChange, value, name } }) => (
                     <UploadMultiple
                       isImage={false}

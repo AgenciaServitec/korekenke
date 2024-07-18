@@ -1,17 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  RadioGroup,
-  Row,
-  Select,
-  Steps,
-  Title,
-  notification,
-} from "../../../../components";
+import React, { useEffect } from "react";
+import { Button, Col, Form, RadioGroup, Row } from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

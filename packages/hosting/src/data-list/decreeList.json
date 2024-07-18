@@ -1,0 +1,58 @@
+[
+  {
+    "id": "archivo",
+    "name": "ARCHIVO"
+  },
+  {
+    "id": "tramite",
+    "name": "TRAMITE"
+  },
+  {
+    "id": "conocimiento",
+    "name": "CONOCIMIENTO"
+  },
+  {
+    "id": "coordinar",
+    "name": "COORDINAR"
+  },
+  {
+    "id": "cumplimiento",
+    "name": "CUMPLIMIENTO"
+  },
+  {
+    "id": "difusion",
+    "name": "DIFUSION"
+  },
+  {
+    "id": "explotacion",
+    "name": "EXPLOTACION"
+  },
+  {
+    "id": "estudio",
+    "name": "ESTUDIO"
+  },
+  {
+    "id": "hable_conmigo",
+    "name": "HABLE CONMIGO"
+  },
+  {
+    "id": "informe",
+    "name": "INFORME"
+  },
+  {
+    "id": "recomendación",
+    "name": "RECOMENDACIÓN"
+  },
+  {
+    "id": "respuesta",
+    "name": "RESPUESTA"
+  },
+  {
+    "id": "seguimiento",
+    "name": "SEGUIMIENTO"
+  },
+  {
+    "id": "accion_correspondiente",
+    "name": "ACCION CORRESPONDIENTE"
+  }
+]

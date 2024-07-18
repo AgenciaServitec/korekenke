@@ -13,7 +13,7 @@
             "id": "cobiene",
             "code": "cobiene",
             "name": "Comando de bienestar del ejercito",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/copere.webp",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/logo-ep.png",
             "entities": [
               {
                 "id": "departamento_de_apoyo_social",

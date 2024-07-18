@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import moment from "moment";
 import styled from "styled-components";
-import { DatePicker, Input } from "../../../../components";
-import { mediaQuery } from "../../../../styles";
+import { DatePicker, Input } from "../../components";
+import { mediaQuery } from "../../styles";
 
 const CorrespondencesFinder = ({ searchFields, onSearch }) => {
   const onChangeTourDate = (value) =>

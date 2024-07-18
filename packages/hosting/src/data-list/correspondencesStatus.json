@@ -1,0 +1,18 @@
+{
+  "notDecreed": {
+    "name": "No decretado",
+    "color": "red"
+  },
+  "pending": {
+    "name": "Pendiente",
+    "color": "orange"
+  },
+  "inProgress": {
+    "name": "En proceso",
+    "color": "info"
+  },
+  "finalized": {
+    "name": "Finalizado",
+    "color": "green"
+  }
+}

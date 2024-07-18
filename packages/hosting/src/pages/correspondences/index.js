@@ -7,15 +7,25 @@ import {
   notification,
   Row,
   Spin,
-} from "../../../../components/ui";
-import CorrespondencesTable from "./Correspondences.Table";
+} from "../../components/ui";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { correspondencesRef } from "../../../../firebase/collections";
+import {
+  correspondencesRef,
+  updateCorrespondence,
+} from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
+import { useDefaultFirestoreProps, useDevice } from "../../hooks";
+import {
+  CorrespondenceModalProvider,
+  useCorrespondenceModal,
+} from "./Correspondence.ModalProvider";
+import { DecreeModal } from "./DecreeModal";
+import { CorrespondencesTable } from "./Correspondences.Table";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
+  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
@@ -32,6 +42,8 @@ export const CorrespondencesIntegration = () => {
   }, [correspondencesError]);
 
   const onNavigateTo = (correspondenceId) => navigate(correspondenceId);
+  const onGoToDecreeSheets = (correspondenceId) =>
+    navigate(`/correspondences/${correspondenceId}/sheets`);
 
   const onAddCorrespondence = () => onNavigateTo("new");
   const onEditCorrespondence = (correspondenceId) =>
@@ -40,42 +52,63 @@ export const CorrespondencesIntegration = () => {
     modalConfirm({
       title: "¿Estás seguro de que quieres eliminar la correspondencia?",
       onOk: async () => {
-        await correspondencesRef.doc(correspondenceId).update({
-          isDeleted: true,
-        });
+        await updateCorrespondence(
+          correspondenceId,
+          assignDeleteProps({ isDeleted: true })
+        );
 
         notification({
           type: "success",
-          title: "Correspondencia eliminada",
         });
       },
     });
 
   return (
     <Spin size="large" spinning={correspondencesLoading}>
-      <Correspondence
-        correspondences={correspondences}
-        onAddCorrespondence={onAddCorrespondence}
-        onEditCorrespondence={onEditCorrespondence}
-        onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
-      />
+      <CorrespondenceModalProvider>
+        <Correspondences
+          correspondences={correspondences}
+          onAddCorrespondence={onAddCorrespondence}
+          onEditCorrespondence={onEditCorrespondence}
+          onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
+          onGoToDecreeSheets={onGoToDecreeSheets}
+        />
+      </CorrespondenceModalProvider>
     </Spin>
   );
 };
 
-const Correspondence = ({
+const Correspondences = ({
   correspondences,
   onAddCorrespondence,
   onEditCorrespondence,
   onConfirmDeleteCorrespondence,
+  onGoToDecreeSheets,
 }) => {
+  const { isTablet } = useDevice();
+  const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
+    useCorrespondenceModal();
+
   const filterCorrespondencesView = correspondences.filter(
     (reception) => reception
   );
 
+  const onDecreeCorrespondence = (correspondence) => {
+    onShowCorrespondenceModal({
+      title: "Decreto",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <DecreeModal
+          correspondence={correspondence}
+          onCloseDecreeModal={onCloseCorrespondenceModal}
+        />
+      ),
+    });
+  };
+
   return (
     <Acl
-      category="jefatura-de-bienestar-del-ejercito"
+      category="public"
       subCategory="correspondences"
       name="/correspondences"
       redirect
@@ -97,6 +130,8 @@ const Correspondence = ({
             correspondences={filterCorrespondencesView}
             onClickEditCorrespondence={onEditCorrespondence}
             onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
+            onDecreeCorrespondence={onDecreeCorrespondence}
+            onGoToDecreeSheets={onGoToDecreeSheets}
           />
         </div>
       </Container>

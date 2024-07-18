@@ -5,13 +5,15 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
+  faClipboardList,
   faComputer,
   faFileAlt,
-  faFileShield,
+  faFilePen,
   faGears,
   faHome,
   faHorse,
   faIdCard,
+  faList,
   faNetworkWired,
   faPoll,
   faShield,
@@ -162,12 +164,46 @@ export const DrawerLayout = ({
       ],
     },
     {
+      label: "Correspondencias",
+      key: "files",
+      icon: <FontAwesomeIcon icon={faClipboardList} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+        "public",
+        ["correspondences"],
+        ["/correspondences/new", "/correspondences"]
+      ),
+      children: [
+        {
+          label: "Realizar correspondencia",
+          key: "correspondence",
+          icon: <FontAwesomeIcon icon={faFilePen} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["correspondences"],
+            ["/correspondences/new"]
+          ),
+          onClick: () => onClickMenu("/correspondences/new"),
+        },
+        {
+          label: "Lista de correspondencias",
+          key: "correspondences-list",
+          icon: <FontAwesomeIcon icon={faList} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["correspondences"],
+            ["/correspondences"]
+          ),
+          onClick: () => onClickMenu("/correspondences"),
+        },
+      ],
+    },
+    {
       label: "Encuestas",
       key: "surveys",
       icon: <FontAwesomeIcon icon={faPoll} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
-        "surveys",
-        ["organizational-climate-studies"],
+        "public",
+        ["survey-organizational-climate-studies"],
         ["/organizational-climate-studies"]
       ),
       children: [
@@ -187,21 +223,10 @@ export const DrawerLayout = ({
       isVisible:
         existsAclsInAclsOfUser(
           "jefatura-de-bienestar-del-ejercito",
-          ["correspondences", "inscriptions"],
-          ["/correspondences", "/inscriptions"]
+          ["inscriptions"],
+          ["/inscriptions"]
         ) && currentCommand?.id === "copere",
       children: [
-        {
-          label: "Correspondencias",
-          key: "correspondences",
-          icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
-          isVisible: existsAclsInAclsOfUser(
-            "jefatura-de-bienestar-del-ejercito",
-            ["correspondences"],
-            ["/correspondences"]
-          ),
-          onClick: () => onClickMenu("/correspondences"),
-        },
         {
           label: "Inscripciones",
           key: "inscriptions",
@@ -266,7 +291,7 @@ export const DrawerLayout = ({
         {
           label: "Realizar Solicitud",
           key: "application-request",
-          icon: <FontAwesomeIcon icon={faFileAlt} size="lg" />,
+          icon: <FontAwesomeIcon icon={faFilePen} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
             "departamento-de-apoyo-social",
             ["dasRequests"],
@@ -279,7 +304,7 @@ export const DrawerLayout = ({
         },
         {
           key: "requests-list",
-          icon: <FontAwesomeIcon icon={faFileShield} size="lg" />,
+          icon: <FontAwesomeIcon icon={faList} size="lg" />,
           label: "Lista de solicitudes",
           isVisible: existsAclsInAclsOfUser(
             "departamento-de-apoyo-social",
