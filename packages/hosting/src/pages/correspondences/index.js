@@ -42,6 +42,8 @@ export const CorrespondencesIntegration = () => {
   }, [correspondencesError]);
 
   const onNavigateTo = (correspondenceId) => navigate(correspondenceId);
+  const onGoToDecreeSheets = (correspondenceId) =>
+    navigate(`/correspondences/${correspondenceId}/sheets`);
 
   const onAddCorrespondence = () => onNavigateTo("new");
   const onEditCorrespondence = (correspondenceId) =>
@@ -69,6 +71,7 @@ export const CorrespondencesIntegration = () => {
           onAddCorrespondence={onAddCorrespondence}
           onEditCorrespondence={onEditCorrespondence}
           onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
+          onGoToDecreeSheets={onGoToDecreeSheets}
         />
       </CorrespondenceModalProvider>
     </Spin>
@@ -80,6 +83,7 @@ const Correspondences = ({
   onAddCorrespondence,
   onEditCorrespondence,
   onConfirmDeleteCorrespondence,
+  onGoToDecreeSheets,
 }) => {
   const { isTablet } = useDevice();
   const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
@@ -127,6 +131,7 @@ const Correspondences = ({
             onClickEditCorrespondence={onEditCorrespondence}
             onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
             onDecreeCorrespondence={onDecreeCorrespondence}
+            onGoToDecreeSheets={onGoToDecreeSheets}
           />
         </div>
       </Container>

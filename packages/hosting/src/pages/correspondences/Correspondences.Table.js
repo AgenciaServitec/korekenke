@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardCheck,
   faEdit,
+  faEye,
   faFilePdf,
   faPrint,
   faTrash,
@@ -25,6 +26,7 @@ export const CorrespondencesTable = ({
   onClickDeleteCorrespondence,
   onDecreeCorrespondence,
   onClickPrintTicket,
+  onGoToDecreeSheets,
 }) => {
   const columns = [
     {
@@ -124,6 +126,15 @@ export const CorrespondencesTable = ({
             <Tag color={status?.color} style={{ margin: 0 }}>
               {status?.name}
             </Tag>
+            {correspondence?.status === "pending" && (
+              <IconAction
+                className="pointer"
+                tooltipTitle="Ver hoja de decreto"
+                onClick={() => onGoToDecreeSheets(correspondence.id)}
+                styled={{ color: (theme) => theme.colors.tertiary }}
+                icon={faEye}
+              />
+            )}
           </Space>
         );
       },
