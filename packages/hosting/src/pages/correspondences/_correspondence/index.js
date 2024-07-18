@@ -111,7 +111,6 @@ const Correspondence = ({
   savingCorrespondence,
   onGoBack,
 }) => {
-  console.log({ correspondence });
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const schema = yup.object({
