@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   Button,
@@ -35,6 +35,7 @@ import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
+import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -46,6 +47,17 @@ export const EditDasRequestIntegration = ({
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
+
+  useEffect(() => {
+    if (dasRequest?.wasRead === false && dasRequest?.status === "pending") {
+      (async () => {
+        await updateDasApplication(dasRequest.id, {
+          status: "inProgress",
+          wasRead: true,
+        });
+      })();
+    }
+  }, [dasRequest]);
 
   // const updateDasRequest = async (dasRequest, status) => {
   //   try {

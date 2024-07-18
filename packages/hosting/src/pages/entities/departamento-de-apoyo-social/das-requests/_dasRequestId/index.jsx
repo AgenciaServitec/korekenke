@@ -71,6 +71,7 @@ export const DasRequestIntegration = () => {
     isHeadline: formData.isHeadline,
     requestType: formData.requestType,
     status: isNew ? "pending" : dasRequest.status,
+    wasRead: dasRequest?.wasRead || false,
     headline: {
       id: authUser.id,
       ...omit(formData.headline, "phoneNumber"),

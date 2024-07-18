@@ -44,8 +44,11 @@ export const DasRequestsTable = ({
   const navigateTo = (pathname) => navigate(pathname);
 
   const isPositiveOrApproved = (dasRequest) =>
-    dasRequest?.status === "approved" ||
+    dasRequest?.status === "finalized" ||
+    dasRequest?.status === "inProgess" ||
     dasRequest?.response?.type === "positive";
+
+  const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
 
   const columns = [
     {
@@ -177,20 +180,21 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
-          {entity?.entityManageId === authUser?.id && (
-            <Acl
-              category="departamento-de-apoyo-social"
-              subCategory="dasRequests"
-              name="/das-requests/:dasRequestId#reply"
-            >
-              <IconAction
-                tooltipTitle="Responder solicitud"
-                icon={faReply}
-                styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => onAddReplyDasRequest(dasRequest)}
-              />
-            </Acl>
-          )}
+          {entity?.entityManageId === authUser?.id &&
+            !isFinalized(dasRequest) && (
+              <Acl
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#reply"
+              >
+                <IconAction
+                  tooltipTitle="Responder solicitud"
+                  icon={faReply}
+                  styled={{ color: (theme) => theme.colors.primary }}
+                  onClick={() => onAddReplyDasRequest(dasRequest)}
+                />
+              </Acl>
+            )}
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
@@ -205,17 +209,19 @@ export const DasRequestsTable = ({
               }
             />
           </Acl>
-          <Acl
-            category="departamento-de-apoyo-social"
-            subCategory="dasRequests"
-            name="/das-requests/:dasRequestId"
-          >
-            <IconAction
-              tooltipTitle="Editar"
-              icon={faEdit}
-              onClick={() => onEditDasRequest(dasRequest)}
-            />
-          </Acl>
+          {!isFinalized(dasRequest) && (
+            <Acl
+              category="departamento-de-apoyo-social"
+              subCategory="dasRequests"
+              name="/das-requests/:dasRequestId"
+            >
+              <IconAction
+                tooltipTitle="Editar"
+                icon={faEdit}
+                onClick={() => onEditDasRequest(dasRequest)}
+              />
+            </Acl>
+          )}
           {!isPositiveOrApproved(dasRequest) && (
             <Acl
               category="departamento-de-apoyo-social"

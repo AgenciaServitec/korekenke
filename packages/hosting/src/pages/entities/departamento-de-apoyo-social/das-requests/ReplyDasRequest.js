@@ -58,7 +58,10 @@ export const ReplyDasRequestModal = ({
     try {
       setSavingData(true);
 
-      await updateDasApplication(dasRequest.id, { response: { ...formData } });
+      await updateDasApplication(dasRequest.id, {
+        response: { ...formData },
+        status: "finalized",
+      });
       notification({ type: "success" });
       onSetVisibleModal(false);
     } catch (e) {
