@@ -34,7 +34,8 @@ export const DiscountAgreementGrantedUniversitySheet = ({
               <p>
                 {requestType && findDasRequest(requestType).name}
                 <br />
-                <span>{findInstitution(institution).name || emptyContent}</span>
+                {/* <span>{findInstitution(institution).name || emptyContent}</span> */}
+                <span>{institution?.id || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -60,7 +61,8 @@ export const DiscountAgreementGrantedUniversitySheet = ({
             <p className="request-content__body">
               Que teniendo conocimiento del convenio de cooperación
               interinstitucional con la Universidad
-              <span> {findInstitution(institution).name || emptyContent} </span>
+              {/* <span> {findInstitution(institution).name || emptyContent} </span> */}
+              <span> {institution?.id || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio en beneficio de mi

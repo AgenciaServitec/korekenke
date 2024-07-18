@@ -16,6 +16,7 @@ import { ApplicantDocumentsSheet } from "./common/ApplicantDocumentsSheet";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findRelationShip } from "../../../../../utils";
 import { useGlobalData } from "../../../../../providers";
+import { updateDasApplication } from "../../../../../firebase/collections/dasApplications";
 
 export const DasRequestSheets = () => {
   const { requestType, dasRequestId } = useParams();
@@ -29,6 +30,17 @@ export const DasRequestSheets = () => {
   useEffect(() => {
     dasRequestError && notification({ type: "error" });
   }, [dasRequestError]);
+
+  useEffect(() => {
+    if (dasRequest?.wasRead === false && dasRequest?.status === "pending") {
+      (async () => {
+        await updateDasApplication(dasRequestId, {
+          status: "inProgress",
+          wasRead: true,
+        });
+      })();
+    }
+  }, [dasRequest]);
 
   // useEffect(() => {
   //   (async () => {
