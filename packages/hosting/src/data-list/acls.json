@@ -69,7 +69,8 @@
       "/correspondences": "Menu: Correspondencias",
       "/correspondences/new": "Agregar correspondencia",
       "/correspondences/:correspondenceId": "Editar correspondencia",
-      "/correspondences#delete": "Eliminar correspondencia"
+      "/correspondences#delete": "Eliminar correspondencia",
+      "/correspondences#decree": "Decretar correspondencias"
     },
     "survey-organizational-climate-studies": {
       "label": "Encuesta: Estudio del Clima Organizacional",

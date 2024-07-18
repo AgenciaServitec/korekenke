@@ -8,7 +8,6 @@ import {
   Row,
   Spin,
 } from "../../components/ui";
-import CorrespondencesTable from "./Correspondences.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   correspondencesRef,
@@ -16,7 +15,13 @@ import {
 } from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { useDefaultFirestoreProps } from "../../hooks";
+import { useDefaultFirestoreProps, useDevice } from "../../hooks";
+import {
+  CorrespondenceModalProvider,
+  useCorrespondenceModal,
+} from "./Correspondence.ModalProvider";
+import { DecreeModal } from "./DecreeModal";
+import { CorrespondencesTable } from "./Correspondences.Table";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -58,12 +63,14 @@ export const CorrespondencesIntegration = () => {
 
   return (
     <Spin size="large" spinning={correspondencesLoading}>
-      <Correspondences
-        correspondences={correspondences}
-        onAddCorrespondence={onAddCorrespondence}
-        onEditCorrespondence={onEditCorrespondence}
-        onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
-      />
+      <CorrespondenceModalProvider>
+        <Correspondences
+          correspondences={correspondences}
+          onAddCorrespondence={onAddCorrespondence}
+          onEditCorrespondence={onEditCorrespondence}
+          onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
+        />
+      </CorrespondenceModalProvider>
     </Spin>
   );
 };
@@ -74,9 +81,26 @@ const Correspondences = ({
   onEditCorrespondence,
   onConfirmDeleteCorrespondence,
 }) => {
+  const { isTablet } = useDevice();
+  const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
+    useCorrespondenceModal();
+
   const filterCorrespondencesView = correspondences.filter(
     (reception) => reception
   );
+
+  const onDecreeCorrespondence = (correspondence) => {
+    onShowCorrespondenceModal({
+      title: "Decreto",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <DecreeModal
+          correspondence={correspondence}
+          onCloseDecreeModal={onCloseCorrespondenceModal}
+        />
+      ),
+    });
+  };
 
   return (
     <Acl
@@ -102,6 +126,7 @@ const Correspondences = ({
             correspondences={filterCorrespondencesView}
             onClickEditCorrespondence={onEditCorrespondence}
             onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
+            onDecreeCorrespondence={onDecreeCorrespondence}
           />
         </div>
       </Container>

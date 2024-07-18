@@ -21,6 +21,7 @@ import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import dayjs from "dayjs";
 import {
+  addCorrespondence,
   getCorrespondenceId,
   updateCorrespondence,
 } from "../../../firebase/collections";
@@ -53,12 +54,14 @@ export const CorrespondenceIntegration = () => {
     try {
       setSavingCorrespondence(true);
 
-      await updateCorrespondence(
-        correspondence.id,
-        isNew
-          ? assignCreateProps(mapCorrespondence(correspondence, formData))
-          : assignUpdateProps(mapCorrespondence(correspondence, formData))
-      );
+      isNew
+        ? await addCorrespondence(
+            assignCreateProps(mapCorrespondence(correspondence, formData))
+          )
+        : await updateCorrespondence(
+            correspondence.id,
+            assignUpdateProps(mapCorrespondence(correspondence, formData))
+          );
 
       notification({ type: "success" });
       onGoBack();
@@ -84,9 +87,9 @@ export const CorrespondenceIntegration = () => {
         indicative: formData.indicative,
         issue: formData.issue,
         classification: formData.classification,
-        photos: formData.photos,
-        documents: formData.documents,
-        status: "pending",
+        photos: formData?.photos || null,
+        documents: formData?.documents || null,
+        status: correspondence?.status || "notDecreed",
       }
     );
 
@@ -108,6 +111,7 @@ const Correspondence = ({
   savingCorrespondence,
   onGoBack,
 }) => {
+  console.log({ correspondence });
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const schema = yup.object({
@@ -176,7 +180,6 @@ const Correspondence = ({
                 <Controller
                   name="destination"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Destinatario"
@@ -193,7 +196,6 @@ const Correspondence = ({
                 <Controller
                   name="receivedBy"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Recibido Por:"
@@ -210,7 +212,6 @@ const Correspondence = ({
                 <Controller
                   name="class"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Clase"
@@ -227,7 +228,6 @@ const Correspondence = ({
                 <Controller
                   name="dateCorrespondence"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <DatePicker
                       label="Fecha"
@@ -244,7 +244,6 @@ const Correspondence = ({
                 <Controller
                   name="indicative"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Indicativo"
@@ -261,7 +260,6 @@ const Correspondence = ({
                 <Controller
                   name="classification"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Clasificación"
@@ -278,7 +276,6 @@ const Correspondence = ({
                 <Controller
                   name="issue"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <TextArea
                       label="Asunto"
@@ -298,17 +295,16 @@ const Correspondence = ({
                 <Controller
                   name="photos"
                   control={control}
-                  defaultValue={[]}
                   render={({ field: { onChange, value, name } }) => (
                     <UploadMultiple
                       label="Fotos (523x404)"
+                      isImage={true}
                       accept="image/*"
-                      bucket="documents"
                       resize="423x304"
                       name={name}
                       value={value}
+                      bucket="documents"
                       filePath={`correspondences/${correspondence.id}/photos`}
-                      isImage={true}
                       buttonText="Subir imagen"
                       error={error(name)}
                       required={required(name)}
@@ -322,7 +318,6 @@ const Correspondence = ({
                 <Controller
                   name="documents"
                   control={control}
-                  defaultValue={[]}
                   render={({ field: { onChange, value, name } }) => (
                     <UploadMultiple
                       isImage={false}
