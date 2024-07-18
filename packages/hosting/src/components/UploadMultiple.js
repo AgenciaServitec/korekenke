@@ -52,14 +52,17 @@ export const UploadMultiple = ({
   bucket = "default",
   buttonText = "Upload image",
   dragger = true,
+  hidden,
+  name,
   error = false,
   helperText,
   filePath,
-  name,
   isImage = true,
+  withThumbImage = true,
   label,
   required = false,
   resize = "423x304",
+  additionalFields = null,
   value,
   onChange,
   onUploading,
@@ -108,12 +111,18 @@ export const UploadMultiple = ({
   const uploadFileToFile = ({ uid, name, url, thumbUrl }) => {
     assert(url, "Missing url");
 
-    return {
+    const file = {
+      ...additionalFields,
       uid,
       name,
       url,
-      thumbUrl,
     };
+
+    if (isImage) {
+      file.thumbUrl = thumbUrl;
+    }
+
+    return file;
   };
 
   const customRequest = async (requestOption) => {
@@ -127,6 +136,7 @@ export const UploadMultiple = ({
         resize,
         storage,
         isImage,
+        withThumbImage,
         options: {
           file: requestOption.file,
           onError: (error) =>
@@ -206,6 +216,7 @@ export const UploadMultiple = ({
       <ComponentContainer.filled
         animation={false}
         required={required}
+        hidden={hidden}
         error={error}
         helperText={helperText}
         label={label}
