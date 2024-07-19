@@ -43,7 +43,7 @@ export const CorrespondencesIntegration = () => {
 
   const onNavigateTo = (correspondenceId) => navigate(correspondenceId);
   const onGoToDecreeSheets = (correspondenceId) =>
-    navigate(`/correspondences/${correspondenceId}/sheets`);
+    navigate(`/correspondences/${correspondenceId}/decree/sheets`);
 
   const onAddCorrespondence = () => onNavigateTo("new");
   const onEditCorrespondence = (correspondenceId) =>
