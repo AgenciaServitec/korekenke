@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { QRCode, Spinner } from "../../../../../components";
+import { notification, QRCode, Spinner } from "../../../../../components";
 import {
   ImgNoFound,
   LogoArmyPeru,
@@ -12,16 +12,25 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findDegree } from "../../../../../utils";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { firestore } from "../../../../../firebase";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
-  const { departments, users, entities, livestockAndEquines } = useGlobalData();
-
-  const livestockAndEquine = livestockAndEquines.find(
-    (_livestockAndEquine) => _livestockAndEquine.id === livestockAndEquineId
+  const [
+    livestockAndEquine,
+    livestockAndEquineLoading,
+    livestockAndEquineError,
+  ] = useDocumentData(
+    firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
   );
+  const { departments, users, entities } = useGlobalData();
 
-  if (!livestockAndEquine) return <Spinner height="80vh" />;
+  useEffect(() => {
+    livestockAndEquineError && notification({ type: "error" });
+  }, [livestockAndEquineError]);
+
+  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
 
   const genericSearchById = (group, id) => {
     return group.find((_group) => _group.id === id);
@@ -48,12 +57,9 @@ export const PdfEquineLivestockRegistrationCard = () => {
 
   const entityBossSVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
-  const entityRCMDNEPR = genericSearchById(entities, "D0ALtPQ7ItsbSzb0vjIt");
+  const entityRCMDNEPR = genericSearchByNameId(departments, "pel-vet");
 
-  const entityBossRCMDNEPR = genericSearchById(
-    users,
-    entityRCMDNEPR?.entityManageId
-  );
+  const entityBossRCMDNEPR = genericSearchById(users, entityRCMDNEPR?.bossId);
 
   return (
     <Container>
