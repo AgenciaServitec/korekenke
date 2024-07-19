@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router";
-import { firestore } from "../../../../../firebase";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
-import { notification, QRCode, Spinner } from "../../../../../components";
+import { QRCode, Spinner } from "../../../../../components";
 import {
   ImgNoFound,
   LogoArmyPeru,
@@ -17,42 +15,42 @@ import { findDegree } from "../../../../../utils";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
-  const { departments, users, entities } = useGlobalData();
-  const [
-    livestockAndEquine,
-    livestockAndEquineLoading,
-    livestockAndEquineError,
-  ] = useDocumentData(
-    firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
+  const { departments, users, entities, livestockAndEquines } = useGlobalData();
+
+  const livestockAndEquine = livestockAndEquines.find(
+    (_livestockAndEquine) => _livestockAndEquine.id === livestockAndEquineId
   );
 
-  useEffect(() => {
-    livestockAndEquineError && notification({ type: "error" });
-  }, [livestockAndEquineError]);
+  if (!livestockAndEquine) return <Spinner height="80vh" />;
 
-  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
-
-  const genericSearch = (group, id) => {
+  const genericSearchById = (group, id) => {
     return group.find((_group) => _group.id === id);
   };
 
-  const unitPELVETRCMDNEPR = genericSearch(
+  const genericSearchByNameId = (group, nameId) => {
+    return group.find((_group) => _group.nameId === nameId);
+  };
+
+  const unitPELVETRCMDNEPR = genericSearchById(
     departments,
     livestockAndEquine?.unit
   );
 
-  const unitBossPELVETRCMDNEPR = genericSearch(
+  const unitBossPELVETRCMDNEPR = genericSearchById(
     users,
     unitPELVETRCMDNEPR?.bossId
   );
 
-  const entitySVRE = genericSearch(entities, "lCBsn4NbEjt0lBtkBHeO");
+  const entitySVRE = genericSearchByNameId(
+    entities,
+    "servicio-de-veterinaria-y-remonta-del-ejercito"
+  );
 
-  const entityBossSVRE = genericSearch(users, entitySVRE?.entityManageId);
+  const entityBossSVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
-  const entityRCMDNEPR = genericSearch(entities, "7zw9UxYVomBeXVyUayt6");
+  const entityRCMDNEPR = genericSearchById(entities, "D0ALtPQ7ItsbSzb0vjIt");
 
-  const entityBossRCMDNEPR = genericSearch(
+  const entityBossRCMDNEPR = genericSearchById(
     users,
     entityRCMDNEPR?.entityManageId
   );
