@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import { firestore } from "../../../../../firebase";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, QRCode, Spinner } from "../../../../../components";
 import {
@@ -14,10 +12,11 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findDegree } from "../../../../../utils";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { firestore } from "../../../../../firebase";
 
 export const PdfEquineLivestockRegistrationCard = () => {
   const { livestockAndEquineId } = useParams();
-  const { departments, users, entities } = useGlobalData();
   const [
     livestockAndEquine,
     livestockAndEquineLoading,
@@ -25,6 +24,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
   ] = useDocumentData(
     firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
   );
+  const { departments, users, entities } = useGlobalData();
 
   useEffect(() => {
     livestockAndEquineError && notification({ type: "error" });
@@ -32,30 +32,34 @@ export const PdfEquineLivestockRegistrationCard = () => {
 
   if (livestockAndEquineLoading) return <Spinner height="80vh" />;
 
-  const genericSearch = (group, id) => {
+  const genericSearchById = (group, id) => {
     return group.find((_group) => _group.id === id);
   };
 
-  const unitPELVETRCMDNEPR = genericSearch(
+  const genericSearchByNameId = (group, nameId) => {
+    return group.find((_group) => _group.nameId === nameId);
+  };
+
+  const unitPELVETRCMDNEPR = genericSearchById(
     departments,
     livestockAndEquine?.unit
   );
 
-  const unitBossPELVETRCMDNEPR = genericSearch(
+  const unitBossPELVETRCMDNEPR = genericSearchById(
     users,
     unitPELVETRCMDNEPR?.bossId
   );
 
-  const entitySVRE = genericSearch(entities, "lCBsn4NbEjt0lBtkBHeO");
-
-  const entityBossSVRE = genericSearch(users, entitySVRE?.entityManageId);
-
-  const entityRCMDNEPR = genericSearch(entities, "7zw9UxYVomBeXVyUayt6");
-
-  const entityBossRCMDNEPR = genericSearch(
-    users,
-    entityRCMDNEPR?.entityManageId
+  const entitySVRE = genericSearchByNameId(
+    entities,
+    "servicio-de-veterinaria-y-remonta-del-ejercito"
   );
+
+  const entityBossSVRE = genericSearchById(users, entitySVRE?.entityManageId);
+
+  const entityRCMDNEPR = genericSearchByNameId(departments, "pel-vet");
+
+  const entityBossRCMDNEPR = genericSearchById(users, entityRCMDNEPR?.bossId);
 
   return (
     <Container>
