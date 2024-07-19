@@ -5,20 +5,6 @@
       "emails": {
         "sales": "korekenke@gmail.com"
       },
-      "numbers": {
-        "phone": ["123 456 789"],
-        "wsp": ["123 456 789"]
-      },
-      "socialLinks": {
-        "facebook": "#",
-        "instagram": "#",
-        "whatsapp": "#",
-        "tiktok": "#",
-        "email": "mailto:#"
-      },
-      "directions": {
-        "local1": "Chorrillos - Lima - Perú"
-      },
       "poweredBy": {
         "name": "Agencia servitec",
         "webUrl": "https://agenciaservitec.com"

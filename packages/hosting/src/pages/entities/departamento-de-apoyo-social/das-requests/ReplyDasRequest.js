@@ -58,7 +58,10 @@ export const ReplyDasRequestModal = ({
     try {
       setSavingData(true);
 
-      await updateDasApplication(dasRequest.id, { response: { ...formData } });
+      await updateDasApplication(dasRequest.id, {
+        response: { ...formData },
+        status: "finalized",
+      });
       notification({ type: "success" });
       onSetVisibleModal(false);
     } catch (e) {
@@ -85,7 +88,6 @@ export const ReplyDasRequestModal = ({
             <Controller
               name="message"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value, name } }) => (
                 <TextArea
                   label="Mensaje"
@@ -104,16 +106,14 @@ export const ReplyDasRequestModal = ({
             <Controller
               name="documents"
               control={control}
-              defaultValue={[]}
               render={({ field: { onChange, value, name } }) => (
                 <UploadMultiple
-                  isImage={false}
                   label="Documentos (Pdf)"
+                  isImage={false}
                   accept="application/pdf"
                   name={name}
                   value={value}
                   bucket="departamentoDeApoyoSocial"
-                  fileName={`copyConsolidadoNotasUniv-photo-${uuidv4()}`}
                   filePath={`das-applicants/${dasRequest.id}/files`}
                   buttonText="Subir archivo"
                   error={error(name)}
@@ -125,12 +125,10 @@ export const ReplyDasRequestModal = ({
               )}
             />
           </Col>
-
           <Col sm={24}>
             <Controller
               name="type"
               control={control}
-              defaultValue={[]}
               render={({ field: { onChange, value, name } }) => (
                 <RadioGroup
                   label="Tipo de respuesta"

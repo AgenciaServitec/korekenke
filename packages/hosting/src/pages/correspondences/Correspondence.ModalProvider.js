@@ -1,33 +1,33 @@
 import React, { createContext, useContext, useState } from "react";
-import { Modal } from "../../../../components";
+import { Modal } from "../../components";
 
-const ReservationModalContext = createContext({
-  onShowReservationModal: () => console.log(),
-  onCloseReservationModal: () => console.log(),
+const CorrespondenceModalContext = createContext({
+  onShowCorrespondenceModal: () => console.log(),
+  onCloseCorrespondenceModal: () => console.log(),
 });
 
 export const CorrespondenceModalProvider = ({ children, drivers }) => {
   const [visibleModal, setVisibleModal] = useState(false);
   const [modalProps, setModalProps] = useState();
 
-  const onShowReservationModal = (modalProps) => {
+  const onShowCorrespondenceModal = (modalProps) => {
     setVisibleModal(true);
     setModalProps(modalProps);
   };
 
-  const onCloseReservationModal = () => {
+  const onCloseCorrespondenceModal = () => {
     setVisibleModal(false);
     setModalProps(undefined);
   };
 
   return (
-    <ReservationModalContext.Provider
-      value={{ onShowReservationModal, onCloseReservationModal }}
+    <CorrespondenceModalContext.Provider
+      value={{ onShowCorrespondenceModal, onCloseCorrespondenceModal }}
     >
       {children}
       <Modal
-        visible={visibleModal}
-        onCancel={onCloseReservationModal}
+        open={visibleModal}
+        onCancel={onCloseCorrespondenceModal}
         title={modalProps?.title}
         closable
         width={modalProps?.width}
@@ -36,8 +36,9 @@ export const CorrespondenceModalProvider = ({ children, drivers }) => {
       >
         {modalProps?.onRenderBody && modalProps.onRenderBody(drivers)}
       </Modal>
-    </ReservationModalContext.Provider>
+    </CorrespondenceModalContext.Provider>
   );
 };
 
-export const useReservationModal = () => useContext(ReservationModalContext);
+export const useCorrespondenceModal = () =>
+  useContext(CorrespondenceModalContext);

@@ -1,2 +1,2 @@
-export * from "./correspondences";
+export * from "../../correspondences";
 export * from "./inscriptions";

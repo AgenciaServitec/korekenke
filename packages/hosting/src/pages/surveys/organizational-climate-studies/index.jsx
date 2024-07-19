@@ -67,13 +67,13 @@ export const OrganizationalClimateStudiesIntegration = () => {
       ),
     },
     {
-      title: "Acctiones",
+      title: "Acciones",
       key: "actions",
       render: (_, organizationClimateStudy) => (
         <Space>
           <Acl
-            category="surveys"
-            subCategory="organizational-climate-studies"
+            category="public"
+            subCategory="survey-organizational-climate-studies"
             name="/organizational-climate-studies/:organizationalClimateStudyId"
           >
             <IconAction
@@ -85,8 +85,8 @@ export const OrganizationalClimateStudiesIntegration = () => {
             />
           </Acl>
           <Acl
-            category="surveys"
-            subCategory="organizational-climate-studies"
+            category="public"
+            subCategory="survey-organizational-climate-studies"
             name="/organizational-climate-studies#deleted"
           >
             <IconAction
@@ -107,8 +107,8 @@ export const OrganizationalClimateStudiesIntegration = () => {
     <Row gutter={[16, 16]}>
       <Col span={24} md={22}>
         <Acl
-          category="surveys"
-          subCategory="organizational-climate-studies"
+          category="public"
+          subCategory="survey-organizational-climate-studies"
           name="/organizational-climate-studies/new"
         >
           <AddButton
@@ -120,8 +120,8 @@ export const OrganizationalClimateStudiesIntegration = () => {
       </Col>
       <Col span={24} md={2}>
         <Acl
-          category="surveys"
-          subCategory="organizational-climate-studies"
+          category="public"
+          subCategory="survey-organizational-climate-studies"
           name="/organizational-climate-studies/sheets"
         >
           <IconAction
@@ -137,8 +137,8 @@ export const OrganizationalClimateStudiesIntegration = () => {
       <Divider />
       <Col span={24}>
         <Acl
-          category="surveys"
-          subCategory="organizational-climate-studies"
+          category="public"
+          subCategory="survey-organizational-climate-studies"
           name="/organizational-climate-studies/list"
         >
           <Table

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row, Steps, Title, notification } from "../../../../components";
+import React, { useState } from "react";
+import { Col, notification, Row, Steps, Title } from "../../../../components";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import { firestore } from "../../../../firebase";
 import { getOrganizationalClimateStudyId } from "../../../../firebase/collections/organizationalClimateStudies";

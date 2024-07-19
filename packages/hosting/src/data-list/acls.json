@@ -62,10 +62,18 @@
       "/sections#delete": "Eliminar sección"
     }
   },
-  "surveys": {
-    "label": "Encuestas",
-    "organizational-climate-studies": {
-      "label": "Estudio del Clima Organizacional",
+  "public": {
+    "label": "Público",
+    "correspondences": {
+      "label": "Correspondencias",
+      "/correspondences": "Menu: Correspondencias",
+      "/correspondences/new": "Agregar correspondencia",
+      "/correspondences/:correspondenceId": "Editar correspondencia",
+      "/correspondences#delete": "Eliminar correspondencia",
+      "/correspondences#decree": "Decretar correspondencias"
+    },
+    "survey-organizational-climate-studies": {
+      "label": "Encuesta: Estudio del Clima Organizacional",
       "/organizational-climate-studies": "Menu: Estudio del Clima Organizacional",
       "/organizational-climate-studies/list": "Lista Estudios del Clima Organizacional",
       "/organizational-climate-studies/new": "Agregar Estudio del Clima Organizacional",
@@ -81,8 +89,6 @@
       "/das-requests": "Menu: Solicitudes",
       "/das-requests/new": "Agregar solicitud",
       "/das-requests/:dasRequestId": "Editar solicitud",
-      "/das-requests/:dasRequestId#approved": "Aprobar solicitud",
-      "/das-requests/:dasRequestId#noApproved": "No aprobar solicitud",
       "/das-requests#delete": "Eliminar solicitud",
       "/das-requests/:dasRequestId/sheets": "Pdfs de la solicitud",
       "/das-requests/:dasRequestId#addObservation": "Solicitud: Agregar observación",
@@ -93,13 +99,6 @@
   },
   "jefatura-de-bienestar-del-ejercito": {
     "label": "Jefatura de bienestar del ejército",
-    "correspondences": {
-      "label": "Correspondencias",
-      "/correspondences": "Menu: Correspondencias",
-      "/correspondences/new": "Agregar correspondencia",
-      "/correspondences/:correspondenceId": "Editar correspondencia",
-      "/correspondences#delete": "Eliminar correspondencia"
-    },
     "inscriptions": {
       "label": "Inscripciones",
       "/inscriptions": "Menu: Inscripciones",

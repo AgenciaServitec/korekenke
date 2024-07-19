@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import dayjs from "dayjs";
 import {
@@ -7,39 +7,41 @@ import {
   Space,
   TableVirtualized,
   Tag,
-} from "../../../../components/ui";
+  Button,
+} from "../../components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCheckCircle,
-  faCircleInfo,
+  faClipboardCheck,
   faEdit,
+  faEye,
   faFilePdf,
   faPrint,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { CorrespondencesStatus } from "../../data-list";
 
-const CorrespondencesTable = ({
+export const CorrespondencesTable = ({
   correspondences,
   onClickEditCorrespondence,
   onClickDeleteCorrespondence,
+  onDecreeCorrespondence,
   onClickPrintTicket,
+  onGoToDecreeSheets,
 }) => {
   const columns = [
     {
       title: "F. Creación",
-      width: ["97px", "10%"],
+      width: ["40px", "10%"],
       render: (correspondence) => (
         <CorrespondenceContainer>
           <Space direction="vertical">
             <div>
               <span>
-                {dayjs(correspondence.createAt.toDate()).format("DD/MM/YYYY")}
-              </span>
-              <span>
-                {dayjs(correspondence.createAt.toDate()).format("h:mm a")}
+                {dayjs(correspondence.createAt.toDate()).format(
+                  "DD/MM/YYYY HH:mm"
+                )}
               </span>
             </div>
-            <div>{correspondencesStatus(correspondence.status)}</div>
           </Space>
         </CorrespondenceContainer>
       ),
@@ -47,7 +49,7 @@ const CorrespondencesTable = ({
     {
       title: "Destinatario",
       align: "center",
-      width: ["130px", "15%"],
+      width: ["100px", "10%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.destination}</div>
       ),
@@ -55,7 +57,7 @@ const CorrespondencesTable = ({
     {
       title: "Recibido por",
       align: "center",
-      width: ["130px", "15%"],
+      width: ["100px", "10%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.receivedBy}</div>
       ),
@@ -63,7 +65,7 @@ const CorrespondencesTable = ({
     {
       title: "Clase",
       align: "center",
-      width: ["130px", "15%"],
+      width: ["100px", "10%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.class}</div>
       ),
@@ -71,7 +73,7 @@ const CorrespondencesTable = ({
     {
       title: "Indicativo",
       align: "center",
-      width: ["130px", "10%"],
+      width: ["50px", "7%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.indicative}</div>
       ),
@@ -79,7 +81,7 @@ const CorrespondencesTable = ({
     {
       title: "Clasificación",
       align: "center",
-      width: ["130px", "25%"],
+      width: ["100px", "15%"],
       render: (correspondence) => (
         <div>
           <div className="capitalize">{correspondence?.classification}</div>
@@ -89,7 +91,7 @@ const CorrespondencesTable = ({
     {
       title: "Asunto",
       align: "center",
-      width: ["130px", "15%"],
+      width: ["230px", "30%"],
       render: (correspondence) => <div>{correspondence?.issue}</div>,
     },
     {
@@ -98,7 +100,7 @@ const CorrespondencesTable = ({
       width: ["130px", "15%"],
       render: (correspondence) => (
         <div>
-          <Space>
+          <Space align="center">
             {(correspondence?.documents || []).map((document, index) => (
               <a
                 key={index}
@@ -114,12 +116,52 @@ const CorrespondencesTable = ({
       ),
     },
     {
-      title: "⚙️",
-      width: ["70px", "15%"],
+      title: "Estado",
+      align: "center",
+      width: ["70px", "10%"],
+      render: (correspondence) => {
+        const status = CorrespondencesStatus?.[correspondence?.status];
+        return (
+          <Space>
+            <Tag color={status?.color} style={{ margin: 0 }}>
+              {status?.name}
+            </Tag>
+            {correspondence?.status === "pending" && (
+              <IconAction
+                className="pointer"
+                tooltipTitle="Ver hoja de decreto"
+                onClick={() => onGoToDecreeSheets(correspondence.id)}
+                styled={{ color: (theme) => theme.colors.tertiary }}
+                icon={faEye}
+              />
+            )}
+          </Space>
+        );
+      },
+    },
+    {
+      title: "Opciones",
+      align: "end",
+      width: ["130px", "30%"],
       render: (correspondence) => (
         <IconsActionWrapper>
+          {correspondence?.status === "notDecreed" && (
+            <Acl
+              category="public"
+              subCategory="correspondences"
+              name="/correspondences#decree"
+            >
+              <Button
+                size="small"
+                onClick={() => onDecreeCorrespondence(correspondence)}
+              >
+                <FontAwesomeIcon icon={faClipboardCheck} />
+                Decretar
+              </Button>
+            </Acl>
+          )}
           <Acl
-            category="jefatura-de-bienestar-del-ejercito"
+            category="public"
             subCategory="correspondences"
             name="/correspondences/:correspondenceId"
           >
@@ -130,19 +172,21 @@ const CorrespondencesTable = ({
               icon={faEdit}
             />
           </Acl>
-          <Acl
-            category="jefatura-de-bienestar-del-ejercito"
-            subCategory="correspondences"
-            name="/correspondences#delete"
-          >
-            <IconAction
-              className="pointer"
-              onClick={() => onClickDeleteCorrespondence(correspondence.id)}
-              styled={{ color: (theme) => theme.colors.error }}
-              icon={faTrash}
-            />
-          </Acl>
-          {correspondence.status === "accepted" && (
+          {correspondence?.status === "notDecreed" && (
+            <Acl
+              category="public"
+              subCategory="correspondences"
+              name="/correspondences#delete"
+            >
+              <IconAction
+                className="pointer"
+                onClick={() => onClickDeleteCorrespondence(correspondence.id)}
+                styled={{ color: (theme) => theme.colors.error }}
+                icon={faTrash}
+              />
+            </Acl>
+          )}
+          {correspondence?.status === "finalized" && (
             <IconAction
               className="pointer"
               onClick={() => onClickPrintTicket(correspondence.id)}
@@ -160,28 +204,9 @@ const CorrespondencesTable = ({
       dataSource={correspondences}
       columns={columns}
       rowHeaderHeight={50}
-      rowBodyHeight={100}
+      rowBodyHeight={150}
     />
   );
-};
-
-export default memo(CorrespondencesTable);
-
-const correspondencesStatus = (status) => {
-  switch (status) {
-    case "pending":
-      return (
-        <Tag color="processing" style={{ margin: 0 }}>
-          <FontAwesomeIcon icon={faCircleInfo} /> Pendiente
-        </Tag>
-      );
-    case "accepted":
-      return (
-        <Tag color="success" style={{ margin: 0 }}>
-          <FontAwesomeIcon icon={faCheckCircle} /> Aceptado
-        </Tag>
-      );
-  }
 };
 
 const CorrespondenceContainer = styled.div`
@@ -201,6 +226,8 @@ const CorrespondenceContainer = styled.div`
 
 const IconsActionWrapper = styled.div`
   display: flex;
+  justify-content: start;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.5em;
 `;

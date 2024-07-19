@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   Button,
   Col,
   Collapse,
   IconAction,
-  modalConfirm,
-  notification,
   Row,
   Spinner,
   Tag,
@@ -30,7 +28,6 @@ import {
   PersonalInformationModal,
   useDasRequestModal,
 } from "./components";
-import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 import { ObservationsList } from "./components/ObservationsList";
 import { useDevice } from "../../../../../../hooks";
 import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
@@ -38,6 +35,7 @@ import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
+import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -50,47 +48,58 @@ export const EditDasRequestIntegration = ({
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
 
-  const updateDasRequest = async (dasRequest, status) => {
-    try {
-      setApprovedLoading(true);
-      await updateDasApplication(dasRequest.id, {
-        status: status,
-      });
-
-      notification({ type: "success" });
-    } catch (e) {
-      console.error("approvedDasRequestError:", e);
-    } finally {
-      setApprovedLoading(false);
+  useEffect(() => {
+    if (dasRequest?.wasRead === false && dasRequest?.status === "pending") {
+      (async () => {
+        await updateDasApplication(dasRequest.id, {
+          status: "inProgress",
+          wasRead: true,
+        });
+      })();
     }
-  };
+  }, [dasRequest]);
 
-  const onConfirmDesApprovedDasRequest = (dasRequest) =>
-    modalConfirm({
-      title: "¿Estás seguro de que quieres desaprobar la solicitud?",
-      onOk: () => updateDasRequest(dasRequest, "pending"),
-    });
+  // const updateDasRequest = async (dasRequest, status) => {
+  //   try {
+  //     setApprovedLoading(true);
+  //     await updateDasApplication(dasRequest.id, {
+  //       status: status,
+  //     });
+  //
+  //     notification({ type: "success" });
+  //   } catch (e) {
+  //     console.error("approvedDasRequestError:", e);
+  //   } finally {
+  //     setApprovedLoading(false);
+  //   }
+  // };
 
-  const onConfirmApprovedDasRequest = (dasRequest) => {
-    const { headline, institution, applicant } = dasRequest;
-
-    if (
-      !isEmpty(headline?.observations) ||
-      !isEmpty(institution?.observations) ||
-      !isEmpty(applicant?.observations)
-    ) {
-      return notification({
-        type: "warning",
-        title:
-          "Para realizar la aprobacion, no debe hacer observaciones en la solicitud",
-      });
-    }
-
-    return modalConfirm({
-      title: "¿Estás seguro de que quieres aprobar la solicitud?",
-      onOk: () => updateDasRequest(dasRequest, "approved"),
-    });
-  };
+  // const onConfirmDesApprovedDasRequest = (dasRequest) =>
+  //   modalConfirm({
+  //     title: "¿Estás seguro de que quieres desaprobar la solicitud?",
+  //     onOk: () => updateDasRequest(dasRequest, "pending"),
+  //   });
+  //
+  // const onConfirmApprovedDasRequest = (dasRequest) => {
+  //   const { headline, institution, applicant } = dasRequest;
+  //
+  //   if (
+  //     !isEmpty(headline?.observations) ||
+  //     !isEmpty(institution?.observations) ||
+  //     !isEmpty(applicant?.observations)
+  //   ) {
+  //     return notification({
+  //       type: "warning",
+  //       title:
+  //         "Para realizar la aprobacion, no debe hacer observaciones en la solicitud",
+  //     });
+  //   }
+  //
+  //   return modalConfirm({
+  //     title: "¿Estás seguro de que quieres aprobar la solicitud?",
+  //     onOk: () => updateDasRequest(dasRequest, "approved"),
+  //   });
+  // };
 
   if (isEmpty(dasRequest)) return <Spinner height="80vh" />;
 
@@ -101,8 +110,6 @@ export const EditDasRequestIntegration = ({
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onNavigateTo={onNavigateTo}
-        onConfirmApprovedDasRequest={onConfirmApprovedDasRequest}
-        onConfirmDesApprovedDasRequest={onConfirmDesApprovedDasRequest}
         approvedLoading={approvedLoading}
         visibleReplyModal={visibleReplyModal}
         onSetVisibleReplyModal={onSetVisibleReplyModal}
@@ -118,8 +125,6 @@ const EditDasRequest = ({
   dasRequest,
   onGoBack,
   onNavigateTo,
-  onConfirmApprovedDasRequest,
-  onConfirmDesApprovedDasRequest,
   approvedLoading,
   visibleReplyModal,
   onSetVisibleReplyModal,
@@ -427,28 +432,6 @@ const EditDasRequest = ({
               Cancelar
             </Button>
           </Col>
-          {dasRequest?.status === "approved" && (
-            <Acl
-              category="departamento-de-apoyo-social"
-              subCategory="dasRequests"
-              name="/das-requests/:dasRequestId#noApproved"
-            >
-              {dasRequest.status === "approved" && (
-                <Col xs={24} sm={12} md={6}>
-                  <Button
-                    danger
-                    size="large"
-                    block
-                    loading={approvedLoading}
-                    disabled={dasRequest.status === "pending"}
-                    onClick={() => onConfirmDesApprovedDasRequest(dasRequest)}
-                  >
-                    Desaprobar solicitud
-                  </Button>
-                </Col>
-              )}
-            </Acl>
-          )}
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
