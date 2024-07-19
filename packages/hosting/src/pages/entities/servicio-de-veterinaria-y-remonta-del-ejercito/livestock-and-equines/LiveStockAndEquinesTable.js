@@ -62,6 +62,7 @@ export const LiveStockAndEquinesTable = ({
     },
     {
       title: "Acciones",
+      align: "center",
       key: "actions",
       render: (_, livestockAndEquine) => (
         <Space>

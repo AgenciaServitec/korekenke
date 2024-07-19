@@ -53,6 +53,7 @@ export const EquineMagazineProfilesTable = ({
     },
     {
       title: "Acciones",
+      align: "center",
       key: "action",
       render: (_, equineMagazineProfile) => (
         <Space>

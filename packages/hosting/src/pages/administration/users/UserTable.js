@@ -90,6 +90,7 @@ export const UsersTable = ({
     {
       title: "Estado",
       dataIndex: "status",
+      align: "center",
       key: "status",
       render: (_) => (
         <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -125,6 +126,7 @@ export const UsersTable = ({
     },
     {
       title: "Acciones",
+      align: "center",
       key: "actions",
       render: (_, user) => (
         <Space>

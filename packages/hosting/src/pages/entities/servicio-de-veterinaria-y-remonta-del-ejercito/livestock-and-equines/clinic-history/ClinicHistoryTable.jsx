@@ -47,6 +47,7 @@ export const ClinicHistoryTable = ({
     {
       title: "Estado",
       key: "status",
+      align: "center",
       dataIndex: "status",
       render: (_, clinicHistory) =>
         clinicHistory?.status && (
@@ -65,6 +66,7 @@ export const ClinicHistoryTable = ({
     },
     {
       title: "Acciones",
+      align: "center",
       key: "action",
       render: (_, clinicHistory) => (
         <>

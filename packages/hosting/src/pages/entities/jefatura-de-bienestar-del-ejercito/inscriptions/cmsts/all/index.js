@@ -103,6 +103,7 @@ export const AllRegistered = () => {
     {
       title: "Estado",
       dataIndex: "status",
+      align: "center",
       key: "status",
       render: (status, _) => (
         <Tag color="warning">{status === "pending" && "Pendiente"}</Tag>
