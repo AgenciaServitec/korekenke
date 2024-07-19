@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { notification, PDF, Sheet, Spinner } from "../../../../../components";
 import { useParams } from "react-router";
 import { DiscountAgreementGrantedUniversitySheet } from "./DiscountAgreementGrantedUniversity";
@@ -15,14 +15,16 @@ import { firestore } from "../../../../../firebase";
 import { ApplicantDocumentsSheet } from "./common/ApplicantDocumentsSheet";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findRelationShip } from "../../../../../utils";
-import { useGlobalData } from "../../../../../providers";
+import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { updateDasApplication } from "../../../../../firebase/collections/dasApplications";
+import { fetchEntities, fetchUser } from "../../../../../firebase/collections";
 
 export const DasRequestSheets = () => {
   const { requestType, dasRequestId } = useParams();
   const { users } = useGlobalData();
+  const { authUser } = useAuthentication();
 
-  // const [entityManage, setEntityManage] = useState(null);
+  const [entityManager, setEntityManager] = useState(null);
 
   const [dasRequest = {} || null, dasRequestLoading, dasRequestError] =
     useDocumentData(firestore.collection("das-applications").doc(dasRequestId));
@@ -32,28 +34,32 @@ export const DasRequestSheets = () => {
   }, [dasRequestError]);
 
   useEffect(() => {
-    if (dasRequest?.wasRead === false && dasRequest?.status === "pending") {
-      (async () => {
+    (async () => {
+      const dasEntityManager = await fetchEntityManager();
+      if (
+        dasRequest?.wasRead === false &&
+        dasRequest?.status === "pending" &&
+        dasEntityManager.id === authUser.id
+      ) {
         await updateDasApplication(dasRequestId, {
           status: "inProgress",
           wasRead: true,
         });
-      })();
-    }
+      }
+    })();
   }, [dasRequest]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const _entities = await fetchEntities();
-  //     console.log("_entities: ", _entities);
-  //     const manageDas = _entities.find(
-  //       (entity) => entity?.nameId === "departamento-de-apoyo-social"
-  //     );
-  //     const _entityManage = await fetchUser(manageDas?.entityManageId);
-  //
-  //     setEntityManage(_entityManage);
-  //   })();
-  // }, []);
+  const fetchEntityManager = async () => {
+    const _entities = await fetchEntities();
+
+    const manageDas = _entities.find(
+      (entity) => entity?.nameId === "departamento-de-apoyo-social"
+    );
+    const _entityManager = await fetchUser(manageDas?.entityManageId);
+
+    setEntityManager(_entityManager);
+    return _entityManager;
+  };
 
   if (dasRequestLoading) return <Spinner height="80vh" />;
 

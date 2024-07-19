@@ -37,6 +37,11 @@ import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 import { DasRequestStatus } from "../../../../../../data-list";
+import {
+  fetchEntities,
+  fetchUser,
+} from "../../../../../../firebase/collections";
+import { useAuthentication } from "../../../../../../providers";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -44,63 +49,38 @@ export const EditDasRequestIntegration = ({
   onGoBack,
   onNavigateTo,
 }) => {
+  const { authUser } = useAuthentication();
   const [approvedLoading, setApprovedLoading] = useState(false);
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
 
   useEffect(() => {
-    if (dasRequest?.wasRead === false && dasRequest?.status === "pending") {
-      (async () => {
+    (async () => {
+      const dasEntityManager = await fetchEntityManager();
+      if (
+        dasRequest?.wasRead === false &&
+        dasRequest?.status === "pending" &&
+        dasEntityManager.id === authUser.id
+      ) {
         await updateDasApplication(dasRequest.id, {
           status: "inProgress",
           wasRead: true,
         });
-      })();
-    }
+      }
+    })();
   }, [dasRequest]);
 
-  // const updateDasRequest = async (dasRequest, status) => {
-  //   try {
-  //     setApprovedLoading(true);
-  //     await updateDasApplication(dasRequest.id, {
-  //       status: status,
-  //     });
-  //
-  //     notification({ type: "success" });
-  //   } catch (e) {
-  //     console.error("approvedDasRequestError:", e);
-  //   } finally {
-  //     setApprovedLoading(false);
-  //   }
-  // };
+  const fetchEntityManager = async () => {
+    const _entities = await fetchEntities();
 
-  // const onConfirmDesApprovedDasRequest = (dasRequest) =>
-  //   modalConfirm({
-  //     title: "¿Estás seguro de que quieres desaprobar la solicitud?",
-  //     onOk: () => updateDasRequest(dasRequest, "pending"),
-  //   });
-  //
-  // const onConfirmApprovedDasRequest = (dasRequest) => {
-  //   const { headline, institution, applicant } = dasRequest;
-  //
-  //   if (
-  //     !isEmpty(headline?.observations) ||
-  //     !isEmpty(institution?.observations) ||
-  //     !isEmpty(applicant?.observations)
-  //   ) {
-  //     return notification({
-  //       type: "warning",
-  //       title:
-  //         "Para realizar la aprobacion, no debe hacer observaciones en la solicitud",
-  //     });
-  //   }
-  //
-  //   return modalConfirm({
-  //     title: "¿Estás seguro de que quieres aprobar la solicitud?",
-  //     onOk: () => updateDasRequest(dasRequest, "approved"),
-  //   });
-  // };
+    const manageDas = _entities.find(
+      (entity) => entity?.nameId === "departamento-de-apoyo-social"
+    );
+    const _entityManager = await fetchUser(manageDas?.entityManageId);
+
+    return _entityManager;
+  };
 
   if (isEmpty(dasRequest)) return <Spinner height="80vh" />;
 
