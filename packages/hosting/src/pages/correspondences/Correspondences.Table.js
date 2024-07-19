@@ -141,7 +141,7 @@ export const CorrespondencesTable = ({
     },
     {
       title: "Opciones",
-      align: "end",
+      align: "center",
       width: ["130px", "30%"],
       render: (correspondence) => (
         <IconsActionWrapper>

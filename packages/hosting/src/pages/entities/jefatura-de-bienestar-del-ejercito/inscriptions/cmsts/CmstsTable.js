@@ -34,6 +34,7 @@ export const CmstsTable = ({ familyMembers, onDeleteFamilyMember }) => {
     },
     {
       title: "Acciones",
+      align: "center",
       key: "actions",
       render: (_, { dni }) => (
         <Space>

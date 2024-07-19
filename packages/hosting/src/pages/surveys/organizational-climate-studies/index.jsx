@@ -68,6 +68,7 @@ export const OrganizationalClimateStudiesIntegration = () => {
     },
     {
       title: "Acciones",
+      align: "center",
       key: "actions",
       render: (_, organizationClimateStudy) => (
         <Space>

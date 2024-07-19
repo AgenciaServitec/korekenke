@@ -131,6 +131,7 @@ export const DasRequestsTable = ({
     },
     {
       title: "Estado",
+      align: "center",
       key: "status",
       render: (_, dasRequest) => {
         const requestStatus = DasRequestStatus[dasRequest.status];
@@ -140,18 +141,12 @@ export const DasRequestsTable = ({
     },
     {
       title: "Respuesta",
+      align: "center",
       key: "status",
       render: (_, dasRequest) => {
         return (
           dasRequest?.response && (
-            <div
-              style={{
-                display: "flex",
-                gap: ".5em",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <Space>
               <div>
                 <Tag
                   color={
@@ -170,13 +165,14 @@ export const DasRequestsTable = ({
                 styled={{ color: (theme) => theme.colors.info }}
                 onClick={() => onShowReplyDasRequestInformation(dasRequest)}
               />
-            </div>
+            </Space>
           )
         );
       },
     },
     {
       title: "Opciones",
+      align: "center",
       key: "options",
       render: (_, dasRequest) => (
         <Space>
