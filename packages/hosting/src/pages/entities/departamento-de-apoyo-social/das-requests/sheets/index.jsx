@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { notification, PDF, Sheet, Spinner } from "../../../../../components";
 import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -9,6 +9,7 @@ import { findRelationShip } from "../../../../../utils";
 import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { updateDasApplication } from "../../../../../firebase/collections/dasApplications";
 import { fetchEntities, fetchUser } from "../../../../../firebase/collections";
+<<<<<<< HEAD
 import { DescuentoConvenioUniversidadSheet } from "./DescuentoConvenioUniversidad.Sheet";
 import { BecaEstudioPostgradoUniversidadSheet } from "./BecaEstudioPostgradoUniversidad.Sheet";
 import { DescuentoConvenioPostgradoUniversidadSheet } from "./DescuentoConvenioPostgradoUniversidad.Sheet";
@@ -18,11 +19,18 @@ import { MediaBecaPostgradoUniversidadSheet } from "./MediaBecaPostgradoUniversi
 import { DescuentoConvenioInstitutoSheet } from "./DescuentoConvenioInstituto.Sheet";
 import { BecaEstudiosInstitutoSheet } from "./BecaEstudiosInstituto.Sheet";
 import { MediaBecaInstitutoSheet } from "./MediaBecaInstituto.Sheet";
+=======
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
 
 export const DasRequestSheets = () => {
   const { requestType, dasRequestId } = useParams();
   const { users } = useGlobalData();
   const { authUser } = useAuthentication();
+<<<<<<< HEAD
+=======
+
+  const [entityManager, setEntityManager] = useState(null);
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
 
   const [dasRequest = {} || null, dasRequestLoading, dasRequestError] =
     useDocumentData(firestore.collection("das-applications").doc(dasRequestId));
@@ -33,6 +41,7 @@ export const DasRequestSheets = () => {
 
   useEffect(() => {
     (async () => {
+<<<<<<< HEAD
       if (dasRequest?.status === "inProgress") return;
 
       const dasEntityManager = await fetchEntityManager();
@@ -41,6 +50,13 @@ export const DasRequestSheets = () => {
         dasRequest?.wasRead === false &&
         dasRequest?.status === "proceeds" &&
         dasEntityManager?.id === authUser.id
+=======
+      const dasEntityManager = await fetchEntityManager();
+      if (
+        dasRequest?.wasRead === false &&
+        dasRequest?.status === "pending" &&
+        dasEntityManager.id === authUser.id
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
       ) {
         await updateDasApplication(dasRequestId, {
           status: "inProgress",
@@ -54,12 +70,21 @@ export const DasRequestSheets = () => {
     const _entities = await fetchEntities();
 
     const manageDas = _entities.find(
+<<<<<<< HEAD
       (entity) => entity?.nameId === "departamento-de-apoyo-social",
     );
 
     if (!manageDas?.entityManageId) return;
 
     return await fetchUser(manageDas?.entityManageId);
+=======
+      (entity) => entity?.nameId === "departamento-de-apoyo-social"
+    );
+    const _entityManager = await fetchUser(manageDas?.entityManageId);
+
+    setEntityManager(_entityManager);
+    return _entityManager;
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
   };
 
   if (dasRequestLoading) return <Spinner height="80vh" />;

@@ -36,7 +36,10 @@ import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
+<<<<<<< HEAD
 import { DasRequestStatus } from "../../../../../../data-list";
+=======
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
 import {
   fetchEntities,
   fetchUser,
@@ -50,12 +53,17 @@ export const EditDasRequestIntegration = ({
   onNavigateTo,
 }) => {
   const { authUser } = useAuthentication();
+<<<<<<< HEAD
+=======
+  const [approvedLoading, setApprovedLoading] = useState(false);
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
 
   useEffect(() => {
     (async () => {
+<<<<<<< HEAD
       if (dasRequest?.status === "inProgress") return;
 
       const dasEntityManager = await fetchEntityManager();
@@ -63,6 +71,13 @@ export const EditDasRequestIntegration = ({
         dasRequest?.wasRead === false &&
         dasRequest?.status === "proceeds" &&
         dasEntityManager?.id === authUser?.id
+=======
+      const dasEntityManager = await fetchEntityManager();
+      if (
+        dasRequest?.wasRead === false &&
+        dasRequest?.status === "pending" &&
+        dasEntityManager.id === authUser.id
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
       ) {
         await updateDasApplication(dasRequest.id, {
           status: "inProgress",
@@ -76,12 +91,18 @@ export const EditDasRequestIntegration = ({
     const _entities = await fetchEntities();
 
     const manageDas = _entities.find(
+<<<<<<< HEAD
       (entity) => entity?.nameId === "departamento-de-apoyo-social",
     );
 
     const _entityManager = manageDas?.entityManageId
       ? await fetchUser(manageDas?.entityManageId)
       : {};
+=======
+      (entity) => entity?.nameId === "departamento-de-apoyo-social"
+    );
+    const _entityManager = await fetchUser(manageDas?.entityManageId);
+>>>>>>> a79c382 (validate that the manager changes the status to inProcess of the request)
 
     return _entityManager;
   };
