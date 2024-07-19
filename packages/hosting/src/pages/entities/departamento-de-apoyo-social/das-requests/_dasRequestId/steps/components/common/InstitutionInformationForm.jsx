@@ -13,10 +13,7 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../../hooks";
-import {
-  DasRequestList,
-  institutions,
-} from "../../../../../../../../data-list";
+import { DasRequestList } from "../../../../../../../../data-list";
 
 export const InstitutionInformationForm = ({
   onPrevStep,
@@ -55,11 +52,7 @@ export const InstitutionInformationForm = ({
     reset({
       institution: {
         type: _dasRequest?.institutionId,
-        id: (institutions?.[_dasRequest?.institutionId] || []).find(
-          (institution) => institution.id === dasRequest?.institution?.id
-        )
-          ? dasRequest?.institution?.id
-          : null,
+        id: dasRequest?.institution?.id || null,
         specialty: dasRequest?.institution?.specialty || "",
         processType: dasRequest?.institution?.processType || "",
       },
@@ -67,13 +60,7 @@ export const InstitutionInformationForm = ({
   };
 
   const mapFormData = (formData) => ({
-    institution:
-      {
-        ...formData?.institution,
-        ...(institutions?.[formData?.institution?.type] || []).find(
-          (institution) => institution.id === formData?.institution?.id
-        ),
-      } || null,
+    institution: formData?.institution || null,
   });
 
   const onSubmit = (formData) =>
@@ -133,7 +120,7 @@ export const InstitutionInformationForm = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Input
-                        label="Instituciones"
+                        label="Nombre de institucion"
                         name={name}
                         value={value}
                         onChange={onChange}
