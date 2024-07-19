@@ -16,7 +16,7 @@ import { updateCorrespondence } from "../../firebase/collections";
 import { DecreeList } from "../../data-list";
 
 export const DecreeModal = ({ correspondence, onCloseDecreeModal }) => {
-  const { assignUpdateProps } = useDefaultFirestoreProps();
+  const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
   const schema = yup.object({
@@ -47,7 +47,7 @@ export const DecreeModal = ({ correspondence, onCloseDecreeModal }) => {
       await updateCorrespondence(
         correspondence.id,
         assignUpdateProps({
-          decree: decreeMap(formData),
+          decree: assignCreateProps(decreeMap(formData)),
           status: "pending",
         })
       );

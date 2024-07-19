@@ -10,7 +10,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
-import { DasRequestStatus, institutions } from "../../../../data-list";
+import { DasRequestStatus } from "../../../../data-list";
 import { useNavigate } from "react-router";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import styled from "styled-components";
@@ -67,30 +67,30 @@ export const DasRequestsTable = ({
       title: "Solicitud / Institución",
       key: "requestType",
       render: (_, dasRequest) => {
-        let institutionData = null;
-        const institutionType = dasRequest?.institution?.type;
+        // let institutionData = null;
+        // const institutionType = dasRequest?.institution?.type;
 
-        switch (institutionType) {
-          case "institutes":
-            institutionData = (institutions?.[institutionType] || []).find(
-              (institution) => institution.id === dasRequest?.institution?.id
-            );
-            break;
-          case "universities":
-            institutionData = (institutions?.[institutionType] || []).find(
-              (university) => university.id === dasRequest?.institution?.id
-            );
-            break;
-          default:
-            institutionData = "";
-            break;
-        }
+        // switch (institutionType) {
+        //   case "institutes":
+        //     institutionData = (institutions?.[institutionType] || []).find(
+        //       (institution) => institution.id === dasRequest?.institution?.id
+        //     );
+        //     break;
+        //   case "universities":
+        //     institutionData = (institutions?.[institutionType] || []).find(
+        //       (university) => university.id === dasRequest?.institution?.id
+        //     );
+        //     break;
+        //   default:
+        //     institutionData = "";
+        //     break;
+        // }
 
         return (
           <div className="capitalize">
             <div>{findDasRequest(dasRequest.requestType)?.name}</div>
             <div>
-              <strong>{institutionData?.name}</strong>
+              <strong>{dasRequest?.institution?.id}</strong>
             </div>
           </div>
         );

@@ -23,7 +23,7 @@ export * from "./access-control/manage-acls";
 //CORRESPONDENCES "PUBLIC"
 export * from "./correspondences";
 export * from "./correspondences/_correspondence";
-export * from "./correspondences/_correspondence/sheets";
+export * from "./correspondences/_correspondence/decree/sheets";
 
 //SURVEYS "PUBLIC"
 export * from "./surveys/organizational-climate-studies";
