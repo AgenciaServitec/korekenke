@@ -93,7 +93,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
-                        label="Copia de CIP del Titular"
+                        label="Foto de CIP del Titular"
                         accept="image/*"
                         name={name}
                         value={value}
@@ -103,7 +103,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                         filePath={`das-applicants/${dasRequest.id}/files`}
                         additionalFields={{
                           numberCopies: 2,
-                          label: "Copia de CIP del Titular",
+                          label: "Foto de CIP del Titular",
                         }}
                         buttonText="Subir archivo"
                         error={error(name)}
@@ -121,7 +121,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
-                        label="Copia de DNI del Titular"
+                        label="Foto de DNI del Titular"
                         accept="image/*"
                         name={name}
                         value={value}
@@ -131,7 +131,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                         filePath={`das-applicants/${dasRequest.id}/files`}
                         additionalFields={{
                           numberCopies: 2,
-                          label: "Copia de DNI del Titular",
+                          label: "Foto de DNI del Titular",
                         }}
                         buttonText="Subir archivo"
                         error={error(name)}
@@ -153,7 +153,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
-                        label="Copia de CIF del Familiar"
+                        label="Foto de CIF del Familiar"
                         accept="image/*"
                         name={name}
                         value={value}
@@ -163,7 +163,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                         filePath={`das-applicants/${dasRequest.id}/files`}
                         additionalFields={{
                           numberCopies: 2,
-                          label: "Copia de CIF del Familiar",
+                          label: "Foto de CIF del Familiar",
                         }}
                         buttonText="Subir archivo"
                         error={error(name)}
@@ -181,7 +181,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
-                        label="Copia de DNI del Familiar"
+                        label="Foto de DNI del Familiar"
                         accept="image/*"
                         name={name}
                         value={value}
@@ -191,7 +191,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                         filePath={`das-applicants/${dasRequest.id}/files`}
                         additionalFields={{
                           numberCopies: 2,
-                          label: "Copia de DNI del Familiar",
+                          label: "Foto de DNI del Familiar",
                         }}
                         buttonText="Subir archivo"
                         error={error(name)}

@@ -121,7 +121,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de Constancia de Ingreso de la Univ"
+                      label="Foto de Constancia de Ingreso de la Univ"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -131,7 +131,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de Constancia de Ingreso de la Univ",
+                        label: "Foto de Constancia de Ingreso de la Univ",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -149,7 +149,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de Boleta pago matrícula de la Univ"
+                      label="Foto de Boleta pago matrícula de la Univ"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -159,7 +159,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de Boleta pago matrícula de la Univ",
+                        label: "Foto de Boleta pago matrícula de la Univ",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -181,7 +181,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de Consolidado de notas (último ciclo)"
+                      label="Foto de Consolidado de notas (último ciclo)"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -191,7 +191,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de Consolidado de notas (último ciclo)",
+                        label: "Foto de Consolidado de notas (último ciclo)",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -209,7 +209,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de la última boleta de pago de la Univ"
+                      label="Foto de la última boleta de pago de la Univ"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -219,7 +219,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de la última boleta de pago de la Univ",
+                        label: "Foto de la última boleta de pago de la Univ",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -239,7 +239,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <Upload
-                  label="Copia de Liquidación de Haberes del Titular"
+                  label="Foto de Liquidación de Haberes del Titular"
                   accept="image/*"
                   name={name}
                   value={value}
@@ -249,7 +249,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   filePath={`das-applicants/${dasRequest.id}/files`}
                   additionalFields={{
                     numberCopies: 2,
-                    label: "Copia de Liquidación de Haberes del Titular",
+                    label: "Foto de Liquidación de Haberes del Titular",
                   }}
                   buttonText="Subir archivo"
                   error={error(name)}
@@ -269,7 +269,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de CIP del Titular"
+                      label="Foto de CIP del Titular"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -279,7 +279,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de CIP del Titular",
+                        label: "Foto de CIP del Titular",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -297,7 +297,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de DNI del Titular"
+                      label="Foto de DNI del Titular"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -307,7 +307,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de DNI del Titular",
+                        label: "Foto de DNI del Titular",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -329,7 +329,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de CIF del Familiar"
+                      label="Foto de CIF del Familiar"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -339,7 +339,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de CIF del Familiar",
+                        label: "Foto de CIF del Familiar",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
@@ -357,7 +357,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
-                      label="Copia de DNI del Familiar"
+                      label="Foto de DNI del Familiar"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -367,7 +367,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
-                        label: "Copia de DNI del Familiar",
+                        label: "Foto de DNI del Familiar",
                       }}
                       buttonText="Subir archivo"
                       error={error(name)}
