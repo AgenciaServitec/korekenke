@@ -36,6 +36,7 @@ import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
+import { DasRequestStatus } from "../../../../../../data-list";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -368,10 +369,8 @@ const EditDasRequest = ({
               <Title level={2}>
                 Solicitud: {findDasRequest(dasRequest?.requestType)?.name}
                 &nbsp;
-                <Tag
-                  color={dasRequest.status === "pending" ? "orange" : "success"}
-                >
-                  {dasRequest.status === "pending" ? "Pendiente" : "Aprovado"}
+                <Tag color={DasRequestStatus?.[dasRequest.status]?.color}>
+                  {DasRequestStatus?.[dasRequest.status]?.name}
                 </Tag>
               </Title>
               <div className="actions-items">
