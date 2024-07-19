@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { DecreeSheet } from "./DecreeSheet";
-import { notification, PDF, Sheet, Spinner } from "../../../../components";
+import { notification, PDF, Sheet, Spinner } from "../../../../../components";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { correspondencesRef } from "../../../../firebase/collections";
+import { correspondencesRef } from "../../../../../firebase/collections";
 import { useParams } from "react-router";
 
 export const DecreeSheets = () => {

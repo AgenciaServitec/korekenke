@@ -4,7 +4,7 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { DecreeSheets } from "../pages/correspondences/_correspondence/sheets";
+import { DecreeSheets } from "../pages/correspondences/_correspondence/decree/sheets";
 
 export const Router = () => {
   return (
@@ -278,7 +278,7 @@ export const Router = () => {
       {/*SHEETS*/}
       <Route
         exact
-        path="/correspondences/:correspondenceId/sheets"
+        path="/correspondences/:correspondenceId/decree/sheets"
         element={<A.DecreeSheets />}
       />
       <Route
