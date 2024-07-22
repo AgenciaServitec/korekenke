@@ -16,6 +16,7 @@ import {
   faEye,
   faFilePdf,
   faPrint,
+  faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { CorrespondencesStatus } from "../../data-list";
@@ -27,7 +28,11 @@ export const CorrespondencesTable = ({
   onDecreeCorrespondence,
   onClickPrintTicket,
   onGoToDecreeSheets,
+  onAddReplyCorrespondence,
+  onShowReplyCorrespondenceInformation,
 }) => {
+  console.log(correspondences);
+
   const columns = [
     {
       title: "F. Creación",
@@ -140,11 +145,48 @@ export const CorrespondencesTable = ({
       },
     },
     {
+      title: "Respuesta",
+      align: "center",
+      width: ["130px", "30%"],
+      render: (correspondence) => {
+        const status = correspondence?.response?.type === "positive";
+        return (
+          <Space>
+            <Tag color={status ? "green" : "red"}>
+              {status ? "Positivo" : "Negativo"}
+            </Tag>
+            <IconAction
+              tooltipTitle="Ver detalle de respuesta"
+              icon={faEye}
+              size={30}
+              styled={{ color: (theme) => theme.colors.info }}
+              onClick={() => {
+                if (correspondence?.response)
+                  onShowReplyCorrespondenceInformation(correspondence);
+              }}
+            />
+          </Space>
+        );
+      },
+    },
+    {
       title: "Opciones",
       align: "center",
       width: ["130px", "30%"],
       render: (correspondence) => (
         <IconsActionWrapper>
+          {correspondence?.status !== "finalized" && (
+            <Acl category="public"
+              subCategory="correspondences"
+              name="/correspondences/:correspondenceId#reply">
+              <IconAction
+                tooltipTitle="Responder solicitud"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.primary }}
+                onClick={() => onAddReplyCorrespondence(correspondence)}
+              />
+            </Acl>
+          )}
           {correspondence?.status === "notDecreed" && (
             <Acl
               category="public"

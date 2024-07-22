@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   AddButton,
@@ -22,6 +22,8 @@ import {
 } from "./Correspondence.ModalProvider";
 import { DecreeModal } from "./DecreeModal";
 import { CorrespondencesTable } from "./Correspondences.Table";
+import { ReplyCorrespondenceModal } from "./ReplyCorrespondence";
+import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInformation";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -33,6 +35,10 @@ export const CorrespondencesIntegration = () => {
         .where("isDeleted", "==", false)
         .orderBy("createAt", "desc")
     );
+  const [visibleReplyModal, setVisibleReplyModal] = useState(false);
+  const [visibleReplyInformatioModal, setVisibleReplyInformationModal] =
+    useState(false);
+  const [correspondence, setCorrespondence] = useState({});
 
   useEffect(() => {
     correspondencesError &&
@@ -44,6 +50,16 @@ export const CorrespondencesIntegration = () => {
   const onNavigateTo = (correspondenceId) => navigate(correspondenceId);
   const onGoToDecreeSheets = (correspondenceId) =>
     navigate(`/correspondences/${correspondenceId}/decree/sheets`);
+
+  const onAddReplyCorrespondence = (correspondence) => {
+    setCorrespondence(correspondence);
+    setVisibleReplyModal(true);
+  };
+
+  const onShowReplyCorrespondenceInformation = (correspondence) => {
+    setCorrespondence(correspondence);
+    setVisibleReplyInformationModal(true);
+  };
 
   const onAddCorrespondence = () => onNavigateTo("new");
   const onEditCorrespondence = (correspondenceId) =>
@@ -68,10 +84,19 @@ export const CorrespondencesIntegration = () => {
       <CorrespondenceModalProvider>
         <Correspondences
           correspondences={correspondences}
+          correspondence={correspondence}
           onAddCorrespondence={onAddCorrespondence}
           onEditCorrespondence={onEditCorrespondence}
           onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
           onGoToDecreeSheets={onGoToDecreeSheets}
+          onAddReplyCorrespondence={onAddReplyCorrespondence}
+          visibleReplyModal={visibleReplyModal}
+          onSetVisibleReplyModal={setVisibleReplyModal}
+          visibleReplyInformatioModal={visibleReplyInformatioModal}
+          onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
+          onShowReplyCorrespondenceInformation={
+            onShowReplyCorrespondenceInformation
+          }
         />
       </CorrespondenceModalProvider>
     </Spin>
@@ -80,10 +105,17 @@ export const CorrespondencesIntegration = () => {
 
 const Correspondences = ({
   correspondences,
+  correspondence,
   onAddCorrespondence,
   onEditCorrespondence,
   onConfirmDeleteCorrespondence,
   onGoToDecreeSheets,
+  onAddReplyCorrespondence,
+  visibleReplyModal,
+  onSetVisibleReplyModal,
+  visibleReplyInformatioModal,
+  onSetVisibleReplyInformationModal,
+  onShowReplyCorrespondenceInformation,
 }) => {
   const { isTablet } = useDevice();
   const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
@@ -132,8 +164,22 @@ const Correspondences = ({
             onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
             onDecreeCorrespondence={onDecreeCorrespondence}
             onGoToDecreeSheets={onGoToDecreeSheets}
+            onAddReplyCorrespondence={onAddReplyCorrespondence}
+            onShowReplyCorrespondenceInformation={
+              onShowReplyCorrespondenceInformation
+            }
           />
         </div>
+        <ReplyCorrespondenceInformationModal
+          visibleModal={visibleReplyInformatioModal}
+          onSetVisibleModal={onSetVisibleReplyInformationModal}
+          response={correspondence?.response}
+        />
+        <ReplyCorrespondenceModal
+          visibleModal={visibleReplyModal}
+          onSetVisibleModal={onSetVisibleReplyModal}
+          correspondence={correspondence}
+        />
       </Container>
     </Acl>
   );
