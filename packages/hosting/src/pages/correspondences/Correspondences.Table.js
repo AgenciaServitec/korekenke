@@ -176,9 +176,11 @@ export const CorrespondencesTable = ({
       render: (correspondence) => (
         <IconsActionWrapper>
           {correspondence?.status !== "finalized" && (
-            <Acl category="public"
+            <Acl
+              category="public"
               subCategory="correspondences"
-              name="/correspondences/:correspondenceId#reply">
+              name="/correspondences/:correspondenceId#reply"
+            >
               <IconAction
                 tooltipTitle="Responder solicitud"
                 icon={faReply}
