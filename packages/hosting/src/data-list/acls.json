@@ -69,6 +69,7 @@
       "/correspondences": "Menu: Correspondencias",
       "/correspondences/new": "Agregar correspondencia",
       "/correspondences/:correspondenceId": "Editar correspondencia",
+      "/correspondences/:correspondenceId#reply": "Responder correspondencia",
       "/correspondences#delete": "Eliminar correspondencia",
       "/correspondences#decree": "Decretar correspondencias"
     },
