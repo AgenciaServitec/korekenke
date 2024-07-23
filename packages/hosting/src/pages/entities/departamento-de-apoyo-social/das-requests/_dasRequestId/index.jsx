@@ -191,6 +191,7 @@ const DasRequest = ({
         return (
           <Step4ApplicantDocuments
             isNew={isNew}
+            user={user}
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
           />
