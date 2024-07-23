@@ -131,7 +131,7 @@ const EditDasRequest = ({
 
   const onObservationPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
-      title: "Observacion",
+      title: "Agregar Observacion",
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <ObservationPersonalInformationModal
@@ -144,7 +144,7 @@ const EditDasRequest = ({
 
   const onEditInstitutionData = (dasRequest) => {
     onShowDasRequestModal({
-      title: "Agregar Observación",
+      title: "Datos de Institución",
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <InstitutionDataModal
