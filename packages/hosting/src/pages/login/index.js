@@ -8,7 +8,6 @@ import { useNavigate } from "react-router";
 import { MilitarSchool } from "../../images";
 
 export const LoginIntegration = () => {
-  
   const { authUser } = useAuthentication();
   const { onNavigateInCommand } = useCommand();
   const navigate = useNavigate();

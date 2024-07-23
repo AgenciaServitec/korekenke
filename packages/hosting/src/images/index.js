@@ -19,4 +19,3 @@ export { default as LogoServicioVeterinarioRemontaEjercito } from "./webp/logo-s
 export { default as ImgNoFound } from "./webp/img-no-found.webp";
 
 export { default as MilitarSchool } from "./webp/militar-school.webp";
-
