@@ -11,6 +11,8 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   correspondencesRef,
+  fetchEntities,
+  fetchUser,
   updateCorrespondence,
 } from "../../firebase/collections";
 import styled from "styled-components";
@@ -24,10 +26,12 @@ import { DecreeModal } from "./DecreeModal";
 import { CorrespondencesTable } from "./Correspondences.Table";
 import { ReplyCorrespondenceModal } from "./ReplyCorrespondence";
 import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInformation";
+import { useAuthentication } from "../../providers";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+  const { authUser } = useAuthentication();
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
@@ -50,17 +54,6 @@ export const CorrespondencesIntegration = () => {
   const onNavigateTo = (correspondenceId) => navigate(correspondenceId);
   const onGoToDecreeSheets = (correspondenceId) =>
     navigate(`/correspondences/${correspondenceId}/decree/sheets`);
-
-  const onAddReplyCorrespondence = (correspondence) => {
-    setCorrespondence(correspondence);
-    setVisibleReplyModal(true);
-  };
-
-  const onShowReplyCorrespondenceInformation = (correspondence) => {
-    setCorrespondence(correspondence);
-    setVisibleReplyInformationModal(true);
-  };
-
   const onAddCorrespondence = () => onNavigateTo("new");
   const onEditCorrespondence = (correspondenceId) =>
     onNavigateTo(correspondenceId);
@@ -79,12 +72,44 @@ export const CorrespondencesIntegration = () => {
       },
     });
 
+  const onAddReplyCorrespondence = (correspondence) => {
+    setCorrespondence(correspondence);
+    setVisibleReplyModal(true);
+  };
+
+  const onShowReplyCorrespondenceInformation = (correspondence) => {
+    setCorrespondence(correspondence);
+    setVisibleReplyInformationModal(true);
+  };
+
+  const onChangeStatusToInProgress = async (correspondence) => {
+    if (
+      correspondence?.status === "pending" &&
+      fetchEntityManager == authUser.id
+    )
+      await updateCorrespondence(correspondence.id, {
+        status: "inProgress",
+      });
+  };
+
+  const fetchEntityManager = async () => {
+    const _entities = await fetchEntities();
+
+    const manageDas = _entities.find(
+      (entity) => entity?.nameId === "mesa-de-partes"
+    );
+    const _entityManager = await fetchUser(manageDas?.entityManageId);
+
+    return _entityManager;
+  };
+
   return (
     <Spin size="large" spinning={correspondencesLoading}>
       <CorrespondenceModalProvider>
         <Correspondences
           correspondences={correspondences}
           correspondence={correspondence}
+          onChangeStatusToInProgress={onChangeStatusToInProgress}
           onAddCorrespondence={onAddCorrespondence}
           onEditCorrespondence={onEditCorrespondence}
           onConfirmDeleteCorrespondence={onConfirmDeleteCorrespondence}
@@ -106,6 +131,7 @@ export const CorrespondencesIntegration = () => {
 const Correspondences = ({
   correspondences,
   correspondence,
+  onChangeStatusToInProgress,
   onAddCorrespondence,
   onEditCorrespondence,
   onConfirmDeleteCorrespondence,
@@ -160,6 +186,7 @@ const Correspondences = ({
         <div>
           <CorrespondencesTable
             correspondences={filterCorrespondencesView}
+            onChangeStatusToInProgress={onChangeStatusToInProgress}
             onClickEditCorrespondence={onEditCorrespondence}
             onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
             onDecreeCorrespondence={onDecreeCorrespondence}

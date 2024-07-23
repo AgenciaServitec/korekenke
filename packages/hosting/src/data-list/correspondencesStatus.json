@@ -9,7 +9,7 @@
   },
   "inProgress": {
     "name": "En proceso",
-    "color": "info"
+    "color": "blue"
   },
   "finalized": {
     "name": "Finalizado",
