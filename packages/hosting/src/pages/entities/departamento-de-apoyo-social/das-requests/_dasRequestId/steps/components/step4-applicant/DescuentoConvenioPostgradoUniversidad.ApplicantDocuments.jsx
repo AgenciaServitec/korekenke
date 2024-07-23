@@ -256,7 +256,7 @@ export const DescuentoConvenioPostgradoUniversidadApplicantDocuments = ({
                       value={value}
                       withThumbImage={false}
                       bucket="departamentoDeApoyoSocial"
-                      fileName={`signaturePhoto-photo-${uuidv4()}`}
+                      fileName={`signature-photo-${uuidv4()}`}
                       filePath={`das-applicants/${dasRequest.id}/files`}
                       additionalFields={{
                         numberCopies: 2,
