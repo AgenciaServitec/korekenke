@@ -18,8 +18,8 @@ export const ProfileImagesForm = () => {
   const { putUser, putUserLoading, putUserResponse } = useApiUserPut();
 
   const schema = yup.object({
-    dniPhoto: yup.mixed(),
     cipPhoto: yup.mixed(),
+    dniPhoto: yup.mixed(),
     signaturePhoto: yup.mixed(),
   });
 
@@ -41,8 +41,8 @@ export const ProfileImagesForm = () => {
           id: authUser.id,
           phone: authUser.phone,
           email: authUser.email,
-          dniPhoto: formData?.dniPhoto || null,
           cipPhoto: formData?.cipPhoto || null,
+          dniPhoto: formData?.dniPhoto || null,
           signaturePhoto: formData?.signaturePhoto || null,
         })
       );
@@ -64,8 +64,8 @@ export const ProfileImagesForm = () => {
 
   const resetForm = () => {
     reset({
-      dniPhoto: authUser?.dniPhoto || null,
       cipPhoto: authUser?.cipPhoto || null,
+      dniPhoto: authUser?.dniPhoto || null,
       signaturePhoto: authUser?.signaturePhoto || null,
     });
   };
@@ -80,16 +80,15 @@ export const ProfileImagesForm = () => {
         <Col xs={24} sm={12} md={12}>
           <Controller
             control={control}
-            name="dniPhoto"
+            name="cipPhoto"
             render={({ field: { onChange, value, onBlur, name } }) => (
               <Upload
-                label="Foto de DNI"
-                accept="image/*"
+                label="Foto de CIP"
                 resize="423x304"
                 buttonText="Subir foto"
                 value={value}
                 name={name}
-                fileName={`dni-foto-${uuidv4()}`}
+                fileName={`cip-foto-${uuidv4()}`}
                 filePath={`users/${authUser.id}/documents`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
@@ -101,15 +100,16 @@ export const ProfileImagesForm = () => {
         <Col xs={24} sm={12} md={12}>
           <Controller
             control={control}
-            name="cipPhoto"
+            name="dniPhoto"
             render={({ field: { onChange, value, onBlur, name } }) => (
               <Upload
-                label="Foto de CIP"
+                label="Foto de DNI"
+                accept="image/*"
                 resize="423x304"
                 buttonText="Subir foto"
                 value={value}
                 name={name}
-                fileName={`cip-foto-${uuidv4()}`}
+                fileName={`dni-foto-${uuidv4()}`}
                 filePath={`users/${authUser.id}/documents`}
                 onChange={(file) => onChange(file)}
                 required={required(name)}
