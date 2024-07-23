@@ -133,6 +133,7 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
                         helperText={errorMessage(name)}
                         required={required(name)}
                         onChange={(file) => onChange(file)}
+                        onChangeCopy={(file) => onSetCipPhotoCopy(file)}
                         onUploading={setUploadingImage}
                       />
                     )}
