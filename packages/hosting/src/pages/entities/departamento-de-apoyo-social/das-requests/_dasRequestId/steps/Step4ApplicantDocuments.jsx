@@ -191,10 +191,6 @@ export const Step4ApplicantDocuments = ({
         return (
           <NoDocuments
             isNew={isNew}
-            user={user}
-            onSetCipPhotoCopy={setCipPhotoCopy}
-            onSetDniPhotoCopy={setDniPhotoCopy}
-            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             onNextStep={onNextStep}
           />
