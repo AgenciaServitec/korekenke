@@ -7,6 +7,7 @@ import { AccessData } from "./AccessData";
 import { PersonalInformation } from "./PersonalInformation";
 import { PrivacyPolicies } from "./PrivacyPolicies";
 import { useAuthentication } from "../../providers";
+import { MilitarSchool } from "../../images";
 
 export const RegisterIntegration = () => {
   const navigate = useNavigate();
@@ -81,6 +82,9 @@ const Container = styled.div`
   height: auto;
   display: flex;
   justify-content: center;
+  background-image: url(${MilitarSchool});
+  background-repeat: no-repeat;
+  background-size: cover;
 
   .content-wrapper {
     max-width: 40em;

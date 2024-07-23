@@ -17,6 +17,7 @@ import { fetchCollectionOnce } from "../../firebase/utils";
 import { firestore } from "../../firebase";
 import { useApiPersonDataByDniGet } from "../../api";
 import { capitalize } from "lodash";
+import { LogoPrimary } from "../../images";
 
 export const AccessData = ({ next, currentStep }) => {
   const { getPersonDataByDni } = useApiPersonDataByDniGet();
@@ -106,6 +107,9 @@ export const AccessData = ({ next, currentStep }) => {
 
   return (
     <Container>
+      <div className="logo-login">
+        <img src={LogoPrimary}></img>
+      </div>
       <div className="title-login">
         <Title level={3}>Registro</Title>
       </div>
@@ -158,7 +162,19 @@ export const AccessData = ({ next, currentStep }) => {
 };
 
 const Container = styled.div`
+  .logo-login {
+    width: 80px;
+    height: 100px;
+    margin: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .title-login {
+    padding-top: 1em;
     color: ${({ theme }) => theme.colors.primary};
 
     h3 {
