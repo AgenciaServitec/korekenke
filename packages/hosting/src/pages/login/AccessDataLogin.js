@@ -15,6 +15,7 @@ import { firestore } from "../../firebase";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { Link } from "react-router-dom";
 import { setLocalStorage } from "../../utils";
+import { LogoPrimary } from "../../images";
 
 export const AccessDataLogin = ({ next }) => {
   const [loading, setLoading] = useState(false);
@@ -71,6 +72,9 @@ export const AccessDataLogin = ({ next }) => {
 
   return (
     <Container>
+      <div className="logo-login">
+        <img src={LogoPrimary} alt="Logo"></img>
+      </div>
       <div className="title-login">
         <Title level={3}>Datos de acceso</Title>
       </div>
@@ -108,6 +112,17 @@ export const AccessDataLogin = ({ next }) => {
 };
 
 const Container = styled.div`
+  .logo-login {
+    width: 80px;
+    height: 100px;
+    margin: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .title-login {
     color: ${({ theme }) => theme.colors.primary};
 

@@ -19,6 +19,7 @@ import { DegreesArmy } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
+import { LogoPrimary } from "../../images";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
@@ -132,6 +133,9 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
 
   return (
     <Container>
+      <div className="logo-login">
+        <img src={LogoPrimary} alt="Logo"></img>
+      </div>
       <div className="title">
         <Title level={3}>DATOS PERSONALES</Title>
       </div>
@@ -277,7 +281,19 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
 };
 
 const Container = styled.div`
+  .logo-login {
+    width: 80px;
+    height: 100px;
+    margin: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .title {
+    padding-top: 1em;
     color: ${({ theme }) => theme.colors.primary};
 
     h3 {
