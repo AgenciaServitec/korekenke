@@ -83,22 +83,27 @@ export const CorrespondencesIntegration = () => {
   };
 
   const onChangeStatusToInProgress = async (correspondence) => {
+    const MdpEntityManager = await fetchEntityManager();
+
     if (
       correspondence?.status === "pending" &&
-      fetchEntityManager == authUser.id
-    )
+      MdpEntityManager.id == authUser.id
+    ) {
       await updateCorrespondence(correspondence.id, {
         status: "inProgress",
       });
+    }
   };
 
   const fetchEntityManager = async () => {
     const _entities = await fetchEntities();
 
-    const manageDas = _entities.find(
+    const manageMesaDePartes = _entities.find(
       (entity) => entity?.nameId === "mesa-de-partes"
     );
-    const _entityManager = await fetchUser(manageDas?.entityManageId);
+    const _entityManager = await fetchUser(manageMesaDePartes?.entityManageId);
+
+    console.log(_entityManager);
 
     return _entityManager;
   };
