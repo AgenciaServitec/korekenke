@@ -16,11 +16,11 @@ import { v4 as uuidv4 } from "uuid";
 export const DescuentoConvenioUniversidadApplicantDocuments = ({
   isNew,
   user,
-  onPrevStep,
-  dasRequest,
   onSetCipPhotoCopy,
   onSetDniPhotoCopy,
   onSetSignaturePhotoCopy,
+  onPrevStep,
+  dasRequest,
   loading,
   onSaveApplicantDocuments,
 }) => {
@@ -99,10 +99,10 @@ export const DescuentoConvenioUniversidadApplicantDocuments = ({
             dasRequest?.applicant?.documents?.copyCipHeadline || null,
           copyDniHeadline:
             dasRequest?.applicant?.documents?.copyDniHeadline || null,
-          copyCifFamiliar:
-            dasRequest?.applicant?.documents?.copyCifFamiliar || null,
           signaturePhoto:
             dasRequest?.applicant?.documents?.signaturePhoto || null,
+          copyCifFamiliar:
+            dasRequest?.applicant?.documents?.copyCifFamiliar || null,
           copyDniFamiliar:
             dasRequest?.applicant?.documents?.copyDniFamiliar || null,
         },

@@ -66,11 +66,11 @@ export const Step4ApplicantDocuments = ({
           <DescuentoConvenioUniversidadApplicantDocuments
             isNew={isNew}
             user={user}
-            onPrevStep={onPrevStep}
-            dasRequest={dasRequest}
             onSetCipPhotoCopy={setCipPhotoCopy}
             onSetDniPhotoCopy={setDniPhotoCopy}
             onSetSignaturePhotoCopy={setSignaturePhotoCopy}
+            dasRequest={dasRequest}
+            onPrevStep={onPrevStep}
             loadingStep4={loadingStep4}
             onSaveApplicantDocuments={onSaveApplicantDocumentsStep4}
           />
@@ -79,8 +79,12 @@ export const Step4ApplicantDocuments = ({
         return (
           <DescuentoConvenioPostgradoUniversidadApplicantDocuments
             isNew={isNew}
-            onPrevStep={onPrevStep}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             dasRequest={dasRequest}
+            onPrevStep={onPrevStep}
             loadingStep4={loadingStep4}
             onSaveApplicantDocuments={onSaveApplicantDocumentsStep4}
           />
@@ -89,6 +93,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <BecaEstudiosUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -99,6 +107,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <BecaEstudioPostgradoUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -109,6 +121,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <MediaBecaUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -119,6 +135,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <MediaBecaPostgradoUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -129,6 +149,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <DescuentoConvenioInstitutoApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -139,6 +163,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <BecaEstudiosInstitutoApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -149,6 +177,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <MediaBecaInstitutoApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             dasRequest={dasRequest}
             loadingStep4={loadingStep4}
@@ -159,6 +191,10 @@ export const Step4ApplicantDocuments = ({
         return (
           <NoDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={setCipPhotoCopy}
+            onSetDniPhotoCopy={setDniPhotoCopy}
+            onSetSignaturePhotoCopy={setSignaturePhotoCopy}
             onPrevStep={onPrevStep}
             onNextStep={onNextStep}
           />
