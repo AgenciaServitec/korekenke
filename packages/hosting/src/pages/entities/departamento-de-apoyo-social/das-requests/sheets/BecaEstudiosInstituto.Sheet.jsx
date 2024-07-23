@@ -10,7 +10,7 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const InstituteStudyScolarshipSheet = ({ data, dataFamiliar }) => {
+export const BecaEstudiosInstitutoSheet = ({ data, dataFamiliar }) => {
   const { headline, createAt, familiar, institution, requestType } = data;
 
   const createdDate = dayjs(createAt.toDate());

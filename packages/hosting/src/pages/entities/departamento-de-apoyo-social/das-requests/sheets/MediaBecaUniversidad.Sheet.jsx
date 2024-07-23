@@ -10,10 +10,7 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const StudyScholarshipAwardedByUniversitySheet = ({
-  data,
-  dataFamiliar,
-}) => {
+export const MediaBecaUniversidadSheet = ({ data, dataFamiliar }) => {
   const { headline, createAt, familiar, institution, requestType } = data;
 
   const createdDate = dayjs(createAt.toDate());
@@ -25,7 +22,7 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Beca de estudios en universidad</h2>
+          <h2>Media beca en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -56,15 +53,15 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
               con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
-              Que teniendo conocimiento del convenio de cooperación
-              interinstitucional con la Universidad
+              Que teniendo conocimiento del convenio de cooperación con la
+              Universidad
               <span> {findInstitution(institution).name || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
-              convenio en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
+              convenio en befeneficio de mi
+              <span>{dataFamiliar(familiar)}</span> para seguir estudios en la
               especialidad de
-              <span> {institution.specialty || emptyContent} </span>.
+              <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
               <p>
@@ -74,9 +71,9 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
             </div>
             <div className="request-content__footer">
               <p className="date">
-                Lima, <span> {createdDate.format("DD")} </span> de
-                <span> {createdDate.format("MM")} </span> del
-                <span> {createdDate.format("YYYY")} </span>
+                Lima, <span>{createdDate.format("DD")}</span> de
+                <span>{createdDate.format("MM")}</span> del
+                <span>{createdDate.format("YYYY")}</span>
               </p>
               <SignatureSheet
                 signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}

@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { notification, PDF, Sheet, Spinner } from "../../../../../components";
 import { useParams } from "react-router";
-import { DiscountAgreementGrantedUniversitySheet } from "./DiscountAgreementGrantedUniversity";
-import { DiscountAgreementPostgraduateStudiesUniversitySheet } from "./DiscountAgreementPostgraduateStudiesUniversity";
-import { StudyScholarshipAwardedByUniversitySheet } from "./StudyScholarshipAwardedByUniversity";
-import { StudyScholarshipPostgraduateStudiesUniversitySheet } from "./StudyScholarshipPostgraduateStudiesUniversity";
-import { HalfScholarshipAwardedByUniversitySheet } from "./HalfScholarshipAwardedByUniversity";
-import { HalfScholarshipPostgraduateStudiesUniversitySheet } from "./HalfScholarshipPostgraduateStudiesUniversity";
-import { DiscountAgreementGrantedInstituteSheet } from "./DiscountAgreementGrantedInstitute";
-import { InstituteStudyHalfScolarshipSheet } from "./InstituteStudyHalfScolarship";
-import { InstituteStudyScolarshipSheet } from "./InstituteStudyScolarship";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
 import { ApplicantDocumentsSheet } from "./common/ApplicantDocumentsSheet";
@@ -18,6 +9,15 @@ import { findRelationShip } from "../../../../../utils";
 import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { updateDasApplication } from "../../../../../firebase/collections/dasApplications";
 import { fetchEntities, fetchUser } from "../../../../../firebase/collections";
+import { DescuentoConvenioUniversidadSheet } from "./DescuentoConvenioUniversidad.Sheet";
+import { BecaEstudioPostgradoUniversidadSheet } from "./BecaEstudioPostgradoUniversidad.Sheet";
+import { DescuentoConvenioPostgradoUniversidadSheet } from "./DescuentoConvenioPostgradoUniversidad.Sheet";
+import { BecaEstudiosUniversidadSheet } from "./BecaEstudiosUniversidad.Sheet";
+import { MediaBecaUniversidadSheet } from "./MediaBecaUniversidad.Sheet";
+import { MediaBecaPostgradoUniversidadSheet } from "./MediaBecaPostgradoUniversidad.Sheet";
+import { DescuentoConvenioInstitutoSheet } from "./DescuentoConvenioInstituto.Sheet";
+import { BecaEstudiosInstitutoSheet } from "./BecaEstudiosInstituto.Sheet";
+import { MediaBecaInstitutoSheet } from "./MediaBecaInstituto.Sheet";
 
 export const DasRequestSheets = () => {
   const { requestType, dasRequestId } = useParams();
@@ -88,7 +88,7 @@ export const DasRequestSheets = () => {
     descuento_por_convenio_en_universidad: (
       <>
         <Sheet>
-          <DiscountAgreementGrantedUniversitySheet
+          <DescuentoConvenioUniversidadSheet
             dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -99,7 +99,7 @@ export const DasRequestSheets = () => {
     descuento_por_convenio_postgrado_en_universidad: (
       <>
         <Sheet>
-          <DiscountAgreementPostgraduateStudiesUniversitySheet
+          <DescuentoConvenioPostgradoUniversidadSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -110,7 +110,7 @@ export const DasRequestSheets = () => {
     beca_de_estudios_en_universidad: (
       <>
         <Sheet>
-          <StudyScholarshipAwardedByUniversitySheet
+          <BecaEstudiosUniversidadSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -121,7 +121,7 @@ export const DasRequestSheets = () => {
     beca_de_estudio_para_postgrado_en_universidad: (
       <>
         <Sheet>
-          <StudyScholarshipPostgraduateStudiesUniversitySheet
+          <BecaEstudioPostgradoUniversidadSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -132,7 +132,7 @@ export const DasRequestSheets = () => {
     media_beca_en_universidad: (
       <>
         <Sheet>
-          <HalfScholarshipAwardedByUniversitySheet
+          <MediaBecaUniversidadSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -143,7 +143,7 @@ export const DasRequestSheets = () => {
     media_beca_para_postgrado_en_universidad: (
       <>
         <Sheet>
-          <HalfScholarshipPostgraduateStudiesUniversitySheet
+          <MediaBecaPostgradoUniversidadSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -154,7 +154,7 @@ export const DasRequestSheets = () => {
     descuento_por_convenio_en_instituto: (
       <>
         <Sheet>
-          <DiscountAgreementGrantedInstituteSheet
+          <DescuentoConvenioInstitutoSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -165,7 +165,7 @@ export const DasRequestSheets = () => {
     beca_de_estudios_en_instituto: (
       <>
         <Sheet>
-          <InstituteStudyScolarshipSheet
+          <BecaEstudiosInstitutoSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -176,7 +176,7 @@ export const DasRequestSheets = () => {
     media_beca_en_instituto: (
       <>
         <Sheet>
-          <InstituteStudyHalfScolarshipSheet
+          <MediaBecaInstitutoSheet
             data={dasRequestView}
             dataFamiliar={dataFamiliar}
           />

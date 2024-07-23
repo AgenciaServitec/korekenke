@@ -1,19 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
+import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
 import dayjs from "dayjs";
-import { userFullName } from "../../../../../utils/users/userFullName2";
 import {
   findDasRequest,
   findDegree,
   findInstitution,
 } from "../../../../../utils";
+import { userFullName } from "../../../../../utils/users/userFullName2";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const HalfScholarshipAwardedByUniversitySheet = ({
-  data,
-  dataFamiliar,
-}) => {
+export const DescuentoConvenioInstitutoSheet = ({ data, dataFamiliar }) => {
   const { headline, createAt, familiar, institution, requestType } = data;
 
   const createdDate = dayjs(createAt.toDate());
@@ -25,7 +22,7 @@ export const HalfScholarshipAwardedByUniversitySheet = ({
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Media beca en universidad</h2>
+          <h2>Descuento por convenio de instituto</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -47,7 +44,10 @@ export const HalfScholarshipAwardedByUniversitySheet = ({
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)} </span>, Grado
-              <span>{findDegree(headline?.degree).label || emptyContent}</span>
+              <span>
+                {" "}
+                {findDegree(headline?.degree).label || emptyContent}{" "}
+              </span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -56,13 +56,13 @@ export const HalfScholarshipAwardedByUniversitySheet = ({
               con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
-              Que teniendo conocimiento del convenio de cooperación con la
-              Universidad
+              Que teniendo conocimiento que el instituto
               <span> {findInstitution(institution).name || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
-              convenio en befeneficio de mi
-              <span>{dataFamiliar(familiar)}</span> para seguir estudios en la
+              convenio instituto en beneficio de mi
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
+              especialidad de para seguir estudios de post grado en la
               especialidad de
               <span> {institution.specialty || emptyContent}</span>.
             </p>
@@ -74,9 +74,9 @@ export const HalfScholarshipAwardedByUniversitySheet = ({
             </div>
             <div className="request-content__footer">
               <p className="date">
-                Lima, <span>{createdDate.format("DD")}</span> de
-                <span>{createdDate.format("MM")}</span> del
-                <span>{createdDate.format("YYYY")}</span>
+                Lima, <span> {createdDate.format("DD")} </span> de
+                <span> {createdDate.format("MM")} </span> del
+                <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
                 signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}

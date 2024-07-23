@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import {
@@ -10,7 +10,10 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
+export const BecaEstudioPostgradoUniversidadSheet = ({
+  data,
+  dataFamiliar,
+}) => {
   const { headline, createAt, familiar, institution, requestType } = data;
 
   const createdDate = dayjs(createAt.toDate());
@@ -22,7 +25,7 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Descuento por convenio en universidad</h2>
+          <h2>Beca de estudio para post grado en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -43,7 +46,7 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(headline)}</span>, Grado
+              <span> {userFullName(headline)} </span>, Grado
               <span>{findDegree(headline?.degree).label || emptyContent}</span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
@@ -53,15 +56,15 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
               con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
-              Que teniendo conocimiento que el instituto
-              <span>{findInstitution(institution).name || emptyContent}</span>
-              por intermedio de COBIENE-DAS está otorgando BECA DE ESTUDIO por
-              convenio al personal militar y civil del Ejército, solicito a Ud.,
-              Mi General disponer a quien corresponda se me inscriba a fin de
-              obtener este beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> en la especialidad o
-              carrera de
-              <span> {institution.specialty || emptyContent} </span>.
+              Que teniendo conocimiento del convenio de cooperación
+              interinstitucional con la Universidad
+              <span> {findInstitution(institution).name || emptyContent} </span>
+              respetuosamente solicito a Ud. se digne disponer a quien
+              corresponda dar las facilidades para obtener la beca de estudios
+              en beneficio de mi <span> {dataFamiliar(familiar)} </span> para
+              seguir estudios en la especialidad de para seguir estudios de post
+              grado en la especialidad de
+              <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
               <p>
@@ -122,7 +125,7 @@ const Container = styled.div`
       place-items: center;
 
       h2 {
-        font-size: 1.5em;
+        font-size: 1.7em;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;

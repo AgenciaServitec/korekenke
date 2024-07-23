@@ -10,7 +10,7 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
+export const DescuentoConvenioPostgradoUniversidadSheet = ({
   data,
   dataFamiliar,
 }) => {
