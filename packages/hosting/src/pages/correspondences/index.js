@@ -103,8 +103,6 @@ export const CorrespondencesIntegration = () => {
     );
     const _entityManager = await fetchUser(manageMesaDePartes?.entityManageId);
 
-    console.log(_entityManager);
-
     return _entityManager;
   };
 
