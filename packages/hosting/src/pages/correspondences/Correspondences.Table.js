@@ -23,6 +23,7 @@ import { CorrespondencesStatus } from "../../data-list";
 
 export const CorrespondencesTable = ({
   correspondences,
+  onChangeStatusToInProgress,
   onClickEditCorrespondence,
   onClickDeleteCorrespondence,
   onDecreeCorrespondence,
@@ -31,8 +32,6 @@ export const CorrespondencesTable = ({
   onAddReplyCorrespondence,
   onShowReplyCorrespondenceInformation,
 }) => {
-  console.log(correspondences);
-
   const columns = [
     {
       title: "F. Creación",
@@ -103,22 +102,29 @@ export const CorrespondencesTable = ({
       title: "Archivos",
       align: "center",
       width: ["130px", "15%"],
-      render: (correspondence) => (
-        <div>
-          <Space align="center">
-            {(correspondence?.documents || []).map((document, index) => (
-              <a
-                key={index}
-                href={document.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FontAwesomeIcon icon={faFilePdf} size="2x" />
-              </a>
-            ))}
-          </Space>
-        </div>
-      ),
+      render: (correspondence) => {
+        const changeStatus = async () => {
+          await onChangeStatusToInProgress(correspondence);
+        };
+
+        return (
+          <div>
+            <Space align="center">
+              {(correspondence?.documents || []).map((document, index) => (
+                <a
+                  key={index}
+                  href={document.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={changeStatus}
+                >
+                  <FontAwesomeIcon icon={faFilePdf} size="2x" />
+                </a>
+              ))}
+            </Space>
+          </div>
+        );
+      },
     },
     {
       title: "Estado",
