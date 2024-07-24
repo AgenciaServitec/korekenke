@@ -89,6 +89,7 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <DescuentoConvenioUniversidadSheet
+            user={user}
             dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
@@ -100,7 +101,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <DescuentoConvenioPostgradoUniversidadSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -111,7 +113,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <BecaEstudiosUniversidadSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -122,7 +125,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <BecaEstudioPostgradoUniversidadSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -133,7 +137,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <MediaBecaUniversidadSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -144,7 +149,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <MediaBecaPostgradoUniversidadSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -155,7 +161,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <DescuentoConvenioInstitutoSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -166,7 +173,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <BecaEstudiosInstitutoSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>
@@ -177,7 +185,8 @@ export const DasRequestSheets = () => {
       <>
         <Sheet>
           <MediaBecaInstitutoSheet
-            data={dasRequestView}
+            user={user}
+            dasRequest={dasRequestView}
             dataFamiliar={dataFamiliar}
           />
         </Sheet>

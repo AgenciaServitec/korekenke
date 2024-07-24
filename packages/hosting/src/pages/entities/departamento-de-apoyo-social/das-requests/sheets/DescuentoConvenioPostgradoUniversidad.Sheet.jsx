@@ -11,10 +11,11 @@ import {
 import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const DescuentoConvenioPostgradoUniversidadSheet = ({
-  data,
+  user,
+  dasRequest,
   dataFamiliar,
 }) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -46,7 +47,7 @@ export const DescuentoConvenioPostgradoUniversidadSheet = ({
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(data?.headline)} </span>, Grado
+              <span> {userFullName(dasRequest?.headline)} </span>, Grado
               <span>
                 {" "}
                 {findDegree(headline?.degree).label || emptyContent}{" "}
@@ -82,8 +83,13 @@ export const DescuentoConvenioPostgradoUniversidadSheet = ({
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}

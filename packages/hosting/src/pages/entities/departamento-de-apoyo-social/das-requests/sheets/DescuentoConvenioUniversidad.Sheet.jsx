@@ -7,6 +7,7 @@ import { findDasRequest, findDegree } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const DescuentoConvenioUniversidadSheet = ({
+  user,
   dasRequest,
   dataFamiliar,
 }) => {
@@ -82,8 +83,13 @@ export const DescuentoConvenioUniversidadSheet = ({
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto?.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}

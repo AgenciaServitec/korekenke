@@ -10,8 +10,12 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const BecaEstudiosUniversidadSheet = ({ data, dataFamiliar }) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+export const BecaEstudiosUniversidadSheet = ({
+  user,
+  dasRequest,
+  dataFamiliar,
+}) => {
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -76,8 +80,13 @@ export const BecaEstudiosUniversidadSheet = ({ data, dataFamiliar }) => {
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}
