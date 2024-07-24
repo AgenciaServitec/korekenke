@@ -234,7 +234,6 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                redirect
                 category="departamento-de-apoyo-social"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
@@ -277,7 +276,6 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                redirect
                 category="departamento-de-apoyo-social"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
@@ -320,7 +318,6 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                redirect
                 category="departamento-de-apoyo-social"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
