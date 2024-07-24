@@ -88,6 +88,7 @@ export const EditDasRequestIntegration = ({
     <DasRequestModalProvider>
       <EditDasRequest
         isNew={isNew}
+        user={authUser}
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onNavigateTo={onNavigateTo}
@@ -103,6 +104,7 @@ export const EditDasRequestIntegration = ({
 
 const EditDasRequest = ({
   isNew,
+  user,
   dasRequest,
   onGoBack,
   onNavigateTo,
@@ -175,6 +177,7 @@ const EditDasRequest = ({
       onRenderBody: () => (
         <ApplicantDocumentsModal
           isNew={isNew}
+          user={user}
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
         />
