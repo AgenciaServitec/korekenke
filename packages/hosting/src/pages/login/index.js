@@ -5,7 +5,6 @@ import { SendCodeSmsAndSignInWithCodeIntegration } from "./SendCodeSmsAndSignInW
 import { AccessDataLogin } from "./AccessDataLogin";
 import { useAuthentication, useCommand } from "../../providers";
 import { useNavigate } from "react-router";
-import { MilitarSchool } from "../../images";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
@@ -52,9 +51,6 @@ const Container = styled.div`
   height: auto;
   display: flex;
   justify-content: center;
-  background-image: url(${MilitarSchool});
-  background-repeat: no-repeat;
-  background-size: cover;
 
   .content-wrapper {
     max-width: 40em;
