@@ -61,6 +61,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
 
   const entityBossRCMDNEPR = genericSearchById(users, entityRCMDNEPR?.bossId);
 
+  const userAssignedFullName = (userId) => {
+    const user = users.find((_user) => _user.id === userId);
+    if (!user) return "";
+    return userFullName(user);
+  };
+
   return (
     <Container>
       <div className="sheet">
@@ -112,6 +118,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
             <div className="section_information">
               <div className="section_information__column">
                 <ul>
+                  <li>NSC - CORRELATIVO</li>
                   <li>UNIDAD</li>
                   <li>GRAN UNIDAD</li>
                   <li>NOMBRE</li>
@@ -123,10 +130,11 @@ export const PdfEquineLivestockRegistrationCard = () => {
               </div>
               <div className="section_information__column">
                 <ul>
+                  <li>: {livestockAndEquine?.nscCorrelativo || ""}</li>
                   <li>: {unitPELVETRCMDNEPR?.name || ""}</li>
                   <li>: {livestockAndEquine?.greatUnit || ""}</li>
                   <li>: {livestockAndEquine?.name || ""}</li>
-                  <li>: {livestockAndEquine?.registrationNumber || ""}</li>
+                  <li>: {livestockAndEquine?.registrationNumber || "S/N"}</li>
                   <li>: {livestockAndEquine?.chipNumber || ""}</li>
                   <li>
                     :{" "}
@@ -143,6 +151,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   <li>MADRE</li>
                   <li>PROCEDENCIA</li>
                   <li>RAZA/LINEA</li>
+                  <li>ASIGNADO U AFECTADO</li>
                 </ul>
               </div>
               <div className="section_information__column">
@@ -161,6 +170,12 @@ export const PdfEquineLivestockRegistrationCard = () => {
                   <li>: {livestockAndEquine?.mother || ""}</li>
                   <li>: {livestockAndEquine?.origin || ""}</li>
                   <li>: {livestockAndEquine?.raceOrLine || ""}</li>
+                  <li>
+                    :{" "}
+                    {userAssignedFullName(
+                      livestockAndEquine?.assignedOrAffectedId
+                    ) || ""}
+                  </li>
                 </ul>
               </div>
             </div>
