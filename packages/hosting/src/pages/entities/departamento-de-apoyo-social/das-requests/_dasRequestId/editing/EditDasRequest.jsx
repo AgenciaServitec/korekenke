@@ -50,7 +50,6 @@ export const EditDasRequestIntegration = ({
   onNavigateTo,
 }) => {
   const { authUser } = useAuthentication();
-  const [approvedLoading, setApprovedLoading] = useState(false);
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
@@ -92,7 +91,6 @@ export const EditDasRequestIntegration = ({
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onNavigateTo={onNavigateTo}
-        approvedLoading={approvedLoading}
         visibleReplyModal={visibleReplyModal}
         onSetVisibleReplyModal={onSetVisibleReplyModal}
         visibleReplyInformationModal={visibleReplyInformationModal}
@@ -108,7 +106,6 @@ const EditDasRequest = ({
   dasRequest,
   onGoBack,
   onNavigateTo,
-  approvedLoading,
   visibleReplyModal,
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
@@ -402,12 +399,7 @@ const EditDasRequest = ({
             />
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <Button
-              size="large"
-              block
-              disabled={approvedLoading}
-              onClick={() => onGoBack()}
-            >
+            <Button size="large" block onClick={() => onGoBack()}>
               Cancelar
             </Button>
           </Col>
@@ -422,7 +414,6 @@ const EditDasRequest = ({
                   type="primary"
                   size="large"
                   block
-                  loading={approvedLoading}
                   disabled={dasRequest.status === "approved"}
                   onClick={() => onSetVisibleReplyModal(dasRequest)}
                 >
