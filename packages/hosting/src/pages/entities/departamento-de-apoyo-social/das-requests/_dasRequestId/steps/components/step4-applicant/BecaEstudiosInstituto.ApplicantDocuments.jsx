@@ -125,7 +125,7 @@ export const BecaEstudiosInstitutoApplicantDocuments = ({
                                 bucket: "default",
                                 resize: "423x304",
                                 fileName: `cip-photo-${uuidv4()}`,
-                                filePath: `users/${user.id}/documents`,
+                                filePath: `users/${user?.id}/documents`,
                               }
                         }
                         buttonText="Subir archivo"
@@ -133,7 +133,9 @@ export const BecaEstudiosInstitutoApplicantDocuments = ({
                         helperText={errorMessage(name)}
                         required={required(name)}
                         onChange={(file) => onChange(file)}
-                        onChangeCopy={(file) => onSetCipPhotoCopy(file)}
+                        onChangeCopy={(file) =>
+                          onSetCipPhotoCopy && onSetCipPhotoCopy(file)
+                        }
                         onUploading={setUploadingImage}
                       />
                     )}
@@ -166,7 +168,7 @@ export const BecaEstudiosInstitutoApplicantDocuments = ({
                                 bucket: "default",
                                 resize: "423x304",
                                 fileName: `dni-photo-${uuidv4()}`,
-                                filePath: `users/${user.id}/documents`,
+                                filePath: `users/${user?.id}/documents`,
                               }
                         }
                         buttonText="Subir archivo"
@@ -174,7 +176,9 @@ export const BecaEstudiosInstitutoApplicantDocuments = ({
                         helperText={errorMessage(name)}
                         required={required(name)}
                         onChange={(file) => onChange(file)}
-                        onChangeCopy={(file) => onSetDniPhotoCopy(file)}
+                        onChangeCopy={(file) =>
+                          onSetDniPhotoCopy && onSetDniPhotoCopy(file)
+                        }
                         onUploading={setUploadingImage}
                       />
                     )}
@@ -207,7 +211,7 @@ export const BecaEstudiosInstitutoApplicantDocuments = ({
                                 bucket: "default",
                                 resize: "423x304",
                                 fileName: `signature-photo-${uuidv4()}`,
-                                filePath: `users/${user.id}/documents`,
+                                filePath: `users/${user?.id}/documents`,
                               }
                         }
                         buttonText="Subir archivo"
@@ -215,7 +219,10 @@ export const BecaEstudiosInstitutoApplicantDocuments = ({
                         helperText={errorMessage(name)}
                         required={required(name)}
                         onChange={(file) => onChange(file)}
-                        onChangeCopy={(file) => onSetSignaturePhotoCopy(file)}
+                        onChangeCopy={(file) =>
+                          onSetSignaturePhotoCopy &&
+                          onSetSignaturePhotoCopy(file)
+                        }
                         onUploading={setUploadingImage}
                       />
                     )}
