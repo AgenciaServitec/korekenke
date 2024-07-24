@@ -7,7 +7,6 @@ import { AccessData } from "./AccessData";
 import { PersonalInformation } from "./PersonalInformation";
 import { PrivacyPolicies } from "./PrivacyPolicies";
 import { useAuthentication } from "../../providers";
-import { MilitarSchool } from "../../images";
 
 export const RegisterIntegration = () => {
   const navigate = useNavigate();
