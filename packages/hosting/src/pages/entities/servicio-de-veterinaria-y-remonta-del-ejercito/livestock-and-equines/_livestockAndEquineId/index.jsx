@@ -28,11 +28,12 @@ import {
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
+import { userFullName } from "../../../../../utils/users/userFullName2";
 
 export const LiveStockAndEquineIntegration = () => {
   const { livestockAndEquineId } = useParams();
   const navigate = useNavigate();
-  const { livestockAndEquines, departments } = useGlobalData();
+  const { livestockAndEquines, departments, users } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -54,6 +55,7 @@ export const LiveStockAndEquineIntegration = () => {
 
   const mapLiveStockAndEquine = (formData) => ({
     ...livestockAndEquine,
+    nscCorrelativo: formData?.nscCorrelativo || null,
     rightProfilePhoto: formData?.rightProfilePhoto || null,
     frontPhoto: formData?.frontPhoto || null,
     leftProfilePhoto: formData?.leftProfilePhoto || null,
@@ -61,7 +63,7 @@ export const LiveStockAndEquineIntegration = () => {
     greatUnit: formData.greatUnit,
     name: formData.name,
     registrationNumber: formData.registrationNumber,
-    chipNumber: formData.chipNumber,
+    chipNumber: formData.chipNumber || null,
     gender: formData.gender,
     color: formData.color,
     birthdate: dayjs(formData.birthdate).format(DATE_FORMAT_TO_FIRESTORE),
@@ -71,7 +73,7 @@ export const LiveStockAndEquineIntegration = () => {
     origin: formData.origin,
     raceOrLine: formData.raceOrLine,
     fur: formData.fur,
-    squadron: formData.squadron,
+    assignedOrAffectedId: formData.assignedOrAffectedId,
     description: formData.description,
   });
 
@@ -103,6 +105,15 @@ export const LiveStockAndEquineIntegration = () => {
     value: deparment.id,
   }));
 
+  const cologeUsers = users
+    .filter((user) =>
+      (user?.commands || []).map((command) => command.code).includes("cologe")
+    )
+    .map((_user) => ({
+      label: userFullName(_user),
+      value: _user.id,
+    }));
+
   const onGoBack = () => navigate(-1);
 
   return (
@@ -110,6 +121,7 @@ export const LiveStockAndEquineIntegration = () => {
       isNew={isNew}
       departmentsView={departmentsView}
       livestockAndEquine={livestockAndEquine}
+      cologeUsers={cologeUsers}
       onSaveLivestockAndEquine={onSaveLivestockAndEquine}
       loading={loading}
       onGoBack={onGoBack}
@@ -121,11 +133,13 @@ const LiveStockAndEquine = ({
   isNew,
   departmentsView,
   livestockAndEquine,
+  cologeUsers,
   onSaveLivestockAndEquine,
   loading,
   onGoBack,
 }) => {
   const schema = yup.object({
+    nscCorrelativo: yup.string().notRequired(),
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
@@ -133,7 +147,7 @@ const LiveStockAndEquine = ({
     greatUnit: yup.string().required(),
     name: yup.string().required(),
     registrationNumber: yup.string().required(),
-    chipNumber: yup.number().required(),
+    chipNumber: yup.number().notRequired(),
     gender: yup.string().required(),
     color: yup.string().required(),
     birthdate: yup.date().required(),
@@ -143,7 +157,7 @@ const LiveStockAndEquine = ({
     origin: yup.string().required(),
     raceOrLine: yup.string().required(),
     fur: yup.string().required(),
-    squadron: yup.string().required(),
+    assignedOrAffectedId: yup.string().required(),
     description: yup.string(),
   });
 
@@ -164,6 +178,7 @@ const LiveStockAndEquine = ({
 
   const resetForm = () => {
     reset({
+      nscCorrelativo: livestockAndEquine?.nscCorrelativo || "",
       rightProfilePhoto: livestockAndEquine?.rightProfilePhoto || null,
       frontPhoto: livestockAndEquine?.frontPhoto || null,
       leftProfilePhoto: livestockAndEquine?.leftProfilePhoto || null,
@@ -184,6 +199,7 @@ const LiveStockAndEquine = ({
       raceOrLine: livestockAndEquine?.raceOrLine || "",
       fur: livestockAndEquine?.fur || "",
       squadron: livestockAndEquine?.squadron || "",
+      assignedOrAffectedId: livestockAndEquine?.assignedOrAffectedId || "",
       description: livestockAndEquine?.description || "",
     });
   };
@@ -278,6 +294,22 @@ const LiveStockAndEquine = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
+                  name="nscCorrelativo"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="NSC - Correlativo"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24} md={6}>
+                <Controller
                   name="unit"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
@@ -325,7 +357,6 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-
               <Col span={24} md={6}>
                 <Controller
                   name="height"
@@ -343,7 +374,7 @@ const LiveStockAndEquine = ({
                 />
               </Col>
 
-              <Col span={24} md={8}>
+              <Col span={24} md={6}>
                 <Controller
                   name="name"
                   control={control}
@@ -359,7 +390,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={24} md={8}>
+              <Col span={24} md={6}>
                 <Controller
                   name="father"
                   control={control}
@@ -375,7 +406,7 @@ const LiveStockAndEquine = ({
                   )}
                 />
               </Col>
-              <Col span={24} md={8}>
+              <Col span={24} md={6}>
                 <Controller
                   name="mother"
                   control={control}
@@ -515,13 +546,14 @@ const LiveStockAndEquine = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="squadron"
+                  name="assignedOrAffectedId"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="Escuadrón"
+                    <Select
+                      label="Asignado u Afectado"
                       name={name}
                       value={value}
+                      options={cologeUsers}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
