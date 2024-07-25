@@ -50,7 +50,6 @@ export const EditDasRequestIntegration = ({
   onNavigateTo,
 }) => {
   const { authUser } = useAuthentication();
-  const [approvedLoading, setApprovedLoading] = useState(false);
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
@@ -88,10 +87,10 @@ export const EditDasRequestIntegration = ({
     <DasRequestModalProvider>
       <EditDasRequest
         isNew={isNew}
+        user={authUser}
         dasRequest={dasRequest}
         onGoBack={onGoBack}
         onNavigateTo={onNavigateTo}
-        approvedLoading={approvedLoading}
         visibleReplyModal={visibleReplyModal}
         onSetVisibleReplyModal={onSetVisibleReplyModal}
         visibleReplyInformationModal={visibleReplyInformationModal}
@@ -103,10 +102,10 @@ export const EditDasRequestIntegration = ({
 
 const EditDasRequest = ({
   isNew,
+  user,
   dasRequest,
   onGoBack,
   onNavigateTo,
-  approvedLoading,
   visibleReplyModal,
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
@@ -175,6 +174,7 @@ const EditDasRequest = ({
       onRenderBody: () => (
         <ApplicantDocumentsModal
           isNew={isNew}
+          user={user}
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
         />
@@ -231,7 +231,6 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                redirect
                 category="departamento-de-apoyo-social"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
@@ -274,7 +273,6 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                redirect
                 category="departamento-de-apoyo-social"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
@@ -317,7 +315,6 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                redirect
                 category="departamento-de-apoyo-social"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
@@ -402,12 +399,7 @@ const EditDasRequest = ({
             />
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <Button
-              size="large"
-              block
-              disabled={approvedLoading}
-              onClick={() => onGoBack()}
-            >
+            <Button size="large" block onClick={() => onGoBack()}>
               Cancelar
             </Button>
           </Col>
@@ -422,7 +414,6 @@ const EditDasRequest = ({
                   type="primary"
                   size="large"
                   block
-                  loading={approvedLoading}
                   disabled={dasRequest.status === "approved"}
                   onClick={() => onSetVisibleReplyModal(dasRequest)}
                 >

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
+import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
 import dayjs from "dayjs";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import {
@@ -10,11 +10,8 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const StudyScholarshipAwardedByUniversitySheet = ({
-  data,
-  dataFamiliar,
-}) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -25,7 +22,7 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Beca de estudios en universidad</h2>
+          <h2>Descuento por convenio en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -46,7 +43,7 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(headline)} </span>, Grado
+              <span> {userFullName(headline)}</span>, Grado
               <span>{findDegree(headline?.degree).label || emptyContent}</span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
@@ -56,14 +53,14 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
               con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
-              Que teniendo conocimiento del convenio de cooperación
-              interinstitucional con la Universidad
-              <span> {findInstitution(institution).name || emptyContent} </span>
-              respetuosamente solicito a Ud. se digne disponer a quien
-              corresponda dar las facilidades para obtener el descuento por
-              convenio en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
-              especialidad de
+              Que teniendo conocimiento que el instituto
+              <span>{findInstitution(institution).name || emptyContent}</span>
+              por intermedio de COBIENE-DAS está otorgando BECA DE ESTUDIO por
+              convenio al personal militar y civil del Ejército, solicito a Ud.,
+              Mi General disponer a quien corresponda se me inscriba a fin de
+              obtener este beneficio de mi
+              <span> {dataFamiliar(familiar)} </span> en la especialidad o
+              carrera de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">
@@ -79,8 +76,13 @@ export const StudyScholarshipAwardedByUniversitySheet = ({
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}
@@ -125,7 +127,7 @@ const Container = styled.div`
       place-items: center;
 
       h2 {
-        font-size: 1.7em;
+        font-size: 1.5em;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;

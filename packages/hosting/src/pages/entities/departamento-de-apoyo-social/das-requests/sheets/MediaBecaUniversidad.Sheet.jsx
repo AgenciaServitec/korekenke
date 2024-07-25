@@ -10,11 +10,12 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
-  data,
+export const MediaBecaUniversidadSheet = ({
+  user,
+  dasRequest,
   dataFamiliar,
 }) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -25,7 +26,7 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Descuento por convenio de post grado en universidad</h2>
+          <h2>Media beca en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -46,11 +47,8 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(data?.headline)} </span>, Grado
-              <span>
-                {" "}
-                {findDegree(headline?.degree).label || emptyContent}{" "}
-              </span>
+              <span> {userFullName(headline)} </span>, Grado
+              <span>{findDegree(headline?.degree).label || emptyContent}</span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -64,10 +62,10 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
               <span> {findInstitution(institution).name || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
-              convenio en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para seguir estudios de
-              POST GRADO en la especialidad de
-              <span> {institution.specialty || emptyContent} </span>.
+              convenio en befeneficio de mi
+              <span>{dataFamiliar(familiar)}</span> para seguir estudios en la
+              especialidad de
+              <span> {institution.specialty || emptyContent}</span>.
             </p>
             <div className="request-content__message">
               <p>
@@ -77,13 +75,18 @@ export const DiscountAgreementPostgraduateStudiesUniversitySheet = ({
             </div>
             <div className="request-content__footer">
               <p className="date">
-                Lima, <span> {createdDate.format("DD")} </span> de
-                <span> {createdDate.format("MM")} </span> del
-                <span> {createdDate.format("YYYY")} </span>
+                Lima, <span>{createdDate.format("DD")}</span> de
+                <span>{createdDate.format("MM")}</span> del
+                <span>{createdDate.format("YYYY")}</span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}

@@ -13,17 +13,34 @@ import {
   NoDocuments,
 } from "../../steps/components";
 import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateUser } from "../../../../../../../firebase/collections";
+import { useDefaultFirestoreProps } from "../../../../../../../hooks";
 
 export const ApplicantDocumentsModal = ({
   isNew,
+  user,
   dasRequest,
   onCloseDasRequestModal,
 }) => {
+  const { assignUpdateProps } = useDefaultFirestoreProps();
+
   const [loading, setLoading] = useState(false);
+  const [cipPhotoCopy, setCipPhotoCopy] = useState(null);
+  const [dniPhotoCopy, setDniPhotoCopy] = useState(null);
+  const [signaturePhotoCopy, setSignaturePhotoCopy] = useState(null);
 
   const onSaveApplicantDocuments = async (formData) => {
     try {
       setLoading(true);
+
+      await updateUser(
+        user.id,
+        assignUpdateProps({
+          ...(!user?.cipPhoto && { cipPhoto: cipPhotoCopy }),
+          ...(!user?.dniPhoto && { dniPhoto: dniPhotoCopy }),
+          ...(!user?.signaturePhoto && { signaturePhoto: signaturePhotoCopy }),
+        })
+      );
 
       await updateDasApplication(dasRequest.id, {
         applicant: {
@@ -48,6 +65,10 @@ export const ApplicantDocumentsModal = ({
   return (
     <ApplicantDocuments
       isNew={isNew}
+      user={user}
+      onSetCipPhotoCopy={setCipPhotoCopy}
+      onSetDniPhotoCopy={setDniPhotoCopy}
+      onSetSignaturePhotoCopy={setSignaturePhotoCopy}
       dasRequest={dasRequest}
       loading={loading}
       onCloseDasRequestModal={onCloseDasRequestModal}
@@ -58,6 +79,10 @@ export const ApplicantDocumentsModal = ({
 
 const ApplicantDocuments = ({
   isNew,
+  user,
+  onSetCipPhotoCopy,
+  onSetDniPhotoCopy,
+  onSetSignaturePhotoCopy,
   dasRequest,
   loading,
   onCloseDasRequestModal,
@@ -69,6 +94,10 @@ const ApplicantDocuments = ({
         return (
           <DescuentoConvenioUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -79,6 +108,10 @@ const ApplicantDocuments = ({
         return (
           <DescuentoConvenioPostgradoUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -89,6 +122,10 @@ const ApplicantDocuments = ({
         return (
           <BecaEstudiosUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -99,6 +136,10 @@ const ApplicantDocuments = ({
         return (
           <BecaEstudioPostgradoUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -109,6 +150,10 @@ const ApplicantDocuments = ({
         return (
           <MediaBecaUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -119,6 +164,10 @@ const ApplicantDocuments = ({
         return (
           <MediaBecaPostgradoUniversidadApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -129,6 +178,10 @@ const ApplicantDocuments = ({
         return (
           <DescuentoConvenioInstitutoApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -139,6 +192,10 @@ const ApplicantDocuments = ({
         return (
           <BecaEstudiosInstitutoApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}
@@ -149,6 +206,10 @@ const ApplicantDocuments = ({
         return (
           <MediaBecaInstitutoApplicantDocuments
             isNew={isNew}
+            user={user}
+            onSetCipPhotoCopy={onSetCipPhotoCopy}
+            onSetDniPhotoCopy={onSetDniPhotoCopy}
+            onSetSignaturePhotoCopy={onSetSignaturePhotoCopy}
             onPrevStep={onCloseDasRequestModal}
             dasRequest={dasRequest}
             loading={loading}

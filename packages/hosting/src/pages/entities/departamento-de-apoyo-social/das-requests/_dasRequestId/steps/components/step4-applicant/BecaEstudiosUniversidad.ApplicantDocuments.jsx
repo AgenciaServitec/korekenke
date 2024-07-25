@@ -15,6 +15,10 @@ import { useFormUtils } from "../../../../../../../../hooks";
 
 export const BecaEstudiosUniversidadApplicantDocuments = ({
   isNew,
+  user,
+  onSetCipPhotoCopy,
+  onSetDniPhotoCopy,
+  onSetSignaturePhotoCopy,
   onPrevStep,
   dasRequest,
   loading,
@@ -23,21 +27,21 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const isHeadline = dasRequest?.isHeadline;
-  const processType = dasRequest?.institution?.processType === "entry";
+  const processTypeIsEntry = dasRequest?.institution?.processType === "entry";
 
   const schema = yup.object({
     applicant: yup.object({
       documents: yup.object({
-        copyConstanciaIngresoUniv: processType
+        copyConstanciaIngresoUniv: processTypeIsEntry
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
-        copyConsolidadoNotasUniv: processType
+        copyConsolidadoNotasUniv: processTypeIsEntry
           ? yup.mixed().notRequired().nullable()
           : yup.mixed().required(),
-        copyBoletaPagoMatriculaUniv: processType
+        copyBoletaPagoMatriculaUniv: processTypeIsEntry
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
-        copyUltimaBoletaPagoUniv: processType
+        copyUltimaBoletaPagoUniv: processTypeIsEntry
           ? yup.mixed().notRequired().nullable()
           : yup.mixed().required(),
         copyLiquidacionHaberesHeadline: yup.mixed().required(),
@@ -45,6 +49,9 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
         copyDniHeadline: dasRequest?.isHeadline
+          ? yup.mixed().required()
+          : yup.mixed().notRequired().nullable(),
+        signaturePhoto: dasRequest?.isHeadline
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
         copyCifFamiliar: dasRequest?.isHeadline
@@ -92,6 +99,8 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
             dasRequest?.applicant?.documents?.copyCipHeadline || null,
           copyDniHeadline:
             dasRequest?.applicant?.documents?.copyDniHeadline || null,
+          signaturePhoto:
+            dasRequest?.applicant?.documents?.signaturePhoto || null,
           copyCifFamiliar:
             dasRequest?.applicant?.documents?.copyCifFamiliar || null,
           copyDniFamiliar:
@@ -113,7 +122,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]}>
-          {processType && (
+          {processTypeIsEntry && (
             <>
               <Col sm={24} md={12}>
                 <Controller
@@ -173,7 +182,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
               </Col>
             </>
           )}
-          {!processType && (
+          {!processTypeIsEntry && (
             <>
               <Col sm={24} md={12}>
                 <Controller
@@ -281,11 +290,26 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                         numberCopies: 2,
                         label: "Foto de CIP del Titular",
                       }}
+                      copyFilesTo={
+                        user?.cipPhoto
+                          ? null
+                          : {
+                              withThumbImage: true,
+                              isImage: true,
+                              bucket: "default",
+                              resize: "423x304",
+                              fileName: `cip-photo-${uuidv4()}`,
+                              filePath: `users/${user?.id}/documents`,
+                            }
+                      }
                       buttonText="Subir archivo"
                       error={error(name)}
                       helperText={errorMessage(name)}
                       required={required(name)}
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) =>
+                        onSetCipPhotoCopy && onSetCipPhotoCopy(file)
+                      }
                       onUploading={setUploadingImage}
                     />
                   )}
@@ -309,11 +333,69 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                         numberCopies: 2,
                         label: "Foto de DNI del Titular",
                       }}
+                      copyFilesTo={
+                        user?.dniPhoto
+                          ? null
+                          : {
+                              withThumbImage: true,
+                              isImage: true,
+                              bucket: "default",
+                              resize: "423x304",
+                              fileName: `dni-photo-${uuidv4()}`,
+                              filePath: `users/${user?.id}/documents`,
+                            }
+                      }
                       buttonText="Subir archivo"
                       error={error(name)}
                       helperText={errorMessage(name)}
                       required={required(name)}
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) =>
+                        onSetDniPhotoCopy && onSetDniPhotoCopy(file)
+                      }
+                      onUploading={setUploadingImage}
+                    />
+                  )}
+                />
+              </Col>
+              <Col sm={24} md={12}>
+                <Controller
+                  name="applicant.documents.signaturePhoto"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Upload
+                      label="Foto de firma del titular"
+                      accept="image/*"
+                      name={name}
+                      value={value}
+                      withThumbImage={false}
+                      bucket="departamentoDeApoyoSocial"
+                      fileName={`signature-photo-${uuidv4()}`}
+                      filePath={`das-applicants/${dasRequest.id}/files`}
+                      additionalFields={{
+                        numberCopies: 2,
+                        label: "Foto de firma del titular",
+                      }}
+                      copyFilesTo={
+                        user?.signaturePhoto
+                          ? null
+                          : {
+                              withThumbImage: true,
+                              isImage: true,
+                              bucket: "default",
+                              resize: "423x304",
+                              fileName: `signature-photo-${uuidv4()}`,
+                              filePath: `users/${user?.id}/documents`,
+                            }
+                      }
+                      buttonText="Subir archivo"
+                      error={error(name)}
+                      helperText={errorMessage(name)}
+                      required={required(name)}
+                      onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) =>
+                        onSetSignaturePhotoCopy && onSetSignaturePhotoCopy(file)
+                      }
                       onUploading={setUploadingImage}
                     />
                   )}
