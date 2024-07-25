@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardCheck,
   faEdit,
+  faEnvelopeOpenText,
   faEye,
   faFilePdf,
   faPrint,
@@ -31,6 +32,7 @@ export const CorrespondencesTable = ({
   onGoToDecreeSheets,
   onAddReplyCorrespondence,
   onShowReplyCorrespondenceInformation,
+  onAddCorrespondenceReceivedBy,
 }) => {
   const columns = [
     {
@@ -181,6 +183,13 @@ export const CorrespondencesTable = ({
       width: ["130px", "30%"],
       render: (correspondence) => (
         <IconsActionWrapper>
+          {correspondence?.status === "notDecreed" && (
+            <IconAction
+              tooltipTitle="Recibido por"
+              icon={faEnvelopeOpenText}
+              onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
+            />
+          )}
           {correspondence?.status !== "finalized" && (
             <Acl
               category="public"

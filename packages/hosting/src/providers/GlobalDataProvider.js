@@ -12,6 +12,7 @@ import {
   entitiesRef,
   livestockAndEquinesRef,
   sectionsRef,
+  unitsRef,
   usersRef,
 } from "../firebase/collections";
 import { useCommand } from "./CommandProvider";
@@ -23,6 +24,7 @@ const GlobalDataContext = createContext({
   sectionUsers: [],
   officeUsers: [],
   entities: [],
+  units: [],
   departments: [],
   sections: [],
   rolesAcls: [],
@@ -55,6 +57,10 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
+  const [units = [], unitsLoading, unitsError] = useCollectionData(
+    authUser ? unitsRef.where("isDeleted", "==", false) : null
+  );
+
   const [departments = [], departmentsLoading, departmentsError] =
     useCollectionData(
       authUser ? departmentsRef.where("isDeleted", "==", false) : null
@@ -85,6 +91,7 @@ export const GlobalDataProvider = ({ children }) => {
 
   const error =
     entitiesError ||
+    unitsError ||
     rolesAclsError ||
     usersError ||
     correspondencesError ||
@@ -95,6 +102,7 @@ export const GlobalDataProvider = ({ children }) => {
 
   const loading =
     entitiesLoading ||
+    unitsLoading ||
     rolesAclsLoading ||
     usersLoading ||
     correspondencesLoading ||
@@ -130,6 +138,7 @@ export const GlobalDataProvider = ({ children }) => {
           ["desc"]
         ),
         entities: orderBy(entities, "createAt", "desc"),
+        units: orderBy(units, "createAt", "desc"),
         departments: orderBy(departments, "createAt", "desc"),
         sections: orderBy(sections, "createAt", "desc"),
         rolesAcls: orderBy(rolesAcls, "createAt", "desc"),

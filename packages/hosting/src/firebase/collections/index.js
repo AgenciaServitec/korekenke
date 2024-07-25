@@ -4,6 +4,7 @@ export * from "./users";
 export * from "./correspondences";
 export * from "./rolesAcls";
 export * from "./entities";
+export * from "./units";
 export * from "./departments";
 export * from "./sections";
 export * from "./offices";

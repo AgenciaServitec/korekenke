@@ -129,6 +129,17 @@ export const DrawerLayout = ({
           onClick: () => onClickMenu("/entities"),
         },
         {
+          label: "Unidades",
+          key: "units",
+          icon: <FontAwesomeIcon icon={faBuildingUser} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "administration",
+            ["units"],
+            ["/units"]
+          ),
+          onClick: () => onClickMenu("/units"),
+        },
+        {
           label: "Departamentos",
           key: "departments",
           icon: <FontAwesomeIcon icon={faBuildingUser} size="lg" />,
