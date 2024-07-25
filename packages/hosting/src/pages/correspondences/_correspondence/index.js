@@ -79,7 +79,6 @@ export const CorrespondenceIntegration = () => {
       {
         id: correspondence.id,
         destination: formData.destination,
-        receivedBy: formData.receivedBy,
         class: formData.class,
         dateCorrespondence: dayjs(formData.dateCorrespondence).format(
           DATE_FORMAT_TO_FIRESTORE
@@ -115,7 +114,6 @@ const Correspondence = ({
 
   const schema = yup.object({
     destination: yup.string().required(),
-    receivedBy: yup.string().required(),
     class: yup.string().required(),
     indicative: yup.string().required(),
     classification: yup.string().required(),
@@ -143,7 +141,6 @@ const Correspondence = ({
   const resetForm = () => {
     reset({
       destination: correspondence?.destination || "",
-      receivedBy: correspondence?.receivedBy || "",
       class: correspondence?.class || "",
       indicative: correspondence?.indicative || "",
       classification: correspondence?.classification || "",
@@ -175,29 +172,13 @@ const Correspondence = ({
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmitSaveCorrespondence)}>
             <Row gutter={[16, 16]}>
-              <Col span={24} md={12}>
+              <Col span={24}>
                 <Controller
                   name="destination"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Destinatario"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24} md={12}>
-                <Controller
-                  name="receivedBy"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="Recibido Por:"
                       name={name}
                       value={value}
                       onChange={onChange}

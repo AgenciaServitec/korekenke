@@ -27,6 +27,7 @@ import { CorrespondencesTable } from "./Correspondences.Table";
 import { ReplyCorrespondenceModal } from "./ReplyCorrespondence";
 import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInformation";
 import { useAuthentication } from "../../providers";
+import { ReceivedByModal } from "./ReceivedBy";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ export const CorrespondencesIntegration = () => {
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
   const [visibleReplyInformatioModal, setVisibleReplyInformationModal] =
     useState(false);
+  const [visibleReceivedByModal, setVisibleReceivedByModal] = useState(false);
   const [correspondence, setCorrespondence] = useState({});
 
   useEffect(() => {
@@ -80,6 +82,11 @@ export const CorrespondencesIntegration = () => {
   const onShowReplyCorrespondenceInformation = (correspondence) => {
     setCorrespondence(correspondence);
     setVisibleReplyInformationModal(true);
+  };
+
+  const onAddCorrespondenceReceivedBy = (correspondence) => {
+    setCorrespondence(correspondence);
+    setVisibleReceivedByModal(true);
   };
 
   const onChangeStatusToInProgress = async (correspondence) => {
@@ -125,6 +132,9 @@ export const CorrespondencesIntegration = () => {
           onShowReplyCorrespondenceInformation={
             onShowReplyCorrespondenceInformation
           }
+          visibleReceivedByModal={visibleReceivedByModal}
+          onSetvisibleReceivedByModal={setVisibleReceivedByModal}
+          onAddCorrespondenceReceivedBy={onAddCorrespondenceReceivedBy}
         />
       </CorrespondenceModalProvider>
     </Spin>
@@ -145,6 +155,9 @@ const Correspondences = ({
   visibleReplyInformatioModal,
   onSetVisibleReplyInformationModal,
   onShowReplyCorrespondenceInformation,
+  visibleReceivedByModal,
+  onSetvisibleReceivedByModal,
+  onAddCorrespondenceReceivedBy,
 }) => {
   const { isTablet } = useDevice();
   const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
@@ -198,6 +211,7 @@ const Correspondences = ({
             onShowReplyCorrespondenceInformation={
               onShowReplyCorrespondenceInformation
             }
+            onAddCorrespondenceReceivedBy={onAddCorrespondenceReceivedBy}
           />
         </div>
         <ReplyCorrespondenceInformationModal
@@ -208,6 +222,11 @@ const Correspondences = ({
         <ReplyCorrespondenceModal
           visibleModal={visibleReplyModal}
           onSetVisibleModal={onSetVisibleReplyModal}
+          correspondence={correspondence}
+        />
+        <ReceivedByModal
+          visibleModal={visibleReceivedByModal}
+          onSetVisibleModal={onSetvisibleReceivedByModal}
           correspondence={correspondence}
         />
       </Container>
