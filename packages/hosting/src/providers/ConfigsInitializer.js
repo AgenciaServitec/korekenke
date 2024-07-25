@@ -5,6 +5,8 @@ import { ConfigProvider } from "antd";
 import { setLocale } from "yup";
 import { yup } from "../config";
 import * as dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import es from "dayjs/locale/es";
 
 import advancedFormat from "dayjs/plugin/advancedFormat";
@@ -17,6 +19,8 @@ import weekYear from "dayjs/plugin/weekYear";
 export const ConfigsInitializer = ({ children }) => {
   const [locale] = useState(esES);
 
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   dayjs.extend(localizedFormat);
   dayjs.extend(customParseFormat);
   dayjs.extend(advancedFormat);

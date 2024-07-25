@@ -13,7 +13,6 @@ import {
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { institutions } from "../../../../../../../data-list";
 import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
 
 export const InstitutionDataModal = ({
@@ -26,9 +25,7 @@ export const InstitutionDataModal = ({
     ...dasRequest,
     institution: {
       ...dasRequest.institution,
-      ...(institutions?.[dasRequest?.institution?.type] || []).find(
-        (institution) => institution.id === formData.institution.id
-      ),
+      id: formData.institution.id,
       processType: formData.institution.processType,
       specialty: formData.institution.specialty,
     },
@@ -171,16 +168,10 @@ const InstitutionData = ({
             name="institution.id"
             control={control}
             render={({ field: { onChange, value, name } }) => (
-              <Select
+              <Input
                 label="Institución"
                 name={name}
                 value={value}
-                options={(
-                  institutions?.[dasRequest?.institution?.type] || []
-                ).map((institution) => ({
-                  label: institution.name,
-                  value: institution.id,
-                }))}
                 onChange={onChange}
                 error={error(name)}
                 helperText={errorMessage(name)}
