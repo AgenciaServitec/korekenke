@@ -40,6 +40,13 @@
       "/entities/:entityId": "Editar Entidad",
       "/entities#delete": "Eliminar Entidad"
     },
+    "units": {
+      "label": "Unidades",
+      "/units": "Menú: Unidades",
+      "/units/new": "Agregar Unidad",
+      "/units/:unitId": "Editar Unidad",
+      "/units#delete": "Eliminar Unidad"
+    },
     "departments": {
       "label": "Departamentos",
       "/departments": "Menú: Departamentos",

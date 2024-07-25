@@ -8,6 +8,8 @@ export * from "./administration/users";
 export * from "./administration/users/_userId";
 export * from "./administration/entities";
 export * from "./administration/entities/_entity";
+export * from "./administration/units";
+export * from "./administration/units/_unitId";
 export * from "./administration/departments";
 export * from "./administration/departments/_department";
 export * from "./administration/offices";
