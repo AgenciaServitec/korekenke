@@ -4,18 +4,17 @@ import { isEmpty } from "lodash";
 import styled from "styled-components";
 
 export const ApplicantDocumentsSheet = ({ applicant = null }) => {
-  const applicantDocuments = Object.entries(applicant.documents).map(
-    ([key, values]) => ({
+  const applicantDocumentsView = Object.entries(applicant.documents)
+    .map(([key, values]) => ({
       nameField: key,
       documents: values?.numberCopies ? Array(1).fill(values) : null,
-    })
-  );
+    }))
+    .filter((document) => document.nameField !== "signaturePhoto");
 
   return (
     <>
-      {applicantDocuments.map((applicantDocument, index) => {
+      {applicantDocumentsView.map((applicantDocument, index) => {
         if (isEmpty(applicantDocument?.documents)) return null;
-
         return (
           <div key={index}>
             {applicantDocument.documents.map(
