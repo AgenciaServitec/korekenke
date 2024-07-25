@@ -83,7 +83,7 @@ export const ReceivedByModal = ({
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <Input
-                  label="Remitente"
+                  label=""
                   name={name}
                   value={value}
                   onChange={onChange}
