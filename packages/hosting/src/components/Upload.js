@@ -34,12 +34,15 @@ export const Upload = ({
   resize = "1480x2508",
   additionalFields = null,
   value,
-  onChange,
   onUploading,
+  onChange,
+  onChangeCopy,
+  copyFilesTo = null,
 }) => {
   const storage = buckets[bucket];
 
   const [files, setFiles] = useState([]);
+  const [filesCopy, setFilesCopy] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
 
@@ -59,6 +62,17 @@ export const Upload = ({
     filesDone &&
       onChange(!isEmpty(files) ? uploadFileToFile(files[0]) : undefined);
   }, [JSON.stringify(files)]);
+
+  useEffect(() => {
+    if (!copyFilesTo || !onChangeCopy) return;
+
+    const filesDone2 = filesCopy.every((file) => file.status === "success");
+
+    filesDone2 &&
+      onChangeCopy(
+        !isEmpty(filesCopy) ? uploadFileToFile(filesCopy[0]) : undefined
+      );
+  }, [JSON.stringify(filesCopy)]);
 
   const uploadFileToFile = ({ uid, name, url, thumbUrl }) => {
     assert(url, "Missing url");
@@ -104,8 +118,32 @@ export const Upload = ({
         },
       });
 
-      if (status) return addFileToFiles(newFile);
+      if (copyFilesTo) {
+        const { newFile, status } = await uploadFile({
+          ...copyFilesTo,
+          storage: buckets[copyFilesTo.bucket],
+          options: {
+            file: requestOption.file,
+            onError: (error) =>
+              requestOption.onError && requestOption.onError(error),
+            onProgress: (percent) =>
+              requestOption.onProgress &&
+              requestOption.onProgress({
+                ...new ProgressEvent("load"),
+                percent: percent,
+              }),
+            onSuccess: (message) =>
+              requestOption.onSuccess &&
+              requestOption.onSuccess(message, new XMLHttpRequest()),
+          },
+        });
 
+        status
+          ? addFileToFilesCopy(newFile)
+          : await deleteFileCopy(newFile, copyFilesTo);
+      }
+
+      if (status) return addFileToFiles(newFile);
       await deleteFile(newFile);
     } catch (e) {
       uploadErrorMessage();
@@ -135,6 +173,20 @@ export const Upload = ({
       return nextFiles;
     });
 
+  const addFileToFilesCopy = (fileCopy) => {
+    setFilesCopy((prevFilesCopy) => {
+      const index = prevFilesCopy.findIndex(
+        (prevFileCopy) => prevFileCopy?.uid === fileCopy?.uid
+      );
+
+      const nextFilesCopy = [...prevFilesCopy];
+
+      nextFilesCopy[index <= 0 ? 0 : index] = fileCopy;
+
+      return nextFilesCopy;
+    });
+  };
+
   const onChangeUpload = ({ file, fileList }) => {
     if (file.status === "done") return;
 
@@ -158,6 +210,18 @@ export const Upload = ({
     await deleteFileAndFileThumbFromStorage(storage, filePath, file.name);
 
     setFiles((prevFiles) =>
+      prevFiles.filter((prevFile) => prevFile.uid !== file.uid)
+    );
+  };
+
+  const deleteFileCopy = async (file, copyFilesTo) => {
+    await deleteFileAndFileThumbFromStorage(
+      copyFilesTo.storage,
+      copyFilesTo.filePath,
+      file.name
+    );
+
+    setFilesCopy((prevFiles) =>
       prevFiles.filter((prevFile) => prevFile.uid !== file.uid)
     );
   };

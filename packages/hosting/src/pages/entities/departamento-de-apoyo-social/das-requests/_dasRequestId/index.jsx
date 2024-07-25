@@ -191,6 +191,7 @@ const DasRequest = ({
         return (
           <Step4ApplicantDocuments
             isNew={isNew}
+            user={user}
             onNextStep={onNextStep}
             onPrevStep={onPrevStep}
           />
@@ -228,7 +229,7 @@ const DasRequest = ({
     <Acl
       category="departamento-de-apoyo-social"
       subCategory="dasRequests"
-      name="/das-requests/new"
+      name={isNew ? "/das-requests/new" : "/das-requests/:dasRequestId"}
       redirect
     >
       <Container>

@@ -10,8 +10,12 @@ import {
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+export const BecaEstudiosInstitutoSheet = ({
+  user,
+  dasRequest,
+  dataFamiliar,
+}) => {
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -22,7 +26,7 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Descuento por convenio en universidad</h2>
+          <h2>Beca de estudio en instituto</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -43,7 +47,7 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(headline)}</span>, Grado
+              <span>{userFullName(headline)}</span>, Grado
               <span>{findDegree(headline?.degree).label || emptyContent}</span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
@@ -54,12 +58,12 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
             </p>
             <p className="request-content__body">
               Que teniendo conocimiento que el instituto
-              <span>{findInstitution(institution).name || emptyContent}</span>
-              por intermedio de COBIENE-DAS está otorgando BECA DE ESTUDIO por
+              <span> {findInstitution(institution).name || emptyContent} </span>
+              por intermedio del COBIENE-DAS está otorgando BECA DE ESTUDIO por
               convenio al personal militar y civil del Ejército, solicito a Ud.,
               Mi General disponer a quien corresponda se me inscriba a fin de
               obtener este beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> en la especialidad o
+              <span> {dataFamiliar(familiar)} </span>, en la especialidad o
               carrera de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
@@ -76,8 +80,13 @@ export const InstituteStudyHalfScolarshipSheet = ({ data, dataFamiliar }) => {
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}

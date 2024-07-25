@@ -1,20 +1,21 @@
 import React from "react";
-import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import styled from "styled-components";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
+import { userFullName } from "../../../../../utils/users/userFullName2";
 import {
   findDasRequest,
   findDegree,
   findInstitution,
-  userFullName,
 } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
-  data,
+export const DescuentoConvenioPostgradoUniversidadSheet = ({
+  user,
+  dasRequest,
   dataFamiliar,
 }) => {
-  const { headline, createAt, familiar, institution, requestType } = data;
+  const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -25,7 +26,7 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Media beca otorgado por la universidad</h2>
+          <h2>Descuento por convenio de post grado en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -46,8 +47,11 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(headline)} </span>, Grado
-              <span>{findDegree(headline?.degree).label || emptyContent}</span>
+              <span> {userFullName(dasRequest?.headline)} </span>, Grado
+              <span>
+                {" "}
+                {findDegree(headline?.degree).label || emptyContent}{" "}
+              </span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -60,12 +64,10 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
               Universidad
               <span> {findInstitution(institution).name || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
-              corresponda dar las facilidades para obtener la media beca de
-              estudios en beneficio de mi
-              <span> {dataFamiliar(familiar)} </span> para seguir estudios en la
-              especialidad de para seguir estudios de post grado en la
-              especialidad de para seguir estudios de post grado en la
-              especialidad de
+              corresponda dar las facilidades para obtener el descuento por
+              convenio en beneficio de mi
+              <span> {dataFamiliar(familiar)} </span> para seguir estudios de
+              POST GRADO en la especialidad de
               <span> {institution.specialty || emptyContent} </span>.
             </p>
             <div className="request-content__message">
@@ -81,8 +83,13 @@ export const HalfScholarshipPostgraduateStudiesUniversitySheet = ({
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}

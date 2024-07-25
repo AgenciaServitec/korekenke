@@ -1,19 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
-import { userFullName } from "../../../../../utils/users/userFullName2";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
-import { findDasRequest, findInstitution } from "../../../../../utils";
-import { findDegree } from "../../../../../utils";
+import { userFullName } from "../../../../../utils/users/userFullName2";
+import {
+  findDasRequest,
+  findDegree,
+  findInstitution,
+} from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
-export const DiscountAgreementGrantedUniversitySheet = ({
+export const BecaEstudiosUniversidadSheet = ({
+  user,
   dasRequest,
   dataFamiliar,
 }) => {
   const { headline, createAt, familiar, institution, requestType } = dasRequest;
-
-  console.log(dasRequest);
 
   const createdDate = dayjs(createAt.toDate());
 
@@ -24,7 +26,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
       <div className="sheet">
         <div className="header">
           <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
-          <h2>Descuento por convenio en universidad</h2>
+          <h2>Beca de estudios en universidad</h2>
           <img src={LogoPrimary} alt="Logo de COBIENE" />
         </div>
         <div className="main">
@@ -34,8 +36,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
               <p>
                 {requestType && findDasRequest(requestType).name}
                 <br />
-                {/* <span>{findInstitution(institution).name || emptyContent}</span> */}
-                <span>{institution?.id || emptyContent}</span>
+                <span>{findInstitution(institution).name || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -47,10 +48,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)} </span>, Grado
-              <span>
-                {" "}
-                {findDegree(headline?.degree).label || emptyContent}{" "}
-              </span>
+              <span>{findDegree(headline?.degree).label || emptyContent}</span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -61,8 +59,7 @@ export const DiscountAgreementGrantedUniversitySheet = ({
             <p className="request-content__body">
               Que teniendo conocimiento del convenio de cooperación
               interinstitucional con la Universidad
-              {/* <span> {findInstitution(institution).name || emptyContent} </span> */}
-              <span> {institution?.id || emptyContent} </span>
+              <span> {findInstitution(institution).name || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio en beneficio de mi
@@ -83,8 +80,13 @@ export const DiscountAgreementGrantedUniversitySheet = ({
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={headline?.signaturePhoto?.thumbUrl}
-                signatureUrl={headline?.signaturePhoto?.url}
+                signaturethumbUrl={
+                  user?.signaturePhoto?.thumbUrl ||
+                  headline?.signaturePhoto?.thumbUrl
+                }
+                signatureUrl={
+                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                }
                 name={userFullName(headline)}
                 cip={headline?.cip}
                 degree={findDegree(headline?.degree)?.label}
@@ -129,7 +131,7 @@ const Container = styled.div`
       place-items: center;
 
       h2 {
-        font-size: 1.5em;
+        font-size: 1.7em;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;
@@ -209,7 +211,7 @@ const Container = styled.div`
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 0.5em;
+          gap: 1em;
 
           .date {
             margin-bottom: 1em;
