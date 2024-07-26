@@ -3,11 +3,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import {
+<<<<<<< HEAD
   useDefaultFirestoreProps,
   useFormUtils,
   useUpdateAssignToInUser,
 } from "../../../../hooks";
 import {
+=======
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
   Acl,
   Button,
   Col,
@@ -25,13 +28,21 @@ import {
   getUnitId,
   updateUnit,
 } from "../../../../firebase/collections";
+<<<<<<< HEAD
 import { useCommand, useGlobalData } from "../../../../providers";
 import { findRole, getNameId, userFullName } from "../../../../utils";
 import { capitalize, concat, isEmpty, orderBy } from "lodash";
+=======
+import { useGlobalData } from "../../../../providers";
+import { findRole, getNameId, userFullName } from "../../../../utils";
+import { capitalize, concat, isEmpty, orderBy } from "lodash";
+import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
 
 export const UnitIntegration = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
+<<<<<<< HEAD
   const {
     entities,
     units,
@@ -45,6 +56,11 @@ export const UnitIntegration = () => {
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
 
+=======
+  const { entities, rolesAcls, unitUsers } = useGlobalData();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { updateAssignToUser } = useUpdateAssignToInUser();
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
   const [loading, setLoading] = useState();
   const [unit, setUnit] = useState({});
 
@@ -65,6 +81,7 @@ export const UnitIntegration = () => {
     ...unit,
     name: formData.name,
     nameId: getNameId(formData.name),
+<<<<<<< HEAD
     membersIds: formData.membersIds || [],
     bossId: formData.bossId || null,
     commandId: unit?.commandId || currentCommand.id,
@@ -72,6 +89,12 @@ export const UnitIntegration = () => {
     departmentId: formData.departmentId,
     officeId: formData.officeId,
     sectionId: formData.sectionId,
+=======
+    entityId: formData.entityId,
+    greatUnit: formData.greatUnit,
+    membersIds: formData.membersIds || [],
+    bossId: formData.bossId || null,
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
   });
 
   const saveUnit = async (formData) => {
@@ -80,7 +103,11 @@ export const UnitIntegration = () => {
 
       const usersIdsDeselected = formData?.membersIds
         ? (unit?.membersIds || []).filter(
+<<<<<<< HEAD
             (memberId) => !formData.membersIds.includes(memberId),
+=======
+            (memberId) => !formData.membersIds.includes(memberId)
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
           )
         : [];
 
@@ -112,9 +139,12 @@ export const UnitIntegration = () => {
       unitUsers={unitUsers}
       unit={unit}
       entities={entities}
+<<<<<<< HEAD
       departments={departments}
       offices={offices}
       sections={sections}
+=======
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
       rolesAcls={rolesAcls}
       loading={loading}
       onSaveUnit={saveUnit}
@@ -129,21 +159,31 @@ const Unit = ({
   rolesAcls,
   unit,
   entities,
+<<<<<<< HEAD
   departments,
   offices,
   sections,
+=======
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
   loading,
   onSaveUnit,
   onGoBack,
 }) => {
   const schema = yup.object({
     name: yup.string().required(),
+<<<<<<< HEAD
     membersIds: yup.array().nullable(),
     bossId: yup.string(),
     entityId: yup.string(),
     departmentId: yup.string(),
     officeId: yup.string(),
     sectionId: yup.string(),
+=======
+    entityId: yup.string().required(),
+    membersIds: yup.array().nullable(),
+    greatUnit: yup.string(),
+    bossId: yup.string(),
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
   });
 
   const {
@@ -166,18 +206,29 @@ const Unit = ({
   const resetForm = () => {
     reset({
       name: unit?.name || "",
+<<<<<<< HEAD
       membersIds: unit?.membersIds || null,
       bossId: unit?.bossId || "",
       entityId: unit?.entityId || "",
       departmentId: unit?.departmentId || "",
       officeId: unit?.officeId || "",
       sectionId: unit?.sectionId || "",
+=======
+      entityId: unit?.entityId || "",
+      membersIds: unit?.membersIds || null,
+      greatUnit: unit?.greatUnit || "",
+      bossId: unit?.bossId || "",
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
     });
   };
 
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
+<<<<<<< HEAD
       findRole(rolesAcls, user?.roleCode)?.name || "",
+=======
+      findRole(rolesAcls, user?.roleCode)?.name || ""
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
     )})`,
     value: user.id,
     key: user.id,
@@ -185,7 +236,11 @@ const Unit = ({
   });
 
   const membersInEdition = unitUsers.filter((user) =>
+<<<<<<< HEAD
     !isEmpty(unit?.membersIds) ? unit.membersIds.includes(user.id) : false,
+=======
+    !isEmpty(unit?.membersIds) ? unit.membersIds.includes(user.id) : false
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
   );
 
   const userBosses = unitUsers.filter((user) => user.roleCode === "unit_boss");
@@ -193,6 +248,7 @@ const Unit = ({
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
     unitUsers.filter(
+<<<<<<< HEAD
       (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id),
     ),
   ).map(mapOptionSelectMembers);
@@ -202,6 +258,13 @@ const Unit = ({
       .filter((user) => (watch("membersIds") || []).includes(user.id))
       .filter((user) => (!bossId ? true : user.id !== bossId))
       .map(mapOptionSelectMembers);
+=======
+      (user) => user.assignedTo.type === "unit" && isEmpty(user.assignedTo.id)
+    )
+  ).map(mapOptionSelectMembers);
+
+  const bossesView = userBosses.map(mapOptionSelectMembers);
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
 
   const onChangeMembersWithValidation = (onChange, value) => {
     const _userBosses = userBosses.filter((user) => value.includes(user.id));
@@ -233,6 +296,10 @@ const Unit = ({
                 <Controller
                   name="name"
                   control={control}
+<<<<<<< HEAD
+=======
+                  defaultValue=""
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Nombre"
@@ -247,8 +314,53 @@ const Unit = ({
               </Col>
               <Col span={24}>
                 <Controller
+<<<<<<< HEAD
                   name="membersIds"
                   control={control}
+=======
+                  name="entityId"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Entidad"
+                      name={name}
+                      value={value}
+                      options={entities.map((entity) => ({
+                        label: entity.name,
+                        value: entity.id,
+                      }))}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="greatUnit"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Gran Unidad"
+                      name={name}
+                      value={value}
+                      options={[]}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="membersIds"
+                  control={control}
+                  defaultValue=""
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
@@ -258,7 +370,11 @@ const Unit = ({
                       options={orderBy(
                         usersViewForMembers,
                         ["roleCode"],
+<<<<<<< HEAD
                         ["desc"],
+=======
+                        ["desc"]
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
                       )}
                       onChange={(value) =>
                         onChangeMembersWithValidation(onChange, value)
@@ -273,11 +389,19 @@ const Unit = ({
                 <Controller
                   name="bossId"
                   control={control}
+<<<<<<< HEAD
+=======
+                  defaultValue=""
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Jefe"
                       value={value}
+<<<<<<< HEAD
                       options={bossesView(watch("secondBossId"))}
+=======
+                      options={bossesView}
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
@@ -286,6 +410,7 @@ const Unit = ({
                   )}
                 />
               </Col>
+<<<<<<< HEAD
               <Col span={24}>
                 <br />
                 <ComponentContainer.group label="Vinculación (opcional)">
@@ -369,6 +494,8 @@ const Unit = ({
                   </Row>
                 </ComponentContainer.group>
               </Col>
+=======
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
             </Row>
             <Row justify="end" gutter={[16, 16]}>
               <Col xs={24} sm={6} md={4}>

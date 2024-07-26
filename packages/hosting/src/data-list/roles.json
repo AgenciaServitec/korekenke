@@ -1,4 +1,5 @@
 [
+<<<<<<< HEAD
   {
     "id": "super_admin",
     "name": "Super Admin",
@@ -70,3 +71,71 @@
     "initialPathname": "/home"
   }
 ]
+=======
+    {
+        "id": "super_admin",
+        "name": "Super Admin",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "manager",
+        "name": "Gerente",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "sub_manager",
+        "name": "Sub gerente",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "assistant_manager",
+        "name": "Asistente gerencial",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "unit_boss",
+        "name": "Jefe de Unidad",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "department_boss",
+        "name": "Jefe de Departamento",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "department_assistant",
+        "name": "Asistente de Departamento",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "section_boss",
+        "name": "Jefe de Sección",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "section_assistant",
+        "name": "Asistente de Sección",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "office_boss",
+        "name": "Jefe de Oficina",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "office_assistant",
+        "name": "Asistente de Oficina",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "party_table",
+        "name": "Mesa de Partes",
+        "initialPathname": "/home"
+    },
+    {
+        "id": "user",
+        "name": "Usuario",
+        "initialPathname": "/home"
+    }
+]
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)

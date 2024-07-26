@@ -24,7 +24,15 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { mapAcls } from "../../../../utils";
 import { useGlobalData } from "../../../../providers";
+<<<<<<< HEAD
 import { addRoleAcl, updateRoleAcl } from "../../../../firebase/collections";
+=======
+import {
+  addRoleAcl,
+  fetchRoleAcl,
+  updateRoleAcl,
+} from "../../../../firebase/collections";
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
 import { acls, Roles } from "../../../../data-list";
 
 export const RoleAclIntegration = () => {

@@ -17,5 +17,8 @@ export { default as ProcessTypeInInstitution } from "./processTypeInInstitution.
 export { default as CorrespondencesStatus } from "./correspondencesStatus.json";
 export { default as DecreeList } from "./decreeList.json";
 export { default as Roles } from "./roles.json";
+<<<<<<< HEAD
 export { default as AnimalsType } from "./animals.json";
 export { default as ApplicantDocumentsOrdered } from "./applicantDocumentsOrdered.json";
+=======
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)

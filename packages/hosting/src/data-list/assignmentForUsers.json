@@ -4,7 +4,11 @@
     "type": "entity"
   },
   {
+<<<<<<< HEAD
     "roles": ["unit_boss", "unit_assistant"],
+=======
+    "roles": ["unit_boss"],
+>>>>>>> 1f6250b (refactored the unit structure and created roles.json)
     "type": "unit"
   },
   {
