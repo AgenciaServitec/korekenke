@@ -16,3 +16,4 @@ export { default as DasRequestStatus } from "./dasRequestStatus.json";
 export { default as ProcessTypeInInstitution } from "./processTypeInInstitution.json";
 export { default as CorrespondencesStatus } from "./correspondencesStatus.json";
 export { default as DecreeList } from "./decreeList.json";
+export { default as Roles } from "./roles.json";

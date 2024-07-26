@@ -30,7 +30,7 @@ import {
   fetchRoleAcl,
   updateRoleAcl,
 } from "../../../../firebase/collections";
-import { acls } from "../../../../data-list";
+import { acls, Roles } from "../../../../data-list";
 
 export const RoleAclIntegration = () => {
   const navigate = useNavigate();
@@ -78,23 +78,20 @@ export const RoleAclIntegration = () => {
   }, [saveRoleAclsSuccess]);
 
   const onSaveRoleAcls = async (formData) => {
-    const roleId = formData.name.toLowerCase().split(" ").join("_");
-    if (roleAclsId === "new") {
-      const roleAcl = await fetchRoleAcl(roleId);
-      if (roleAcl)
-        return notification({
-          type: "warning",
-          title: "El nombre del Rol ya existe, ingrese un nuevo nombre.",
-        });
-    }
+    const role = Roles.find((_role) => _role.id === formData.roleId);
 
-    await saveRoleAcls(
-      assign({}, formData, {
-        id: roleAcls?.id || roleId,
-        name: formData.name.toLowerCase(),
-        acls: mapAcls(formData.acls),
-      })
-    );
+    if (!role)
+      return notification({
+        type: "warning",
+        title: "El Rol no existe.",
+      });
+
+    await saveRoleAcls({
+      id: formData.roleId,
+      name: role.name,
+      initialPathname: role.initialPathname,
+      acls: mapAcls(formData.acls),
+    });
   };
 
   const onCancel = (modifiedFields) => {
@@ -125,8 +122,7 @@ const RoleAcl = ({
   onCancel,
 }) => {
   const schema = yup.object({
-    name: yup.string().required(),
-    initialPathname: yup.string().required(),
+    roleId: yup.string().required(),
   });
 
   const {
@@ -150,8 +146,7 @@ const RoleAcl = ({
 
   const roleAclsToForm = (roleAcls) =>
     reset({
-      name: roleAcls?.name || "",
-      initialPathname: roleAcls?.initialPathname || "/home",
+      roleId: roleAcls?.id || "",
       acls: mapAcls(roleAcls?.acls),
     });
 
@@ -170,41 +165,19 @@ const RoleAcl = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Controller
-              name="name"
-              defaultValue=""
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Nombre"
-                  name={name}
-                  onChange={onChange}
-                  value={value}
-                  error={error(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
-              name="initialPathname"
+              name="roleId"
               defaultValue=""
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <Select
-                  label="Página de Inicio"
+                  label="Rol de usuario"
                   onChange={onChange}
                   value={value}
                   error={error(name)}
-                  options={[
-                    {
-                      label: "Inicio",
-                      value: "/home",
-                    },
-                    {
-                      label: "Perfil",
-                      value: "/profile",
-                    },
-                  ]}
+                  options={Roles.map((role) => ({
+                    label: role.name,
+                    value: role.id,
+                  }))}
                 />
               )}
             />
