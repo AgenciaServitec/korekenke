@@ -1,5 +1,8 @@
 [
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2ca210c (format code)
   {
     "id": "super_admin",
     "name": "Super Admin",
@@ -26,11 +29,14 @@
     "initialPathname": "/home"
   },
   {
+<<<<<<< HEAD
     "id": "unit_assistant",
     "name": "Asistente de Unidad",
     "initialPathname": "/home"
   },
   {
+=======
+>>>>>>> 2ca210c (format code)
     "id": "department_boss",
     "name": "Jefe de Departamento",
     "initialPathname": "/home"
@@ -71,6 +77,7 @@
     "initialPathname": "/home"
   }
 ]
+<<<<<<< HEAD
 =======
     {
         "id": "super_admin",
@@ -139,3 +146,5 @@
     }
 ]
 >>>>>>> 1f6250b (refactored the unit structure and created roles.json)
+=======
+>>>>>>> 2ca210c (format code)
