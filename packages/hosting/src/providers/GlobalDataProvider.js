@@ -20,6 +20,7 @@ import { useCommand } from "./CommandProvider";
 const GlobalDataContext = createContext({
   commands: [],
   users: [],
+  unitUsers: [],
   departmentUsers: [],
   sectionUsers: [],
   officeUsers: [],
@@ -122,6 +123,11 @@ export const GlobalDataProvider = ({ children }) => {
       value={{
         commands: orderBy(commands, (command) => [command.name], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
+        unitUsers: orderBy(
+          usersByRoleCode(users, ["unit_boss"]),
+          (user) => [user.createAt],
+          ["desc"]
+        ),
         departmentUsers: orderBy(
           usersByRoleCode(users, ["department_boss", "department_assistant"]),
           (user) => [user.createAt],

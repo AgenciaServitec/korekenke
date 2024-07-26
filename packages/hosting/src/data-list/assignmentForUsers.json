@@ -4,6 +4,10 @@
     "type": "entity"
   },
   {
+    "roles": ["unit_boss"],
+    "type": "unit"
+  },
+  {
     "roles": ["department_boss", "department_assistant"],
     "type": "department"
   },
