@@ -24,7 +24,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
   ] = useDocumentData(
     firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
   );
-  const { departments, users, entities } = useGlobalData();
+  const { departments, users, entities, units } = useGlobalData();
 
   useEffect(() => {
     livestockAndEquineError && notification({ type: "error" });
@@ -40,26 +40,23 @@ export const PdfEquineLivestockRegistrationCard = () => {
     return group.find((_group) => _group.nameId === nameId);
   };
 
-  const unitPELVETRCMDNEPR = genericSearchById(
-    departments,
-    livestockAndEquine?.unit
-  );
-
-  const unitBossPELVETRCMDNEPR = genericSearchById(
-    users,
-    unitPELVETRCMDNEPR?.bossId
-  );
-
   const entitySVRE = genericSearchByNameId(
     entities,
     "servicio-de-veterinaria-y-remonta-del-ejercito"
   );
 
-  const entityBossSVRE = genericSearchById(users, entitySVRE?.entityManageId);
+  const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
-  const entityRCMDNEPR = genericSearchByNameId(departments, "pel-vet");
+  const unitData = genericSearchById(units, livestockAndEquine?.unit);
 
-  const entityBossRCMDNEPR = genericSearchById(users, entityRCMDNEPR?.bossId);
+  const bossUnitData = genericSearchById(users, unitData?.bossId);
+
+  const departmentPELVET = genericSearchByNameId(departments, "pel-vet");
+
+  const bossDepartmentPELVET = genericSearchById(
+    users,
+    departmentPELVET?.bossId
+  );
 
   const userAssignedFullName = (userId) => {
     const user = users.find((_user) => _user.id === userId);
@@ -131,7 +128,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
               <div className="section_information__column">
                 <ul>
                   <li>: {livestockAndEquine?.nscCorrelativo || ""}</li>
-                  <li>: {unitPELVETRCMDNEPR?.name || ""}</li>
+                  <li>: {unitData?.name || ""}</li>
                   <li>: {livestockAndEquine?.greatUnit || ""}</li>
                   <li>: {livestockAndEquine?.name || ""}</li>
                   <li>: {livestockAndEquine?.registrationNumber || "S/N"}</li>
@@ -194,23 +191,23 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {entityBossSVRE?.signaturePhoto && (
+                    {bossEntitySVRE?.signaturePhoto && (
                       <img
-                        src={entityBossSVRE?.signaturePhoto.url}
+                        src={bossEntitySVRE?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{entityBossSVRE?.cip}</strong>
+                      <strong>{bossEntitySVRE?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(entityBossSVRE)}</strong>
+                      <strong>{userFullName(bossEntitySVRE)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(entityBossSVRE?.degree)?.label}
+                        {findDegree(bossEntitySVRE?.degree)?.label}
                       </strong>
                     </p>
                     <p>
@@ -223,27 +220,25 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {entityBossRCMDNEPR?.signaturePhoto && (
+                    {bossUnitData?.signaturePhoto && (
                       <img
-                        src={entityBossRCMDNEPR?.signaturePhoto.url}
+                        src={bossUnitData?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{entityBossRCMDNEPR?.cip}</strong>
+                      <strong>{bossUnitData?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(entityBossRCMDNEPR)}</strong>
+                      <strong>{userFullName(bossUnitData)}</strong>
                     </p>
                     <p>
-                      <strong>
-                        {findDegree(entityBossRCMDNEPR?.degree)?.label}
-                      </strong>
+                      <strong>{findDegree(bossUnitData?.degree)?.label}</strong>
                     </p>
                     <p>
-                      <strong>Comandante del {entityRCMDNEPR?.name}</strong>
+                      <strong>Jefe del {unitData?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -252,27 +247,29 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {unitBossPELVETRCMDNEPR?.signaturePhoto && (
+                    {bossDepartmentPELVET?.signaturePhoto && (
                       <img
-                        src={unitBossPELVETRCMDNEPR?.signaturePhoto.url}
+                        src={bossDepartmentPELVET?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{unitBossPELVETRCMDNEPR?.cip}</strong>
+                      <strong>{bossDepartmentPELVET?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(unitBossPELVETRCMDNEPR)}</strong>
+                      <strong>{userFullName(bossDepartmentPELVET)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(unitBossPELVETRCMDNEPR?.degree)?.label}
+                        {findDegree(bossDepartmentPELVET?.degree)?.label}
                       </strong>
                     </p>
                     <p>
-                      <strong>JEFE {unitPELVETRCMDNEPR?.name}</strong>
+                      <strong>
+                        JEFE {`${departmentPELVET?.name} DEL ${unitData?.name}`}
+                      </strong>
                     </p>
                   </div>
                 </div>
