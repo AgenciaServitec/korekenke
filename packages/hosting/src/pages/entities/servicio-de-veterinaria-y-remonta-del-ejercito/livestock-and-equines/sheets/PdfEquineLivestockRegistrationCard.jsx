@@ -235,7 +235,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
                       <strong>{findDegree(bossUnitData?.degree)?.label}</strong>
                     </p>
                     <p>
-                      <strong>Comandante del {unitData?.name}</strong>
+                      <strong>Jefe del {unitData?.name}</strong>
                     </p>
                   </div>
                 </div>
