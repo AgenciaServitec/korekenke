@@ -23,6 +23,8 @@ export const UsersTable = ({
     switch (assignedTo?.type) {
       case "entity":
         return { module: "Entidad", url: `/entities/${assignedTo.id}` };
+      case "unit":
+        return { module: "Unidad", url: `/units/${assignedTo.id}` };
       case "department":
         return { module: "Departamento", url: `/departments/${assignedTo.id}` };
       case "section":

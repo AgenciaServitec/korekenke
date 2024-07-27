@@ -33,7 +33,7 @@ import { userFullName } from "../../../../../utils/users/userFullName2";
 export const LiveStockAndEquineIntegration = () => {
   const { livestockAndEquineId } = useParams();
   const navigate = useNavigate();
-  const { livestockAndEquines, departments, users } = useGlobalData();
+  const { livestockAndEquines, departments, users, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -119,6 +119,7 @@ export const LiveStockAndEquineIntegration = () => {
   return (
     <LiveStockAndEquine
       isNew={isNew}
+      units={units}
       departmentsView={departmentsView}
       livestockAndEquine={livestockAndEquine}
       cologeUsers={cologeUsers}
@@ -131,13 +132,18 @@ export const LiveStockAndEquineIntegration = () => {
 
 const LiveStockAndEquine = ({
   isNew,
-  departmentsView,
+  units,
   livestockAndEquine,
   cologeUsers,
   onSaveLivestockAndEquine,
   loading,
   onGoBack,
 }) => {
+  const unitsView = units.map((unit) => ({
+    label: unit.name,
+    value: unit.id,
+  }));
+
   const schema = yup.object({
     nscCorrelativo: yup.string().notRequired(),
     rightProfilePhoto: yup.mixed().required(),
@@ -166,6 +172,8 @@ const LiveStockAndEquine = ({
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -202,6 +210,15 @@ const LiveStockAndEquine = ({
       assignedOrAffectedId: livestockAndEquine?.assignedOrAffectedId || "",
       description: livestockAndEquine?.description || "",
     });
+  };
+
+  const onChangeGreatUnit = (onChange, value) => {
+    const _unit = units.find((_unit) => _unit.id === value);
+
+    if (_unit) setValue("greatUnit", _unit?.greatUnit);
+    if (!_unit) setValue("greatUnit", "");
+
+    return onChange(value);
   };
 
   const onSubmit = (formData) => {
@@ -317,8 +334,8 @@ const LiveStockAndEquine = ({
                       label="Unidad"
                       name={name}
                       value={value}
-                      options={departmentsView}
-                      onChange={onChange}
+                      options={unitsView}
+                      onChange={(value) => onChangeGreatUnit(onChange, value)}
                       error={error(name)}
                       required={required(name)}
                     />

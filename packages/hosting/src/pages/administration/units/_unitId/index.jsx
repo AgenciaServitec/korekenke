@@ -170,11 +170,15 @@ const Unit = ({
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
     unitUsers.filter(
-      (user) => user.assignedTo.type === "unit" && isEmpty(user.assignedTo.id)
+      (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id)
     )
   ).map(mapOptionSelectMembers);
 
-  const bossesView = userBosses.map(mapOptionSelectMembers);
+  const bossesView = (bossId = undefined) =>
+    userBosses
+      .filter((user) => (watch("membersIds") || []).includes(user.id))
+      .filter((user) => (!bossId ? true : user.id !== bossId))
+      .map(mapOptionSelectMembers);
 
   const onChangeMembersWithValidation = (onChange, value) => {
     const _userBosses = userBosses.filter((user) => value.includes(user.id));
@@ -292,7 +296,7 @@ const Unit = ({
                     <Select
                       label="Jefe"
                       value={value}
-                      options={bossesView}
+                      options={bossesView(watch("secondBossId"))}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
