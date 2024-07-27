@@ -40,20 +40,23 @@ export const PdfEquineLivestockRegistrationCard = () => {
     return group.find((_group) => _group.nameId === nameId);
   };
 
-  const entityData = genericSearchByNameId(
+  const entitySVRE = genericSearchByNameId(
     entities,
     "servicio-de-veterinaria-y-remonta-del-ejercito"
   );
 
-  const bossEntityData = genericSearchById(users, entityData?.entityManageId);
+  const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
   const unitData = genericSearchById(units, livestockAndEquine?.unit);
 
   const bossUnitData = genericSearchById(users, unitData?.bossId);
 
-  const departmentData = genericSearchByNameId(departments, "pel-vet");
+  const departmentPELVET = genericSearchByNameId(departments, "pel-vet");
 
-  const bossDepartmentData = genericSearchById(users, departmentData?.bossId);
+  const bossDepartmentPELVET = genericSearchById(
+    users,
+    departmentPELVET?.bossId
+  );
 
   const userAssignedFullName = (userId) => {
     const user = users.find((_user) => _user.id === userId);
@@ -188,27 +191,27 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {bossEntityData?.signaturePhoto && (
+                    {bossEntitySVRE?.signaturePhoto && (
                       <img
-                        src={bossEntityData?.signaturePhoto.url}
+                        src={bossEntitySVRE?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossEntityData?.cip}</strong>
+                      <strong>{bossEntitySVRE?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossEntityData)}</strong>
+                      <strong>{userFullName(bossEntitySVRE)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(bossEntityData?.degree)?.label}
+                        {findDegree(bossEntitySVRE?.degree)?.label}
                       </strong>
                     </p>
                     <p>
-                      <strong>JEFE DEL {entityData?.name}</strong>
+                      <strong>JEFE DEL {entitySVRE?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -244,28 +247,28 @@ export const PdfEquineLivestockRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {bossDepartmentData?.signaturePhoto && (
+                    {bossDepartmentPELVET?.signaturePhoto && (
                       <img
-                        src={bossDepartmentData?.signaturePhoto.url}
+                        src={bossDepartmentPELVET?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossDepartmentData?.cip}</strong>
+                      <strong>{bossDepartmentPELVET?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossDepartmentData)}</strong>
+                      <strong>{userFullName(bossDepartmentPELVET)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(bossDepartmentData?.degree)?.label}
+                        {findDegree(bossDepartmentPELVET?.degree)?.label}
                       </strong>
                     </p>
                     <p>
                       <strong>
-                        JEFE {`${departmentData?.name} DEL ${unitData?.name}`}
+                        JEFE {`${departmentPELVET?.name} DEL ${unitData?.name}`}
                       </strong>
                     </p>
                   </div>
