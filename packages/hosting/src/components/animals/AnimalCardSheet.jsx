@@ -3,12 +3,69 @@ import {
   ImgNoFound,
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
 } from "../../images";
 import { userFullName } from "../../utils/users/userFullName2";
 import { findDegree } from "../../utils";
 import { QRCode } from "../index";
 import styled from "styled-components";
 import { AnimalsInformation } from "./AnimalsInformation";
+=======
+} from "../../../../../images";
+import dayjs from "dayjs";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
+import { useGlobalData } from "../../../../../providers";
+import { userFullName } from "../../../../../utils/users/userFullName2";
+import { findDegree } from "../../../../../utils";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { firestore } from "../../../../../firebase";
+
+export const PdfEquineLivestockRegistrationCard = () => {
+  const { livestockAndEquineId } = useParams();
+  const [
+    livestockAndEquine,
+    livestockAndEquineLoading,
+    livestockAndEquineError,
+  ] = useDocumentData(
+    firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
+  );
+  const { departments, users, entities, units } = useGlobalData();
+
+  useEffect(() => {
+    livestockAndEquineError && notification({ type: "error" });
+  }, [livestockAndEquineError]);
+
+  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
+
+  const genericSearchById = (group, id) => {
+    return group.find((_group) => _group.id === id);
+  };
+
+  const genericSearchByNameId = (group, nameId) => {
+    return group.find((_group) => _group.nameId === nameId);
+  };
+
+  const entityData = genericSearchByNameId(
+    entities,
+    "servicio-de-veterinaria-y-remonta-del-ejercito"
+  );
+
+  const bossEntityData = genericSearchById(users, entityData?.entityManageId);
+
+  const unitData = genericSearchById(units, livestockAndEquine?.unit);
+
+  const bossUnitData = genericSearchById(users, unitData?.bossId);
+
+  const departmentData = genericSearchByNameId(departments, "pel-vet");
+
+  const bossDepartmentData = genericSearchById(users, departmentData?.bossId);
+
+  const userAssignedFullName = (userId) => {
+    const user = users.find((_user) => _user.id === userId);
+    if (!user) return "";
+    return userFullName(user);
+  };
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
 
 export const AnimalCardSheet = ({ animal }) => {
   return (
@@ -55,7 +112,74 @@ export const AnimalCardSheet = ({ animal }) => {
                 </div>
               </div>
             </div>
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
             <AnimalsInformation animal={animal} />
+=======
+            <div className="section_information">
+              <div className="section_information__column">
+                <ul>
+                  <li>NSC - CORRELATIVO</li>
+                  <li>UNIDAD</li>
+                  <li>GRAN UNIDAD</li>
+                  <li>NOMBRE</li>
+                  <li>N° MATRICULA</li>
+                  <li>N° CHIP</li>
+                  <li>SEXO</li>
+                  <li>COLOR</li>
+                </ul>
+              </div>
+              <div className="section_information__column">
+                <ul>
+                  <li>: {livestockAndEquine?.nscCorrelativo || ""}</li>
+                  <li>: {unitData?.name || ""}</li>
+                  <li>: {livestockAndEquine?.greatUnit || ""}</li>
+                  <li>: {livestockAndEquine?.name || ""}</li>
+                  <li>: {livestockAndEquine?.registrationNumber || "S/N"}</li>
+                  <li>: {livestockAndEquine?.chipNumber || ""}</li>
+                  <li>
+                    :{" "}
+                    {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
+                  </li>
+                  <li>: {livestockAndEquine?.color || ""}</li>
+                </ul>
+              </div>
+              <div className="section_information__column">
+                <ul>
+                  <li>F. NACIMIENTO</li>
+                  <li>TALLA</li>
+                  <li>PADRE</li>
+                  <li>MADRE</li>
+                  <li>PROCEDENCIA</li>
+                  <li>RAZA/LINEA</li>
+                  <li>ASIGNADO U AFECTADO</li>
+                </ul>
+              </div>
+              <div className="section_information__column">
+                <ul>
+                  <li>
+                    :{" "}
+                    {livestockAndEquine?.birthdate
+                      ? dayjs(
+                          livestockAndEquine?.birthdate,
+                          DATE_FORMAT_TO_FIRESTORE
+                        ).format("DD/MM/YYYY")
+                      : ""}
+                  </li>
+                  <li>: {livestockAndEquine?.height || ""} Mts</li>
+                  <li>: {livestockAndEquine?.father || ""}</li>
+                  <li>: {livestockAndEquine?.mother || ""}</li>
+                  <li>: {livestockAndEquine?.origin || ""}</li>
+                  <li>: {livestockAndEquine?.raceOrLine || ""}</li>
+                  <li>
+                    :{" "}
+                    {userAssignedFullName(
+                      livestockAndEquine?.assignedOrAffectedId
+                    ) || ""}
+                  </li>
+                </ul>
+              </div>
+            </div>
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
             <div className="section_description">
               {animal?.description && (
                 <>
@@ -71,15 +195,22 @@ export const AnimalCardSheet = ({ animal }) => {
                     <strong>JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                     {animal?.entityGUManage?.signaturePhoto && (
                       <img
                         src={animal?.entityGUManage?.signaturePhoto.url}
+=======
+                    {bossEntityData?.signaturePhoto && (
+                      <img
+                        src={bossEntityData?.signaturePhoto.url}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                       <strong>{animal?.entityGUManage?.cip}</strong>
                     </p>
                     <p>
@@ -92,6 +223,20 @@ export const AnimalCardSheet = ({ animal }) => {
                     </p>
                     <p>
                       <strong>JEFE DEL {animal?.entityGU?.name}</strong>
+=======
+                      <strong>{bossEntityData?.cip}</strong>
+                    </p>
+                    <p>
+                      <strong>{userFullName(bossEntityData)}</strong>
+                    </p>
+                    <p>
+                      <strong>
+                        {findDegree(bossEntityData?.degree)?.label}
+                      </strong>
+                    </p>
+                    <p>
+                      <strong>JEFE DEL {entityData?.name}</strong>
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                     </p>
                   </div>
                 </div>
@@ -100,15 +245,22 @@ export const AnimalCardSheet = ({ animal }) => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                     {animal?.unitBoss?.signaturePhoto && (
                       <img
                         src={animal?.unitBoss?.signaturePhoto.url}
+=======
+                    {bossUnitData?.signaturePhoto && (
+                      <img
+                        src={bossUnitData?.signaturePhoto.url}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                       <strong>{animal?.unitBoss?.cip}</strong>
                     </p>
                     <p>
@@ -121,6 +273,18 @@ export const AnimalCardSheet = ({ animal }) => {
                     </p>
                     <p>
                       <strong>Jefe del {animal?.unit?.name}</strong>
+=======
+                      <strong>{bossUnitData?.cip}</strong>
+                    </p>
+                    <p>
+                      <strong>{userFullName(bossUnitData)}</strong>
+                    </p>
+                    <p>
+                      <strong>{findDegree(bossUnitData?.degree)?.label}</strong>
+                    </p>
+                    <p>
+                      <strong>Comandante del {unitData?.name}</strong>
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                     </p>
                   </div>
                 </div>
@@ -129,15 +293,22 @@ export const AnimalCardSheet = ({ animal }) => {
                     <strong>OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                     {animal?.departmentBoss?.signaturePhoto && (
                       <img
                         src={animal?.departmentBoss?.signaturePhoto.url}
+=======
+                    {bossDepartmentData?.signaturePhoto && (
+                      <img
+                        src={bossDepartmentData?.signaturePhoto.url}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                       <strong>{animal?.departmentBoss?.cip}</strong>
                     </p>
                     <p>
@@ -146,12 +317,26 @@ export const AnimalCardSheet = ({ animal }) => {
                     <p>
                       <strong>
                         {findDegree(animal?.departmentBoss?.degree)?.label}
+=======
+                      <strong>{bossDepartmentData?.cip}</strong>
+                    </p>
+                    <p>
+                      <strong>{userFullName(bossDepartmentData)}</strong>
+                    </p>
+                    <p>
+                      <strong>
+                        {findDegree(bossDepartmentData?.degree)?.label}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                       </strong>
                     </p>
                     <p>
                       <strong>
+<<<<<<< HEAD:packages/hosting/src/components/animals/AnimalCardSheet.jsx
                         JEFE{" "}
                         {`${animal?.department?.name || ""} DEL ${animal?.unit?.name || ""}`}
+=======
+                        JEFE {`${departmentData?.name} DEL ${unitData?.name}`}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets/PdfEquineLivestockRegistrationCard.jsx
                       </strong>
                     </p>
                   </div>

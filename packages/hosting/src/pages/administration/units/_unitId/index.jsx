@@ -249,6 +249,7 @@ const Unit = ({
     isNew ? [] : membersInEdition,
     unitUsers.filter(
 <<<<<<< HEAD
+<<<<<<< HEAD
       (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id),
     ),
   ).map(mapOptionSelectMembers);
@@ -265,6 +266,17 @@ const Unit = ({
 
   const bossesView = userBosses.map(mapOptionSelectMembers);
 >>>>>>> 1f6250b (refactored the unit structure and created roles.json)
+=======
+      (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id)
+    )
+  ).map(mapOptionSelectMembers);
+
+  const bossesView = (bossId = undefined) =>
+    userBosses
+      .filter((user) => (watch("membersIds") || []).includes(user.id))
+      .filter((user) => (!bossId ? true : user.id !== bossId))
+      .map(mapOptionSelectMembers);
+>>>>>>> 98c9bc3 (Updated fields with units and large units)
 
   const onChangeMembersWithValidation = (onChange, value) => {
     const _userBosses = userBosses.filter((user) => value.includes(user.id));
@@ -398,10 +410,14 @@ const Unit = ({
                       label="Jefe"
                       value={value}
 <<<<<<< HEAD
+<<<<<<< HEAD
                       options={bossesView(watch("secondBossId"))}
 =======
                       options={bossesView}
 >>>>>>> 1f6250b (refactored the unit structure and created roles.json)
+=======
+                      options={bossesView(watch("secondBossId"))}
+>>>>>>> 98c9bc3 (Updated fields with units and large units)
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}

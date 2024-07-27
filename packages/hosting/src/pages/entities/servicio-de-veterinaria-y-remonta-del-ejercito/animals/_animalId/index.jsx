@@ -41,8 +41,12 @@ export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
+<<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
   const { authUser } = useAuthentication();
   const { animals, users, units } = useGlobalData();
+=======
+  const { livestockAndEquines, departments, users, units } = useGlobalData();
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId/index.jsx
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { onSetAnimalLog } = useAnimalLogs();
 
@@ -151,10 +155,16 @@ export const AnimalIntegration = () => {
   return (
     <Animal
       isNew={isNew}
+<<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
       user={authUser}
       animalType={animalType}
       units={units}
       animal={animal}
+=======
+      units={units}
+      departmentsView={departmentsView}
+      livestockAndEquine={livestockAndEquine}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId/index.jsx
       cologeUsers={cologeUsers}
       onSaveAnimal={onSaveAnimal}
       loading={loading}
@@ -165,15 +175,21 @@ export const AnimalIntegration = () => {
 
 const Animal = ({
   isNew,
+<<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
   user,
   animalType,
   units,
   animal,
+=======
+  units,
+  livestockAndEquine,
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId/index.jsx
   cologeUsers,
   onSaveAnimal,
   loading,
   onGoBack,
 }) => {
+<<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
   const [rightProfilePhotoCopy, setRightProfilePhotoCopy] = useState(
     animal?.rightProfilePhotoCopy,
   );
@@ -184,6 +200,12 @@ const Animal = ({
 
   const isEquine = animalType === "equine";
   const isCattle = animalType === "cattle";
+=======
+  const unitsView = units.map((unit) => ({
+    label: unit.name,
+    value: unit.id,
+  }));
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId/index.jsx
 
   const schema = yup.object({
     nsgId: yup.string(),
@@ -219,6 +241,8 @@ const Animal = ({
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -262,6 +286,7 @@ const Animal = ({
     });
   };
 
+<<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
   const onSubmit = (formData) =>
     onSaveAnimal({
       ...formData,
@@ -269,6 +294,20 @@ const Animal = ({
       frontPhotoCopy,
       leftProfilePhotoCopy,
     });
+=======
+  const onChangeGreatUnit = (onChange, value) => {
+    const _unit = units.find((_unit) => _unit.id === value);
+
+    if (_unit) setValue("greatUnit", _unit?.greatUnit);
+    if (!_unit) setValue("greatUnit", "");
+
+    return onChange(value);
+  };
+
+  const onSubmit = (formData) => {
+    onSaveLivestockAndEquine(formData);
+  };
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId/index.jsx
 
   return (
     <Acl
@@ -421,7 +460,12 @@ const Animal = ({
                       label="Unidad"
                       name={name}
                       value={value}
+<<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
                       onChange={onChange}
+=======
+                      options={unitsView}
+                      onChange={(value) => onChangeGreatUnit(onChange, value)}
+>>>>>>> 98c9bc3 (Updated fields with units and large units):packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId/index.jsx
                       error={error(name)}
                       required={required(name)}
                     />
