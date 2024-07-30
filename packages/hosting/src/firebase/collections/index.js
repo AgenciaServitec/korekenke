@@ -10,5 +10,5 @@ export * from "./sections";
 export * from "./offices";
 export * from "./clinicHistories";
 export * from "./equineMagazineProfiles";
-export * from "./livestockAndEquines";
+export * from "./animals";
 export * from "./cmstsEnrollments";

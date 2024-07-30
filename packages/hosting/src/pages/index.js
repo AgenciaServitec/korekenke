@@ -40,14 +40,14 @@ export * from "./entities/departamento-de-apoyo-social/das-requests/sheets";
 export * from "./entities/jefatura-de-bienestar-del-ejercito/inscriptions";
 
 //ENTITIES "servicio-de-veterinaria-y-remonta-del-ejercito"
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/_livestockAndEquineId";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/sheets";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/clinic-history";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/clinic-history/sheets";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/_equineMagazineProfileId";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/equine-magazine-profiles/sheets";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/sheets";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/clinic-history";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/clinic-history/sheets";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles/_equineMagazineProfileId";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles/sheets";
 
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests";

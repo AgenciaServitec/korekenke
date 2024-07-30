@@ -11,12 +11,12 @@ import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
-export const LiveStockAndEquinesTable = ({
-  livestockAndEquines,
-  onEditLiveStockAndEquine,
-  onConfirmRemoveLiveStockAndEquine,
-  onNavigateGoToPdfEquineLivestockRegistrationCard,
-  onNavigateGoToEquineMagazineProfiles,
+export const AnimalsTable = ({
+  animals,
+  onEditAnimal,
+  onConfirmRemoveAnimal,
+  onNavigateGoToPdfAnimalRegistrationCard,
+  onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
 }) => {
   const columns = [
@@ -24,15 +24,14 @@ export const LiveStockAndEquinesTable = ({
       title: "Fecha creación",
       dataIndex: "createAt",
       key: "createAt",
-      render: (_, livestockAndEquine) =>
-        dayjs(livestockAndEquine.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+      render: (_, animal) =>
+        dayjs(animal.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Nombre",
       dataIndex: "name",
       key: "name",
-      render: (_, livestockAndEquine) =>
-        capitalize(livestockAndEquine?.name || ""),
+      render: (_, animal) => capitalize(animal?.name || ""),
     },
     {
       title: "N° Matrícula",
@@ -48,86 +47,75 @@ export const LiveStockAndEquinesTable = ({
       title: "Sexo",
       dataIndex: "gender",
       key: "gender",
-      render: (_, livestockAndEquine) =>
-        livestockAndEquine.gender === "male" ? "Macho" : "Hembra",
+      render: (_, animal) => (animal.gender === "male" ? "Macho" : "Hembra"),
     },
     {
       title: "Fecha de Nacimiento",
       dataIndex: "birthdate",
       key: "birthdate",
-      render: (_, livestockAndEquine) =>
-        dayjs(livestockAndEquine.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
-          "DD/MM/YYYY"
-        ),
+      render: (_, animal) =>
+        dayjs(animal.birthdate, DATE_FORMAT_TO_FIRESTORE).format("DD/MM/YYYY"),
     },
     {
       title: "Acciones",
       align: "center",
       key: "actions",
-      render: (_, livestockAndEquine) => (
+      render: (_, animal) => (
         <Space>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="clinicHistory"
-            name="/livestock-and-equines/:livestockAndEquineId/clinic-history"
+            name="/animals/:animalId/clinic-history"
           >
             <IconAction
               tooltipTitle="Historial clinico"
               icon={faNotesMedical}
-              onClick={() => onNavigateGoToClinicHistory(livestockAndEquine.id)}
+              onClick={() => onNavigateGoToClinicHistory(animal.id)}
             />
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="equineMagazineProfiles"
-            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles"
+            name="/animals/:animalId/equine-magazine-profiles"
           >
             <IconAction
               tooltipTitle="Ficha revista equina"
               icon={faListCheck}
-              onClick={() =>
-                onNavigateGoToEquineMagazineProfiles(livestockAndEquine.id)
-              }
+              onClick={() => onNavigateGoToAnimalMagazineProfiles(animal.id)}
             />
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="livestockAndEquines"
-            name="/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+            subCategory="animals"
+            name="/animals/:animalId/pdf-equine-livestock-registration-card"
           >
             <IconAction
               tooltipTitle="Ver tarjeta"
               icon={faIdCard}
-              onClick={() =>
-                onNavigateGoToPdfEquineLivestockRegistrationCard(
-                  livestockAndEquine.id
-                )
-              }
+              onClick={() => onNavigateGoToPdfAnimalRegistrationCard(animal.id)}
             />
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="livestockAndEquines"
-            name="/livestock-and-equines/:livestockAndEquineId"
+            subCategory="animals"
+            name="/animals/:animalId"
           >
             <IconAction
               tooltipTitle="Editar"
               icon={faEdit}
-              onClick={() => onEditLiveStockAndEquine(livestockAndEquine)}
+              onClick={() => onEditAnimal(animal)}
             />
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="livestockAndEquines"
-            name="/livestock-and-equines#delete"
+            subCategory="animals"
+            name="/animals#delete"
           >
             <IconAction
               tooltipTitle="Eliminar"
               styled={{ color: (theme) => theme.colors.error }}
               icon={faTrash}
-              onClick={() =>
-                onConfirmRemoveLiveStockAndEquine(livestockAndEquine)
-              }
+              onClick={() => onConfirmRemoveAnimal(animal)}
             />
           </Acl>
         </Space>
@@ -138,7 +126,7 @@ export const LiveStockAndEquinesTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={orderBy(livestockAndEquines, "createAt", "desc")}
+      dataSource={orderBy(animals, "createAt", "desc")}
       scroll={{ x: "max-content" }}
     />
   );

@@ -28,6 +28,7 @@ import {
 } from "../../../components";
 import { mapAcls } from "../../../utils";
 import { useGlobalData } from "../../../providers";
+import { usersRef } from "../../../firebase/collections";
 
 const ACTION = {
   add: {
@@ -60,7 +61,7 @@ export const ManageAclsIntegration = () => {
     error: errorUsersAcls,
     success: isSuccessUsersAcls,
   } = useAsync(async (currentAction, formData) => {
-    const users = await fetchUser(formData);
+    const users = await fetchUsers(formData);
 
     const batch = firestore.batch();
 
@@ -76,9 +77,8 @@ export const ManageAclsIntegration = () => {
     return await batch.commit();
   });
 
-  const fetchUser = async (formData) => {
-    const usersQuerySnapshot = await firestore
-      .collection("users")
+  const fetchUsers = async (formData) => {
+    const usersQuerySnapshot = await usersRef
       .where("isDeleted", "==", false)
       .where("roleCode", "==", formData.roleCode)
       .get();

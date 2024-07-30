@@ -18,43 +18,46 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useQuery,
+} from "../../../../../hooks";
 import { useGlobalData } from "../../../../../providers";
 import {
-  addLivestockAndEquine,
-  getLivestockAndEquineId,
-  updateLivestockAndEquine,
+  addAnimal,
+  getAnimalId,
+  updateAnimal,
 } from "../../../../../firebase/collections";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 
-export const LiveStockAndEquineIntegration = () => {
-  const { livestockAndEquineId } = useParams();
+export const AnimalIntegration = () => {
+  const { animalId } = useParams();
+  const { animalType } = useQuery();
   const navigate = useNavigate();
-  const { livestockAndEquines, departments, users, units } = useGlobalData();
+  const { animals, departments, users, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
-  const [livestockAndEquine, setLivestockAndEquine] = useState({});
+  const [animal, setAnimal] = useState({});
 
-  const isNew = livestockAndEquineId === "new";
+  const isNew = animalId === "new";
 
   useEffect(() => {
-    const _livestockAndEquine = isNew
-      ? { id: getLivestockAndEquineId() }
-      : livestockAndEquines.find(
-          (livestockAndEquine) => livestockAndEquine.id === livestockAndEquineId
-        );
+    const _animal = isNew
+      ? { id: getAnimalId() }
+      : animals.find((animal) => animal?.id === animalId);
 
-    if (!_livestockAndEquine) return navigate(-1);
+    if (!_animal) return navigate(-1);
 
-    setLivestockAndEquine(_livestockAndEquine);
+    setAnimal(_animal);
   }, []);
 
-  const mapLiveStockAndEquine = (formData) => ({
-    ...livestockAndEquine,
+  const mapAnimal = (formData) => ({
+    ...animal,
     nscCorrelativo: formData?.nscCorrelativo || null,
     rightProfilePhoto: formData?.rightProfilePhoto || null,
     frontPhoto: formData?.frontPhoto || null,
@@ -75,20 +78,16 @@ export const LiveStockAndEquineIntegration = () => {
     fur: formData.fur,
     assignedOrAffectedId: formData.assignedOrAffectedId,
     description: formData.description,
+    type: animalType,
   });
 
-  const onSaveLivestockAndEquine = async (formData) => {
+  const onSaveAnimal = async (formData) => {
     try {
       setLoading(true);
 
       isNew
-        ? await addLivestockAndEquine(
-            assignCreateProps(mapLiveStockAndEquine(formData))
-          )
-        : await updateLivestockAndEquine(
-            livestockAndEquine.id,
-            assignUpdateProps(mapLiveStockAndEquine(formData))
-          );
+        ? await addAnimal(assignCreateProps(mapAnimal(formData)))
+        : await updateAnimal(animal.id, assignUpdateProps(mapAnimal(formData)));
 
       notification({ type: "success" });
       onGoBack();
@@ -117,25 +116,27 @@ export const LiveStockAndEquineIntegration = () => {
   const onGoBack = () => navigate(-1);
 
   return (
-    <LiveStockAndEquine
+    <Animal
       isNew={isNew}
+      animalType={animalType}
       units={units}
       departmentsView={departmentsView}
-      livestockAndEquine={livestockAndEquine}
+      animal={animal}
       cologeUsers={cologeUsers}
-      onSaveLivestockAndEquine={onSaveLivestockAndEquine}
+      onSaveAnimal={onSaveAnimal}
       loading={loading}
       onGoBack={onGoBack}
     />
   );
 };
 
-const LiveStockAndEquine = ({
+const Animal = ({
   isNew,
+  animalType,
   units,
-  livestockAndEquine,
+  animal,
   cologeUsers,
-  onSaveLivestockAndEquine,
+  onSaveAnimal,
   loading,
   onGoBack,
 }) => {
@@ -172,7 +173,6 @@ const LiveStockAndEquine = ({
     handleSubmit,
     control,
     reset,
-    watch,
     setValue,
   } = useForm({
     resolver: yupResolver(schema),
@@ -182,33 +182,33 @@ const LiveStockAndEquine = ({
 
   useEffect(() => {
     resetForm();
-  }, [livestockAndEquine]);
+  }, [animal]);
 
   const resetForm = () => {
     reset({
-      nscCorrelativo: livestockAndEquine?.nscCorrelativo || "",
-      rightProfilePhoto: livestockAndEquine?.rightProfilePhoto || null,
-      frontPhoto: livestockAndEquine?.frontPhoto || null,
-      leftProfilePhoto: livestockAndEquine?.leftProfilePhoto || null,
-      unit: livestockAndEquine?.unit || "",
-      greatUnit: livestockAndEquine?.greatUnit || "",
-      name: livestockAndEquine?.name || "",
-      registrationNumber: livestockAndEquine?.registrationNumber || "",
-      gender: livestockAndEquine?.gender || "",
-      chipNumber: livestockAndEquine?.chipNumber || "",
-      color: livestockAndEquine?.color || "",
-      birthdate: livestockAndEquine?.birthdate
-        ? dayjs(livestockAndEquine.birthdate, DATE_FORMAT_TO_FIRESTORE)
+      nscCorrelativo: animal?.nscCorrelativo || "",
+      rightProfilePhoto: animal?.rightProfilePhoto || null,
+      frontPhoto: animal?.frontPhoto || null,
+      leftProfilePhoto: animal?.leftProfilePhoto || null,
+      unit: animal?.unit || "",
+      greatUnit: animal?.greatUnit || "",
+      name: animal?.name || "",
+      registrationNumber: animal?.registrationNumber || "",
+      gender: animal?.gender || "",
+      chipNumber: animal?.chipNumber || "",
+      color: animal?.color || "",
+      birthdate: animal?.birthdate
+        ? dayjs(animal.birthdate, DATE_FORMAT_TO_FIRESTORE)
         : undefined,
-      height: livestockAndEquine?.height || "",
-      father: livestockAndEquine?.father || "",
-      mother: livestockAndEquine?.mother || "",
-      origin: livestockAndEquine?.origin || "",
-      raceOrLine: livestockAndEquine?.raceOrLine || "",
-      fur: livestockAndEquine?.fur || "",
-      squadron: livestockAndEquine?.squadron || "",
-      assignedOrAffectedId: livestockAndEquine?.assignedOrAffectedId || "",
-      description: livestockAndEquine?.description || "",
+      height: animal?.height || "",
+      father: animal?.father || "",
+      mother: animal?.mother || "",
+      origin: animal?.origin || "",
+      raceOrLine: animal?.raceOrLine || "",
+      fur: animal?.fur || "",
+      squadron: animal?.squadron || "",
+      assignedOrAffectedId: animal?.assignedOrAffectedId || "",
+      description: animal?.description || "",
     });
   };
 
@@ -222,23 +222,21 @@ const LiveStockAndEquine = ({
   };
 
   const onSubmit = (formData) => {
-    onSaveLivestockAndEquine(formData);
+    onSaveAnimal(formData);
   };
 
   return (
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
-      subCategory="livestockAndEquines"
-      name={
-        isNew
-          ? "/livestock-and-equines/new"
-          : "/livestock-and-equines/:livestockAndEquineId"
-      }
+      subCategory="animals"
+      name={isNew ? "/animals/new" : "/animals/:animalId"}
       redirect
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Ganado o equino</Title>
+          <Title level={3}>
+            {animalType === "canines" ? "canino" : "Ganado o Equino"}
+          </Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -257,7 +255,7 @@ const LiveStockAndEquine = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${livestockAndEquine.id}/photos`}
+                      filePath={`livestock-and-equines/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -279,7 +277,7 @@ const LiveStockAndEquine = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`front-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${livestockAndEquine.id}/photos`}
+                      filePath={`livestock-and-equines/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -301,7 +299,7 @@ const LiveStockAndEquine = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${livestockAndEquine.id}/photos`}
+                      filePath={`livestock-and-equines/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}

@@ -1,45 +1,39 @@
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
-import { livestockAndEquinesRef } from "./livestockAndEquines";
+import { animalsRef } from "./animals";
 
-export const equineMagazineProfilesRef = (livestockAndEquineId) =>
-  livestockAndEquinesRef
-    .doc(livestockAndEquineId)
-    .collection("equine-magazine-profiles");
+export const animalMagazineProfilesRef = (animalId) =>
+  animalsRef.doc(animalId).collection("animal-magazine-profiles");
 
-export const getEquineMagazineProfileId = (livestockAndEquineId) =>
-  equineMagazineProfilesRef(livestockAndEquineId).doc().id;
+export const getAnimalMagazineProfileId = (animalId) =>
+  animalMagazineProfilesRef(animalId).doc().id;
 
-export const fetchEquineMagazineProfile = async (
-  livestockAndEquineId,
-  equineMagazineProfileId
+export const fetchAnimalMagazineProfile = async (
+  animalId,
+  animalIdMagazineProfileId
 ) =>
   fetchDocumentOnce(
-    equineMagazineProfilesRef(livestockAndEquineId).doc(equineMagazineProfileId)
+    animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfileId)
   );
 
-export const fetchEquineMagazineProfiles = async (livestockAndEquineId) =>
-  fetchCollectionOnce(equineMagazineProfilesRef(livestockAndEquineId));
+export const fetchAnimalMagazineProfiles = async (animalId) =>
+  fetchCollectionOnce(animalMagazineProfilesRef(animalId));
 
-export const addEquineMagazineProfile = async (
-  livestockAndEquineId,
-  equineMagazineProfile
+export const addAnimalMagazineProfile = async (
+  animalId,
+  animalIdMagazineProfile
 ) =>
   setDocument(
-    equineMagazineProfilesRef(livestockAndEquineId).doc(
-      equineMagazineProfile.id
-    ),
-    equineMagazineProfile
+    animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfile.id),
+    animalIdMagazineProfile
   );
 
-export const updateEquineMagazineProfile = async (
-  livestockAndEquineId,
-  equineMagazineProfileId,
-  equineMagazineProfile
+export const updateAnimalMagazineProfile = async (
+  animalId,
+  animalIdMagazineProfileId,
+  animalIdMagazineProfile
 ) =>
   updateDocument(
-    equineMagazineProfilesRef(livestockAndEquineId).doc(
-      equineMagazineProfileId
-    ),
-    equineMagazineProfile
+    animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfileId),
+    animalIdMagazineProfile
   );

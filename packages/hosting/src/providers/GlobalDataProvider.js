@@ -10,7 +10,7 @@ import {
   correspondencesRef,
   departmentsRef,
   entitiesRef,
-  livestockAndEquinesRef,
+  animalsRef,
   sectionsRef,
   unitsRef,
   usersRef,
@@ -31,7 +31,7 @@ const GlobalDataContext = createContext({
   rolesAcls: [],
   offices: [],
   correspondences: [],
-  livestockAndEquines: [],
+  animals: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
@@ -77,12 +77,8 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
-  const [
-    livestockAndEquines = [],
-    livestockAndEquinesLoading,
-    livestockAndEquinesError,
-  ] = useCollectionData(
-    livestockAndEquinesRef.where("isDeleted", "==", false) || null
+  const [animals = [], animalsLoading, animalsError] = useCollectionData(
+    animalsRef.where("isDeleted", "==", false) || null
   );
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
@@ -99,7 +95,7 @@ export const GlobalDataProvider = ({ children }) => {
     departmentsError ||
     sectionsError ||
     officesError ||
-    livestockAndEquinesError;
+    animalsError;
 
   const loading =
     entitiesLoading ||
@@ -110,7 +106,7 @@ export const GlobalDataProvider = ({ children }) => {
     departmentsLoading ||
     sectionsLoading ||
     officesLoading ||
-    livestockAndEquinesLoading;
+    animalsLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -150,7 +146,7 @@ export const GlobalDataProvider = ({ children }) => {
         rolesAcls: orderBy(rolesAcls, "createAt", "desc"),
         offices: orderBy(offices, "createAt", "desc"),
         correspondences: orderBy(correspondences, "createAt", "desc"),
-        livestockAndEquines: orderBy(livestockAndEquines, "createAt", "desc"),
+        animals: orderBy(animals, "createAt", "desc"),
       }}
     >
       {children}

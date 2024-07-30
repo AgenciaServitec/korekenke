@@ -7,6 +7,7 @@ import {
   faBuildingUser,
   faClipboardList,
   faComputer,
+  faDog,
   faFileAlt,
   faFilePen,
   faGears,
@@ -269,8 +270,8 @@ export const DrawerLayout = ({
       isVisible:
         existsAclsInAclsOfUser(
           "servicio-de-veterinaria-y-remonta-del-ejercito",
-          ["livestockAndEquines"],
-          ["/livestock-and-equines"]
+          ["animals"],
+          ["/animals"]
         ) && currentCommand?.id === "cologe",
       children: [
         {
@@ -279,12 +280,26 @@ export const DrawerLayout = ({
           label: "Ganados y equinos",
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
-            ["livestockAndEquines"],
-            ["/livestock-and-equines"]
+            ["animals"],
+            ["/animals"]
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=livestock-and-equines"
+            ),
+        },
+        {
+          key: "canines",
+          icon: <FontAwesomeIcon icon={faDog} size="lg" />,
+          label: "Caninos",
+          isVisible: existsAclsInAclsOfUser(
+            "servicio-de-veterinaria-y-remonta-del-ejercito",
+            ["animals"],
+            ["/animals"]
+          ),
+          onClick: () =>
+            onClickMenu(
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canines"
             ),
         },
       ],

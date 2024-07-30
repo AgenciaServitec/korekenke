@@ -8,7 +8,7 @@ import {
 import { BodyWeightEstimationSheet } from "./BodyWeightEstimationSheet";
 import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
+import { animalsRef } from "../../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../../providers";
 import { EquineMagazineProfileSheet } from "./EquineMagazineProfileSheet";
 
@@ -21,7 +21,7 @@ export const PdfEquineMagazineProfilesSheets = () => {
     equineMagazineProfileLoading,
     equineMagazineProfileError,
   ] = useDocumentData(
-    livestockAndEquinesRef
+    animalsRef
       .doc(livestockAndEquineId)
       .collection("equine-magazine-profiles")
       .doc(equineMagazineProfileId)
