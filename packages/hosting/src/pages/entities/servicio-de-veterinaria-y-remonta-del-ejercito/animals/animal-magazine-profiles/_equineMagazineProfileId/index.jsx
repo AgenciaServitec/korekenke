@@ -23,10 +23,10 @@ import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
 import { EquineMagazineProfiles } from "../../../../../../data-list";
 import {
-  addEquineMagazineProfile,
-  fetchEquineMagazineProfile,
+  addAnimalMagazineProfile,
+  fetchAnimalMagazineProfile,
   getClinicHistoryId,
-  updateEquineMagazineProfile,
+  updateAnimalMagazineProfile,
 } from "../../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../../providers";
 import { mediaQuery } from "../../../../../../styles";
@@ -50,7 +50,7 @@ export const EquineMagazineProfileIntegration = () => {
     const _equineMagazineProfile = isNew
       ? { id: getClinicHistoryId() }
       : (async () => {
-          fetchEquineMagazineProfile(
+          fetchAnimalMagazineProfile(
             livestockAndEquineId,
             equineMagazineProfileId
           ).then((_response) => {
@@ -115,11 +115,11 @@ export const EquineMagazineProfileIntegration = () => {
       setLoading(true);
 
       isNew
-        ? await addEquineMagazineProfile(
+        ? await addAnimalMagazineProfile(
             livestockAndEquineId,
             assignCreateProps(mapForm(formData))
           )
-        : await updateEquineMagazineProfile(
+        : await updateAnimalMagazineProfile(
             livestockAndEquineId,
             equineMagazineProfile.id,
             assignUpdateProps(mapForm(formData))

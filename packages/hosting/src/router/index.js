@@ -4,7 +4,6 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { DecreeSheets } from "../pages/correspondences/_correspondence/decree/sheets";
 
 export const Router = () => {
   return (
@@ -203,26 +202,26 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals"
           element={
             <AdminLayout>
-              <A.LiveStockAndEquinesIntegration />
+              <A.AnimalsIntegration />
             </AdminLayout>
           }
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId"
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId"
           element={
             <AdminLayout>
-              <A.LiveStockAndEquineIntegration />
+              <A.AnimalIntegration />
             </AdminLayout>
           }
         />
         {/*  */}
         {/*<Route*/}
         {/*  exact*/}
-        {/*  path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles"*/}
+        {/*  path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles"*/}
         {/*  element={*/}
         {/*    <AdminLayout>*/}
         {/*      <A.EquineMagazineProfilesIntegration />*/}
@@ -231,7 +230,7 @@ export const Router = () => {
         {/*/>*/}
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles"
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles"
           element={
             <AdminLayout>
               <A.EquineMagazineProfilesIntegration />
@@ -240,7 +239,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
           element={
             <AdminLayout>
               <A.EquineMagazineProfileIntegration />
@@ -249,7 +248,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history"
+          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/clinic-history"
           element={
             <AdminLayout>
               <A.ClinicHistoryIntegration />
@@ -306,17 +305,17 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card"
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/pdf-animal-registration-card"
         element={<A.PdfEquineLivestockRegistrationCardSheet />}
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/clinic-history/pdf-clinic-history"
         element={<A.PdfClinicHistorySheets />}
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
         element={<A.PdfEquineMagazineProfilesSheets />}
       />
       <Route

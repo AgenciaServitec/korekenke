@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, QRCode, Spinner } from "../../../../../../components";
-import { livestockAndEquinesRef } from "../../../../../../firebase/collections";
+import { animalsRef } from "../../../../../../firebase/collections";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
@@ -15,7 +15,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
     livestockAndEquine = {},
     livestockAndEquineLoading,
     livestockAndEquineError,
-  ] = useDocumentData(livestockAndEquinesRef.doc(livestockAndEquineId));
+  ] = useDocumentData(animalsRef.doc(livestockAndEquineId));
 
   useEffect(() => {
     livestockAndEquineError && notification({ type: "error" });

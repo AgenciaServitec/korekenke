@@ -12,7 +12,7 @@ import { EquineMagazineProfilesTable } from "./EquineMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
-import { updateEquineMagazineProfile } from "../../../../../firebase/collections";
+import { updateAnimalMagazineProfile } from "../../../../../firebase/collections";
 
 export const EquineMagazineProfilesIntegration = () => {
   const { livestockAndEquineId } = useParams();
@@ -41,7 +41,7 @@ export const EquineMagazineProfilesIntegration = () => {
     modalConfirm({
       title: "¿Estás seguro de que quieres eliminar la revista equina?",
       onOk: async () =>
-        await updateEquineMagazineProfile(
+        await updateAnimalMagazineProfile(
           livestockAndEquineId,
           equineMagazineProfileId,
           {
