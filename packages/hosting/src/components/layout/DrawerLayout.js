@@ -17,7 +17,6 @@ import {
   faIdCard,
   faList,
   faNetworkWired,
-  faPeopleRoof,
   faPoll,
   faShield,
   faUsers,
