@@ -61,6 +61,7 @@ export const DepartmentIntegration = () => {
     membersIds: formData?.membersIds || [],
     bossId: formData?.bossId || null,
     secondBossId: formData?.secondBossId || null,
+    commandId: department?.commandId || currentCommand.id,
   });
 
   const onSaveDepartment = async (formData) => {

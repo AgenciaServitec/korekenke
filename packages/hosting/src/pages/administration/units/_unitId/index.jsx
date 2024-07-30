@@ -21,7 +21,7 @@ import {
   getUnitId,
   updateUnit,
 } from "../../../../firebase/collections";
-import { useGlobalData } from "../../../../providers";
+import { useCommand, useGlobalData } from "../../../../providers";
 import { findRole, getNameId, userFullName } from "../../../../utils";
 import { capitalize, concat, isEmpty, orderBy } from "lodash";
 import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
@@ -32,6 +32,8 @@ export const UnitIntegration = () => {
   const { entities, rolesAcls, unitUsers } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { currentCommand } = useCommand();
+
   const [loading, setLoading] = useState();
   const [unit, setUnit] = useState({});
 
@@ -59,6 +61,7 @@ export const UnitIntegration = () => {
     greatUnit: formData.greatUnit,
     membersIds: formData.membersIds || [],
     bossId: formData.bossId || null,
+    commandId: unit?.commandId || currentCommand.id,
   });
 
   const saveUnit = async (formData) => {

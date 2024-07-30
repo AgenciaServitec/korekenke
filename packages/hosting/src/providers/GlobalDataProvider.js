@@ -59,26 +59,43 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [units = [], unitsLoading, unitsError] = useCollectionData(
-    authUser ? unitsRef.where("isDeleted", "==", false) : null
+    authUser
+      ? unitsRef
+          .where("isDeleted", "==", false)
+          .where("commandId", "==", currentCommand.id)
+      : null
   );
 
   const [departments = [], departmentsLoading, departmentsError] =
     useCollectionData(
-      authUser ? departmentsRef.where("isDeleted", "==", false) : null
+      authUser
+        ? departmentsRef
+            .where("isDeleted", "==", false)
+            .where("commandId", "==", currentCommand.id)
+        : null
     );
 
   const [sections = [], sectionsLoading, sectionsError] = useCollectionData(
-    authUser ? sectionsRef.where("isDeleted", "==", false) : null
+    authUser
+      ? sectionsRef
+          .where("isDeleted", "==", false)
+          .where("commandId", "==", currentCommand.id)
+      : null
   );
 
   const [offices = [], officesLoading, officesError] = useCollectionData(
     authUser
-      ? firestore.collection("offices").where("isDeleted", "==", false)
+      ? firestore
+          .collection("offices")
+          .where("isDeleted", "==", false)
+          .where("commandId", "==", currentCommand.id)
       : null
   );
 
   const [animals = [], animalsLoading, animalsError] = useCollectionData(
-    animalsRef.where("isDeleted", "==", false) || null
+    currentCommand.id === "cologe"
+      ? animalsRef.where("isDeleted", "==", false)
+      : null
   );
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
