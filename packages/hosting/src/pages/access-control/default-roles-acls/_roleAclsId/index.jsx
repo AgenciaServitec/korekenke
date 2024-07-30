@@ -7,7 +7,7 @@ import {
   useDefaultFirestoreProps,
   useFormUtils,
 } from "../../../../hooks";
-import { assign, isEmpty, isObject } from "lodash";
+import { isEmpty, isObject } from "lodash";
 import {
   Acl,
   Button,
@@ -15,7 +15,6 @@ import {
   Col,
   ComponentContainer,
   Form,
-  Input,
   modalConfirm,
   notification,
   Row,
@@ -25,11 +24,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { mapAcls } from "../../../../utils";
 import { useGlobalData } from "../../../../providers";
-import {
-  addRoleAcl,
-  fetchRoleAcl,
-  updateRoleAcl,
-} from "../../../../firebase/collections";
+import { addRoleAcl, updateRoleAcl } from "../../../../firebase/collections";
 import { acls, Roles } from "../../../../data-list";
 
 export const RoleAclIntegration = () => {
@@ -253,7 +248,7 @@ const RoleAcl = ({
               block
               loading={savingRoleAcls}
             >
-              Save
+              Guardar
             </Button>
           </Col>
           <Col xs={24} sm={12} md={5}>
