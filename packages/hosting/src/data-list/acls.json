@@ -124,7 +124,7 @@
       "/animals/new": "Agregar animal",
       "/animals/:animalId": "Editar animal",
       "/animals#delete": "Eliminar animal",
-      "/animals/:animalId/pdf-animal-livestock-registration-card": "Pdf tarjeta de registro animal"
+      "/animals/:animalId/pdf-animal-registration-card": "Pdf tarjeta de registro animal"
     },
     "animalMagazineProfiles": {
       "label": "Fichas de revista",
