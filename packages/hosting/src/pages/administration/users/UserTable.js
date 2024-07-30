@@ -3,6 +3,7 @@ import { Acl, IconAction, Space, Table, Tag } from "../../../components";
 import {
   faArrowUpRightFromSquare,
   faEdit,
+  faLinkSlash,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, orderBy } from "lodash";
@@ -15,7 +16,8 @@ export const UsersTable = ({
   users,
   rolesAcls,
   onEditUser,
-  onConfirmRemoveUser,
+  onRemoveUser,
+  onUnlinkAssignedToUser,
 }) => {
   const getModuleByUserAssignedTo = (assignedTo = null) => {
     if (!assignedTo?.id) return null;
@@ -76,16 +78,22 @@ export const UsersTable = ({
         const assignedTo = getModuleByUserAssignedTo(user.assignedTo);
 
         return (
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <Space>
             {assignedTo && (
-              <div>
+              <>
                 <Link to={assignedTo.url}>
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} />{" "}
                   {assignedTo.module}
                 </Link>
-              </div>
+                <IconAction
+                  icon={faLinkSlash}
+                  size={33}
+                  tooltipTitle="Desvincular al usuario de su grupo"
+                  onClick={() => onUnlinkAssignedToUser(user)}
+                />
+              </>
             )}
-          </div>
+          </Space>
         );
       },
     },
@@ -152,7 +160,7 @@ export const UsersTable = ({
               tooltipTitle="Eliminar"
               styled={{ color: (theme) => theme.colors.error }}
               icon={faTrash}
-              onClick={() => onConfirmRemoveUser(user)}
+              onClick={() => onRemoveUser(user)}
             />
           </Acl>
         </Space>
