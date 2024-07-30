@@ -118,30 +118,30 @@
   },
   "servicio-de-veterinaria-y-remonta-del-ejercito": {
     "label": "Servicio de veterinaria y remonta del ejército",
-    "livestockAndEquines": {
-      "label": "Ganado y equinos",
-      "/livestock-and-equines": "Menu: Ganados y equinos",
-      "/livestock-and-equines/new": "Agregar ganado y equino",
-      "/livestock-and-equines/:livestockAndEquineId": "Editar ganado y equino",
-      "/livestock-and-equines#delete": "Eliminar ganado y equino",
-      "/livestock-and-equines/:livestockAndEquineId/pdf-equine-livestock-registration-card": "Pdf tarjeta de registro ganado y equino"
+    "animals": {
+      "label": "Animales",
+      "/animals": "Menu: Animales",
+      "/animals/new": "Agregar animal",
+      "/animals/:animalId": "Editar animal",
+      "/animals#delete": "Eliminar animal",
+      "/animals/:animalId/pdf-animal-registration-card": "Pdf tarjeta de registro animal"
     },
-    "equineMagazineProfiles": {
-      "label": "Fichas de revista equina",
-      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles": "Ficha de revista equina",
-      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/new": "Agregar ficha de revista equina",
-      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId": "Editar ficha de revista equina",
-      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles#delete": "Eliminar ficha de revista equina",
-      "/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile": "Pdf ficha de revista equina"
+    "animalMagazineProfiles": {
+      "label": "Fichas de revista",
+      "/animal/:animalId/animal-magazine-profiles": "Ficha de revista",
+      "/animal/:animalId/animal-magazine-profiles/new": "Agregar ficha de revista",
+      "/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId": "Editar ficha de revista",
+      "/animal/:animalId/animal-magazine-profiles#delete": "Eliminar ficha de revista",
+      "/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile": "Pdf ficha de revista"
     },
     "clinicHistory": {
       "label": "Historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history": "Historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history/new": "Agregar historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId": "Editar historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history#clinicHistoryReview": "Revisar historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history#delete": "Eliminar historial clinico",
-      "/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
+      "/animal/:animalId/clinic-history": "Historial clinico",
+      "/animal/:animalId/clinic-history/new": "Agregar historial clinico",
+      "/animal/:animalId/clinic-history/:clinicHistoryId": "Editar historial clinico",
+      "/animal/:animalId/clinic-history#clinicHistoryReview": "Revisar historial clinico",
+      "/animal/:animalId/clinic-history#delete": "Eliminar historial clinico",
+      "/animal/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
     }
   }
 }
