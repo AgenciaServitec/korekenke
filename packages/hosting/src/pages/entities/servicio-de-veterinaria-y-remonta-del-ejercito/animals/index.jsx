@@ -38,7 +38,6 @@ export const AnimalsIntegration = () => {
   };
 
   const animalsView = animals.filter((animal) => animal.type === animalType);
-  console.log(animalType);
   return (
     <Animals
       animals={animalsView}

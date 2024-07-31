@@ -13,8 +13,6 @@ export const DescuentoConvenioUniversidadSheet = ({
 }) => {
   const { headline, createAt, familiar, institution, requestType } = dasRequest;
 
-  console.log(dasRequest);
-
   const createdDate = dayjs(createAt.toDate());
 
   const emptyContent = ".............................";
