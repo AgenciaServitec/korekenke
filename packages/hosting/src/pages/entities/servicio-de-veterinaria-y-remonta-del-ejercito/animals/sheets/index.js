@@ -1,12 +1,12 @@
 import React from "react";
-import { PdfEquineLivestockRegistrationCard } from "./PdfEquineLivestockRegistrationCard";
+import { PdfAnimalRegistrationCard } from "./PdfAnimalRegistrationCard";
 import { PDF, Sheet } from "../../../../../components";
 
-export const PdfEquineLivestockRegistrationCardSheet = () => {
+export const PdfAnimalRegistrationCardSheet = () => {
   return (
     <PDF>
       <Sheet layout="landscape">
-        <PdfEquineLivestockRegistrationCard />
+        <PdfAnimalRegistrationCard />
       </Sheet>
     </PDF>
   );

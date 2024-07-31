@@ -6,15 +6,15 @@ import {
   LogoServicioVeterinarioRemontaEjercito,
   ToilleteImg,
 } from "../../../../../../images";
-import { EquineMagazineProfiles } from "../../../../../../data-list";
+import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import dayjs from "dayjs";
 import { QRCode } from "../../../../../../components";
 
-export const EquineMagazineProfileSheet = ({
-  livestockAndEquine,
-  equineMagazineProfile,
+export const AnimalMagazineProfilesheet = ({
+  animal,
+  animalMagazineProfile,
 }) => {
   return (
     <Container>
@@ -45,16 +45,11 @@ export const EquineMagazineProfileSheet = ({
                 <tbody>
                   <tr>
                     <td className="name">NOMBRE DEL EQUINO</td>
-                    <td className="value">{livestockAndEquine?.name}</td>
+                    <td className="value">{animal?.name}</td>
                     <td className="name">EDAD</td>
                     <td className="value">
                       {dayjs().diff(
-                        dayjs(
-                          dayjs(
-                            livestockAndEquine.birthdate,
-                            "DD/MM/YYYY HH:mm"
-                          )
-                        ),
+                        dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
                         "years"
                       )}{" "}
                       AÑOS
@@ -62,33 +57,29 @@ export const EquineMagazineProfileSheet = ({
                     <td className="name">MESES</td>
                     <td className="value" colSpan={2}>
                       {dayjs().diff(
-                        dayjs(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm"),
+                        dayjs(animal.birthdate, "DD/MM/YYYY HH:mm"),
                         "months"
                       )}
                     </td>
                   </tr>
                   <tr>
                     <td className="name">N° MATRÍCULA</td>
-                    <td className="value">
-                      {livestockAndEquine?.registrationNumber}
-                    </td>
+                    <td className="value">{animal?.registrationNumber}</td>
                     <td className="name">N° CHIP</td>
-                    <td className="value">{livestockAndEquine?.chipNumber}</td>
+                    <td className="value">{animal?.chipNumber}</td>
                     <td className="name">SEXO</td>
                     <td className="value" colSpan={2}>
-                      {livestockAndEquine?.gender === "male"
-                        ? "MACHO"
-                        : "HEMBRA"}
+                      {animal?.gender === "male" ? "MACHO" : "HEMBRA"}
                     </td>
                   </tr>
                   <tr>
                     <td className="name">RAZA O TIPO</td>
-                    <td className="value">{livestockAndEquine?.raceOrLine}</td>
+                    <td className="value">{animal?.raceOrLine}</td>
                     <td className="name" colSpan={2}>
                       PELAJE
                     </td>
                     <td className="value" colSpan={3}>
-                      {livestockAndEquine?.fur}
+                      {animal?.fur}
                     </td>
                   </tr>
                 </tbody>
@@ -111,13 +102,13 @@ export const EquineMagazineProfileSheet = ({
                 </tr>
               </thead>
               <tbody>
-                {EquineMagazineProfiles.bodyCondition.map(
+                {AnimalMagazineProfiles.bodyCondition.map(
                   (_bodyCondition, index) => (
                     <tr
                       key={index}
                       className={
                         _bodyCondition?.id ===
-                          equineMagazineProfile?.bodyCondition?.id && "active"
+                          animalMagazineProfile?.bodyCondition?.id && "active"
                       }
                     >
                       <td>
@@ -131,7 +122,7 @@ export const EquineMagazineProfileSheet = ({
                         <span>{_bodyCondition.name}</span>
                         <span>
                           {_bodyCondition?.id ===
-                          equineMagazineProfile?.bodyCondition?.id ? (
+                          animalMagazineProfile?.bodyCondition?.id ? (
                             <FontAwesomeIcon
                               icon={faCircleCheck}
                               size="3x"
@@ -145,15 +136,15 @@ export const EquineMagazineProfileSheet = ({
                       <td>
                         <span>
                           {_bodyCondition?.id ===
-                          equineMagazineProfile?.bodyCondition?.id
-                            ? equineMagazineProfile?.bodyCondition?.observation
+                          animalMagazineProfile?.bodyCondition?.id
+                            ? animalMagazineProfile?.bodyCondition?.observation
                             : ""}
                         </span>
                       </td>
                       <td className="body-condition-qualification">
                         <strong>
                           {_bodyCondition?.id ===
-                          equineMagazineProfile?.bodyCondition?.qualification
+                          animalMagazineProfile?.bodyCondition?.qualification
                             ? _bodyCondition?.id
                             : ""}
                         </strong>
@@ -177,20 +168,20 @@ export const EquineMagazineProfileSheet = ({
                   <td rowSpan={2}>
                     <img src={ToilleteImg} alt="Imagen de caballo" />
                   </td>
-                  {EquineMagazineProfiles.toillete.map((_toillete) => (
+                  {AnimalMagazineProfiles.toillete.map((_toillete) => (
                     <th key={_toillete?.id}>{_toillete?.name}</th>
                   ))}
                 </tr>
                 <tr>
-                  {EquineMagazineProfiles.toillete.map((_toillete) => (
+                  {AnimalMagazineProfiles.toillete.map((_toillete) => (
                     <td
                       key={_toillete?.id}
                       className={
-                        _toillete?.id === equineMagazineProfile?.toillete?.id &&
+                        _toillete?.id === animalMagazineProfile?.toillete?.id &&
                         "active"
                       }
                     >
-                      {_toillete?.id === equineMagazineProfile?.toillete?.id ? (
+                      {_toillete?.id === animalMagazineProfile?.toillete?.id ? (
                         <FontAwesomeIcon
                           icon={faCircleCheck}
                           size="3x"
@@ -218,21 +209,21 @@ export const EquineMagazineProfileSheet = ({
                   <td rowSpan={2}>
                     <img src={HerradoImg} alt="Imagen de caballo" />
                   </td>
-                  {EquineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                  {AnimalMagazineProfiles.horseshoe.map((_horseshoe) => (
                     <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
                   ))}
                 </tr>
                 <tr>
-                  {EquineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                  {AnimalMagazineProfiles.horseshoe.map((_horseshoe) => (
                     <td
                       key={_horseshoe?.id}
                       className={
                         _horseshoe?.id ===
-                          equineMagazineProfile?.horseshoe?.id && "active"
+                          animalMagazineProfile?.horseshoe?.id && "active"
                       }
                     >
                       {_horseshoe?.id ===
-                      equineMagazineProfile?.horseshoe?.id ? (
+                      animalMagazineProfile?.horseshoe?.id ? (
                         <FontAwesomeIcon
                           icon={faCircleCheck}
                           size="3x"

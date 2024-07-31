@@ -10,6 +10,7 @@ import {
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
+import { useQuery } from "../../../../hooks";
 
 export const AnimalsTable = ({
   animals,
@@ -19,6 +20,10 @@ export const AnimalsTable = ({
   onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
 }) => {
+  const { animalType } = useQuery();
+
+  const animalsOfType = animals.filter((animal) => animal.type === animalType);
+
   const columns = [
     {
       title: "Fecha creación",
@@ -37,11 +42,13 @@ export const AnimalsTable = ({
       title: "N° Matrícula",
       dataIndex: "registrationNumber",
       key: "registrationNumber",
+      render: (_, animal) => animal.registrationNumber || "S/N",
     },
     {
       title: "N° Chip",
       dataIndex: "chipNumber",
       key: "chipNumber",
+      render: (_, animal) => animal.chipNumber || "S/N",
     },
     {
       title: "Sexo",
@@ -75,8 +82,8 @@ export const AnimalsTable = ({
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="equineMagazineProfiles"
-            name="/animals/:animalId/equine-magazine-profiles"
+            subCategory="animalMagazineProfiles"
+            name="/animals/:animalId/animal-magazine-profiles"
           >
             <IconAction
               tooltipTitle="Ficha revista equina"
@@ -87,7 +94,7 @@ export const AnimalsTable = ({
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="animals"
-            name="/animals/:animalId/pdf-equine-livestock-registration-card"
+            name="/animals/:animalId/pdf-animal-registration-card"
           >
             <IconAction
               tooltipTitle="Ver tarjeta"
@@ -126,7 +133,7 @@ export const AnimalsTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={orderBy(animals, "createAt", "desc")}
+      dataSource={orderBy(animalsOfType, "createAt", "desc")}
       scroll={{ x: "max-content" }}
     />
   );

@@ -146,25 +146,25 @@ const Animal = ({
   }));
 
   const schema = yup.object({
-    nscCorrelativo: yup.string().notRequired(),
+    nscCorrelativo: yup.string(),
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
     unit: yup.string().required(),
     greatUnit: yup.string().required(),
     name: yup.string().required(),
-    registrationNumber: yup.string().required(),
-    chipNumber: yup.number().notRequired(),
+    registrationNumber: yup.string(),
+    chipNumber: yup.string(),
     gender: yup.string().required(),
     color: yup.string().required(),
     birthdate: yup.date().required(),
-    height: yup.string().required(),
+    height: yup.string(),
     father: yup.string().required(),
     mother: yup.string().required(),
     origin: yup.string().required(),
-    raceOrLine: yup.string().required(),
-    fur: yup.string().required(),
-    assignedOrAffectedId: yup.string().required(),
+    raceOrLine: yup.string(),
+    fur: yup.string(),
+    assignedOrAffectedId: yup.string(),
     description: yup.string(),
   });
 
@@ -458,7 +458,7 @@ const Animal = ({
                   name="chipNumber"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
-                    <InputNumber
+                    <Input
                       label="N° de Chip"
                       name={name}
                       value={value}

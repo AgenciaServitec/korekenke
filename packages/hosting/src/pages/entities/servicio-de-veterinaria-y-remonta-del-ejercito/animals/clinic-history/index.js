@@ -9,7 +9,11 @@ import {
   notification,
   Row,
 } from "../../../../../components";
-import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useQuery,
+  useQueryString,
+} from "../../../../../hooks";
 import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
 import { firestore } from "../../../../../firebase";
@@ -23,25 +27,26 @@ import {
 import { useAuthentication, useGlobalData } from "../../../../../providers";
 import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { LivestockAndEquineInformation } from "../../../../../components/ui/entities";
+import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
-  const { livestockAndEquineId } = useParams();
+  const { animalId } = useParams();
+  const { animalType } = useQuery();
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
     ""
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { livestockAndEquines, departments } = useGlobalData();
+  const { animals, departments } = useGlobalData();
 
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
     historyClinicCheckModal: false,
   });
-  const [livestockAndEquine, setLivestockAndEquine] = useState({});
+  const [animal, setAnimal] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
   const [PEL_VET_DEL_RC_MDN_EPR_boss, setPEL_VET_DEL_RC_MDN_EPR_boss] =
     useState(null);
@@ -65,8 +70,8 @@ export const ClinicHistoryIntegration = () => {
   const [clinicHistories = [], clinicHistoriesLoading, clinicHistoriesError] =
     useCollectionData(
       firestore
-        .collection("livestock-and-equines")
-        .doc(livestockAndEquineId)
+        .collection("animals")
+        .doc(animalId)
         .collection("clinic-history")
         .where("isDeleted", "==", false)
     );
@@ -74,12 +79,8 @@ export const ClinicHistoryIntegration = () => {
   const onNavigateGoTo = (pathname) => navigate(pathname);
 
   useEffect(() => {
-    setLivestockAndEquine(
-      livestockAndEquines.find(
-        (_livestockAndEquine) => _livestockAndEquine.id === livestockAndEquineId
-      ) || {}
-    );
-  }, [livestockAndEquineId]);
+    setAnimal(animals.find((_animal) => _animal.id === animalId) || {});
+  }, [animalId]);
 
   useEffect(() => {
     clinicHistoriesError && notification({ type: "error" });
@@ -101,7 +102,7 @@ export const ClinicHistoryIntegration = () => {
   const onDeleteClinicHistory = async (clinicHistory) => {
     try {
       await updateClinicHistory(
-        livestockAndEquineId,
+        animalId,
         clinicHistory.id,
         assignDeleteProps({ isDeleted: true })
       );
@@ -132,7 +133,7 @@ export const ClinicHistoryIntegration = () => {
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
       subCategory="clinicHistory"
-      name="/livestock-and-equines/:livestockAndEquineId/clinic-history"
+      name="/animals/:animalId/clinic-history"
       redirect
     >
       <Container gutter={[16, 16]}>
@@ -141,7 +142,7 @@ export const ClinicHistoryIntegration = () => {
             icon={faArrowLeft}
             onClick={() =>
               onNavigateGoTo(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines`
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`
               )
             }
           />
@@ -152,9 +153,7 @@ export const ClinicHistoryIntegration = () => {
             bordered={false}
             type="inner"
           >
-            <LivestockAndEquineInformation
-              livestockAndEquine={livestockAndEquine}
-            />
+            <AnimalInformation animal={animal} />
           </Card>
         </Col>
         <Col span={24}>
@@ -163,7 +162,7 @@ export const ClinicHistoryIntegration = () => {
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
-                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+                name="/animals/:animalId/clinic-history/:clinicHistoryId"
               >
                 <AddButton
                   onClick={() => {
@@ -184,7 +183,7 @@ export const ClinicHistoryIntegration = () => {
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
-                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/pdf-clinic-history"
+                name="/animals/:animalId/clinic-history/pdf-clinic-history"
               >
                 <IconAction
                   tooltipTitle="Pdf del historial clínico"
@@ -215,7 +214,7 @@ export const ClinicHistoryIntegration = () => {
           onSetClinicHistoryId={setClinicHistoryId}
           clinicHistoryId={clinicHistoryId}
           currentHistoryClinic={currentHistoryClinic}
-          livestockAndEquineId={livestockAndEquineId}
+          animalId={animalId}
         />
         <ClinicHistoryCheckedModalComponent
           key={isVisibleModal.historyClinicCheckModal}
@@ -223,7 +222,7 @@ export const ClinicHistoryIntegration = () => {
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicCheckModal}
           onSetClinicHistoryId={setClinicHistoryId}
-          livestockAndEquineId={livestockAndEquineId}
+          animalId={animalId}
           currentHistoryClinic={currentHistoryClinic}
         />
       </Container>

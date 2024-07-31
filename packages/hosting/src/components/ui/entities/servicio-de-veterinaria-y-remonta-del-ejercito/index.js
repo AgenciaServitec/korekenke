@@ -1,1 +1,1 @@
-export * from "./LivestockAndEquineInformation";
+export * from "./AnimalInformation";

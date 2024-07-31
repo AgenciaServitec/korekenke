@@ -233,7 +233,7 @@ export const Router = () => {
           path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles"
           element={
             <AdminLayout>
-              <A.EquineMagazineProfilesIntegration />
+              <A.AnimalMagazineProfilesIntegration />
             </AdminLayout>
           }
         />
@@ -242,7 +242,7 @@ export const Router = () => {
           path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
           element={
             <AdminLayout>
-              <A.EquineMagazineProfileIntegration />
+              <A.AnimalMagazineProfileIntegration />
             </AdminLayout>
           }
         />
@@ -305,8 +305,8 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/pdf-animal-registration-card"
-        element={<A.PdfEquineLivestockRegistrationCardSheet />}
+        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/pdf-animal-card"
+        element={<A.PdfAnimalRegistrationCardSheet />}
       />
       <Route
         exact
@@ -316,7 +316,7 @@ export const Router = () => {
       <Route
         exact
         path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
-        element={<A.PdfEquineMagazineProfilesSheets />}
+        element={<A.PdfAnimalMagazineProfilesSheets />}
       />
       <Route
         exact
