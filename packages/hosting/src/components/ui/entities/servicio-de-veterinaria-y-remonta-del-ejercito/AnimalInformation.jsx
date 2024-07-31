@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row } from "antd";
+import { Col, Row } from "../../../ui";
 import dayjs from "dayjs";
 
 export const AnimalInformation = ({ animal }) => {
@@ -15,7 +15,7 @@ export const AnimalInformation = ({ animal }) => {
           dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
           "year"
         )} años  (${dayjs().diff(
-          dayjs(animal.birthdate, "DD/MM/YYYY HH:mm"),
+          dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
           "month"
         )} meses)`}</strong>
       </Col>

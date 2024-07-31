@@ -242,6 +242,10 @@ const ClinicHistoryModal = ({
                       label: "Hemograma completo",
                       value: "hemograma-completo",
                     },
+                    {
+                      label: "Otros",
+                      value: "otros",
+                    },
                   ]}
                   onChange={onChange}
                   error={error(name)}
