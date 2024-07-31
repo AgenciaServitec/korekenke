@@ -45,7 +45,7 @@ export const UsersTable = ({
         capitalize(
           `${user?.firstName} ${user?.paternalSurname} ${
             user?.maternalSurname || ""
-          }`
+          }`,
         ),
     },
     {

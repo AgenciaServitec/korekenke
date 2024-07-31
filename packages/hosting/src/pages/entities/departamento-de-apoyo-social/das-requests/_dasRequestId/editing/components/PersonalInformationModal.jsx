@@ -25,7 +25,7 @@ export const PersonalInformationModal = ({
   const [loading, setLoading] = useState(false);
 
   const [relationship, setRelationship] = useState(
-    dasRequest?.familiar?.relationship || ""
+    dasRequest?.familiar?.relationship || "",
   );
 
   const schema = yup.object({
@@ -219,7 +219,7 @@ export const PersonalInformationModal = ({
                       ([key, value]) => ({
                         label: value,
                         value: key,
-                      })
+                      }),
                     )}
                     onChange={(value) => {
                       setRelationship(value);

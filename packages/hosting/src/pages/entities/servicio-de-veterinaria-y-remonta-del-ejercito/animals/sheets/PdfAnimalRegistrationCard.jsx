@@ -18,7 +18,7 @@ import { firestore } from "../../../../../firebase";
 export const PdfAnimalRegistrationCard = () => {
   const { animalId } = useParams();
   const [animal, animalLoading, animalError] = useDocumentData(
-    firestore.collection("animals").doc(animalId)
+    firestore.collection("animals").doc(animalId),
   );
   const { departments, users, entities, units } = useGlobalData();
 
@@ -38,7 +38,7 @@ export const PdfAnimalRegistrationCard = () => {
 
   const entitySVRE = genericSearchByNameId(
     entities,
-    "servicio-de-veterinaria-y-remonta-del-ejercito"
+    "servicio-de-veterinaria-y-remonta-del-ejercito",
   );
 
   const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
@@ -51,7 +51,7 @@ export const PdfAnimalRegistrationCard = () => {
 
   const bossDepartmentPELVET = genericSearchById(
     users,
-    departmentPELVET?.bossId
+    departmentPELVET?.bossId,
   );
 
   const userAssignedFullName = (userId) => {
@@ -147,7 +147,7 @@ export const PdfAnimalRegistrationCard = () => {
                     {animal?.birthdate
                       ? dayjs(
                           animal?.birthdate,
-                          DATE_FORMAT_TO_FIRESTORE
+                          DATE_FORMAT_TO_FIRESTORE,
                         ).format("DD/MM/YYYY")
                       : ""}
                   </li>

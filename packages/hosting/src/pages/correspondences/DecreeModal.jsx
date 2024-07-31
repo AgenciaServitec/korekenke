@@ -49,7 +49,7 @@ export const DecreeModal = ({ correspondence, onCloseDecreeModal }) => {
         assignUpdateProps({
           decree: assignCreateProps(decreeMap(formData)),
           status: "pending",
-        })
+        }),
       );
 
       onCloseDecreeModal();

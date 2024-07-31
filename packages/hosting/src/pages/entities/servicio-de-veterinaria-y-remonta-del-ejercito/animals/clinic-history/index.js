@@ -37,7 +37,7 @@ export const ClinicHistoryIntegration = () => {
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
-    ""
+    "",
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { animals, departments } = useGlobalData();
@@ -54,13 +54,13 @@ export const ClinicHistoryIntegration = () => {
   useEffect(() => {
     (async () => {
       const PEL_VET_DEL_RC_MDN_EPR_department = departments.find(
-        (department) => department?.id === "BP0Z7ZSLIXyz1pGYFwhU"
+        (department) => department?.id === "BP0Z7ZSLIXyz1pGYFwhU",
       );
 
       if (!PEL_VET_DEL_RC_MDN_EPR_department?.bossId) return;
 
       const userBoss = await fetchUser(
-        PEL_VET_DEL_RC_MDN_EPR_department.bossId
+        PEL_VET_DEL_RC_MDN_EPR_department.bossId,
       );
 
       setPEL_VET_DEL_RC_MDN_EPR_boss(userBoss);
@@ -73,7 +73,7 @@ export const ClinicHistoryIntegration = () => {
         .collection("animals")
         .doc(animalId)
         .collection("clinic-history")
-        .where("isDeleted", "==", false)
+        .where("isDeleted", "==", false),
     );
 
   const onNavigateGoTo = (pathname) => navigate(pathname);
@@ -88,7 +88,7 @@ export const ClinicHistoryIntegration = () => {
 
   useEffect(() => {
     const clinicHistory = clinicHistories.find(
-      (clinicHistory) => clinicHistory?.id === clinicHistoryId
+      (clinicHistory) => clinicHistory?.id === clinicHistoryId,
     );
 
     if (!clinicHistory) return setCurrentHistoryClinic(null);
@@ -104,7 +104,7 @@ export const ClinicHistoryIntegration = () => {
       await updateClinicHistory(
         animalId,
         clinicHistory.id,
-        assignDeleteProps({ isDeleted: true })
+        assignDeleteProps({ isDeleted: true }),
       );
     } catch (e) {
       console.error("ErrorDeleteClinicHistory: ", e);
@@ -142,7 +142,7 @@ export const ClinicHistoryIntegration = () => {
             icon={faArrowLeft}
             onClick={() =>
               onNavigateGoTo(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`,
               )
             }
           />

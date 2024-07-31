@@ -14,7 +14,7 @@ import {
 export const PdfRegistrationCmsts = ({ user, cmstsEnrollment }) => {
   const findDegree = (degreeCode) =>
     DegreesArmy.flatMap((degreeArmy) => degreeArmy.options).find(
-      (degree) => degree.value === degreeCode
+      (degree) => degree.value === degreeCode,
     );
 
   return (

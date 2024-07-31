@@ -10,7 +10,7 @@ export const DecreeSheets = () => {
 
   const [correspondence = [], correspondenceLoading, correspondenceError] =
     useDocumentData(
-      correspondenceId ? correspondencesRef.doc(correspondenceId) : null
+      correspondenceId ? correspondencesRef.doc(correspondenceId) : null,
     );
 
   useEffect(() => {

@@ -70,8 +70,8 @@ export const ManageAclsIntegration = () => {
       .forEach((user) =>
         batch.update(
           firestore.collection("users").doc(user.id),
-          assignUpdateProps(user)
-        )
+          assignUpdateProps(user),
+        ),
       );
 
     return await batch.commit();
@@ -171,7 +171,7 @@ const ManageAcls = ({
     Object.entries(acls).forEach(([key, subCategories = {}]) => {
       aclsDefault[key] = {};
       Object.keys(subCategories).forEach(
-        (_key) => (aclsDefault[key][_key] = [])
+        (_key) => (aclsDefault[key][_key] = []),
       );
     });
 
@@ -281,7 +281,7 @@ const ManageAcls = ({
                           const unlabeledAclsForSelectOptions =
                             isObject(items) &&
                             Object.entries(items).filter(
-                              (_item) => !_item.includes("label")
+                              (_item) => !_item.includes("label"),
                             );
 
                           return (
@@ -300,7 +300,7 @@ const ManageAcls = ({
                                         (_item) => ({
                                           label: _item[1],
                                           value: _item[0],
-                                        })
+                                        }),
                                       )}
                                       name={name}
                                       value={value}
@@ -313,7 +313,7 @@ const ManageAcls = ({
                               </Col>
                             )
                           );
-                        }
+                        },
                       )}
                     </Row>
                   </ComponentContainer.group>

@@ -34,13 +34,13 @@ export const CmstsIntegration = () => {
   const [savingCmstsEnrollment, setSavingCmstsEnrollment] = useState(false);
   const [cmstsEnrollment, setCmstsEnrollment] = useState(null);
   const [familyMembers, setFamilyMembers] = useState(
-    cmstsEnrollment?.familyMembers || []
+    cmstsEnrollment?.familyMembers || [],
   );
 
   useEffect(() => {
     (async () => {
       const _cmstsEnrollments = await fetchCollectionOnce(
-        cmstsEnrollmentsRef.where("userId", "==", authUser?.id)
+        cmstsEnrollmentsRef.where("userId", "==", authUser?.id),
       );
 
       setCmstsEnrollment(_cmstsEnrollments[0]);
@@ -63,7 +63,7 @@ export const CmstsIntegration = () => {
               userId: authUser.id,
               familyMembers,
               status: "pending",
-            })
+            }),
           );
 
           notification({

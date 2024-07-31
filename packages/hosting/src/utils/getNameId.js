@@ -7,7 +7,7 @@ export const getNameId = (name) => {
 
   const nameWithoutSpecialCharacters = nameWithoutAccents.replace(
     /[^a-zA-Z 0-9.]+/g,
-    ""
+    "",
   );
 
   return toLower(kebabCase(nameWithoutSpecialCharacters).trim());

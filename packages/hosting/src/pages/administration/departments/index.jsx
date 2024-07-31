@@ -43,7 +43,7 @@ export const DepartmentsIntegration = () => {
           membersIds: null,
           bossId: null,
           secondBossId: null,
-        })
+        }),
       );
     } catch (e) {
       console.error("ErrorDeleteDepartment: ", e);
@@ -52,7 +52,7 @@ export const DepartmentsIntegration = () => {
   };
 
   const departmentsView = departments.filter((department) =>
-    entityId === "all" ? true : department.entityId === entityId
+    entityId === "all" ? true : department.entityId === entityId,
   );
 
   return (
@@ -88,7 +88,7 @@ export const DepartmentsIntegration = () => {
               entities.map((entity) => ({
                 label: entity.name,
                 value: entity.id,
-              }))
+              })),
             )}
           />
         </Col>

@@ -8,6 +8,6 @@ export const classNames = (...args) =>
             .filter(([, condition]) => condition)
             .map(([className]) => className)
             .join(" ")
-        : arg
+        : arg,
     )
     .join(" ");
