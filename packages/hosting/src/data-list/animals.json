@@ -1,14 +1,14 @@
 {
-    "equines": {
-        "addButton": "Equino",
-        "title": "Equinos"
-    },
-    "cattle": {
-        "addButton": "Ganado",
-        "title": "Ganados"
-    },
-    "canines": {
-        "addButton": "Canino",
-        "title": "Caninos"
-    }
+  "equines": {
+    "addButton": "Equino",
+    "title": "Equinos"
+  },
+  "cattle": {
+    "addButton": "Ganado",
+    "title": "Ganados"
+  },
+  "canines": {
+    "addButton": "Canino",
+    "title": "Caninos"
+  }
 }
