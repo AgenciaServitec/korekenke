@@ -12,13 +12,13 @@ import { useParams } from "react-router-dom";
 import { chunk, orderBy } from "lodash";
 
 export const PdfClinicHistorySheets = () => {
-  const { livestockAndEquineId } = useParams();
+  const { animalId } = useParams();
 
   const [clinicHistories = [], clinicHistoriesLoading, clinicHistoriesError] =
     useCollectionData(
       firestore
-        .collection("livestock-and-equines")
-        .doc(livestockAndEquineId)
+        .collection("animals")
+        .doc(animalId)
         .collection("clinic-history")
         .where("isDeleted", "==", false)
     );

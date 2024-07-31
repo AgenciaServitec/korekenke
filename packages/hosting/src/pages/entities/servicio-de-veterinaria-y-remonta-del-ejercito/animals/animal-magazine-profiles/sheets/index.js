@@ -10,45 +10,42 @@ import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { animalsRef } from "../../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../../providers";
-import { EquineMagazineProfileSheet } from "./EquineMagazineProfileSheet";
+import { AnimalMagazineProfilesheet } from "./AnimalMagazineProfileSheet";
 
-export const PdfEquineMagazineProfilesSheets = () => {
-  const { livestockAndEquineId, equineMagazineProfileId } = useParams();
-  const { livestockAndEquines } = useGlobalData();
+export const PdfAnimalMagazineProfilesSheets = () => {
+  const { animalId, animalMagazineProfileId } = useParams();
+  const { animals } = useGlobalData();
 
   const [
-    equineMagazineProfile,
-    equineMagazineProfileLoading,
-    equineMagazineProfileError,
+    animalMagazineProfile,
+    animalMagazineProfileLoading,
+    animalMagazineProfileError,
   ] = useDocumentData(
     animalsRef
-      .doc(livestockAndEquineId)
-      .collection("equine-magazine-profiles")
-      .doc(equineMagazineProfileId)
+      .doc(animalId)
+      .collection("animal-magazine-profiles")
+      .doc(animalMagazineProfileId)
   );
 
   useEffect(() => {
-    equineMagazineProfileError && notification({ type: "error" });
-  }, [equineMagazineProfileError]);
+    animalMagazineProfileError && notification({ type: "error" });
+  }, [animalMagazineProfileError]);
 
-  const livestockAndEquine = livestockAndEquines.find(
-    (_livestockAndEquine) => _livestockAndEquine.id === livestockAndEquineId
-  );
+  const animal = animals.find((_animal) => _animal.id === animalId);
 
-  if (equineMagazineProfileLoading || !livestockAndEquine)
-    return <Spinner height="80vh" />;
+  if (animalMagazineProfileLoading || !animal) return <Spinner height="80vh" />;
 
   return (
     <PDF>
       <Sheet layout="portrait">
-        <EquineMagazineProfileSheet
-          livestockAndEquine={livestockAndEquine}
-          equineMagazineProfile={equineMagazineProfile}
+        <AnimalMagazineProfilesheet
+          animal={animal}
+          animalMagazineProfile={animalMagazineProfile}
         />
       </Sheet>
       <Sheet layout="portrait">
         <BodyWeightEstimationSheet
-          equineMagazineProfile={equineMagazineProfile}
+          animalMagazineProfile={animalMagazineProfile}
         />
       </Sheet>
     </PDF>

@@ -23,7 +23,7 @@ export const ClinicHistoryCheckedModalComponent = ({
   onSetIsVisibleModal,
   onSetClinicHistoryId,
   currentHistoryClinic,
-  livestockAndEquineId,
+  animalId,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +39,7 @@ export const ClinicHistoryCheckedModalComponent = ({
   const onUpdateStatusHistoryClinic = async (formData) => {
     try {
       setLoading(true);
-      await clinicHistoriesRef(livestockAndEquineId)
+      await clinicHistoriesRef(animalId)
         .doc(currentHistoryClinic.id)
         .update(mapForm(formData));
 

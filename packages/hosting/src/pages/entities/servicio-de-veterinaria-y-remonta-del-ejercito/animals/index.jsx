@@ -9,11 +9,12 @@ import {
 } from "../../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { AnimalsTable } from "./AnimalsTable";
 import { useGlobalData } from "../../../../providers";
 import { updateAnimal } from "../../../../firebase/collections";
 import { useDefaultFirestoreProps, useQuery } from "../../../../hooks";
+import { AnimalsType } from "../../../../data-list";
 
 export const AnimalsIntegration = () => {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ export const AnimalsIntegration = () => {
   };
 
   const animalsView = animals.filter((animal) => animal.type === animalType);
-
   return (
     <Animals
       animals={animalsView}
@@ -59,7 +59,7 @@ const Animals = ({
   onNavigateTo,
 }) => {
   const onNavigateGoToPdfAnimalRegistrationCard = (animalId) =>
-    onNavigateTo(`${animalId}/pdf-equine-animal-card`);
+    onNavigateTo(`${animalId}/pdf-animal-card`);
 
   const onNavigateGoToAnimalMagazineProfiles = (animalId) =>
     onNavigateTo(`${animalId}/animal-magazine-profiles`);
@@ -87,15 +87,12 @@ const Animals = ({
               size="large"
               icon={<FontAwesomeIcon icon={faPlus} />}
             >
-              &ensp; Agregar{" "}
-              {animalType === "canines" ? "canino" : "Ganado o Equino"}
+              &ensp; Agregar {AnimalsType[animalType]?.addButton}
             </Button>
           </Acl>
         </Col>
         <Col span={24}>
-          <Title level={3}>
-            {animalType === "canines" ? "Caninos" : "Ganados y Equinos"}
-          </Title>
+          <Title level={3}>{AnimalsType[animalType]?.title}</Title>
         </Col>
         <Col span={24}>
           <AnimalsTable

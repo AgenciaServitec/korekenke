@@ -9,19 +9,17 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
 
 export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
-  const { livestockAndEquineId } = useParams();
+  const { animalId } = useParams();
 
-  const [
-    livestockAndEquine = {},
-    livestockAndEquineLoading,
-    livestockAndEquineError,
-  ] = useDocumentData(animalsRef.doc(livestockAndEquineId));
+  const [animal = {}, animalLoading, animalError] = useDocumentData(
+    animalsRef.doc(animalId)
+  );
 
   useEffect(() => {
-    livestockAndEquineError && notification({ type: "error" });
-  }, [livestockAndEquineError]);
+    animalError && notification({ type: "error" });
+  }, [animalError]);
 
-  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
+  if (animalLoading) return <Spinner height="80vh" />;
 
   return (
     <Container>
@@ -37,13 +35,13 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
               bordered={false}
             />
             <div>
-              <span>{livestockAndEquine.greatUnit}</span>
-              <span>{livestockAndEquine.unit}</span>
+              <span>{animal?.greatUnit}</span>
+              <span>{animal?.unit}</span>
               <span>PEL VET</span>
             </div>
           </div>
           <h2 className="header__title">
-            HISTORIA CLÍNICA VETERINARIA DEL {livestockAndEquine.unit}
+            HISTORIA CLÍNICA VETERINARIA DEL {animal?.unit}
           </h2>
         </div>
         <div className="main">
@@ -52,36 +50,35 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
               <div>
                 <div>
                   <span>Nombre:</span>
-                  <span className="capitalize">{livestockAndEquine.name}</span>
+                  <span className="capitalize">{animal?.name}</span>
                 </div>
                 <div>
                   <span>Sexo:</span>
                   <span className="capitalize">
-                    {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
+                    {animal?.gender === "male" ? "Macho" : "Hembra"}
                   </span>
                 </div>
                 <div>
                   <span>Color:</span>
-                  <span className="capitalize">{livestockAndEquine.color}</span>
+                  <span className="capitalize">{animal?.color}</span>
                 </div>
               </div>
               <div>
                 <div>
                   <span>N° de Matrícula:</span>
-                  <span>{livestockAndEquine.registrationNumber}</span>
+                  <span>{animal?.registrationNumber}</span>
                 </div>
                 <div>
                   <span>Fecha nacimiento:</span>
                   <span>
-                    {dayjs(
-                      livestockAndEquine.birthdate,
-                      DATE_FORMAT_TO_FIRESTORE
-                    ).format("DD/MM/YYYY")}
+                    {dayjs(animal?.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
+                      "DD/MM/YYYY"
+                    )}
                   </span>
                 </div>
                 <div>
                   <span>Escuadrón:</span>
-                  <span>{livestockAndEquine.squadron}</span>
+                  <span>{animal?.squadron}</span>
                 </div>
               </div>
             </div>
@@ -108,10 +105,10 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                             "DD/MM/YYYY HH:mm"
                           )}
                       </td>
-                      <td>{_clinicHistory.symptomatology}</td>
-                      <td>{_clinicHistory.diagnosis}</td>
-                      <td>{_clinicHistory.treatment}</td>
-                      <td>{_clinicHistory.observation}</td>
+                      <td>{_clinicHistory?.symptomatology}</td>
+                      <td>{_clinicHistory?.diagnosis}</td>
+                      <td>{_clinicHistory?.treatment}</td>
+                      <td>{_clinicHistory?.observation}</td>
                       <td className="checked-user">
                         {_clinicHistory?.checkedBy?.fullName}
                       </td>

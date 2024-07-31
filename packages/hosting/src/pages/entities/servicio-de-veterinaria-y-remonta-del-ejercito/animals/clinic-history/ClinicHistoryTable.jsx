@@ -76,7 +76,7 @@ export const ClinicHistoryTable = ({
                 <Acl
                   category="servicio-de-veterinaria-y-remonta-del-ejercito"
                   subCategory="clinicHistory"
-                  name="/livestock-and-equines/:livestockAndEquineId/clinic-history#clinicHistoryReview"
+                  name="/animals/:animalId/clinic-history#clinicHistoryReview"
                 >
                   <IconAction
                     tooltipTitle="Revisar"
@@ -91,7 +91,7 @@ export const ClinicHistoryTable = ({
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
-                name="/livestock-and-equines/:livestockAndEquineId/clinic-history/:clinicHistoryId"
+                name="/animals/:animalId/clinic-history/:clinicHistoryId"
               >
                 <IconAction
                   tooltipTitle="Editar"
@@ -105,7 +105,7 @@ export const ClinicHistoryTable = ({
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
-                name="/livestock-and-equines/:livestockAndEquineId/clinic-history#delete"
+                name="/animals/:animalId/clinic-history#delete"
               >
                 <IconAction
                   tooltipTitle="Eliminar"

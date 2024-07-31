@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-export const BodyWeightEstimationSheet = ({ equineMagazineProfile }) => {
-  const { bodyWeightEstimation } = equineMagazineProfile;
+export const BodyWeightEstimationSheet = ({ animalMagazineProfile }) => {
+  const { bodyWeightEstimation } = animalMagazineProfile;
 
   return (
     <Container>
