@@ -30,10 +30,12 @@ import {
   fetchDepartment,
   fetchOffice,
   fetchSection,
+  fetchUnit,
   updateDepartment,
   updateEntity,
   updateOffice,
   updateSection,
+  updateUnit,
 } from "../../../firebase/collections";
 import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
 
@@ -55,9 +57,12 @@ export const Users = () => {
   const updateModuleAndUser = async (
     moduleType = undefined,
     moduleId,
-    user
+    user,
+    withUserDeletion = true
   ) => {
     if (!moduleType || !moduleId) return;
+
+    const userRemove = withUserDeletion && (await removeUser(user));
 
     switch (moduleType) {
       case "entity": {
@@ -70,7 +75,7 @@ export const Users = () => {
           users: users,
         });
 
-        await removeUser(user);
+        await userRemove;
         break;
       }
       case "department": {
@@ -91,7 +96,27 @@ export const Users = () => {
           ),
         });
 
-        await removeUser(user);
+        await userRemove;
+        break;
+      }
+      case "unit": {
+        const unit = await fetchUnit(moduleId);
+
+        //Update of assignTo of users
+        await updateAssignToUser({
+          oldUsersIds: [user.id],
+          moduleId: moduleId,
+          users: users,
+        });
+
+        await updateUnit(moduleId, {
+          ...(unit.bossId === user.id && { bossId: null }),
+          membersIds: unit.membersIds.filter(
+            (memberId) => memberId !== user.id
+          ),
+        });
+
+        await userRemove;
         break;
       }
       case "section": {
@@ -111,7 +136,7 @@ export const Users = () => {
           ),
         });
 
-        await removeUser(user);
+        await userRemove;
         break;
       }
       case "office": {
@@ -131,28 +156,31 @@ export const Users = () => {
           ),
         });
 
-        await removeUser(user);
+        await userRemove;
         break;
       }
     }
   };
 
-  const removeUserOfGroup = (user) =>
+  const removeUserOfGroup = (user, withUserDeletion = true) =>
     modalConfirm({
       title: `¿Estás seguro de que quieres desvincular al usuario ${
         user.assignedTo.type === "entity"
           ? "de la ENTIDAD"
+          : user.assignedTo.type === "unit"
+          ? "de la UNIDAD"
           : user.assignedTo.type === "department"
           ? "del DEPARTAMENTO"
           : user.assignedTo.type === "office"
           ? "de la OFICINA"
           : "de la SECCIÓN"
-      } y eliminar?`,
+      } ${withUserDeletion ? "y eliminar" : ""}?`,
       onOk: async () => {
         await updateModuleAndUser(
           user.assignedTo.type,
           user.assignedTo.id,
-          user
+          user,
+          withUserDeletion
         );
       },
     });
@@ -210,6 +238,9 @@ export const Users = () => {
       },
     });
 
+  const onConfirmUnlinkAssignedToUser = (user) =>
+    removeUserOfGroup(user, false);
+
   const usersView = users.filter((user) =>
     commandId === "all" ? true : user?.initialCommand?.id === commandId
   );
@@ -246,7 +277,8 @@ export const Users = () => {
             users={usersView}
             rolesAcls={rolesAcls}
             onEditUser={onEditUser}
-            onConfirmRemoveUser={onConfirmRemoveUser}
+            onRemoveUser={onConfirmRemoveUser}
+            onUnlinkAssignedToUser={onConfirmUnlinkAssignedToUser}
           />
         </Col>
       </Row>

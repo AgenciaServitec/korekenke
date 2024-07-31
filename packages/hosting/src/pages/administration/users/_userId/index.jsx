@@ -57,7 +57,7 @@ export const UserIntegration = () => {
             type: "warning",
             title: "Este usuario está asignado como miembro",
             description:
-              "Para realizar el cambio del rol, no debe estar como miembro en ningún grupo como (departamento, sección u oficina)",
+              "Para realizar el cambio del rol, debe desvincular al usuario del grupo al que fue asignado",
           });
         }
       }
