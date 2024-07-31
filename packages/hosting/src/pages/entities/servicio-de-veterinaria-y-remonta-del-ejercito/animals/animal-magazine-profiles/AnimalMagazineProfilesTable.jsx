@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { orderBy } from "lodash";
 
-export const EquineMagazineProfilesTable = ({
-  equineMagazineProfiles,
-  equineMagazineProfilesLoading,
-  onDeleteEquineMagazineProfile,
+export const AnimalMagazineProfilesTable = ({
+  animalMagazineProfiles,
+  animalMagazineProfilesLoading,
+  onDeleteAnimalMagazineProfile,
 }) => {
   const navigate = useNavigate();
 
@@ -19,9 +19,9 @@ export const EquineMagazineProfilesTable = ({
       title: "Fecha creación",
       dataIndex: "createAt",
       key: "createAt",
-      render: (_, equineMagazineProfile) => (
+      render: (_, animalMagazineProfile) => (
         <div>
-          {dayjs(equineMagazineProfile?.createAt.toDate()).format(
+          {dayjs(animalMagazineProfile?.createAt.toDate()).format(
             "DD/MM/YYYY HH:mm"
           )}
         </div>
@@ -31,36 +31,36 @@ export const EquineMagazineProfilesTable = ({
       title: "Condición Corporal",
       key: "bodyContition",
       dataIndex: "bodyContition",
-      render: (_, equineMagazineProfile) => (
-        <div>{equineMagazineProfile?.bodyCondition?.name}</div>
+      render: (_, animalMagazineProfile) => (
+        <div>{animalMagazineProfile?.bodyCondition?.name}</div>
       ),
     },
     {
       title: "Toillete",
       dataIndex: "toillete",
       key: "toillete",
-      render: (_, equineMagazineProfile) => (
-        <div>{equineMagazineProfile?.toillete?.name}</div>
+      render: (_, animalMagazineProfile) => (
+        <div>{animalMagazineProfile?.toillete?.name}</div>
       ),
     },
     {
       title: "Herrado",
       key: "horseshoe",
       dataIndex: "horseshoe",
-      render: (_, equineMagazineProfile) => (
-        <div>{equineMagazineProfile?.horseshoe?.name}</div>
+      render: (_, animalMagazineProfile) => (
+        <div>{animalMagazineProfile?.horseshoe?.name}</div>
       ),
     },
     {
       title: "Acciones",
       align: "center",
       key: "action",
-      render: (_, equineMagazineProfile) => (
+      render: (_, animalMagazineProfile) => (
         <Space>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="equineMagazineProfiles"
-            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId/pdf-equine-magazine-profile"
+            subCategory="animalMagazineProfiles"
+            name="/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
           >
             <IconAction
               tooltipTitle="Pdf"
@@ -68,33 +68,33 @@ export const EquineMagazineProfilesTable = ({
               styled={{ color: (theme) => theme.colors.error }}
               onClick={() =>
                 navigateTo(
-                  `${equineMagazineProfile.id}/pdf-equine-magazine-profile`
+                  `${animalMagazineProfile.id}/pdf-animal-magazine-profile`
                 )
               }
             />
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="equineMagazineProfiles"
-            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+            subCategory="animalMagazineProfiles"
+            name="/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
           >
             <IconAction
               tooltipTitle="Editar"
               icon={faEdit}
-              onClick={() => navigateTo(equineMagazineProfile.id)}
+              onClick={() => navigateTo(animalMagazineProfile.id)}
             />
           </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="equineMagazineProfiles"
-            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles#delete"
+            subCategory="animalMagazineProfiles"
+            name="/animal/:animalId/animal-magazine-profiles#delete"
           >
             <IconAction
               tooltipTitle="Eliminar"
               icon={faTrash}
               styled={{ color: (theme) => theme.colors.error }}
               onClick={() =>
-                onDeleteEquineMagazineProfile(equineMagazineProfile.id)
+                onDeleteAnimalMagazineProfile(animalMagazineProfile.id)
               }
             />
           </Acl>
@@ -106,8 +106,8 @@ export const EquineMagazineProfilesTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={orderBy(equineMagazineProfiles, "createAt", "desc")}
-      loading={equineMagazineProfilesLoading}
+      dataSource={orderBy(animalMagazineProfiles, "createAt", "desc")}
+      loading={animalMagazineProfilesLoading}
       pagination={false}
       scroll={{ x: "max-content" }}
     />

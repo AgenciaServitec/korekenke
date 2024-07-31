@@ -46,7 +46,7 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/clinic-history";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/clinic-history/sheets";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles";
-export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles/_equineMagazineProfileId";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles/_animalMagazineProfileId";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles/sheets";
 
 //ENTITIES "departamento-de-apoyo-social"

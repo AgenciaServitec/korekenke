@@ -8,9 +8,9 @@ import {
   BodyCondition7,
   BodyCondition8,
   BodyCondition9,
-} from "../images/";
+} from "../images";
 
-export const EquineMagazineProfiles = {
+export const AnimalMagazineProfiles = {
   bodyCondition: [
     {
       id: 1,

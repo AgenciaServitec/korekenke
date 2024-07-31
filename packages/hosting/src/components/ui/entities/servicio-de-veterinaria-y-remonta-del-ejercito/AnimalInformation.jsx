@@ -2,48 +2,46 @@ import React from "react";
 import { Col, Row } from "antd";
 import dayjs from "dayjs";
 
-export const LivestockAndEquineInformation = ({ livestockAndEquine }) => {
+export const AnimalInformation = ({ animal }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={12}>
         Nombre del Equino:{" "}
-        <strong className="capitalize">{livestockAndEquine?.name || ""}</strong>
+        <strong className="capitalize">{animal?.name || ""}</strong>
       </Col>
       <Col span={24} md={12}>
         Edad:
         <strong>{` ${dayjs().diff(
-          dayjs(dayjs(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm")),
-          "years"
+          dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
+          "year"
         )} años  (${dayjs().diff(
-          dayjs(livestockAndEquine.birthdate, "DD/MM/YYYY HH:mm"),
-          "months"
+          dayjs(animal.birthdate, "DD/MM/YYYY HH:mm"),
+          "month"
         )} meses)`}</strong>
       </Col>
       <Col span={24} md={12}>
         N° Matrícula:{" "}
         <strong className="capitalize">
-          {livestockAndEquine?.registrationNumber || ""}
+          {animal?.registrationNumber || ""}
         </strong>
       </Col>
       <Col span={24} md={12}>
-        N° Chip: <strong>{livestockAndEquine?.chipNumber || ""}</strong>
+        N° Chip: <strong>{animal?.chipNumber || ""}</strong>
       </Col>
       <Col span={24} md={12}>
         Sexo:
         <strong className="capitalize">
           {" "}
-          {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
+          {animal.gender === "male" ? "Macho" : "Hembra"}
         </strong>
       </Col>
       <Col span={24} md={12}>
         Raza o Tipo:{" "}
-        <strong className="capitalize">
-          {livestockAndEquine?.raceOrLine || ""}
-        </strong>
+        <strong className="capitalize">{animal?.raceOrLine || ""}</strong>
       </Col>
       <Col span={24} md={12}>
         Pelaje:
-        <strong className="capitalize"> {livestockAndEquine?.fur || ""}</strong>
+        <strong className="capitalize"> {animal?.fur || ""}</strong>
       </Col>
     </Row>
   );

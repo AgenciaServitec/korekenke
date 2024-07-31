@@ -128,20 +128,20 @@
     },
     "animalMagazineProfiles": {
       "label": "Fichas de revista",
-      "/animal/:animalId/animal-magazine-profiles": "Ficha de revista",
-      "/animal/:animalId/animal-magazine-profiles/new": "Agregar ficha de revista",
-      "/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId": "Editar ficha de revista",
-      "/animal/:animalId/animal-magazine-profiles#delete": "Eliminar ficha de revista",
-      "/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile": "Pdf ficha de revista"
+      "/animals/:animalId/animal-magazine-profiles": "Ficha de revista",
+      "/animals/:animalId/animal-magazine-profiles/new": "Agregar ficha de revista",
+      "/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId": "Editar ficha de revista",
+      "/animals/:animalId/animal-magazine-profiles#delete": "Eliminar ficha de revista",
+      "/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile": "Pdf ficha de revista"
     },
     "clinicHistory": {
       "label": "Historial clinico",
-      "/animal/:animalId/clinic-history": "Historial clinico",
-      "/animal/:animalId/clinic-history/new": "Agregar historial clinico",
-      "/animal/:animalId/clinic-history/:clinicHistoryId": "Editar historial clinico",
-      "/animal/:animalId/clinic-history#clinicHistoryReview": "Revisar historial clinico",
-      "/animal/:animalId/clinic-history#delete": "Eliminar historial clinico",
-      "/animal/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
+      "/animals/:animalId/clinic-history": "Historial clinico",
+      "/animals/:animalId/clinic-history/new": "Agregar historial clinico",
+      "/animals/:animalId/clinic-history/:clinicHistoryId": "Editar historial clinico",
+      "/animals/:animalId/clinic-history#clinicHistoryReview": "Revisar historial clinico",
+      "/animals/:animalId/clinic-history#delete": "Eliminar historial clinico",
+      "/animals/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
     }
   }
 }

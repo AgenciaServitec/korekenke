@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
-import { EquineMagazineProfiles } from "../../../../../../data-list";
+import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import {
   addAnimalMagazineProfile,
   fetchAnimalMagazineProfile,
@@ -30,60 +30,55 @@ import {
 } from "../../../../../../firebase/collections";
 import { useGlobalData } from "../../../../../../providers";
 import { mediaQuery } from "../../../../../../styles";
-import { LivestockAndEquineInformation } from "../../../../../../components/ui/entities";
+import { AnimalInformation } from "../../../../../../components/ui/entities";
 
-export const EquineMagazineProfileIntegration = () => {
+export const AnimalMagazineProfileIntegration = () => {
   const navigate = useNavigate();
-  const { livestockAndEquines } = useGlobalData();
-  const { equineMagazineProfileId, livestockAndEquineId } = useParams();
+  const { animals } = useGlobalData();
+  const { animalMagazineProfileId, animalId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
-  const [livestockAndEquine, setLivestockAndEquine] = useState({});
-  const [equineMagazineProfile, setEquineMagazineProfile] = useState({});
+  const [animal, setAnimal] = useState({});
+  const [animalMagazineProfile, setAnimalMagazineProfile] = useState({});
   const [loading, setLoading] = useState(false);
 
   const onGoBack = () => navigate(-1);
 
-  const isNew = equineMagazineProfileId === "new";
+  const isNew = animalMagazineProfileId === "new";
 
   useEffect(() => {
-    const _equineMagazineProfile = isNew
+    const _animalMagazineProfile = isNew
       ? { id: getClinicHistoryId() }
       : (async () => {
-          fetchAnimalMagazineProfile(
-            livestockAndEquineId,
-            equineMagazineProfileId
-          ).then((_response) => {
-            if (!_response) return onGoBack();
-            setEquineMagazineProfile(_response);
-            return;
-          });
+          fetchAnimalMagazineProfile(animalId, animalMagazineProfileId).then(
+            (_response) => {
+              if (!_response) return onGoBack();
+              setAnimalMagazineProfile(_response);
+              return;
+            }
+          );
         })();
 
-    setLivestockAndEquine(
-      livestockAndEquines.find(
-        (_livestockAndEquine) => _livestockAndEquine.id === livestockAndEquineId
-      ) || {}
-    );
-    setEquineMagazineProfile(_equineMagazineProfile);
+    setAnimal(animals.find((_animal) => _animal.id === animalId) || {});
+    setAnimalMagazineProfile(_animalMagazineProfile);
   }, []);
 
   const mapForm = (formData) => ({
-    id: equineMagazineProfile.id,
+    id: animalMagazineProfile.id,
     bodyCondition: {
-      ...EquineMagazineProfiles.bodyCondition.find(
+      ...AnimalMagazineProfiles.bodyCondition.find(
         (_bodyCondition) => _bodyCondition.id === formData.bodyCondition
       ),
       observation: formData.bodyConditionObservation,
       qualification: formData.bodyCondition,
     },
     toillete: {
-      ...EquineMagazineProfiles.toillete.find(
+      ...AnimalMagazineProfiles.toillete.find(
         (_toillete) => _toillete.id === formData.toillete
       ),
     },
     horseshoe: {
-      ...EquineMagazineProfiles.horseshoe.find(
+      ...AnimalMagazineProfiles.horseshoe.find(
         (_horseshoe) => _horseshoe.id === formData.horseshoe
       ),
     },
@@ -110,18 +105,18 @@ export const EquineMagazineProfileIntegration = () => {
     },
   });
 
-  const onSaveEquineMagazineProfile = async (formData) => {
+  const onSaveAnimalMagazineProfile = async (formData) => {
     try {
       setLoading(true);
 
       isNew
         ? await addAnimalMagazineProfile(
-            livestockAndEquineId,
+            animalId,
             assignCreateProps(mapForm(formData))
           )
         : await updateAnimalMagazineProfile(
-            livestockAndEquineId,
-            equineMagazineProfile.id,
+            animalId,
+            animalMagazineProfile.id,
             assignUpdateProps(mapForm(formData))
           );
 
@@ -143,17 +138,15 @@ export const EquineMagazineProfileIntegration = () => {
           bordered={false}
           type="inner"
         >
-          <LivestockAndEquineInformation
-            livestockAndEquine={livestockAndEquine}
-          />
+          <AnimalInformation animal={animal} />
         </Card>
       </Col>
       <Col span={24}>
-        <EquineMagazineProfile
+        <AnimalMagazineProfile
           onGoBack={onGoBack}
-          equineMagazineProfile={equineMagazineProfile}
-          equineMagazineProfiles={EquineMagazineProfiles}
-          onSaveEquineMagazineProfile={onSaveEquineMagazineProfile}
+          animalMagazineProfile={animalMagazineProfile}
+          animalMagazineProfiles={AnimalMagazineProfiles}
+          onSaveAnimalMagazineProfile={onSaveAnimalMagazineProfile}
           loading={loading}
         />
       </Col>
@@ -161,11 +154,11 @@ export const EquineMagazineProfileIntegration = () => {
   );
 };
 
-const EquineMagazineProfile = ({
+const AnimalMagazineProfile = ({
   onGoBack,
-  equineMagazineProfile,
-  equineMagazineProfiles,
-  onSaveEquineMagazineProfile,
+  animalMagazineProfile,
+  animalMagazineProfiles,
+  onSaveAnimalMagazineProfile,
   loading,
 }) => {
   const [bodyCondition, setBodyCondition] = useState(null);
@@ -196,28 +189,28 @@ const EquineMagazineProfile = ({
 
   useEffect(() => {
     resetForm();
-    setBodyCondition(equineMagazineProfile?.bodyCondition?.id || null);
+    setBodyCondition(animalMagazineProfile?.bodyCondition?.id || null);
     setBodyConditionObservation(
-      equineMagazineProfile?.bodyCondition?.observation || null
+      animalMagazineProfile?.bodyCondition?.observation || null
     );
-    setToillete(equineMagazineProfile?.toillete?.id || null);
-    setHorseshoe(equineMagazineProfile?.horseshoe?.id || null);
-  }, [equineMagazineProfile]);
+    setToillete(animalMagazineProfile?.toillete?.id || null);
+    setHorseshoe(animalMagazineProfile?.horseshoe?.id || null);
+  }, [animalMagazineProfile]);
 
   const resetForm = () => {
     reset({
       chestCircumference:
-        equineMagazineProfile?.bodyWeightEstimation?.chestCircumference
+        animalMagazineProfile?.bodyWeightEstimation?.chestCircumference
           ?.value || "",
       bodyLength:
-        equineMagazineProfile?.bodyWeightEstimation?.bodyLength?.value || "",
+        animalMagazineProfile?.bodyWeightEstimation?.bodyLength?.value || "",
       heightOfTheCross:
-        equineMagazineProfile?.bodyWeightEstimation?.heightOfTheCross?.value ||
+        animalMagazineProfile?.bodyWeightEstimation?.heightOfTheCross?.value ||
         "",
       horseWeight:
-        equineMagazineProfile?.bodyWeightEstimation?.horseWeight?.value || "",
+        animalMagazineProfile?.bodyWeightEstimation?.horseWeight?.value || "",
       observation:
-        equineMagazineProfile?.bodyWeightEstimation?.observation?.value || "",
+        animalMagazineProfile?.bodyWeightEstimation?.observation?.value || "",
     });
   };
 
@@ -240,7 +233,7 @@ const EquineMagazineProfile = ({
         title: "Herrado del ganado o equino es requerido.",
       });
 
-    onSaveEquineMagazineProfile({
+    onSaveAnimalMagazineProfile({
       ...formData,
       bodyCondition,
       bodyConditionObservation,
@@ -252,8 +245,8 @@ const EquineMagazineProfile = ({
   return (
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
-      subCategory="equineMagazineProfiles"
-      name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/:equineMagazineProfileId"
+      subCategory="animalMagazineProfiles"
+      name="/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
       redirect
     >
       <Container>
@@ -269,7 +262,7 @@ const EquineMagazineProfile = ({
               >
                 <div className="wrapper-condition-corporal">
                   <ul>
-                    {equineMagazineProfiles.bodyCondition.map(
+                    {animalMagazineProfiles.bodyCondition.map(
                       (_bodyCondition) => (
                         <li
                           key={_bodyCondition.id}
@@ -315,7 +308,7 @@ const EquineMagazineProfile = ({
                     <img src={ToilleteImg} alt="toillete" />
                   </div>
                   <ul>
-                    {equineMagazineProfiles.toillete.map((_toillete) => (
+                    {animalMagazineProfiles.toillete.map((_toillete) => (
                       <li
                         key={_toillete.id}
                         onClick={() => setToillete(_toillete.id)}
@@ -337,7 +330,7 @@ const EquineMagazineProfile = ({
                     <img src={HerradoImg} alt="Herrado" />
                   </div>
                   <ul>
-                    {equineMagazineProfiles.horseshoe.map((_horseshoe) => (
+                    {animalMagazineProfiles.horseshoe.map((_horseshoe) => (
                       <li
                         key={_horseshoe.id}
                         onClick={() => setHorseshoe(_horseshoe.id)}

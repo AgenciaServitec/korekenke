@@ -15,22 +15,18 @@ import { findDegree } from "../../../../../utils";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
 
-export const PdfEquineLivestockRegistrationCard = () => {
-  const { livestockAndEquineId } = useParams();
-  const [
-    livestockAndEquine,
-    livestockAndEquineLoading,
-    livestockAndEquineError,
-  ] = useDocumentData(
-    firestore.collection("livestock-and-equines").doc(livestockAndEquineId)
+export const PdfAnimalRegistrationCard = () => {
+  const { animalId } = useParams();
+  const [animal, animalLoading, animalError] = useDocumentData(
+    firestore.collection("animals").doc(animalId)
   );
   const { departments, users, entities, units } = useGlobalData();
 
   useEffect(() => {
-    livestockAndEquineError && notification({ type: "error" });
-  }, [livestockAndEquineError]);
+    animalError && notification({ type: "error" });
+  }, [animalError]);
 
-  if (livestockAndEquineLoading) return <Spinner height="80vh" />;
+  if (animalLoading) return <Spinner height="80vh" />;
 
   const genericSearchById = (group, id) => {
     return group.find((_group) => _group.id === id);
@@ -47,7 +43,7 @@ export const PdfEquineLivestockRegistrationCard = () => {
 
   const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
-  const unitData = genericSearchById(units, livestockAndEquine?.unit);
+  const unitData = genericSearchById(units, animal?.unit);
 
   const bossUnitData = genericSearchById(users, unitData?.bossId);
 
@@ -90,23 +86,19 @@ export const PdfEquineLivestockRegistrationCard = () => {
               <div className="section_images_wrapper">
                 <div className="column_image">
                   <img
-                    src={
-                      livestockAndEquine?.rightProfilePhoto?.url || ImgNoFound
-                    }
+                    src={animal?.rightProfilePhoto?.url || ImgNoFound}
                     alt="Perfil Izquierdo"
                   />
                 </div>
                 <div className="column_image">
                   <img
-                    src={livestockAndEquine?.frontPhoto?.url || ImgNoFound}
+                    src={animal?.frontPhoto?.url || ImgNoFound}
                     alt="Perfil Frontal"
                   />
                 </div>
                 <div className="column_image">
                   <img
-                    src={
-                      livestockAndEquine?.leftProfilePhoto?.url || ImgNoFound
-                    }
+                    src={animal?.leftProfilePhoto?.url || ImgNoFound}
                     alt="Perfil Derecho"
                   />
                 </div>
@@ -127,17 +119,14 @@ export const PdfEquineLivestockRegistrationCard = () => {
               </div>
               <div className="section_information__column">
                 <ul>
-                  <li>: {livestockAndEquine?.nscCorrelativo || ""}</li>
+                  <li>: {animal?.nscCorrelativo || ""}</li>
                   <li>: {unitData?.name || ""}</li>
-                  <li>: {livestockAndEquine?.greatUnit || ""}</li>
-                  <li>: {livestockAndEquine?.name || ""}</li>
-                  <li>: {livestockAndEquine?.registrationNumber || "S/N"}</li>
-                  <li>: {livestockAndEquine?.chipNumber || ""}</li>
-                  <li>
-                    :{" "}
-                    {livestockAndEquine.gender === "male" ? "Macho" : "Hembra"}
-                  </li>
-                  <li>: {livestockAndEquine?.color || ""}</li>
+                  <li>: {animal?.greatUnit || ""}</li>
+                  <li>: {animal?.name || ""}</li>
+                  <li>: {animal?.registrationNumber || "S/N"}</li>
+                  <li>: {animal?.chipNumber || "S/N"}</li>
+                  <li>: {animal?.gender === "male" ? "Macho" : "Hembra"}</li>
+                  <li>: {animal?.color || ""}</li>
                 </ul>
               </div>
               <div className="section_information__column">
@@ -155,32 +144,29 @@ export const PdfEquineLivestockRegistrationCard = () => {
                 <ul>
                   <li>
                     :{" "}
-                    {livestockAndEquine?.birthdate
+                    {animal?.birthdate
                       ? dayjs(
-                          livestockAndEquine?.birthdate,
+                          animal?.birthdate,
                           DATE_FORMAT_TO_FIRESTORE
                         ).format("DD/MM/YYYY")
                       : ""}
                   </li>
-                  <li>: {livestockAndEquine?.height || ""} Mts</li>
-                  <li>: {livestockAndEquine?.father || ""}</li>
-                  <li>: {livestockAndEquine?.mother || ""}</li>
-                  <li>: {livestockAndEquine?.origin || ""}</li>
-                  <li>: {livestockAndEquine?.raceOrLine || ""}</li>
+                  <li>: {animal?.height || ""} Mts</li>
+                  <li>: {animal?.father || ""}</li>
+                  <li>: {animal?.mother || ""}</li>
+                  <li>: {animal?.origin || ""}</li>
+                  <li>: {animal?.raceOrLine || ""}</li>
                   <li>
-                    :{" "}
-                    {userAssignedFullName(
-                      livestockAndEquine?.assignedOrAffectedId
-                    ) || ""}
+                    : {userAssignedFullName(animal?.assignedOrAffectedId) || ""}
                   </li>
                 </ul>
               </div>
             </div>
             <div className="section_description">
-              {livestockAndEquine?.description && (
+              {animal?.description && (
                 <>
                   <strong> Reseña: </strong> <br />
-                  <p>{livestockAndEquine.description || ""}</p>
+                  <p>{animal.description || ""}</p>
                 </>
               )}
             </div>

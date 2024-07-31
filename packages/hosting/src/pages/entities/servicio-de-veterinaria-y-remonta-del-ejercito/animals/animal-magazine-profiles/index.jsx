@@ -4,68 +4,78 @@ import {
   AddButton,
   Col,
   Divider,
+  IconAction,
   modalConfirm,
   notification,
   Row,
 } from "../../../../../components";
-import { EquineMagazineProfilesTable } from "./EquineMagazineProfilesTable";
+import { AnimalMagazineProfilesTable } from "./AnimalMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
 import { updateAnimalMagazineProfile } from "../../../../../firebase/collections";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useQuery } from "../../../../../hooks";
 
-export const EquineMagazineProfilesIntegration = () => {
-  const { livestockAndEquineId } = useParams();
+export const AnimalMagazineProfilesIntegration = () => {
+  const { animalId } = useParams();
+  const { animalType } = useQuery();
   const navigate = useNavigate();
 
   const [
-    equineMagazineProfiles = [],
-    equineMagazineProfilesLoading,
-    equineMagazineProfilesError,
+    animalMagazineProfiles = [],
+    animalMagazineProfilesLoading,
+    animalMagazineProfilesError,
   ] = useCollectionData(
     firestore
-      .collection("livestock-and-equines")
-      .doc(livestockAndEquineId)
-      .collection("equine-magazine-profiles")
+      .collection("animals")
+      .doc(animalId)
+      .collection("animal-magazine-profiles")
       .where("isDeleted", "==", false)
   );
 
   useEffect(() => {
-    equineMagazineProfilesError && notification({ type: "error" });
-  }, [equineMagazineProfilesError]);
+    animalMagazineProfilesError && notification({ type: "error" });
+  }, [animalMagazineProfilesError]);
 
   const navigateTo = (pathname = "new") => navigate(pathname);
 
-  const onAddEquineMagazineProfile = () => navigateTo("new");
-  const onDeleteEquineMagazineProfile = (equineMagazineProfileId) =>
+  const onAddAnimalMagazineProfile = () => navigateTo("new");
+  const onDeleteAnimalMagazineProfile = (animalMagazineProfileId) =>
     modalConfirm({
       title: "¿Estás seguro de que quieres eliminar la revista equina?",
       onOk: async () =>
-        await updateAnimalMagazineProfile(
-          livestockAndEquineId,
-          equineMagazineProfileId,
-          {
-            isDeleted: true,
-          }
-        ),
+        await updateAnimalMagazineProfile(animalId, animalMagazineProfileId, {
+          isDeleted: true,
+        }),
     });
 
   return (
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
-      subCategory="equineMagazineProfiles"
-      name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles"
+      subCategory="animalMagazineProfiles"
+      name="/animals/:animalId/animal-magazine-profiles"
       redirect
     >
       <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <IconAction
+            icon={faArrowLeft}
+            onClick={() =>
+              navigate(
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`
+              )
+            }
+          />
+        </Col>
         <Col span={24} md={8}>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="equineMagazineProfiles"
-            name="/livestock-and-equines/:livestockAndEquineId/equine-magazine-profiles/new"
+            subCategory="animalMagazineProfiles"
+            name="/animals/:animalId/animal-magazine-profiles/new"
           >
             <AddButton
-              onClick={() => onAddEquineMagazineProfile()}
+              onClick={() => onAddAnimalMagazineProfile()}
               title="Ficha de Revista Equina"
               margin="0"
             />
@@ -73,10 +83,10 @@ export const EquineMagazineProfilesIntegration = () => {
         </Col>
         <Divider />
         <Col span={24}>
-          <EquineMagazineProfilesTable
-            equineMagazineProfiles={equineMagazineProfiles}
-            equineMagazineProfilesLoading={equineMagazineProfilesLoading}
-            onDeleteEquineMagazineProfile={onDeleteEquineMagazineProfile}
+          <AnimalMagazineProfilesTable
+            animalMagazineProfiles={animalMagazineProfiles}
+            animalMagazineProfilesLoading={animalMagazineProfilesLoading}
+            onDeleteAnimalMagazineProfile={onDeleteAnimalMagazineProfile}
           />
         </Col>
       </Row>
