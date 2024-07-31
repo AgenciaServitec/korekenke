@@ -51,11 +51,11 @@ export const EntityIntegration = () => {
 
   const mapEntity = (formData) => ({
     ...entity,
-    commandId: currentCommand.id,
     name: formData.name,
     nameId: getNameId(formData.name),
     abbreviation: lowerCase(formData.abbreviation),
     entityManageId: formData?.entityManageId || null,
+    commandId: entity?.commandId || currentCommand.id,
   });
 
   const saveEntity = async (formData) => {

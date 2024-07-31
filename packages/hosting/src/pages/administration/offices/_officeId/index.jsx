@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGlobalData } from "../../../../providers";
+import { useCommand, useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { capitalize, concat, isEmpty } from "lodash";
 import {
@@ -31,6 +31,7 @@ export const OfficeIntegration = () => {
   const { offices, officeUsers, sections, rolesAcls } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState(false);
   const [office, setOffice] = useState({});
@@ -54,6 +55,7 @@ export const OfficeIntegration = () => {
     sectionId: formData.sectionId,
     membersIds: formData?.membersIds || [],
     bossId: formData.bossId || null,
+    commandId: office?.commandId || currentCommand.id,
   });
 
   const saveOffice = async (formData) => {

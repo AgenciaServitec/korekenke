@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useGlobalData } from "../../../../providers";
+import { useCommand, useGlobalData } from "../../../../providers";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import {
   Acl,
@@ -31,6 +31,7 @@ export const SectionIntegration = () => {
   const { rolesAcls, departments, sections, sectionUsers } = useGlobalData();
   const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState(false);
   const [section, setSection] = useState({});
@@ -55,6 +56,7 @@ export const SectionIntegration = () => {
     departmentId: formData.departmentId,
     membersIds: formData?.membersIds || [],
     bossId: formData.bossId || null,
+    commandId: section?.commandId || currentCommand.id,
   });
 
   const onSaveSection = async (formData) => {
