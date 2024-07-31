@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, InputCode, notification, Title } from "../../components";
 import styled from "styled-components";
-import { firebase } from "../../firebase";
 import { getLocalStorage } from "../../utils";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { useFormUtils } from "../../hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import firebase from "firebase/compat/app";
 
 export const SendCodeSmsAndSignInWithCodeIntegration = ({
   prev,
