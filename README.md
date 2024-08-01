@@ -5,6 +5,12 @@ LINKS OLD PROJECT:
 [sistema.korekenke.mil.pe](https://sistema.korekenke.mil.pe/site/login/926730944)
 [tramites.cobiene.mil.pe](https://tramites.cobiene.mil.pe/site/login/926730944?)
 
+
+ENVIRONMENTS:
+
+[PROD](https://korekenke.mil.pe/)
+[DEV](https://korekenke-dev.web.app/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
