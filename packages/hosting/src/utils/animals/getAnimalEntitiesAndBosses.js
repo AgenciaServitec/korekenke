@@ -6,8 +6,6 @@ import {
 } from "../../firebase/collections";
 
 export const getAnimalEntitiesAndBosses = async (animal) => {
-  console.log({ animal });
-
   if (!animal) return {};
 
   const _unit = await fetchUnit(animal?.unitId);
@@ -20,11 +18,11 @@ export const getAnimalEntitiesAndBosses = async (animal) => {
   const _departmentBoss = await fetchUser(_department.bossId);
 
   return {
-    entity: _entity,
-    entityManage: _entityManage,
-    department: _department,
-    unit: _unit,
-    departmentBoss: _departmentBoss,
-    unitBoss: __unitBoss,
+    entity: _entity || {},
+    entityManage: _entityManage || {},
+    department: _department || {},
+    unit: _unit || {},
+    departmentBoss: _departmentBoss || {},
+    unitBoss: __unitBoss || {},
   };
 };
