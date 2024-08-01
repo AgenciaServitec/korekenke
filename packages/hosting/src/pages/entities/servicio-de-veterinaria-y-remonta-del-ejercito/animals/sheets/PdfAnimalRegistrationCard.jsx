@@ -7,8 +7,6 @@ import {
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
 } from "../../../../../images";
-import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findDegree } from "../../../../../utils";
