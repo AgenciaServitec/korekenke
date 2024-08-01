@@ -12,7 +12,7 @@ export const DecreeSheet = ({ decree }) => {
   const decreeList1 = DecreeList.slice(0, DecreeList.length / 2);
   const decreeList2 = DecreeList.slice(
     DecreeList.length / 2,
-    DecreeList.length
+    DecreeList.length,
   );
 
   return (
@@ -28,7 +28,7 @@ export const DecreeSheet = ({ decree }) => {
               FECHA:{" "}
               {decree?.createAt
                 ? dayjs(decree?.createAt.toDate()).format(
-                    DATE_FORMAT_TO_FIRESTORE
+                    DATE_FORMAT_TO_FIRESTORE,
                   )
                 : null}
             </h4>

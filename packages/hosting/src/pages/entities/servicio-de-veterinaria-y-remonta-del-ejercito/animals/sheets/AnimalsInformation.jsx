@@ -87,7 +87,7 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
             value={`: ${
               animal?.birthdate
                 ? dayjs(animal?.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
-                    "DD/MM/YYYY"
+                    "DD/MM/YYYY",
                   )
                 : ""
             }`}
@@ -115,7 +115,7 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
           <ItemInformation
             existField={animal?.assignedOrAffectedId}
             value={`: ${userFullName(
-              users.find((_user) => _user.id === animal?.assignedOrAffectedId)
+              users.find((_user) => _user.id === animal?.assignedOrAffectedId),
             )}`}
           />
         </ul>

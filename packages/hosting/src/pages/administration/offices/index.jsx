@@ -28,7 +28,7 @@ export const OfficesIntegration = () => {
   };
 
   const officesView = offices.filter((office) =>
-    sectionId === "all" ? true : office.sectionId === sectionId
+    sectionId === "all" ? true : office.sectionId === sectionId,
   );
 
   return (
@@ -64,7 +64,7 @@ export const OfficesIntegration = () => {
               sections.map((section) => ({
                 label: section.name,
                 value: section.id,
-              }))
+              })),
             )}
           />
         </Col>

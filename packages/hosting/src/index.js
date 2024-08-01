@@ -47,5 +47,5 @@ root.render(
         </ScrollTop>
       </BrowserRouter>
     </ConfigProvider>
-  </ThemeProvider>
+  </ThemeProvider>,
 );

@@ -52,7 +52,7 @@ export const UploadImages = ({
       onUploading && onUploading(true);
 
       const filesResult = await Promise.allSettled(
-        Object.values(fileList).map(async (file) => uploadFile(file))
+        Object.values(fileList).map(async (file) => uploadFile(file)),
       );
 
       await onChange([...images, ...getImages(filesResult)]);
@@ -99,11 +99,11 @@ export const UploadImages = ({
             await deleteFileAndFileThumbFromStorage(
               firebaseStorage,
               path,
-              filename
+              filename,
             );
             reject(e);
           }
-        }
+        },
       );
     });
 
@@ -114,7 +114,7 @@ export const UploadImages = ({
         await deleteFileAndFileThumbFromStorage(
           firebaseStorage,
           path,
-          image.name
+          image.name,
         );
 
         await onChange(images.filter((_image) => _image.uid !== image.uid));

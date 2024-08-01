@@ -3,7 +3,7 @@ import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
 
 export const organizationalClimateStudiesRef = firestore.collection(
-  "organizational-climate-studies-surveys"
+  "organizational-climate-studies-surveys",
 );
 
 export const getOrganizationalClimateStudyId = () =>
@@ -14,22 +14,22 @@ export const fetchOrganizationalClimateStudy = async (id) =>
 
 export const fetchOrganizationalClimateStudies = async () =>
   fetchCollectionOnce(
-    organizationalClimateStudiesRef.where("isDeleted", "==", false)
+    organizationalClimateStudiesRef.where("isDeleted", "==", false),
   );
 
 export const addOrganizationalClimateStudy = async (
-  organizationalClimateStudy
+  organizationalClimateStudy,
 ) =>
   setDocument(
     organizationalClimateStudiesRef.doc(organizationalClimateStudy.id),
-    organizationalClimateStudy
+    organizationalClimateStudy,
   );
 
 export const updateOrganizationalClimateStudy = async (
   organizationalClimateStudyId,
-  organizationalClimateStudy
+  organizationalClimateStudy,
 ) =>
   updateDocument(
     organizationalClimateStudiesRef.doc(organizationalClimateStudyId),
-    organizationalClimateStudy
+    organizationalClimateStudy,
   );

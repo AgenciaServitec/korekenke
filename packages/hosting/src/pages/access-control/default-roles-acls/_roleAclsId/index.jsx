@@ -197,7 +197,7 @@ const RoleAcl = ({
                       const unlabeledAclsForSelectOptions =
                         isObject(items) &&
                         Object.entries(items).filter(
-                          (_item) => !_item.includes("label")
+                          (_item) => !_item.includes("label"),
                         );
 
                       return (
@@ -215,7 +215,7 @@ const RoleAcl = ({
                                     (_item) => ({
                                       label: _item[1],
                                       value: _item[0],
-                                    })
+                                    }),
                                   )}
                                   name={name}
                                   value={value}
@@ -232,7 +232,7 @@ const RoleAcl = ({
                           </Col>
                         )
                       );
-                    }
+                    },
                   )}
                 </Row>
               </ComponentContainer.group>

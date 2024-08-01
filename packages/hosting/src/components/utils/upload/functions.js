@@ -43,7 +43,7 @@ export const uploadFile = async ({
           onError(error);
           reject(error);
         },
-        () => uploadComplete(mapUploadFile(file), fileConfig)
+        () => uploadComplete(mapUploadFile(file), fileConfig),
       );
 
     const uploadComplete = async (newFile, fileConfig) => {
@@ -86,7 +86,7 @@ const mapUploadFile = (file) => ({
 export const deleteFileAndFileThumbFromStorage = async (
   storage,
   filePath,
-  fileName
+  fileName,
 ) => {
   const extension = fileName.split(".").pop();
 
@@ -96,12 +96,12 @@ export const deleteFileAndFileThumbFromStorage = async (
     (resizeImage) =>
       `${filePath}/thumbs/${fileName.replace(
         `.${extension}`,
-        ""
-      )}_${resizeImage}.${extension}`
+        "",
+      )}_${resizeImage}.${extension}`,
   );
 
   const uris = [pathImage, ...pathThumbImages].map(
-    (url) => `gs://${storage.ref().bucket}/${url}`
+    (url) => `gs://${storage.ref().bucket}/${url}`,
   );
 
   try {

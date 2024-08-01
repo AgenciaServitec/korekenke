@@ -7,6 +7,6 @@ export const searchify = (texts) =>
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/\p{Diacritic}/gu, "")
+        .replace(/\p{Diacritic}/gu, ""),
     )
     .filter((text) => text);

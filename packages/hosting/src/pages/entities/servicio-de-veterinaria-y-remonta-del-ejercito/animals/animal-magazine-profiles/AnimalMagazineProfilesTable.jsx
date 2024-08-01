@@ -22,7 +22,7 @@ export const AnimalMagazineProfilesTable = ({
       render: (_, animalMagazineProfile) => (
         <div>
           {dayjs(animalMagazineProfile?.createAt.toDate()).format(
-            "DD/MM/YYYY HH:mm"
+            "DD/MM/YYYY HH:mm",
           )}
         </div>
       ),
@@ -68,7 +68,7 @@ export const AnimalMagazineProfilesTable = ({
               styled={{ color: (theme) => theme.colors.error }}
               onClick={() =>
                 navigateTo(
-                  `${animalMagazineProfile.id}/pdf-animal-magazine-profile`
+                  `${animalMagazineProfile.id}/pdf-animal-magazine-profile`,
                 )
               }
             />

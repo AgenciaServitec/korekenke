@@ -60,7 +60,7 @@ export const PrivacyPolicies = ({ prev }) => {
           maternalSurname: prevData.maternalSurname.toLocaleLowerCase(),
           acls: roleAclTypeUser?.acls || undefined,
           iAcceptPrivacyPolicies,
-        })
+        }),
       );
 
       if (!postUserResponse.ok) {

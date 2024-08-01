@@ -6,7 +6,7 @@ export const mapColumns = ({ columns, dataSource, currentFilters }) => {
 
   return {
     columnsTable: columns.map((column) =>
-      mapTableColumn(column, dataSourceView)
+      mapTableColumn(column, dataSourceView),
     ),
     itemsFiltered: dataSourceView,
   };
@@ -15,7 +15,7 @@ export const mapColumns = ({ columns, dataSource, currentFilters }) => {
 const dataSourceFilters = (dataSource, currentFilters) => {
   Object.entries(currentFilters).forEach(([fieldName, filterValues]) => {
     dataSource = dataSource.filter((record) =>
-      recordFilter(record, fieldName, filterValues)
+      recordFilter(record, fieldName, filterValues),
     );
   });
 
@@ -26,7 +26,7 @@ const recordFilter = (record, fieldName, filterValues) => {
   if (isEmpty(filterValues)) return true;
 
   return filterValues.some((filterValue) =>
-    onFilter(filterValue, record, fieldName)
+    onFilter(filterValue, record, fieldName),
   );
 };
 
@@ -44,7 +44,7 @@ const mapTableColumn = (column, dataSourceView) => {
 const filters = (fieldName, dataSourceView) => {
   const valuesByFieldName = groupBy(
     dataSourceView,
-    (record) => get(record, `${fieldName}`) || ""
+    (record) => get(record, `${fieldName}`) || "",
   );
 
   const filters = Object.entries(valuesByFieldName).map(([value, records]) => {
