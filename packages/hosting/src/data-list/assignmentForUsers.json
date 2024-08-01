@@ -4,7 +4,7 @@
     "type": "entity"
   },
   {
-    "roles": ["unit_boss"],
+    "roles": ["unit_boss", "unit_assistant"],
     "type": "unit"
   },
   {
