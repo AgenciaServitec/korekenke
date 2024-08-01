@@ -100,7 +100,9 @@ export const PrivacyPolicies = ({ prev }) => {
               required={required(name)}
             >
               He leído y acepto la{" "}
-              <a href="/privacy-policies" target="_blank" rel="noreferrer" >Política de Privacidad</a>
+              <a href="/privacy-policies" target="_blank" rel="noreferrer">
+                Política de Privacidad
+              </a>
             </Checkbox>
           )}
         />
