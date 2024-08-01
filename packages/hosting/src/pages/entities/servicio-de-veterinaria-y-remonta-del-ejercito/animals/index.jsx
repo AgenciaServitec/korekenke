@@ -100,7 +100,7 @@ const Animals = ({
                 size="large"
                 icon={<FontAwesomeIcon icon={faPlus} />}
               >
-                &ensp; Agregar {AnimalsType[animalType]?.addButton}
+                &ensp; Agregar {AnimalsType[animalType]?.titleSingular}
               </Button>
             </Acl>
             <Acl
@@ -120,7 +120,7 @@ const Animals = ({
           </div>
         </Col>
         <Col span={24}>
-          <Title level={3}>{AnimalsType[animalType]?.title}</Title>
+          <Title level={3}>{AnimalsType[animalType]?.titlePlural}</Title>
         </Col>
         <Col span={24}>
           <AnimalsTable

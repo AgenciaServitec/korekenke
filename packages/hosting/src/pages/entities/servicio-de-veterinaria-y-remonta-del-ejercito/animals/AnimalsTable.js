@@ -81,7 +81,7 @@ export const AnimalsTable = ({
             name="/animals/:animalId/animal-magazine-profiles"
           >
             <IconAction
-              tooltipTitle="Ficha revista equina"
+              tooltipTitle="Ficha revista Animal"
               icon={faListCheck}
               onClick={() => onNavigateGoToAnimalMagazineProfiles(animal.id)}
             />
