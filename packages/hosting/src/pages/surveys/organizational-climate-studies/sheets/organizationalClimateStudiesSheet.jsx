@@ -112,7 +112,7 @@ export const OrganizationalClimateStudiesSheet = ({
                           {Surveys.questions[7].options.find(
                             (_personal) =>
                               _personal.value ===
-                              organizationClimateStudy?.questions?.personal,
+                              organizationClimateStudy?.questions?.personal
                           )?.label || ""}
                         </td>
                         <td>{organizationClimateStudy.questions.condition}</td>
@@ -159,7 +159,7 @@ export const OrganizationalClimateStudiesSheet = ({
                         <td>{organizationClimateStudy.items.item34}</td>
                         <td>{escalaL(organizationClimateStudy.items)}</td>
                       </tr>
-                    ),
+                    )
                   )}
                 </tbody>
               </table>

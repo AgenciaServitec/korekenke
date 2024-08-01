@@ -10,7 +10,7 @@ export const useAcl = () => {
     if (!isArray(aclNames)) return false;
 
     return authUser.acls?.[category]?.[subCategory].some((acl) =>
-      includes(aclNames, acl),
+      includes(aclNames, acl)
     );
   };
 

@@ -24,7 +24,7 @@ export const useFormUtils = ({ errors, schema }) => {
 
   const scrollIntoError = () => {
     const formItemErrors = document.getElementsByClassName(
-      "scroll-error-anchor",
+      "scroll-error-anchor"
     );
 
     formItemErrors.length &&

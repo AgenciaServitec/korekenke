@@ -78,7 +78,7 @@ export const CmstsFamilyForm = ({ familyMembers, onSetFamilyMembers }) => {
   const deleteFamilyMember = async (dni) => {
     try {
       const _familyMembers = familyMembers.filter(
-        (familyMember) => familyMember.dni !== dni,
+        (familyMember) => familyMember.dni !== dni
       );
 
       onSetFamilyMembers(_familyMembers);

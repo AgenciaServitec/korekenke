@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 export const useResizeObserver = () => {
   const [currentScreenWidth, setCurrentScreenWidth] = useState(
-    window.innerWidth,
+    window.innerWidth
   );
   const [currentScreenHeight, setCurrentScreenHeight] = useState(
-    window.innerHeight,
+    window.innerHeight
   );
 
   useEffect(() => {

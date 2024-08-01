@@ -9,7 +9,7 @@ const getQueryStringValue = (key, queryString = window.location.search) => {
 const setQueryStringValue = (
   key,
   value,
-  queryString = window.location.search,
+  queryString = window.location.search
 ) => {
   const values = qs.parse(queryString);
   const newQsValue = qs.stringify({ ...values, [key]: value });
@@ -35,7 +35,7 @@ export const useQueryString = (key, initialValue) => {
       setValue(newValue);
       setQueryStringValue(key, newValue);
     },
-    [key],
+    [key]
   );
 
   return [value, onSetValue];

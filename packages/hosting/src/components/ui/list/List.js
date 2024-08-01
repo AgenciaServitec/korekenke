@@ -33,7 +33,7 @@ export const List = ({
           data-testid="edit"
           onClick={onClickEdit}
           icon={faPencil}
-        />,
+        />
       );
     }
 
@@ -54,7 +54,7 @@ export const List = ({
           styled={{
             color: () => "rgb(241, 13, 13)",
           }}
-        />,
+        />
       );
     }
 
@@ -105,11 +105,8 @@ const ListWrapper = styled.section`
 
           &:hover {
             border: 1px solid #dadce0;
-            box-shadow:
-              inset 1px 0 0 #dadce0,
-              inset -1px 0 0 #dadce0,
-              0 1px 2px 0 rgb(60 64 67 / 30%),
-              0 1px 3px 1px rgb(60 64 67 / 15%);
+            box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0,
+              0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
             box-sizing: border-box;
           }
 

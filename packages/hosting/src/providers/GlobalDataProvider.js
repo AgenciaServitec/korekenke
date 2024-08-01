@@ -43,11 +43,11 @@ export const GlobalDataProvider = ({ children }) => {
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser
       ? firestore.collection("roles-acls").where("isDeleted", "==", false)
-      : null,
+      : null
   );
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser ? usersRef.where("isDeleted", "==", false) : null,
+    authUser ? usersRef.where("isDeleted", "==", false) : null
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
@@ -55,7 +55,7 @@ export const GlobalDataProvider = ({ children }) => {
       ? entitiesRef
           .where("isDeleted", "==", false)
           .where("commandId", "==", currentCommand.id)
-      : null,
+      : null
   );
 
   const [units = [], unitsLoading, unitsError] = useCollectionData(
@@ -63,7 +63,7 @@ export const GlobalDataProvider = ({ children }) => {
       ? unitsRef
           .where("isDeleted", "==", false)
           .where("commandId", "==", currentCommand.id)
-      : null,
+      : null
   );
 
   const [departments = [], departmentsLoading, departmentsError] =
@@ -72,7 +72,7 @@ export const GlobalDataProvider = ({ children }) => {
         ? departmentsRef
             .where("isDeleted", "==", false)
             .where("commandId", "==", currentCommand.id)
-        : null,
+        : null
     );
 
   const [sections = [], sectionsLoading, sectionsError] = useCollectionData(
@@ -80,7 +80,7 @@ export const GlobalDataProvider = ({ children }) => {
       ? sectionsRef
           .where("isDeleted", "==", false)
           .where("commandId", "==", currentCommand.id)
-      : null,
+      : null
   );
 
   const [offices = [], officesLoading, officesError] = useCollectionData(
@@ -89,18 +89,18 @@ export const GlobalDataProvider = ({ children }) => {
           .collection("offices")
           .where("isDeleted", "==", false)
           .where("commandId", "==", currentCommand.id)
-      : null,
+      : null
   );
 
   const [animals = [], animalsLoading, animalsError] = useCollectionData(
     currentCommand.id === "cologe"
       ? animalsRef.where("isDeleted", "==", false)
-      : null,
+      : null
   );
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
-      correspondencesRef.where("isDeleted", "==", false) || null,
+      correspondencesRef.where("isDeleted", "==", false) || null
     );
 
   const error =
@@ -139,22 +139,22 @@ export const GlobalDataProvider = ({ children }) => {
         unitUsers: orderBy(
           usersByRoleCode(users, ["unit_boss"]),
           (user) => [user.createAt],
-          ["desc"],
+          ["desc"]
         ),
         departmentUsers: orderBy(
           usersByRoleCode(users, ["department_boss", "department_assistant"]),
           (user) => [user.createAt],
-          ["desc"],
+          ["desc"]
         ),
         sectionUsers: orderBy(
           usersByRoleCode(users, ["section_boss", "section_assistant"]),
           (user) => [user.createAt],
-          ["desc"],
+          ["desc"]
         ),
         officeUsers: orderBy(
           usersByRoleCode(users, ["office_boss", "office_assistant"]),
           (user) => [user.createAt],
-          ["desc"],
+          ["desc"]
         ),
         entities: orderBy(entities, "createAt", "desc"),
         units: orderBy(units, "createAt", "desc"),

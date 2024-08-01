@@ -62,7 +62,7 @@ export const OfficeIntegration = () => {
     try {
       //Get users ids deselection
       const usersIdsDeselected = (office?.membersIds || []).filter(
-        (memberId) => !(formData?.membersIds || []).includes(memberId),
+        (memberId) => !(formData?.membersIds || []).includes(memberId)
       );
 
       //Update of assignTo of users
@@ -152,7 +152,7 @@ const Office = ({
   //VIEWS TO SELECTS
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || "",
+      findRole(rolesAcls, user?.roleCode)?.name || ""
     )})`,
     value: user.id,
     key: user.id,
@@ -160,20 +160,19 @@ const Office = ({
   });
 
   const membersInEdition = officeUsers.filter((user) =>
-    !isEmpty(office?.membersIds) ? office.membersIds.includes(user.id) : false,
+    !isEmpty(office?.membersIds) ? office.membersIds.includes(user.id) : false
   );
 
   const userBosses = officeUsers.filter(
-    (user) => user.roleCode === "office_boss",
+    (user) => user.roleCode === "office_boss"
   );
 
   //LIST TO SELECTS
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
     officeUsers.filter(
-      (user) =>
-        user.assignedTo.type === "office" && isEmpty(user.assignedTo.id),
-    ),
+      (user) => user.assignedTo.type === "office" && isEmpty(user.assignedTo.id)
+    )
   ).map(mapOptionSelectMembers);
 
   const bossesView = () =>

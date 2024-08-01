@@ -18,17 +18,17 @@ export const ObservationsList = ({
   dasRequest,
 }) => {
   const observationsView = orderBy(observations, ["createAt"], ["desc"]).filter(
-    (observation) => observation.isDeleted === false,
+    (observation) => observation.isDeleted === false
   );
 
   const findObservation = (observationId) =>
     dasRequest?.[section]?.observations.find(
-      (observation) => observation.id === observationId,
+      (observation) => observation.id === observationId
     );
 
   const excludeObservation = (observationId) =>
     dasRequest[section].observations.filter(
-      (observation) => observation.id !== observationId,
+      (observation) => observation.id !== observationId
     );
 
   const updatedObservations = async (observations) => {
@@ -80,7 +80,7 @@ export const ObservationsList = ({
                   Observación{" "}
                   <small style={{ fontSize: ".6em" }}>
                     {dayjs(observation.createAt.toDate()).format(
-                      "DD/MM/YYYY HH:mm",
+                      "DD/MM/YYYY HH:mm"
                     )}
                   </small>
                 </p>

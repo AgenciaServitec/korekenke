@@ -71,7 +71,7 @@ export const UnitIntegration = () => {
 
       const usersIdsDeselected = formData?.membersIds
         ? (unit?.membersIds || []).filter(
-            (memberId) => !formData.membersIds.includes(memberId),
+            (memberId) => !formData.membersIds.includes(memberId)
           )
         : [];
 
@@ -162,7 +162,7 @@ const Unit = ({
 
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || "",
+      findRole(rolesAcls, user?.roleCode)?.name || ""
     )})`,
     value: user.id,
     key: user.id,
@@ -170,7 +170,7 @@ const Unit = ({
   });
 
   const membersInEdition = unitUsers.filter((user) =>
-    !isEmpty(unit?.membersIds) ? unit.membersIds.includes(user.id) : false,
+    !isEmpty(unit?.membersIds) ? unit.membersIds.includes(user.id) : false
   );
 
   const userBosses = unitUsers.filter((user) => user.roleCode === "unit_boss");
@@ -178,12 +178,12 @@ const Unit = ({
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
     unitUsers.filter(
-      (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id),
-    ),
+      (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id)
+    )
   ).map(mapOptionSelectMembers);
 
   const departmentsView = departments.filter(
-    (department) => department.entityId === watch("entityId"),
+    (department) => department.entityId === watch("entityId")
   );
 
   const bossesView = (bossId = undefined) =>
@@ -307,7 +307,7 @@ const Unit = ({
                       options={orderBy(
                         usersViewForMembers,
                         ["roleCode"],
-                        ["desc"],
+                        ["desc"]
                       )}
                       onChange={(value) =>
                         onChangeMembersWithValidation(onChange, value)

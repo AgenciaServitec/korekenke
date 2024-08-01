@@ -16,7 +16,7 @@ export const useApiUserPut = () => {
 
       return put(url, user);
     },
-    [put],
+    [put]
   );
 
   return {

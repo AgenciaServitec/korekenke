@@ -13,10 +13,10 @@ export const AnimalInformation = ({ animal }) => {
         Edad:
         <strong>{` ${dayjs().diff(
           dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-          "year",
+          "year"
         )} años  (${dayjs().diff(
           dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-          "month",
+          "month"
         )} meses)`}</strong>
       </Col>
       <Col span={24} md={12}>

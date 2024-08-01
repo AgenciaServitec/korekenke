@@ -16,7 +16,7 @@ export const updateUsersWithBatch = async (users = []) => {
   const batch = firestore.batch();
 
   chunk(users, 400).forEach((users) =>
-    users.forEach((user) => batch.update(usersRef.doc(user.id), user)),
+    users.forEach((user) => batch.update(usersRef.doc(user.id), user))
   );
 
   return await batch.commit();

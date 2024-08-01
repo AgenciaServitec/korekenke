@@ -20,7 +20,7 @@ export const PdfAnimalRegistrationCard = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const [animal, animalLoading, animalError] = useDocumentData(
-    firestore.collection("animals").doc(animalId),
+    firestore.collection("animals").doc(animalId)
   );
   const { departments, users, entities, units } = useGlobalData();
 
@@ -49,9 +49,9 @@ export const PdfAnimalRegistrationCard = () => {
 
   const bossUnit = findById(users, unit?.bossId);
 
-    const department = departments.find(
-        (department) => department.unitId === unit.id
-    );
+  const department = departments.find(
+    (department) => department.unitId === unit.id
+  );
 
   const bossDepartment = findById(users, department?.bossId);
 

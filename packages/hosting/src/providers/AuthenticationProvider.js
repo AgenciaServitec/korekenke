@@ -25,7 +25,7 @@ export const AuthenticationProvider = ({ children }) => {
   const { firebaseUser, firebaseUserLoading } = useFirebaseUser();
 
   const [user, userLoading, userError] = useDocumentData(
-    firebaseUser ? usersRef.doc(firebaseUser.uid) : null,
+    firebaseUser ? usersRef.doc(firebaseUser.uid) : null
   );
 
   const [rolesAcls, rolesAclsLoading, rolesAclsError] =

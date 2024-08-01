@@ -17,6 +17,7 @@ import { useFormUtils } from "../../../../../../../../hooks";
 import { Relationships } from "../../../../../../../../data-list";
 
 export const PersonalInformationForm = ({
+<<<<<<< HEAD
                                             user,
                                             onPrevStep,
                                             dasRequest,
@@ -37,6 +38,39 @@ export const PersonalInformationForm = ({
             phoneNumber: yup.string().required(),
             currentService: yup.string(),
             email: yup.string().email(),
+=======
+  user,
+  onPrevStep,
+  dasRequest,
+  loadingStep2,
+  onSavePersonalInformationStep2,
+}) => {
+  const [relationship, setRelationship] = useState("");
+
+  const schema = yup.object({
+    headline: yup.object({
+      firstName: yup.string().required(),
+      paternalSurname: yup.string().required(),
+      maternalSurname: yup.string().required(),
+      cip: yup.string().required(),
+      degree: yup.string().required(),
+      phoneNumber: yup.string().required(),
+      currentService: yup.string(),
+      email: yup.string().email(),
+    }),
+    familiar: dasRequest?.isHeadline
+      ? yup.object().nullable().notRequired()
+      : yup.object({
+          firstName: yup.string().required(),
+          paternalSurname: yup.string().required(),
+          maternalSurname: yup.string().required(),
+          email: yup.string().email().required(),
+          relationship: yup.string().required(),
+          cif:
+            relationship === "brother"
+              ? yup.string().min(9).max(9).nullable().notRequired()
+              : yup.string().min(9).max(9).required(),
+>>>>>>> 2e57011 (updated cif not required when is brother)
         }),
         familiar: dasRequest?.isHeadline
             ? yup.object().nullable().notRequired()
@@ -53,6 +87,7 @@ export const PersonalInformationForm = ({
             }),
     });
 
+<<<<<<< HEAD
     const {
         formState: { errors },
         handleSubmit,
@@ -61,6 +96,18 @@ export const PersonalInformationForm = ({
     } = useForm({
         resolver: yupResolver(schema),
     });
+=======
+  console.log("Parentesco: ", relationship);
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+>>>>>>> 2e57011 (updated cif not required when is brother)
 
     const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
@@ -114,6 +161,7 @@ export const PersonalInformationForm = ({
         <Container>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Row gutter={[16, 16]}>
+<<<<<<< HEAD
                     <Col span={24}>
                         <Card
                             title={
@@ -396,6 +444,121 @@ export const PersonalInformationForm = ({
                             </Card>
                         </Col>
                     )}
+=======
+                  <Col span={24} md={8}>
+                    <Controller
+                      name="familiar.firstName"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="Nombres"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          helperText={errorMessage(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={8}>
+                    <Controller
+                      name="familiar.paternalSurname"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="Apellido Paterno"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          helperText={errorMessage(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={8}>
+                    <Controller
+                      name="familiar.maternalSurname"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="Apellido Materno"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          helperText={errorMessage(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={8}>
+                    <Controller
+                      name="familiar.relationship"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Select
+                          label="Parentesco"
+                          name={name}
+                          value={value}
+                          options={Object.entries(Relationships).map(
+                            ([key, value]) => ({
+                              label: value,
+                              value: key,
+                            })
+                          )}
+                          onChange={(value) => {
+                            setRelationship(value);
+                            onChange(value);
+                          }}
+                          error={error(name)}
+                          helperText={errorMessage(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24} md={8}>
+                    <Controller
+                      name="familiar.email"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="Correo Electrónico"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          helperText={errorMessage(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                  {relationship !== "brother" && (
+                    <Col span={24} md={8}>
+                      <Controller
+                        name="familiar.cif"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <InputNumber
+                            label="N° CIF"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            helperText={errorMessage(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  )}
+>>>>>>> 2e57011 (updated cif not required when is brother)
                 </Row>
                 <Row justify="end" gutter={[16, 16]}>
                     <Col xs={24} sm={12} md={6}>

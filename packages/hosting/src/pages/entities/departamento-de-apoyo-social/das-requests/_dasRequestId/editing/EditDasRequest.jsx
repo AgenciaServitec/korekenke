@@ -74,7 +74,7 @@ export const EditDasRequestIntegration = ({
     const _entities = await fetchEntities();
 
     const manageDas = _entities.find(
-      (entity) => entity?.nameId === "departamento-de-apoyo-social",
+      (entity) => entity?.nameId === "departamento-de-apoyo-social"
     );
     const _entityManager = await fetchUser(manageDas?.entityManageId);
 
