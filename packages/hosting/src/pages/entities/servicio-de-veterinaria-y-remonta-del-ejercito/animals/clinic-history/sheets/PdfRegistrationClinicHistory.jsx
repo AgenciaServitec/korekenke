@@ -10,6 +10,7 @@ import { getAnimalEntitiesAndBosses } from "../../../../../../utils";
 
 export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { animalId } = useParams();
+
   const [loading, setLoading] = useState(true);
   const [animal, setAnimal] = useState(null);
   const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});

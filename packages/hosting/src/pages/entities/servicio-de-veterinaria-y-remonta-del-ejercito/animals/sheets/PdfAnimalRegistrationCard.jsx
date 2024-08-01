@@ -18,7 +18,7 @@ import { fetchAnimal } from "../../../../../firebase/collections";
 export const PdfAnimalRegistrationCard = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
-  const { users, entities } = useGlobalData();
+  const { users } = useGlobalData();
 
   const [loading, setLoading] = useState(true);
   const [animal, setAnimal] = useState(null);
