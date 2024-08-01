@@ -6,8 +6,7 @@ export const AnimalInformation = ({ animal }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={12}>
-        Nombre del Equino:{" "}
-        <strong className="capitalize">{animal?.name || ""}</strong>
+        Nombre: <strong className="capitalize">{animal?.name || ""}</strong>
       </Col>
       <Col span={24} md={12}>
         Edad:

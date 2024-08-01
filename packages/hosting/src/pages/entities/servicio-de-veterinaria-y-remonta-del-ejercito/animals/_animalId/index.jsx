@@ -32,6 +32,7 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
+import { AnimalsType } from "../../../../../data-list";
 
 export const AnimalIntegration = () => {
   const { animalId } = useParams();
@@ -141,7 +142,6 @@ const Animal = ({
 
   const isEquine = animalType === "equines";
   const isCattle = animalType === "cattle";
-  const isCanine = animalType === "canines";
 
   const schema = yup.object({
     nscCorrelativo: yup.string(),
@@ -237,9 +237,7 @@ const Animal = ({
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>
-            {animalType === "canines" ? "canino" : "Ganado o Equino"}
-          </Title>
+          <Title level={3}>{AnimalsType[animalType].titleSingular}</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>

@@ -76,7 +76,7 @@ export const AnimalMagazineProfilesIntegration = () => {
           >
             <AddButton
               onClick={() => onAddAnimalMagazineProfile()}
-              title="Ficha de Revista Equina"
+              title="Ficha de Revista Animal"
               margin="0"
             />
           </Acl>
