@@ -148,7 +148,7 @@ export const ClinicHistoryIntegration = () => {
         </Col>
         <Col span={24}>
           <Card
-            title={<span style={{ fontSize: "1.5em" }}>Datos del Equino</span>}
+            title={<span style={{ fontSize: "1.5em" }}>Datos del animal</span>}
             bordered={false}
             type="inner"
           >
@@ -168,7 +168,7 @@ export const ClinicHistoryIntegration = () => {
                     setClinicHistoryId("new");
                     onSetVisibleHistoryClinicModal();
                   }}
-                  title="Historia Clínica"
+                  title="Historia clínica"
                   margin="0"
                 />
               </Acl>
