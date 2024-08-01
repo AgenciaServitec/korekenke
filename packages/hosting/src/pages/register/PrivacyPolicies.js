@@ -16,6 +16,7 @@ import {
 import { assign } from "lodash";
 import { fetchRoleAcl } from "../../firebase/collections";
 import { LogoArmyPeru } from "../../images";
+import { Link } from "react-router-dom";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ export const PrivacyPolicies = ({ prev }) => {
               required={required(name)}
             >
               He leído y acepto la{" "}
-              <a href="#" target="_blank" rel="noreferrer">
+              <a href="/privacy-policies" target="_blank" rel="noreferrer">
                 Política de Privacidad
               </a>
             </Checkbox>

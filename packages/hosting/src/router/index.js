@@ -346,6 +346,7 @@ export const Router = () => {
         path="/surveys/organizational-climate-studies/sheets"
         element={<A.OrganizationalClimateStudiesSheets />}
       />
+      <Route exact path="/privacy-policies" element={<A.PrivacyPolicies />} />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );
