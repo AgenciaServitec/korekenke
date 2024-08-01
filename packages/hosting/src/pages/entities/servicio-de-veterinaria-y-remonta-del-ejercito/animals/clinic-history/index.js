@@ -69,7 +69,7 @@ export const ClinicHistoryIntegration = () => {
         setLoading(false);
       }
     })();
-  }, [animal]);
+  }, []);
 
   const [clinicHistories = [], clinicHistoriesLoading, clinicHistoriesError] =
     useCollectionData(
