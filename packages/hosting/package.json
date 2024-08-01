@@ -4,7 +4,7 @@
   "private": true,
   "sideEffects": false,
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "analyze": "yarn build && source-map-explorer 'build/static/js/*.js'",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "eslint": "^9.8.0",
+    "eslint": "^8.54.0",
     "eslint-plugin-react": "^7.35.0",
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
