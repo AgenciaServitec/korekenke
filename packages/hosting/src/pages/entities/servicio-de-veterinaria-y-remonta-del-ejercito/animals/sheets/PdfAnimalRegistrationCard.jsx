@@ -7,13 +7,13 @@ import {
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
 } from "../../../../../images";
-import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findDegree } from "../../../../../utils";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
+import { AnimalsInformation } from "./AnimalsInformation";
+import { AnimalsType } from "../../../../../data-list";
 import { useQuery } from "../../../../../hooks";
 
 export const PdfAnimalRegistrationCard = () => {
@@ -45,24 +45,15 @@ export const PdfAnimalRegistrationCard = () => {
 
   const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
-  const unitData = genericSearchById(units, animal?.unit);
+  const unit = genericSearchById(units, animal?.unit);
 
-  const bossUnitData = genericSearchById(users, unitData?.bossId);
+  const bossUnit = genericSearchById(users, unit?.bossId);
 
-  const departmentPELVET = genericSearchByNameId(departments, "pel-vet");
-
-  const bossDepartmentPELVET = genericSearchById(
-    users,
-    departmentPELVET?.bossId
+  const department = departments.find(
+    (department) => department.unitId === unit.id
   );
 
-  const userAssignedFullName = (userId) => {
-    const user = users.find((_user) => _user.id === userId);
-    if (!user) return "";
-    return userFullName(user);
-  };
-
-  const isCattle = animalType === "cattle";
+  const bossDepartment = genericSearchById(users, department?.bossId);
 
   return (
     <Container>
@@ -73,8 +64,8 @@ export const PdfAnimalRegistrationCard = () => {
           </div>
           <div className="header__item-center">
             <div>
-              <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO</h2>
-              <h3>TARJETA DE REGISTRO DE GANADO EQUINO</h3>
+              <h2>{AnimalsType[animalType].cardTitle}</h2>
+              <h3>{AnimalsType[animalType].cardSubTitle}</h3>
             </div>
           </div>
           <div className="header__item-right">
@@ -108,66 +99,7 @@ export const PdfAnimalRegistrationCard = () => {
                 </div>
               </div>
             </div>
-            <div className="section_information">
-              <div className="section_information__column">
-                <ul>
-                  <li>NSC - CORRELATIVO</li>
-                  <li>UNIDAD</li>
-                  <li>GRAN UNIDAD</li>
-                  <li>NOMBRE</li>
-                  {isCattle && <li>N° ARETE</li>}
-                  <li>N° MATRICULA</li>
-                  <li>N° CHIP</li>
-                  <li>SEXO</li>
-                  <li>COLOR</li>
-                </ul>
-              </div>
-              <div className="section_information__column">
-                <ul>
-                  <li>: {animal?.nscCorrelativo || ""}</li>
-                  <li>: {unitData?.name || ""}</li>
-                  <li>: {animal?.greatUnit || ""}</li>
-                  <li>: {animal?.name || ""}</li>
-                  {isCattle && <li>: {animal?.slopeNumber || "S/N"}</li>}
-                  <li>: {animal?.registrationNumber || "S/N"}</li>
-                  <li>: {animal?.chipNumber || "S/N"}</li>
-                  <li>: {animal?.gender === "male" ? "Macho" : "Hembra"}</li>
-                  <li>: {animal?.color || ""}</li>
-                </ul>
-              </div>
-              <div className="section_information__column">
-                <ul>
-                  <li>F. NACIMIENTO</li>
-                  <li>TALLA</li>
-                  <li>PADRE</li>
-                  <li>MADRE</li>
-                  <li>PROCEDENCIA</li>
-                  <li>RAZA/LINEA</li>
-                  <li>ASIGNADO U AFECTADO</li>
-                </ul>
-              </div>
-              <div className="section_information__column">
-                <ul>
-                  <li>
-                    :{" "}
-                    {animal?.birthdate
-                      ? dayjs(
-                          animal?.birthdate,
-                          DATE_FORMAT_TO_FIRESTORE
-                        ).format("DD/MM/YYYY")
-                      : ""}
-                  </li>
-                  <li>: {animal?.height || ""} Mts</li>
-                  <li>: {animal?.father || ""}</li>
-                  <li>: {animal?.mother || ""}</li>
-                  <li>: {animal?.origin || ""}</li>
-                  <li>: {animal?.raceOrLine || ""}</li>
-                  <li>
-                    : {userAssignedFullName(animal?.assignedOrAffectedId) || ""}
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <AnimalsInformation animal={animal} unit={unit} users={users} />
             <div className="section_description">
               {animal?.description && (
                 <>
@@ -212,25 +144,25 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {bossUnitData?.signaturePhoto && (
+                    {bossUnit?.signaturePhoto && (
                       <img
-                        src={bossUnitData?.signaturePhoto.url}
+                        src={bossUnit?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossUnitData?.cip}</strong>
+                      <strong>{bossUnit?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossUnitData)}</strong>
+                      <strong>{userFullName(bossUnit)}</strong>
                     </p>
                     <p>
-                      <strong>{findDegree(bossUnitData?.degree)?.label}</strong>
+                      <strong>{findDegree(bossUnit?.degree)?.label}</strong>
                     </p>
                     <p>
-                      <strong>Jefe del {unitData?.name}</strong>
+                      <strong>Jefe del {unit?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -239,28 +171,28 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {bossDepartmentPELVET?.signaturePhoto && (
+                    {bossDepartment?.signaturePhoto && (
                       <img
-                        src={bossDepartmentPELVET?.signaturePhoto.url}
+                        src={bossDepartment?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossDepartmentPELVET?.cip}</strong>
+                      <strong>{bossDepartment?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossDepartmentPELVET)}</strong>
+                      <strong>{userFullName(bossDepartment)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(bossDepartmentPELVET?.degree)?.label}
+                        {findDegree(bossDepartment?.degree)?.label}
                       </strong>
                     </p>
                     <p>
                       <strong>
-                        JEFE {`${departmentPELVET?.name} DEL ${unitData?.name}`}
+                        JEFE {`${department?.name} DEL ${unit?.name}`}
                       </strong>
                     </p>
                   </div>
@@ -374,25 +306,6 @@ const Container = styled.div`
           display: flex;
           justify-content: start;
         }
-      }
-    }
-  }
-
-  .section_information {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1em;
-    &__column {
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        font-weight: 600;
-        font-size: 0.8em;
-        text-transform: uppercase;
-        display: grid;
-        gap: 0.1em;
       }
     }
   }
