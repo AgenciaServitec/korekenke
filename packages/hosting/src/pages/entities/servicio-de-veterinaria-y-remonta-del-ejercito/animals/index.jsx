@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   Button,
@@ -16,12 +16,29 @@ import { useGlobalData } from "../../../../providers";
 import { updateAnimal } from "../../../../firebase/collections";
 import { useDefaultFirestoreProps, useQueryString } from "../../../../hooks";
 import { AnimalsType } from "../../../../data-list";
+import queryString from "query-string";
 
 export const AnimalsIntegration = () => {
   const navigate = useNavigate();
-  const [animalType, setAnimalType] = useQueryString("animalType", "equines");
   const { animals } = useGlobalData();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+
+  const query = queryString.parse(location.search);
+
+  const [animalType, setAnimalType] = useQueryString(
+    "animalType",
+    query?.animalType || "equines",
+  );
+
+  const [animalsView, setAnimalsView] = useState([]);
+
+  useEffect(() => {
+    setAnimalType(query?.animalType);
+
+    setAnimalsView(
+      animals.filter((animal) => animal.type === query?.animalType),
+    );
+  }, [query?.animalType]);
 
   const navigateTo = (pathname = "new") =>
     navigate(`${pathname}?animalType=${animalType}`);
@@ -37,8 +54,6 @@ export const AnimalsIntegration = () => {
       },
     });
   };
-
-  const animalsView = animals.filter((animal) => animal.type === animalType);
 
   return (
     <Animals
@@ -109,6 +124,7 @@ const Animals = ({
               name="/animals/new"
             >
               <Radio.Group
+                key={animalType}
                 onChange={(e) => onSetAnimalType(e.target.value)}
                 defaultValue={animalType}
               >
