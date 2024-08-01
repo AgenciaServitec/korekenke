@@ -1,15 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { notification, QRCode, Spinner } from "../../../../../../components";
-import { animalsRef } from "../../../../../../firebase/collections";
+import {
+  animalsRef,
+  fetchDepartment,
+  fetchUnit,
+} from "../../../../../../firebase/collections";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
 
 export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { animalId } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [department, setDepartment] = useState(null);
+  const [unit, setUnit] = useState(null);
 
   const [animal = {}, animalLoading, animalError] = useDocumentData(
     animalsRef.doc(animalId),
@@ -19,7 +26,27 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
     animalError && notification({ type: "error" });
   }, [animalError]);
 
-  if (animalLoading) return <Spinner height="80vh" />;
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+
+        if (animal) {
+          const _unit = await fetchUnit(animal.unitId);
+          if (!_unit) return;
+
+          const _department = await fetchDepartment(_unit.departmentId);
+
+          setUnit(_unit);
+          setDepartment(_department);
+        }
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [animal]);
+
+  if (animalLoading || loading) return <Spinner height="80vh" />;
 
   return (
     <Container>
@@ -36,12 +63,12 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
             />
             <div>
               <span>{animal?.greatUnit}</span>
-              <span>{animal?.unit}</span>
-              <span>PEL VET</span>
+              <span>{unit?.name}</span>
+              <span>{department?.name}</span>
             </div>
           </div>
           <h2 className="header__title">
-            HISTORIA CLÍNICA VETERINARIA DEL {animal?.unit}
+            HISTORIA CLÍNICA VETERINARIA DEL {unit?.name}
           </h2>
         </div>
         <div className="main">

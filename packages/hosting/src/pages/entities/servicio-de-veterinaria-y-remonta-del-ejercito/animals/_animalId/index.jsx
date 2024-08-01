@@ -6,7 +6,6 @@ import {
   DatePicker,
   Form,
   Input,
-  InputNumber,
   notification,
   Row,
   Select,
@@ -38,7 +37,7 @@ export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
-  const { animals, departments, users, units } = useGlobalData();
+  const { animals, users, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -62,7 +61,7 @@ export const AnimalIntegration = () => {
     rightProfilePhoto: formData?.rightProfilePhoto || null,
     frontPhoto: formData?.frontPhoto || null,
     leftProfilePhoto: formData?.leftProfilePhoto || null,
-    unit: formData.unit,
+    unitId: formData.unitId,
     greatUnit: formData.greatUnit,
     name: formData.name,
     slopeNumber: formData.slopeNumber,
@@ -100,11 +99,6 @@ export const AnimalIntegration = () => {
     }
   };
 
-  const departmentsView = departments.map((deparment) => ({
-    label: deparment.name,
-    value: deparment.id,
-  }));
-
   const cologeUsers = users
     .filter((user) =>
       (user?.commands || []).map((command) => command.code).includes("cologe"),
@@ -121,7 +115,6 @@ export const AnimalIntegration = () => {
       isNew={isNew}
       animalType={animalType}
       units={units}
-      departmentsView={departmentsView}
       animal={animal}
       cologeUsers={cologeUsers}
       onSaveAnimal={onSaveAnimal}
@@ -141,17 +134,12 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
-  const unitsView = units.map((unit) => ({
-    label: unit.name,
-    value: unit.id,
-  }));
-
   const schema = yup.object({
     nscCorrelativo: yup.string(),
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
-    unit: yup.string().required(),
+    unitId: yup.string().required(),
     greatUnit: yup.string().required(),
     name: yup.string().required(),
     slopeNumber:
@@ -195,7 +183,7 @@ const Animal = ({
       rightProfilePhoto: animal?.rightProfilePhoto || null,
       frontPhoto: animal?.frontPhoto || null,
       leftProfilePhoto: animal?.leftProfilePhoto || null,
-      unit: animal?.unit || "",
+      unitId: animal?.unitId || "",
       greatUnit: animal?.greatUnit || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",
@@ -333,14 +321,17 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="unit"
+                  name="unitId"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Unidad"
                       name={name}
                       value={value}
-                      options={unitsView}
+                      options={units.map((unit) => ({
+                        label: unit.name,
+                        value: unit.id,
+                      }))}
                       onChange={(value) => onChangeGreatUnit(onChange, value)}
                       error={error(name)}
                       required={required(name)}

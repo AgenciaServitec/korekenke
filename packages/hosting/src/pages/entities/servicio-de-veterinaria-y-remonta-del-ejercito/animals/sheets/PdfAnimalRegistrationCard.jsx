@@ -45,7 +45,7 @@ export const PdfAnimalRegistrationCard = () => {
 
   const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
 
-  const unitData = genericSearchById(units, animal?.unit);
+  const unitData = genericSearchById(units, animal?.unitId);
 
   const bossUnitData = genericSearchById(users, unitData?.bossId);
 

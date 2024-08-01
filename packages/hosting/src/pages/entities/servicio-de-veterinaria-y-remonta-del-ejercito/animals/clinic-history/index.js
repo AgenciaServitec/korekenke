@@ -21,6 +21,8 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import {
+  fetchDepartment,
+  fetchUnit,
   fetchUser,
   updateClinicHistory,
 } from "../../../../../firebase/collections";
@@ -29,7 +31,6 @@ import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
-import { isEmpty } from "lodash";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -41,7 +42,7 @@ export const ClinicHistoryIntegration = () => {
     "",
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { animals, departments, units } = useGlobalData();
+  const { animals } = useGlobalData();
   const animalsByType = animals.filter((animal) => animal.type === animalType);
 
   const [isVisibleModal, setIsVisibleModal] = useState({
@@ -50,33 +51,18 @@ export const ClinicHistoryIntegration = () => {
   });
   const [animal, setAnimal] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
-  const [boss, setBoss] = useState(null);
-
-  const findById = (dataSource, id) => {
-    return dataSource.find((_dataSource) => _dataSource.id === id);
-  };
+  const [departmentBoss, setDepartmentBoss] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const unit = findById(units, animal?.unit);
+      const _unit = await fetchUnit(animal?.unitId);
+      if (!_unit) return;
 
-      if (!isEmpty(unit)) {
-        const userBoss = await fetchUser(unit.bossId);
-        setBoss(userBoss);
-        return;
-      }
+      const _department = await fetchDepartment(_unit.departmentId);
 
-      const PEL_VET_DEL_RC_MDN_EPR_department = departments.find(
-        (department) => department?.nameId === "pel-vet",
-      );
+      const _departmentBoss = await fetchUser(_department.bossId);
 
-      if (!PEL_VET_DEL_RC_MDN_EPR_department?.bossId) return;
-
-      const userBoss = await fetchUser(
-        PEL_VET_DEL_RC_MDN_EPR_department.bossId,
-      );
-
-      setBoss(userBoss);
+      setDepartmentBoss(_departmentBoss);
     })();
   }, [animal]);
 
@@ -217,7 +203,7 @@ export const ClinicHistoryIntegration = () => {
             onSetClinicHistoryId={setClinicHistoryId}
             loading={clinicHistoriesLoading}
             user={authUser}
-            boss={boss}
+            departmentBoss={departmentBoss}
           />
         </Col>
         <ClinicHistoryModalComponent
