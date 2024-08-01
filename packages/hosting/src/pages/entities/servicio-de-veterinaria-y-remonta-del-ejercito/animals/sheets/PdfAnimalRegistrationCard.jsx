@@ -32,30 +32,30 @@ export const PdfAnimalRegistrationCard = () => {
 
   if (animalLoading) return <Spinner height="80vh" />;
 
-  const genericSearchById = (group, id) => {
+  const findById = (group, id) => {
     return group.find((_group) => _group.id === id);
   };
 
-  const genericSearchByNameId = (group, nameId) => {
+  const findByNameId = (group, nameId) => {
     return group.find((_group) => _group.nameId === nameId);
   };
 
-    const entitySVRE = genericSearchByNameId(
-        entities,
-        "servicio-de-veterinaria-y-remonta-del-ejercito"
-    );
+  const entitySVRE = findByNameId(
+    entities,
+    "servicio-de-veterinaria-y-remonta-del-ejercito"
+  );
 
-    const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
+  const bossEntitySVRE = findById(users, entitySVRE?.entityManageId);
 
-    const unit = genericSearchById(units, animal?.unit);
+  const unit = findById(units, animal?.unit);
 
-    const bossUnit = genericSearchById(users, unit?.bossId);
+  const bossUnit = findById(users, unit?.bossId);
 
     const department = departments.find(
         (department) => department.unitId === unit.id
     );
 
-    const bossDepartment = genericSearchById(users, department?.bossId);
+  const bossDepartment = findById(users, department?.bossId);
 
   return (
     <Container>
