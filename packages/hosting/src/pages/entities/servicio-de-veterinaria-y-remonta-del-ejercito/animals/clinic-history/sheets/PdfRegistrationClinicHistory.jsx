@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React from "react";
 import styled from "styled-components";
-import { QRCode, Spinner } from "../../../../../../components";
-import { fetchAnimal } from "../../../../../../firebase/collections";
+import { QRCode } from "../../../../../../components";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
-import { getAnimalEntitiesAndBosses } from "../../../../../../utils";
+import { useNavigate } from "react-router";
+import { isEmpty } from "lodash";
 
-export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
-  const { animalId } = useParams();
-
-  const [loading, setLoading] = useState(true);
-  const [animal, setAnimal] = useState(null);
-  const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const _animal = await fetchAnimal(animalId);
-        const result = await getAnimalEntitiesAndBosses(_animal);
-        setAnimal(_animal);
-        setAnimalEntitiesAndBosses(result);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  if (loading) return <Spinner height="80vh" />;
+export const PdfRegistrationClinicHistory = ({
+  clinicHistories,
+  animal,
+  animalEntitiesAndBosses,
+}) => {
+  const navigate = useNavigate();
+  if (isEmpty(clinicHistories)) return navigate(-1);
 
   const { unit, department } = animalEntitiesAndBosses;
 
