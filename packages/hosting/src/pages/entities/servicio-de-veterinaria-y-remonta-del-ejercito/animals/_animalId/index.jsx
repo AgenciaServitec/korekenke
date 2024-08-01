@@ -256,7 +256,7 @@ const Animal = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${animal.id}/photos`}
+                      filePath={`animals/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -278,7 +278,7 @@ const Animal = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`front-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${animal.id}/photos`}
+                      filePath={`animals/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -300,7 +300,7 @@ const Animal = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${animal.id}/photos`}
+                      filePath={`animals/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
