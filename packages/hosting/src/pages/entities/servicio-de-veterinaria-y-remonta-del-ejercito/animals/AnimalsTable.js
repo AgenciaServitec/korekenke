@@ -10,7 +10,6 @@ import {
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
-import { useQuery } from "../../../../hooks";
 
 export const AnimalsTable = ({
   animals,
@@ -20,10 +19,6 @@ export const AnimalsTable = ({
   onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
 }) => {
-  const { animalType } = useQuery();
-
-  const animalsOfType = animals.filter((animal) => animal.type === animalType);
-
   const columns = [
     {
       title: "Fecha creación",
@@ -133,7 +128,7 @@ export const AnimalsTable = ({
   return (
     <Table
       columns={columns}
-      dataSource={orderBy(animalsOfType, "createAt", "desc")}
+      dataSource={orderBy(animals, "createAt", "desc")}
       scroll={{ x: "max-content" }}
     />
   );
