@@ -178,7 +178,8 @@ export const PdfAnimalRegistrationCard = () => {
                     </p>
                     <p>
                       <strong>
-                        JEFE {`${department?.name} DEL ${unit?.name}`}
+                        JEFE{" "}
+                        {`${department?.name || ""} DEL ${unit?.name || ""}`}
                       </strong>
                     </p>
                   </div>
