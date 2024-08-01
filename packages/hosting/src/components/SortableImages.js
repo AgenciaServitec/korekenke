@@ -20,7 +20,7 @@ export const SortableImages = ({
   onRenderLastElement,
 }) => {
   const dataSource = [...images, onRenderLastElement ? "last" : ""].filter(
-    (image) => image
+    (image) => image,
   );
 
   return (
@@ -53,7 +53,7 @@ export const SortableImages = ({
               !isString(image) && images.push(image);
 
               return images;
-            }, [])
+            }, []),
           )
         }
       />

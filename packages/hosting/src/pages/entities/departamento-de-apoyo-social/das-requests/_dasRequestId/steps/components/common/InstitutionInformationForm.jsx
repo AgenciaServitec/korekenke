@@ -41,7 +41,7 @@ export const InstitutionInformationForm = ({
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   const _dasRequest = DasRequestList.find(
-    (_dasRequest) => _dasRequest.id === dasRequest?.requestType
+    (_dasRequest) => _dasRequest.id === dasRequest?.requestType,
   );
 
   useEffect(() => {

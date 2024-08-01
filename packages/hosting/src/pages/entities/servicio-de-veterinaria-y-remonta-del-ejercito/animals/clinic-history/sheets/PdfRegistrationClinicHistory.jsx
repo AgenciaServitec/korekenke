@@ -12,7 +12,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { animalId } = useParams();
 
   const [animal = {}, animalLoading, animalError] = useDocumentData(
-    animalsRef.doc(animalId)
+    animalsRef.doc(animalId),
   );
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                   <span>Fecha nacimiento:</span>
                   <span>
                     {dayjs(animal?.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
-                      "DD/MM/YYYY"
+                      "DD/MM/YYYY",
                     )}
                   </span>
                 </div>
@@ -102,7 +102,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                       <td>
                         {_clinicHistory?.createAt &&
                           dayjs(_clinicHistory.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm"
+                            "DD/MM/YYYY HH:mm",
                           )}
                       </td>
                       <td>{_clinicHistory?.symptomatology}</td>

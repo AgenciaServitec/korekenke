@@ -8,5 +8,5 @@ export const findRelationShip = (familiar) =>
 
 export const findInstitution = (institution) =>
   institutions[institution?.type].find(
-    (_institution) => _institution.id === institution.id
+    (_institution) => _institution.id === institution.id,
   );

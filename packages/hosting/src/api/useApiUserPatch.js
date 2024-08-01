@@ -16,7 +16,7 @@ export const useApiUserPatch = () => {
 
       return patch(url, user);
     },
-    [patch]
+    [patch],
   );
 
   return {

@@ -39,10 +39,10 @@ export const HeaderLayout = ({
 
   const lastCommand = orderBy(
     (user?.commands || []).filter(
-      (command) => command.id !== user.initialCommand.id
+      (command) => command.id !== user.initialCommand.id,
     ),
     "updateAt",
-    "desc"
+    "desc",
   )?.[0];
 
   const items = [

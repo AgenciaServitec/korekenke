@@ -23,7 +23,7 @@ export const Acl = ({ children, category, subCategory, name, redirect }) => {
     if (isEmpty(name)) return false;
 
     return (authUser?.acls?.[category]?.[subCategory] || []).some(
-      (acl) => acl === name
+      (acl) => acl === name,
     );
   };
 

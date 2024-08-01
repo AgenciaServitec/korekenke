@@ -60,10 +60,10 @@ export const SortableItems = ({
   const onDragEnd = ({ active, over }) => {
     if (over && active.id !== over?.id) {
       const oldIndex = dataSource.findIndex(
-        (dataSourceValue) => getUniqueIdentifier(dataSourceValue) === active.id
+        (dataSourceValue) => getUniqueIdentifier(dataSourceValue) === active.id,
       );
       const newIndex = dataSource.findIndex(
-        (dataSourceValue) => getUniqueIdentifier(dataSourceValue) === over.id
+        (dataSourceValue) => getUniqueIdentifier(dataSourceValue) === over.id,
       );
 
       const newDataSource = arrayMove(dataSource, oldIndex, newIndex);
@@ -73,7 +73,7 @@ export const SortableItems = ({
   };
 
   const items = dataSource.map((dataSourceValue) =>
-    getUniqueIdentifier(dataSourceValue)
+    getUniqueIdentifier(dataSourceValue),
   );
 
   return (

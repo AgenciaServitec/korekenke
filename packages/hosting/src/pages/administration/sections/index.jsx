@@ -42,7 +42,7 @@ export const SectionsIntegration = () => {
           isDeleted: true,
           membersIds: null,
           bossId: null,
-        })
+        }),
       );
     } catch (e) {
       console.error("ErrorDeleteSection: ", e);
@@ -51,7 +51,7 @@ export const SectionsIntegration = () => {
   };
 
   const sectionsView = sections.filter((section) =>
-    departmentId === "all" ? true : section.departmentId === departmentId
+    departmentId === "all" ? true : section.departmentId === departmentId,
   );
 
   return (
@@ -87,7 +87,7 @@ export const SectionsIntegration = () => {
               departments.map((department) => ({
                 label: department.name,
                 value: department.id,
-              }))
+              })),
             )}
           />
         </Col>

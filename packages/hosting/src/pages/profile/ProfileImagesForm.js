@@ -44,7 +44,7 @@ export const ProfileImagesForm = () => {
           cipPhoto: formData?.cipPhoto || null,
           dniPhoto: formData?.dniPhoto || null,
           signaturePhoto: formData?.signaturePhoto || null,
-        })
+        }),
       );
 
       if (!putUserResponse.ok) {

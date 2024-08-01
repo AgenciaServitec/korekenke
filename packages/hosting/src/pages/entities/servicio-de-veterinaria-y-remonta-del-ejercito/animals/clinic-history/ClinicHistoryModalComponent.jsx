@@ -59,7 +59,7 @@ export const ClinicHistoryModalComponent = ({
         : await updateClinicHistory(
             animalId,
             _clinicHistory.id,
-            assignUpdateProps(_clinicHistory)
+            assignUpdateProps(_clinicHistory),
           );
 
       onSetIsVisibleModal();

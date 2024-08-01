@@ -34,7 +34,7 @@ export const DasRequestsTable = ({
   useEffect(() => {
     (async () => {
       const entities = await fetchCollectionOnce(
-        entitiesRef.where("nameId", "==", "departamento-de-apoyo-social")
+        entitiesRef.where("nameId", "==", "departamento-de-apoyo-social"),
       );
 
       setEntity(entities?.[0]);
@@ -116,8 +116,8 @@ export const DasRequestsTable = ({
                 window.open(
                   `https://api.whatsapp.com/send?phone=${dasRequest.headline.phone.prefix.replace(
                     "+",
-                    ""
-                  )}${dasRequest.headline.phone.number}`
+                    "",
+                  )}${dasRequest.headline.phone.number}`,
                 )
               }
             />

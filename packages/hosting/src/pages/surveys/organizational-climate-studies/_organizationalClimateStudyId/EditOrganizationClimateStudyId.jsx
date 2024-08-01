@@ -10,7 +10,7 @@ export const EditOrganizationClimateStudyId = () => {
   const navigate = useNavigate();
   const { organizationalClimateStudyId } = useParams();
   const [organizationalClimateStudy, setOrganizationalClimateStudy] = useState(
-    {}
+    {},
   );
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const EditOrganizationClimateStudyId = () => {
 
   const itemsSurvey = itemsOptions.reduce((acc, _itemsOptions) => {
     const response = Surveys.items.responses.find(
-      (response) => response.value === _itemsOptions.value
+      (response) => response.value === _itemsOptions.value,
     );
     if (response) {
       acc.push({ label: _itemsOptions.label, value: response.label });
@@ -71,7 +71,7 @@ export const EditOrganizationClimateStudyId = () => {
                   <span>
                     {
                       Surveys.questions[1].options.find(
-                        (option) => option.value === questions?.type
+                        (option) => option.value === questions?.type,
                       ).label
                     }
                   </span>
@@ -89,7 +89,7 @@ export const EditOrganizationClimateStudyId = () => {
                   <span>
                     {
                       Surveys.questions[3].options.find(
-                        (option) => option.value === questions?.ubigeus
+                        (option) => option.value === questions?.ubigeus,
                       ).label
                     }
                   </span>
@@ -107,7 +107,7 @@ export const EditOrganizationClimateStudyId = () => {
                   <span>
                     {
                       Surveys.questions[5].options.find(
-                        (option) => option.value === questions?.gender
+                        (option) => option.value === questions?.gender,
                       ).label
                     }
                   </span>
@@ -120,7 +120,7 @@ export const EditOrganizationClimateStudyId = () => {
                     {
                       Surveys.questions[6].options.find(
                         (option) =>
-                          option.value === questions?.occupationalGroup
+                          option.value === questions?.occupationalGroup,
                       ).label
                     }
                   </span>
@@ -132,7 +132,7 @@ export const EditOrganizationClimateStudyId = () => {
                   <span>
                     {
                       Surveys.questions[7].options.find(
-                        (option) => option.value === questions?.personal
+                        (option) => option.value === questions?.personal,
                       ).label
                     }
                   </span>
@@ -144,7 +144,7 @@ export const EditOrganizationClimateStudyId = () => {
                   <span>
                     {
                       Surveys.questions[8].options.find(
-                        (option) => option.value === questions?.condition
+                        (option) => option.value === questions?.condition,
                       ).label
                     }
                   </span>

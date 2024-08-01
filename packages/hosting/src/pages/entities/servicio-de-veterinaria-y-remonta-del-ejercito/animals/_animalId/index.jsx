@@ -107,7 +107,7 @@ export const AnimalIntegration = () => {
 
   const cologeUsers = users
     .filter((user) =>
-      (user?.commands || []).map((command) => command.code).includes("cologe")
+      (user?.commands || []).map((command) => command.code).includes("cologe"),
     )
     .map((_user) => ({
       label: userFullName(_user),

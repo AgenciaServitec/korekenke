@@ -114,7 +114,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       usersRef
         .where("isDeleted", "==", false)
         .where("email", "==", email)
-        .limit(1)
+        .limit(1),
     );
 
     return response[0];
@@ -125,7 +125,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       usersRef
         .where("isDeleted", "==", false)
         .where("phone.number", "==", phoneNumber)
-        .limit(1)
+        .limit(1),
     );
 
     return response[0];

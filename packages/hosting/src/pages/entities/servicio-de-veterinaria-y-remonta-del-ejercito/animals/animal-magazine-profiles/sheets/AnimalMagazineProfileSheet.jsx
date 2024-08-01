@@ -50,7 +50,7 @@ export const AnimalMagazineProfilesheet = ({
                     <td className="value">
                       {dayjs().diff(
                         dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-                        "years"
+                        "years",
                       )}{" "}
                       AÑOS
                     </td>
@@ -58,7 +58,7 @@ export const AnimalMagazineProfilesheet = ({
                     <td className="value" colSpan={2}>
                       {dayjs().diff(
                         dayjs(animal.birthdate, "DD/MM/YYYY HH:mm"),
-                        "months"
+                        "months",
                       )}
                     </td>
                   </tr>
@@ -150,7 +150,7 @@ export const AnimalMagazineProfilesheet = ({
                         </strong>
                       </td>
                     </tr>
-                  )
+                  ),
                 )}
               </tbody>
             </table>
