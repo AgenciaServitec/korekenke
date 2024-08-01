@@ -146,6 +146,10 @@ const Animal = ({
     value: unit.id,
   }));
 
+  const isEquine = animalType === "equines";
+  const isCattle = animalType === "cattle";
+  const isCanine = animalType === "canines";
+
   const schema = yup.object({
     nscCorrelativo: yup.string(),
     rightProfilePhoto: yup.mixed().required(),
@@ -154,20 +158,21 @@ const Animal = ({
     unit: yup.string().required(),
     greatUnit: yup.string().required(),
     name: yup.string().required(),
-    slopeNumber:
-      animalType === "cattle"
-        ? yup.string().required()
-        : yup.string().notRequired(),
-    registrationNumber: yup.string(),
-    chipNumber: yup.string(),
+    slopeNumber: isCattle
+      ? yup.string().required()
+      : yup.string().notRequired(),
+    registrationNumber: isCattle
+      ? yup.string().notRequired()
+      : yup.string().required(),
+    chipNumber: isEquine ? yup.string().required() : yup.string().notRequired(),
     gender: yup.string().required(),
     color: yup.string().required(),
     birthdate: yup.date().required(),
-    height: yup.string(),
+    height: isEquine ? yup.string().required() : yup.string().notRequired(),
     father: yup.string().required(),
     mother: yup.string().required(),
     origin: yup.string().required(),
-    raceOrLine: yup.string(),
+    raceOrLine: yup.string().required(),
     fur: yup.string(),
     assignedOrAffectedId: yup.string(),
     description: yup.string(),
@@ -212,13 +217,10 @@ const Animal = ({
       origin: animal?.origin || "",
       raceOrLine: animal?.raceOrLine || "",
       fur: animal?.fur || "",
-      squadron: animal?.squadron || "",
       assignedOrAffectedId: animal?.assignedOrAffectedId || "",
       description: animal?.description || "",
     });
   };
-
-  const isCattle = animalType === "cattle";
 
   const onChangeGreatUnit = (onChange, value) => {
     const _unit = units.find((_unit) => _unit.id === value);
@@ -380,22 +382,24 @@ const Animal = ({
                   )}
                 />
               </Col>
-              <Col span={24} md={6}>
-                <Controller
-                  name="height"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="Talla"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
+              {isEquine && (
+                <Col span={24} md={6}>
+                  <Controller
+                    name="height"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Input
+                        label="Talla"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              )}
 
               <Col span={24} md={6}>
                 <Controller
@@ -463,38 +467,42 @@ const Animal = ({
                   />
                 </Col>
               )}
-              <Col span={24} md={6}>
-                <Controller
-                  name="registrationNumber"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="N° de Matrícula"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
+              {isEquine && (
+                <>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="registrationNumber"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="N° de Matrícula"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Col>
-              <Col span={24} md={6}>
-                <Controller
-                  name="chipNumber"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="N° de Chip"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
+                  </Col>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="chipNumber"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="N° de Chip"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Col>
+                  </Col>
+                </>
+              )}
               <Col span={24} md={6}>
                 <Controller
                   name="origin"

@@ -64,8 +64,6 @@ export const PersonalInformationForm = ({
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
-  console.log(errors);
-
   useEffect(() => {
     resetForm();
   }, []);
