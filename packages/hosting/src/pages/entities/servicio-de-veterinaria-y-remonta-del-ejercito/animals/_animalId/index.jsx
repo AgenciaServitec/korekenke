@@ -65,6 +65,7 @@ export const AnimalIntegration = () => {
     unit: formData.unit,
     greatUnit: formData.greatUnit,
     name: formData.name,
+    slopeNumber: formData.slopeNumber,
     registrationNumber: formData.registrationNumber,
     chipNumber: formData.chipNumber || null,
     gender: formData.gender,
@@ -153,6 +154,10 @@ const Animal = ({
     unit: yup.string().required(),
     greatUnit: yup.string().required(),
     name: yup.string().required(),
+    slopeNumber:
+      animalType === "cattle"
+        ? yup.string().required()
+        : yup.string().notRequired(),
     registrationNumber: yup.string(),
     chipNumber: yup.string(),
     gender: yup.string().required(),
@@ -193,6 +198,7 @@ const Animal = ({
       unit: animal?.unit || "",
       greatUnit: animal?.greatUnit || "",
       name: animal?.name || "",
+      slopeNumber: animal?.slopeNumber || "",
       registrationNumber: animal?.registrationNumber || "",
       gender: animal?.gender || "",
       chipNumber: animal?.chipNumber || "",
@@ -211,6 +217,8 @@ const Animal = ({
       description: animal?.description || "",
     });
   };
+
+  const isCattle = animalType === "cattle";
 
   const onChangeGreatUnit = (onChange, value) => {
     const _unit = units.find((_unit) => _unit.id === value);
@@ -437,6 +445,24 @@ const Animal = ({
                   )}
                 />
               </Col>
+              {isCattle && (
+                <Col span={24} md={6}>
+                  <Controller
+                    name="slopeNumber"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Input
+                        label="N° de Arete"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              )}
               <Col span={24} md={6}>
                 <Controller
                   name="registrationNumber"

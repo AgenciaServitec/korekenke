@@ -14,9 +14,11 @@ import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findDegree } from "../../../../../utils";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../../../../firebase";
+import { useQuery } from "../../../../../hooks";
 
 export const PdfAnimalRegistrationCard = () => {
   const { animalId } = useParams();
+  const { animalType } = useQuery();
   const [animal, animalLoading, animalError] = useDocumentData(
     firestore.collection("animals").doc(animalId)
   );
@@ -59,6 +61,8 @@ export const PdfAnimalRegistrationCard = () => {
     if (!user) return "";
     return userFullName(user);
   };
+
+  const isCattle = animalType === "cattle";
 
   return (
     <Container>
@@ -111,6 +115,7 @@ export const PdfAnimalRegistrationCard = () => {
                   <li>UNIDAD</li>
                   <li>GRAN UNIDAD</li>
                   <li>NOMBRE</li>
+                  {isCattle && <li>N° ARETE</li>}
                   <li>N° MATRICULA</li>
                   <li>N° CHIP</li>
                   <li>SEXO</li>
@@ -123,6 +128,7 @@ export const PdfAnimalRegistrationCard = () => {
                   <li>: {unitData?.name || ""}</li>
                   <li>: {animal?.greatUnit || ""}</li>
                   <li>: {animal?.name || ""}</li>
+                  {isCattle && <li>: {animal?.slopeNumber || "S/N"}</li>}
                   <li>: {animal?.registrationNumber || "S/N"}</li>
                   <li>: {animal?.chipNumber || "S/N"}</li>
                   <li>: {animal?.gender === "male" ? "Macho" : "Hembra"}</li>
