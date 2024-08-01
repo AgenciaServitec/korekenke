@@ -1,52 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
-import { notification, QRCode, Spinner } from "../../../../../../components";
-import {
-  animalsRef,
-  fetchDepartment,
-  fetchUnit,
-} from "../../../../../../firebase/collections";
+import { QRCode, Spinner } from "../../../../../../components";
+import { fetchAnimal } from "../../../../../../firebase/collections";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
+import { getAnimalEntitiesAndBosses } from "../../../../../../utils";
 
 export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
   const { animalId } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [department, setDepartment] = useState(null);
-  const [unit, setUnit] = useState(null);
-
-  const [animal = {}, animalLoading, animalError] = useDocumentData(
-    animalsRef.doc(animalId),
-  );
-
-  useEffect(() => {
-    animalError && notification({ type: "error" });
-  }, [animalError]);
+  const [loading, setLoading] = useState(true);
+  const [animal, setAnimal] = useState(null);
+  const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-
-        if (animal) {
-          const _unit = await fetchUnit(animal.unitId);
-          if (!_unit) return;
-
-          const _department = await fetchDepartment(_unit.departmentId);
-
-          setUnit(_unit);
-          setDepartment(_department);
-        }
+        const _animal = await fetchAnimal(animalId);
+        const result = await getAnimalEntitiesAndBosses(_animal);
+        setAnimal(_animal);
+        setAnimalEntitiesAndBosses(result);
       } finally {
         setLoading(false);
       }
     })();
-  }, [animal]);
+  }, []);
 
-  if (animalLoading || loading) return <Spinner height="80vh" />;
+  if (loading) return <Spinner height="80vh" />;
+
+  const { unit, department } = animalEntitiesAndBosses;
 
   return (
     <Container>

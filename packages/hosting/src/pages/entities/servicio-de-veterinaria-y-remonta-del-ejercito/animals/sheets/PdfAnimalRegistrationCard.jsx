@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { notification, QRCode, Spinner } from "../../../../../components";
+import { QRCode, Spinner } from "../../../../../components";
 import {
   ImgNoFound,
   LogoArmyPeru,
@@ -9,51 +9,39 @@ import {
 } from "../../../../../images";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import { findDegree } from "../../../../../utils";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { firestore } from "../../../../../firebase";
+import { findDegree, getAnimalEntitiesAndBosses } from "../../../../../utils";
 import { AnimalsInformation } from "./AnimalsInformation";
 import { AnimalsType } from "../../../../../data-list";
 import { useQuery } from "../../../../../hooks";
+import { fetchAnimal } from "../../../../../firebase/collections";
 
 export const PdfAnimalRegistrationCard = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
-  const [animal, animalLoading, animalError] = useDocumentData(
-    firestore.collection("animals").doc(animalId),
-  );
-  const { departments, users, entities, units } = useGlobalData();
+  const { users, entities } = useGlobalData();
+
+  const [loading, setLoading] = useState(true);
+  const [animal, setAnimal] = useState(null);
+  const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
 
   useEffect(() => {
-    animalError && notification({ type: "error" });
-  }, [animalError]);
+    (async () => {
+      try {
+        setLoading(true);
+        const _animal = await fetchAnimal(animalId);
+        const result = await getAnimalEntitiesAndBosses(_animal);
+        setAnimal(_animal);
+        setAnimalEntitiesAndBosses(result);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-  if (animalLoading) return <Spinner height="80vh" />;
+  if (loading) return <Spinner height="80vh" />;
 
-  const findById = (group, id) => {
-    return group.find((_group) => _group.id === id);
-  };
-
-  const findByNameId = (group, nameId) => {
-    return group.find((_group) => _group.nameId === nameId);
-  };
-
-  const entitySVRE = findByNameId(
-    entities,
-    "servicio-de-veterinaria-y-remonta-del-ejercito",
-  );
-
-  const bossEntitySVRE = findById(users, entitySVRE?.entityManageId);
-
-  const unit = findById(units, animal?.unit);
-
-  const bossUnit = findById(users, unit?.bossId);
-
-  const department = departments.find(
-    (department) => department.unitId === unit.id,
-  );
-
-  const bossDepartment = findById(users, department?.bossId);
+  const { entity, entityManage, unit, department, unitBoss, departmentBoss } =
+    animalEntitiesAndBosses;
 
   return (
     <Container>
@@ -115,27 +103,25 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {bossEntitySVRE?.signaturePhoto && (
+                    {entityManage?.signaturePhoto && (
                       <img
-                        src={bossEntitySVRE?.signaturePhoto.url}
+                        src={entityManage?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossEntitySVRE?.cip}</strong>
+                      <strong>{entityManage?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossEntitySVRE)}</strong>
+                      <strong>{userFullName(entityManage)}</strong>
                     </p>
                     <p>
-                      <strong>
-                        {findDegree(bossEntitySVRE?.degree)?.label}
-                      </strong>
+                      <strong>{findDegree(entityManage?.degree)?.label}</strong>
                     </p>
                     <p>
-                      <strong>JEFE DEL {entitySVRE?.name}</strong>
+                      <strong>JEFE DEL {entity?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -144,22 +130,22 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {bossUnit?.signaturePhoto && (
+                    {unitBoss?.signaturePhoto && (
                       <img
-                        src={bossUnit?.signaturePhoto.url}
+                        src={unitBoss?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossUnit?.cip}</strong>
+                      <strong>{unitBoss?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossUnit)}</strong>
+                      <strong>{userFullName(unitBoss)}</strong>
                     </p>
                     <p>
-                      <strong>{findDegree(bossUnit?.degree)?.label}</strong>
+                      <strong>{findDegree(unitBoss?.degree)?.label}</strong>
                     </p>
                     <p>
                       <strong>Jefe del {unit?.name}</strong>
@@ -171,23 +157,23 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {bossDepartment?.signaturePhoto && (
+                    {departmentBoss?.signaturePhoto && (
                       <img
-                        src={bossDepartment?.signaturePhoto.url}
+                        src={departmentBoss?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossDepartment?.cip}</strong>
+                      <strong>{departmentBoss?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossDepartment)}</strong>
+                      <strong>{userFullName(departmentBoss)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(bossDepartment?.degree)?.label}
+                        {findDegree(departmentBoss?.degree)?.label}
                       </strong>
                     </p>
                     <p>

@@ -8,6 +8,7 @@ import {
   modalConfirm,
   notification,
   Row,
+  Spinner,
 } from "../../../../../components";
 import {
   useDefaultFirestoreProps,
@@ -21,6 +22,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import {
+  fetchAnimal,
   fetchDepartment,
   fetchUnit,
   fetchUser,
@@ -31,6 +33,7 @@ import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
+import { getAnimalEntitiesAndBosses } from "../../../../../utils";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -51,18 +54,20 @@ export const ClinicHistoryIntegration = () => {
   });
   const [animal, setAnimal] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
-  const [departmentBoss, setDepartmentBoss] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
 
   useEffect(() => {
     (async () => {
-      const _unit = await fetchUnit(animal?.unitId);
-      if (!_unit) return;
-
-      const _department = await fetchDepartment(_unit.departmentId);
-
-      const _departmentBoss = await fetchUser(_department.bossId);
-
-      setDepartmentBoss(_departmentBoss);
+      try {
+        setLoading(true);
+        const _animal = await fetchAnimal(animalId);
+        const result = await getAnimalEntitiesAndBosses(_animal);
+        setAnimal(_animal);
+        setAnimalEntitiesAndBosses(result);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [animal]);
 
@@ -127,6 +132,10 @@ export const ClinicHistoryIntegration = () => {
     setIsVisibleModal({
       historyClinicCheckModal: !isVisibleModal.historyClinicCheckModal,
     });
+
+  if (loading) return <Spinner height="80vh" />;
+
+  const { departmentBoss } = animalEntitiesAndBosses;
 
   return (
     <Acl

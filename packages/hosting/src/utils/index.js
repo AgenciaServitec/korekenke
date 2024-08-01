@@ -10,3 +10,4 @@ export * from "./acl";
 export * from "./users";
 export * from "./pathnameWithCommand";
 export * from "./dasRequests";
+export * from "./animals";
