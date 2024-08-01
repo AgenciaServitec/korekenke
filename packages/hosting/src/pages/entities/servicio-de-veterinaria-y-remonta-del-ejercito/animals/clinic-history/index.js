@@ -29,6 +29,7 @@ import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
+import { isEmpty } from "lodash";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -40,7 +41,8 @@ export const ClinicHistoryIntegration = () => {
     "",
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { animals, departments } = useGlobalData();
+  const { animals, departments, units } = useGlobalData();
+  const animalsByType = animals.filter((animal) => animal.type === animalType);
 
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
@@ -48,13 +50,24 @@ export const ClinicHistoryIntegration = () => {
   });
   const [animal, setAnimal] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
-  const [PEL_VET_DEL_RC_MDN_EPR_boss, setPEL_VET_DEL_RC_MDN_EPR_boss] =
-    useState(null);
+  const [boss, setBoss] = useState(null);
+
+  const findById = (dataSource, id) => {
+    return dataSource.find((_dataSource) => _dataSource.id === id);
+  };
 
   useEffect(() => {
     (async () => {
+      const unit = findById(units, animal?.unit);
+
+      if (!isEmpty(unit)) {
+        const userBoss = await fetchUser(unit.bossId);
+        setBoss(userBoss);
+        return;
+      }
+
       const PEL_VET_DEL_RC_MDN_EPR_department = departments.find(
-        (department) => department?.id === "BP0Z7ZSLIXyz1pGYFwhU",
+        (department) => department?.nameId === "pel-vet",
       );
 
       if (!PEL_VET_DEL_RC_MDN_EPR_department?.bossId) return;
@@ -63,9 +76,9 @@ export const ClinicHistoryIntegration = () => {
         PEL_VET_DEL_RC_MDN_EPR_department.bossId,
       );
 
-      setPEL_VET_DEL_RC_MDN_EPR_boss(userBoss);
+      setBoss(userBoss);
     })();
-  }, []);
+  }, [animal]);
 
   const [clinicHistories = [], clinicHistoriesLoading, clinicHistoriesError] =
     useCollectionData(
@@ -79,7 +92,7 @@ export const ClinicHistoryIntegration = () => {
   const onNavigateGoTo = (pathname) => navigate(pathname);
 
   useEffect(() => {
-    setAnimal(animals.find((_animal) => _animal.id === animalId) || {});
+    setAnimal(animalsByType.find((_animal) => _animal.id === animalId) || {});
   }, [animalId]);
 
   useEffect(() => {
@@ -204,11 +217,10 @@ export const ClinicHistoryIntegration = () => {
             onSetClinicHistoryId={setClinicHistoryId}
             loading={clinicHistoriesLoading}
             user={authUser}
-            PEL_VET_DEL_RC_MDN_EPR_boss={PEL_VET_DEL_RC_MDN_EPR_boss}
+            boss={boss}
           />
         </Col>
         <ClinicHistoryModalComponent
-          key={isVisibleModal.historyClinicModal}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
           onSetClinicHistoryId={setClinicHistoryId}
@@ -217,7 +229,6 @@ export const ClinicHistoryIntegration = () => {
           animalId={animalId}
         />
         <ClinicHistoryCheckedModalComponent
-          key={isVisibleModal.historyClinicCheckModal}
           user={authUser}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={onSetVisibleHistoryClinicCheckModal}

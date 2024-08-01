@@ -16,7 +16,7 @@ export const ClinicHistoryTable = ({
   onSetClinicHistoryId,
   loading,
   user,
-  PEL_VET_DEL_RC_MDN_EPR_boss,
+  boss,
 }) => {
   const columns = [
     {
@@ -72,7 +72,7 @@ export const ClinicHistoryTable = ({
         <>
           {clinicHistory?.status === "pending" && (
             <Space>
-              {PEL_VET_DEL_RC_MDN_EPR_boss?.id === user.id && (
+              {boss?.id === user.id && (
                 <Acl
                   category="servicio-de-veterinaria-y-remonta-del-ejercito"
                   subCategory="clinicHistory"
