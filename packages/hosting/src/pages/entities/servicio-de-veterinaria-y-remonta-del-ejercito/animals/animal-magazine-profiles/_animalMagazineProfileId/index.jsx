@@ -46,6 +46,10 @@ export const AnimalMagazineProfileIntegration = () => {
 
   const isNew = animalMagazineProfileId === "new";
 
+  const isEquine = animal?.type === "equine";
+  const isCattle = animal?.type === "cattle";
+  const isCanine = animal?.type === "canine";
+
   useEffect(() => {
     const _animalMagazineProfile = isNew
       ? { id: getClinicHistoryId() }
@@ -143,10 +147,11 @@ export const AnimalMagazineProfileIntegration = () => {
       </Col>
       <Col span={24}>
         <AnimalMagazineProfile
-          onGoBack={onGoBack}
+          isEquine={isEquine}
           animalMagazineProfile={animalMagazineProfile}
           animalMagazineProfiles={AnimalMagazineProfiles}
           onSaveAnimalMagazineProfile={onSaveAnimalMagazineProfile}
+          onGoBack={onGoBack}
           loading={loading}
         />
       </Col>
@@ -155,11 +160,12 @@ export const AnimalMagazineProfileIntegration = () => {
 };
 
 const AnimalMagazineProfile = ({
-  onGoBack,
+  isEquine,
   animalMagazineProfile,
   animalMagazineProfiles,
   onSaveAnimalMagazineProfile,
   loading,
+  onGoBack,
 }) => {
   const [bodyCondition, setBodyCondition] = useState(null);
   const [bodyConditionObservation, setBodyConditionObservation] =
@@ -180,7 +186,6 @@ const AnimalMagazineProfile = ({
     handleSubmit,
     control,
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -227,7 +232,7 @@ const AnimalMagazineProfile = ({
         title: "Toillete del ganado o equino es requerido.",
       });
 
-    if (!horseshoe)
+    if (!horseshoe && isEquine)
       return notification({
         type: "warning",
         title: "Herrado del ganado o equino es requerido.",
@@ -320,28 +325,30 @@ const AnimalMagazineProfile = ({
                   </ul>
                 </div>
               </Card>
-              <Card
-                title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
-                bordered={false}
-                type="inner"
-              >
-                <div className="wrapper-toillete-and-herrado">
-                  <div className="wrapper-toillete-and-herrado__image">
-                    <img src={HerradoImg} alt="Herrado" />
+              {isEquine && (
+                <Card
+                  title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
+                  bordered={false}
+                  type="inner"
+                >
+                  <div className="wrapper-toillete-and-herrado">
+                    <div className="wrapper-toillete-and-herrado__image">
+                      <img src={HerradoImg} alt="Herrado" />
+                    </div>
+                    <ul>
+                      {animalMagazineProfiles.horseshoe.map((_horseshoe) => (
+                        <li
+                          key={_horseshoe.id}
+                          onClick={() => setHorseshoe(_horseshoe.id)}
+                          className={horseshoe === _horseshoe.id && "active"}
+                        >
+                          <h5>{_horseshoe.name}</h5>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul>
-                    {animalMagazineProfiles.horseshoe.map((_horseshoe) => (
-                      <li
-                        key={_horseshoe.id}
-                        onClick={() => setHorseshoe(_horseshoe.id)}
-                        className={horseshoe === _horseshoe.id && "active"}
-                      >
-                        <h5>{_horseshoe.name}</h5>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Card>
+                </Card>
+              )}
             </div>
           </Col>
           <Col span={24}>
