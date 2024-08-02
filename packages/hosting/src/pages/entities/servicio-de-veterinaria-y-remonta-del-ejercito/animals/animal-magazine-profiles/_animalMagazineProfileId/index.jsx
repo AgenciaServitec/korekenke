@@ -69,19 +69,19 @@ export const AnimalMagazineProfileIntegration = () => {
   const mapForm = (formData) => ({
     id: animalMagazineProfile.id,
     bodyCondition: {
-      ...AnimalMagazineProfiles.bodyCondition.find(
+      ...AnimalMagazineProfiles?.[animal.type]?.bodyCondition.find(
         (_bodyCondition) => _bodyCondition.id === formData.bodyCondition,
       ),
       observation: formData.bodyConditionObservation,
       qualification: formData.bodyCondition,
     },
     toillete: {
-      ...AnimalMagazineProfiles.toillete.find(
+      ...AnimalMagazineProfiles?.[animal.type]?.toillete.items.find(
         (_toillete) => _toillete.id === formData.toillete,
       ),
     },
     horseshoe: {
-      ...AnimalMagazineProfiles.horseshoe.find(
+      ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
         (_horseshoe) => _horseshoe.id === formData.horseshoe,
       ),
     },
