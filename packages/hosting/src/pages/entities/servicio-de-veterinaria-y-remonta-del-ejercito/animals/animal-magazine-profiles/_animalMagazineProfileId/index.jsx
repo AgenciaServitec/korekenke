@@ -19,7 +19,6 @@ import {
 } from "../../../../../../hooks";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
 import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import {
