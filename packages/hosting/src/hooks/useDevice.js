@@ -3,7 +3,7 @@ import { breakPoints } from "../styles";
 
 export const useDevice = () => {
   const [currentScreenWidth, setCurrentScreenWidth] = useState(
-    window.innerWidth,
+    window.innerWidth
   );
 
   useMemo(() => {

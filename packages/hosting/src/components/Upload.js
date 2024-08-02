@@ -70,7 +70,7 @@ export const Upload = ({
 
     filesDone2 &&
       onChangeCopy(
-        !isEmpty(filesCopy) ? uploadFileToFile(filesCopy[0]) : undefined,
+        !isEmpty(filesCopy) ? uploadFileToFile(filesCopy[0]) : undefined
       );
   }, [JSON.stringify(filesCopy)]);
 
@@ -174,7 +174,7 @@ export const Upload = ({
   const addFileToFiles = (file) =>
     setFiles((prevFiles) => {
       const index = prevFiles.findIndex(
-        (prevFile) => prevFile.uid === file.uid,
+        (prevFile) => prevFile.uid === file.uid
       );
 
       const nextFiles = [...prevFiles];
@@ -187,7 +187,7 @@ export const Upload = ({
   const addFileToFilesCopy = (fileCopy) => {
     setFilesCopy((prevFilesCopy) => {
       const index = prevFilesCopy.findIndex(
-        (prevFileCopy) => prevFileCopy?.uid === fileCopy?.uid,
+        (prevFileCopy) => prevFileCopy?.uid === fileCopy?.uid
       );
 
       const nextFilesCopy = [...prevFilesCopy];
@@ -221,7 +221,7 @@ export const Upload = ({
     await deleteFileAndFileThumbFromStorage(storage, filePath, file.name);
 
     setFiles((prevFiles) =>
-      prevFiles.filter((prevFile) => prevFile.uid !== file.uid),
+      prevFiles.filter((prevFile) => prevFile.uid !== file.uid)
     );
   };
 
@@ -229,11 +229,11 @@ export const Upload = ({
     await deleteFileAndFileThumbFromStorage(
       copyFilesTo.storage,
       copyFilesTo.filePath,
-      file.name,
+      file.name
     );
 
     setFilesCopy((prevFiles) =>
-      prevFiles.filter((prevFile) => prevFile.uid !== file.uid),
+      prevFiles.filter((prevFile) => prevFile.uid !== file.uid)
     );
   };
 
@@ -241,7 +241,7 @@ export const Upload = ({
     if (isEmpty(files)) return true;
 
     AntdMessage.error(
-      `¡Elimine el archivo actual antes de cargar un archivo nuevo!`,
+      `¡Elimine el archivo actual antes de cargar un archivo nuevo!`
     );
 
     return AntdUpload.LIST_IGNORE;

@@ -35,7 +35,7 @@ export const DasRequestsListIntegration = () => {
     useCollectionData(
       ["super_admin", "manager", "department_boss"].includes(authUser.roleCode)
         ? dasApplicationsRef || null
-        : dasApplicationsRef.where("headline.id", "==", authUser.id),
+        : dasApplicationsRef.where("headline.id", "==", authUser.id)
     );
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const DasRequestsListIntegration = () => {
       onOk: async () => {
         await updateDasApplication(
           dasRequest.id,
-          assignDeleteProps({ isDeleted: true }),
+          assignDeleteProps({ isDeleted: true })
         );
       },
     });

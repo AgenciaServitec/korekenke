@@ -52,7 +52,7 @@ export const DasRequestSheets = () => {
     const _entities = await fetchEntities();
 
     const manageDas = _entities.find(
-      (entity) => entity?.nameId === "departamento-de-apoyo-social",
+      (entity) => entity?.nameId === "departamento-de-apoyo-social"
     );
 
     if (!manageDas?.entityManageId) return;
@@ -67,7 +67,7 @@ export const DasRequestSheets = () => {
 
     if (familiar)
       return `${findRelationShip(familiar)} ${userFullName(
-        familiar,
+        familiar
       )} ${existCifInFamiliar}`;
 
     return "persona";

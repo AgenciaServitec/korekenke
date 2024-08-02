@@ -64,7 +64,7 @@ export const AccessDataLogin = ({ next }) => {
 
   const userByCip = async (cip) => {
     const response = await fetchCollectionOnce(
-      firestore.collection("users").where("cip", "==", cip).limit(1),
+      firestore.collection("users").where("cip", "==", cip).limit(1)
     );
 
     return response[0];

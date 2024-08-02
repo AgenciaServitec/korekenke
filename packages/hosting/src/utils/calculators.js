@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 export const calcAges = (birthdate) => {
   const years = dayjs().diff(
     dayjs(dayjs(birthdate, "DD/MM/YYYY HH:mm")),
-    "years",
+    "years"
   );
 
   const months =

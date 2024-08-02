@@ -7,7 +7,7 @@ describe("getTypeForAssignedToByRoleCode: with corrects roles", () => {
 
   test("user with roleCode: department_boss", () => {
     expect(getTypeForAssignedToByRoleCode("department_boss")).toEqual(
-      "department",
+      "department"
     );
   });
 
@@ -21,7 +21,7 @@ describe("getTypeForAssignedToByRoleCode: with corrects roles", () => {
 
   test("user with roleCode incorrect: department_boss_1312313", () => {
     expect(getTypeForAssignedToByRoleCode("department_boss_1312313")).toEqual(
-      null,
+      null
     );
   });
 });

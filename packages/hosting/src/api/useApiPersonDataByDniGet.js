@@ -14,7 +14,7 @@ export const useApiPersonDataByDniGet = () => {
     async (dni = "") => {
       return await get(dni);
     },
-    [get],
+    [get]
   );
 
   return {

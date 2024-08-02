@@ -27,7 +27,7 @@ export const AnimalsIntegration = () => {
 
   const [animalType, setAnimalType] = useQueryString(
     "animalType",
-    query?.animalType || "equine",
+    query?.animalType || "equine"
   );
 
   const [animalsView, setAnimalsView] = useState([]);
@@ -36,7 +36,7 @@ export const AnimalsIntegration = () => {
     setAnimalType(query?.animalType);
 
     setAnimalsView(
-      animals.filter((animal) => animal.type === query?.animalType),
+      animals.filter((animal) => animal.type === query?.animalType)
     );
   }, [query?.animalType]);
 

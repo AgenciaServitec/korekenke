@@ -68,7 +68,7 @@ export const PdfRegistrationClinicHistory = ({
                   <span>Fecha nacimiento:</span>
                   <span>
                     {dayjs(animal?.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
-                      "DD/MM/YYYY",
+                      "DD/MM/YYYY"
                     )}
                   </span>
                 </div>
@@ -98,7 +98,7 @@ export const PdfRegistrationClinicHistory = ({
                       <td>
                         {_clinicHistory?.createAt &&
                           dayjs(_clinicHistory.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm",
+                            "DD/MM/YYYY HH:mm"
                           )}
                       </td>
                       <td>{_clinicHistory?.symptomatology}</td>

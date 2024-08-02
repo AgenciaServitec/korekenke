@@ -4,7 +4,7 @@ export const querySnapshotToArray = (querySnapshot) => {
   const documents = [];
 
   querySnapshot.forEach((childSnapshot) =>
-    documents.push({ ...childSnapshot.data(), id: childSnapshot.id }),
+    documents.push({ ...childSnapshot.data(), id: childSnapshot.id })
   );
 
   return documents;

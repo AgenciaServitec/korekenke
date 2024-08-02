@@ -3,8 +3,7 @@
   font-family: "DINPro-regular";
   font-style: normal;
   font-display: swap;
-  src:
-    url(DinPro/DINPro-Regular.otf) format("otf"),
+  src: url(DinPro/DINPro-Regular.otf) format("otf"),
     url(DinPro/DINPro-Regular.otf) format("truetype");
 }
 
@@ -12,8 +11,7 @@
   font-family: "DINPro-Medium";
   font-style: normal;
   font-display: swap;
-  src:
-    url(DinPro/DINPro-Medium.otf) format("otf"),
+  src: url(DinPro/DINPro-Medium.otf) format("otf"),
     url(DinPro/DINPro-Medium.otf) format("truetype");
 }
 
@@ -21,7 +19,6 @@
   font-family: "DINPro-Bold";
   font-style: normal;
   font-display: swap;
-  src:
-    url(DinPro/DINPro-Bold.otf) format("otf"),
+  src: url(DinPro/DINPro-Bold.otf) format("otf"),
     url(DinPro/DINPro-Bold.otf) format("truetype");
 }

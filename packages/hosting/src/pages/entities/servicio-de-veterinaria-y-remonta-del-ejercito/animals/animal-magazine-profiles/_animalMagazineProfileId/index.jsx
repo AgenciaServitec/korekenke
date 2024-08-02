@@ -58,7 +58,7 @@ export const AnimalMagazineProfileIntegration = () => {
               if (!_response) return onGoBack();
               setAnimalMagazineProfile(_response);
               return;
-            },
+            }
           );
         })();
 
@@ -70,20 +70,20 @@ export const AnimalMagazineProfileIntegration = () => {
     id: animalMagazineProfile.id,
     bodyCondition: {
       ...AnimalMagazineProfiles?.[animal.type]?.bodyCondition.find(
-        (_bodyCondition) => _bodyCondition.id === formData.bodyCondition,
+        (_bodyCondition) => _bodyCondition.id === formData.bodyCondition
       ),
       observation: formData.bodyConditionObservation,
       qualification: formData.bodyCondition,
     },
     toillete: {
       ...AnimalMagazineProfiles?.[animal.type]?.toillete.items.find(
-        (_toillete) => _toillete.id === formData.toillete,
+        (_toillete) => _toillete.id === formData.toillete
       ),
     },
     ...(isEquine && {
       horseshoe: {
         ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
-          (_horseshoe) => _horseshoe.id === formData.horseshoe,
+          (_horseshoe) => _horseshoe.id === formData.horseshoe
         ),
       },
     }),
@@ -117,12 +117,12 @@ export const AnimalMagazineProfileIntegration = () => {
       isNew
         ? await addAnimalMagazineProfile(
             animalId,
-            assignCreateProps(mapForm(formData)),
+            assignCreateProps(mapForm(formData))
           )
         : await updateAnimalMagazineProfile(
             animalId,
             animalMagazineProfile.id,
-            assignUpdateProps(mapForm(formData)),
+            assignUpdateProps(mapForm(formData))
           );
 
       notification({ type: "success" });
@@ -199,7 +199,7 @@ const AnimalMagazineProfile = ({
     resetForm();
     setBodyCondition(animalMagazineProfile?.bodyCondition?.id || null);
     setBodyConditionObservation(
-      animalMagazineProfile?.bodyCondition?.observation || null,
+      animalMagazineProfile?.bodyCondition?.observation || null
     );
     setToillete(animalMagazineProfile?.toillete?.id || null);
     setHorseshoe(animalMagazineProfile?.horseshoe?.id || null);
@@ -291,7 +291,7 @@ const AnimalMagazineProfile = ({
                             </div>
                           </div>
                         </li>
-                      ),
+                      )
                     )}
                   </ul>
                   <br />
@@ -329,7 +329,7 @@ const AnimalMagazineProfile = ({
                         >
                           <h5>{_toillete.name}</h5>
                         </li>
-                      ),
+                      )
                     )}
                   </ul>
                 </div>

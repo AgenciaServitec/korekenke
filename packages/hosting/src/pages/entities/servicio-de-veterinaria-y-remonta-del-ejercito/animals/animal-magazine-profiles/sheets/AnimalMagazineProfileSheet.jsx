@@ -141,7 +141,7 @@ export const AnimalMagazineProfilesheet = ({
                         </strong>
                       </td>
                     </tr>
-                  ),
+                  )
                 )}
               </tbody>
             </table>
@@ -165,7 +165,7 @@ export const AnimalMagazineProfilesheet = ({
                   {AnimalMagazineProfiles[animal.type].toillete.items.map(
                     (_toillete) => (
                       <th key={_toillete?.id}>{_toillete?.name}</th>
-                    ),
+                    )
                   )}
                 </tr>
                 <tr>
@@ -189,7 +189,7 @@ export const AnimalMagazineProfilesheet = ({
                           ""
                         )}
                       </td>
-                    ),
+                    )
                   )}
                 </tr>
               </tbody>

@@ -24,7 +24,7 @@ export const PersonalInformationForm = ({
   onSavePersonalInformationStep2,
 }) => {
   const [relationship, setRelationship] = useState(
-    dasRequest?.familiar?.relationship || "",
+    dasRequest?.familiar?.relationship || ""
   );
 
   const schema = yup.object({
@@ -342,7 +342,7 @@ export const PersonalInformationForm = ({
                             ([key, value]) => ({
                               label: value,
                               value: key,
-                            }),
+                            })
                           )}
                           onChange={(value) => {
                             setRelationship(value);

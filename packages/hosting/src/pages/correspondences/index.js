@@ -38,7 +38,7 @@ export const CorrespondencesIntegration = () => {
     useCollectionData(
       correspondencesRef
         .where("isDeleted", "==", false)
-        .orderBy("createAt", "desc"),
+        .orderBy("createAt", "desc")
     );
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
   const [visibleReplyInformatioModal, setVisibleReplyInformationModal] =
@@ -65,7 +65,7 @@ export const CorrespondencesIntegration = () => {
       onOk: async () => {
         await updateCorrespondence(
           correspondenceId,
-          assignDeleteProps({ isDeleted: true }),
+          assignDeleteProps({ isDeleted: true })
         );
 
         notification({
@@ -106,7 +106,7 @@ export const CorrespondencesIntegration = () => {
     const _entities = await fetchEntities();
 
     const manageMesaDePartes = _entities.find(
-      (entity) => entity?.nameId === "mesa-de-partes",
+      (entity) => entity?.nameId === "mesa-de-partes"
     );
     const _entityManager = await fetchUser(manageMesaDePartes?.entityManageId);
 
@@ -164,7 +164,7 @@ const Correspondences = ({
     useCorrespondenceModal();
 
   const filterCorrespondencesView = correspondences.filter(
-    (reception) => reception,
+    (reception) => reception
   );
 
   const onDecreeCorrespondence = (correspondence) => {
