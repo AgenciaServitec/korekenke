@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { notification, PDF, Sheet, Spinner } from "../../../../../components";
 import { useParams } from "react-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -24,8 +24,6 @@ export const DasRequestSheets = () => {
   const { users } = useGlobalData();
   const { authUser } = useAuthentication();
 
-  const [entityManager, setEntityManager] = useState(null);
-
   const [dasRequest = {} || null, dasRequestLoading, dasRequestError] =
     useDocumentData(firestore.collection("das-applications").doc(dasRequestId));
 
@@ -36,10 +34,11 @@ export const DasRequestSheets = () => {
   useEffect(() => {
     (async () => {
       const dasEntityManager = await fetchEntityManager();
+
       if (
         dasRequest?.wasRead === false &&
         dasRequest?.status === "pending" &&
-        dasEntityManager.id === authUser.id
+        dasEntityManager?.id === authUser.id
       ) {
         await updateDasApplication(dasRequestId, {
           status: "inProgress",
@@ -55,10 +54,10 @@ export const DasRequestSheets = () => {
     const manageDas = _entities.find(
       (entity) => entity?.nameId === "departamento-de-apoyo-social",
     );
-    const _entityManager = await fetchUser(manageDas?.entityManageId);
 
-    setEntityManager(_entityManager);
-    return _entityManager;
+    if (!manageDas?.entityManageId) return;
+
+    return await fetchUser(manageDas?.entityManageId);
   };
 
   if (dasRequestLoading) return <Spinner height="80vh" />;

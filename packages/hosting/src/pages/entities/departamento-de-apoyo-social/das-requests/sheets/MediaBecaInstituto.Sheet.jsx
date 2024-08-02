@@ -32,7 +32,7 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
               <p>
                 {requestType && findDasRequest(requestType).name}
                 <br />
-                <span>{findInstitution(institution).name || emptyContent}</span>
+                <span>{institution?.id || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
             </p>
             <p className="request-content__body">
               Que teniendo conocimiento que el instituto
-              <span>{findInstitution(institution).name || emptyContent}</span>
+              <span>{institution?.id || emptyContent}</span>
               por intermedio de COBIENE-DAS está otorgando BECA DE ESTUDIO por
               convenio al personal militar y civil del Ejército, solicito a Ud.,
               Mi General disponer a quien corresponda se me inscriba a fin de
