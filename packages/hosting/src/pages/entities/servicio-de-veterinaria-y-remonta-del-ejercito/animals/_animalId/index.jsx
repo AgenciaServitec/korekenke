@@ -135,11 +135,6 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
-  const unitsView = units.map((unit) => ({
-    label: unit.name,
-    value: unit.id,
-  }));
-
   const isEquine = animalType === "equines";
   const isCattle = animalType === "cattle";
 
@@ -154,9 +149,9 @@ const Animal = ({
     slopeNumber: isCattle
       ? yup.string().required()
       : yup.string().notRequired(),
-    registrationNumber: isCattle
-      ? yup.string().notRequired()
-      : yup.string().required(),
+    registrationNumber: !isCattle
+      ? yup.string().required()
+      : yup.string().notRequired(),
     chipNumber: isEquine ? yup.string().required() : yup.string().notRequired(),
     gender: yup.string().required(),
     color: yup.string().required(),
@@ -197,7 +192,7 @@ const Animal = ({
       greatUnit: animal?.greatUnit || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",
-      registrationNumber: animal?.registrationNumber || "",
+      registrationNumber: animal?.registrationNumber || null,
       gender: animal?.gender || "",
       chipNumber: animal?.chipNumber || "",
       color: animal?.color || "",
@@ -461,7 +456,7 @@ const Animal = ({
                   />
                 </Col>
               )}
-              {isEquine && (
+              {!isCattle && (
                 <>
                   <Col span={24} md={6}>
                     <Controller
@@ -479,23 +474,25 @@ const Animal = ({
                       )}
                     />
                   </Col>
-                  <Col span={24} md={6}>
-                    <Controller
-                      name="chipNumber"
-                      control={control}
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="N° de Chip"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
                 </>
+              )}
+              {isEquine && (
+                <Col span={24} md={6}>
+                  <Controller
+                    name="chipNumber"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Input
+                        label="N° de Chip"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
               )}
               <Col span={24} md={6}>
                 <Controller
