@@ -1,21 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  HerradoImg,
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
-  ToilleteImg,
 } from "../../../../../../images";
 import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import dayjs from "dayjs";
 import { QRCode } from "../../../../../../components";
+import { calcAges } from "../../../../../../utils";
 
 export const AnimalMagazineProfilesheet = ({
   animal,
   animalMagazineProfile,
 }) => {
+  const animalAges = calcAges(animal.birthdate);
+
   return (
     <Container>
       <div className="sheet">
@@ -47,19 +47,10 @@ export const AnimalMagazineProfilesheet = ({
                     <td className="name">NOMBRE</td>
                     <td className="value">{animal?.name}</td>
                     <td className="name">EDAD</td>
-                    <td className="value">
-                      {dayjs().diff(
-                        dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-                        "years",
-                      )}{" "}
-                      AÑOS
-                    </td>
+                    <td className="value">{animalAges?.years} AÑOS</td>
                     <td className="name">MESES</td>
                     <td className="value" colSpan={2}>
-                      {dayjs().diff(
-                        dayjs(animal.birthdate, "DD/MM/YYYY HH:mm"),
-                        "months",
-                      )}
+                      {animalAges?.months}
                     </td>
                   </tr>
                   <tr>
