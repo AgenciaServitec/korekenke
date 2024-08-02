@@ -23,7 +23,7 @@ export const ApplicantDocumentsSheet = ({ applicant = null }) => {
                   <Sheet key={index}>
                     <Container>
                       <div className="sheet">
-                        <img src={document.url} alt="" />
+                        <img src={document.url} alt="user document" />
                       </div>
                     </Container>
                   </Sheet>

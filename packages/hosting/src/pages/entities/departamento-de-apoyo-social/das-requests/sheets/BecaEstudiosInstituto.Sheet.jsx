@@ -1,13 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import {
-  findDasRequest,
-  findDegree,
-  findInstitution,
-} from "../../../../../utils";
+import { findDasRequest, findDegree } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const BecaEstudiosInstitutoSheet = ({
@@ -36,7 +32,7 @@ export const BecaEstudiosInstitutoSheet = ({
               <p>
                 {requestType && findDasRequest(requestType).name}
                 <br />
-                <span>{findInstitution(institution).name || emptyContent}</span>
+                <span>{institution?.id || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -58,7 +54,7 @@ export const BecaEstudiosInstitutoSheet = ({
             </p>
             <p className="request-content__body">
               Que teniendo conocimiento que el instituto
-              <span> {findInstitution(institution).name || emptyContent} </span>
+              <span> {institution?.id || emptyContent} </span>
               por intermedio del COBIENE-DAS está otorgando BECA DE ESTUDIO por
               convenio al personal militar y civil del Ejército, solicito a Ud.,
               Mi General disponer a quien corresponda se me inscriba a fin de
