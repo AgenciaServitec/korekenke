@@ -243,6 +243,7 @@ const Animal = ({
                   name="rightProfilePhoto"
                   render={({ field: { onChange, value, onBlur, name } }) => (
                     <Upload
+                      isImage
                       label="Foto perfil derecho"
                       accept="image/*"
                       buttonText="Subir foto"
@@ -265,6 +266,7 @@ const Animal = ({
                   name="frontPhoto"
                   render={({ field: { onChange, value, onBlur, name } }) => (
                     <Upload
+                      isImage
                       label="Foto frontal"
                       accept="image/*"
                       buttonText="Subir foto"
@@ -287,6 +289,7 @@ const Animal = ({
                   name="leftProfilePhoto"
                   render={({ field: { onChange, value, onBlur, name } }) => (
                     <Upload
+                      isImage
                       label="Foto perfil izquierdo"
                       accept="image/*"
                       buttonText="Subir foto"

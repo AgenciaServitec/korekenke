@@ -103,6 +103,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
+                        isImage
                         label="Foto de CIP del Titular"
                         accept="image/*"
                         name={name}
@@ -146,6 +147,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
+                        isImage
                         label="Foto de DNI del Titular"
                         accept="image/*"
                         name={name}
@@ -189,6 +191,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
+                        isImage
                         label="Foto de firma del titular"
                         accept="image/*"
                         name={name}
@@ -237,6 +240,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
+                        isImage
                         label="Foto de CIF del Familiar"
                         accept="image/*"
                         name={name}
@@ -265,6 +269,7 @@ export const MediaBecaInstitutoApplicantDocuments = ({
                     control={control}
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
+                        isImage
                         label="Foto de DNI del Familiar"
                         accept="image/*"
                         name={name}

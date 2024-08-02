@@ -337,6 +337,8 @@ const EditDasRequest = ({
     },
   ];
 
+  console.log("Solicitud: ", dasRequest)
+
   return (
     <Container>
       <div className="card-wrapper">
