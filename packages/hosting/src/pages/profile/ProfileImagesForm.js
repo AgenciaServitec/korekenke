@@ -103,6 +103,7 @@ export const ProfileImagesForm = () => {
             name="dniPhoto"
             render={({ field: { onChange, value, onBlur, name } }) => (
               <Upload
+                isImage
                 label="Foto de DNI"
                 accept="image/*"
                 resize="423x304"
