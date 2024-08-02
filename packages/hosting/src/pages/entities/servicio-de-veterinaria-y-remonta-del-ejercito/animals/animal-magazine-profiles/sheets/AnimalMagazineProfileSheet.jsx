@@ -39,12 +39,12 @@ export const AnimalMagazineProfilesheet = ({
               <table className="table-header-profile">
                 <thead>
                   <tr>
-                    <th colSpan={7}>FICHA DE REVISTA EQUINA</th>
+                    <th colSpan={7}>FICHA DE REVISTA DEL ANIMAL</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="name">NOMBRE DEL EQUINO</td>
+                    <td className="name">NOMBRE</td>
                     <td className="value">{animal?.name}</td>
                     <td className="name">EDAD</td>
                     <td className="value">
@@ -96,7 +96,7 @@ export const AnimalMagazineProfilesheet = ({
                   <th colSpan={5}>CONDICIÓN CORPORAL</th>
                 </tr>
                 <tr>
-                  <th colSpan={3}>PUNTAJE DE CONDICIÓN CORPORAL EN EQUINOS</th>
+                  <th colSpan={3}>PUNTAJE DE CONDICIÓN CORPORAL</th>
                   <th>OBSERVACIÓN</th>
                   <th>CALIFICACIÓN</th>
                 </tr>
@@ -168,7 +168,7 @@ export const AnimalMagazineProfilesheet = ({
                   <td rowSpan={2}>
                     <img
                       src={AnimalMagazineProfiles[animal.type].toillete.image}
-                      alt="Imagen de caballo"
+                      alt="Imagen de animal"
                     />
                   </td>
                   {AnimalMagazineProfiles[animal.type].toillete.items.map(
@@ -221,7 +221,7 @@ export const AnimalMagazineProfilesheet = ({
                           AnimalMagazineProfiles?.[animal.type]?.horseshoe
                             ?.image
                         }
-                        alt="Imagen de caballo"
+                        alt="Imagen de animal"
                       />
                     </td>
                     {AnimalMagazineProfiles?.[

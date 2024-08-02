@@ -29,7 +29,7 @@ import {
 } from "../images";
 
 export const AnimalMagazineProfiles = {
-  equines: {
+  equine: {
     bodyCondition: [
       {
         id: 1,
@@ -154,7 +154,7 @@ export const AnimalMagazineProfiles = {
       ],
     },
   },
-  canines: {
+  canine: {
     bodyCondition: [
       {
         id: 1,

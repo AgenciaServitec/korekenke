@@ -27,7 +27,7 @@ export const AnimalsIntegration = () => {
 
   const [animalType, setAnimalType] = useQueryString(
     "animalType",
-    query?.animalType || "equines",
+    query?.animalType || "equine",
   );
 
   const [animalsView, setAnimalsView] = useState([]);
@@ -40,11 +40,13 @@ export const AnimalsIntegration = () => {
     );
   }, [query?.animalType]);
 
-  const navigateTo = (pathname = "new") =>
+  const navigateTo = (pathname = "new") => navigate(pathname);
+
+  const navigateToWithQuery = (pathname = "new") =>
     navigate(`${pathname}?animalType=${animalType}`);
 
-  const onAddAnimal = () => navigateTo("new");
-  const onEditAnimal = (animal) => navigateTo(animal.id);
+  const onAddAnimal = () => navigateToWithQuery("new");
+  const onEditAnimal = (animal) => navigateToWithQuery(animal.id);
 
   const onConfirmDeleteAnimal = async (animal) => {
     modalConfirm({
@@ -62,6 +64,7 @@ export const AnimalsIntegration = () => {
       onAddAnimal={onAddAnimal}
       onEditAnimal={onEditAnimal}
       onDeleteAnimal={onConfirmDeleteAnimal}
+      onNavigateToWithQuery={navigateToWithQuery}
       onNavigateTo={navigateTo}
       onSetAnimalType={setAnimalType}
     />
@@ -74,14 +77,15 @@ const Animals = ({
   onAddAnimal,
   onEditAnimal,
   onDeleteAnimal,
+  onNavigateToWithQuery,
   onNavigateTo,
   onSetAnimalType,
 }) => {
   const onNavigateGoToPdfAnimalRegistrationCard = (animalId) =>
-    onNavigateTo(`${animalId}/pdf-animal-card`);
+    onNavigateToWithQuery(`${animalId}/pdf-animal-card`);
 
   const onNavigateGoToAnimalMagazineProfiles = (animalId) =>
-    onNavigateTo(`${animalId}/animal-magazine-profiles`);
+    onNavigateToWithQuery(`${animalId}/animal-magazine-profiles`);
 
   const onNavigateGoToClinicHistory = (animalId) =>
     onNavigateTo(`${animalId}/clinic-history`);
@@ -128,15 +132,15 @@ const Animals = ({
                 onChange={(e) => onSetAnimalType(e.target.value)}
                 defaultValue={animalType}
               >
-                <Radio.Button value="equines">Equinos</Radio.Button>
+                <Radio.Button value="equine">Equinos</Radio.Button>
                 <Radio.Button value="cattle">Ganados</Radio.Button>
-                <Radio.Button value="canines">Caninos</Radio.Button>
+                <Radio.Button value="canine">Caninos</Radio.Button>
               </Radio.Group>
             </Acl>
           </div>
         </Col>
         <Col span={24}>
-          <Title level={3}>{AnimalsType[animalType]?.titlePlural}</Title>
+          <Title level={3}>{AnimalsType?.[animalType]?.titlePlural}</Title>
         </Col>
         <Col span={24}>
           <AnimalsTable

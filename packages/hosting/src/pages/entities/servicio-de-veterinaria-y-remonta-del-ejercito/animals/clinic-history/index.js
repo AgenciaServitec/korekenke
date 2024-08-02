@@ -23,9 +23,6 @@ import { ClinicHistoryModalComponent } from "./ClinicHistoryModalComponent";
 import { useParams } from "react-router-dom";
 import {
   fetchAnimal,
-  fetchDepartment,
-  fetchUnit,
-  fetchUser,
   updateClinicHistory,
 } from "../../../../../firebase/collections";
 import { useAuthentication, useGlobalData } from "../../../../../providers";
@@ -38,7 +35,6 @@ import { getAnimalEntitiesAndBosses } from "../../../../../utils";
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
   const { animalId } = useParams();
-  const { animalType } = useQuery();
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
@@ -46,7 +42,6 @@ export const ClinicHistoryIntegration = () => {
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { animals } = useGlobalData();
-  const animalsByType = animals.filter((animal) => animal.type === animalType);
 
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
@@ -56,6 +51,10 @@ export const ClinicHistoryIntegration = () => {
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
   const [loading, setLoading] = useState(true);
   const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
+
+  const animalsByType = animals.filter(
+    (_animal) => _animal?.type === animal?.type,
+  );
 
   useEffect(() => {
     (async () => {
@@ -150,7 +149,7 @@ export const ClinicHistoryIntegration = () => {
             icon={faArrowLeft}
             onClick={() =>
               onNavigateGoTo(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`,
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
               )
             }
           />

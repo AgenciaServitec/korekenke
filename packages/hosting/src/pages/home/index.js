@@ -100,7 +100,7 @@ export const HomeIntegration = () => {
                 <li>
                   <Link
                     to={onNavigateGoTo(
-                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equines",
+                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equine",
                     )}
                   >
                     1. Equinos
@@ -118,7 +118,7 @@ export const HomeIntegration = () => {
                 <li>
                   <Link
                     to={onNavigateGoTo(
-                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canines",
+                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canine",
                     )}
                   >
                     3. Caninos

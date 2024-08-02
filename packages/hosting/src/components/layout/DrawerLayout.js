@@ -286,11 +286,11 @@ export const DrawerLayout = ({
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equines",
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equine",
             ),
         },
         {
-          key: "livestock",
+          key: "cattle",
           icon: <FontAwesomeIcon icon={faCow} size="lg" />,
           label: "Ganados",
           isVisible: existsAclsInAclsOfUser(
@@ -314,7 +314,7 @@ export const DrawerLayout = ({
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canines",
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canine",
             ),
         },
       ],
