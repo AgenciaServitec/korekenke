@@ -95,6 +95,17 @@ export const Upload = ({
     try {
       setUploading(true);
 
+      const fileType = requestOption?.file?.type.split("/")[0];
+
+      if (isImage && fileType !== "image") {
+        setUploading(false);
+        requestOption.onError(true);
+        return notification({
+          type: "warning",
+          title: "Debe subir una imagen",
+        });
+      }
+
       const { newFile, status } = await uploadFile({
         filePath,
         fileName,
