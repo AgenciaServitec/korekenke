@@ -29,8 +29,7 @@ import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUs
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
-  const { rolesAcls, departments, entities, departmentUsers, units } =
-    useGlobalData();
+  const { rolesAcls, departments, entities, departmentUsers } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
@@ -57,7 +56,6 @@ export const DepartmentIntegration = () => {
     nameId: getNameId(formData.name),
     description: formData.description,
     entityId: formData.entityId,
-    ...(currentCommand.code === "cologe" && { unitId: formData.unitId }),
     membersIds: formData?.membersIds || [],
     bossId: formData?.bossId || null,
     secondBossId: formData?.secondBossId || null,
@@ -71,7 +69,7 @@ export const DepartmentIntegration = () => {
       //Get users ids deselection
       const usersIdsDeselected = formData?.membersIds
         ? (department?.membersIds || []).filter(
-            (memberId) => !formData.membersIds.includes(memberId)
+            (memberId) => !formData.membersIds.includes(memberId),
           )
         : [];
 
@@ -88,7 +86,7 @@ export const DepartmentIntegration = () => {
         ? await addDepartment(assignCreateProps(mapDepartment(formData)))
         : await updateDepartment(
             department.id,
-            assignUpdateProps(mapDepartment(formData))
+            assignUpdateProps(mapDepartment(formData)),
           );
 
       notification({ type: "success" });
@@ -106,11 +104,9 @@ export const DepartmentIntegration = () => {
     <Department
       isNew={isNew}
       onGoBack={onGoBack}
-      currentCommandCode={currentCommand.code}
       department={department}
       rolesAcls={rolesAcls}
       entities={entities}
-      units={units}
       departmentUsers={departmentUsers}
       onSaveDepartment={onSaveDepartment}
       loading={loading}
@@ -121,11 +117,9 @@ export const DepartmentIntegration = () => {
 const Department = ({
   isNew,
   onGoBack,
-  currentCommandCode,
   department,
   rolesAcls,
   entities,
-  units,
   departmentUsers,
   onSaveDepartment,
   loading,
@@ -134,10 +128,6 @@ const Department = ({
     name: yup.string().required(),
     description: yup.string(),
     entityId: yup.string().required(),
-    unitId:
-      currentCommandCode === "cologe"
-        ? yup.string().required()
-        : yup.string().notRequired(),
     membersIds: yup.array().nullable(),
     bossId: yup.string(),
     secondBossId: yup.string(),
@@ -168,7 +158,6 @@ const Department = ({
       name: department?.name || "",
       description: department?.description || "",
       entityId: department?.entityId || "",
-      unitId: department?.unitId || "",
       membersIds: department?.membersIds || null,
       bossId: department?.bossId || "",
       secondBossId: department?.secondBossId || "",
@@ -178,7 +167,7 @@ const Department = ({
   //VIEWS TO SELECTS
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || ""
+      findRole(rolesAcls, user?.roleCode)?.name || "",
     )})`,
     value: user.id,
     key: user.id,
@@ -188,11 +177,11 @@ const Department = ({
   const membersInEdition = departmentUsers.filter((user) =>
     !isEmpty(department?.membersIds)
       ? department.membersIds.includes(user.id)
-      : false
+      : false,
   );
 
   const userBosses = departmentUsers.filter(
-    (user) => user.roleCode === "department_boss"
+    (user) => user.roleCode === "department_boss",
   );
 
   //LIST TO SELECTS
@@ -200,8 +189,8 @@ const Department = ({
     isNew ? [] : membersInEdition,
     departmentUsers.filter(
       (user) =>
-        user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
-    )
+        user.assignedTo.type === "department" && isEmpty(user.assignedTo.id),
+    ),
   ).map(mapOptionSelectMembers);
 
   const bossesView = (bossId = undefined) =>
@@ -298,27 +287,6 @@ const Department = ({
                   )}
                 />
               </Col>
-              {currentCommandCode === "cologe" && (
-                <Col span={24}>
-                  <Controller
-                    name="unitId"
-                    control={control}
-                    render={({ field: { onChange, value, name } }) => (
-                      <Select
-                        label="Unidad"
-                        value={value}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                        options={units.map((entity) => ({
-                          label: entity.name,
-                          value: entity.id,
-                        }))}
-                      />
-                    )}
-                  />
-                </Col>
-              )}
               <Col span={24}>
                 <Controller
                   name="membersIds"
@@ -336,7 +304,7 @@ const Department = ({
                       options={orderBy(
                         usersViewForMembers,
                         ["roleCode"],
-                        ["desc"]
+                        ["desc"],
                       )}
                     />
                   )}

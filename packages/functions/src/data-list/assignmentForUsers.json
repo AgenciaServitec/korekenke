@@ -8,6 +8,10 @@
     "type": "department"
   },
   {
+    "roles": ["unit_boss", "unit_assistant"],
+    "type": "unit"
+  },
+  {
     "roles": ["section_boss", "section_assistant"],
     "type": "section"
   },

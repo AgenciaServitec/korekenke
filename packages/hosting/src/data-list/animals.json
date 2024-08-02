@@ -1,14 +1,20 @@
 {
   "equines": {
-    "addButton": "Equino",
-    "title": "Equinos"
+    "cardTitle": "SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO",
+    "cardSubTitle": "TARJETA DE REGISTRO DE GANADO EQUINO",
+    "titleSingular": "Equino",
+    "titlePlural": "Equinos"
   },
   "cattle": {
-    "addButton": "Ganado",
-    "title": "Ganados"
+    "cardTitle": "SERVICIO VETERINARIO DEL EJÉRCITO",
+    "cardSubTitle": "TARJETA DE REGISTRO DE GANADO VACUNO",
+    "titleSingular": "Ganado",
+    "titlePlural": "Ganados"
   },
   "canines": {
-    "addButton": "Canino",
-    "title": "Caninos"
+    "cardTitle": "SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO",
+    "cardSubTitle": "TARJETA DE REGISTRO DE PERROS DE GUERRA",
+    "titleSingular": "Canino",
+    "titlePlural": "Caninos"
   }
 }

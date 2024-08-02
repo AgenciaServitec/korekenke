@@ -38,7 +38,7 @@ export const useUpdateAssignToInUser = () => {
     const newUsers = getUsers({ usersIds: newUsersIds || [], users, moduleId });
     //Merge old users and new users
     const mergedUsers = concat(oldUsers, newUsers).map((user) =>
-      assignUpdateProps(user)
+      assignUpdateProps(user),
     );
 
     //Update of both users

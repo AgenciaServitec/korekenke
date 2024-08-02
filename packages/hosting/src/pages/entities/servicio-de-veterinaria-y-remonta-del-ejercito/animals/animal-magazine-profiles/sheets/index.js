@@ -24,7 +24,7 @@ export const PdfAnimalMagazineProfilesSheets = () => {
     animalsRef
       .doc(animalId)
       .collection("animal-magazine-profiles")
-      .doc(animalMagazineProfileId)
+      .doc(animalMagazineProfileId),
   );
 
   useEffect(() => {

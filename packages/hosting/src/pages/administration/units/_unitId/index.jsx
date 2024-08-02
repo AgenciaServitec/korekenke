@@ -29,7 +29,7 @@ import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUs
 export const UnitIntegration = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
-  const { entities, rolesAcls, unitUsers } = useGlobalData();
+  const { entities, departments, rolesAcls, unitUsers } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
@@ -58,6 +58,7 @@ export const UnitIntegration = () => {
     name: formData.name,
     nameId: getNameId(formData.name),
     entityId: formData.entityId,
+    departmentId: formData.departmentId,
     greatUnit: formData.greatUnit,
     membersIds: formData.membersIds || [],
     bossId: formData.bossId || null,
@@ -70,7 +71,7 @@ export const UnitIntegration = () => {
 
       const usersIdsDeselected = formData?.membersIds
         ? (unit?.membersIds || []).filter(
-            (memberId) => !formData.membersIds.includes(memberId)
+            (memberId) => !formData.membersIds.includes(memberId),
           )
         : [];
 
@@ -102,6 +103,7 @@ export const UnitIntegration = () => {
       unitUsers={unitUsers}
       unit={unit}
       entities={entities}
+      departments={departments}
       rolesAcls={rolesAcls}
       loading={loading}
       onSaveUnit={saveUnit}
@@ -116,6 +118,7 @@ const Unit = ({
   rolesAcls,
   unit,
   entities,
+  departments,
   loading,
   onSaveUnit,
   onGoBack,
@@ -123,6 +126,7 @@ const Unit = ({
   const schema = yup.object({
     name: yup.string().required(),
     entityId: yup.string().required(),
+    departmentId: yup.string().required(),
     membersIds: yup.array().nullable(),
     greatUnit: yup.string(),
     bossId: yup.string(),
@@ -149,6 +153,7 @@ const Unit = ({
     reset({
       name: unit?.name || "",
       entityId: unit?.entityId || "",
+      departmentId: unit?.departmentId || "",
       membersIds: unit?.membersIds || null,
       greatUnit: unit?.greatUnit || "",
       bossId: unit?.bossId || "",
@@ -157,7 +162,7 @@ const Unit = ({
 
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || ""
+      findRole(rolesAcls, user?.roleCode)?.name || "",
     )})`,
     value: user.id,
     key: user.id,
@@ -165,7 +170,7 @@ const Unit = ({
   });
 
   const membersInEdition = unitUsers.filter((user) =>
-    !isEmpty(unit?.membersIds) ? unit.membersIds.includes(user.id) : false
+    !isEmpty(unit?.membersIds) ? unit.membersIds.includes(user.id) : false,
   );
 
   const userBosses = unitUsers.filter((user) => user.roleCode === "unit_boss");
@@ -173,9 +178,13 @@ const Unit = ({
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
     unitUsers.filter(
-      (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id)
-    )
+      (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id),
+    ),
   ).map(mapOptionSelectMembers);
+
+  const departmentsView = departments.filter(
+    (department) => department.entityId === watch("entityId"),
+  );
 
   const bossesView = (bossId = undefined) =>
     userBosses
@@ -213,7 +222,6 @@ const Unit = ({
                 <Controller
                   name="name"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Nombre"
@@ -230,7 +238,6 @@ const Unit = ({
                 <Controller
                   name="entityId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Entidad"
@@ -239,6 +246,29 @@ const Unit = ({
                       options={entities.map((entity) => ({
                         label: entity.name,
                         value: entity.id,
+                      }))}
+                      onChange={(value) => {
+                        setValue("departmentId", "");
+                        onChange(value);
+                      }}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="departmentId"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Departamento"
+                      name={name}
+                      value={value}
+                      options={departmentsView.map((department) => ({
+                        label: department.name,
+                        value: department.id,
                       }))}
                       onChange={onChange}
                       error={error(name)}
@@ -251,7 +281,6 @@ const Unit = ({
                 <Controller
                   name="greatUnit"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Input
                       label="Gran Unidad"
@@ -269,7 +298,6 @@ const Unit = ({
                 <Controller
                   name="membersIds"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
@@ -279,7 +307,7 @@ const Unit = ({
                       options={orderBy(
                         usersViewForMembers,
                         ["roleCode"],
-                        ["desc"]
+                        ["desc"],
                       )}
                       onChange={(value) =>
                         onChangeMembersWithValidation(onChange, value)
@@ -294,7 +322,6 @@ const Unit = ({
                 <Controller
                   name="bossId"
                   control={control}
-                  defaultValue=""
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Jefe"

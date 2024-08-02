@@ -28,46 +28,45 @@ export const Checkbox = ({
 );
 
 const CheckBoxAntdStyled = styled(CheckboxAntd)`
-  ${({ error, theme, hidden, required }) =>
+  ${({ error, theme, hidden, required }) => css`
+    font-size: ${theme.font_sizes.x_small};
+    display: ${hidden && "none"};
+    color: ${error ? theme.colors.error : theme.colors.primary};
+    animation: ${error && keyframes.shake} 340ms
+      cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+
+    ${error &&
     css`
-      font-size: ${theme.font_sizes.x_small};
-      display: ${hidden && "none"};
-      color: ${error ? theme.colors.error : theme.colors.primary};
-      animation: ${error && keyframes.shake} 340ms
-        cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      .ant-checkbox {
+        .ant-checkbox-inner {
+          border-color: ${theme.colors.error};
+        }
+      }
 
-      ${error &&
-      css`
-        .ant-checkbox {
-          .ant-checkbox-inner {
-            border-color: ${theme.colors.error};
-          }
+      .ant-checkbox-checked {
+        .ant-checkbox-inner {
+          border-color: ${theme.colors.error};
+          background-color: ${theme.colors.error};
         }
 
-        .ant-checkbox-checked {
-          .ant-checkbox-inner {
-            border-color: ${theme.colors.error};
-            background-color: ${theme.colors.error};
-          }
-
-          ::after {
-            border-color: ${theme.colors.error};
-          }
+        ::after {
+          border-color: ${theme.colors.error};
         }
-      `}
-
-      ${required &&
-      css`
-        .checkbox-content {
-          ::before {
-            display: inline-block;
-            margin-right: 0.2rem;
-            color: ${error ? theme.colors.error : "inherit"};
-            font-size: ${theme.font_sizes.small};
-            line-height: 1;
-            content: "*";
-          }
-        }
-      `}
+      }
     `}
+
+    ${required &&
+    css`
+      .checkbox-content {
+        ::before {
+          display: inline-block;
+          margin-right: 0.2rem;
+          color: ${error ? theme.colors.error : "inherit"};
+          font-size: ${theme.font_sizes.small};
+          line-height: 1;
+          content: "*";
+        }
+      }
+    `}
+  `}
 `;

@@ -5,10 +5,9 @@ import {
   firestore,
 } from "../../_firebase";
 import { NextFunction, Request, Response } from "express";
-import { isEmpty, orderBy } from "lodash";
+import { isEmpty } from "lodash";
 import assert from "assert";
 import { defaultFirestoreProps, logger } from "../../utils";
-import { Timestamp } from "@google-cloud/firestore";
 
 interface Params {
   userId: string;

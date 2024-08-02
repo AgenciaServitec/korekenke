@@ -65,7 +65,7 @@ export const ProfileDataForm = () => {
           id: authUser.id,
           profilePhoto: formData?.profilePhoto || null,
           phone: { prefix: "+51", number: formData.phoneNumber },
-        })
+        }),
       );
 
       if (!putUserResponse.ok) {

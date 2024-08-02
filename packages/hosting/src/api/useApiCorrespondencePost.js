@@ -14,7 +14,7 @@ export const useApiCorrespondencePost = () => {
     async (correspondence) => {
       return post("/", correspondence);
     },
-    [post]
+    [post],
   );
 
   return {

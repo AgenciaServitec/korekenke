@@ -50,8 +50,8 @@ const Container = styled.div`
       color: ${error
         ? theme.colors.error
         : disabled
-        ? theme.colors.gray
-        : lighten(0.1, theme.colors.font1)};
+          ? theme.colors.gray
+          : lighten(0.1, theme.colors.font1)};
     }
 
     .item-label {
@@ -63,7 +63,9 @@ const Container = styled.div`
       background-color: transparent;
       color: ${error ? theme.colors.error : theme.colors.body};
       font-size: ${theme.font_sizes.small};
-      transition: all ease-in-out 150ms, opacity 150ms;
+      transition:
+        all ease-in-out 150ms,
+        opacity 150ms;
 
       ${hidden &&
       css`
@@ -100,8 +102,8 @@ const Wrapper = styled.div`
       border-color: ${error
         ? theme.colors.error
         : disabled
-        ? theme.colors.gray
-        : lighten(0.1, theme.colors.primary)};
+          ? theme.colors.gray
+          : lighten(0.1, theme.colors.primary)};
     }
 
     .item-wrapper {

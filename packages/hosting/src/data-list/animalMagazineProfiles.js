@@ -8,66 +8,188 @@ import {
   BodyCondition7,
   BodyCondition8,
   BodyCondition9,
+  BodyConditionCanine1,
+  BodyConditionCanine2,
+  BodyConditionCanine3,
+  BodyConditionCanine4,
+  BodyConditionCanine5,
+  BodyConditionCattle1,
+  BodyConditionCattle2,
+  BodyConditionCattle3,
+  BodyConditionCattle4,
+  BodyConditionCattle5,
+  BodyConditionCattle6,
+  BodyConditionCattle7,
+  BodyConditionCattle8,
+  BodyConditionCattle9,
+  HerradoImg,
+  ToilleteCanineImg,
+  ToilleteCattleImg,
+  ToilleteImg,
 } from "../images";
 
 export const AnimalMagazineProfiles = {
-  bodyCondition: [
-    {
-      id: 1,
-      name: "Pobre o extremadamente flaco",
-      img: BodyCondition1,
+  equines: {
+    bodyCondition: [
+      {
+        id: 1,
+        name: "Pobre o extremadamente flaco",
+        img: BodyCondition1,
+      },
+      {
+        id: 2,
+        name: "Muy flaco",
+        img: BodyCondition2,
+      },
+      {
+        id: 3,
+        name: "Flaco",
+        img: BodyCondition3,
+      },
+      {
+        id: 4,
+        name: "Moderadamente flaco",
+        img: BodyCondition4,
+      },
+      {
+        id: 5,
+        name: "Moderado",
+        img: BodyCondition5,
+      },
+      {
+        id: 6,
+        name: "Moderadamente encarnado",
+        img: BodyCondition6,
+      },
+      {
+        id: 7,
+        name: "Encarnado",
+        img: BodyCondition7,
+      },
+      {
+        id: 8,
+        name: "Obeso",
+        img: BodyCondition8,
+      },
+      {
+        id: 9,
+        name: "Extremadamente obeso",
+        img: BodyCondition9,
+      },
+    ],
+    toillete: {
+      image: ToilleteImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
     },
-    {
-      id: 2,
-      name: "Muy flaco",
-      img: BodyCondition2,
+    horseshoe: {
+      image: HerradoImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
     },
-    {
-      id: 3,
-      name: "Flaco",
-      img: BodyCondition3,
+  },
+  cattle: {
+    bodyCondition: [
+      {
+        id: 1,
+        name: "Pobre o extremadamente flaco",
+        img: BodyConditionCattle1,
+      },
+      {
+        id: 2,
+        name: "Muy flaco",
+        img: BodyConditionCattle2,
+      },
+      {
+        id: 3,
+        name: "Flaco",
+        img: BodyConditionCattle3,
+      },
+      {
+        id: 4,
+        name: "Moderadamente flaco",
+        img: BodyConditionCattle4,
+      },
+      {
+        id: 5,
+        name: "Moderado",
+        img: BodyConditionCattle5,
+      },
+      {
+        id: 6,
+        name: "Moderadamente encarnado",
+        img: BodyConditionCattle6,
+      },
+      {
+        id: 7,
+        name: "Encarnado",
+        img: BodyConditionCattle7,
+      },
+      {
+        id: 8,
+        name: "Obeso",
+        img: BodyConditionCattle8,
+      },
+      {
+        id: 9,
+        name: "Extremadamente obeso",
+        img: BodyConditionCattle9,
+      },
+    ],
+    toillete: {
+      image: ToilleteCattleImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
     },
-    {
-      id: 4,
-      name: "Moderadamente flaco",
-      img: BodyCondition4,
+  },
+  canines: {
+    bodyCondition: [
+      {
+        id: 1,
+        name: "Excesivamente delgado",
+        img: BodyConditionCanine1,
+      },
+      {
+        id: 2,
+        name: "Delgado",
+        img: BodyConditionCanine2,
+      },
+      {
+        id: 3,
+        name: "Peso ideal",
+        img: BodyConditionCanine3,
+      },
+      {
+        id: 4,
+        name: "Sobrepeso",
+        img: BodyConditionCanine4,
+      },
+      {
+        id: 5,
+        name: "Sobrepeso extremo",
+        img: BodyConditionCanine5,
+      },
+    ],
+    toillete: {
+      image: ToilleteCanineImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
     },
-    {
-      id: 5,
-      name: "Moderado",
-      img: BodyCondition5,
-    },
-    {
-      id: 6,
-      name: "Moderadamente encarnado",
-      img: BodyCondition6,
-    },
-    {
-      id: 7,
-      name: "Encarnado",
-      img: BodyCondition7,
-    },
-    {
-      id: 8,
-      name: "Obeso",
-      img: BodyCondition8,
-    },
-    {
-      id: 9,
-      name: "Extremadamente obeso",
-      img: BodyCondition9,
-    },
-  ],
-  toillete: [
-    { id: 1, name: "Muy bueno" },
-    { id: 2, name: "Bueno" },
-    { id: 3, name: "Regular" },
-    { id: 4, name: "Malo" },
-  ],
-  horseshoe: [
-    { id: 1, name: "Muy bueno" },
-    { id: 2, name: "Bueno" },
-    { id: 3, name: "Regular" },
-    { id: 4, name: "Malo" },
-  ],
+  },
 };

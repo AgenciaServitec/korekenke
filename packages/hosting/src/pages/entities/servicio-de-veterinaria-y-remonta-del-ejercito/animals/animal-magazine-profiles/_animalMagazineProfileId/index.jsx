@@ -19,7 +19,6 @@ import {
 } from "../../../../../../hooks";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
 import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import {
@@ -46,6 +45,10 @@ export const AnimalMagazineProfileIntegration = () => {
 
   const isNew = animalMagazineProfileId === "new";
 
+  const isEquine = animal?.type === "equine";
+  const isCattle = animal?.type === "cattle";
+  const isCanine = animal?.type === "canine";
+
   useEffect(() => {
     const _animalMagazineProfile = isNew
       ? { id: getClinicHistoryId() }
@@ -55,7 +58,7 @@ export const AnimalMagazineProfileIntegration = () => {
               if (!_response) return onGoBack();
               setAnimalMagazineProfile(_response);
               return;
-            }
+            },
           );
         })();
 
@@ -66,20 +69,20 @@ export const AnimalMagazineProfileIntegration = () => {
   const mapForm = (formData) => ({
     id: animalMagazineProfile.id,
     bodyCondition: {
-      ...AnimalMagazineProfiles.bodyCondition.find(
-        (_bodyCondition) => _bodyCondition.id === formData.bodyCondition
+      ...AnimalMagazineProfiles?.[animal.type]?.bodyCondition.find(
+        (_bodyCondition) => _bodyCondition.id === formData.bodyCondition,
       ),
       observation: formData.bodyConditionObservation,
       qualification: formData.bodyCondition,
     },
     toillete: {
-      ...AnimalMagazineProfiles.toillete.find(
-        (_toillete) => _toillete.id === formData.toillete
+      ...AnimalMagazineProfiles?.[animal.type]?.toillete.items.find(
+        (_toillete) => _toillete.id === formData.toillete,
       ),
     },
     horseshoe: {
-      ...AnimalMagazineProfiles.horseshoe.find(
-        (_horseshoe) => _horseshoe.id === formData.horseshoe
+      ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
+        (_horseshoe) => _horseshoe.id === formData.horseshoe,
       ),
     },
     bodyWeightEstimation: {
@@ -112,12 +115,12 @@ export const AnimalMagazineProfileIntegration = () => {
       isNew
         ? await addAnimalMagazineProfile(
             animalId,
-            assignCreateProps(mapForm(formData))
+            assignCreateProps(mapForm(formData)),
           )
         : await updateAnimalMagazineProfile(
             animalId,
             animalMagazineProfile.id,
-            assignUpdateProps(mapForm(formData))
+            assignUpdateProps(mapForm(formData)),
           );
 
       notification({ type: "success" });
@@ -134,7 +137,7 @@ export const AnimalMagazineProfileIntegration = () => {
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Card
-          title={<span style={{ fontSize: "1.5em" }}>Datos del Equino</span>}
+          title={<span style={{ fontSize: "1.5em" }}>Datos del Animal</span>}
           bordered={false}
           type="inner"
         >
@@ -143,10 +146,12 @@ export const AnimalMagazineProfileIntegration = () => {
       </Col>
       <Col span={24}>
         <AnimalMagazineProfile
-          onGoBack={onGoBack}
+          animal={animal}
+          isEquine={isEquine}
           animalMagazineProfile={animalMagazineProfile}
           animalMagazineProfiles={AnimalMagazineProfiles}
           onSaveAnimalMagazineProfile={onSaveAnimalMagazineProfile}
+          onGoBack={onGoBack}
           loading={loading}
         />
       </Col>
@@ -155,11 +160,13 @@ export const AnimalMagazineProfileIntegration = () => {
 };
 
 const AnimalMagazineProfile = ({
-  onGoBack,
+  animal,
+  isEquine,
   animalMagazineProfile,
   animalMagazineProfiles,
   onSaveAnimalMagazineProfile,
   loading,
+  onGoBack,
 }) => {
   const [bodyCondition, setBodyCondition] = useState(null);
   const [bodyConditionObservation, setBodyConditionObservation] =
@@ -180,7 +187,6 @@ const AnimalMagazineProfile = ({
     handleSubmit,
     control,
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -191,7 +197,7 @@ const AnimalMagazineProfile = ({
     resetForm();
     setBodyCondition(animalMagazineProfile?.bodyCondition?.id || null);
     setBodyConditionObservation(
-      animalMagazineProfile?.bodyCondition?.observation || null
+      animalMagazineProfile?.bodyCondition?.observation || null,
     );
     setToillete(animalMagazineProfile?.toillete?.id || null);
     setHorseshoe(animalMagazineProfile?.horseshoe?.id || null);
@@ -227,7 +233,7 @@ const AnimalMagazineProfile = ({
         title: "Toillete del ganado o equino es requerido.",
       });
 
-    if (!horseshoe)
+    if (!horseshoe && isEquine)
       return notification({
         type: "warning",
         title: "Herrado del ganado o equino es requerido.",
@@ -262,7 +268,7 @@ const AnimalMagazineProfile = ({
               >
                 <div className="wrapper-condition-corporal">
                   <ul>
-                    {animalMagazineProfiles.bodyCondition.map(
+                    {animalMagazineProfiles?.[animal.type]?.bodyCondition.map(
                       (_bodyCondition) => (
                         <li
                           key={_bodyCondition.id}
@@ -284,7 +290,7 @@ const AnimalMagazineProfile = ({
                             </div>
                           </div>
                         </li>
-                      )
+                      ),
                     )}
                   </ul>
                   <br />
@@ -305,43 +311,59 @@ const AnimalMagazineProfile = ({
               >
                 <div className="wrapper-toillete-and-herrado">
                   <div className="wrapper-toillete-and-herrado__image">
-                    <img src={ToilleteImg} alt="toillete" />
+                    <img
+                      src={
+                        animalMagazineProfiles?.[animal.type]?.toillete.image
+                      }
+                      alt="toillete"
+                    />
                   </div>
                   <ul>
-                    {animalMagazineProfiles.toillete.map((_toillete) => (
-                      <li
-                        key={_toillete.id}
-                        onClick={() => setToillete(_toillete.id)}
-                        className={toillete === _toillete.id && "active"}
-                      >
-                        <h5>{_toillete.name}</h5>
-                      </li>
-                    ))}
+                    {animalMagazineProfiles?.[animal.type]?.toillete.items.map(
+                      (_toillete) => (
+                        <li
+                          key={_toillete.id}
+                          onClick={() => setToillete(_toillete.id)}
+                          className={toillete === _toillete.id && "active"}
+                        >
+                          <h5>{_toillete.name}</h5>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               </Card>
-              <Card
-                title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
-                bordered={false}
-                type="inner"
-              >
-                <div className="wrapper-toillete-and-herrado">
-                  <div className="wrapper-toillete-and-herrado__image">
-                    <img src={HerradoImg} alt="Herrado" />
+              {isEquine && (
+                <Card
+                  title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
+                  bordered={false}
+                  type="inner"
+                >
+                  <div className="wrapper-toillete-and-herrado">
+                    <div className="wrapper-toillete-and-herrado__image">
+                      <img
+                        src={
+                          animalMagazineProfiles?.[animal.type]?.horseshoe.image
+                        }
+                        alt="Herrado"
+                      />
+                    </div>
+                    <ul>
+                      {animalMagazineProfiles?.[
+                        animal.type
+                      ]?.horseshoe.items.map((_horseshoe) => (
+                        <li
+                          key={_horseshoe.id}
+                          onClick={() => setHorseshoe(_horseshoe.id)}
+                          className={horseshoe === _horseshoe.id && "active"}
+                        >
+                          <h5>{_horseshoe.name}</h5>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul>
-                    {animalMagazineProfiles.horseshoe.map((_horseshoe) => (
-                      <li
-                        key={_horseshoe.id}
-                        onClick={() => setHorseshoe(_horseshoe.id)}
-                        className={horseshoe === _horseshoe.id && "active"}
-                      >
-                        <h5>{_horseshoe.name}</h5>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Card>
+                </Card>
+              )}
             </div>
           </Col>
           <Col span={24}>

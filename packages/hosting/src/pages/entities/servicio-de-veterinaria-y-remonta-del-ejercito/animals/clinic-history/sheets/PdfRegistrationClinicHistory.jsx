@@ -1,25 +1,21 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import React from "react";
 import styled from "styled-components";
-import { notification, QRCode, Spinner } from "../../../../../../components";
-import { animalsRef } from "../../../../../../firebase/collections";
+import { QRCode } from "../../../../../../components";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../../firebase/firestore";
 import { LogoServicioVeterinarioRemontaEjercito } from "../../../../../../images";
+import { useNavigate } from "react-router";
+import { isEmpty } from "lodash";
 
-export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
-  const { animalId } = useParams();
+export const PdfRegistrationClinicHistory = ({
+  clinicHistories,
+  animal,
+  animalEntitiesAndBosses,
+}) => {
+  const navigate = useNavigate();
+  if (isEmpty(clinicHistories)) return navigate(-1);
 
-  const [animal = {}, animalLoading, animalError] = useDocumentData(
-    animalsRef.doc(animalId)
-  );
-
-  useEffect(() => {
-    animalError && notification({ type: "error" });
-  }, [animalError]);
-
-  if (animalLoading) return <Spinner height="80vh" />;
+  const { unit, department } = animalEntitiesAndBosses;
 
   return (
     <Container>
@@ -36,12 +32,12 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
             />
             <div>
               <span>{animal?.greatUnit}</span>
-              <span>{animal?.unit}</span>
-              <span>PEL VET</span>
+              <span>{unit?.name}</span>
+              <span>{department?.name}</span>
             </div>
           </div>
           <h2 className="header__title">
-            HISTORIA CLÍNICA VETERINARIA DEL {animal?.unit}
+            HISTORIA CLÍNICA VETERINARIA DEL {unit?.name}
           </h2>
         </div>
         <div className="main">
@@ -72,7 +68,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                   <span>Fecha nacimiento:</span>
                   <span>
                     {dayjs(animal?.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
-                      "DD/MM/YYYY"
+                      "DD/MM/YYYY",
                     )}
                   </span>
                 </div>
@@ -102,7 +98,7 @@ export const PdfRegistrationClinicHistory = ({ clinicHistories }) => {
                       <td>
                         {_clinicHistory?.createAt &&
                           dayjs(_clinicHistory.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm"
+                            "DD/MM/YYYY HH:mm",
                           )}
                       </td>
                       <td>{_clinicHistory?.symptomatology}</td>

@@ -37,7 +37,7 @@ export const ObservationForApplicantDocumentsModal = ({
           },
         ],
         ["createAt"],
-        "desc"
+        "desc",
       ),
     },
   });

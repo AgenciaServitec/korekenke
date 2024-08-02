@@ -35,14 +35,14 @@ export const DrawerLayout = ({
   const existsAclsInAclsOfUser = (
     category,
     subCategories = [],
-    aclNames = []
+    aclNames = [],
   ) => {
     return subCategories
       .map((subCategory) => {
         if (isEmpty(user?.acls?.[category]?.[subCategory])) return false;
 
         return user.acls?.[category]?.[subCategory].some((acl) =>
-          includes(aclNames, acl)
+          includes(aclNames, acl),
         );
       })
       .some((acl) => acl);
@@ -73,7 +73,7 @@ export const DrawerLayout = ({
       isVisible: existsAclsInAclsOfUser(
         "accessControl",
         ["defaultRolesAcls", "manageAcls"],
-        ["/default-roles-acls", "/manage-acls"]
+        ["/default-roles-acls", "/manage-acls"],
       ),
       children: [
         {
@@ -82,7 +82,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "accessControl",
             ["defaultRolesAcls"],
-            ["/default-roles-acls"]
+            ["/default-roles-acls"],
           ),
           onClick: () => onClickMenu("/default-roles-acls"),
         },
@@ -92,7 +92,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "accessControl",
             ["manageAcls"],
-            ["/manage-acls"]
+            ["/manage-acls"],
           ),
           onClick: () => onClickMenu("/manage-acls"),
         },
@@ -105,7 +105,7 @@ export const DrawerLayout = ({
       isVisible: existsAclsInAclsOfUser(
         "administration",
         ["users", "entities", "departments", "offices", "sections"],
-        ["/users", "/entities", "/departments", "/sections", "/offices"]
+        ["/users", "/entities", "/departments", "/sections", "/offices"],
       ),
       children: [
         {
@@ -115,7 +115,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "administration",
             ["users"],
-            ["/users"]
+            ["/users"],
           ),
           onClick: () => onClickMenu("/users"),
         },
@@ -126,7 +126,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "administration",
             ["entities"],
-            ["/entities"]
+            ["/entities"],
           ),
           onClick: () => onClickMenu("/entities"),
         },
@@ -137,7 +137,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "administration",
             ["units"],
-            ["/units"]
+            ["/units"],
           ),
           onClick: () => onClickMenu("/units"),
         },
@@ -148,7 +148,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "administration",
             ["departments"],
-            ["/departments"]
+            ["/departments"],
           ),
           onClick: () => onClickMenu("/departments"),
         },
@@ -159,7 +159,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "administration",
             ["sections"],
-            ["/sections"]
+            ["/sections"],
           ),
           onClick: () => onClickMenu("/sections"),
         },
@@ -170,7 +170,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "administration",
             ["offices"],
-            ["/offices"]
+            ["/offices"],
           ),
           onClick: () => onClickMenu("/offices"),
         },
@@ -183,7 +183,7 @@ export const DrawerLayout = ({
       isVisible: existsAclsInAclsOfUser(
         "public",
         ["correspondences"],
-        ["/correspondences/new", "/correspondences"]
+        ["/correspondences/new", "/correspondences"],
       ),
       children: [
         {
@@ -193,7 +193,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "public",
             ["correspondences"],
-            ["/correspondences/new"]
+            ["/correspondences/new"],
           ),
           onClick: () => onClickMenu("/correspondences/new"),
         },
@@ -204,7 +204,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "public",
             ["correspondences"],
-            ["/correspondences"]
+            ["/correspondences"],
           ),
           onClick: () => onClickMenu("/correspondences"),
         },
@@ -217,7 +217,7 @@ export const DrawerLayout = ({
       isVisible: existsAclsInAclsOfUser(
         "public",
         ["survey-organizational-climate-studies"],
-        ["/organizational-climate-studies"]
+        ["/organizational-climate-studies"],
       ),
       children: [
         {
@@ -237,7 +237,7 @@ export const DrawerLayout = ({
         existsAclsInAclsOfUser(
           "jefatura-de-bienestar-del-ejercito",
           ["inscriptions"],
-          ["/inscriptions"]
+          ["/inscriptions"],
         ) && currentCommand?.id === "copere",
       children: [
         {
@@ -247,7 +247,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "jefatura-de-bienestar-del-ejercito",
             ["inscriptions"],
-            ["/inscriptions"]
+            ["/inscriptions"],
           ),
           children: [
             {
@@ -256,7 +256,7 @@ export const DrawerLayout = ({
               isVisible: existsAclsInAclsOfUser(
                 "jefatura-de-bienestar-del-ejercito",
                 ["inscriptions"],
-                ["/inscriptions/cmsts"]
+                ["/inscriptions/cmsts"],
               ),
               onClick: () => onClickMenu("/inscriptions/cmsts"),
             },
@@ -272,7 +272,7 @@ export const DrawerLayout = ({
         existsAclsInAclsOfUser(
           "servicio-de-veterinaria-y-remonta-del-ejercito",
           ["animals"],
-          ["/animals"]
+          ["/animals"],
         ) && currentCommand?.id === "cologe",
       children: [
         {
@@ -282,11 +282,11 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["animals"],
-            ["/animals"]
+            ["/animals"],
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equines"
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equines",
             ),
         },
         {
@@ -296,11 +296,11 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["animals"],
-            ["/animals"]
+            ["/animals"],
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=cattle"
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=cattle",
             ),
         },
         {
@@ -310,11 +310,11 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["animals"],
-            ["/animals"]
+            ["/animals"],
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canines"
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canines",
             ),
         },
       ],
@@ -326,7 +326,7 @@ export const DrawerLayout = ({
       isVisible: existsAclsInAclsOfUser(
         "departamento-de-apoyo-social",
         ["dasRequests"],
-        ["/das-requests", "/das-requests/new"]
+        ["/das-requests", "/das-requests/new"],
       ),
       children: [
         {
@@ -336,11 +336,11 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "departamento-de-apoyo-social",
             ["dasRequests"],
-            ["/das-requests/new"]
+            ["/das-requests/new"],
           ),
           onClick: () =>
             onClickMenu(
-              "/entities/departamento-de-apoyo-social/das-requests/new"
+              "/entities/departamento-de-apoyo-social/das-requests/new",
             ),
         },
         {
@@ -350,7 +350,7 @@ export const DrawerLayout = ({
           isVisible: existsAclsInAclsOfUser(
             "departamento-de-apoyo-social",
             ["dasRequests"],
-            ["/das-requests"]
+            ["/das-requests"],
           ),
           onClick: () =>
             onClickMenu("/entities/departamento-de-apoyo-social/das-requests"),
@@ -363,7 +363,7 @@ export const DrawerLayout = ({
     return items.filter((item) => {
       if (item?.children) {
         item.children = (item?.children || []).filter(
-          (_children) => _children.isVisible
+          (_children) => _children.isVisible,
         );
       }
 

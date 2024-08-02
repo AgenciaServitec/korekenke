@@ -6,7 +6,6 @@ import {
   DatePicker,
   Form,
   Input,
-  InputNumber,
   notification,
   Row,
   Select,
@@ -33,12 +32,13 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
+import { AnimalsType } from "../../../../../data-list";
 
 export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
-  const { animals, departments, users, units } = useGlobalData();
+  const { animals, users, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -62,9 +62,10 @@ export const AnimalIntegration = () => {
     rightProfilePhoto: formData?.rightProfilePhoto || null,
     frontPhoto: formData?.frontPhoto || null,
     leftProfilePhoto: formData?.leftProfilePhoto || null,
-    unit: formData.unit,
+    unitId: formData.unitId,
     greatUnit: formData.greatUnit,
     name: formData.name,
+    slopeNumber: formData.slopeNumber,
     registrationNumber: formData.registrationNumber,
     chipNumber: formData.chipNumber || null,
     gender: formData.gender,
@@ -99,14 +100,9 @@ export const AnimalIntegration = () => {
     }
   };
 
-  const departmentsView = departments.map((deparment) => ({
-    label: deparment.name,
-    value: deparment.id,
-  }));
-
   const cologeUsers = users
     .filter((user) =>
-      (user?.commands || []).map((command) => command.code).includes("cologe")
+      (user?.commands || []).map((command) => command.code).includes("cologe"),
     )
     .map((_user) => ({
       label: userFullName(_user),
@@ -120,7 +116,6 @@ export const AnimalIntegration = () => {
       isNew={isNew}
       animalType={animalType}
       units={units}
-      departmentsView={departmentsView}
       animal={animal}
       cologeUsers={cologeUsers}
       onSaveAnimal={onSaveAnimal}
@@ -140,29 +135,32 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
-  const unitsView = units.map((unit) => ({
-    label: unit.name,
-    value: unit.id,
-  }));
+  const isEquine = animalType === "equines";
+  const isCattle = animalType === "cattle";
 
   const schema = yup.object({
     nscCorrelativo: yup.string(),
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
-    unit: yup.string().required(),
+    unitId: yup.string().required(),
     greatUnit: yup.string().required(),
     name: yup.string().required(),
-    registrationNumber: yup.string(),
-    chipNumber: yup.string(),
+    slopeNumber: isCattle
+      ? yup.string().required()
+      : yup.string().notRequired(),
+    registrationNumber: !isCattle
+      ? yup.string().required()
+      : yup.string().notRequired(),
+    chipNumber: isEquine ? yup.string().required() : yup.string().notRequired(),
     gender: yup.string().required(),
     color: yup.string().required(),
     birthdate: yup.date().required(),
-    height: yup.string(),
+    height: isEquine ? yup.string().required() : yup.string().notRequired(),
     father: yup.string().required(),
     mother: yup.string().required(),
     origin: yup.string().required(),
-    raceOrLine: yup.string(),
+    raceOrLine: yup.string().required(),
     fur: yup.string(),
     assignedOrAffectedId: yup.string(),
     description: yup.string(),
@@ -190,10 +188,11 @@ const Animal = ({
       rightProfilePhoto: animal?.rightProfilePhoto || null,
       frontPhoto: animal?.frontPhoto || null,
       leftProfilePhoto: animal?.leftProfilePhoto || null,
-      unit: animal?.unit || "",
+      unitId: animal?.unitId || "",
       greatUnit: animal?.greatUnit || "",
       name: animal?.name || "",
-      registrationNumber: animal?.registrationNumber || "",
+      slopeNumber: animal?.slopeNumber || "",
+      registrationNumber: animal?.registrationNumber || null,
       gender: animal?.gender || "",
       chipNumber: animal?.chipNumber || "",
       color: animal?.color || "",
@@ -206,7 +205,6 @@ const Animal = ({
       origin: animal?.origin || "",
       raceOrLine: animal?.raceOrLine || "",
       fur: animal?.fur || "",
-      squadron: animal?.squadron || "",
       assignedOrAffectedId: animal?.assignedOrAffectedId || "",
       description: animal?.description || "",
     });
@@ -234,9 +232,7 @@ const Animal = ({
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>
-            {animalType === "canines" ? "canino" : "Ganado o Equino"}
-          </Title>
+          <Title level={3}>{AnimalsType[animalType].titleSingular}</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -255,7 +251,7 @@ const Animal = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${animal.id}/photos`}
+                      filePath={`animals/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -277,7 +273,7 @@ const Animal = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`front-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${animal.id}/photos`}
+                      filePath={`animals/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -299,7 +295,7 @@ const Animal = ({
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
-                      filePath={`livestock-and-equines/${animal.id}/photos`}
+                      filePath={`animals/${animal.id}/photos`}
                       onChange={(file) => onChange(file)}
                       required={required(name)}
                       error={error(name)}
@@ -325,14 +321,17 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="unit"
+                  name="unitId"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       label="Unidad"
                       name={name}
                       value={value}
-                      options={unitsView}
+                      options={units.map((unit) => ({
+                        label: unit.name,
+                        value: unit.id,
+                      }))}
                       onChange={(value) => onChangeGreatUnit(onChange, value)}
                       error={error(name)}
                       required={required(name)}
@@ -372,22 +371,24 @@ const Animal = ({
                   )}
                 />
               </Col>
-              <Col span={24} md={6}>
-                <Controller
-                  name="height"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="Talla"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
+              {isEquine && (
+                <Col span={24} md={6}>
+                  <Controller
+                    name="height"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Input
+                        label="Talla"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              )}
 
               <Col span={24} md={6}>
                 <Controller
@@ -437,38 +438,62 @@ const Animal = ({
                   )}
                 />
               </Col>
-              <Col span={24} md={6}>
-                <Controller
-                  name="registrationNumber"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="N° de Matrícula"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
+              {isCattle && (
+                <Col span={24} md={6}>
+                  <Controller
+                    name="slopeNumber"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Input
+                        label="N° de Arete"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              )}
+              {!isCattle && (
+                <>
+                  <Col span={24} md={6}>
+                    <Controller
+                      name="registrationNumber"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          label="N° de Matrícula"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Col>
-              <Col span={24} md={6}>
-                <Controller
-                  name="chipNumber"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="N° de Chip"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
+                  </Col>
+                </>
+              )}
+              {isEquine && (
+                <Col span={24} md={6}>
+                  <Controller
+                    name="chipNumber"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Input
+                        label="N° de Chip"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              )}
               <Col span={24} md={6}>
                 <Controller
                   name="origin"

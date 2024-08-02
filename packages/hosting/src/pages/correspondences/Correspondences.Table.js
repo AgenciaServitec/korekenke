@@ -44,7 +44,7 @@ export const CorrespondencesTable = ({
             <div>
               <span>
                 {dayjs(correspondence.createAt.toDate()).format(
-                  "DD/MM/YYYY HH:mm"
+                  "DD/MM/YYYY HH:mm",
                 )}
               </span>
             </div>

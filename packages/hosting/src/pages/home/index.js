@@ -49,7 +49,7 @@ export const HomeIntegration = () => {
               <li>
                 <Link
                   to={onNavigateGoTo(
-                    "/entities/departamento-de-apoyo-social/das-requests/new"
+                    "/entities/departamento-de-apoyo-social/das-requests/new",
                   )}
                 >
                   1. Realizar una solicitud convenio descuento
@@ -58,7 +58,7 @@ export const HomeIntegration = () => {
               <li>
                 <Link
                   to={onNavigateGoTo(
-                    "/entities/departamento-de-apoyo-social/das-requests"
+                    "/entities/departamento-de-apoyo-social/das-requests",
                   )}
                 >
                   2. Tu lista de solicitudes
@@ -100,10 +100,28 @@ export const HomeIntegration = () => {
                 <li>
                   <Link
                     to={onNavigateGoTo(
-                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/livestock-and-equines"
+                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=equines",
                     )}
                   >
-                    1. Ganado y Equinos
+                    1. Equinos
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={onNavigateGoTo(
+                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=cattle",
+                    )}
+                  >
+                    2. Ganados
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={onNavigateGoTo(
+                      "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canines",
+                    )}
+                  >
+                    3. Caninos
                   </Link>
                 </li>
               </ul>

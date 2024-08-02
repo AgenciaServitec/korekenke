@@ -31,7 +31,7 @@ export const AnimalMagazineProfilesIntegration = () => {
       .collection("animals")
       .doc(animalId)
       .collection("animal-magazine-profiles")
-      .where("isDeleted", "==", false)
+      .where("isDeleted", "==", false),
   );
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const AnimalMagazineProfilesIntegration = () => {
             icon={faArrowLeft}
             onClick={() =>
               navigate(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`
+                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`,
               )
             }
           />
@@ -76,7 +76,7 @@ export const AnimalMagazineProfilesIntegration = () => {
           >
             <AddButton
               onClick={() => onAddAnimalMagazineProfile()}
-              title="Ficha de Revista Equina"
+              title="Ficha de revista"
               margin="0"
             />
           </Acl>

@@ -52,3 +52,6 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests";
 export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
+
+//PRIVACY POLICIES
+export * from "./privacy-policies";

@@ -27,7 +27,7 @@ export const ApplicantDocumentsSheet = ({ applicant = null }) => {
                       </div>
                     </Container>
                   </Sheet>
-                )
+                ),
             )}
           </div>
         );

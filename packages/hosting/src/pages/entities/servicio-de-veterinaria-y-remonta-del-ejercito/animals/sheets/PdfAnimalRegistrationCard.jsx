@@ -1,64 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { notification, QRCode, Spinner } from "../../../../../components";
+import { QRCode, Spinner } from "../../../../../components";
 import {
   ImgNoFound,
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
 } from "../../../../../images";
-import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { useGlobalData } from "../../../../../providers";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import { findDegree } from "../../../../../utils";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { firestore } from "../../../../../firebase";
+import { findDegree, getAnimalEntitiesAndBosses } from "../../../../../utils";
+import { AnimalsInformation } from "./AnimalsInformation";
+import { AnimalsType } from "../../../../../data-list";
+import { useQuery } from "../../../../../hooks";
+import { fetchAnimal } from "../../../../../firebase/collections";
 
 export const PdfAnimalRegistrationCard = () => {
   const { animalId } = useParams();
-  const [animal, animalLoading, animalError] = useDocumentData(
-    firestore.collection("animals").doc(animalId)
-  );
-  const { departments, users, entities, units } = useGlobalData();
+  const { animalType } = useQuery();
+  const { users } = useGlobalData();
+
+  const [loading, setLoading] = useState(true);
+  const [animal, setAnimal] = useState(null);
+  const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
 
   useEffect(() => {
-    animalError && notification({ type: "error" });
-  }, [animalError]);
+    (async () => {
+      try {
+        setLoading(true);
+        const _animal = await fetchAnimal(animalId);
+        const result = await getAnimalEntitiesAndBosses(_animal);
+        setAnimal(_animal);
+        setAnimalEntitiesAndBosses(result);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-  if (animalLoading) return <Spinner height="80vh" />;
+  if (loading) return <Spinner height="80vh" />;
 
-  const genericSearchById = (group, id) => {
-    return group.find((_group) => _group.id === id);
-  };
-
-  const genericSearchByNameId = (group, nameId) => {
-    return group.find((_group) => _group.nameId === nameId);
-  };
-
-  const entitySVRE = genericSearchByNameId(
-    entities,
-    "servicio-de-veterinaria-y-remonta-del-ejercito"
-  );
-
-  const bossEntitySVRE = genericSearchById(users, entitySVRE?.entityManageId);
-
-  const unitData = genericSearchById(units, animal?.unit);
-
-  const bossUnitData = genericSearchById(users, unitData?.bossId);
-
-  const departmentPELVET = genericSearchByNameId(departments, "pel-vet");
-
-  const bossDepartmentPELVET = genericSearchById(
-    users,
-    departmentPELVET?.bossId
-  );
-
-  const userAssignedFullName = (userId) => {
-    const user = users.find((_user) => _user.id === userId);
-    if (!user) return "";
-    return userFullName(user);
-  };
+  const { entity, entityManage, unit, department, unitBoss, departmentBoss } =
+    animalEntitiesAndBosses;
 
   return (
     <Container>
@@ -69,8 +52,8 @@ export const PdfAnimalRegistrationCard = () => {
           </div>
           <div className="header__item-center">
             <div>
-              <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO</h2>
-              <h3>TARJETA DE REGISTRO DE GANADO EQUINO</h3>
+              <h2>{AnimalsType[animalType].cardTitle}</h2>
+              <h3>{AnimalsType[animalType].cardSubTitle}</h3>
             </div>
           </div>
           <div className="header__item-right">
@@ -104,64 +87,7 @@ export const PdfAnimalRegistrationCard = () => {
                 </div>
               </div>
             </div>
-            <div className="section_information">
-              <div className="section_information__column">
-                <ul>
-                  <li>NSC - CORRELATIVO</li>
-                  <li>UNIDAD</li>
-                  <li>GRAN UNIDAD</li>
-                  <li>NOMBRE</li>
-                  <li>N° MATRICULA</li>
-                  <li>N° CHIP</li>
-                  <li>SEXO</li>
-                  <li>COLOR</li>
-                </ul>
-              </div>
-              <div className="section_information__column">
-                <ul>
-                  <li>: {animal?.nscCorrelativo || ""}</li>
-                  <li>: {unitData?.name || ""}</li>
-                  <li>: {animal?.greatUnit || ""}</li>
-                  <li>: {animal?.name || ""}</li>
-                  <li>: {animal?.registrationNumber || "S/N"}</li>
-                  <li>: {animal?.chipNumber || "S/N"}</li>
-                  <li>: {animal?.gender === "male" ? "Macho" : "Hembra"}</li>
-                  <li>: {animal?.color || ""}</li>
-                </ul>
-              </div>
-              <div className="section_information__column">
-                <ul>
-                  <li>F. NACIMIENTO</li>
-                  <li>TALLA</li>
-                  <li>PADRE</li>
-                  <li>MADRE</li>
-                  <li>PROCEDENCIA</li>
-                  <li>RAZA/LINEA</li>
-                  <li>ASIGNADO U AFECTADO</li>
-                </ul>
-              </div>
-              <div className="section_information__column">
-                <ul>
-                  <li>
-                    :{" "}
-                    {animal?.birthdate
-                      ? dayjs(
-                          animal?.birthdate,
-                          DATE_FORMAT_TO_FIRESTORE
-                        ).format("DD/MM/YYYY")
-                      : ""}
-                  </li>
-                  <li>: {animal?.height || ""} Mts</li>
-                  <li>: {animal?.father || ""}</li>
-                  <li>: {animal?.mother || ""}</li>
-                  <li>: {animal?.origin || ""}</li>
-                  <li>: {animal?.raceOrLine || ""}</li>
-                  <li>
-                    : {userAssignedFullName(animal?.assignedOrAffectedId) || ""}
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <AnimalsInformation animal={animal} unit={unit} users={users} />
             <div className="section_description">
               {animal?.description && (
                 <>
@@ -177,27 +103,25 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {bossEntitySVRE?.signaturePhoto && (
+                    {entityManage?.signaturePhoto && (
                       <img
-                        src={bossEntitySVRE?.signaturePhoto.url}
+                        src={entityManage?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossEntitySVRE?.cip}</strong>
+                      <strong>{entityManage?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossEntitySVRE)}</strong>
+                      <strong>{userFullName(entityManage)}</strong>
                     </p>
                     <p>
-                      <strong>
-                        {findDegree(bossEntitySVRE?.degree)?.label}
-                      </strong>
+                      <strong>{findDegree(entityManage?.degree)?.label}</strong>
                     </p>
                     <p>
-                      <strong>JEFE DEL {entitySVRE?.name}</strong>
+                      <strong>JEFE DEL {entity?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -206,25 +130,25 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {bossUnitData?.signaturePhoto && (
+                    {unitBoss?.signaturePhoto && (
                       <img
-                        src={bossUnitData?.signaturePhoto.url}
+                        src={unitBoss?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossUnitData?.cip}</strong>
+                      <strong>{unitBoss?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossUnitData)}</strong>
+                      <strong>{userFullName(unitBoss)}</strong>
                     </p>
                     <p>
-                      <strong>{findDegree(bossUnitData?.degree)?.label}</strong>
+                      <strong>{findDegree(unitBoss?.degree)?.label}</strong>
                     </p>
                     <p>
-                      <strong>Jefe del {unitData?.name}</strong>
+                      <strong>Jefe del {unit?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -233,28 +157,29 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {bossDepartmentPELVET?.signaturePhoto && (
+                    {departmentBoss?.signaturePhoto && (
                       <img
-                        src={bossDepartmentPELVET?.signaturePhoto.url}
+                        src={departmentBoss?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{bossDepartmentPELVET?.cip}</strong>
+                      <strong>{departmentBoss?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(bossDepartmentPELVET)}</strong>
+                      <strong>{userFullName(departmentBoss)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(bossDepartmentPELVET?.degree)?.label}
+                        {findDegree(departmentBoss?.degree)?.label}
                       </strong>
                     </p>
                     <p>
                       <strong>
-                        JEFE {`${departmentPELVET?.name} DEL ${unitData?.name}`}
+                        JEFE{" "}
+                        {`${department?.name || ""} DEL ${unit?.name || ""}`}
                       </strong>
                     </p>
                   </div>
@@ -368,25 +293,6 @@ const Container = styled.div`
           display: flex;
           justify-content: start;
         }
-      }
-    }
-  }
-
-  .section_information {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1em;
-    &__column {
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        font-weight: 600;
-        font-size: 0.8em;
-        text-transform: uppercase;
-        display: grid;
-        gap: 0.1em;
       }
     }
   }
