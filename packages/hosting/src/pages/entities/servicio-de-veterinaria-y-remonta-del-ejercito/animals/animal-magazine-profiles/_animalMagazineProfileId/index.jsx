@@ -19,7 +19,6 @@ import {
 } from "../../../../../../hooks";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { HerradoImg, ToilleteImg } from "../../../../../../images";
 import { useParams } from "react-router";
 import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import {
@@ -70,19 +69,19 @@ export const AnimalMagazineProfileIntegration = () => {
   const mapForm = (formData) => ({
     id: animalMagazineProfile.id,
     bodyCondition: {
-      ...AnimalMagazineProfiles.bodyCondition.find(
+      ...AnimalMagazineProfiles?.[animal.type]?.bodyCondition.find(
         (_bodyCondition) => _bodyCondition.id === formData.bodyCondition,
       ),
       observation: formData.bodyConditionObservation,
       qualification: formData.bodyCondition,
     },
     toillete: {
-      ...AnimalMagazineProfiles.toillete.find(
+      ...AnimalMagazineProfiles?.[animal.type]?.toillete.items.find(
         (_toillete) => _toillete.id === formData.toillete,
       ),
     },
     horseshoe: {
-      ...AnimalMagazineProfiles.horseshoe.find(
+      ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
         (_horseshoe) => _horseshoe.id === formData.horseshoe,
       ),
     },
@@ -147,6 +146,7 @@ export const AnimalMagazineProfileIntegration = () => {
       </Col>
       <Col span={24}>
         <AnimalMagazineProfile
+          animal={animal}
           isEquine={isEquine}
           animalMagazineProfile={animalMagazineProfile}
           animalMagazineProfiles={AnimalMagazineProfiles}
@@ -160,6 +160,7 @@ export const AnimalMagazineProfileIntegration = () => {
 };
 
 const AnimalMagazineProfile = ({
+  animal,
   isEquine,
   animalMagazineProfile,
   animalMagazineProfiles,
@@ -267,7 +268,7 @@ const AnimalMagazineProfile = ({
               >
                 <div className="wrapper-condition-corporal">
                   <ul>
-                    {animalMagazineProfiles.bodyCondition.map(
+                    {animalMagazineProfiles?.[animal.type]?.bodyCondition.map(
                       (_bodyCondition) => (
                         <li
                           key={_bodyCondition.id}
@@ -310,18 +311,25 @@ const AnimalMagazineProfile = ({
               >
                 <div className="wrapper-toillete-and-herrado">
                   <div className="wrapper-toillete-and-herrado__image">
-                    <img src={ToilleteImg} alt="toillete" />
+                    <img
+                      src={
+                        animalMagazineProfiles?.[animal.type]?.toillete.image
+                      }
+                      alt="toillete"
+                    />
                   </div>
                   <ul>
-                    {animalMagazineProfiles.toillete.map((_toillete) => (
-                      <li
-                        key={_toillete.id}
-                        onClick={() => setToillete(_toillete.id)}
-                        className={toillete === _toillete.id && "active"}
-                      >
-                        <h5>{_toillete.name}</h5>
-                      </li>
-                    ))}
+                    {animalMagazineProfiles?.[animal.type]?.toillete.items.map(
+                      (_toillete) => (
+                        <li
+                          key={_toillete.id}
+                          onClick={() => setToillete(_toillete.id)}
+                          className={toillete === _toillete.id && "active"}
+                        >
+                          <h5>{_toillete.name}</h5>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               </Card>
@@ -333,10 +341,17 @@ const AnimalMagazineProfile = ({
                 >
                   <div className="wrapper-toillete-and-herrado">
                     <div className="wrapper-toillete-and-herrado__image">
-                      <img src={HerradoImg} alt="Herrado" />
+                      <img
+                        src={
+                          animalMagazineProfiles?.[animal.type]?.horseshoe.image
+                        }
+                        alt="Herrado"
+                      />
                     </div>
                     <ul>
-                      {animalMagazineProfiles.horseshoe.map((_horseshoe) => (
+                      {animalMagazineProfiles?.[
+                        animal.type
+                      ]?.horseshoe.items.map((_horseshoe) => (
                         <li
                           key={_horseshoe.id}
                           onClick={() => setHorseshoe(_horseshoe.id)}

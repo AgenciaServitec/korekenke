@@ -102,7 +102,7 @@ export const AnimalMagazineProfilesheet = ({
                 </tr>
               </thead>
               <tbody>
-                {AnimalMagazineProfiles.bodyCondition.map(
+                {AnimalMagazineProfiles[animal.type].bodyCondition.map(
                   (_bodyCondition, index) => (
                     <tr
                       key={index}
@@ -166,78 +166,98 @@ export const AnimalMagazineProfilesheet = ({
               <tbody>
                 <tr>
                   <td rowSpan={2}>
-                    <img src={ToilleteImg} alt="Imagen de caballo" />
+                    <img
+                      src={AnimalMagazineProfiles[animal.type].toillete.image}
+                      alt="Imagen de caballo"
+                    />
                   </td>
-                  {AnimalMagazineProfiles.toillete.map((_toillete) => (
-                    <th key={_toillete?.id}>{_toillete?.name}</th>
-                  ))}
+                  {AnimalMagazineProfiles[animal.type].toillete.items.map(
+                    (_toillete) => (
+                      <th key={_toillete?.id}>{_toillete?.name}</th>
+                    ),
+                  )}
                 </tr>
                 <tr>
-                  {AnimalMagazineProfiles.toillete.map((_toillete) => (
-                    <td
-                      key={_toillete?.id}
-                      className={
-                        _toillete?.id === animalMagazineProfile?.toillete?.id &&
-                        "active"
-                      }
-                    >
-                      {_toillete?.id === animalMagazineProfile?.toillete?.id ? (
-                        <FontAwesomeIcon
-                          icon={faCircleCheck}
-                          size="3x"
-                          style={{ color: "green" }}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </td>
-                  ))}
+                  {AnimalMagazineProfiles[animal.type].toillete.items.map(
+                    (_toillete) => (
+                      <td
+                        key={_toillete?.id}
+                        className={
+                          _toillete?.id ===
+                            animalMagazineProfile?.toillete?.id && "active"
+                        }
+                      >
+                        {_toillete?.id ===
+                        animalMagazineProfile?.toillete?.id ? (
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            size="3x"
+                            style={{ color: "green" }}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                    ),
+                  )}
                 </tr>
               </tbody>
             </table>
           </div>
           <br />
-          <div className="main-horseshoe">
-            <table>
-              <thead>
-                <tr>
-                  <th colSpan={5}>HERRADO</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td rowSpan={2}>
-                    <img src={HerradoImg} alt="Imagen de caballo" />
-                  </td>
-                  {AnimalMagazineProfiles.horseshoe.map((_horseshoe) => (
-                    <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
-                  ))}
-                </tr>
-                <tr>
-                  {AnimalMagazineProfiles.horseshoe.map((_horseshoe) => (
-                    <td
-                      key={_horseshoe?.id}
-                      className={
-                        _horseshoe?.id ===
-                          animalMagazineProfile?.horseshoe?.id && "active"
-                      }
-                    >
-                      {_horseshoe?.id ===
-                      animalMagazineProfile?.horseshoe?.id ? (
-                        <FontAwesomeIcon
-                          icon={faCircleCheck}
-                          size="3x"
-                          style={{ color: "green" }}
-                        />
-                      ) : (
-                        ""
-                      )}
+          {AnimalMagazineProfiles?.[animal.type]?.horseshoe && (
+            <div className="main-horseshoe">
+              <table>
+                <thead>
+                  <tr>
+                    <th colSpan={5}>HERRADO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td rowSpan={2}>
+                      <img
+                        src={
+                          AnimalMagazineProfiles?.[animal.type]?.horseshoe
+                            ?.image
+                        }
+                        alt="Imagen de caballo"
+                      />
                     </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                    {AnimalMagazineProfiles?.[
+                      animal.type
+                    ]?.horseshoe?.items.map((_horseshoe) => (
+                      <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
+                    ))}
+                  </tr>
+                  <tr>
+                    {AnimalMagazineProfiles?.[
+                      animal.type
+                    ]?.horseshoe?.items.map((_horseshoe) => (
+                      <td
+                        key={_horseshoe?.id}
+                        className={
+                          _horseshoe?.id ===
+                            animalMagazineProfile?.horseshoe?.id && "active"
+                        }
+                      >
+                        {_horseshoe?.id ===
+                        animalMagazineProfile?.horseshoe?.id ? (
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            size="3x"
+                            style={{ color: "green" }}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         <div className="signature">
