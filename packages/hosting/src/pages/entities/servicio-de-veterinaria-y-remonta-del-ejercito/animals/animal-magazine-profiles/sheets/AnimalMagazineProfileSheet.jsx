@@ -1,21 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  HerradoImg,
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
-  ToilleteImg,
 } from "../../../../../../images";
 import { AnimalMagazineProfiles } from "../../../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import dayjs from "dayjs";
 import { QRCode } from "../../../../../../components";
+import { calcAges } from "../../../../../../utils";
 
 export const AnimalMagazineProfilesheet = ({
   animal,
   animalMagazineProfile,
 }) => {
+  const animalAges = calcAges(animal.birthdate);
+
   return (
     <Container>
       <div className="sheet">
@@ -39,27 +39,18 @@ export const AnimalMagazineProfilesheet = ({
               <table className="table-header-profile">
                 <thead>
                   <tr>
-                    <th colSpan={7}>FICHA DE REVISTA EQUINA</th>
+                    <th colSpan={7}>FICHA DE REVISTA DEL ANIMAL</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="name">NOMBRE DEL EQUINO</td>
+                    <td className="name">NOMBRE</td>
                     <td className="value">{animal?.name}</td>
                     <td className="name">EDAD</td>
-                    <td className="value">
-                      {dayjs().diff(
-                        dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-                        "years",
-                      )}{" "}
-                      AÑOS
-                    </td>
+                    <td className="value">{animalAges?.years} AÑOS</td>
                     <td className="name">MESES</td>
                     <td className="value" colSpan={2}>
-                      {dayjs().diff(
-                        dayjs(animal.birthdate, "DD/MM/YYYY HH:mm"),
-                        "months",
-                      )}
+                      {animalAges?.months}
                     </td>
                   </tr>
                   <tr>
@@ -96,7 +87,7 @@ export const AnimalMagazineProfilesheet = ({
                   <th colSpan={5}>CONDICIÓN CORPORAL</th>
                 </tr>
                 <tr>
-                  <th colSpan={3}>PUNTAJE DE CONDICIÓN CORPORAL EN EQUINOS</th>
+                  <th colSpan={3}>PUNTAJE DE CONDICIÓN CORPORAL</th>
                   <th>OBSERVACIÓN</th>
                   <th>CALIFICACIÓN</th>
                 </tr>
@@ -168,7 +159,7 @@ export const AnimalMagazineProfilesheet = ({
                   <td rowSpan={2}>
                     <img
                       src={AnimalMagazineProfiles[animal.type].toillete.image}
-                      alt="Imagen de caballo"
+                      alt="Imagen de animal"
                     />
                   </td>
                   {AnimalMagazineProfiles[animal.type].toillete.items.map(
@@ -221,7 +212,7 @@ export const AnimalMagazineProfilesheet = ({
                           AnimalMagazineProfiles?.[animal.type]?.horseshoe
                             ?.image
                         }
-                        alt="Imagen de caballo"
+                        alt="Imagen de animal"
                       />
                     </td>
                     {AnimalMagazineProfiles?.[

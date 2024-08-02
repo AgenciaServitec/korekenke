@@ -135,7 +135,7 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
-  const isEquine = animalType === "equines";
+  const isEquine = animalType === "equine";
   const isCattle = animalType === "cattle";
 
   const schema = yup.object({

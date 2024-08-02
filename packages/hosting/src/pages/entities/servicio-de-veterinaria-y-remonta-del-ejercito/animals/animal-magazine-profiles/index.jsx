@@ -43,7 +43,7 @@ export const AnimalMagazineProfilesIntegration = () => {
   const onAddAnimalMagazineProfile = () => navigateTo("new");
   const onDeleteAnimalMagazineProfile = (animalMagazineProfileId) =>
     modalConfirm({
-      title: "¿Estás seguro de que quieres eliminar la revista equina?",
+      title: "¿Estás seguro de que quieres eliminar la revista del animal?",
       onOk: async () =>
         await updateAnimalMagazineProfile(animalId, animalMagazineProfileId, {
           isDeleted: true,

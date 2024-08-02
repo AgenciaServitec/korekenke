@@ -80,11 +80,13 @@ export const AnimalMagazineProfileIntegration = () => {
         (_toillete) => _toillete.id === formData.toillete,
       ),
     },
-    horseshoe: {
-      ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
-        (_horseshoe) => _horseshoe.id === formData.horseshoe,
-      ),
-    },
+    ...(isEquine && {
+      horseshoe: {
+        ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
+          (_horseshoe) => _horseshoe.id === formData.horseshoe,
+        ),
+      },
+    }),
     bodyWeightEstimation: {
       chestCircumference: {
         typeMeasure: "cm",
@@ -98,9 +100,9 @@ export const AnimalMagazineProfileIntegration = () => {
         typeMeasure: "cm",
         value: formData.heightOfTheCross,
       },
-      horseWeight: {
+      weight: {
         typeMeasure: "kg",
-        value: formData.horseWeight,
+        value: formData.weight,
       },
       observation: {
         value: formData.observation,
@@ -178,7 +180,7 @@ const AnimalMagazineProfile = ({
     chestCircumference: yup.number().required(),
     bodyLength: yup.number().required(),
     heightOfTheCross: yup.number().required(),
-    horseWeight: yup.number().required(),
+    weight: yup.number().required(),
     observation: yup.string(),
   });
 
@@ -213,8 +215,7 @@ const AnimalMagazineProfile = ({
       heightOfTheCross:
         animalMagazineProfile?.bodyWeightEstimation?.heightOfTheCross?.value ||
         "",
-      horseWeight:
-        animalMagazineProfile?.bodyWeightEstimation?.horseWeight?.value || "",
+      weight: animalMagazineProfile?.bodyWeightEstimation?.weight?.value || "",
       observation:
         animalMagazineProfile?.bodyWeightEstimation?.observation?.value || "",
     });
@@ -224,19 +225,19 @@ const AnimalMagazineProfile = ({
     if (!bodyCondition)
       return notification({
         type: "warning",
-        title: "La condición corporal del ganado o equino es requerido.",
+        title: "La condición corporal del animal es requerido.",
       });
 
     if (!toillete)
       return notification({
         type: "warning",
-        title: "Toillete del ganado o equino es requerido.",
+        title: "Toillete del animal es requerido.",
       });
 
     if (!horseshoe && isEquine)
       return notification({
         type: "warning",
-        title: "Herrado del ganado o equino es requerido.",
+        title: "Herrado del equino es requerido.",
       });
 
     onSaveAnimalMagazineProfile({
@@ -431,12 +432,12 @@ const AnimalMagazineProfile = ({
                   </Col>
                   <Col span={24} md={6}>
                     <Controller
-                      name="horseWeight"
+                      name="weight"
                       control={control}
                       defaultValue=""
                       render={({ field: { onChange, value, name } }) => (
                         <InputNumber
-                          label="Peso del caballo (Kg)"
+                          label="Peso del animal (Kg)"
                           name={name}
                           value={value}
                           onChange={onChange}

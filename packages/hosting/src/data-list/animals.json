@@ -1,5 +1,5 @@
 {
-  "equines": {
+  "equine": {
     "cardTitle": "SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO",
     "cardSubTitle": "TARJETA DE REGISTRO DE GANADO EQUINO",
     "titleSingular": "Equino",
@@ -11,7 +11,7 @@
     "titleSingular": "Ganado",
     "titlePlural": "Ganados"
   },
-  "canines": {
+  "canine": {
     "cardTitle": "SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO",
     "cardSubTitle": "TARJETA DE REGISTRO DE PERROS DE GUERRA",
     "titleSingular": "Canino",
