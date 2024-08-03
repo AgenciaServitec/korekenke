@@ -274,7 +274,7 @@ const Department = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Entidad"
+                      label="Entidad (G.U)"
                       value={value}
                       onChange={onChange}
                       error={error(name)}

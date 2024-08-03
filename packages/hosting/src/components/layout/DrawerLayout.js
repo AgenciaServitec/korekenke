@@ -120,7 +120,7 @@ export const DrawerLayout = ({
           onClick: () => onClickMenu("/users"),
         },
         {
-          label: "Entidades",
+          label: "Entidades / G.U",
           key: "entities",
           icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
           isVisible: existsAclsInAclsOfUser(

@@ -34,11 +34,11 @@
       "/users#delete": "Eliminar Usuario"
     },
     "entities": {
-      "label": "Entidades",
-      "/entities": "Menú: Entidades",
-      "/entities/new": "Agregar Entidad",
-      "/entities/:entityId": "Editar Entidad",
-      "/entities#delete": "Eliminar Entidad"
+      "label": "Entidades / G.U",
+      "/entities": "Menú: Entidades / G.U",
+      "/entities/new": "Agregar Entidad (G.U)",
+      "/entities/:entityId": "Editar Entidad (G.U)",
+      "/entities#delete": "Eliminar Entidad (G.U)"
     },
     "units": {
       "label": "Unidades",

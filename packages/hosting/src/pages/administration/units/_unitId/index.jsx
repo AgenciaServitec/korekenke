@@ -240,7 +240,7 @@ const Unit = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Select
-                      label="Entidad"
+                      label="Entidad (G.U)"
                       name={name}
                       value={value}
                       options={entities.map((entity) => ({
