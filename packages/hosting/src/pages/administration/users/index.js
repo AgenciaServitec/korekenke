@@ -166,7 +166,7 @@ export const Users = () => {
     modalConfirm({
       title: `¿Estás seguro de que quieres desvincular al usuario ${
         user.assignedTo.type === "entity"
-          ? "de la ENTIDAD (G.U)"
+          ? "de la ENTIDAD / G.U"
           : user.assignedTo.type === "unit"
             ? "de la UNIDAD"
             : user.assignedTo.type === "department"
@@ -206,7 +206,7 @@ export const Users = () => {
           icon: <FontAwesomeIcon icon={faWarning} color="orange" size="lg" />,
           title: "Este usuario está asignado como miembro",
           description:
-            "Para eliminar, el usuario no debe estar como miembro o jefe en (entidad (G.U), departamento, sección u oficina)",
+            "Para eliminar, el usuario no debe estar como miembro o jefe en (entidad / G.U, departamento, sección u oficina)",
           btn: (
             <Space>
               <Button

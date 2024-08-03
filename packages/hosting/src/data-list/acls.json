@@ -36,9 +36,9 @@
     "entities": {
       "label": "Entidades / G.U",
       "/entities": "Menú: Entidades / G.U",
-      "/entities/new": "Agregar Entidad (G.U)",
-      "/entities/:entityId": "Editar Entidad (G.U)",
-      "/entities#delete": "Eliminar Entidad (G.U)"
+      "/entities/new": "Agregar Entidad / G.U",
+      "/entities/:entityId": "Editar Entidad / G.U",
+      "/entities#delete": "Eliminar Entidad / G.U"
     },
     "units": {
       "label": "Unidades",
