@@ -18,7 +18,6 @@ import {
 import { useNavigate, useParams } from "react-router";
 import {
   addUnit,
-  fetchUnit,
   getUnitId,
   updateUnit,
 } from "../../../../firebase/collections";
@@ -30,8 +29,15 @@ import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUs
 export const UnitIntegration = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
-  const { entities, departments, offices, sections, rolesAcls, unitUsers } =
-    useGlobalData();
+  const {
+    entities,
+    units,
+    departments,
+    offices,
+    sections,
+    rolesAcls,
+    unitUsers,
+  } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
@@ -45,11 +51,9 @@ export const UnitIntegration = () => {
   useEffect(() => {
     const _unit = isNew
       ? { id: getUnitId() }
-      : (async () =>
-          await fetchUnit(unitId).then((response) => {
-            if (!response) return onGoBack();
-            setUnit(response);
-          }))();
+      : units.find((unit) => unit.id === unitId);
+
+    if (!_unit) return onGoBack();
 
     setUnit(_unit);
   }, []);
