@@ -110,6 +110,7 @@ export const ProfileDataForm = () => {
             name="profilePhoto"
             render={({ field: { onChange, value, onBlur, name } }) => (
               <Upload
+                isImage
                 label="Foto personal"
                 accept="image/*"
                 resize="313x370"
