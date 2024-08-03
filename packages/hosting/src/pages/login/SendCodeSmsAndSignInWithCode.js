@@ -35,7 +35,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
             applicationVerifier.clear();
             notification({
               type: "warning",
-              title: "El tiempo a expirado, vuela a intentarlo",
+              title: "El tiempo a expirado, vuelva a intentarlo",
             });
             gRecaptchaReset();
           },

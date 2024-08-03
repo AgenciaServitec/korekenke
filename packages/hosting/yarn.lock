@@ -5795,7 +5795,7 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-firebase@^10.6.0:
+firebase@^10.12.4:
   version "10.12.5"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-10.12.5.tgz#381eccea39002c46d73883b7b0cfbef17d531a76"
   integrity sha512-J0yL3yh12CfFprTkSOQ9HqBugERyqvWwOuOoo1j1QHmYe9cYLKnBmtNCvGIYInDcsVUnJoRXCM+hxbGf48oVhg==
