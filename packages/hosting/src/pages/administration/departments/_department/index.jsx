@@ -64,16 +64,14 @@ export const DepartmentIntegration = () => {
     name: formData.name,
     nameId: getNameId(formData.name),
     description: formData.description,
-
-    entityId: formData.entityId,
-    unitId: formData.unitId,
-    officeId: formData.officeId,
-    sectionId: formData.sectionId,
-
     membersIds: formData?.membersIds || [],
     bossId: formData?.bossId || null,
     secondBossId: formData?.secondBossId || null,
     commandId: department?.commandId || currentCommand.id,
+    entityId: formData.entityId,
+    unitId: formData.unitId,
+    officeId: formData.officeId,
+    sectionId: formData.sectionId,
   });
 
   const onSaveDepartment = async (formData) => {
@@ -122,8 +120,8 @@ export const DepartmentIntegration = () => {
       rolesAcls={rolesAcls}
       entities={entities}
       units={units}
-      offices={offices}
       sections={sections}
+      offices={offices}
       departmentUsers={departmentUsers}
       onSaveDepartment={onSaveDepartment}
       loading={loading}
@@ -138,8 +136,8 @@ const Department = ({
   rolesAcls,
   entities,
   units,
-  offices,
   sections,
+  offices,
   departmentUsers,
   onSaveDepartment,
   loading,
@@ -147,13 +145,13 @@ const Department = ({
   const schema = yup.object({
     name: yup.string().required(),
     description: yup.string(),
+    membersIds: yup.array().nullable(),
+    bossId: yup.string(),
+    secondBossId: yup.string(),
     entityId: yup.string(),
     unitId: yup.string(),
     officeId: yup.string(),
     sectionId: yup.string(),
-    membersIds: yup.array().nullable(),
-    bossId: yup.string(),
-    secondBossId: yup.string(),
   });
 
   const {
@@ -180,13 +178,13 @@ const Department = ({
     reset({
       name: department?.name || "",
       description: department?.description || "",
+      membersIds: department?.membersIds || null,
+      bossId: department?.bossId || "",
+      secondBossId: department?.secondBossId || "",
       entityId: department?.entityId || "",
       unitId: department?.unitId || "",
       officeId: department?.officeId || "",
       sectionId: department?.sectionId || "",
-      membersIds: department?.membersIds || null,
-      bossId: department?.bossId || "",
-      secondBossId: department?.secondBossId || "",
     });
   };
 
