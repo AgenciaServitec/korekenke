@@ -112,7 +112,7 @@ export const HomeIntegration = () => {
                       "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=cattle",
                     )}
                   >
-                    2. Ganados
+                    2. Vacunos
                   </Link>
                 </li>
                 <li>

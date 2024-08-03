@@ -133,7 +133,7 @@ const Animals = ({
                 defaultValue={animalType}
               >
                 <Radio.Button value="equine">Equinos</Radio.Button>
-                <Radio.Button value="cattle">Ganados</Radio.Button>
+                <Radio.Button value="cattle">Vacunos</Radio.Button>
                 <Radio.Button value="canine">Caninos</Radio.Button>
               </Radio.Group>
             </Acl>

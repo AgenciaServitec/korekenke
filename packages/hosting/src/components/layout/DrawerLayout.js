@@ -292,7 +292,7 @@ export const DrawerLayout = ({
         {
           key: "cattle",
           icon: <FontAwesomeIcon icon={faCow} size="lg" />,
-          label: "Ganados",
+          label: "Vacunos",
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["animals"],
