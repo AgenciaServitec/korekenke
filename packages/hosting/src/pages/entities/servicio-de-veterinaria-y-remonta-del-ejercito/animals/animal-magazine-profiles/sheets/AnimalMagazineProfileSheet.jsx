@@ -116,7 +116,7 @@ export const AnimalMagazineProfilesheet = ({
                           animalMagazineProfile?.bodyCondition?.id ? (
                             <FontAwesomeIcon
                               icon={faCircleCheck}
-                              size="3x"
+                              size="2x"
                               style={{ color: "green" }}
                             />
                           ) : (
@@ -182,7 +182,7 @@ export const AnimalMagazineProfilesheet = ({
                         animalMagazineProfile?.toillete?.id ? (
                           <FontAwesomeIcon
                             icon={faCircleCheck}
-                            size="3x"
+                            size="2x"
                             style={{ color: "green" }}
                           />
                         ) : (
@@ -231,7 +231,7 @@ export const AnimalMagazineProfilesheet = ({
                           {_paws?.id === animalMagazineProfile?.paws?.id ? (
                             <FontAwesomeIcon
                               icon={faCircleCheck}
-                              size="3x"
+                              size="2x"
                               style={{ color: "green" }}
                             />
                           ) : (
@@ -268,7 +268,7 @@ export const AnimalMagazineProfilesheet = ({
 const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 12.7px;
 
   * {
     margin: 0;
@@ -311,7 +311,7 @@ const Container = styled.div`
           .value {
             text-transform: uppercase;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
           }
 
           th,
@@ -343,9 +343,15 @@ const Container = styled.div`
     }
 
     .main {
+      margin-bottom: 0.5em;
+
       .main-body-condition {
         &__title {
           text-align: center;
+          font-size: 1.2em;
+        }
+
+        .body-condition-qualification {
           font-size: 1.2em;
         }
 

@@ -60,7 +60,7 @@ export const AnimalMagazineProfilesTable = ({
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="animalMagazineProfiles"
-            name="/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
+            name="/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
           >
             <IconAction
               tooltipTitle="Pdf"
@@ -76,7 +76,7 @@ export const AnimalMagazineProfilesTable = ({
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="animalMagazineProfiles"
-            name="/animal/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
+            name="/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
           >
             <IconAction
               tooltipTitle="Editar"
@@ -87,7 +87,7 @@ export const AnimalMagazineProfilesTable = ({
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="animalMagazineProfiles"
-            name="/animal/:animalId/animal-magazine-profiles#delete"
+            name="/animals/:animalId/animal-magazine-profiles#delete"
           >
             <IconAction
               tooltipTitle="Eliminar"
