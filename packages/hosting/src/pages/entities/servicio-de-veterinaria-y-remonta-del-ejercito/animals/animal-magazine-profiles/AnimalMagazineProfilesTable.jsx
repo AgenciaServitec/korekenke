@@ -44,11 +44,11 @@ export const AnimalMagazineProfilesTable = ({
       ),
     },
     {
-      title: "Herrado",
-      key: "horseshoe",
-      dataIndex: "horseshoe",
+      title: "Patas",
+      key: "paws",
+      dataIndex: "paws",
       render: (_, animalMagazineProfile) => (
-        <div>{animalMagazineProfile?.horseshoe?.name}</div>
+        <div>{animalMagazineProfile?.paws?.name}</div>
       ),
     },
     {

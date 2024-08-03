@@ -22,6 +22,8 @@ import {
   BodyConditionCattle7,
   BodyConditionCattle8,
   BodyConditionCattle9,
+  CaninesPaws,
+  CattlePaws,
   HerradoImg,
   ToilleteCanineImg,
   ToilleteCattleImg,
@@ -86,7 +88,7 @@ export const AnimalMagazineProfiles = {
         { id: 4, name: "Malo" },
       ],
     },
-    horseshoe: {
+    paws: {
       image: HerradoImg,
       items: [
         { id: 1, name: "Muy bueno" },
@@ -153,6 +155,15 @@ export const AnimalMagazineProfiles = {
         { id: 4, name: "Malo" },
       ],
     },
+    paws: {
+      image: CattlePaws,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
+    },
   },
   canine: {
     bodyCondition: [
@@ -184,6 +195,15 @@ export const AnimalMagazineProfiles = {
     ],
     toillete: {
       image: ToilleteCanineImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
+    },
+    paws: {
+      image: CaninesPaws,
       items: [
         { id: 1, name: "Muy bueno" },
         { id: 2, name: "Bueno" },

@@ -196,54 +196,50 @@ export const AnimalMagazineProfilesheet = ({
             </table>
           </div>
           <br />
-          {AnimalMagazineProfiles?.[animal.type]?.horseshoe && (
-            <div className="main-horseshoe">
+          {AnimalMagazineProfiles?.[animal.type]?.paws && (
+            <div className="main-paws">
               <table>
                 <thead>
                   <tr>
-                    <th colSpan={5}>HERRADO</th>
+                    <th colSpan={5}>PATAS</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td rowSpan={2}>
                       <img
-                        src={
-                          AnimalMagazineProfiles?.[animal.type]?.horseshoe
-                            ?.image
-                        }
-                        alt="Imagen de animal"
+                        src={AnimalMagazineProfiles?.[animal.type]?.paws?.image}
+                        alt="Imagen patas de animal"
                       />
                     </td>
-                    {AnimalMagazineProfiles?.[
-                      animal.type
-                    ]?.horseshoe?.items.map((_horseshoe) => (
-                      <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
-                    ))}
+                    {AnimalMagazineProfiles?.[animal.type]?.paws?.items.map(
+                      (_paws) => (
+                        <th key={_paws?.id}>{_paws?.name}</th>
+                      ),
+                    )}
                   </tr>
                   <tr>
-                    {AnimalMagazineProfiles?.[
-                      animal.type
-                    ]?.horseshoe?.items.map((_horseshoe) => (
-                      <td
-                        key={_horseshoe?.id}
-                        className={
-                          _horseshoe?.id ===
-                            animalMagazineProfile?.horseshoe?.id && "active"
-                        }
-                      >
-                        {_horseshoe?.id ===
-                        animalMagazineProfile?.horseshoe?.id ? (
-                          <FontAwesomeIcon
-                            icon={faCircleCheck}
-                            size="3x"
-                            style={{ color: "green" }}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </td>
-                    ))}
+                    {AnimalMagazineProfiles?.[animal.type]?.paws?.items.map(
+                      (_paws) => (
+                        <td
+                          key={_paws?.id}
+                          className={
+                            _paws?.id === animalMagazineProfile?.paws?.id &&
+                            "active"
+                          }
+                        >
+                          {_paws?.id === animalMagazineProfile?.paws?.id ? (
+                            <FontAwesomeIcon
+                              icon={faCircleCheck}
+                              size="3x"
+                              style={{ color: "green" }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                      ),
+                    )}
                   </tr>
                 </tbody>
               </table>
@@ -404,7 +400,7 @@ const Container = styled.div`
       }
 
       .main-toillete,
-      .main-horseshoe {
+      .main-paws {
         table {
           width: 100%;
 
