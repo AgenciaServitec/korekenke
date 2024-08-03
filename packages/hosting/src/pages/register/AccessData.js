@@ -91,7 +91,11 @@ export const AccessData = ({ next, currentStep }) => {
 
   const userByCip = async (cip) => {
     const response = await fetchCollectionOnce(
-      firestore.collection("users").where("cip", "==", cip).limit(1),
+      firestore
+        .collection("users")
+        .where("cip", "==", cip)
+        .where("isDeleted", "==", false)
+        .limit(1),
     );
 
     return response[0];
@@ -99,7 +103,11 @@ export const AccessData = ({ next, currentStep }) => {
 
   const userByDni = async (dni) => {
     const response = await fetchCollectionOnce(
-      firestore.collection("users").where("dni", "==", dni).limit(1),
+      firestore
+        .collection("users")
+        .where("dni", "==", dni)
+        .where("isDeleted", "==", false)
+        .limit(1),
     );
 
     return response[0];
