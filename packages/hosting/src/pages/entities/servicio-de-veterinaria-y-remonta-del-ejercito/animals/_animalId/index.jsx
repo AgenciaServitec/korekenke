@@ -38,7 +38,7 @@ export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
-  const { animals, users, units } = useGlobalData();
+  const { animals, users, entities, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,7 @@ export const AnimalIntegration = () => {
     frontPhoto: formData?.frontPhoto || null,
     leftProfilePhoto: formData?.leftProfilePhoto || null,
     unitId: formData.unitId,
-    greatUnit: formData.greatUnit,
+    entityId: formData.entityId,
     name: formData.name,
     slopeNumber: formData.slopeNumber,
     registrationNumber: formData.registrationNumber,
@@ -116,6 +116,7 @@ export const AnimalIntegration = () => {
       isNew={isNew}
       animalType={animalType}
       units={units}
+      entities={entities}
       animal={animal}
       cologeUsers={cologeUsers}
       onSaveAnimal={onSaveAnimal}
@@ -129,6 +130,7 @@ const Animal = ({
   isNew,
   animalType,
   units,
+  entities,
   animal,
   cologeUsers,
   onSaveAnimal,
@@ -144,7 +146,7 @@ const Animal = ({
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
     unitId: yup.string().required(),
-    greatUnit: yup.string().required(),
+    entityId: yup.string(),
     name: yup.string().required(),
     slopeNumber: isCattle
       ? yup.string().required()
@@ -189,7 +191,7 @@ const Animal = ({
       frontPhoto: animal?.frontPhoto || null,
       leftProfilePhoto: animal?.leftProfilePhoto || null,
       unitId: animal?.unitId || "",
-      greatUnit: animal?.greatUnit || "",
+      entityId: animal?.entityId || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",
       registrationNumber: animal?.registrationNumber || null,
@@ -210,11 +212,11 @@ const Animal = ({
     });
   };
 
-  const onChangeGreatUnit = (onChange, value) => {
+  const onChangeEntityGU = (onChange, value) => {
     const _unit = units.find((_unit) => _unit.id === value);
 
-    if (_unit) setValue("greatUnit", _unit?.greatUnit);
-    if (!_unit) setValue("greatUnit", "");
+    if (_unit) setValue("entityId", _unit?.entityId);
+    if (!_unit) setValue("entityId", "");
 
     return onChange(value);
   };
@@ -335,7 +337,7 @@ const Animal = ({
                         label: unit.name,
                         value: unit.id,
                       }))}
-                      onChange={(value) => onChangeGreatUnit(onChange, value)}
+                      onChange={(value) => onChangeEntityGU(onChange, value)}
                       error={error(name)}
                       required={required(name)}
                     />
@@ -344,14 +346,19 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="greatUnit"
+                  name="entityId"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="Gran Unidad"
+                    <Select
+                      label="Entidad / G.U"
                       name={name}
                       value={value}
-                      onChange={onChange}
+                      options={entities.map((entity) => ({
+                        label: entity.name,
+                        value: entity.id,
+                      }))}
+                      onChange={(value) => onChangeEntityGU(onChange, value)}
+                      disabled
                       error={error(name)}
                       required={required(name)}
                     />

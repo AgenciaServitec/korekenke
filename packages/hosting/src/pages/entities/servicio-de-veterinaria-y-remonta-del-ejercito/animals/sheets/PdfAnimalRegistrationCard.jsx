@@ -40,8 +40,14 @@ export const PdfAnimalRegistrationCard = () => {
 
   if (loading) return <Spinner height="80vh" />;
 
-  const { entity, entityManage, unit, department, unitBoss, departmentBoss } =
-    animalEntitiesAndBosses;
+  const {
+    entityGU,
+    entityGUManage,
+    unit,
+    department,
+    unitBoss,
+    departmentBoss,
+  } = animalEntitiesAndBosses;
 
   return (
     <Container>
@@ -52,8 +58,8 @@ export const PdfAnimalRegistrationCard = () => {
           </div>
           <div className="header__item-center">
             <div>
-              <h2>{AnimalsType[animalType].cardTitle}</h2>
-              <h3>{AnimalsType[animalType].cardSubTitle}</h3>
+              <h2>{AnimalsType?.[animalType]?.cardTitle}</h2>
+              <h3>{AnimalsType?.[animalType]?.cardSubTitle}</h3>
             </div>
           </div>
           <div className="header__item-right">
@@ -87,7 +93,12 @@ export const PdfAnimalRegistrationCard = () => {
                 </div>
               </div>
             </div>
-            <AnimalsInformation animal={animal} unit={unit} users={users} />
+            <AnimalsInformation
+              animal={animal}
+              unit={unit}
+              entityGU={entityGU}
+              users={users}
+            />
             <div className="section_description">
               {animal?.description && (
                 <>
@@ -100,28 +111,30 @@ export const PdfAnimalRegistrationCard = () => {
               <div className="section_signature">
                 <div className="signature_content">
                   <div className="signature_tittle">
-                    <strong> JEFE DEL SVETRE</strong>
+                    <strong>JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {entityManage?.signaturePhoto && (
+                    {entityGUManage?.signaturePhoto && (
                       <img
-                        src={entityManage?.signaturePhoto.url}
+                        src={entityGUManage?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{entityManage?.cip}</strong>
+                      <strong>{entityGUManage?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(entityManage)}</strong>
+                      <strong>{userFullName(entityGUManage)}</strong>
                     </p>
                     <p>
-                      <strong>{findDegree(entityManage?.degree)?.label}</strong>
+                      <strong>
+                        {findDegree(entityGUManage?.degree)?.label}
+                      </strong>
                     </p>
                     <p>
-                      <strong>JEFE DEL {entity?.name}</strong>
+                      <strong>JEFE DEL {entityGU?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -154,7 +167,7 @@ export const PdfAnimalRegistrationCard = () => {
                 </div>
                 <div className="signature_content">
                   <div className="signature_tittle">
-                    <strong> OFICIAL VETERINARIO</strong>
+                    <strong>OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
                     {departmentBoss?.signaturePhoto && (
