@@ -62,7 +62,6 @@ export const UnitIntegration = () => {
     ...unit,
     name: formData.name,
     nameId: getNameId(formData.name),
-    greatUnit: formData.greatUnit,
     membersIds: formData.membersIds || [],
     bossId: formData.bossId || null,
     commandId: unit?.commandId || currentCommand.id,
