@@ -1,23 +1,14 @@
 import React from "react";
 import { Acl, IconAction, Space, Table } from "../../../../components";
-import {
-  faEdit,
-  faIdCard,
-  faListCheck,
-  faNotesMedical,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faIdCard } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
-export const AnimalsTable = ({
+export const AnimalLogsTable = ({
   animals,
-  onEditAnimal,
-  onConfirmRemoveAnimal,
   onNavigateGoToPdfAnimalRegistrationCard,
-  onNavigateGoToAnimalMagazineProfiles,
-  onNavigateGoToClinicHistory,
+  loading,
 }) => {
   const columns = [
     {
@@ -66,58 +57,13 @@ export const AnimalsTable = ({
         <Space>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="clinicHistory"
-            name="/animals/:animalId/clinic-history"
-          >
-            <IconAction
-              tooltipTitle="Historial clinico"
-              icon={faNotesMedical}
-              onClick={() => onNavigateGoToClinicHistory(animal.id)}
-            />
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="animalMagazineProfiles"
-            name="/animals/:animalId/animal-magazine-profiles"
-          >
-            <IconAction
-              tooltipTitle="Ficha revista Animal"
-              icon={faListCheck}
-              onClick={() => onNavigateGoToAnimalMagazineProfiles(animal.id)}
-            />
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="animals"
-            name="/animals/:animalId/pdf-animal-card"
+            subCategory="animalLogs"
+            name="/animal-logs/:animalId/pdf-animal-log-card"
           >
             <IconAction
               tooltipTitle="Ver tarjeta"
               icon={faIdCard}
               onClick={() => onNavigateGoToPdfAnimalRegistrationCard(animal.id)}
-            />
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="animals"
-            name="/animals/:animalId"
-          >
-            <IconAction
-              tooltipTitle="Editar"
-              icon={faEdit}
-              onClick={() => onEditAnimal(animal)}
-            />
-          </Acl>
-          <Acl
-            category="servicio-de-veterinaria-y-remonta-del-ejercito"
-            subCategory="animals"
-            name="/animals#delete"
-          >
-            <IconAction
-              tooltipTitle="Eliminar"
-              styled={{ color: (theme) => theme.colors.error }}
-              icon={faTrash}
-              onClick={() => onConfirmRemoveAnimal(animal)}
             />
           </Acl>
         </Space>
@@ -130,6 +76,7 @@ export const AnimalsTable = ({
       columns={columns}
       dataSource={orderBy(animals, "createAt", "desc")}
       scroll={{ x: "max-content" }}
+      loading={loading}
     />
   );
 };
