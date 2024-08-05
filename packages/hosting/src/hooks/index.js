@@ -11,4 +11,5 @@ export * from "./useDebounce";
 export * from "./useAsync";
 export * from "./useAcl";
 export * from "./userInfo";
-// export * from "./useUpdateAssignToInUser";
+export * from "./useUpdateAssignToInUser";
+export * from "./useAnimalLogs";

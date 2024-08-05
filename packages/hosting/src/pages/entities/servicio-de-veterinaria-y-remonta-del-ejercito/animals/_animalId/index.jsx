@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  useAnimalLogs,
   useDefaultFirestoreProps,
   useFormUtils,
   useQuery,
@@ -27,6 +28,7 @@ import {
   addAnimal,
   addAnimalLog,
   getAnimalId,
+  getAnimalLogId,
   updateAnimal,
 } from "../../../../../firebase/collections";
 import dayjs from "dayjs";
@@ -39,8 +41,9 @@ export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
-  const { animals, users, entities, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { animals, users, entities, units } = useGlobalData();
+  const { onSetAnimalLog } = useAnimalLogs();
 
   const [loading, setLoading] = useState(false);
   const [animal, setAnimal] = useState({});
@@ -99,13 +102,7 @@ export const AnimalIntegration = () => {
         ? await addAnimal(assignCreateProps(_formData))
         : await updateAnimal(animal.id, assignUpdateProps(_formData));
 
-      // Add animal history
-      if (!animal?.status || animal?.status === "registered") {
-        await addAnimalLog({
-          id: animal.id,
-          ..._formData,
-        });
-      }
+      await onSetAnimalLog({ animal, formData: _formData });
 
       await notification({ type: "success" });
       onGoBack();
