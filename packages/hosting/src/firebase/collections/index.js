@@ -12,3 +12,4 @@ export * from "./clinicHistories";
 export * from "./equineMagazineProfiles";
 export * from "./animals";
 export * from "./cmstsEnrollments";
+export * from "./animal-logs";
