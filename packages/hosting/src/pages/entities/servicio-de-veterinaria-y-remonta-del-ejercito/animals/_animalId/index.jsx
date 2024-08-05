@@ -25,8 +25,10 @@ import {
 import { useGlobalData } from "../../../../../providers";
 import {
   addAnimal,
+  addAnimalLog,
   getAnimalId,
   updateAnimal,
+  updateAnimalLog,
 } from "../../../../../firebase/collections";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
@@ -91,7 +93,23 @@ export const AnimalIntegration = () => {
         ? await addAnimal(assignCreateProps(mapAnimal(formData)))
         : await updateAnimal(animal.id, assignUpdateProps(mapAnimal(formData)));
 
-      notification({ type: "success" });
+      isNew
+        ? await addAnimalLog({
+            id: animal.id,
+            ...formData,
+            rightProfilePhoto: formData?.rightProfilePhotoCopy || null,
+            frontPhoto: formData?.frontPhotoCopy || null,
+            leftProfilePhoto: formData?.leftProfilePhotoCopy || null,
+          })
+        : await updateAnimalLog(animal.id, {
+            id: animal.id,
+            ...formData,
+            rightProfilePhoto: formData?.rightProfilePhotoCopy || null,
+            frontPhoto: formData?.frontPhotoCopy || null,
+            leftProfilePhoto: formData?.leftProfilePhotoCopy || null,
+          });
+
+      await notification({ type: "success" });
       onGoBack();
     } catch (e) {
       console.error("ErrorSaveEntity: ", e);
@@ -138,9 +156,9 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
-  const [rightProfilePhoto, setRightProfilePhoto] = useState(null);
-  const [frontPhoto, setFrontPhoto] = useState(null);
-  const [leftProfilePhoto, setLeftProfilePhoto] = useState(null);
+  const [rightProfilePhotoCopy, setRightProfilePhotoCopy] = useState(null);
+  const [frontPhotoCopy, setFrontPhotoCopy] = useState(null);
+  const [leftProfilePhotoCopy, setLeftProfilePhotoCopy] = useState(null);
 
   const isEquine = animalType === "equine";
   const isCattle = animalType === "cattle";
@@ -226,9 +244,13 @@ const Animal = ({
     return onChange(value);
   };
 
-  const onSubmit = (formData) => {
-    onSaveAnimal(formData);
-  };
+  const onSubmit = (formData) =>
+    onSaveAnimal({
+      ...formData,
+      rightProfilePhotoCopy,
+      frontPhotoCopy,
+      leftProfilePhotoCopy,
+    });
 
   return (
     <Acl
@@ -269,11 +291,11 @@ const Animal = ({
                               bucket:
                                 "servicioDeVeterinariaYRemontaDelEjercito",
                               fileName: `right-profile-photo-${uuidv4()}`,
-                              filePath: `animal-history/${animal?.id}/images`,
+                              filePath: `animal-logs/${animal?.id}/images`,
                             }
                       }
                       onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) => setRightProfilePhoto(file)}
+                      onChangeCopy={(file) => setRightProfilePhotoCopy(file)}
                       required={required(name)}
                       error={error(name)}
                     />
@@ -305,11 +327,11 @@ const Animal = ({
                               bucket:
                                 "servicioDeVeterinariaYRemontaDelEjercito",
                               fileName: `front-photo-${uuidv4()}`,
-                              filePath: `animal-history/${animal?.id}/images`,
+                              filePath: `animal-logs/${animal?.id}/images`,
                             }
                       }
                       onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) => setFrontPhoto(file)}
+                      onChangeCopy={(file) => setFrontPhotoCopy(file)}
                       required={required(name)}
                       error={error(name)}
                     />
@@ -341,11 +363,11 @@ const Animal = ({
                               bucket:
                                 "servicioDeVeterinariaYRemontaDelEjercito",
                               fileName: `left-profile-photo-${uuidv4()}`,
-                              filePath: `animal-history/${animal?.id}/images`,
+                              filePath: `animal-logs/${animal?.id}/images`,
                             }
                       }
                       onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) => setLeftProfilePhoto(file)}
+                      onChangeCopy={(file) => setLeftProfilePhotoCopy(file)}
                       required={required(name)}
                       error={error(name)}
                     />
