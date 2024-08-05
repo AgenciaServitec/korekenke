@@ -9,15 +9,11 @@ export { default as BodyConditionCanine3 } from "./webp/body-condition/peso-idea
 export { default as BodyConditionCanine4 } from "./webp/body-condition/sobrepeso-canino.webp";
 export { default as BodyConditionCanine5 } from "./webp/body-condition/sobrepeso-extremo-canino.webp";
 
-export { default as BodyConditionCattle1 } from "./webp/body-condition/extremadamente-delgado-ganado.webp";
-export { default as BodyConditionCattle2 } from "./webp/body-condition/muy-delgado-ganado.webp";
-export { default as BodyConditionCattle3 } from "./webp/body-condition/delgado-ganado.webp";
-export { default as BodyConditionCattle4 } from "./webp/body-condition/regular-ganado.webp";
-export { default as BodyConditionCattle5 } from "./webp/body-condition/moderado-ganado.webp";
-export { default as BodyConditionCattle6 } from "./webp/body-condition/bueno-ganado.webp";
-export { default as BodyConditionCattle7 } from "./webp/body-condition/gordo-ganado.webp";
-export { default as BodyConditionCattle8 } from "./webp/body-condition/muy-gordo-ganado.webp";
-export { default as BodyConditionCattle9 } from "./webp/body-condition/obeso-ganado.webp";
+export { default as BodyConditionCattle1 } from "./webp/body-condition/extremo-delgado-ganado.webp";
+export { default as BodyConditionCattle2 } from "./webp/body-condition/delgado-ganado.webp";
+export { default as BodyConditionCattle3 } from "./webp/body-condition/magro-ganado.webp";
+export { default as BodyConditionCattle4 } from "./webp/body-condition/gordo-ganado.webp";
+export { default as BodyConditionCattle5 } from "./webp/body-condition/extremo-gordo-ganado.webp";
 
 export { default as BodyCondition1 } from "./webp/body-condition-1.webp";
 export { default as BodyCondition2 } from "./webp/body-condition-2.webp";
