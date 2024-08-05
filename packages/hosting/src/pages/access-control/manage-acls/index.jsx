@@ -366,7 +366,7 @@ const ManageAcls = ({
               </Col>
               <Col xs={24} sm={6} md={4}>
                 <Button size="large" danger block onClick={() => resetForm()}>
-                  Resetear todo
+                  Resetear todos
                 </Button>
               </Col>
             </Row>
