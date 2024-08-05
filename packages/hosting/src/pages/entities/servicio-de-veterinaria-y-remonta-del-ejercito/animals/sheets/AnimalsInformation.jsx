@@ -10,8 +10,6 @@ export const AnimalsInformation = ({
   entityGU,
   users,
 }) => {
-  console.log("entityGU: ", entityGU.name);
-
   return (
     <Container className="section">
       <div className="information-column">
