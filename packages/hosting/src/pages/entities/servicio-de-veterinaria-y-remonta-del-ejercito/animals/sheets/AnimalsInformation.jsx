@@ -17,7 +17,7 @@ export const AnimalsInformation = ({
       <div className="information-column">
         <ul>
           <ItemInformation
-            existField={animal?.nscCorrelativo}
+            existField={animal?.nscId}
             value="NSC - CORRELATIVO"
           />
           <ItemInformation existField={unit?.name} value="UNIDAD" />
@@ -36,8 +36,8 @@ export const AnimalsInformation = ({
       <div className="information-column">
         <ul>
           <ItemInformation
-            existField={animal?.nscCorrelativo}
-            value={`: ${animal?.nscCorrelativo}`}
+            existField={animal?.nscId}
+            value={`: ${animal?.nscId}`}
           />
           <ItemInformation existField={unit?.name} value={`: ${unit?.name}`} />
           <ItemInformation
