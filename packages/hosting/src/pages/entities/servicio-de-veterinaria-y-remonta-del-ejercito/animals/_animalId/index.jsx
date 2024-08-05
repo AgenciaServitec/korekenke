@@ -58,7 +58,7 @@ export const AnimalIntegration = () => {
 
   const mapAnimal = (formData) => ({
     ...animal,
-    nscCorrelativo: formData?.nscCorrelativo || null,
+    nscId: formData?.nscId || null,
     rightProfilePhoto: formData?.rightProfilePhoto || null,
     frontPhoto: formData?.frontPhoto || null,
     leftProfilePhoto: formData?.leftProfilePhoto || null,
@@ -141,7 +141,7 @@ const Animal = ({
   const isCattle = animalType === "cattle";
 
   const schema = yup.object({
-    nscCorrelativo: yup.string(),
+    nscId: yup.string(),
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
@@ -186,7 +186,7 @@ const Animal = ({
 
   const resetForm = () => {
     reset({
-      nscCorrelativo: animal?.nscCorrelativo || "",
+      nscId: animal?.nscId || "",
       rightProfilePhoto: animal?.rightProfilePhoto || null,
       frontPhoto: animal?.frontPhoto || null,
       leftProfilePhoto: animal?.leftProfilePhoto || null,
@@ -234,7 +234,7 @@ const Animal = ({
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>{AnimalsType[animalType].titleSingular}</Title>
+          <Title level={3}>{AnimalsType?.[animalType]?.titleSingular}</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -243,7 +243,7 @@ const Animal = ({
                 <Controller
                   control={control}
                   name="rightProfilePhoto"
-                  render={({ field: { onChange, value, onBlur, name } }) => (
+                  render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
                       label="Foto perfil derecho"
@@ -266,7 +266,7 @@ const Animal = ({
                 <Controller
                   control={control}
                   name="frontPhoto"
-                  render={({ field: { onChange, value, onBlur, name } }) => (
+                  render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
                       label="Foto frontal"
@@ -289,7 +289,7 @@ const Animal = ({
                 <Controller
                   control={control}
                   name="leftProfilePhoto"
-                  render={({ field: { onChange, value, onBlur, name } }) => (
+                  render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
                       label="Foto perfil izquierdo"
@@ -310,7 +310,7 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="nscCorrelativo"
+                  name="nscId"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
