@@ -131,7 +131,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={8}
                       label="Foto de Constancia de Ingreso de la Univ"
                       accept="image/*"
                       name={name}
@@ -161,7 +160,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={6}
                       label="Foto de Boleta pago matrícula de la Univ"
                       accept="image/*"
                       name={name}
@@ -195,7 +193,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={9}
                       label="Foto de Consolidado de notas (último ciclo)"
                       accept="image/*"
                       name={name}
@@ -225,7 +222,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={7}
                       label="Foto de la última boleta de pago de la Univ"
                       accept="image/*"
                       name={name}
@@ -257,7 +253,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
               render={({ field: { onChange, value, name } }) => (
                 <Upload
                   isImage
-                  order={5}
                   label="Foto de Liquidación de Haberes del Titular"
                   accept="image/*"
                   name={name}
@@ -289,7 +284,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={3}
                       label="Foto de CIP del Titular"
                       accept="image/*"
                       name={name}
@@ -334,7 +328,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={1}
                       label="Foto de DNI del Titular"
                       accept="image/*"
                       name={name}
@@ -427,7 +420,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={4}
                       label="Foto de CIF del Familiar"
                       accept="image/*"
                       name={name}
@@ -457,7 +449,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      order={2}
                       label="Foto de DNI del Familiar"
                       accept="image/*"
                       name={name}
