@@ -261,7 +261,7 @@ const Animal = ({
                       fileName={`right-profile-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
                       copyFilesTo={
-                        animal?.status !== "pending"
+                        animal?.status !== "registered"
                           ? null
                           : {
                               withThumbImage: false,
@@ -297,7 +297,7 @@ const Animal = ({
                       fileName={`front-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
                       copyFilesTo={
-                        animal?.status !== "pending"
+                        animal?.status !== "registered"
                           ? null
                           : {
                               withThumbImage: false,
@@ -333,7 +333,7 @@ const Animal = ({
                       fileName={`left-profile-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
                       copyFilesTo={
-                        animal?.status !== "pending"
+                        animal?.status !== "registered"
                           ? null
                           : {
                               withThumbImage: false,
