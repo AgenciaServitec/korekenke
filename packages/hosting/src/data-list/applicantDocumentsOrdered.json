@@ -1,0 +1,11 @@
+{
+  "copyDniFamiliar": 1,
+  "copyDniHeadline": 2,
+  "copyCipHeadline": 3,
+  "copyCifFamiliar": 4,
+  "copyLiquidacionHaberesHeadline": 5,
+  "copyBoletaPagoMatriculaUniv": 6,
+  "copyUltimaBoletaPagoUniv": 7,
+  "copyConstanciaIngresoUniv": 8,
+  "copyConsolidadoNotasUniv": 9
+}
