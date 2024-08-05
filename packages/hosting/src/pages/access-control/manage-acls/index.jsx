@@ -149,6 +149,7 @@ const ManageAcls = ({
     reset,
     formState: { errors },
     watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -186,6 +187,22 @@ const ManageAcls = ({
     notification({
       type: "success",
       title: "¡Reseteo de formulario exito!",
+      duration: 2,
+    });
+  };
+
+  const resetAcls = () => {
+    Object.entries(acls).forEach(([key, subCategories = {}]) => {
+      Object.keys(subCategories).forEach((_key) =>
+        setValue(`acls.${key}.${_key}`, false),
+      );
+    });
+
+    window.scrollTo(0, 0);
+
+    notification({
+      type: "success",
+      title: "¡Reseteo de Acls exito!",
       duration: 2,
     });
   };
@@ -343,8 +360,13 @@ const ManageAcls = ({
                 </Button>
               </Col>
               <Col xs={24} sm={6} md={4}>
+                <Button size="large" danger block onClick={() => resetAcls()}>
+                  Resetear solo Acls
+                </Button>
+              </Col>
+              <Col xs={24} sm={6} md={4}>
                 <Button size="large" danger block onClick={() => resetForm()}>
-                  Resetear
+                  Resetear todos
                 </Button>
               </Col>
             </Row>
