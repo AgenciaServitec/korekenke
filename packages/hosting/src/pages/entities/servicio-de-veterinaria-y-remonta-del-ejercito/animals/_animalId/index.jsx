@@ -80,6 +80,7 @@ export const AnimalIntegration = () => {
     assignedOrAffectedId: formData.assignedOrAffectedId,
     description: formData.description,
     type: animalType,
+    status: animal?.status || "registered",
   });
 
   const onSaveAnimal = async (formData) => {
@@ -137,6 +138,10 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
+  const [rightProfilePhoto, setRightProfilePhoto] = useState(null);
+  const [frontPhoto, setFrontPhoto] = useState(null);
+  const [leftProfilePhoto, setLeftProfilePhoto] = useState(null);
+
   const isEquine = animalType === "equine";
   const isCattle = animalType === "cattle";
 
@@ -255,7 +260,20 @@ const Animal = ({
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
+                      copyFilesTo={
+                        animal?.status !== "registered"
+                          ? null
+                          : {
+                              withThumbImage: false,
+                              isImage: true,
+                              bucket:
+                                "servicioDeVeterinariaYRemontaDelEjercito",
+                              fileName: `right-profile-photo-${uuidv4()}`,
+                              filePath: `animal-history/${animal?.id}/images`,
+                            }
+                      }
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) => setRightProfilePhoto(file)}
                       required={required(name)}
                       error={error(name)}
                     />
@@ -278,7 +296,20 @@ const Animal = ({
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`front-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
+                      copyFilesTo={
+                        animal?.status !== "registered"
+                          ? null
+                          : {
+                              withThumbImage: false,
+                              isImage: true,
+                              bucket:
+                                "servicioDeVeterinariaYRemontaDelEjercito",
+                              fileName: `front-photo-${uuidv4()}`,
+                              filePath: `animal-history/${animal?.id}/images`,
+                            }
+                      }
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) => setFrontPhoto(file)}
                       required={required(name)}
                       error={error(name)}
                     />
@@ -299,9 +330,22 @@ const Animal = ({
                       name={name}
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
-                      fileName={`right-profile-photo-${uuidv4()}`}
+                      fileName={`left-profile-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
+                      copyFilesTo={
+                        animal?.status !== "registered"
+                          ? null
+                          : {
+                              withThumbImage: false,
+                              isImage: true,
+                              bucket:
+                                "servicioDeVeterinariaYRemontaDelEjercito",
+                              fileName: `left-profile-photo-${uuidv4()}`,
+                              filePath: `animal-history/${animal?.id}/images`,
+                            }
+                      }
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) => setLeftProfilePhoto(file)}
                       required={required(name)}
                       error={error(name)}
                     />
