@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useCommand, useGlobalData } from "../../../../providers";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useUpdateAssignToInUser,
+} from "../../../../hooks";
 import { capitalize, concat, isEmpty, orderBy } from "lodash";
 import {
   Acl,
@@ -25,7 +29,6 @@ import {
   updateDepartment,
 } from "../../../../firebase/collections";
 import { findRole, getNameId, userFullName } from "../../../../utils";
-import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();

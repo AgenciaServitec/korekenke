@@ -15,7 +15,11 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useUpdateAssignToInUser,
+} from "../../../../hooks";
 import { capitalize, lowerCase } from "lodash";
 import {
   addEntity,
@@ -23,7 +27,6 @@ import {
   updateEntity,
 } from "../../../../firebase/collections";
 import { findRole, getNameId, userFullName } from "../../../../utils";
-import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const EntityIntegration = () => {
   const { entityId } = useParams();

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
-import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import {
+  useAcl,
+  useDefaultFirestoreProps,
+  useUpdateAssignToInUser,
+} from "../../../hooks";
 import {
   Acl,
   Button,
@@ -14,7 +18,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { updateSection } from "../../../firebase/collections";
-import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
 import { concat } from "lodash";
 
 export const SectionsIntegration = () => {

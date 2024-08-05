@@ -26,9 +26,7 @@ import {
 import { useGlobalData } from "../../../../../providers";
 import {
   addAnimal,
-  addAnimalLog,
   getAnimalId,
-  getAnimalLogId,
   updateAnimal,
 } from "../../../../../firebase/collections";
 import dayjs from "dayjs";

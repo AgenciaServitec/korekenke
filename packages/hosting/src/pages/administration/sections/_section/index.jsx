@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useCommand, useGlobalData } from "../../../../providers";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useUpdateAssignToInUser,
+} from "../../../../hooks";
 import {
   Acl,
   Button,
@@ -24,7 +28,6 @@ import {
   updateSection,
 } from "../../../../firebase/collections";
 import { findRole, getNameId, userFullName } from "../../../../utils";
-import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const SectionIntegration = () => {
   const { sectionId } = useParams();
