@@ -16,7 +16,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
   currentStep,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [verificationId, setVerificationId] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
 
   const phoneNumber = getLocalStorage("login")?.phoneNumber;
 
@@ -35,14 +35,18 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
             applicationVerifier.clear();
             notification({
               type: "warning",
-              title: "El tiempo a expirado, vuela a intentarlo",
+              title: "El tiempo a expirado, vuelva a intentarlo",
             });
-            prev();
+            gRecaptchaReset();
           },
         },
       );
 
-      if (!applicationVerifier) return applicationVerifier.clear();
+      if (!applicationVerifier) {
+        gRecaptchaReset();
+        applicationVerifier.clear();
+        return;
+      }
 
       const confirmationResult = await firebase
         .auth()
@@ -55,7 +59,8 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
     } catch (e) {
       console.error("onSendCodeSms:", e);
       notification({ type: "error", title: e.message });
-      setVerificationId("");
+      setVerificationId(null);
+      gRecaptchaReset();
       prev();
     } finally {
       onSetLoading(false);
@@ -85,8 +90,26 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
         type: "error",
         title: codeType ? "El código de verificación no es válido." : e.message,
       });
+      gRecaptchaReset();
     } finally {
       onSetLoading(false);
+    }
+  };
+
+  const gRecaptchaReset = () => {
+    if (window?.recaptchaVerifier) {
+      window.recaptchaVerifier
+        .render()
+        .then((widgetId) => {
+          window.grecaptcha.reset(widgetId);
+        })
+        .catch((error) => {
+          console.error("Error resetting reCAPTCHA", error);
+        });
+
+      document.getElementById("recaptcha-container").innerHTML = "";
+
+      window.recaptchaVerifier.clear();
     }
   };
 

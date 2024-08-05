@@ -40,7 +40,7 @@ export const EntitiesIntegration = () => {
               size="large"
               icon={<FontAwesomeIcon icon={faPlus} />}
             >
-              &ensp; Agregar Entidad
+              &ensp; Agregar Entidad / G.U
             </Button>
           </Acl>
         </Col>

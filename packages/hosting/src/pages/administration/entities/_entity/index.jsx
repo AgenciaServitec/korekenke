@@ -175,7 +175,7 @@ const Entity = ({
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Entidad</Title>
+          <Title level={3}>Entidad / G.U</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveEntity)}>

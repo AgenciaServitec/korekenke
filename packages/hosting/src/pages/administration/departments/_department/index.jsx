@@ -7,6 +7,7 @@ import {
   Acl,
   Button,
   Col,
+  ComponentContainer,
   Form,
   Input,
   notification,
@@ -29,7 +30,15 @@ import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUs
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
-  const { rolesAcls, departments, entities, departmentUsers } = useGlobalData();
+  const {
+    rolesAcls,
+    departments,
+    entities,
+    units,
+    offices,
+    sections,
+    departmentUsers,
+  } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
@@ -55,11 +64,14 @@ export const DepartmentIntegration = () => {
     name: formData.name,
     nameId: getNameId(formData.name),
     description: formData.description,
-    entityId: formData.entityId,
     membersIds: formData?.membersIds || [],
     bossId: formData?.bossId || null,
     secondBossId: formData?.secondBossId || null,
     commandId: department?.commandId || currentCommand.id,
+    entityId: formData.entityId,
+    unitId: formData.unitId,
+    officeId: formData.officeId,
+    sectionId: formData.sectionId,
   });
 
   const onSaveDepartment = async (formData) => {
@@ -107,6 +119,9 @@ export const DepartmentIntegration = () => {
       department={department}
       rolesAcls={rolesAcls}
       entities={entities}
+      units={units}
+      sections={sections}
+      offices={offices}
       departmentUsers={departmentUsers}
       onSaveDepartment={onSaveDepartment}
       loading={loading}
@@ -120,6 +135,9 @@ const Department = ({
   department,
   rolesAcls,
   entities,
+  units,
+  sections,
+  offices,
   departmentUsers,
   onSaveDepartment,
   loading,
@@ -127,10 +145,13 @@ const Department = ({
   const schema = yup.object({
     name: yup.string().required(),
     description: yup.string(),
-    entityId: yup.string().required(),
     membersIds: yup.array().nullable(),
     bossId: yup.string(),
     secondBossId: yup.string(),
+    entityId: yup.string(),
+    unitId: yup.string(),
+    officeId: yup.string(),
+    sectionId: yup.string(),
   });
 
   const {
@@ -157,10 +178,13 @@ const Department = ({
     reset({
       name: department?.name || "",
       description: department?.description || "",
-      entityId: department?.entityId || "",
       membersIds: department?.membersIds || null,
       bossId: department?.bossId || "",
       secondBossId: department?.secondBossId || "",
+      entityId: department?.entityId || "",
+      unitId: department?.unitId || "",
+      officeId: department?.officeId || "",
+      sectionId: department?.sectionId || "",
     });
   };
 
@@ -270,25 +294,6 @@ const Department = ({
               </Col>
               <Col span={24}>
                 <Controller
-                  name="entityId"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Entidad"
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      options={entities.map((entity) => ({
-                        label: entity.name,
-                        value: entity.id,
-                      }))}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
                   name="membersIds"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
@@ -343,6 +348,89 @@ const Department = ({
                     />
                   )}
                 />
+              </Col>
+              <Col span={24}>
+                <br />
+                <ComponentContainer.group label="Vinculación (opcional)">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Controller
+                        name="entityId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Entidad / G.U"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={entities.map((entity) => ({
+                              label: entity.name,
+                              value: entity.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="unitId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Unidad"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={units.map((unit) => ({
+                              label: unit.name,
+                              value: unit.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="officeId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Officina"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={offices.map((office) => ({
+                              label: office.name,
+                              value: office.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="sectionId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Sección"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={sections.map((section) => ({
+                              label: section.name,
+                              value: section.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </ComponentContainer.group>
               </Col>
             </Row>
             <Row justify="end" gutter={[16, 16]}>

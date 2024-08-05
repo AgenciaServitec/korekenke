@@ -17,42 +17,41 @@ export const BodyWeightEstimationSheet = ({ animalMagazineProfile }) => {
                 <td>
                   PT: PERIMETRO TORAXICO (
                   <strong>
-                    {bodyWeightEstimation.chestCircumference.typeMeasure}
+                    {bodyWeightEstimation.chestCircumference?.typeMeasure}
                   </strong>
                   )
                 </td>
                 <td className="cell-value">
-                  {bodyWeightEstimation.chestCircumference.value}
+                  {bodyWeightEstimation.chestCircumference?.value}
                 </td>
                 <td>
                   LC: LONGITUD CORPORAL (
-                  <strong>{bodyWeightEstimation.bodyLength.typeMeasure}</strong>
+                  <strong>
+                    {bodyWeightEstimation.bodyLength?.typeMeasure}
+                  </strong>
                   )
                 </td>
                 <td className="cell-value">
-                  {bodyWeightEstimation.bodyLength.value}
+                  {bodyWeightEstimation.bodyLength?.value}
                 </td>
               </tr>
               <tr>
                 <td>
                   AC: ALTURA DE LA CRUZ (
                   <strong>
-                    {bodyWeightEstimation.heightOfTheCross.typeMeasure}
+                    {bodyWeightEstimation.heightOfTheCross?.typeMeasure}
                   </strong>
                   )
                 </td>
                 <td className="cell-value">
-                  {bodyWeightEstimation.heightOfTheCross.value}
+                  {bodyWeightEstimation.heightOfTheCross?.value}
                 </td>
                 <td>
-                  PESO DEL CABALLO (
-                  <strong>
-                    {bodyWeightEstimation.horseWeight.typeMeasure}
-                  </strong>
-                  )
+                  PESO DEL ANIMAL (
+                  <strong>{bodyWeightEstimation?.weight?.typeMeasure}</strong>)
                 </td>
                 <td className="cell-value">
-                  {bodyWeightEstimation.heightOfTheCross.value}
+                  {bodyWeightEstimation.heightOfTheCross?.value}
                 </td>
               </tr>
             </tbody>
@@ -73,7 +72,7 @@ export const BodyWeightEstimationSheet = ({ animalMagazineProfile }) => {
                       <pre
                         style={{ textAlign: "left", whiteSpace: "pre-line" }}
                       >
-                        {bodyWeightEstimation.observation.value}
+                        {bodyWeightEstimation.observation?.value}
                       </pre>
                     </td>
                   </tr>

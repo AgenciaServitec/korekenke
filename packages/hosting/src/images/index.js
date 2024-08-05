@@ -32,8 +32,10 @@ export { default as BodyCondition9 } from "./webp/body-condition-9.webp";
 export { default as ToilleteImg } from "./webp/toillete.webp";
 export { default as ToilleteCattleImg } from "./webp/toillete/toillete-ganado.webp";
 export { default as ToilleteCanineImg } from "./webp/toillete/toillete-canino.webp";
-
 export { default as HerradoImg } from "./webp/herrado.webp";
+export { default as CattlePaws } from "./webp/cattle-paws.webp";
+export { default as CaninesPaws } from "./webp/canines-paws.webp";
+
 export { default as LogoArmyPeru } from "./webp/logo.ejercito-del-peru.webp";
 export { default as LogoServicioVeterinarioRemontaEjercito } from "./webp/logo-servicio-veterinario-remonta-ejercito.webp";
 export { default as ImgNoFound } from "./webp/img-no-found.webp";

@@ -88,7 +88,7 @@ export const DasRequestsTable = ({
 
         return (
           <div className="capitalize">
-            <div>{findDasRequest(dasRequest.requestType)?.name}</div>
+            <div>{findDasRequest(dasRequest?.requestType)?.name}</div>
             <div>
               <strong>{dasRequest?.institution?.id}</strong>
             </div>

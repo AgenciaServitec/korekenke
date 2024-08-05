@@ -1,12 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import { LogoArmyPeru, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
-import {
-  findDasRequest,
-  findDegree,
-  findInstitution,
-} from "../../../../../utils";
+import { findDasRequest, findDegree } from "../../../../../utils";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
@@ -34,9 +30,9 @@ export const DescuentoConvenioInstitutoSheet = ({
             <div className="request-type__text">
               <p>SOLICITA:</p>
               <p>
-                {requestType && findDasRequest(requestType).name}
+                {requestType && findDasRequest(requestType)?.name}
                 <br />
-                <span>{findInstitution(institution).name || emptyContent}</span>
+                <span>{institution?.id || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -61,7 +57,7 @@ export const DescuentoConvenioInstitutoSheet = ({
             </p>
             <p className="request-content__body">
               Que teniendo conocimiento que el instituto
-              <span> {findInstitution(institution).name || emptyContent} </span>
+              <span> {institution?.id || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
               convenio instituto en beneficio de mi

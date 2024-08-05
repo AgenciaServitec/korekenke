@@ -4,7 +4,14 @@ import styled from "styled-components";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 
-export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
+export const AnimalsInformation = ({
+  animal,
+  unit = undefined,
+  entityGU,
+  users,
+}) => {
+  console.log("entityGU: ", entityGU.name);
+
   return (
     <Container className="section">
       <div className="information-column">
@@ -14,7 +21,7 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
             value="NSC - CORRELATIVO"
           />
           <ItemInformation existField={unit?.name} value="UNIDAD" />
-          <ItemInformation existField={animal?.greatUnit} value="GRAN UNIDAD" />
+          <ItemInformation existField={entityGU?.name} value="GRAN UNIDAD" />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
           <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
           <ItemInformation
@@ -34,8 +41,8 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
           />
           <ItemInformation existField={unit?.name} value={`: ${unit?.name}`} />
           <ItemInformation
-            existField={animal?.greatUnit}
-            value={`: ${animal?.greatUnit}`}
+            existField={entityGU?.name}
+            value={`: ${entityGU?.name}`}
           />
           <ItemInformation
             existField={animal?.name}

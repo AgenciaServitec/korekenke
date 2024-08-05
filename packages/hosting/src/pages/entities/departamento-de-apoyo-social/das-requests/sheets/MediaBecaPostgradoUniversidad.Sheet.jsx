@@ -36,7 +36,7 @@ export const MediaBecaPostgradoUniversidadSheet = ({
               <p>
                 {requestType && findDasRequest(requestType).name}
                 <br />
-                <span>{findInstitution(institution).name || emptyContent}</span>
+                <span>{institution?.id || emptyContent}</span>
               </p>
             </div>
           </div>
@@ -59,7 +59,7 @@ export const MediaBecaPostgradoUniversidadSheet = ({
             <p className="request-content__body">
               Que teniendo conocimiento del convenio de cooperación con la
               Universidad
-              <span> {findInstitution(institution).name || emptyContent} </span>
+              <span> {institution?.id || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener la media beca de
               estudios en beneficio de mi

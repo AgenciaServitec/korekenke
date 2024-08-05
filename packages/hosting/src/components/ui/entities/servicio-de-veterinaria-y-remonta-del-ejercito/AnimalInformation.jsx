@@ -1,8 +1,10 @@
 import React from "react";
 import { Col, Row } from "../../../ui";
-import dayjs from "dayjs";
+import { calcAges } from "../../../../utils";
 
 export const AnimalInformation = ({ animal }) => {
+  const animalAges = calcAges(animal.birthdate);
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24} md={12}>
@@ -10,13 +12,7 @@ export const AnimalInformation = ({ animal }) => {
       </Col>
       <Col span={24} md={12}>
         Edad:
-        <strong>{` ${dayjs().diff(
-          dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-          "year",
-        )} años  (${dayjs().diff(
-          dayjs(dayjs(animal.birthdate, "DD/MM/YYYY HH:mm")),
-          "month",
-        )} meses)`}</strong>
+        <strong>{` ${animalAges?.years} años  (${animalAges?.months} meses)`}</strong>
       </Col>
       <Col span={24} md={12}>
         N° Matrícula:{" "}

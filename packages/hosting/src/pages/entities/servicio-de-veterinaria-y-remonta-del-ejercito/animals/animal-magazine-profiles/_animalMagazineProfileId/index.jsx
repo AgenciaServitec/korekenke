@@ -45,10 +45,6 @@ export const AnimalMagazineProfileIntegration = () => {
 
   const isNew = animalMagazineProfileId === "new";
 
-  const isEquine = animal?.type === "equine";
-  const isCattle = animal?.type === "cattle";
-  const isCanine = animal?.type === "canine";
-
   useEffect(() => {
     const _animalMagazineProfile = isNew
       ? { id: getClinicHistoryId() }
@@ -80,9 +76,9 @@ export const AnimalMagazineProfileIntegration = () => {
         (_toillete) => _toillete.id === formData.toillete,
       ),
     },
-    horseshoe: {
-      ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
-        (_horseshoe) => _horseshoe.id === formData.horseshoe,
+    paws: {
+      ...AnimalMagazineProfiles?.[animal.type]?.paws.items.find(
+        (_paws) => _paws.id === formData.paws,
       ),
     },
     bodyWeightEstimation: {
@@ -98,9 +94,9 @@ export const AnimalMagazineProfileIntegration = () => {
         typeMeasure: "cm",
         value: formData.heightOfTheCross,
       },
-      horseWeight: {
+      weight: {
         typeMeasure: "kg",
-        value: formData.horseWeight,
+        value: formData.weight,
       },
       observation: {
         value: formData.observation,
@@ -147,7 +143,6 @@ export const AnimalMagazineProfileIntegration = () => {
       <Col span={24}>
         <AnimalMagazineProfile
           animal={animal}
-          isEquine={isEquine}
           animalMagazineProfile={animalMagazineProfile}
           animalMagazineProfiles={AnimalMagazineProfiles}
           onSaveAnimalMagazineProfile={onSaveAnimalMagazineProfile}
@@ -161,7 +156,6 @@ export const AnimalMagazineProfileIntegration = () => {
 
 const AnimalMagazineProfile = ({
   animal,
-  isEquine,
   animalMagazineProfile,
   animalMagazineProfiles,
   onSaveAnimalMagazineProfile,
@@ -172,13 +166,13 @@ const AnimalMagazineProfile = ({
   const [bodyConditionObservation, setBodyConditionObservation] =
     useState(null);
   const [toillete, setToillete] = useState(null);
-  const [horseshoe, setHorseshoe] = useState(null);
+  const [paws, setPaws] = useState(null);
 
   const schema = yup.object({
     chestCircumference: yup.number().required(),
     bodyLength: yup.number().required(),
     heightOfTheCross: yup.number().required(),
-    horseWeight: yup.number().required(),
+    weight: yup.number().required(),
     observation: yup.string(),
   });
 
@@ -200,7 +194,7 @@ const AnimalMagazineProfile = ({
       animalMagazineProfile?.bodyCondition?.observation || null,
     );
     setToillete(animalMagazineProfile?.toillete?.id || null);
-    setHorseshoe(animalMagazineProfile?.horseshoe?.id || null);
+    setPaws(animalMagazineProfile?.paws?.id || null);
   }, [animalMagazineProfile]);
 
   const resetForm = () => {
@@ -213,8 +207,7 @@ const AnimalMagazineProfile = ({
       heightOfTheCross:
         animalMagazineProfile?.bodyWeightEstimation?.heightOfTheCross?.value ||
         "",
-      horseWeight:
-        animalMagazineProfile?.bodyWeightEstimation?.horseWeight?.value || "",
+      weight: animalMagazineProfile?.bodyWeightEstimation?.weight?.value || "",
       observation:
         animalMagazineProfile?.bodyWeightEstimation?.observation?.value || "",
     });
@@ -224,19 +217,19 @@ const AnimalMagazineProfile = ({
     if (!bodyCondition)
       return notification({
         type: "warning",
-        title: "La condición corporal del ganado o equino es requerido.",
+        title: "La condición corporal del animal es requerido.",
       });
 
     if (!toillete)
       return notification({
         type: "warning",
-        title: "Toillete del ganado o equino es requerido.",
+        title: "Toillete del animal es requerido.",
       });
 
-    if (!horseshoe && isEquine)
+    if (!paws)
       return notification({
         type: "warning",
-        title: "Herrado del ganado o equino es requerido.",
+        title: "Patas del animal es requerido.",
       });
 
     onSaveAnimalMagazineProfile({
@@ -244,7 +237,7 @@ const AnimalMagazineProfile = ({
       bodyCondition,
       bodyConditionObservation,
       toillete,
-      horseshoe,
+      paws,
     });
   };
 
@@ -309,8 +302,8 @@ const AnimalMagazineProfile = ({
                 bordered={false}
                 type="inner"
               >
-                <div className="wrapper-toillete-and-herrado">
-                  <div className="wrapper-toillete-and-herrado__image">
+                <div className="wrapper-toillete-and-paws">
+                  <div className="wrapper-toillete-and-paws__image">
                     <img
                       src={
                         animalMagazineProfiles?.[animal.type]?.toillete.image
@@ -333,37 +326,33 @@ const AnimalMagazineProfile = ({
                   </ul>
                 </div>
               </Card>
-              {isEquine && (
-                <Card
-                  title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
-                  bordered={false}
-                  type="inner"
-                >
-                  <div className="wrapper-toillete-and-herrado">
-                    <div className="wrapper-toillete-and-herrado__image">
-                      <img
-                        src={
-                          animalMagazineProfiles?.[animal.type]?.horseshoe.image
-                        }
-                        alt="Herrado"
-                      />
-                    </div>
-                    <ul>
-                      {animalMagazineProfiles?.[
-                        animal.type
-                      ]?.horseshoe.items.map((_horseshoe) => (
-                        <li
-                          key={_horseshoe.id}
-                          onClick={() => setHorseshoe(_horseshoe.id)}
-                          className={horseshoe === _horseshoe.id && "active"}
-                        >
-                          <h5>{_horseshoe.name}</h5>
-                        </li>
-                      ))}
-                    </ul>
+              <Card
+                title={<span style={{ fontSize: "1.5em" }}>Patas</span>}
+                bordered={false}
+                type="inner"
+              >
+                <div className="wrapper-toillete-and-paws">
+                  <div className="wrapper-toillete-and-paws__image">
+                    <img
+                      src={animalMagazineProfiles?.[animal.type]?.paws?.image}
+                      alt="Herrado"
+                    />
                   </div>
-                </Card>
-              )}
+                  <ul>
+                    {(
+                      animalMagazineProfiles?.[animal.type]?.paws?.items || []
+                    ).map((_paws) => (
+                      <li
+                        key={_paws.id}
+                        onClick={() => setPaws(_paws.id)}
+                        className={paws === _paws.id && "active"}
+                      >
+                        <h5>{_paws.name}</h5>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Card>
             </div>
           </Col>
           <Col span={24}>
@@ -431,12 +420,12 @@ const AnimalMagazineProfile = ({
                   </Col>
                   <Col span={24} md={6}>
                     <Controller
-                      name="horseWeight"
+                      name="weight"
                       control={control}
                       defaultValue=""
                       render={({ field: { onChange, value, name } }) => (
                         <InputNumber
-                          label="Peso del caballo (Kg)"
+                          label="Peso del animal (Kg)"
                           name={name}
                           value={value}
                           onChange={onChange}
@@ -590,7 +579,7 @@ const Container = styled.div`
     }
   }
 
-  .wrapper-toillete-and-herrado {
+  .wrapper-toillete-and-paws {
     display: flex;
     flex-direction: column;
     gap: 1em;

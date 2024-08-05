@@ -15,7 +15,7 @@ export const PdfRegistrationClinicHistory = ({
   const navigate = useNavigate();
   if (isEmpty(clinicHistories)) return navigate(-1);
 
-  const { unit, department } = animalEntitiesAndBosses;
+  const { entityGU, unit, department } = animalEntitiesAndBosses;
 
   return (
     <Container>
@@ -31,7 +31,7 @@ export const PdfRegistrationClinicHistory = ({
               bordered={false}
             />
             <div>
-              <span>{animal?.greatUnit}</span>
+              <span>{entityGU?.name}</span>
               <span>{unit?.name}</span>
               <span>{department?.name}</span>
             </div>
