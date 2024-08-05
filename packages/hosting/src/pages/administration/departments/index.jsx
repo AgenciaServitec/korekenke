@@ -12,9 +12,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
-import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import {
+  useAcl,
+  useDefaultFirestoreProps,
+  useUpdateAssignToInUser,
+} from "../../../hooks";
 import { updateDepartment } from "../../../firebase/collections";
-import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
 import { concat } from "lodash";
 
 export const DepartmentsIntegration = () => {

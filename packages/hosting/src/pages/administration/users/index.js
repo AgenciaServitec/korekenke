@@ -37,7 +37,7 @@ import {
   updateSection,
   updateUnit,
 } from "../../../firebase/collections";
-import { useUpdateAssignToInUser } from "../../../hooks/useUpdateAssignToInUser";
+import { useUpdateAssignToInUser } from "../../../hooks";
 
 export const Users = () => {
   const navigate = useNavigate();
