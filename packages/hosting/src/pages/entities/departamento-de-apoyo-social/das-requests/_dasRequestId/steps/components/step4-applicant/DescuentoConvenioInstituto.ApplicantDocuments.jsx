@@ -105,7 +105,6 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
                         isImage
-                        order={3}
                         label="Foto de CIP del Titular"
                         accept="image/*"
                         name={name}
@@ -150,7 +149,6 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
                         isImage
-                        order={1}
                         label="Foto de DNI del Titular"
                         accept="image/*"
                         name={name}
@@ -244,7 +242,6 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
                         isImage
-                        order={4}
                         label="Foto de CIF del Familiar"
                         accept="image/*"
                         name={name}
@@ -274,7 +271,6 @@ export const DescuentoConvenioInstitutoApplicantDocuments = ({
                     render={({ field: { onChange, value, name } }) => (
                       <Upload
                         isImage
-                        order={2}
                         label="Foto de DNI del Familiar"
                         accept="image/*"
                         name={name}
