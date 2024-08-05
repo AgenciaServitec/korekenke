@@ -102,48 +102,28 @@ export const AnimalMagazineProfiles = {
     bodyCondition: [
       {
         id: 1,
-        name: "Pobre o extremadamente flaco",
+        name: "Extremadamente delgado",
         img: BodyConditionCattle1,
       },
       {
         id: 2,
-        name: "Muy flaco",
+        name: "Delgado",
         img: BodyConditionCattle2,
       },
       {
         id: 3,
-        name: "Flaco",
+        name: "Magro",
         img: BodyConditionCattle3,
       },
       {
         id: 4,
-        name: "Moderadamente flaco",
+        name: "Gordo",
         img: BodyConditionCattle4,
       },
       {
         id: 5,
-        name: "Moderado",
+        name: "Extremadamente Gordo",
         img: BodyConditionCattle5,
-      },
-      {
-        id: 6,
-        name: "Moderadamente encarnado",
-        img: BodyConditionCattle6,
-      },
-      {
-        id: 7,
-        name: "Encarnado",
-        img: BodyConditionCattle7,
-      },
-      {
-        id: 8,
-        name: "Obeso",
-        img: BodyConditionCattle8,
-      },
-      {
-        id: 9,
-        name: "Extremadamente obeso",
-        img: BodyConditionCattle9,
       },
     ],
     toillete: {
