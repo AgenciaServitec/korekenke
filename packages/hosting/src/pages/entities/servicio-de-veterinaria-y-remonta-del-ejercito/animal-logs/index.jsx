@@ -89,7 +89,7 @@ const AnimalLogs = ({
             }}
           >
             <Title level={3}>
-              {AnimalsType?.[animalType]?.titlePlural || "Todos"} - Historial
+              {AnimalsType?.[animalType]?.titlePlural || "Animales"} - Historial
             </Title>
             <Acl
               category="servicio-de-veterinaria-y-remonta-del-ejercito"
