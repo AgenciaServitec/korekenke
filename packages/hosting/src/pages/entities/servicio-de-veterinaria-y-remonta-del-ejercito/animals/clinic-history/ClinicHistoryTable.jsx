@@ -6,7 +6,7 @@ import {
   faHospitalUser,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { isEmpty, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import dayjs from "dayjs";
 
 export const ClinicHistoryTable = ({
