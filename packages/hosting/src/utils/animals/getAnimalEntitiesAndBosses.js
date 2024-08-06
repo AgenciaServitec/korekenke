@@ -13,8 +13,8 @@ export const getAnimalEntitiesAndBosses = async (animal) => {
 
   const { entityId, departmentId } = _unit;
 
-  const _department = await fetchDepartment(departmentId);
-  const _entity = await fetchEntity(entityId);
+  const _department = departmentId ? await fetchDepartment(departmentId) : {};
+  const _entity = entityId ? await fetchEntity(entityId) : {};
 
   const _entityManage = await fetchUser(_entity.entityManageId);
   const __unitBoss = await fetchUser(_unit.bossId);

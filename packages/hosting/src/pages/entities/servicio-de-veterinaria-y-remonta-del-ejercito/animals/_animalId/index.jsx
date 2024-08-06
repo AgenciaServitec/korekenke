@@ -100,7 +100,7 @@ export const AnimalIntegration = () => {
         ? await addAnimal(assignCreateProps(_formData))
         : await updateAnimal(animal.id, assignUpdateProps(_formData));
 
-      await onSetAnimalLog({ animal, formData: _formData });
+      // await onSetAnimalLog({ animal, formData: _formData });
 
       await notification({ type: "success" });
       onGoBack();
