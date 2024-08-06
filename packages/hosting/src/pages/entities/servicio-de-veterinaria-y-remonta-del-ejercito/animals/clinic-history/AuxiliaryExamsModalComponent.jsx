@@ -12,8 +12,6 @@ export const AuxiliaryExamsModalComponent = ({
 }) => {
   const auxiliaryExams = currentHistoryClinic?.auxiliaryExams;
 
-  console.log(auxiliaryExams);
-
   return (
     <DataEntryModal
       title="Exámenes auxiliares"

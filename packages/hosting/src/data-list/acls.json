@@ -146,7 +146,8 @@
       "/animals/:animalId/clinic-history/:clinicHistoryId": "Editar historial clinico",
       "/animals/:animalId/clinic-history#clinicHistoryReview": "Revisar historial clinico",
       "/animals/:animalId/clinic-history#delete": "Eliminar historial clinico",
-      "/animals/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
+      "/animals/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico",
+      "/animals/:animalId/clinic-history#auxiliaryExamsView": "Ver examenes auxiliares"
     }
   }
 }

@@ -90,14 +90,20 @@ export const ClinicHistoryTable = ({
                   />
                 </Acl>
               )}
-              <IconAction
-                tooltipTitle="Exámenes auxiliares"
-                icon={faHospitalUser}
-                onClick={() => {
-                  onSetClinicHistoryId(clinicHistory.id);
-                  onSetIsVisibleAuxiliaryExamsModal();
-                }}
-              />
+              <Acl
+                category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                subCategory="clinicHistory"
+                name="/animals/:animalId/clinic-history#auxiliaryExamsView"
+              >
+                <IconAction
+                  tooltipTitle="Exámenes auxiliares"
+                  icon={faHospitalUser}
+                  onClick={() => {
+                    onSetClinicHistoryId(clinicHistory.id);
+                    onSetIsVisibleAuxiliaryExamsModal();
+                  }}
+                />
+              </Acl>
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"
