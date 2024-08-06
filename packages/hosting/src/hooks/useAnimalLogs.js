@@ -1,20 +1,24 @@
-import { addAnimalLog } from "../firebase/collections";
+import { addAnimalLog, getAnimalLogId } from "../firebase/collections";
 import { getAnimalEntitiesAndBosses } from "../utils";
+import { useDefaultFirestoreProps } from "./useDefaultFirestoreProps";
 
 export const useAnimalLogs = () => {
-  const onSetAnimalLog = async ({ animal, formData }) => {
-    // Add animal history
-    if (!animal?.status || animal?.status === "registered") {
-      const result = await getAnimalEntitiesAndBosses(animal);
+  const { assignCreateProps } = useDefaultFirestoreProps();
 
-      // Se usa el mismo id de animal, para realizar solo 1 copia por cada animal
-      await addAnimalLog({
-        id: animal.id,
+  const onSetAnimalLog = async ({ animal, formData }) => {
+    const result = await getAnimalEntitiesAndBosses(animal);
+
+    const animalLog = getAnimalLogId();
+
+    // Se crea un copia cada que se actualizar por el motivo de los jefes que paran cambiando en los grupos o puede que no aya jefes
+    await addAnimalLog(
+      assignCreateProps({
         animalId: animal.id,
         ...formData,
         ...result,
-      });
-    }
+        id: animalLog,
+      }),
+    );
   };
 
   return {

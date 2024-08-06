@@ -35,8 +35,6 @@ export const AnimalLogsIntegration = () => {
   useEffect(() => {
     onSetAnimalType(query?.animalType);
 
-    console.log("animalLogs: ", animalLogs);
-
     setAnimalsView(
       animalLogs.filter((animal) =>
         query?.animalType === "all" ? true : animal.type === query?.animalType,
