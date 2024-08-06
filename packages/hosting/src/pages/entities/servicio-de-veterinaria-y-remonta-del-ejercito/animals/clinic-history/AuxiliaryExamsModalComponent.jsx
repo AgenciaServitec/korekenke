@@ -1,12 +1,7 @@
 import React from "react";
 import { Col, DataEntryModal, Image, Row } from "../../../../../components";
 import styled from "styled-components";
-import {
-  faFile,
-  faFileExcel,
-  faFilePdf,
-  faFileWord,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFile, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AuxiliaryExamsModalComponent = ({
