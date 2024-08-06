@@ -1,4 +1,5 @@
 export * from "./animals";
+export * from "./animal-logs";
 export * from "./animals/_animalId";
 export * from "./animals/clinic-history";
 export * from "./animals/clinic-history/sheets";

@@ -12,6 +12,7 @@ import {
   faFileAlt,
   faFilePen,
   faGears,
+  faHistory,
   faHome,
   faHorse,
   faIdCard,
@@ -315,6 +316,20 @@ export const DrawerLayout = ({
           onClick: () =>
             onClickMenu(
               "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canine",
+            ),
+        },
+        {
+          key: "histories",
+          icon: <FontAwesomeIcon icon={faHistory} size="lg" />,
+          label: "Historial de animales",
+          isVisible: existsAclsInAclsOfUser(
+            "servicio-de-veterinaria-y-remonta-del-ejercito",
+            ["animalLogs"],
+            ["/animal-logs"],
+          ),
+          onClick: () =>
+            onClickMenu(
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs?animalType=all",
             ),
         },
       ],

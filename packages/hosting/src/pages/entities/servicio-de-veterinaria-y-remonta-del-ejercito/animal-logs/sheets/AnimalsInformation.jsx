@@ -36,8 +36,8 @@ export const AnimalsInformation = ({
           />
           <ItemInformation existField={unit?.name} value={`: ${unit?.name}`} />
           <ItemInformation
-            existField={animal?.greatUnitStatic}
-            value={`: ${animal?.greatUnitStatic}`}
+            existField={entityGU?.name}
+            value={`: ${entityGU?.name}`}
           />
           <ItemInformation
             existField={animal?.name}

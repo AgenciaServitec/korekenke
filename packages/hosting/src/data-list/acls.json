@@ -124,7 +124,12 @@
       "/animals/new": "Agregar animal",
       "/animals/:animalId": "Editar animal",
       "/animals#delete": "Eliminar animal",
-      "/animals/:animalId/pdf-animal-registration-card": "Pdf tarjeta de registro animal"
+      "/animals/:animalId/pdf-animal-card": "Pdf tarjeta de registro animal"
+    },
+    "animalLogs": {
+      "label": "Historial de animales",
+      "/animal-logs": "Menu: Historial de animales",
+      "/animal-logs/:animalId/pdf-animal-log-card": "Pdf tarjeta de registro animal"
     },
     "animalMagazineProfiles": {
       "label": "Fichas de revista",
