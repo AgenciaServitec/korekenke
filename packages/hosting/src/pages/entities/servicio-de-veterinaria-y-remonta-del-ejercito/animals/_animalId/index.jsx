@@ -72,7 +72,7 @@ export const AnimalIntegration = () => {
     unitId: formData.unitId,
     greatUnitStatic: formData.greatUnitStatic,
     name: formData.name,
-    slopeNumber: formData.slopeNumber,
+    ...(formData.type === "cattle" && { slopeNumber: formData.slopeNumber }),
     registrationNumber: formData.registrationNumber,
     chipNumber: formData.chipNumber || null,
     gender: formData.gender,

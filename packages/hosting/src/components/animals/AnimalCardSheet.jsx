@@ -55,12 +55,7 @@ export const AnimalCardSheet = ({ animal }) => {
                 </div>
               </div>
             </div>
-            <AnimalsInformation
-              animal={animal}
-              unit={animal?.unit}
-              entityGU={animal?.entityGU}
-              users={animal?.users}
-            />
+            <AnimalsInformation animal={animal} />
             <div className="section_description">
               {animal?.description && (
                 <>

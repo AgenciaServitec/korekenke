@@ -8,7 +8,7 @@ export const AnimalsInformation = ({ animal }) => {
     <Container className="section">
       <div className="information-column">
         <ul>
-          <ItemInformation existField={animal?.nsgId} value="NSG" />
+          <ItemInformation existField={true} value="NSG" />
           <ItemInformation existField={animal?.unit?.name} value="UNIDAD" />
           <ItemInformation
             existField={animal?.entityGU?.name}
@@ -28,8 +28,8 @@ export const AnimalsInformation = ({ animal }) => {
       <div className="information-column">
         <ul>
           <ItemInformation
-            existField={animal?.nsgId}
-            value={`: ${animal?.nsgId}`}
+            existField={true}
+            value={`: ${animal?.nsgId || "S/N"}`}
           />
           <ItemInformation
             existField={animal?.unit?.name}
