@@ -3,6 +3,7 @@ import { Acl, IconAction, Space, Table, Tag } from "../../../../../components";
 import {
   faClipboardCheck,
   faEdit,
+  faHospitalUser,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
@@ -14,6 +15,7 @@ export const ClinicHistoryTable = ({
   onSetIsVisibleModal,
   onSetIsVisibleCheckModal,
   onSetClinicHistoryId,
+  onSetIsVisibleAuxiliaryExamsModal,
   loading,
   user,
   departmentBoss,
@@ -88,6 +90,14 @@ export const ClinicHistoryTable = ({
                   />
                 </Acl>
               )}
+              <IconAction
+                tooltipTitle="Exámenes auxiliares"
+                icon={faHospitalUser}
+                onClick={() => {
+                  onSetClinicHistoryId(clinicHistory.id);
+                  onSetIsVisibleAuxiliaryExamsModal();
+                }}
+              />
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"

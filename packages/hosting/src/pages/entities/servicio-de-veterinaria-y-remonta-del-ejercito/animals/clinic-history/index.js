@@ -10,11 +10,7 @@ import {
   Row,
   Spinner,
 } from "../../../../../components";
-import {
-  useDefaultFirestoreProps,
-  useQuery,
-  useQueryString,
-} from "../../../../../hooks";
+import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
 import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
 import { firestore } from "../../../../../firebase";
@@ -31,6 +27,7 @@ import { useNavigate } from "react-router";
 import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 import { getAnimalEntitiesAndBosses } from "../../../../../utils";
+import { AuxiliaryExamsModalComponent } from "./AuxiliaryExamsModalComponent";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -46,6 +43,7 @@ export const ClinicHistoryIntegration = () => {
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
     historyClinicCheckModal: false,
+    auxiliaryExamsModal: false,
   });
   const [animal, setAnimal] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
@@ -100,6 +98,7 @@ export const ClinicHistoryIntegration = () => {
   }, [
     isVisibleModal.historyClinicModal,
     isVisibleModal.historyClinicCheckModal,
+    isVisibleModal.auxiliaryExamsModal,
   ]);
 
   const onDeleteClinicHistory = async (clinicHistory) => {
@@ -131,6 +130,12 @@ export const ClinicHistoryIntegration = () => {
     setIsVisibleModal({
       historyClinicCheckModal: !isVisibleModal.historyClinicCheckModal,
     });
+
+  const onSetIsVisibleAuxiliaryExamsModal = () => {
+    setIsVisibleModal({
+      auxiliaryExamsModal: !isVisibleModal.auxiliaryExamsModal,
+    });
+  };
 
   if (loading) return <Spinner height="80vh" />;
 
@@ -208,6 +213,9 @@ export const ClinicHistoryIntegration = () => {
             onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
             onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
             onSetIsVisibleCheckModal={onSetVisibleHistoryClinicCheckModal}
+            onSetIsVisibleAuxiliaryExamsModal={
+              onSetIsVisibleAuxiliaryExamsModal
+            }
             onSetClinicHistoryId={setClinicHistoryId}
             loading={clinicHistoriesLoading}
             user={authUser}
@@ -228,6 +236,12 @@ export const ClinicHistoryIntegration = () => {
           onSetIsVisibleModal={onSetVisibleHistoryClinicCheckModal}
           onSetClinicHistoryId={setClinicHistoryId}
           animalId={animalId}
+          currentHistoryClinic={currentHistoryClinic}
+        />
+        <AuxiliaryExamsModalComponent
+          isVisibleModal={isVisibleModal}
+          onSetIsVisibleModal={onSetIsVisibleAuxiliaryExamsModal}
+          onSetClinicHistoryId={setClinicHistoryId}
           currentHistoryClinic={currentHistoryClinic}
         />
       </Container>
