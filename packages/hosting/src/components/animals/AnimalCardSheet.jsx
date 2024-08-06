@@ -1,54 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import styled from "styled-components";
-import { QRCode, Spinner } from "../../../../../components";
+import React from "react";
 import {
   ImgNoFound,
   LogoArmyPeru,
   LogoServicioVeterinarioRemontaEjercito,
-} from "../../../../../images";
-import { useGlobalData } from "../../../../../providers";
-import { userFullName } from "../../../../../utils/users/userFullName2";
-import { findDegree, getAnimalEntitiesAndBosses } from "../../../../../utils";
+} from "../../images";
+import { userFullName } from "../../utils/users/userFullName2";
+import { findDegree } from "../../utils";
+import { QRCode } from "../index";
+import styled from "styled-components";
 import { AnimalsInformation } from "./AnimalsInformation";
-import { AnimalsType } from "../../../../../data-list";
-import { useQuery } from "../../../../../hooks";
-import { fetchAnimal } from "../../../../../firebase/collections";
 
-export const PdfAnimalRegistrationCard = () => {
-  const { animalId } = useParams();
-  const { animalType } = useQuery();
-  const { users } = useGlobalData();
-
-  const [loading, setLoading] = useState(true);
-  const [animal, setAnimal] = useState(null);
-  const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const _animal = await fetchAnimal(animalId);
-        const result = await getAnimalEntitiesAndBosses(_animal);
-        setAnimal(_animal);
-        setAnimalEntitiesAndBosses(result);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  if (loading) return <Spinner height="80vh" />;
-
-  const {
-    entityGU,
-    entityGUManage,
-    unit,
-    department,
-    unitBoss,
-    departmentBoss,
-  } = animalEntitiesAndBosses;
-
+export const AnimalCardSheet = ({ animal }) => {
   return (
     <Container>
       <div className="sheet">
@@ -58,8 +20,8 @@ export const PdfAnimalRegistrationCard = () => {
           </div>
           <div className="header__item-center">
             <div>
-              <h2>{AnimalsType?.[animalType]?.cardTitle}</h2>
-              <h3>{AnimalsType?.[animalType]?.cardSubTitle}</h3>
+              <h2>{animal?.cardTitle}</h2>
+              <h3>{animal?.cardSubTitle}</h3>
             </div>
           </div>
           <div className="header__item-right">
@@ -95,9 +57,9 @@ export const PdfAnimalRegistrationCard = () => {
             </div>
             <AnimalsInformation
               animal={animal}
-              unit={unit}
-              entityGU={entityGU}
-              users={users}
+              unit={animal?.unit}
+              entityGU={animal?.entityGU}
+              users={animal?.users}
             />
             <div className="section_description">
               {animal?.description && (
@@ -114,27 +76,27 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong>JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {entityGUManage?.signaturePhoto && (
+                    {animal?.entityGUManage?.signaturePhoto && (
                       <img
-                        src={entityGUManage?.signaturePhoto.url}
+                        src={animal?.entityGUManage?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{entityGUManage?.cip}</strong>
+                      <strong>{animal?.entityGUManage?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(entityGUManage)}</strong>
+                      <strong>{userFullName(animal?.entityGUManage)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(entityGUManage?.degree)?.label}
+                        {findDegree(animal?.entityGUManage?.degree)?.label}
                       </strong>
                     </p>
                     <p>
-                      <strong>JEFE DEL {entityGU?.name}</strong>
+                      <strong>JEFE DEL {animal?.entityGU?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -143,25 +105,27 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {unitBoss?.signaturePhoto && (
+                    {animal?.unitBoss?.signaturePhoto && (
                       <img
-                        src={unitBoss?.signaturePhoto.url}
+                        src={animal?.unitBoss?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{unitBoss?.cip}</strong>
+                      <strong>{animal?.unitBoss?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(unitBoss)}</strong>
+                      <strong>{userFullName(animal?.unitBoss)}</strong>
                     </p>
                     <p>
-                      <strong>{findDegree(unitBoss?.degree)?.label}</strong>
+                      <strong>
+                        {findDegree(animal?.unitBoss?.degree)?.label}
+                      </strong>
                     </p>
                     <p>
-                      <strong>Jefe del {unit?.name}</strong>
+                      <strong>Jefe del {animal?.unit?.name}</strong>
                     </p>
                   </div>
                 </div>
@@ -170,29 +134,29 @@ export const PdfAnimalRegistrationCard = () => {
                     <strong>OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {departmentBoss?.signaturePhoto && (
+                    {animal?.departmentBoss?.signaturePhoto && (
                       <img
-                        src={departmentBoss?.signaturePhoto.url}
+                        src={animal?.departmentBoss?.signaturePhoto.url}
                         alt="Perfil Izquierdo"
                       />
                     )}
                   </div>
                   <div className="signature_info">
                     <p>
-                      <strong>{departmentBoss?.cip}</strong>
+                      <strong>{animal?.departmentBoss?.cip}</strong>
                     </p>
                     <p>
-                      <strong>{userFullName(departmentBoss)}</strong>
+                      <strong>{userFullName(animal?.departmentBoss)}</strong>
                     </p>
                     <p>
                       <strong>
-                        {findDegree(departmentBoss?.degree)?.label}
+                        {findDegree(animal?.departmentBoss?.degree)?.label}
                       </strong>
                     </p>
                     <p>
                       <strong>
                         JEFE{" "}
-                        {`${department?.name || ""} DEL ${unit?.name || ""}`}
+                        {`${animal?.department?.name || ""} DEL ${animal?.unit?.name || ""}`}
                       </strong>
                     </p>
                   </div>

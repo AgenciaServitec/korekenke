@@ -1,22 +1,19 @@
 import dayjs from "dayjs";
 import React from "react";
 import styled from "styled-components";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
-import { userFullName } from "../../../../../utils/users/userFullName2";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
-export const AnimalsInformation = ({
-  animal,
-  unit = undefined,
-  entityGU,
-  users,
-}) => {
+export const AnimalsInformation = ({ animal }) => {
   return (
     <Container className="section">
       <div className="information-column">
         <ul>
           <ItemInformation existField={animal?.nsgId} value="NSG" />
-          <ItemInformation existField={unit?.name} value="UNIDAD" />
-          <ItemInformation existField={entityGU?.name} value="GRAN UNIDAD" />
+          <ItemInformation existField={animal?.unit?.name} value="UNIDAD" />
+          <ItemInformation
+            existField={animal?.entityGU?.name}
+            value="GRAN UNIDAD"
+          />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
           <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
           <ItemInformation
@@ -34,10 +31,13 @@ export const AnimalsInformation = ({
             existField={animal?.nsgId}
             value={`: ${animal?.nsgId}`}
           />
-          <ItemInformation existField={unit?.name} value={`: ${unit?.name}`} />
           <ItemInformation
-            existField={entityGU?.name}
-            value={`: ${entityGU?.name}`}
+            existField={animal?.unit?.name}
+            value={`: ${animal?.unit?.name}`}
+          />
+          <ItemInformation
+            existField={animal?.entityGU?.name}
+            value={`: ${animal?.entityGU?.name}`}
           />
           <ItemInformation
             existField={animal?.name}
@@ -74,11 +74,15 @@ export const AnimalsInformation = ({
           <ItemInformation existField={animal?.height} value="TALLA" />
           <ItemInformation existField={animal?.father} value="PADRE" />
           <ItemInformation existField={animal?.mother} value="MADRE" />
-          <ItemInformation existField={animal?.origin} value="PROCEDENCIA" />
-          <ItemInformation existField={animal?.raceOrLine} value="RAZA/LINEA" />
           <ItemInformation
-            existField={animal?.assignedOrAffectedId}
-            value="ASIGNADO U AFECTADO"
+            existField={animal?.origin}
+            value="PROCEDENCIA"
+            label
+          />
+          <ItemInformation
+            existField={animal?.raceOrLine}
+            value="RAZA/LINEA"
+            label
           />
         </ul>
       </div>
@@ -113,12 +117,6 @@ export const AnimalsInformation = ({
           <ItemInformation
             existField={animal?.raceOrLine}
             value={`: ${animal?.raceOrLine}`}
-          />
-          <ItemInformation
-            existField={animal?.assignedOrAffectedId}
-            value={`: ${userFullName(
-              users.find((_user) => _user.id === animal?.assignedOrAffectedId),
-            )}`}
           />
         </ul>
       </div>
