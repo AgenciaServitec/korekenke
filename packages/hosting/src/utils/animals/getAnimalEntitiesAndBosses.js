@@ -16,9 +16,13 @@ export const getAnimalEntitiesAndBosses = async (animal) => {
   const _department = departmentId ? await fetchDepartment(departmentId) : {};
   const _entity = entityId ? await fetchEntity(entityId) : {};
 
-  const _entityManage = await fetchUser(_entity.entityManageId);
-  const __unitBoss = await fetchUser(_unit.bossId);
-  const _departmentBoss = await fetchUser(_department.bossId);
+  const _entityManage = _entity?.entityManageId
+    ? await fetchUser(_entity.entityManageId)
+    : {};
+  const __unitBoss = _unit?.bossId ? await fetchUser(_unit.bossId) : {};
+  const _departmentBoss = _department?.bossId
+    ? await fetchUser(_department.bossId)
+    : {};
 
   return {
     entityGU: _entity || {},
