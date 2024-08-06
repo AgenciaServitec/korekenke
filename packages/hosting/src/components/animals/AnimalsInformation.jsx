@@ -11,7 +11,7 @@ export const AnimalsInformation = ({ animal }) => {
           <ItemInformation existField={true} value="NSG" />
           <ItemInformation existField={animal?.unit?.name} value="UNIDAD" />
           <ItemInformation
-            existField={animal?.entityGU?.name}
+            existField={animal?.greatUnitStatic}
             value="GRAN UNIDAD"
           />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
