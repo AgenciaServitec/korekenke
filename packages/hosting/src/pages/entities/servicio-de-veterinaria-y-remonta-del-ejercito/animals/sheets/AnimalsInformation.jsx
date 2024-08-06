@@ -14,10 +14,7 @@ export const AnimalsInformation = ({
     <Container className="section">
       <div className="information-column">
         <ul>
-          <ItemInformation
-            existField={animal?.nscId}
-            value="NSC - CORRELATIVO"
-          />
+          <ItemInformation existField={animal?.nsgId} value="NSG" />
           <ItemInformation existField={unit?.name} value="UNIDAD" />
           <ItemInformation existField={entityGU?.name} value="GRAN UNIDAD" />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
@@ -34,13 +31,13 @@ export const AnimalsInformation = ({
       <div className="information-column">
         <ul>
           <ItemInformation
-            existField={animal?.nscId}
-            value={`: ${animal?.nscId}`}
+            existField={animal?.nsgId}
+            value={`: ${animal?.nsgId}`}
           />
           <ItemInformation existField={unit?.name} value={`: ${unit?.name}`} />
           <ItemInformation
-            existField={entityGU?.name}
-            value={`: ${entityGU?.name}`}
+            existField={animal?.greatUnitStatic}
+            value={`: ${animal?.greatUnitStatic}`}
           />
           <ItemInformation
             existField={animal?.name}
