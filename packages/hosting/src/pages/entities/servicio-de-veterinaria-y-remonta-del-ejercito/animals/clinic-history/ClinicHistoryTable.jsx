@@ -6,7 +6,7 @@ import {
   faHospitalUser,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { orderBy } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import dayjs from "dayjs";
 
 export const ClinicHistoryTable = ({
@@ -90,20 +90,22 @@ export const ClinicHistoryTable = ({
                   />
                 </Acl>
               )}
-              <Acl
-                category="servicio-de-veterinaria-y-remonta-del-ejercito"
-                subCategory="clinicHistory"
-                name="/animals/:animalId/clinic-history#auxiliaryExamsView"
-              >
-                <IconAction
-                  tooltipTitle="Exámenes auxiliares"
-                  icon={faHospitalUser}
-                  onClick={() => {
-                    onSetClinicHistoryId(clinicHistory.id);
-                    onSetIsVisibleAuxiliaryExamsModal();
-                  }}
-                />
-              </Acl>
+              {clinicHistory?.auxiliaryExams?.type && (
+                <Acl
+                  category="servicio-de-veterinaria-y-remonta-del-ejercito"
+                  subCategory="clinicHistory"
+                  name="/animals/:animalId/clinic-history#auxiliaryExamsView"
+                >
+                  <IconAction
+                    tooltipTitle="Exámenes auxiliares"
+                    icon={faHospitalUser}
+                    onClick={() => {
+                      onSetClinicHistoryId(clinicHistory.id);
+                      onSetIsVisibleAuxiliaryExamsModal();
+                    }}
+                  />
+                </Acl>
+              )}
               <Acl
                 category="servicio-de-veterinaria-y-remonta-del-ejercito"
                 subCategory="clinicHistory"

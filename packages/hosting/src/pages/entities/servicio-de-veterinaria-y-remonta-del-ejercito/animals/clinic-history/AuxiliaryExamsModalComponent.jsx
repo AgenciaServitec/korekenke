@@ -3,6 +3,7 @@ import { Col, DataEntryModal, Image, Row } from "../../../../../components";
 import styled from "styled-components";
 import { faFile, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { capitalize } from "lodash";
 
 export const AuxiliaryExamsModalComponent = ({
   currentHistoryClinic,
@@ -14,7 +15,7 @@ export const AuxiliaryExamsModalComponent = ({
 
   return (
     <DataEntryModal
-      title="Exámenes auxiliares"
+      title={`Examenes auxiliares "${capitalize(auxiliaryExams?.type)}"`}
       visible={isVisibleModal.auxiliaryExamsModal}
       onCancel={() => {
         onSetClinicHistoryId("");
@@ -29,7 +30,7 @@ export const AuxiliaryExamsModalComponent = ({
                 <span>Imagenes</span>
               </div>
               <div className="body">
-                {auxiliaryExams?.images.map((image) => (
+                {(auxiliaryExams?.images || []).map((image) => (
                   <Image key={image.uid} src={image.url} width={100} />
                 ))}
               </div>
@@ -41,7 +42,7 @@ export const AuxiliaryExamsModalComponent = ({
                 <span>Documentos</span>
               </div>
               <div className="body">
-                {auxiliaryExams?.documents.map((document) => {
+                {(auxiliaryExams?.documents || []).map((document) => {
                   const iconDocument = (icon) => {
                     if (icon === "pdf") {
                       return <FontAwesomeIcon icon={faFilePdf} size="2x" />;
