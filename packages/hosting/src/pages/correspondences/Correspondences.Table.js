@@ -14,55 +14,69 @@ import {
   faEnvelopeOpenText,
   faEye,
   faFilePdf,
+  faFilter,
   faPrint,
   faReply,
 } from "@fortawesome/free-solid-svg-icons";
 import { CorrespondencesStatus } from "../../data-list";
-import { useAuthentication, useGlobalData } from "../../providers";
-import { fetchUser } from "../../firebase/collections";
+import { useAuthentication } from "../../providers";
+import { fetchDepartmentBoss, fetchEntityManager } from "../../utils";
+import { Table } from "../../components";
+import { orderBy } from "lodash";
 
 export const CorrespondencesTable = ({
   correspondences,
   onChangeStatusToInProgress,
   onClickEditCorrespondence,
-  onClickDeleteCorrespondence,
-  onDecreeCorrespondence,
   onClickPrintTicket,
-  onGoToDecreeSheets,
   onAddReplyCorrespondence,
   onShowReplyCorrespondenceInformation,
   onAddCorrespondenceReceivedBy,
   onCorrespondenceProceeds,
 }) => {
   const { authUser } = useAuthentication();
-  const { departments } = useGlobalData();
-  const [departmentBossMP, setDepartmentBossMP] = useState({});
-  const { departmentMP, setDepartmentMP } = useState({});
+  const [departmentMPBoss, setDepartmentMPBoss] = useState({});
+  const [entityGuDASBoss, setEntityGuDASBoss] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const entityGuDASNameId = "departamento-de-apoyo-social";
+  const departmentNameId = "mesa-de-partes";
 
   useEffect(() => {
     (async () => {
-      console.log(departments);
-      const departmentMPBossId = departments.find(
-        (_department) =>
-          _department.commandId === "cobiene" &&
-          _department.nameId === "mesa-de-partes",
-      )?.bossId;
+      try {
+        setLoading(true);
+        const _entityDasBoss = await fetchEntityManager(entityGuDASNameId);
+        const _departmentMpBoss = await fetchDepartmentBoss(departmentNameId);
 
-      const departmentMPboss = departmentMPBossId
-        ? await fetchUser(departmentMPBossId)
-        : {};
-      setDepartmentBossMP(departmentMPboss);
+        setEntityGuDASBoss(_entityDasBoss);
+        setDepartmentMPBoss(_departmentMpBoss);
+      } catch (e) {
+        console.error("EntityDAS or departmentMP does not have a boss: ", e);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
   const isDepartmentBossMP = (correspondence) => {
-    correspondence?.status === "pending";
+    correspondence?.status === "waiting" && departmentMPBoss.id && authUser.id;
   };
+
+  const correspondenceFilter = () => {
+    if (entityGuDASBoss.id === authUser.id)
+      return correspondences.filter(
+        (correspondence) => correspondence.status === "proceeds",
+      );
+    return correspondences;
+  };
+
+  const correspondencesView = correspondenceFilter();
 
   const columns = [
     {
       title: "F. Creación",
-      width: ["40px", "10%"],
+      width: ["80px", "10%"],
       render: (correspondence) => (
         <CorrespondenceContainer>
           <Space direction="vertical">
@@ -104,7 +118,7 @@ export const CorrespondencesTable = ({
     {
       title: "Indicativo",
       align: "center",
-      width: ["50px", "7%"],
+      width: ["100px", "7%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.indicative}</div>
       ),
@@ -122,13 +136,13 @@ export const CorrespondencesTable = ({
     {
       title: "Asunto",
       align: "center",
-      width: ["230px", "30%"],
+      width: ["200px", "30%"],
       render: (correspondence) => <div>{correspondence?.issue}</div>,
     },
     {
       title: "Archivos",
       align: "center",
-      width: ["130px", "15%"],
+      width: ["100px", "15%"],
       render: (correspondence) => {
         const changeStatus = async () => {
           await onChangeStatusToInProgress(correspondence);
@@ -156,7 +170,7 @@ export const CorrespondencesTable = ({
     {
       title: "Estado",
       align: "center",
-      width: ["70px", "10%"],
+      width: ["50px", "10%"],
       render: (correspondence) => {
         const status = CorrespondencesStatus?.[correspondence?.status];
         return (
@@ -164,15 +178,6 @@ export const CorrespondencesTable = ({
             <Tag color={status?.color} style={{ margin: 0 }}>
               {status?.name}
             </Tag>
-            {correspondence?.status === "pending" && (
-              <IconAction
-                className="pointer"
-                tooltipTitle="Ver hoja de decreto"
-                onClick={() => onGoToDecreeSheets(correspondence.id)}
-                styled={{ color: (theme) => theme.colors.tertiary }}
-                icon={faEye}
-              />
-            )}
           </Space>
         );
       },
@@ -185,38 +190,46 @@ export const CorrespondencesTable = ({
         const status = correspondence?.response?.type === "positive";
         return (
           <Space>
-            <Tag color={status ? "green" : "red"}>
-              {status ? "Positivo" : "Negativo"}
-            </Tag>
-            <IconAction
-              tooltipTitle="Ver detalle de respuesta"
-              icon={faEye}
-              size={30}
-              styled={{ color: (theme) => theme.colors.info }}
-              onClick={() => {
-                if (correspondence?.response)
-                  onShowReplyCorrespondenceInformation(correspondence);
-              }}
-            />
+            {correspondence?.response && (
+              <>
+                <Tag color={status ? "green" : "red"}>
+                  {status ? "Positivo" : "Negativo"}
+                </Tag>
+                <IconAction
+                  tooltipTitle="Ver detalle de respuesta"
+                  icon={faEye}
+                  size={30}
+                  styled={{ color: (theme) => theme.colors.info }}
+                  onClick={() =>
+                    onShowReplyCorrespondenceInformation(correspondence)
+                  }
+                />
+              </>
+            )}
           </Space>
         );
       },
     },
     {
-      title: "Opciones",
+      title: "Acciones",
       align: "center",
       width: ["130px", "30%"],
       render: (correspondence) => (
-        <IconsActionWrapper>
-          {!isDepartmentBossMP(correspondence) && (
-            <IconAction
-              tooltipTitle="Responder"
-              icon={faReply}
-              styled={{ color: (theme) => theme.colors.primary }}
-              onClick={() => onCorrespondenceProceeds(correspondence)}
-            />
+        <Space>
+          {isDepartmentBossMP(correspondence) && (
+            <Acl
+              category="public"
+              subCategory="correspondences"
+              name="/correspondences/:correspondenceId#proceeds"
+            >
+              <IconAction
+                tooltipTitle="Evaluación solicitud"
+                icon={faFilter}
+                onClick={() => onCorrespondenceProceeds(correspondence)}
+              />
+            </Acl>
           )}
-          {correspondence?.status === "notDecreed" && (
+          {correspondence?.status === "proceeds" && (
             <IconAction
               tooltipTitle="Recibido por"
               icon={faEnvelopeOpenText}
@@ -243,21 +256,27 @@ export const CorrespondencesTable = ({
             name="/correspondences/:correspondenceId"
           >
             <IconAction
-              className="pointer"
+              tooltipTitle="Editar"
               onClick={() => onClickEditCorrespondence(correspondence.id)}
               styled={{ color: (theme) => theme.colors.tertiary }}
               icon={faEdit}
             />
           </Acl>
           {correspondence?.status === "finalized" && (
-            <IconAction
-              className="pointer"
-              onClick={() => onClickPrintTicket(correspondence.id)}
-              styled={{ color: (theme) => theme.colors.info }}
-              icon={faPrint}
-            />
+            <Acl
+              category="public"
+              subCategory="correspondences"
+              name="/correspondences/:correspondenceId#"
+            >
+              <IconAction
+                className="pointer"
+                onClick={() => onClickPrintTicket(correspondence.id)}
+                styled={{ color: (theme) => theme.colors.info }}
+                icon={faPrint}
+              />
+            </Acl>
           )}
-        </IconsActionWrapper>
+        </Space>
       ),
     },
   ];

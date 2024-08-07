@@ -1,19 +1,19 @@
 {
-  "pending": {
-    "name": "Pendiente",
-    "color": "orange"
-  },
   "notProceeds": {
     "name": "No procede",
     "color": "red"
+  },
+  "waiting": {
+    "name": "En espera",
+    "color": "yellow"
   },
   "proceeds": {
     "name": "Procede",
     "color": "blue"
   },
-  "notDecreed": {
-    "name": "No decretado",
-    "color": "red"
+  "pending": {
+    "name": "Pendiente",
+    "color": "orange"
   },
   "inProgress": {
     "name": "En proceso",
