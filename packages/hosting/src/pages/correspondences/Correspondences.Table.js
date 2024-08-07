@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import dayjs from "dayjs";
 import {
@@ -7,20 +7,19 @@ import {
   Space,
   TableVirtualized,
   Tag,
-  Button,
 } from "../../components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClipboardCheck,
   faEdit,
   faEnvelopeOpenText,
   faEye,
   faFilePdf,
   faPrint,
   faReply,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { CorrespondencesStatus } from "../../data-list";
+import { useAuthentication, useGlobalData } from "../../providers";
+import { fetchUser } from "../../firebase/collections";
 
 export const CorrespondencesTable = ({
   correspondences,
@@ -33,7 +32,33 @@ export const CorrespondencesTable = ({
   onAddReplyCorrespondence,
   onShowReplyCorrespondenceInformation,
   onAddCorrespondenceReceivedBy,
+  onCorrespondenceProceeds,
 }) => {
+  const { authUser } = useAuthentication();
+  const { departments } = useGlobalData();
+  const [departmentBossMP, setDepartmentBossMP] = useState({});
+  const { departmentMP, setDepartmentMP } = useState({});
+
+  useEffect(() => {
+    (async () => {
+      console.log(departments);
+      const departmentMPBossId = departments.find(
+        (_department) =>
+          _department.commandId === "cobiene" &&
+          _department.nameId === "mesa-de-partes",
+      )?.bossId;
+
+      const departmentMPboss = departmentMPBossId
+        ? await fetchUser(departmentMPBossId)
+        : {};
+      setDepartmentBossMP(departmentMPboss);
+    })();
+  }, []);
+
+  const isDepartmentBossMP = (correspondence) => {
+    correspondence?.status === "pending";
+  };
+
   const columns = [
     {
       title: "F. Creación",
@@ -183,6 +208,14 @@ export const CorrespondencesTable = ({
       width: ["130px", "30%"],
       render: (correspondence) => (
         <IconsActionWrapper>
+          {!isDepartmentBossMP(correspondence) && (
+            <IconAction
+              tooltipTitle="Responder"
+              icon={faReply}
+              styled={{ color: (theme) => theme.colors.primary }}
+              onClick={() => onCorrespondenceProceeds(correspondence)}
+            />
+          )}
           {correspondence?.status === "notDecreed" && (
             <IconAction
               tooltipTitle="Recibido por"
@@ -204,21 +237,6 @@ export const CorrespondencesTable = ({
               />
             </Acl>
           )}
-          {correspondence?.status === "notDecreed" && (
-            <Acl
-              category="public"
-              subCategory="correspondences"
-              name="/correspondences#decree"
-            >
-              <Button
-                size="small"
-                onClick={() => onDecreeCorrespondence(correspondence)}
-              >
-                <FontAwesomeIcon icon={faClipboardCheck} />
-                Decretar
-              </Button>
-            </Acl>
-          )}
           <Acl
             category="public"
             subCategory="correspondences"
@@ -231,20 +249,6 @@ export const CorrespondencesTable = ({
               icon={faEdit}
             />
           </Acl>
-          {correspondence?.status === "notDecreed" && (
-            <Acl
-              category="public"
-              subCategory="correspondences"
-              name="/correspondences#delete"
-            >
-              <IconAction
-                className="pointer"
-                onClick={() => onClickDeleteCorrespondence(correspondence.id)}
-                styled={{ color: (theme) => theme.colors.error }}
-                icon={faTrash}
-              />
-            </Acl>
-          )}
           {correspondence?.status === "finalized" && (
             <IconAction
               className="pointer"
