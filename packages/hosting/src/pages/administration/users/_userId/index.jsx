@@ -116,6 +116,9 @@ export const UserIntegration = () => {
               formData.commandsIds.includes(command.id),
             )
           : null,
+        initialCommand: formData?.commandsIds
+          ? commands.find((command) => command.id === formData?.commandsIds[0])
+          : null,
         cgi: formData.cgi,
       },
     );
