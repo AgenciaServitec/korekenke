@@ -33,9 +33,16 @@ export const DasRequestsListIntegration = () => {
 
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
     useCollectionData(
-      ["super_admin", "manager", "department_boss"].includes(authUser.roleCode)
-        ? dasApplicationsRef || null
-        : dasApplicationsRef.where("headline.id", "==", authUser.id),
+      [
+        "super_admin",
+        "manager",
+        "department_boss",
+        "department_assistant",
+      ].includes(authUser.roleCode)
+        ? dasApplicationsRef.where("isDeleted", "==", false) || null
+        : dasApplicationsRef
+            .where("isDeleted", "==", false)
+            .where("headline.id", "==", authUser.id),
     );
 
   useEffect(() => {
@@ -76,6 +83,7 @@ export const DasRequestsListIntegration = () => {
       visibleReplyModal={visibleReplyModal}
       onSetVisibleReplyModal={setVisibleReplyModal}
       visibleReplyInformationModal={visibleReplyInformationModal}
+      user={authUser}
       onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
       onAddReplyDasRequest={onAddReplyDasRequest}
       onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
@@ -93,6 +101,7 @@ const DasRequestsList = ({
   visibleReplyModal,
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
+  user,
   onSetVisibleReplyInformationModal,
   onShowReplyDasRequestInformation,
 }) => {
@@ -115,6 +124,7 @@ const DasRequestsList = ({
             dasApplicationsLoading={dasApplicationsLoading}
             onAddReplyDasRequest={onAddReplyDasRequest}
             onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
+            user={user}
           />
         </Col>
         <ReplyDasRequestInformationModal
