@@ -102,7 +102,7 @@ export const AnimalMagazineProfilesheet = ({
                           animalMagazineProfile?.bodyCondition?.id && "active"
                       }
                     >
-                      <td>
+                      <td className="img-animal">
                         <img
                           src={_bodyCondition.img}
                           alt={`Imagen de ${_bodyCondition.name}`}
@@ -372,11 +372,13 @@ const Container = styled.div`
             }
 
             td:first-child {
-              width: 15em;
-              padding: 0;
+              width: 10em;
+              padding: 1px;
+              background: #fff;
               img {
                 width: 100%;
-                height: 4.5em;
+                height: 4.1em;
+                object-fit: contain;
               }
             }
 
