@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {
   faClipboardList,
-  faFileAlt,
+  faHorseHead,
   faLock,
   faPoll,
   faShield,
@@ -92,10 +92,10 @@ export const HomeIntegration = () => {
         {currentCommand?.id === "cologe" && (
           <div>
             <div className="items-icon">
-              <FontAwesomeIcon icon={faShield} size="5x" />
+              <FontAwesomeIcon icon={faHorseHead} size="5x" />
             </div>
             <div>
-              <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCTIO</h2>
+              <h2>SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO</h2>
               <ul>
                 <li>
                   <Link

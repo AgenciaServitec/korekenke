@@ -140,7 +140,7 @@ const Animals = ({
           </div>
         </Col>
         <Col span={24}>
-          <Title level={3}>{AnimalsType?.[animalType]?.titlePlural}</Title>
+          <Title level={2}>{AnimalsType?.[animalType]?.titlePlural}</Title>
         </Col>
         <Col span={24}>
           <AnimalsTable

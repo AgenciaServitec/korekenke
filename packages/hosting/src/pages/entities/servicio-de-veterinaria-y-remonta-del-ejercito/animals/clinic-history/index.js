@@ -9,6 +9,8 @@ import {
   notification,
   Row,
   Spinner,
+  Title,
+  Space,
 } from "../../../../../components";
 import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
 import styled from "styled-components";
@@ -28,6 +30,7 @@ import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 import { getAnimalEntitiesAndBosses } from "../../../../../utils";
 import { AuxiliaryExamsModalComponent } from "./AuxiliaryExamsModalComponent";
+import { AnimalsType } from "../../../../../data-list";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -150,14 +153,21 @@ export const ClinicHistoryIntegration = () => {
     >
       <Container gutter={[16, 16]}>
         <Col span={24}>
-          <IconAction
-            icon={faArrowLeft}
-            onClick={() =>
-              onNavigateGoTo(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
-              )
-            }
-          />
+          <Space>
+            <IconAction
+              icon={faArrowLeft}
+              onClick={() =>
+                onNavigateGoTo(
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
+                )
+              }
+            />
+            <Col span={24}>
+              <Title level={2} style={{ margin: "0" }}>
+                Historial clínico
+              </Title>
+            </Col>
+          </Space>
         </Col>
         <Col span={24}>
           <Card

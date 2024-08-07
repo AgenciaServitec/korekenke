@@ -5,10 +5,13 @@ import {
   Card,
   Col,
   Form,
+  IconAction,
   InputNumber,
   notification,
   Row,
+  Space,
   TextArea,
+  Title,
 } from "../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +33,7 @@ import {
 import { useGlobalData } from "../../../../../../providers";
 import { mediaQuery } from "../../../../../../styles";
 import { AnimalInformation } from "../../../../../../components/ui/entities";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export const AnimalMagazineProfileIntegration = () => {
   const navigate = useNavigate();
@@ -131,6 +135,16 @@ export const AnimalMagazineProfileIntegration = () => {
 
   return (
     <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Space>
+          <IconAction icon={faArrowLeft} onClick={() => onGoBack()} />
+          <Col span={24}>
+            <Title level={2} style={{ margin: "0" }}>
+              Detalle de ficha revista de animal
+            </Title>
+          </Col>
+        </Space>
+      </Col>
       <Col span={24}>
         <Card
           title={<span style={{ fontSize: "1.5em" }}>Datos del Animal</span>}

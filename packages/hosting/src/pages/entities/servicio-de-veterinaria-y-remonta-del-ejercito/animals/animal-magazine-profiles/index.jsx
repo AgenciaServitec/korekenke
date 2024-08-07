@@ -8,6 +8,8 @@ import {
   modalConfirm,
   notification,
   Row,
+  Title,
+  Space,
 } from "../../../../../components";
 import { AnimalMagazineProfilesTable } from "./AnimalMagazineProfilesTable";
 import { useNavigate, useParams } from "react-router-dom";
@@ -59,14 +61,21 @@ export const AnimalMagazineProfilesIntegration = () => {
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <IconAction
-            icon={faArrowLeft}
-            onClick={() =>
-              navigate(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`,
-              )
-            }
-          />
+          <Space>
+            <IconAction
+              icon={faArrowLeft}
+              onClick={() =>
+                navigate(
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animalType}`,
+                )
+              }
+            />
+            <Col span={24}>
+              <Title level={2} style={{ margin: "0" }}>
+                Ficha revista de animal
+              </Title>
+            </Col>
+          </Space>
         </Col>
         <Col span={24} md={8}>
           <Acl

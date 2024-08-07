@@ -15,6 +15,7 @@ import {
   faHistory,
   faHome,
   faHorse,
+  faHorseHead,
   faIdCard,
   faList,
   faNetworkWired,
@@ -268,7 +269,7 @@ export const DrawerLayout = ({
     {
       label: "Servicio de veterinaria y remonta del ejército",
       key: "servicio-de-veterinaria-y-remonta-del-ejercito",
-      icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      icon: <FontAwesomeIcon icon={faHorseHead} size="lg" />,
       isVisible:
         existsAclsInAclsOfUser(
           "servicio-de-veterinaria-y-remonta-del-ejercito",

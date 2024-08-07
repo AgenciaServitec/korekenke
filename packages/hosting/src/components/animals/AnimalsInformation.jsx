@@ -10,10 +10,7 @@ export const AnimalsInformation = ({ animal }) => {
                 <ul>
                     <ItemInformation existField={true} value="NSG" />
                     <ItemInformation existField={animal?.unit?.name} value="UNIDAD" />
-                    <ItemInformation
-                        existField={animal?.greatUnitStatic}
-                        value="GRAN UNIDAD"
-                    />
+                    <ItemInformation existField={true} value="GRAN UNIDAD" />
                     <ItemInformation existField={animal?.name} value="NOMBRE" />
                     <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
                     <ItemInformation
@@ -28,16 +25,16 @@ export const AnimalsInformation = ({ animal }) => {
             <div className="information-column">
                 <ul>
                     <ItemInformation
-            existField={true}
-            value={`: ${animal?.nsgId || "S/N"}`}
+                        existField={true}
+                        value={`: ${animal?.nsgId || "S/N"}`}
                     />
                     <ItemInformation
                         existField={animal?.unit?.name}
                         value={`: ${animal?.unit?.name}`}
                     />
                     <ItemInformation
-                        existField={animal?.entityGU?.name}
-                        value={`: ${animal?.entityGU?.name}`}
+                        existField={true}
+                        value={`: ${animal?.greatUnitStatic || "S/N"}`}
                     />
                     <ItemInformation
                         existField={animal?.name}
@@ -128,22 +125,22 @@ const ItemInformation = ({ existField = false, value = undefined }) =>
     existField ? <li>{value}</li> : null;
 
 const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1em;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1em;
 
-  .information-column {
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-weight: 600;
-      font-size: 0.8em;
-      text-transform: uppercase;
-      display: grid;
-      gap: 0.1em;
+    .information-column {
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-weight: 600;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            display: grid;
+            gap: 0.1em;
+        }
     }
-  }
 `;

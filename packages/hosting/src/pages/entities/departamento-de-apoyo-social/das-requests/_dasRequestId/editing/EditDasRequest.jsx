@@ -60,7 +60,7 @@ export const EditDasRequestIntegration = ({
       if (
         dasRequest?.wasRead === false &&
         dasRequest?.status === "pending" &&
-        dasEntityManager.id === authUser.id
+        dasEntityManager?.id === authUser?.id
       ) {
         await updateDasApplication(dasRequest.id, {
           status: "inProgress",
@@ -76,7 +76,10 @@ export const EditDasRequestIntegration = ({
     const manageDas = _entities.find(
       (entity) => entity?.nameId === "departamento-de-apoyo-social",
     );
-    const _entityManager = await fetchUser(manageDas?.entityManageId);
+
+    const _entityManager = manageDas?.entityManageId
+      ? await fetchUser(manageDas?.entityManageId)
+      : {};
 
     return _entityManager;
   };
