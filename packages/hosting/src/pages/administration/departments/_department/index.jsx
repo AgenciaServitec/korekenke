@@ -33,15 +33,8 @@ import { findRole, getNameId, userFullName } from "../../../../utils";
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
-  const {
-    rolesAcls,
-    departments,
-    entities,
-    units,
-    offices,
-    sections,
-    departmentUsers,
-  } = useGlobalData();
+  const { rolesAcls, departments, entities, units, offices, sections, users } =
+    useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
@@ -93,7 +86,7 @@ export const DepartmentIntegration = () => {
         oldUsersIds: usersIdsDeselected,
         newUsersIds: formData?.membersIds,
         moduleId: department?.id,
-        users: departmentUsers,
+        users: users,
       });
 
       //Update of department
@@ -125,7 +118,7 @@ export const DepartmentIntegration = () => {
       units={units}
       sections={sections}
       offices={offices}
-      departmentUsers={departmentUsers}
+      users={users}
       onSaveDepartment={onSaveDepartment}
       loading={loading}
     />
@@ -141,7 +134,7 @@ const Department = ({
   units,
   sections,
   offices,
-  departmentUsers,
+  users,
   onSaveDepartment,
   loading,
 }) => {
@@ -201,22 +194,22 @@ const Department = ({
     roleCode: user.roleCode,
   });
 
-  const membersInEdition = departmentUsers.filter((user) =>
+  const membersInEdition = users.filter((user) =>
     !isEmpty(department?.membersIds)
       ? department.membersIds.includes(user.id)
       : false,
   );
 
-  const userBosses = departmentUsers.filter(
+  const userBosses = users.filter(
     (user) => user.roleCode === "department_boss",
   );
 
   //LIST TO SELECTS
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
-    departmentUsers.filter(
+    users.filter(
       (user) =>
-        user.assignedTo.type === "department" && isEmpty(user.assignedTo.id),
+        isEmpty(user?.assignedTo?.id) && user.roleCode !== "super_admin",
     ),
   ).map(mapOptionSelectMembers);
 
