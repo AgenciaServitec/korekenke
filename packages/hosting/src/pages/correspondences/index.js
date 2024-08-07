@@ -11,8 +11,6 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   correspondencesRef,
-  fetchEntities,
-  fetchUser,
   updateCorrespondence,
 } from "../../firebase/collections";
 import styled from "styled-components";
@@ -108,7 +106,7 @@ export const CorrespondencesIntegration = () => {
 
     if (
       correspondence?.status === "proceeds" &&
-      MdpEntityManager.id == authUser.id
+      MdpEntityManager.id === authUser.id
     ) {
       await updateCorrespondence(correspondence.id, {
         status: "inProgress",

@@ -21,8 +21,6 @@ import {
 import { CorrespondencesStatus } from "../../data-list";
 import { useAuthentication } from "../../providers";
 import { fetchDepartmentBoss, fetchEntityManager } from "../../utils";
-import { Table } from "../../components";
-import { orderBy } from "lodash";
 
 export const CorrespondencesTable = ({
   correspondences,
@@ -37,41 +35,39 @@ export const CorrespondencesTable = ({
   const { authUser } = useAuthentication();
   const [departmentMPBoss, setDepartmentMPBoss] = useState({});
   const [entityGuDASBoss, setEntityGuDASBoss] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const entityGuDASNameId = "departamento-de-apoyo-social";
   const departmentNameId = "mesa-de-partes";
 
   useEffect(() => {
     (async () => {
-      try {
-        setLoading(true);
-        const _entityDasBoss = await fetchEntityManager(entityGuDASNameId);
-        const _departmentMpBoss = await fetchDepartmentBoss(departmentNameId);
+      const _entityDasBoss = await fetchEntityManager(entityGuDASNameId);
+      const _departmentMpBoss = await fetchDepartmentBoss(departmentNameId);
 
-        setEntityGuDASBoss(_entityDasBoss);
-        setDepartmentMPBoss(_departmentMpBoss);
-      } catch (e) {
-        console.error("EntityDAS or departmentMP does not have a boss: ", e);
-      } finally {
-        setLoading(false);
-      }
+      setEntityGuDASBoss(_entityDasBoss);
+      setDepartmentMPBoss(_departmentMpBoss);
     })();
   }, []);
 
-  const isDepartmentBossMP = (correspondence) => {
-    correspondence?.status === "waiting" && departmentMPBoss.id && authUser.id;
-  };
+  const correspondencesPreEvaluationView = correspondences
+    .filter((correspondence) =>
+      ["waiting", "notProceeds"].includes(correspondence?.status),
+    )
+    .filter((_correspondence) =>
+      ["department_boss", "super_admin"].includes(authUser.roleCode)
+        ? true
+        : authUser.id === _correspondence.userId,
+    );
 
-  const correspondenceFilter = () => {
-    if (entityGuDASBoss.id === authUser.id)
-      return correspondences.filter(
-        (correspondence) => correspondence.status === "proceeds",
-      );
-    return correspondences;
-  };
+  const correspondencesToEntityGUManagerView = correspondences.filter(
+    (correspondence) =>
+      !["waiting", "notProceeds"].includes(correspondence?.status) &&
+      departmentMPBoss.id === authUser.id,
+  );
 
-  const correspondencesView = correspondenceFilter();
+  const correspondencesView = correspondences.filter(
+    (correspondence) => correspondence.userId === authUser.id,
+  );
 
   const columns = [
     {
@@ -216,7 +212,7 @@ export const CorrespondencesTable = ({
       width: ["130px", "30%"],
       render: (correspondence) => (
         <Space>
-          {isDepartmentBossMP(correspondence) && (
+          {departmentMPBoss.id === authUser.id && (
             <Acl
               category="public"
               subCategory="correspondences"
@@ -236,7 +232,7 @@ export const CorrespondencesTable = ({
               onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
             />
           )}
-          {correspondence?.status !== "finalized" && (
+          {correspondence?.status === "pending" && (
             <Acl
               category="public"
               subCategory="correspondences"
@@ -283,7 +279,11 @@ export const CorrespondencesTable = ({
 
   return (
     <TableVirtualized
-      dataSource={correspondences}
+      dataSource={
+        authUser.id === departmentMPBoss.id
+          ? correspondencesToEntityGUManagerView
+          : correspondencesPreEvaluationView
+      }
       columns={columns}
       rowHeaderHeight={50}
       rowBodyHeight={150}
