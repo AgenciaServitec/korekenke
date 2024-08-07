@@ -25,9 +25,9 @@ export const DasRequestsTable = ({
   dasApplicationsLoading,
   onAddReplyDasRequest,
   onShowReplyDasRequestInformation,
+  user,
 }) => {
   const navigate = useNavigate();
-  const { authUser } = useAuthentication();
 
   const [entity, setEntity] = useState(null);
 
@@ -176,21 +176,20 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
-          {entity?.entityManageId === authUser?.id &&
-            !isFinalized(dasRequest) && (
-              <Acl
-                category="departamento-de-apoyo-social"
-                subCategory="dasRequests"
-                name="/das-requests/:dasRequestId#reply"
-              >
-                <IconAction
-                  tooltipTitle="Responder solicitud"
-                  icon={faReply}
-                  styled={{ color: (theme) => theme.colors.primary }}
-                  onClick={() => onAddReplyDasRequest(dasRequest)}
-                />
-              </Acl>
-            )}
+          {entity?.entityManageId === user?.id && !isFinalized(dasRequest) && (
+            <Acl
+              category="departamento-de-apoyo-social"
+              subCategory="dasRequests"
+              name="/das-requests/:dasRequestId#reply"
+            >
+              <IconAction
+                tooltipTitle="Responder solicitud"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.primary }}
+                onClick={() => onAddReplyDasRequest(dasRequest)}
+              />
+            </Acl>
+          )}
           <Acl
             category="departamento-de-apoyo-social"
             subCategory="dasRequests"
@@ -218,20 +217,21 @@ export const DasRequestsTable = ({
               />
             </Acl>
           )}
-          {!isPositiveOrApproved(dasRequest) && (
-            <Acl
-              category="departamento-de-apoyo-social"
-              subCategory="dasRequests"
-              name="/das-requests#delete"
-            >
-              <IconAction
-                tooltipTitle="Eliminar"
-                icon={faTrash}
-                styled={{ color: (theme) => theme.colors.error }}
-                onClick={() => onDeleteDasRequest(dasRequest)}
-              />
-            </Acl>
-          )}
+          {!isPositiveOrApproved(dasRequest) &&
+            dasRequest.headline.id !== user.id && (
+              <Acl
+                category="departamento-de-apoyo-social"
+                subCategory="dasRequests"
+                name="/das-requests#delete"
+              >
+                <IconAction
+                  tooltipTitle="Eliminar"
+                  icon={faTrash}
+                  styled={{ color: (theme) => theme.colors.error }}
+                  onClick={() => onDeleteDasRequest(dasRequest)}
+                />
+              </Acl>
+            )}
         </Space>
       ),
     },
