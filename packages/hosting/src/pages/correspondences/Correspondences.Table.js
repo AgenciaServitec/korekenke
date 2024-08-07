@@ -59,15 +59,14 @@ export const CorrespondencesTable = ({
         : authUser.id === _correspondence.userId,
     );
 
-  const correspondencesToEntityGUManagerView = correspondences.filter(
-    (correspondence) =>
-      !["waiting", "notProceeds"].includes(correspondence?.status) &&
-      departmentMPBoss.id === authUser.id,
-  );
-
-  const correspondencesView = correspondences.filter(
-    (correspondence) => correspondence.userId === authUser.id,
-  );
+  const correspondencesToEntityGUManagerView = correspondences
+    .filter(
+      (correspondence) =>
+        !["waiting", "notProceeds"].includes(correspondence?.status),
+    )
+    .filter((_correspondence) =>
+      ["manager", "super_admin"].includes(authUser.roleCode),
+    );
 
   const columns = [
     {
@@ -280,7 +279,7 @@ export const CorrespondencesTable = ({
   return (
     <TableVirtualized
       dataSource={
-        authUser.id === departmentMPBoss.id
+        ["manager", "super_admin"].includes(authUser.roleCode)
           ? correspondencesToEntityGUManagerView
           : correspondencesPreEvaluationView
       }
