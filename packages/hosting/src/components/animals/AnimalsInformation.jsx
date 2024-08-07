@@ -10,10 +10,7 @@ export const AnimalsInformation = ({ animal }) => {
         <ul>
           <ItemInformation existField={true} value="NSG" />
           <ItemInformation existField={animal?.unit?.name} value="UNIDAD" />
-          <ItemInformation
-            existField={animal?.greatUnitStatic}
-            value="GRAN UNIDAD"
-          />
+          <ItemInformation existField={true} value="GRAN UNIDAD" />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
           <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
           <ItemInformation
@@ -36,8 +33,8 @@ export const AnimalsInformation = ({ animal }) => {
             value={`: ${animal?.unit?.name}`}
           />
           <ItemInformation
-            existField={animal?.entityGU?.name}
-            value={`: ${animal?.entityGU?.name}`}
+            existField={true}
+            value={`: ${animal?.greatUnitStatic || "S/N"}`}
           />
           <ItemInformation
             existField={animal?.name}
