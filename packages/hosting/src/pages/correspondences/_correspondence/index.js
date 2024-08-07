@@ -107,6 +107,7 @@ export const CorrespondenceIntegration = () => {
         photos: formData?.photos || null,
         documents: formData?.documents || null,
         status: correspondence?.status || "waiting",
+        userId: authUser.id,
       },
     );
 
