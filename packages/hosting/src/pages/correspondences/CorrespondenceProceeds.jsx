@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Col,
@@ -12,7 +12,6 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDevice, useFormUtils } from "../../hooks";
-import styled from "styled-components";
 import { updateCorrespondence } from "../../firebase/collections";
 
 export const CorrespondenceProceeds = ({
@@ -56,8 +55,19 @@ export const CorrespondenceProceeds = ({
     }
   };
 
+  useEffect(() => {
+    resetForm();
+  }, [visibleModal]);
+
+  const resetForm = () => {
+    reset({
+      isProceeds: "",
+    });
+  };
+
   return (
     <Modal
+      title="Evaluación de la correspondencia"
       open={visibleModal}
       onCancel={() => onSetVisibleModal(false)}
       closable
@@ -67,19 +77,17 @@ export const CorrespondenceProceeds = ({
     >
       <Form onSubmit={handleSubmit(onSubmitCorrespondenceProceeds)}>
         <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <WrapperContent>
-              <h2>¿Procede esta solicitud?</h2>
-            </WrapperContent>
-          </Col>
           <Col sm={24}>
             <Controller
               name="isProceeds"
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <RadioGroup
+                  label="¿Procede esta correspondencia?"
                   optionType="button"
                   buttonStyle="solid"
+                  size="large"
+                  style={{ display: "flex", justifyContent: "center" }}
                   animation={false}
                   onChange={onChange}
                   value={value}
@@ -130,9 +138,3 @@ export const CorrespondenceProceeds = ({
     </Modal>
   );
 };
-
-const WrapperContent = styled.div`
-  h2 {
-    text-align: center;
-  }
-`;

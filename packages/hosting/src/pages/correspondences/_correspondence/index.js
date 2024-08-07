@@ -17,7 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
-import { useGlobalData } from "../../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import dayjs from "dayjs";
 import {
@@ -26,15 +26,18 @@ import {
   updateCorrespondence,
 } from "../../../firebase/collections";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
+import { fetchEntityManager } from "../../../utils";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const { correspondenceId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { correspondences } = useGlobalData();
 
   const [correspondence, setCorrespondence] = useState({});
   const [savingCorrespondence, setSavingCorrespondence] = useState(false);
+  const [entityGuDASBoss, setEntityGuDASBoss] = useState(false);
 
   const isNew = correspondenceId === "new";
 
@@ -48,6 +51,21 @@ export const CorrespondenceIntegration = () => {
     if (!correspondence_) return onGoBack();
 
     setCorrespondence(correspondence_);
+
+    (async () => {
+      const _entityGuDASBoss = await fetchEntityManager(
+        "departamento-de-apoyo-social",
+      );
+      setEntityGuDASBoss(_entityGuDASBoss);
+
+      if (
+        correspondence?.status === "proceeds" &&
+        entityGuDASBoss.id === authUser.id
+      )
+        await updateCorrespondence(correspondenceId, {
+          status: "inProgress",
+        });
+    })();
   }, []);
 
   const onSaveCorrespondence = async (formData) => {
@@ -88,7 +106,7 @@ export const CorrespondenceIntegration = () => {
         classification: formData.classification,
         photos: formData?.photos || null,
         documents: formData?.documents || null,
-        status: correspondence?.status || "pending",
+        status: correspondence?.status || "waiting",
       },
     );
 

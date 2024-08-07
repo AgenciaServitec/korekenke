@@ -29,6 +29,7 @@ import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInform
 import { useAuthentication } from "../../providers";
 import { ReceivedByModal } from "./ReceivedBy";
 import { CorrespondenceProceeds } from "./CorrespondenceProceeds";
+import { fetchEntityManager } from "../../utils";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -101,27 +102,18 @@ export const CorrespondencesIntegration = () => {
   };
 
   const onChangeStatusToInProgress = async (correspondence) => {
-    const MdpEntityManager = await fetchEntityManager();
+    const MdpEntityManager = await fetchEntityManager(
+      "departamento-de-apoyo-social",
+    );
 
     if (
-      correspondence?.status === "pending" &&
+      correspondence?.status === "proceeds" &&
       MdpEntityManager.id == authUser.id
     ) {
       await updateCorrespondence(correspondence.id, {
         status: "inProgress",
       });
     }
-  };
-
-  const fetchEntityManager = async () => {
-    const _entities = await fetchEntities();
-
-    const manageMesaDePartes = _entities.find(
-      (entity) => entity?.nameId === "mesa-de-partes",
-    );
-    const _entityManager = await fetchUser(manageMesaDePartes?.entityManageId);
-
-    return _entityManager;
   };
 
   return (
