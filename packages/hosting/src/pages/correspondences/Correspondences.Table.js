@@ -227,7 +227,7 @@ export const CorrespondencesTable = ({
             />
           )}
           {correspondence?.status === "inProgress" &&
-            authUser.id === entityGuDASBoss && (
+            authUser.id === entityGuDASBoss.id && (
               <Acl
                 category="public"
                 subCategory="correspondences"
