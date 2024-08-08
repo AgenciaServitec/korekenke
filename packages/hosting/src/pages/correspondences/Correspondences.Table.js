@@ -50,20 +50,6 @@ export const CorrespondencesTable = ({
     })();
   }, []);
 
-  const correspondencesToEntityGUManagerView = correspondences.filter(
-    (correspondence) =>
-      ["super_admin"].includes(authUser.roleCode)
-        ? true
-        : !["waiting", "notProceeds"].includes(correspondence?.status),
-  );
-
-  const correspondencesPublicView = correspondences.filter((_correspondence) =>
-    ["department_boss", "super_admin"].includes(authUser.roleCode)
-      ? true
-      : _correspondence.userId === authUser.id &&
-        ["waiting", "notProceeds"].includes(_correspondence?.status),
-  );
-
   const _entityGuDasManagerView = correspondences.filter(
     (correspondence) =>
       !["waiting", "notProceeds"].includes(correspondence.status),
