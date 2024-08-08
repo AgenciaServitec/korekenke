@@ -10,6 +10,7 @@ import {
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
+import { useAuthentication } from "../../../../providers";
 
 export const AnimalsTable = ({
   animals,
@@ -19,6 +20,8 @@ export const AnimalsTable = ({
   onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
 }) => {
+  const { authUser } = useAuthentication();
+
   const columns = [
     {
       title: "Fecha creación",
@@ -125,10 +128,16 @@ export const AnimalsTable = ({
     },
   ];
 
+  const animalsView = animals.filter((animal) =>
+    ["super_admin", "manager"].includes(authUser.roleCode)
+      ? true
+      : animal.userId === authUser.id,
+  );
+
   return (
     <Table
       columns={columns}
-      dataSource={orderBy(animals, "createAt", "desc")}
+      dataSource={orderBy(animalsView, "createAt", "desc")}
       scroll={{ x: "max-content" }}
     />
   );
