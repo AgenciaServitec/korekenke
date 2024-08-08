@@ -226,20 +226,21 @@ export const CorrespondencesTable = ({
               onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
             />
           )}
-          {correspondence?.status === "pending" && (
-            <Acl
-              category="public"
-              subCategory="correspondences"
-              name="/correspondences/:correspondenceId#reply"
-            >
-              <IconAction
-                tooltipTitle="Responder solicitud"
-                icon={faReply}
-                styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => onAddReplyCorrespondence(correspondence)}
-              />
-            </Acl>
-          )}
+          {correspondence?.status === "inProgress" &&
+            authUser.id === entityGuDASBoss && (
+              <Acl
+                category="public"
+                subCategory="correspondences"
+                name="/correspondences/:correspondenceId#reply"
+              >
+                <IconAction
+                  tooltipTitle="Responder solicitud"
+                  icon={faReply}
+                  styled={{ color: (theme) => theme.colors.primary }}
+                  onClick={() => onAddReplyCorrespondence(correspondence)}
+                />
+              </Acl>
+            )}
           <Acl
             category="public"
             subCategory="correspondences"
