@@ -9,7 +9,7 @@ export const AnimalsInformation = ({ animal }) => {
       <div className="information-column">
         <ul>
           <ItemInformation existField={true} value="NSG" />
-          <ItemInformation existField={animal?.unit?.name} value="UNIDAD" />
+          <ItemInformation existField={animal?.animalUnit} value="UNIDAD" />
           <ItemInformation existField={true} value="GRAN UNIDAD" />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
           <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
@@ -29,8 +29,8 @@ export const AnimalsInformation = ({ animal }) => {
             value={`: ${animal?.nsgId || "S/N"}`}
           />
           <ItemInformation
-            existField={animal?.unit?.name}
-            value={`: ${animal?.unit?.name}`}
+            existField={animal?.animalUnit}
+            value={`: ${animal?.animalUnit}`}
           />
           <ItemInformation
             existField={true}

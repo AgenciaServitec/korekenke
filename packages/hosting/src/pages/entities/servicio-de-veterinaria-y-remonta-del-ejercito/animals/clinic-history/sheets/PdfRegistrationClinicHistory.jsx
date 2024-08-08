@@ -32,7 +32,7 @@ export const PdfRegistrationClinicHistory = ({
             />
             <div>
               <span>{animal?.greatUnitStatic || ""}</span>
-              <span>{unit?.name}</span>
+              <span>{animal?.animalUnit}</span>
               <span>{department?.name}</span>
             </div>
           </div>
