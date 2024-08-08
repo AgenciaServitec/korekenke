@@ -113,8 +113,7 @@ export const CorrespondenceIntegration = () => {
         classification: formData.classification,
         photos: formData?.photos || null,
         documents: formData?.documents || null,
-        status: correspondence?.status || "waiting",
-        userId: authUser.id,
+        status: correspondence?.status || "notDecreed",
       },
     );
 
