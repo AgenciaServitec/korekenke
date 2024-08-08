@@ -49,24 +49,18 @@ export const CorrespondencesTable = ({
     })();
   }, []);
 
-  const correspondencesPreEvaluationView = correspondences
-    .filter((correspondence) =>
-      ["waiting", "notProceeds"].includes(correspondence?.status),
-    )
-    .filter((_correspondence) =>
-      ["department_boss", "super_admin"].includes(authUser.roleCode)
-        ? true
-        : authUser.id === _correspondence.userId,
-    );
-
-  const correspondencesToEntityGUManagerView = correspondences
-    .filter(
-      (correspondence) =>
-        !["waiting", "notProceeds"].includes(correspondence?.status),
-    )
-    .filter((_correspondence) =>
+  const correspondencesToEntityGUManagerView = correspondences.filter(
+    (correspondence) =>
+      !["waiting", "notProceeds"].includes(correspondence?.status) &&
       ["manager", "super_admin"].includes(authUser.roleCode),
-    );
+  );
+
+  const correspondencesPublicView = correspondences.filter((_correspondence) =>
+    ["waiting", "notProceeds"].includes(_correspondence?.status) &&
+    ["department_boss", "super_admin"].includes(authUser.roleCode)
+      ? true
+      : _correspondence.userId === authUser.id,
+  );
 
   const columns = [
     {
@@ -279,9 +273,7 @@ export const CorrespondencesTable = ({
   return (
     <TableVirtualized
       dataSource={
-        ["manager", "super_admin"].includes(authUser.roleCode)
-          ? correspondencesToEntityGUManagerView
-          : correspondencesPreEvaluationView
+        correspondencesPublicView || correspondencesToEntityGUManagerView
       }
       columns={columns}
       rowHeaderHeight={50}
