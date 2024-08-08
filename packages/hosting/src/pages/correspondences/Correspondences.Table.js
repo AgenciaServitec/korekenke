@@ -4,17 +4,16 @@ import dayjs from "dayjs";
 import {
   Acl,
   IconAction,
+  ShowImagesAndDocumentsModal,
   Space,
   TableVirtualized,
   Tag,
 } from "../../components/ui";
-import { Row, Col } from "../../components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col, Row } from "../../components";
 import {
   faEdit,
   faEnvelopeOpenText,
   faEye,
-  faFilePdf,
   faFilter,
   faPrint,
   faReply,
@@ -36,6 +35,8 @@ export const CorrespondencesTable = ({
   const { authUser } = useAuthentication();
   const [departmentMPBoss, setDepartmentMPBoss] = useState({});
   const [entityGuDASBoss, setEntityGuDASBoss] = useState({});
+  const [isVisibleFiles, setIsVisibleFiles] = useState(false);
+  const [correspondence, setCorrespondence] = useState(null);
 
   const entityGuDASNameId = "departamento-de-apoyo-social";
   const departmentNameId = "mesa-de-partes";
@@ -64,8 +65,15 @@ export const CorrespondencesTable = ({
   const _correspondencesPublicView = correspondences.filter((correspondence) =>
     ["super_admin"].includes(authUser.roleCode)
       ? true
-      : correspondence.userId === authUser.userId,
+      : correspondence.userId === authUser.id,
   );
+
+  const onShowFiles = async (correspondence) => {
+    setCorrespondence(correspondence);
+    setIsVisibleFiles(true);
+
+    await onChangeStatusToInProgress(correspondence);
+  };
 
   const columns = [
     {
@@ -138,10 +146,6 @@ export const CorrespondencesTable = ({
       align: "center",
       width: ["100px", "15%"],
       render: (correspondence) => {
-        const changeStatus = async () => {
-          await onChangeStatusToInProgress(correspondence);
-        };
-
         return (
           <div>
             {(["pending", "inProgress", "finalized"].includes(
@@ -149,17 +153,11 @@ export const CorrespondencesTable = ({
             ) ||
               ["super_admin", "user"].includes(authUser.roleCode)) && (
               <Space align="center">
-                {(correspondence?.documents || []).map((document, index) => (
-                  <a
-                    key={index}
-                    href={document.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={changeStatus}
-                  >
-                    <FontAwesomeIcon icon={faFilePdf} size="2x" />
-                  </a>
-                ))}
+                <IconAction
+                  tooltipTitle="Ver archivos"
+                  icon={faEye}
+                  onClick={() => onShowFiles(correspondence)}
+                />
               </Space>
             )}
           </div>
@@ -312,6 +310,13 @@ export const CorrespondencesTable = ({
           />
         )}
       </Col>
+      <ShowImagesAndDocumentsModal
+        title="Archivos de Correspondencia"
+        images={correspondence?.photos}
+        documents={correspondence?.documents}
+        isVisibleModal={isVisibleFiles}
+        onSetIsVisibleModal={setIsVisibleFiles}
+      />
     </Row>
   );
 };
