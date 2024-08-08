@@ -8,6 +8,7 @@ import {
   TableVirtualized,
   Tag,
 } from "../../components/ui";
+import { Row, Col } from "../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -61,6 +62,23 @@ export const CorrespondencesTable = ({
       ? true
       : _correspondence.userId === authUser.id &&
         ["waiting", "notProceeds"].includes(_correspondence?.status),
+  );
+
+  const _entityGuDasManagerView = correspondences.filter(
+    (correspondence) =>
+      !["waiting", "notProceeds"].includes(correspondence.status),
+  );
+
+  const _departmentMPBossView = correspondences.filter(
+    (correspondence) =>
+      ["waiting", "notProceeds"].includes(correspondence.status) ===
+      ["department_boss"].includes(authUser.roleCode),
+  );
+
+  const _correspondencesPublicView = correspondences.filter((correspondence) =>
+    ["super_admin"].includes(authUser.roleCode)
+      ? true
+      : correspondence.userId === authUser.userId,
   );
 
   const columns = [
@@ -140,19 +158,24 @@ export const CorrespondencesTable = ({
 
         return (
           <div>
-            <Space align="center">
-              {(correspondence?.documents || []).map((document, index) => (
-                <a
-                  key={index}
-                  href={document.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={changeStatus}
-                >
-                  <FontAwesomeIcon icon={faFilePdf} size="2x" />
-                </a>
-              ))}
-            </Space>
+            {(["pending", "inProgress", "finalized"].includes(
+              correspondence.status,
+            ) ||
+              ["super_admin", "user"].includes(authUser.roleCode)) && (
+              <Space align="center">
+                {(correspondence?.documents || []).map((document, index) => (
+                  <a
+                    key={index}
+                    href={document.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={changeStatus}
+                  >
+                    <FontAwesomeIcon icon={faFilePdf} size="2x" />
+                  </a>
+                ))}
+              </Space>
+            )}
           </div>
         );
       },
@@ -219,13 +242,14 @@ export const CorrespondencesTable = ({
               />
             </Acl>
           )}
-          {correspondence?.status === "proceeds" && (
-            <IconAction
-              tooltipTitle="Recibido por"
-              icon={faEnvelopeOpenText}
-              onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
-            />
-          )}
+          {correspondence?.status === "proceeds" &&
+            entityGuDASBoss.id === authUser.id && (
+              <IconAction
+                tooltipTitle="Recibido por"
+                icon={faEnvelopeOpenText}
+                onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
+              />
+            )}
           {correspondence?.status === "inProgress" &&
             authUser.id === entityGuDASBoss.id && (
               <Acl
@@ -272,20 +296,37 @@ export const CorrespondencesTable = ({
     },
   ];
 
-  return authUser.roleCode === "manager" ? (
-    <TableVirtualized
-      dataSource={correspondencesToEntityGUManagerView}
-      columns={columns}
-      rowHeaderHeight={50}
-      rowBodyHeight={150}
-    />
-  ) : (
-    <TableVirtualized
-      dataSource={correspondencesPublicView}
-      columns={columns}
-      rowHeaderHeight={50}
-      rowBodyHeight={150}
-    />
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        {authUser.roleCode === "manager" && (
+          <TableVirtualized
+            dataSource={_entityGuDasManagerView}
+            columns={columns}
+            rowHeaderHeight={50}
+            rowBodyHeight={150}
+          />
+        )}
+
+        {authUser.roleCode === "department_boss" && (
+          <TableVirtualized
+            dataSource={_departmentMPBossView}
+            columns={columns}
+            rowHeaderHeight={50}
+            rowBodyHeight={150}
+          />
+        )}
+
+        {["super_admin", "user"].includes(authUser.roleCode) && (
+          <TableVirtualized
+            dataSource={_correspondencesPublicView}
+            columns={columns}
+            rowHeaderHeight={50}
+            rowBodyHeight={150}
+          />
+        )}
+      </Col>
+    </Row>
   );
 };
 
