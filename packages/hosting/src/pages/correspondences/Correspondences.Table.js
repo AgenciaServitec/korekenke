@@ -72,6 +72,8 @@ export const CorrespondencesTable = ({
     setCorrespondence(correspondence);
     setIsVisibleFiles(true);
 
+    if (correspondence.status === "inProgress") return;
+
     await onChangeStatusToInProgress(correspondence);
   };
 

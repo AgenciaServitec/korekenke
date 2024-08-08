@@ -63,6 +63,8 @@ export const CorrespondenceIntegration = () => {
 
   useEffect(() => {
     (async () => {
+      if (correspondence?.status === "pending") return;
+
       if (
         correspondence?.status === "pending" &&
         entityGuDASBoss.id === authUser.id
