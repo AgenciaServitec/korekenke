@@ -63,7 +63,7 @@ export const CorrespondenceIntegration = () => {
 
   useEffect(() => {
     (async () => {
-      if (correspondence?.status === "pending") return;
+      if (correspondence?.status === "inProgress") return;
 
       if (
         correspondence?.status === "pending" &&
