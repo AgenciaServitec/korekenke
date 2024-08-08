@@ -687,29 +687,36 @@ const Animal = ({
                 />
               </Col>
             </Row>
-            {["super_admin", "gerente"].includes(user.roleCode) && (
-              <Row justify="end">
-                <Col span={12}>
-                  <Controller
-                    name="unitId"
-                    control={control}
-                    render={({ field: { onChange, value, name } }) => (
-                      <Select
-                        label="Unidad"
-                        name={name}
-                        value={value}
-                        options={units.map((unit) => ({
-                          label: unit.name,
-                          value: unit.id,
-                        }))}
-                        onChange={onChange}
-                        error={error(name)}
-                        required={required(name)}
-                      />
-                    )}
-                  />
-                </Col>
-              </Row>
+
+            {["super_admin", "manager"].includes(user.roleCode) && (
+              <>
+                <br />
+                <Row justify="end">
+                  <Col span={24} md={12}>
+                    <Controller
+                      name="unitId"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Select
+                          label="Unidad"
+                          name={name}
+                          value={value}
+                          options={units.map((unit) => ({
+                            label: unit.name,
+                            value: unit.id,
+                          }))}
+                          disabled={
+                            !["super_admin", "manager"].includes(user.roleCode)
+                          }
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                </Row>
+              </>
             )}
             <Row justify="end" gutter={[16, 16]}>
               <Col xs={24} sm={6} md={4}>
