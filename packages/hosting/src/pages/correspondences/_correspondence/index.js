@@ -9,6 +9,7 @@ import {
   Input,
   notification,
   Row,
+  Spinner,
   TextArea,
   Title,
   UploadMultiple,
@@ -37,7 +38,7 @@ export const CorrespondenceIntegration = () => {
 
   const [correspondence, setCorrespondence] = useState({});
   const [savingCorrespondence, setSavingCorrespondence] = useState(false);
-  const [entityGuDASBoss, setEntityGuDASBoss] = useState(false);
+  const [entityGuDASBoss, setEntityGuDASBoss] = useState({});
 
   const isNew = correspondenceId === "new";
 
@@ -56,17 +57,22 @@ export const CorrespondenceIntegration = () => {
       const _entityGuDASBoss = await fetchEntityManager(
         "departamento-de-apoyo-social",
       );
-      setEntityGuDASBoss(_entityGuDASBoss);
 
+      setEntityGuDASBoss(_entityGuDASBoss);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       if (
-        correspondence?.status === "proceeds" &&
+        correspondence?.status === "pending" &&
         entityGuDASBoss.id === authUser.id
       )
         await updateCorrespondence(correspondenceId, {
           status: "inProgress",
         });
     })();
-  }, []);
+  }, [entityGuDASBoss]);
 
   const onSaveCorrespondence = async (formData) => {
     try {

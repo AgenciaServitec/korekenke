@@ -105,7 +105,7 @@ export const CorrespondencesIntegration = () => {
     );
 
     if (
-      correspondence?.status === "proceeds" &&
+      correspondence?.status === "pending" &&
       MdpEntityManager.id === authUser.id
     ) {
       await updateCorrespondence(correspondence.id, {
