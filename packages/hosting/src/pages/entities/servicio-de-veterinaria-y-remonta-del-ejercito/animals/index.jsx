@@ -38,7 +38,7 @@ export const AnimalsIntegration = () => {
     setAnimalsView(
       animals.filter((animal) => animal.type === query?.animalType),
     );
-  }, [query?.animalType]);
+  }, [animals]);
 
   const navigateTo = (pathname = "new") => navigate(pathname);
 
