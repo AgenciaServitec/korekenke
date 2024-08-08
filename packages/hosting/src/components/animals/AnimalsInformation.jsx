@@ -14,7 +14,7 @@ export const AnimalsInformation = ({ animal }) => {
           <ItemInformation existField={animal?.name} value="NOMBRE" />
           <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
           <ItemInformation
-            existField={animal?.registrationNumber}
+            existField={animal.type !== "cattle"}
             value="N° MATRICULA"
           />
           <ItemInformation existField={animal?.chipNumber} value="N° CHIP" />
@@ -45,8 +45,8 @@ export const AnimalsInformation = ({ animal }) => {
             value={`: ${animal?.slopeNumber}`}
           />
           <ItemInformation
-            existField={animal?.registrationNumber}
-            value={`: ${animal?.registrationNumber}`}
+            existField={animal.type !== "cattle"}
+            value={`: ${animal?.registrationNumber || "S/N"}`}
           />
           <ItemInformation
             existField={animal?.chipNumber}

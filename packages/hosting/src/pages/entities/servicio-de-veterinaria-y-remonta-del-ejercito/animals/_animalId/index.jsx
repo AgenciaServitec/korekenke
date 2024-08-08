@@ -91,6 +91,7 @@ export const AnimalIntegration = () => {
     description: formData.description,
     type: animalType,
     status: animal?.status || "registered",
+    userId: authUser.id,
   });
 
   const onSaveAnimal = async (formData) => {
@@ -175,7 +176,7 @@ const Animal = ({
     slopeNumber: isCattle
       ? yup.string().required()
       : yup.string().notRequired(),
-    registrationNumber: !isCattle
+    registrationNumber: isEquine
       ? yup.string().required()
       : yup.string().notRequired(),
     chipNumber: isEquine ? yup.string().required() : yup.string().notRequired(),
