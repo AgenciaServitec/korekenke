@@ -23,7 +23,7 @@ import {
   useFormUtils,
   useQuery,
 } from "../../../../../hooks";
-import { useGlobalData } from "../../../../../providers";
+import { useAuthentication, useGlobalData } from "../../../../../providers";
 import {
   addAnimal,
   getAnimalId,
@@ -34,13 +34,15 @@ import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { AnimalsType } from "../../../../../data-list";
+import { isProduction } from "../../../../../config";
 
 export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
-  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { authUser } = useAuthentication();
   const { animals, users, units } = useGlobalData();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { onSetAnimalLog } = useAnimalLogs();
 
   const [loading, setLoading] = useState(false);
@@ -69,6 +71,7 @@ export const AnimalIntegration = () => {
     frontPhotoCopy: formData?.frontPhotoCopy || animal?.frontPhotoCopy,
     leftProfilePhotoCopy:
       formData?.leftProfilePhotoCopy || animal?.leftProfilePhotoCopy,
+    animalUnit: formData.animalUnit,
     unitId: formData.unitId,
     greatUnitStatic: formData.greatUnitStatic,
     name: formData.name,
@@ -126,6 +129,7 @@ export const AnimalIntegration = () => {
   return (
     <Animal
       isNew={isNew}
+      user={authUser}
       animalType={animalType}
       units={units}
       animal={animal}
@@ -139,6 +143,7 @@ export const AnimalIntegration = () => {
 
 const Animal = ({
   isNew,
+  user,
   animalType,
   units,
   animal,
@@ -163,6 +168,7 @@ const Animal = ({
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
+    animalUnit: yup.string().required(),
     unitId: yup.string().required(),
     greatUnitStatic: yup.string(),
     name: yup.string().required(),
@@ -207,7 +213,12 @@ const Animal = ({
       rightProfilePhoto: animal?.rightProfilePhoto || null,
       frontPhoto: animal?.frontPhoto || null,
       leftProfilePhoto: animal?.leftProfilePhoto || null,
-      unitId: animal?.unitId || "",
+      animalUnit: animal?.animalUnit || "",
+      unitId: animal?.unitId
+        ? animal?.unitId
+        : isProduction
+          ? "7zw9UxYVomBeXVyUayt6"
+          : "R7zZr5jtrN6F3acc0xnr",
       greatUnitStatic: animal?.greatUnitStatic || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",
@@ -381,17 +392,13 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="unitId"
+                  name="animalUnit"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
-                    <Select
+                    <Input
                       label="Unidad"
                       name={name}
                       value={value}
-                      options={units.map((unit) => ({
-                        label: unit.name,
-                        value: unit.id,
-                      }))}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
@@ -680,6 +687,30 @@ const Animal = ({
                 />
               </Col>
             </Row>
+            {["super_admin", "gerente"].includes(user.roleCode) && (
+              <Row justify="end">
+                <Col span={12}>
+                  <Controller
+                    name="unitId"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <Select
+                        label="Unidad"
+                        name={name}
+                        value={value}
+                        options={units.map((unit) => ({
+                          label: unit.name,
+                          value: unit.id,
+                        }))}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              </Row>
+            )}
             <Row justify="end" gutter={[16, 16]}>
               <Col xs={24} sm={6} md={4}>
                 <Button
