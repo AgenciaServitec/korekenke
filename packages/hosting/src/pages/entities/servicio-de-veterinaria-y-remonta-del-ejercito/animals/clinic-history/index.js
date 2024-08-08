@@ -8,9 +8,10 @@ import {
   modalConfirm,
   notification,
   Row,
+  ShowImagesAndDocumentsModal,
+  Space,
   Spinner,
   Title,
-  Space,
 } from "../../../../../components";
 import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
 import styled from "styled-components";
@@ -29,8 +30,7 @@ import { useNavigate } from "react-router";
 import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 import { getAnimalEntitiesAndBosses } from "../../../../../utils";
-import { AuxiliaryExamsModalComponent } from "./AuxiliaryExamsModalComponent";
-import { AnimalsType } from "../../../../../data-list";
+import { capitalize } from "lodash";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -248,11 +248,12 @@ export const ClinicHistoryIntegration = () => {
           animalId={animalId}
           currentHistoryClinic={currentHistoryClinic}
         />
-        <AuxiliaryExamsModalComponent
-          isVisibleModal={isVisibleModal}
+        <ShowImagesAndDocumentsModal
+          title={`Examenes auxiliares "${capitalize(currentHistoryClinic?.auxiliaryExams?.type)}"`}
+          images={currentHistoryClinic?.auxiliaryExams?.images}
+          documents={currentHistoryClinic?.auxiliaryExams?.documents}
+          isVisibleModal={isVisibleModal.auxiliaryExamsModal}
           onSetIsVisibleModal={onSetIsVisibleAuxiliaryExamsModal}
-          onSetClinicHistoryId={setClinicHistoryId}
-          currentHistoryClinic={currentHistoryClinic}
         />
       </Container>
     </Acl>

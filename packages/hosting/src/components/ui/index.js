@@ -60,6 +60,7 @@ export * from "./InputCode";
 export * from "./Acl";
 export * from "./sheet";
 export * from "./Legend";
+export * from "./ShowImagesAndDocumentsModal";
 
 const { Link, Paragraph } = Typography;
 

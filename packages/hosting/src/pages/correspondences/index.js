@@ -11,8 +11,6 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   correspondencesRef,
-  fetchEntities,
-  fetchUser,
   updateCorrespondence,
 } from "../../firebase/collections";
 import styled from "styled-components";
@@ -28,6 +26,8 @@ import { ReplyCorrespondenceModal } from "./ReplyCorrespondence";
 import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInformation";
 import { useAuthentication } from "../../providers";
 import { ReceivedByModal } from "./ReceivedBy";
+import { CorrespondenceProceeds } from "./CorrespondenceProceeds";
+import { fetchEntityManager } from "../../utils";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -40,10 +40,15 @@ export const CorrespondencesIntegration = () => {
         .where("isDeleted", "==", false)
         .orderBy("createAt", "desc"),
     );
+
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
   const [visibleReplyInformatioModal, setVisibleReplyInformationModal] =
     useState(false);
   const [visibleReceivedByModal, setVisibleReceivedByModal] = useState(false);
+  const [
+    visibleCorrespondenceProceedsModal,
+    setVisibleCorrespondenceProceedsModal,
+  ] = useState(false);
   const [correspondence, setCorrespondence] = useState({});
 
   useEffect(() => {
@@ -89,28 +94,24 @@ export const CorrespondencesIntegration = () => {
     setVisibleReceivedByModal(true);
   };
 
+  const onCorrespondenceProceeds = (correspondence) => {
+    setCorrespondence(correspondence);
+    setVisibleCorrespondenceProceedsModal(true);
+  };
+
   const onChangeStatusToInProgress = async (correspondence) => {
-    const MdpEntityManager = await fetchEntityManager();
+    const MdpEntityManager = await fetchEntityManager(
+      "departamento-de-apoyo-social",
+    );
 
     if (
       correspondence?.status === "pending" &&
-      MdpEntityManager.id == authUser.id
+      MdpEntityManager.id === authUser.id
     ) {
       await updateCorrespondence(correspondence.id, {
         status: "inProgress",
       });
     }
-  };
-
-  const fetchEntityManager = async () => {
-    const _entities = await fetchEntities();
-
-    const manageMesaDePartes = _entities.find(
-      (entity) => entity?.nameId === "mesa-de-partes",
-    );
-    const _entityManager = await fetchUser(manageMesaDePartes?.entityManageId);
-
-    return _entityManager;
   };
 
   return (
@@ -135,6 +136,13 @@ export const CorrespondencesIntegration = () => {
           visibleReceivedByModal={visibleReceivedByModal}
           onSetvisibleReceivedByModal={setVisibleReceivedByModal}
           onAddCorrespondenceReceivedBy={onAddCorrespondenceReceivedBy}
+          visibleCorrespondenceProceedsModal={
+            visibleCorrespondenceProceedsModal
+          }
+          onSetVisibleCorrespondenceProceedsModal={
+            setVisibleCorrespondenceProceedsModal
+          }
+          onCorrespondenceProceeds={onCorrespondenceProceeds}
         />
       </CorrespondenceModalProvider>
     </Spin>
@@ -158,6 +166,9 @@ const Correspondences = ({
   visibleReceivedByModal,
   onSetvisibleReceivedByModal,
   onAddCorrespondenceReceivedBy,
+  visibleCorrespondenceProceedsModal,
+  onSetVisibleCorrespondenceProceedsModal,
+  onCorrespondenceProceeds,
 }) => {
   const { isTablet } = useDevice();
   const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
@@ -212,6 +223,7 @@ const Correspondences = ({
               onShowReplyCorrespondenceInformation
             }
             onAddCorrespondenceReceivedBy={onAddCorrespondenceReceivedBy}
+            onCorrespondenceProceeds={onCorrespondenceProceeds}
           />
         </div>
         <ReplyCorrespondenceInformationModal
@@ -227,6 +239,11 @@ const Correspondences = ({
         <ReceivedByModal
           visibleModal={visibleReceivedByModal}
           onSetVisibleModal={onSetvisibleReceivedByModal}
+          correspondence={correspondence}
+        />
+        <CorrespondenceProceeds
+          visibleModal={visibleCorrespondenceProceedsModal}
+          onSetVisibleModal={onSetVisibleCorrespondenceProceedsModal}
           correspondence={correspondence}
         />
       </Container>

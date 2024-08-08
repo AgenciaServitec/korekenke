@@ -1,43 +1,86 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import dayjs from "dayjs";
 import {
   Acl,
   IconAction,
+  ShowImagesAndDocumentsModal,
   Space,
   TableVirtualized,
   Tag,
-  Button,
 } from "../../components/ui";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Col, Row } from "../../components";
 import {
-  faClipboardCheck,
   faEdit,
   faEnvelopeOpenText,
   faEye,
-  faFilePdf,
+  faFilter,
   faPrint,
   faReply,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { CorrespondencesStatus } from "../../data-list";
+import { useAuthentication } from "../../providers";
+import { fetchDepartmentBoss, fetchEntityManager } from "../../utils";
 
 export const CorrespondencesTable = ({
   correspondences,
   onChangeStatusToInProgress,
   onClickEditCorrespondence,
-  onClickDeleteCorrespondence,
-  onDecreeCorrespondence,
   onClickPrintTicket,
-  onGoToDecreeSheets,
   onAddReplyCorrespondence,
   onShowReplyCorrespondenceInformation,
   onAddCorrespondenceReceivedBy,
+  onCorrespondenceProceeds,
 }) => {
+  const { authUser } = useAuthentication();
+  const [departmentMPBoss, setDepartmentMPBoss] = useState({});
+  const [entityGuDASBoss, setEntityGuDASBoss] = useState({});
+  const [isVisibleFiles, setIsVisibleFiles] = useState(false);
+  const [correspondence, setCorrespondence] = useState(null);
+
+  const entityGuDASNameId = "departamento-de-apoyo-social";
+  const departmentNameId = "mesa-de-partes";
+
+  useEffect(() => {
+    (async () => {
+      const _entityDasBoss = await fetchEntityManager(entityGuDASNameId);
+      const _departmentMpBoss = await fetchDepartmentBoss(departmentNameId);
+
+      setEntityGuDASBoss(_entityDasBoss);
+      setDepartmentMPBoss(_departmentMpBoss);
+    })();
+  }, []);
+
+  const _entityGuDasManagerView = correspondences.filter(
+    (correspondence) =>
+      !["waiting", "notProceeds"].includes(correspondence.status),
+  );
+
+  const _departmentMPBossView = correspondences.filter(
+    (correspondence) =>
+      ["waiting", "notProceeds"].includes(correspondence.status) ===
+      ["department_boss"].includes(authUser.roleCode),
+  );
+
+  const _correspondencesPublicView = correspondences.filter((correspondence) =>
+    ["super_admin"].includes(authUser.roleCode)
+      ? true
+      : correspondence.userId === authUser.id,
+  );
+
+  const onShowFiles = async (correspondence) => {
+    setCorrespondence(correspondence);
+    setIsVisibleFiles(true);
+
+    if (correspondence.status === "inProgress") return;
+
+    await onChangeStatusToInProgress(correspondence);
+  };
+
   const columns = [
     {
       title: "F. Creación",
-      width: ["40px", "10%"],
+      width: ["80px", "10%"],
       render: (correspondence) => (
         <CorrespondenceContainer>
           <Space direction="vertical">
@@ -79,7 +122,7 @@ export const CorrespondencesTable = ({
     {
       title: "Indicativo",
       align: "center",
-      width: ["50px", "7%"],
+      width: ["100px", "7%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.indicative}</div>
       ),
@@ -97,33 +140,28 @@ export const CorrespondencesTable = ({
     {
       title: "Asunto",
       align: "center",
-      width: ["230px", "30%"],
+      width: ["200px", "30%"],
       render: (correspondence) => <div>{correspondence?.issue}</div>,
     },
     {
       title: "Archivos",
       align: "center",
-      width: ["130px", "15%"],
+      width: ["100px", "15%"],
       render: (correspondence) => {
-        const changeStatus = async () => {
-          await onChangeStatusToInProgress(correspondence);
-        };
-
         return (
           <div>
-            <Space align="center">
-              {(correspondence?.documents || []).map((document, index) => (
-                <a
-                  key={index}
-                  href={document.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={changeStatus}
-                >
-                  <FontAwesomeIcon icon={faFilePdf} size="2x" />
-                </a>
-              ))}
-            </Space>
+            {(["pending", "inProgress", "finalized"].includes(
+              correspondence.status,
+            ) ||
+              ["super_admin", "user"].includes(authUser.roleCode)) && (
+              <Space align="center">
+                <IconAction
+                  tooltipTitle="Ver archivos"
+                  icon={faEye}
+                  onClick={() => onShowFiles(correspondence)}
+                />
+              </Space>
+            )}
           </div>
         );
       },
@@ -131,7 +169,7 @@ export const CorrespondencesTable = ({
     {
       title: "Estado",
       align: "center",
-      width: ["70px", "10%"],
+      width: ["50px", "10%"],
       render: (correspondence) => {
         const status = CorrespondencesStatus?.[correspondence?.status];
         return (
@@ -139,15 +177,6 @@ export const CorrespondencesTable = ({
             <Tag color={status?.color} style={{ margin: 0 }}>
               {status?.name}
             </Tag>
-            {correspondence?.status === "pending" && (
-              <IconAction
-                className="pointer"
-                tooltipTitle="Ver hoja de decreto"
-                onClick={() => onGoToDecreeSheets(correspondence.id)}
-                styled={{ color: (theme) => theme.colors.tertiary }}
-                icon={faEye}
-              />
-            )}
           </Space>
         );
       },
@@ -160,111 +189,137 @@ export const CorrespondencesTable = ({
         const status = correspondence?.response?.type === "positive";
         return (
           <Space>
-            <Tag color={status ? "green" : "red"}>
-              {status ? "Positivo" : "Negativo"}
-            </Tag>
-            <IconAction
-              tooltipTitle="Ver detalle de respuesta"
-              icon={faEye}
-              size={30}
-              styled={{ color: (theme) => theme.colors.info }}
-              onClick={() => {
-                if (correspondence?.response)
-                  onShowReplyCorrespondenceInformation(correspondence);
-              }}
-            />
+            {correspondence?.response && (
+              <>
+                <Tag color={status ? "green" : "red"}>
+                  {status ? "Positivo" : "Negativo"}
+                </Tag>
+                <IconAction
+                  tooltipTitle="Ver detalle de respuesta"
+                  icon={faEye}
+                  size={30}
+                  styled={{ color: (theme) => theme.colors.info }}
+                  onClick={() =>
+                    onShowReplyCorrespondenceInformation(correspondence)
+                  }
+                />
+              </>
+            )}
           </Space>
         );
       },
     },
     {
-      title: "Opciones",
+      title: "Acciones",
       align: "center",
       width: ["130px", "30%"],
       render: (correspondence) => (
-        <IconsActionWrapper>
-          {correspondence?.status === "notDecreed" && (
-            <IconAction
-              tooltipTitle="Recibido por"
-              icon={faEnvelopeOpenText}
-              onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
-            />
-          )}
-          {correspondence?.status !== "finalized" && (
+        <Space>
+          {departmentMPBoss.id === authUser.id && (
             <Acl
               category="public"
               subCategory="correspondences"
-              name="/correspondences/:correspondenceId#reply"
+              name="/correspondences/:correspondenceId#proceeds"
             >
               <IconAction
-                tooltipTitle="Responder solicitud"
-                icon={faReply}
-                styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => onAddReplyCorrespondence(correspondence)}
+                tooltipTitle="Evaluación solicitud"
+                icon={faFilter}
+                onClick={() => onCorrespondenceProceeds(correspondence)}
               />
             </Acl>
           )}
-          {correspondence?.status === "notDecreed" && (
-            <Acl
-              category="public"
-              subCategory="correspondences"
-              name="/correspondences#decree"
-            >
-              <Button
-                size="small"
-                onClick={() => onDecreeCorrespondence(correspondence)}
+          {correspondence?.status === "proceeds" &&
+            entityGuDASBoss.id === authUser.id && (
+              <IconAction
+                tooltipTitle="Recibido por"
+                icon={faEnvelopeOpenText}
+                onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
+              />
+            )}
+          {correspondence?.status === "inProgress" &&
+            authUser.id === entityGuDASBoss.id && (
+              <Acl
+                category="public"
+                subCategory="correspondences"
+                name="/correspondences/:correspondenceId#reply"
               >
-                <FontAwesomeIcon icon={faClipboardCheck} />
-                Decretar
-              </Button>
-            </Acl>
-          )}
+                <IconAction
+                  tooltipTitle="Responder solicitud"
+                  icon={faReply}
+                  styled={{ color: (theme) => theme.colors.primary }}
+                  onClick={() => onAddReplyCorrespondence(correspondence)}
+                />
+              </Acl>
+            )}
           <Acl
             category="public"
             subCategory="correspondences"
             name="/correspondences/:correspondenceId"
           >
             <IconAction
-              className="pointer"
+              tooltipTitle="Editar"
               onClick={() => onClickEditCorrespondence(correspondence.id)}
               styled={{ color: (theme) => theme.colors.tertiary }}
               icon={faEdit}
             />
           </Acl>
-          {correspondence?.status === "notDecreed" && (
+          {correspondence?.status === "finalized" && (
             <Acl
               category="public"
               subCategory="correspondences"
-              name="/correspondences#delete"
+              name="/correspondences/:correspondenceId#"
             >
               <IconAction
                 className="pointer"
-                onClick={() => onClickDeleteCorrespondence(correspondence.id)}
-                styled={{ color: (theme) => theme.colors.error }}
-                icon={faTrash}
+                onClick={() => onClickPrintTicket(correspondence.id)}
+                styled={{ color: (theme) => theme.colors.info }}
+                icon={faPrint}
               />
             </Acl>
           )}
-          {correspondence?.status === "finalized" && (
-            <IconAction
-              className="pointer"
-              onClick={() => onClickPrintTicket(correspondence.id)}
-              styled={{ color: (theme) => theme.colors.info }}
-              icon={faPrint}
-            />
-          )}
-        </IconsActionWrapper>
+        </Space>
       ),
     },
   ];
 
   return (
-    <TableVirtualized
-      dataSource={correspondences}
-      columns={columns}
-      rowHeaderHeight={50}
-      rowBodyHeight={150}
-    />
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        {authUser.roleCode === "manager" && (
+          <TableVirtualized
+            dataSource={_entityGuDasManagerView}
+            columns={columns}
+            rowHeaderHeight={50}
+            rowBodyHeight={150}
+          />
+        )}
+
+        {authUser.roleCode === "department_boss" && (
+          <TableVirtualized
+            dataSource={_departmentMPBossView}
+            columns={columns}
+            rowHeaderHeight={50}
+            rowBodyHeight={150}
+          />
+        )}
+
+        {["super_admin", "user"].includes(authUser.roleCode) && (
+          <TableVirtualized
+            dataSource={_correspondencesPublicView}
+            columns={columns}
+            rowHeaderHeight={50}
+            rowBodyHeight={150}
+          />
+        )}
+      </Col>
+      <ShowImagesAndDocumentsModal
+        title="Archivos de Correspondencia"
+        images={correspondence?.photos}
+        documents={correspondence?.documents}
+        isVisibleModal={isVisibleFiles}
+        onSetIsVisibleModal={setIsVisibleFiles}
+      />
+    </Row>
   );
 };
 
