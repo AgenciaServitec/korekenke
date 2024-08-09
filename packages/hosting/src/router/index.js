@@ -67,16 +67,16 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities"
+          path="entities-gu"
           element={
             <AdminLayout>
-              <A.EntitiesIntegration />
+              <A.EntitiesGUIntegration />
             </AdminLayout>
           }
         />
         <Route
           exact
-          path="entities/:entityId"
+          path="entities-gu/:entityGUId"
           element={
             <AdminLayout>
               <A.EntityIntegration />
@@ -256,24 +256,6 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/:entityId/das-requests"
-          element={
-            <AdminLayout>
-              <A.DasRequestsListIntegration />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
-          path="entities/:entityId/das-requests/:dasRequestId"
-          element={
-            <AdminLayout>
-              <A.DasRequestIntegration />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
           path="surveys/organizational-climate-studies"
           element={
             <AdminLayout>
@@ -292,6 +274,24 @@ export const Router = () => {
         />
       </Route>
       {/*SHEETS*/}
+      <Route
+        exact
+        path="entities/:entityId/das-requests"
+        element={
+          <AdminLayout>
+            <A.DasRequestsListIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="entities/:entityId/das-requests/:dasRequestId"
+        element={
+          <AdminLayout>
+            <A.DasRequestIntegration />
+          </AdminLayout>
+        }
+      />
       <Route
         exact
         path="/correspondences/:correspondenceId/decree/sheets"

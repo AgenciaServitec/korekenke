@@ -33,12 +33,12 @@
       "/users/:userId": "Editar Usuario",
       "/users#delete": "Eliminar Usuario"
     },
-    "entities": {
+    "entities-gu": {
       "label": "Entidades / G.U",
-      "/entities": "Menú: Entidades / G.U",
-      "/entities/new": "Agregar Entidad / G.U",
-      "/entities/:entityId": "Editar Entidad / G.U",
-      "/entities#delete": "Eliminar Entidad / G.U"
+      "/entities-gu": "Menú: Entidades / G.U",
+      "/entities-gu/new": "Agregar Entidad / G.U",
+      "/entities-gu/:entityGUId": "Editar Entidad / G.U",
+      "/entities-gu#delete": "Eliminar Entidad / G.U"
     },
     "units": {
       "label": "Unidades",

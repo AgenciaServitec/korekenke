@@ -18,6 +18,8 @@ export const PrivateRoute = () => {
 
   useEffect(() => {
     (async () => {
+      if (!currentCommand && !entityId) return;
+
       const result = await validateAuthorizedModule();
 
       if (!result) return navigate("/home");
@@ -25,13 +27,9 @@ export const PrivateRoute = () => {
   }, [entityId]);
 
   const validateAuthorizedModule = async () => {
-    if (!entityId) return false;
-
     const entity = await fetchEntityByNameId(entityId);
 
-    console.log(entity[0].commandId, "==", currentCommand.id);
-
-    if (isEmpty(entity)) return false;
+    if (isEmpty(entity)) return;
 
     return entity[0].commandId === currentCommand.id;
   };
