@@ -6,6 +6,7 @@ import {
   faEdit,
   faEye,
   faFilePdf,
+  faFilter,
   faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -25,9 +26,11 @@ export const DasRequestsTable = ({
   dasApplicationsLoading,
   onAddReplyDasRequest,
   onShowReplyDasRequestInformation,
+  onDasRequestProceeds,
   user,
 }) => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
 
   const [entity, setEntity] = useState(null);
 
@@ -36,6 +39,8 @@ export const DasRequestsTable = ({
       const entities = await fetchCollectionOnce(
         entitiesRef.where("nameId", "==", "departamento-de-apoyo-social"),
       );
+
+      console.log("Entidades: ", entities);
 
       setEntity(entities?.[0]);
     })();
@@ -49,6 +54,23 @@ export const DasRequestsTable = ({
     dasRequest?.response?.type === "positive";
 
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
+
+  const _entityGuDasManagerView = dasApplications.filter(
+    (dasApplication) =>
+      !["waiting", "notProceeds"].includes(dasApplication.status),
+  );
+
+  const _departmentMPBossView = dasApplications.filter(
+    (dasApplication) =>
+      ["waiting", "notProceeds"].includes(dasApplication.status) ===
+      ["department_boss"].includes(authUser.roleCode),
+  );
+
+  const _dasRequestsPublicView = dasApplications.filter((dasApplication) =>
+    ["super_admin"].includes(authUser.roleCode)
+      ? true
+      : dasApplication.userId === authUser.id,
+  );
 
   const columns = [
     {
@@ -176,6 +198,17 @@ export const DasRequestsTable = ({
       key: "options",
       render: (_, dasRequest) => (
         <Space>
+          <Acl
+            category="departamento-de-apoyo-social"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#proceeds"
+          >
+            <IconAction
+              tooltipTitle="Evaluación de solicitud"
+              icon={faFilter}
+              onClick={() => onDasRequestProceeds(dasRequest)}
+            />
+          </Acl>
           {entity?.entityManageId === user?.id && !isFinalized(dasRequest) && (
             <Acl
               category="departamento-de-apoyo-social"
@@ -236,14 +269,35 @@ export const DasRequestsTable = ({
       ),
     },
   ];
+
   return (
     <Container>
-      <Table
-        loading={dasApplicationsLoading}
-        columns={columns}
-        scroll={{ x: "max-content" }}
-        dataSource={orderBy(dasApplications, "createAt", "desc")}
-      />
+      {authUser.roleCode === "manager" && (
+        <Table
+          loading={dasApplicationsLoading}
+          columns={columns}
+          scroll={{ x: "max-content" }}
+          dataSource={orderBy(_entityGuDasManagerView, "createAt", "desc")}
+        />
+      )}
+
+      {authUser.roleCode === "department_boss" && (
+        <Table
+          loading={dasApplicationsLoading}
+          columns={columns}
+          scroll={{ x: "max-content" }}
+          dataSource={orderBy(_departmentMPBossView, "createAt", "desc")}
+        />
+      )}
+
+      {["super_admin", "user"].includes(authUser.roleCode) && (
+        <Table
+          loading={dasApplicationsLoading}
+          columns={columns}
+          scroll={{ x: "max-content" }}
+          dataSource={orderBy(_dasRequestsPublicView, "createAt", "desc")}
+        />
+      )}
     </Container>
   );
 };
