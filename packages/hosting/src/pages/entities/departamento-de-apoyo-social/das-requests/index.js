@@ -16,6 +16,8 @@ import { updateDasApplication } from "../../../../firebase/collections/dasApplic
 import { useAuthentication } from "../../../../providers";
 import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
+import { CorrespondenceProceeds } from "../../../correspondences/CorrespondenceProceeds";
+import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
@@ -24,6 +26,8 @@ export const DasRequestsListIntegration = () => {
 
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
+    useState(false);
+  const [visibledDasRequestProceeds, setVisibledDasRequestProceeds] =
     useState(false);
   const [dasRequest, setDasRequest] = useState(null);
 
@@ -73,6 +77,11 @@ export const DasRequestsListIntegration = () => {
     setVisibleReplyInformationModal(true);
   };
 
+  const onDasRequestProceeds = (dasRequest) => {
+    setDasRequest(dasRequest);
+    setVisibledDasRequestProceeds(true);
+  };
+
   return (
     <DasRequestsList
       dasApplications={dasApplications}
@@ -83,6 +92,9 @@ export const DasRequestsListIntegration = () => {
       visibleReplyModal={visibleReplyModal}
       onSetVisibleReplyModal={setVisibleReplyModal}
       visibleReplyInformationModal={visibleReplyInformationModal}
+      visibledDasRequestProceeds={visibledDasRequestProceeds}
+      onSetVisibledDasRequestProceeds={setVisibledDasRequestProceeds}
+      onDasRequestProceeds={onDasRequestProceeds}
       user={authUser}
       onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
       onAddReplyDasRequest={onAddReplyDasRequest}
@@ -101,6 +113,9 @@ const DasRequestsList = ({
   visibleReplyModal,
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
+  visibledDasRequestProceeds,
+  onSetVisibledDasRequestProceeds,
+  onDasRequestProceeds,
   user,
   onSetVisibleReplyInformationModal,
   onShowReplyDasRequestInformation,
@@ -124,6 +139,7 @@ const DasRequestsList = ({
             dasApplicationsLoading={dasApplicationsLoading}
             onAddReplyDasRequest={onAddReplyDasRequest}
             onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
+            onDasRequestProceeds={onDasRequestProceeds}
             user={user}
           />
         </Col>
@@ -135,6 +151,11 @@ const DasRequestsList = ({
         <ReplyDasRequestModal
           visibleModal={visibleReplyModal}
           onSetVisibleModal={onSetVisibleReplyModal}
+          dasRequest={dasRequest}
+        />
+        <DasRequestProceedsModal
+          visibleModal={visibledDasRequestProceeds}
+          onSetVisibleModal={onSetVisibledDasRequestProceeds}
           dasRequest={dasRequest}
         />
       </Row>

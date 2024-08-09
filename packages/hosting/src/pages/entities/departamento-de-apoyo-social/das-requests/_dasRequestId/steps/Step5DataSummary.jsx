@@ -86,7 +86,7 @@ export const Step5DataSummary = ({
   const onSendDasRequest = () => {
     onSaveDasApplication({
       ...dasRequest,
-      status: "pending",
+      status: "waiting",
       wasRead: false,
     });
     removeFieldLocalStorage("dasRequest");
