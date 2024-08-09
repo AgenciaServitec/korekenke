@@ -51,22 +51,23 @@ export const CorrespondencesTable = ({
     })();
   }, []);
 
-  const _entityGuDasManagerView = correspondences.filter(
-    (correspondence) =>
-      !["waiting", "notProceeds"].includes(correspondence.status),
-  );
+  const correspondencesViewBy = correspondences.filter((correspondence) => {
+    if (["super_admin"].includes(authUser.roleCode)) return correspondence;
 
-  const _departmentMPBossView = correspondences.filter(
-    (correspondence) =>
+    if (correspondence.userId === authUser.id) return correspondence;
+
+    if (
       ["waiting", "notProceeds"].includes(correspondence.status) ===
-      ["department_boss"].includes(authUser.roleCode),
-  );
+      ["department_boss"].includes(authUser.roleCode)
+    )
+      return correspondence;
 
-  const _correspondencesPublicView = correspondences.filter((correspondence) =>
-    ["super_admin"].includes(authUser.roleCode)
-      ? true
-      : correspondence.userId === authUser.id,
-  );
+    if (
+      !["waiting", "notProceeds"].includes(correspondence.status) ===
+      ["department_boss"].includes(authUser.roleCode)
+    )
+      return correspondence;
+  });
 
   const onShowFiles = async (correspondence) => {
     setCorrespondence(correspondence);
@@ -80,25 +81,15 @@ export const CorrespondencesTable = ({
   const columns = [
     {
       title: "F. Creación",
-      width: ["80px", "10%"],
-      render: (correspondence) => (
-        <CorrespondenceContainer>
-          <Space direction="vertical">
-            <div>
-              <span>
-                {dayjs(correspondence.createAt.toDate()).format(
-                  "DD/MM/YYYY HH:mm",
-                )}
-              </span>
-            </div>
-          </Space>
-        </CorrespondenceContainer>
-      ),
+      align: "center",
+      width: ["9rem", "100%"],
+      render: (dasRequest) =>
+        dayjs(dasRequest.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Destinatario",
       align: "center",
-      width: ["100px", "10%"],
+      width: ["10rem", "100%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.destination}</div>
       ),
@@ -106,47 +97,21 @@ export const CorrespondencesTable = ({
     {
       title: "Recibido por",
       align: "center",
-      width: ["100px", "10%"],
+      width: ["10rem", "100%"],
       render: (correspondence) => (
         <div className="capitalize">{correspondence?.receivedBy}</div>
       ),
     },
     {
-      title: "Clase",
-      align: "center",
-      width: ["100px", "10%"],
-      render: (correspondence) => (
-        <div className="capitalize">{correspondence?.class}</div>
-      ),
-    },
-    {
-      title: "Indicativo",
-      align: "center",
-      width: ["100px", "7%"],
-      render: (correspondence) => (
-        <div className="capitalize">{correspondence?.indicative}</div>
-      ),
-    },
-    {
-      title: "Clasificación",
-      align: "center",
-      width: ["100px", "15%"],
-      render: (correspondence) => (
-        <div>
-          <div className="capitalize">{correspondence?.classification}</div>
-        </div>
-      ),
-    },
-    {
       title: "Asunto",
       align: "center",
-      width: ["200px", "30%"],
+      width: ["10rem", "100%"],
       render: (correspondence) => <div>{correspondence?.issue}</div>,
     },
     {
       title: "Archivos",
       align: "center",
-      width: ["100px", "15%"],
+      width: ["5rem", "100%"],
       render: (correspondence) => {
         return (
           <div>
@@ -169,22 +134,16 @@ export const CorrespondencesTable = ({
     {
       title: "Estado",
       align: "center",
-      width: ["50px", "10%"],
+      width: ["6rem", "100%"],
       render: (correspondence) => {
         const status = CorrespondencesStatus?.[correspondence?.status];
-        return (
-          <Space>
-            <Tag color={status?.color} style={{ margin: 0 }}>
-              {status?.name}
-            </Tag>
-          </Space>
-        );
+        return <Tag color={status?.color}>{status?.name}</Tag>;
       },
     },
     {
       title: "Respuesta",
       align: "center",
-      width: ["130px", "30%"],
+      width: ["8rem", "100%"],
       render: (correspondence) => {
         const status = correspondence?.response?.type === "positive";
         return (
@@ -210,9 +169,9 @@ export const CorrespondencesTable = ({
       },
     },
     {
-      title: "Acciones",
+      title: "Opciones",
       align: "center",
-      width: ["130px", "30%"],
+      width: ["14rem", "100%"],
       render: (correspondence) => (
         <Space>
           {departmentMPBoss.id === authUser.id && (
@@ -285,32 +244,12 @@ export const CorrespondencesTable = ({
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        {authUser.roleCode === "manager" && (
-          <TableVirtualized
-            dataSource={_entityGuDasManagerView}
-            columns={columns}
-            rowHeaderHeight={50}
-            rowBodyHeight={150}
-          />
-        )}
-
-        {authUser.roleCode === "department_boss" && (
-          <TableVirtualized
-            dataSource={_departmentMPBossView}
-            columns={columns}
-            rowHeaderHeight={50}
-            rowBodyHeight={150}
-          />
-        )}
-
-        {["super_admin", "user"].includes(authUser.roleCode) && (
-          <TableVirtualized
-            dataSource={_correspondencesPublicView}
-            columns={columns}
-            rowHeaderHeight={50}
-            rowBodyHeight={150}
-          />
-        )}
+        <TableVirtualized
+          dataSource={correspondencesViewBy}
+          columns={columns}
+          rowHeaderHeight={50}
+          rowBodyHeight={150}
+        />
       </Col>
       <ShowImagesAndDocumentsModal
         title="Archivos de Correspondencia"
@@ -322,26 +261,3 @@ export const CorrespondencesTable = ({
     </Row>
   );
 };
-
-const CorrespondenceContainer = styled.div`
-  ${({ theme }) => css`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .purchase-number {
-      margin-top: ${theme.paddings.small};
-      font-size: ${theme.font_sizes.xx_small};
-      font-weight: ${theme.font_weight.medium};
-    }
-  `}
-`;
-
-const IconsActionWrapper = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5em;
-`;
