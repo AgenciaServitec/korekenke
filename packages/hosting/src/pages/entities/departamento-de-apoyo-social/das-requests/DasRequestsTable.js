@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Acl, IconAction, Space, Table, Tag } from "../../../../components";
+import {
+  Acl,
+  IconAction,
+  Space,
+  TableVirtualized,
+  Tag,
+} from "../../../../components";
 import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
 import {
@@ -40,8 +46,6 @@ export const DasRequestsTable = ({
         entitiesRef.where("nameId", "==", "departamento-de-apoyo-social"),
       );
 
-      console.log("Entidades: ", entities);
-
       setEntity(entities?.[0]);
     })();
   }, []);
@@ -55,59 +59,43 @@ export const DasRequestsTable = ({
 
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
 
-  const _entityGuDasManagerView = dasApplications.filter(
-    (dasApplication) =>
-      !["waiting", "notProceeds"].includes(dasApplication.status),
-  );
+  const dasApplicationsViewBy = dasApplications.filter((dasApplication) => {
+    if (["super_admin"].includes(authUser.roleCode)) return dasApplication;
 
-  const _departmentMPBossView = dasApplications.filter(
-    (dasApplication) =>
+    if (dasApplication.userId === authUser.id) return dasApplication;
+
+    if (
       ["waiting", "notProceeds"].includes(dasApplication.status) ===
-      ["department_boss"].includes(authUser.roleCode),
-  );
+      ["department_boss"].includes(authUser.roleCode)
+    )
+      return dasApplication;
 
-  const _dasRequestsPublicView = dasApplications.filter((dasApplication) =>
-    ["super_admin"].includes(authUser.roleCode)
-      ? true
-      : dasApplication.userId === authUser.id,
-  );
+    if (
+      !["waiting", "notProceeds"].includes(dasApplication.status) ===
+      ["manager"].includes(authUser.roleCode)
+    )
+      return dasApplication;
+  });
 
   const columns = [
     {
       title: "Fecha creación",
-      dataIndex: "createAt",
-      key: "createAt",
-      render: (_, dasRequest) =>
+      align: "center",
+      width: ["9rem", "100%"],
+      render: (dasRequest) =>
         dayjs(dasRequest.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Titular",
-      key: "name",
-      render: (_, dasRequest) => userFullName(dasRequest.headline),
+      align: "center",
+      width: ["15rem", "100%"],
+      render: (dasRequest) => userFullName(dasRequest.headline),
     },
     {
       title: "Solicitud / Institución",
-      key: "requestType",
-      render: (_, dasRequest) => {
-        // let institutionData = null;
-        // const institutionType = dasRequest?.institution?.type;
-
-        // switch (institutionType) {
-        //   case "institutes":
-        //     institutionData = (institutions?.[institutionType] || []).find(
-        //       (institution) => institution.id === dasRequest?.institution?.id
-        //     );
-        //     break;
-        //   case "universities":
-        //     institutionData = (institutions?.[institutionType] || []).find(
-        //       (university) => university.id === dasRequest?.institution?.id
-        //     );
-        //     break;
-        //   default:
-        //     institutionData = "";
-        //     break;
-        // }
-
+      align: "center",
+      width: ["20rem", "100%"],
+      render: (dasRequest) => {
         return (
           <div className="capitalize">
             <div>{findDasRequest(dasRequest?.requestType)?.name}</div>
@@ -120,8 +108,9 @@ export const DasRequestsTable = ({
     },
     {
       title: "Contácto",
-      key: "email",
-      render: (_, dasRequest) => (
+      align: "center",
+      width: ["12rem", "100%"],
+      render: (dasRequest) => (
         <div className="contact">
           <div className="contact__item">
             <a href={`mailto:${dasRequest.headline.email}`}>
@@ -154,8 +143,8 @@ export const DasRequestsTable = ({
     {
       title: "Estado",
       align: "center",
-      key: "status",
-      render: (_, dasRequest) => {
+      width: ["8rem", "100%"],
+      render: (dasRequest) => {
         const requestStatus = DasRequestStatus[dasRequest.status];
 
         return <Tag color={requestStatus?.color}>{requestStatus?.name}</Tag>;
@@ -164,8 +153,8 @@ export const DasRequestsTable = ({
     {
       title: "Respuesta",
       align: "center",
-      key: "status",
-      render: (_, dasRequest) => {
+      width: ["9rem", "100%"],
+      render: (dasRequest) => {
         return (
           dasRequest?.response && (
             <Space>
@@ -195,8 +184,8 @@ export const DasRequestsTable = ({
     {
       title: "Opciones",
       align: "center",
-      key: "options",
-      render: (_, dasRequest) => (
+      width: ["14rem", "100%"],
+      render: (dasRequest) => (
         <Space>
           <Acl
             category="departamento-de-apoyo-social"
@@ -272,32 +261,12 @@ export const DasRequestsTable = ({
 
   return (
     <Container>
-      {authUser.roleCode === "manager" && (
-        <Table
-          loading={dasApplicationsLoading}
-          columns={columns}
-          scroll={{ x: "max-content" }}
-          dataSource={orderBy(_entityGuDasManagerView, "createAt", "desc")}
-        />
-      )}
-
-      {authUser.roleCode === "department_boss" && (
-        <Table
-          loading={dasApplicationsLoading}
-          columns={columns}
-          scroll={{ x: "max-content" }}
-          dataSource={orderBy(_departmentMPBossView, "createAt", "desc")}
-        />
-      )}
-
-      {["super_admin", "user"].includes(authUser.roleCode) && (
-        <Table
-          loading={dasApplicationsLoading}
-          columns={columns}
-          scroll={{ x: "max-content" }}
-          dataSource={orderBy(_dasRequestsPublicView, "createAt", "desc")}
-        />
-      )}
+      <TableVirtualized
+        dataSource={orderBy(dasApplicationsViewBy, "createAt", "desc")}
+        columns={columns}
+        rowHeaderHeight={50}
+        rowBodyHeight={150}
+      />
     </Container>
   );
 };
