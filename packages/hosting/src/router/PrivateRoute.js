@@ -27,7 +27,7 @@ export const PrivateRoute = () => {
   }, [entityId]);
 
   const validateAuthorizedModule = async () => {
-    const entity = await fetchEntityByNameId(entityId);
+    const entity = entityId ? await fetchEntityByNameId(entityId) : null;
 
     if (isEmpty(entity)) return;
 
