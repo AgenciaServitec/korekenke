@@ -4,10 +4,6 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import {
-  PdfAnimalLogRegistrationCardSheet,
-  PdfAnimalLogsRegistrationCardSheet,
-} from "../pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs/sheets";
 
 export const Router = () => {
   return (
@@ -206,7 +202,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals"
+          path="entities/:entityId/animals"
           element={
             <AdminLayout>
               <A.AnimalsIntegration />
@@ -215,7 +211,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs"
+          path="entities/:entityId/animal-logs"
           element={
             <AdminLayout>
               <A.AnimalLogsIntegration />
@@ -224,7 +220,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId"
+          path="entities/:entityId/animals/:animalId"
           element={
             <AdminLayout>
               <A.AnimalIntegration />
@@ -233,7 +229,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles"
+          path="entities/:entityId/animals/:animalId/animal-magazine-profiles"
           element={
             <AdminLayout>
               <A.AnimalMagazineProfilesIntegration />
@@ -242,7 +238,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
+          path="entities/:entityId/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId"
           element={
             <AdminLayout>
               <A.AnimalMagazineProfileIntegration />
@@ -251,7 +247,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/clinic-history"
+          path="entities/:entityId/animals/:animalId/clinic-history"
           element={
             <AdminLayout>
               <A.ClinicHistoryIntegration />
@@ -260,7 +256,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/departamento-de-apoyo-social/das-requests"
+          path="entities/:entityId/das-requests"
           element={
             <AdminLayout>
               <A.DasRequestsListIntegration />
@@ -269,7 +265,7 @@ export const Router = () => {
         />
         <Route
           exact
-          path="entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
+          path="entities/:entityId/das-requests/:dasRequestId"
           element={
             <AdminLayout>
               <A.DasRequestIntegration />
@@ -308,27 +304,27 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/pdf-animal-card"
+        path="/entities/:entityId/animals/:animalId/pdf-animal-card"
         element={<A.PdfAnimalRegistrationCardSheet />}
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs/:animalId/pdf-animal-log-card"
+        path="/entities/:entityId/animal-logs/:animalId/pdf-animal-log-card"
         element={<A.PdfAnimalLogRegistrationCardSheet />}
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/clinic-history/pdf-clinic-history"
+        path="/entities/:entityId/animals/:animalId/clinic-history/pdf-clinic-history"
         element={<A.PdfClinicHistorySheets />}
       />
       <Route
         exact
-        path="/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
+        path="/entities/:entityId/animals/:animalId/animal-magazine-profiles/:animalMagazineProfileId/pdf-animal-magazine-profile"
         element={<A.PdfAnimalMagazineProfilesSheets />}
       />
       <Route
         exact
-        path="/entities/departamento-de-apoyo-social/das-requests"
+        path="/entities/:entityId/das-requests"
         element={
           <AdminLayout>
             <A.DasRequestsListIntegration />
@@ -337,7 +333,7 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId"
+        path="/entities/:entityId/das-requests/:dasRequestId"
         element={
           <AdminLayout>
             <A.DasRequestIntegration />
@@ -346,7 +342,7 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/entities/departamento-de-apoyo-social/das-requests/:dasRequestId/:requestType/sheets"
+        path="/entities/:entityId/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
       />
       <Route

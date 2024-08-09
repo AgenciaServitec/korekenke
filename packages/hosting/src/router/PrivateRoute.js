@@ -1,15 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthentication } from "../providers";
+import { useAuthentication, useCommand } from "../providers";
 import { endsWith, isEmpty, isUndefined } from "lodash";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { fetchEntityByNameId } from "../firebase/collections";
 
 export const PrivateRoute = () => {
   const { authUser } = useAuthentication();
   const location = useLocation();
   const params = useParams();
+  const navigate = useNavigate();
+
+  const { currentCommand } = useCommand();
+  const { entityId } = useParams();
 
   const isLoginPage = location.pathname === "/";
+
+  useEffect(() => {
+    (async () => {
+      const result = await validateAuthorizedModule();
+
+      if (!result) return navigate("/home");
+    })();
+  }, [entityId]);
+
+  const validateAuthorizedModule = async () => {
+    if (!entityId) return false;
+
+    const entity = await fetchEntityByNameId(entityId);
+
+    console.log(entity[0].commandId, "==", currentCommand.id);
+
+    if (isEmpty(entity)) return false;
+
+    return entity[0].commandId === currentCommand.id;
+  };
 
   const validateAuthorizedRoute = () => {
     let result = false;
