@@ -7,6 +7,13 @@ export const entitiesRef = firestore.collection("entities");
 export const getEntityId = () => entitiesRef.doc().id;
 
 export const fetchEntity = async (id) => fetchDocumentOnce(entitiesRef.doc(id));
+export const fetchEntityByNameId = async (nameId) =>
+  fetchCollectionOnce(
+    entitiesRef
+      .where("nameId", "==", nameId)
+      .where("isDeleted", "==", false)
+      .limit(1),
+  );
 
 export const fetchEntities = async () =>
   fetchCollectionOnce(entitiesRef.where("isDeleted", "==", false));

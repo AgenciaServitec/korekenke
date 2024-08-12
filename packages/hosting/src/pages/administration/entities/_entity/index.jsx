@@ -29,7 +29,7 @@ import {
 import { findRole, getNameId, userFullName } from "../../../../utils";
 
 export const EntityIntegration = () => {
-  const { entityId } = useParams();
+  const { entityGUId } = useParams();
   const navigate = useNavigate();
   const { entities, users, rolesAcls } = useGlobalData();
   const { currentCommand } = useCommand();
@@ -39,13 +39,13 @@ export const EntityIntegration = () => {
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
 
-  const isNew = entityId === "new";
+  const isNew = entityGUId === "new";
   const onGoBack = () => navigate(-1);
 
   useEffect(() => {
     const _entity = isNew
       ? { id: getEntityId() }
-      : entities.find((entity) => entity.id === entityId);
+      : entities.find((entity) => entity.id === entityGUId);
 
     if (!_entity) return navigate(-1);
 
@@ -172,8 +172,8 @@ const Entity = ({
   return (
     <Acl
       category="administration"
-      subCategory="entities"
-      name={isNew ? "/entities/new" : "/entities/:entityId"}
+      subCategory="entities-gu"
+      name={isNew ? "/entities-gu/new" : "/entities-gu/:entityGUId"}
       redirect
     >
       <Row gutter={[16, 16]}>
