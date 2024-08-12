@@ -138,7 +138,7 @@ export const GlobalDataProvider = ({ children }) => {
         commands: orderBy(commands, (command) => [command.name], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
         unitUsers: orderBy(
-          usersByRoleCode(users, ["unit_boss"]),
+          usersByRoleCode(users, ["unit_boss", "unit_assistant"]),
           (user) => [user.createAt],
           ["desc"],
         ),
