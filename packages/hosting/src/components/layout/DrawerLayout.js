@@ -106,8 +106,8 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faGears} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
         "administration",
-        ["users", "entities", "departments", "offices", "sections"],
-        ["/users", "/entities", "/departments", "/sections", "/offices"],
+        ["users", "entities-gu", "departments", "offices", "sections"],
+        ["/users", "/entities-gu", "/departments", "/sections", "/offices"],
       ),
       children: [
         {
@@ -127,10 +127,10 @@ export const DrawerLayout = ({
           icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
             "administration",
-            ["entities"],
-            ["/entities"],
+            ["entities-gu"],
+            ["/entities-gu"],
           ),
-          onClick: () => onClickMenu("/entities"),
+          onClick: () => onClickMenu("/entities-gu"),
         },
         {
           label: "Unidades",
