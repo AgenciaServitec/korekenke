@@ -25,6 +25,11 @@
     "initialPathname": "/home"
   },
   {
+    "id": "unit_assistant",
+    "name": "Asistente de Unidad",
+    "initialPathname": "/home"
+  },
+  {
     "id": "department_boss",
     "name": "Jefe de Departamento",
     "initialPathname": "/home"
