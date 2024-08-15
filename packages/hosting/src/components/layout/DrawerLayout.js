@@ -336,11 +336,11 @@ export const DrawerLayout = ({
       ],
     },
     {
-      label: "Departamento de apoyo social (DAS)",
-      key: "departamento-de-apoyo-social",
+      label: "Solicitudes (DAS)",
+      key: "public",
       icon: <FontAwesomeIcon icon={faShield} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
-        "departamento-de-apoyo-social",
+        "public",
         ["dasRequests"],
         ["/das-requests", "/das-requests/new"],
       ),
@@ -350,7 +350,7 @@ export const DrawerLayout = ({
           key: "application-request",
           icon: <FontAwesomeIcon icon={faFilePen} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
-            "departamento-de-apoyo-social",
+            "public",
             ["dasRequests"],
             ["/das-requests/new"],
           ),
@@ -364,7 +364,7 @@ export const DrawerLayout = ({
           icon: <FontAwesomeIcon icon={faList} size="lg" />,
           label: "Lista de solicitudes",
           isVisible: existsAclsInAclsOfUser(
-            "departamento-de-apoyo-social",
+            "public",
             ["dasRequests"],
             ["/das-requests"],
           ),
