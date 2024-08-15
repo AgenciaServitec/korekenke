@@ -136,8 +136,6 @@ const Department = ({
 }) => {
   const [tabView, setTabView] = useState(1);
 
-  console.log({ department });
-
   return (
     <Acl
       category="administration"
