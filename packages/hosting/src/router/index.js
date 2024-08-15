@@ -256,6 +256,15 @@ export const Router = () => {
         />
         <Route
           exact
+          path="entities/:entityId/animals/:animalId/family-tree"
+          element={
+            <AdminLayout>
+              <A.FamilyTreeIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="surveys/organizational-climate-studies"
           element={
             <AdminLayout>

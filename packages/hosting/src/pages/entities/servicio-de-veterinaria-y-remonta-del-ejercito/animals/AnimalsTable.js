@@ -6,6 +6,7 @@ import {
   faListCheck,
   faNotesMedical,
   faTrash,
+  faTree,
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
@@ -19,6 +20,7 @@ export const AnimalsTable = ({
   onNavigateGoToPdfAnimalRegistrationCard,
   onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
+  onNavigateGoToFamilyTree
 }) => {
   const { authUser } = useAuthentication();
 
@@ -67,6 +69,17 @@ export const AnimalsTable = ({
       key: "actions",
       render: (_, animal) => (
         <Space>
+          <Acl
+            category="servicio-de-veterinaria-y-remonta-del-ejercito"
+            subCategory="clinicHistory"
+            name="/animals/:animalId/clinic-history"
+          >
+            <IconAction
+              tooltipTitle="Árbol genealógico"
+              icon={faTree}
+              onClick={() => onNavigateGoToFamilyTree(animal.id)}
+            />
+          </Acl>
           <Acl
             category="servicio-de-veterinaria-y-remonta-del-ejercito"
             subCategory="clinicHistory"
