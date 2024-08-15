@@ -18,3 +18,4 @@ export { default as CorrespondencesStatus } from "./correspondencesStatus.json";
 export { default as DecreeList } from "./decreeList.json";
 export { default as Roles } from "./roles.json";
 export { default as AnimalsType } from "./animals.json";
+export { default as ApplicantDocumentsOrdered } from "./applicantDocumentsOrdered.json";

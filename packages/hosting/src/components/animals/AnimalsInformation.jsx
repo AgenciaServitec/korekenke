@@ -1,24 +1,20 @@
 import dayjs from "dayjs";
 import React from "react";
 import styled from "styled-components";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
-import { userFullName } from "../../../../../utils/users/userFullName2";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
-export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
+export const AnimalsInformation = ({ animal }) => {
   return (
     <Container className="section">
       <div className="information-column">
         <ul>
-          <ItemInformation
-            existField={animal?.nscCorrelativo}
-            value="NSC - CORRELATIVO"
-          />
-          <ItemInformation existField={unit?.name} value="UNIDAD" />
-          <ItemInformation existField={animal?.greatUnit} value="GRAN UNIDAD" />
+          <ItemInformation existField={true} value="NSG" />
+          <ItemInformation existField={animal?.animalUnit} value="UNIDAD" />
+          <ItemInformation existField={true} value="GRAN UNIDAD" />
           <ItemInformation existField={animal?.name} value="NOMBRE" />
           <ItemInformation existField={animal?.slopeNumber} value="N° ARETE" />
           <ItemInformation
-            existField={animal?.registrationNumber}
+            existField={animal.type !== "cattle"}
             value="N° MATRICULA"
           />
           <ItemInformation existField={animal?.chipNumber} value="N° CHIP" />
@@ -29,13 +25,16 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
       <div className="information-column">
         <ul>
           <ItemInformation
-            existField={animal?.nscCorrelativo}
-            value={`: ${animal?.nscCorrelativo}`}
+            existField={true}
+            value={`: ${animal?.nsgId || "S/N"}`}
           />
-          <ItemInformation existField={unit?.name} value={`: ${unit?.name}`} />
           <ItemInformation
-            existField={animal?.greatUnit}
-            value={`: ${animal?.greatUnit}`}
+            existField={animal?.animalUnit}
+            value={`: ${animal?.animalUnit}`}
+          />
+          <ItemInformation
+            existField={true}
+            value={`: ${animal?.greatUnitStatic || "S/N"}`}
           />
           <ItemInformation
             existField={animal?.name}
@@ -46,8 +45,8 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
             value={`: ${animal?.slopeNumber}`}
           />
           <ItemInformation
-            existField={animal?.registrationNumber}
-            value={`: ${animal?.registrationNumber}`}
+            existField={animal.type !== "cattle"}
+            value={`: ${animal?.registrationNumber || "S/N"}`}
           />
           <ItemInformation
             existField={animal?.chipNumber}
@@ -72,11 +71,15 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
           <ItemInformation existField={animal?.height} value="TALLA" />
           <ItemInformation existField={animal?.father} value="PADRE" />
           <ItemInformation existField={animal?.mother} value="MADRE" />
-          <ItemInformation existField={animal?.origin} value="PROCEDENCIA" />
-          <ItemInformation existField={animal?.raceOrLine} value="RAZA/LINEA" />
           <ItemInformation
-            existField={animal?.assignedOrAffectedId}
-            value="ASIGNADO U AFECTADO"
+            existField={animal?.origin}
+            value="PROCEDENCIA"
+            label
+          />
+          <ItemInformation
+            existField={animal?.raceOrLine}
+            value="RAZA/LINEA"
+            label
           />
         </ul>
       </div>
@@ -111,12 +114,6 @@ export const AnimalsInformation = ({ animal, unit = undefined, users }) => {
           <ItemInformation
             existField={animal?.raceOrLine}
             value={`: ${animal?.raceOrLine}`}
-          />
-          <ItemInformation
-            existField={animal?.assignedOrAffectedId}
-            value={`: ${userFullName(
-              users.find((_user) => _user.id === animal?.assignedOrAffectedId),
-            )}`}
           />
         </ul>
       </div>

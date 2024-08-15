@@ -33,12 +33,12 @@
       "/users/:userId": "Editar Usuario",
       "/users#delete": "Eliminar Usuario"
     },
-    "entities": {
-      "label": "Entidades",
-      "/entities": "Menú: Entidades",
-      "/entities/new": "Agregar Entidad",
-      "/entities/:entityId": "Editar Entidad",
-      "/entities#delete": "Eliminar Entidad"
+    "entities-gu": {
+      "label": "Entidades / G.U",
+      "/entities-gu": "Menú: Entidades / G.U",
+      "/entities-gu/new": "Agregar Entidad / G.U",
+      "/entities-gu/:entityGUId": "Editar Entidad / G.U",
+      "/entities-gu#delete": "Eliminar Entidad / G.U"
     },
     "units": {
       "label": "Unidades",
@@ -77,6 +77,7 @@
       "/correspondences/new": "Agregar correspondencia",
       "/correspondences/:correspondenceId": "Editar correspondencia",
       "/correspondences/:correspondenceId#reply": "Responder correspondencia",
+      "/correspondences/:correspondenceId#proceeds": "Evaluación Correspondencia",
       "/correspondences#delete": "Eliminar correspondencia",
       "/correspondences#decree": "Decretar correspondencias"
     },
@@ -102,7 +103,8 @@
       "/das-requests/:dasRequestId#addObservation": "Solicitud: Agregar observación",
       "/das-requests/:dasRequestId#resolverObservation": "Solicitud: Resolver observación",
       "/das-requests/:dasRequestId#closeObservation": "Solicitud: Cerrar observación",
-      "/das-requests/:dasRequestId#reply": "Responder solicitud"
+      "/das-requests/:dasRequestId#reply": "Responder solicitud",
+      "/das-requests/:dasRequestId#proceeds": "Evaluación Solicitud"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {
@@ -124,7 +126,12 @@
       "/animals/new": "Agregar animal",
       "/animals/:animalId": "Editar animal",
       "/animals#delete": "Eliminar animal",
-      "/animals/:animalId/pdf-animal-registration-card": "Pdf tarjeta de registro animal"
+      "/animals/:animalId/pdf-animal-card": "Pdf tarjeta de registro animal"
+    },
+    "animalLogs": {
+      "label": "Historial de animales",
+      "/animal-logs": "Menu: Historial de animales",
+      "/animal-logs/:animalId/pdf-animal-log-card": "Pdf tarjeta de registro animal"
     },
     "animalMagazineProfiles": {
       "label": "Fichas de revista",
@@ -141,7 +148,8 @@
       "/animals/:animalId/clinic-history/:clinicHistoryId": "Editar historial clinico",
       "/animals/:animalId/clinic-history#clinicHistoryReview": "Revisar historial clinico",
       "/animals/:animalId/clinic-history#delete": "Eliminar historial clinico",
-      "/animals/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico"
+      "/animals/:animalId/clinic-history/pdf-clinic-history": "Pdf historial clinico",
+      "/animals/:animalId/clinic-history#auxiliaryExamsView": "Ver examenes auxiliares"
     }
   }
 }

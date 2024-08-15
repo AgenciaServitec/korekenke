@@ -39,6 +39,7 @@ export const GlobalDataProvider = ({ children }) => {
   const { currentCommand } = useCommand();
 
   const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
+  const _currentCommand = currentCommand?.id || null;
 
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser
@@ -51,10 +52,10 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
-    authUser && currentCommand
+    authUser
       ? entitiesRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", currentCommand.id)
+          .where("commandId", "==", _currentCommand)
       : null,
   );
 
@@ -62,7 +63,7 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? unitsRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", currentCommand.id)
+          .where("commandId", "==", _currentCommand)
       : null,
   );
 
@@ -71,7 +72,7 @@ export const GlobalDataProvider = ({ children }) => {
       authUser
         ? departmentsRef
             .where("isDeleted", "==", false)
-            .where("commandId", "==", currentCommand.id)
+            .where("commandId", "==", _currentCommand)
         : null,
     );
 
@@ -79,7 +80,7 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? sectionsRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", currentCommand.id)
+          .where("commandId", "==", _currentCommand)
       : null,
   );
 
@@ -88,12 +89,12 @@ export const GlobalDataProvider = ({ children }) => {
       ? firestore
           .collection("offices")
           .where("isDeleted", "==", false)
-          .where("commandId", "==", currentCommand.id)
+          .where("commandId", "==", _currentCommand)
       : null,
   );
 
   const [animals = [], animalsLoading, animalsError] = useCollectionData(
-    currentCommand.id === "cologe"
+    _currentCommand === "cologe"
       ? animalsRef.where("isDeleted", "==", false)
       : null,
   );
@@ -137,7 +138,7 @@ export const GlobalDataProvider = ({ children }) => {
         commands: orderBy(commands, (command) => [command.name], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
         unitUsers: orderBy(
-          usersByRoleCode(users, ["unit_boss"]),
+          usersByRoleCode(users, ["unit_boss", "unit_assistant"]),
           (user) => [user.createAt],
           ["desc"],
         ),

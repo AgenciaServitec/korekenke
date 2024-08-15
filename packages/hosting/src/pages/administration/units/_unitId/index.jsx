@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useUpdateAssignToInUser,
+} from "../../../../hooks";
 import {
   Acl,
   Button,
   Col,
+  ComponentContainer,
   Form,
   Input,
   notification,
@@ -17,19 +22,25 @@ import {
 import { useNavigate, useParams } from "react-router";
 import {
   addUnit,
-  fetchUnit,
   getUnitId,
   updateUnit,
 } from "../../../../firebase/collections";
 import { useCommand, useGlobalData } from "../../../../providers";
 import { findRole, getNameId, userFullName } from "../../../../utils";
 import { capitalize, concat, isEmpty, orderBy } from "lodash";
-import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const UnitIntegration = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
-  const { entities, departments, rolesAcls, unitUsers } = useGlobalData();
+  const {
+    entities,
+    units,
+    departments,
+    offices,
+    sections,
+    rolesAcls,
+    unitUsers,
+  } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
@@ -43,12 +54,9 @@ export const UnitIntegration = () => {
   useEffect(() => {
     const _unit = isNew
       ? { id: getUnitId() }
-      : (async () =>
-          await fetchUnit(unitId).then((response) => {
-            if (!response) return onGoBack();
-            setUnit(response);
-            return;
-          }))();
+      : units.find((unit) => unit.id === unitId);
+
+    if (!_unit) return onGoBack();
 
     setUnit(_unit);
   }, []);
@@ -57,12 +65,13 @@ export const UnitIntegration = () => {
     ...unit,
     name: formData.name,
     nameId: getNameId(formData.name),
-    entityId: formData.entityId,
-    departmentId: formData.departmentId,
-    greatUnit: formData.greatUnit,
     membersIds: formData.membersIds || [],
     bossId: formData.bossId || null,
     commandId: unit?.commandId || currentCommand.id,
+    entityId: formData.entityId,
+    departmentId: formData.departmentId,
+    officeId: formData.officeId,
+    sectionId: formData.sectionId,
   });
 
   const saveUnit = async (formData) => {
@@ -104,6 +113,8 @@ export const UnitIntegration = () => {
       unit={unit}
       entities={entities}
       departments={departments}
+      offices={offices}
+      sections={sections}
       rolesAcls={rolesAcls}
       loading={loading}
       onSaveUnit={saveUnit}
@@ -119,17 +130,20 @@ const Unit = ({
   unit,
   entities,
   departments,
+  offices,
+  sections,
   loading,
   onSaveUnit,
   onGoBack,
 }) => {
   const schema = yup.object({
     name: yup.string().required(),
-    entityId: yup.string().required(),
-    departmentId: yup.string().required(),
     membersIds: yup.array().nullable(),
-    greatUnit: yup.string(),
     bossId: yup.string(),
+    entityId: yup.string(),
+    departmentId: yup.string(),
+    officeId: yup.string(),
+    sectionId: yup.string(),
   });
 
   const {
@@ -152,11 +166,12 @@ const Unit = ({
   const resetForm = () => {
     reset({
       name: unit?.name || "",
+      membersIds: unit?.membersIds || null,
+      bossId: unit?.bossId || "",
       entityId: unit?.entityId || "",
       departmentId: unit?.departmentId || "",
-      membersIds: unit?.membersIds || null,
-      greatUnit: unit?.greatUnit || "",
-      bossId: unit?.bossId || "",
+      officeId: unit?.officeId || "",
+      sectionId: unit?.sectionId || "",
     });
   };
 
@@ -181,10 +196,6 @@ const Unit = ({
       (user) => user.assignedTo?.type === "unit" && isEmpty(user.assignedTo.id),
     ),
   ).map(mapOptionSelectMembers);
-
-  const departmentsView = departments.filter(
-    (department) => department.entityId === watch("entityId"),
-  );
 
   const bossesView = (bossId = undefined) =>
     userBosses
@@ -236,66 +247,6 @@ const Unit = ({
               </Col>
               <Col span={24}>
                 <Controller
-                  name="entityId"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Entidad"
-                      name={name}
-                      value={value}
-                      options={entities.map((entity) => ({
-                        label: entity.name,
-                        value: entity.id,
-                      }))}
-                      onChange={(value) => {
-                        setValue("departmentId", "");
-                        onChange(value);
-                      }}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="departmentId"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Select
-                      label="Departamento"
-                      name={name}
-                      value={value}
-                      options={departmentsView.map((department) => ({
-                        label: department.name,
-                        value: department.id,
-                      }))}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="greatUnit"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="Gran Unidad"
-                      name={name}
-                      value={value}
-                      options={[]}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
                   name="membersIds"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
@@ -334,6 +285,89 @@ const Unit = ({
                     />
                   )}
                 />
+              </Col>
+              <Col span={24}>
+                <br />
+                <ComponentContainer.group label="Vinculación (opcional)">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Controller
+                        name="entityId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Entidad / G.U"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={entities.map((entity) => ({
+                              label: entity.name,
+                              value: entity.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="departmentId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Departamento"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={departments.map((department) => ({
+                              label: department.name,
+                              value: department.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="officeId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Officina"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={offices.map((office) => ({
+                              label: office.name,
+                              value: office.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="sectionId"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Select
+                            label="Sección"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            options={sections.map((section) => ({
+                              label: section.name,
+                              value: section.id,
+                            }))}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </ComponentContainer.group>
               </Col>
             </Row>
             <Row justify="end" gutter={[16, 16]}>

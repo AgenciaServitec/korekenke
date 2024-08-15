@@ -15,7 +15,11 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useUpdateAssignToInUser,
+} from "../../../../hooks";
 import { capitalize, lowerCase } from "lodash";
 import {
   addEntity,
@@ -23,10 +27,9 @@ import {
   updateEntity,
 } from "../../../../firebase/collections";
 import { findRole, getNameId, userFullName } from "../../../../utils";
-import { useUpdateAssignToInUser } from "../../../../hooks/useUpdateAssignToInUser";
 
 export const EntityIntegration = () => {
-  const { entityId } = useParams();
+  const { entityGUId } = useParams();
   const navigate = useNavigate();
   const { entities, users, rolesAcls } = useGlobalData();
   const { currentCommand } = useCommand();
@@ -36,13 +39,13 @@ export const EntityIntegration = () => {
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
 
-  const isNew = entityId === "new";
+  const isNew = entityGUId === "new";
   const onGoBack = () => navigate(-1);
 
   useEffect(() => {
     const _entity = isNew
       ? { id: getEntityId() }
-      : entities.find((entity) => entity.id === entityId);
+      : entities.find((entity) => entity.id === entityGUId);
 
     if (!_entity) return navigate(-1);
 
@@ -169,13 +172,13 @@ const Entity = ({
   return (
     <Acl
       category="administration"
-      subCategory="entities"
-      name={isNew ? "/entities/new" : "/entities/:entityId"}
+      subCategory="entities-gu"
+      name={isNew ? "/entities-gu/new" : "/entities-gu/:entityGUId"}
       redirect
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>Entidad</Title>
+          <Title level={3}>Entidad / G.U</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(submitSaveEntity)}>

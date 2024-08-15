@@ -8,13 +8,12 @@ import {
   modalConfirm,
   notification,
   Row,
+  ShowImagesAndDocumentsModal,
+  Space,
   Spinner,
+  Title,
 } from "../../../../../components";
-import {
-  useDefaultFirestoreProps,
-  useQuery,
-  useQueryString,
-} from "../../../../../hooks";
+import { useDefaultFirestoreProps, useQueryString } from "../../../../../hooks";
 import styled from "styled-components";
 import { ClinicHistoryTable } from "./ClinicHistoryTable";
 import { firestore } from "../../../../../firebase";
@@ -31,6 +30,7 @@ import { useNavigate } from "react-router";
 import { AnimalInformation } from "../../../../../components/ui/entities";
 import { ClinicHistoryCheckedModalComponent } from "./ClinicHistoryCheckedModalComponent";
 import { getAnimalEntitiesAndBosses } from "../../../../../utils";
+import { capitalize } from "lodash";
 
 export const ClinicHistoryIntegration = () => {
   const { authUser } = useAuthentication();
@@ -46,6 +46,7 @@ export const ClinicHistoryIntegration = () => {
   const [isVisibleModal, setIsVisibleModal] = useState({
     historyClinicModal: false,
     historyClinicCheckModal: false,
+    auxiliaryExamsModal: false,
   });
   const [animal, setAnimal] = useState({});
   const [currentHistoryClinic, setCurrentHistoryClinic] = useState(null);
@@ -100,6 +101,7 @@ export const ClinicHistoryIntegration = () => {
   }, [
     isVisibleModal.historyClinicModal,
     isVisibleModal.historyClinicCheckModal,
+    isVisibleModal.auxiliaryExamsModal,
   ]);
 
   const onDeleteClinicHistory = async (clinicHistory) => {
@@ -132,6 +134,12 @@ export const ClinicHistoryIntegration = () => {
       historyClinicCheckModal: !isVisibleModal.historyClinicCheckModal,
     });
 
+  const onSetIsVisibleAuxiliaryExamsModal = () => {
+    setIsVisibleModal({
+      auxiliaryExamsModal: !isVisibleModal.auxiliaryExamsModal,
+    });
+  };
+
   if (loading) return <Spinner height="80vh" />;
 
   const { departmentBoss } = animalEntitiesAndBosses;
@@ -145,14 +153,21 @@ export const ClinicHistoryIntegration = () => {
     >
       <Container gutter={[16, 16]}>
         <Col span={24}>
-          <IconAction
-            icon={faArrowLeft}
-            onClick={() =>
-              onNavigateGoTo(
-                `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
-              )
-            }
-          />
+          <Space>
+            <IconAction
+              icon={faArrowLeft}
+              onClick={() =>
+                onNavigateGoTo(
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
+                )
+              }
+            />
+            <Col span={24}>
+              <Title level={2} style={{ margin: "0" }}>
+                Historial clínico
+              </Title>
+            </Col>
+          </Space>
         </Col>
         <Col span={24}>
           <Card
@@ -208,6 +223,9 @@ export const ClinicHistoryIntegration = () => {
             onConfirmRemoveClinicHistory={onConfirmRemoveClinicHistory}
             onSetIsVisibleModal={onSetVisibleHistoryClinicModal}
             onSetIsVisibleCheckModal={onSetVisibleHistoryClinicCheckModal}
+            onSetIsVisibleAuxiliaryExamsModal={
+              onSetIsVisibleAuxiliaryExamsModal
+            }
             onSetClinicHistoryId={setClinicHistoryId}
             loading={clinicHistoriesLoading}
             user={authUser}
@@ -229,6 +247,13 @@ export const ClinicHistoryIntegration = () => {
           onSetClinicHistoryId={setClinicHistoryId}
           animalId={animalId}
           currentHistoryClinic={currentHistoryClinic}
+        />
+        <ShowImagesAndDocumentsModal
+          title={`Examenes auxiliares "${capitalize(currentHistoryClinic?.auxiliaryExams?.type)}"`}
+          images={currentHistoryClinic?.auxiliaryExams?.images}
+          documents={currentHistoryClinic?.auxiliaryExams?.documents}
+          isVisibleModal={isVisibleModal.auxiliaryExamsModal}
+          onSetIsVisibleModal={onSetIsVisibleAuxiliaryExamsModal}
         />
       </Container>
     </Acl>

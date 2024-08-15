@@ -33,11 +33,13 @@ export const DasRequestSheets = () => {
 
   useEffect(() => {
     (async () => {
+      if (dasRequest?.status === "inProgress") return;
+
       const dasEntityManager = await fetchEntityManager();
 
       if (
         dasRequest?.wasRead === false &&
-        dasRequest?.status === "pending" &&
+        dasRequest?.status === "proceeds" &&
         dasEntityManager?.id === authUser.id
       ) {
         await updateDasApplication(dasRequestId, {

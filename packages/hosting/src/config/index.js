@@ -11,6 +11,7 @@ export const currentEnvironment = includes(hostsProduction, hostName)
   ? "production"
   : "development";
 
+export const isProduction = currentEnvironment === "production";
 export const common = config.common;
 export const contactData = config.common.contactData;
 

@@ -12,8 +12,10 @@ import {
   faFileAlt,
   faFilePen,
   faGears,
+  faHistory,
   faHome,
   faHorse,
+  faHorseHead,
   faIdCard,
   faList,
   faNetworkWired,
@@ -104,8 +106,8 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faGears} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
         "administration",
-        ["users", "entities", "departments", "offices", "sections"],
-        ["/users", "/entities", "/departments", "/sections", "/offices"],
+        ["users", "entities-gu", "departments", "offices", "sections"],
+        ["/users", "/entities-gu", "/departments", "/sections", "/offices"],
       ),
       children: [
         {
@@ -120,15 +122,15 @@ export const DrawerLayout = ({
           onClick: () => onClickMenu("/users"),
         },
         {
-          label: "Entidades",
+          label: "Entidades / G.U",
           key: "entities",
           icon: <FontAwesomeIcon icon={faNetworkWired} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
             "administration",
-            ["entities"],
-            ["/entities"],
+            ["entities-gu"],
+            ["/entities-gu"],
           ),
-          onClick: () => onClickMenu("/entities"),
+          onClick: () => onClickMenu("/entities-gu"),
         },
         {
           label: "Unidades",
@@ -267,7 +269,7 @@ export const DrawerLayout = ({
     {
       label: "Servicio de veterinaria y remonta del ejército",
       key: "servicio-de-veterinaria-y-remonta-del-ejercito",
-      icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      icon: <FontAwesomeIcon icon={faHorseHead} size="lg" />,
       isVisible:
         existsAclsInAclsOfUser(
           "servicio-de-veterinaria-y-remonta-del-ejercito",
@@ -292,7 +294,7 @@ export const DrawerLayout = ({
         {
           key: "cattle",
           icon: <FontAwesomeIcon icon={faCow} size="lg" />,
-          label: "Ganados",
+          label: "Vacunos",
           isVisible: existsAclsInAclsOfUser(
             "servicio-de-veterinaria-y-remonta-del-ejercito",
             ["animals"],
@@ -315,6 +317,20 @@ export const DrawerLayout = ({
           onClick: () =>
             onClickMenu(
               "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=canine",
+            ),
+        },
+        {
+          key: "histories",
+          icon: <FontAwesomeIcon icon={faHistory} size="lg" />,
+          label: "Historial de animales",
+          isVisible: existsAclsInAclsOfUser(
+            "servicio-de-veterinaria-y-remonta-del-ejercito",
+            ["animalLogs"],
+            ["/animal-logs"],
+          ),
+          onClick: () =>
+            onClickMenu(
+              "/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs?animalType=all",
             ),
         },
       ],

@@ -16,7 +16,6 @@ import {
 import { assign } from "lodash";
 import { fetchRoleAcl } from "../../firebase/collections";
 import { LogoArmyPeru } from "../../images";
-import { Link } from "react-router-dom";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();

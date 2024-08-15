@@ -18,11 +18,12 @@ import { useNavigate, useParams } from "react-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  useAnimalLogs,
   useDefaultFirestoreProps,
   useFormUtils,
   useQuery,
 } from "../../../../../hooks";
-import { useGlobalData } from "../../../../../providers";
+import { useAuthentication, useGlobalData } from "../../../../../providers";
 import {
   addAnimal,
   getAnimalId,
@@ -33,13 +34,16 @@ import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { AnimalsType } from "../../../../../data-list";
+import { isProduction } from "../../../../../config";
 
 export const AnimalIntegration = () => {
   const { animalId } = useParams();
   const { animalType } = useQuery();
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const { animals, users, units } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { onSetAnimalLog } = useAnimalLogs();
 
   const [loading, setLoading] = useState(false);
   const [animal, setAnimal] = useState({});
@@ -58,14 +62,20 @@ export const AnimalIntegration = () => {
 
   const mapAnimal = (formData) => ({
     ...animal,
-    nscCorrelativo: formData?.nscCorrelativo || null,
+    nsgId: formData?.nsgId || null,
     rightProfilePhoto: formData?.rightProfilePhoto || null,
     frontPhoto: formData?.frontPhoto || null,
     leftProfilePhoto: formData?.leftProfilePhoto || null,
+    rightProfilePhotoCopy:
+      formData?.rightProfilePhotoCopy || animal?.rightProfilePhotoCopy,
+    frontPhotoCopy: formData?.frontPhotoCopy || animal?.frontPhotoCopy,
+    leftProfilePhotoCopy:
+      formData?.leftProfilePhotoCopy || animal?.leftProfilePhotoCopy,
+    animalUnit: formData.animalUnit,
     unitId: formData.unitId,
-    greatUnit: formData.greatUnit,
+    greatUnitStatic: formData.greatUnitStatic,
     name: formData.name,
-    slopeNumber: formData.slopeNumber,
+    ...(formData.type === "cattle" && { slopeNumber: formData.slopeNumber }),
     registrationNumber: formData.registrationNumber,
     chipNumber: formData.chipNumber || null,
     gender: formData.gender,
@@ -80,17 +90,23 @@ export const AnimalIntegration = () => {
     assignedOrAffectedId: formData.assignedOrAffectedId,
     description: formData.description,
     type: animalType,
+    status: animal?.status || "registered",
+    userId: authUser.id,
   });
 
   const onSaveAnimal = async (formData) => {
     try {
       setLoading(true);
 
-      isNew
-        ? await addAnimal(assignCreateProps(mapAnimal(formData)))
-        : await updateAnimal(animal.id, assignUpdateProps(mapAnimal(formData)));
+      const _formData = mapAnimal(formData);
 
-      notification({ type: "success" });
+      isNew
+        ? await addAnimal(assignCreateProps(_formData))
+        : await updateAnimal(animal.id, assignUpdateProps(_formData));
+
+      await onSetAnimalLog({ animal, formData: _formData });
+
+      await notification({ type: "success" });
       onGoBack();
     } catch (e) {
       console.error("ErrorSaveEntity: ", e);
@@ -114,6 +130,7 @@ export const AnimalIntegration = () => {
   return (
     <Animal
       isNew={isNew}
+      user={authUser}
       animalType={animalType}
       units={units}
       animal={animal}
@@ -127,6 +144,7 @@ export const AnimalIntegration = () => {
 
 const Animal = ({
   isNew,
+  user,
   animalType,
   units,
   animal,
@@ -135,21 +153,30 @@ const Animal = ({
   loading,
   onGoBack,
 }) => {
+  const [rightProfilePhotoCopy, setRightProfilePhotoCopy] = useState(
+    animal?.rightProfilePhotoCopy,
+  );
+  const [frontPhotoCopy, setFrontPhotoCopy] = useState(animal?.frontPhotoCopy);
+  const [leftProfilePhotoCopy, setLeftProfilePhotoCopy] = useState(
+    animal?.leftProfilePhotoCopy,
+  );
+
   const isEquine = animalType === "equine";
   const isCattle = animalType === "cattle";
 
   const schema = yup.object({
-    nscCorrelativo: yup.string(),
+    nsgId: yup.string(),
     rightProfilePhoto: yup.mixed().required(),
     frontPhoto: yup.mixed().required(),
     leftProfilePhoto: yup.mixed().required(),
+    animalUnit: yup.string().required(),
     unitId: yup.string().required(),
-    greatUnit: yup.string().required(),
+    greatUnitStatic: yup.string(),
     name: yup.string().required(),
     slopeNumber: isCattle
       ? yup.string().required()
       : yup.string().notRequired(),
-    registrationNumber: !isCattle
+    registrationNumber: isEquine
       ? yup.string().required()
       : yup.string().notRequired(),
     chipNumber: isEquine ? yup.string().required() : yup.string().notRequired(),
@@ -171,7 +198,6 @@ const Animal = ({
     handleSubmit,
     control,
     reset,
-    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -184,12 +210,17 @@ const Animal = ({
 
   const resetForm = () => {
     reset({
-      nscCorrelativo: animal?.nscCorrelativo || "",
+      nsgId: animal?.nsgId || "",
       rightProfilePhoto: animal?.rightProfilePhoto || null,
       frontPhoto: animal?.frontPhoto || null,
       leftProfilePhoto: animal?.leftProfilePhoto || null,
-      unitId: animal?.unitId || "",
-      greatUnit: animal?.greatUnit || "",
+      animalUnit: animal?.animalUnit || "",
+      unitId: animal?.unitId
+        ? animal?.unitId
+        : isProduction
+          ? "mVywdUjcwEBT2QxnLzaT"
+          : "R7zZr5jtrN6F3acc0xnr",
+      greatUnitStatic: animal?.greatUnitStatic || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",
       registrationNumber: animal?.registrationNumber || null,
@@ -210,18 +241,13 @@ const Animal = ({
     });
   };
 
-  const onChangeGreatUnit = (onChange, value) => {
-    const _unit = units.find((_unit) => _unit.id === value);
-
-    if (_unit) setValue("greatUnit", _unit?.greatUnit);
-    if (!_unit) setValue("greatUnit", "");
-
-    return onChange(value);
-  };
-
-  const onSubmit = (formData) => {
-    onSaveAnimal(formData);
-  };
+  const onSubmit = (formData) =>
+    onSaveAnimal({
+      ...formData,
+      rightProfilePhotoCopy,
+      frontPhotoCopy,
+      leftProfilePhotoCopy,
+    });
 
   return (
     <Acl
@@ -232,7 +258,7 @@ const Animal = ({
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={3}>{AnimalsType[animalType].titleSingular}</Title>
+          <Title level={3}>{AnimalsType?.[animalType]?.titleSingular}</Title>
         </Col>
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -241,7 +267,7 @@ const Animal = ({
                 <Controller
                   control={control}
                   name="rightProfilePhoto"
-                  render={({ field: { onChange, value, onBlur, name } }) => (
+                  render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
                       label="Foto perfil derecho"
@@ -253,7 +279,22 @@ const Animal = ({
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`right-profile-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
+                      copyFilesTo={
+                        animal?.status !== "registered"
+                          ? null
+                          : {
+                              withThumbImage: false,
+                              isImage: true,
+                              bucket:
+                                "servicioDeVeterinariaYRemontaDelEjercito",
+                              fileName: `right-profile-photo-${uuidv4()}`,
+                              filePath: `animal-logs/${animal?.id}/images`,
+                            }
+                      }
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) =>
+                        file && setRightProfilePhotoCopy(file)
+                      }
                       required={required(name)}
                       error={error(name)}
                     />
@@ -264,7 +305,7 @@ const Animal = ({
                 <Controller
                   control={control}
                   name="frontPhoto"
-                  render={({ field: { onChange, value, onBlur, name } }) => (
+                  render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
                       label="Foto frontal"
@@ -276,7 +317,20 @@ const Animal = ({
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
                       fileName={`front-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
+                      copyFilesTo={
+                        animal?.status !== "registered"
+                          ? null
+                          : {
+                              withThumbImage: false,
+                              isImage: true,
+                              bucket:
+                                "servicioDeVeterinariaYRemontaDelEjercito",
+                              fileName: `front-photo-${uuidv4()}`,
+                              filePath: `animal-logs/${animal?.id}/images`,
+                            }
+                      }
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) => file && setFrontPhotoCopy(file)}
                       required={required(name)}
                       error={error(name)}
                     />
@@ -287,7 +341,7 @@ const Animal = ({
                 <Controller
                   control={control}
                   name="leftProfilePhoto"
-                  render={({ field: { onChange, value, onBlur, name } }) => (
+                  render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
                       label="Foto perfil izquierdo"
@@ -297,9 +351,24 @@ const Animal = ({
                       name={name}
                       withThumbImage={false}
                       bucket="servicioDeVeterinariaYRemontaDelEjercito"
-                      fileName={`right-profile-photo-${uuidv4()}`}
+                      fileName={`left-profile-photo-${uuidv4()}`}
                       filePath={`animals/${animal.id}/photos`}
+                      copyFilesTo={
+                        animal?.status !== "registered"
+                          ? null
+                          : {
+                              withThumbImage: false,
+                              isImage: true,
+                              bucket:
+                                "servicioDeVeterinariaYRemontaDelEjercito",
+                              fileName: `left-profile-photo-${uuidv4()}`,
+                              filePath: `animal-logs/${animal?.id}/images`,
+                            }
+                      }
                       onChange={(file) => onChange(file)}
+                      onChangeCopy={(file) =>
+                        file && setLeftProfilePhotoCopy(file)
+                      }
                       required={required(name)}
                       error={error(name)}
                     />
@@ -308,11 +377,11 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="nscCorrelativo"
+                  name="nsgId"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="NSC - Correlativo"
+                      label="NSG"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -324,18 +393,14 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="unitId"
+                  name="animalUnit"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
-                    <Select
+                    <Input
                       label="Unidad"
                       name={name}
                       value={value}
-                      options={units.map((unit) => ({
-                        label: unit.name,
-                        value: unit.id,
-                      }))}
-                      onChange={(value) => onChangeGreatUnit(onChange, value)}
+                      onChange={onChange}
                       error={error(name)}
                       required={required(name)}
                     />
@@ -344,11 +409,11 @@ const Animal = ({
               </Col>
               <Col span={24} md={6}>
                 <Controller
-                  name="greatUnit"
+                  name="greatUnitStatic"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Gran Unidad"
+                      label="Gran unidad"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -623,6 +688,37 @@ const Animal = ({
                 />
               </Col>
             </Row>
+
+            {["super_admin", "manager"].includes(user.roleCode) && (
+              <>
+                <br />
+                <Row justify="end">
+                  <Col span={24} md={12}>
+                    <Controller
+                      name="unitId"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Select
+                          label="Unidad"
+                          name={name}
+                          value={value}
+                          options={units.map((unit) => ({
+                            label: unit.name,
+                            value: unit.id,
+                          }))}
+                          disabled={
+                            !["super_admin", "manager"].includes(user.roleCode)
+                          }
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                </Row>
+              </>
+            )}
             <Row justify="end" gutter={[16, 16]}>
               <Col xs={24} sm={6} md={4}>
                 <Button

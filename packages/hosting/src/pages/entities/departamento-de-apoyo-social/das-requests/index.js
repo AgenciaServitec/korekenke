@@ -16,6 +16,8 @@ import { updateDasApplication } from "../../../../firebase/collections/dasApplic
 import { useAuthentication } from "../../../../providers";
 import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
+import { CorrespondenceProceeds } from "../../../correspondences/CorrespondenceProceeds";
+import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ export const DasRequestsListIntegration = () => {
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
+  const [visibledDasRequestProceeds, setVisibledDasRequestProceeds] =
+    useState(false);
   const [dasRequest, setDasRequest] = useState(null);
 
   const dasApplicationsRef = firestore
@@ -33,9 +37,16 @@ export const DasRequestsListIntegration = () => {
 
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
     useCollectionData(
-      ["super_admin", "manager", "department_boss"].includes(authUser.roleCode)
-        ? dasApplicationsRef || null
-        : dasApplicationsRef.where("headline.id", "==", authUser.id),
+      [
+        "super_admin",
+        "manager",
+        "department_boss",
+        "department_assistant",
+      ].includes(authUser.roleCode)
+        ? dasApplicationsRef.where("isDeleted", "==", false) || null
+        : dasApplicationsRef
+            .where("isDeleted", "==", false)
+            .where("headline.id", "==", authUser.id),
     );
 
   useEffect(() => {
@@ -66,6 +77,11 @@ export const DasRequestsListIntegration = () => {
     setVisibleReplyInformationModal(true);
   };
 
+  const onDasRequestProceeds = (dasRequest) => {
+    setDasRequest(dasRequest);
+    setVisibledDasRequestProceeds(true);
+  };
+
   return (
     <DasRequestsList
       dasApplications={dasApplications}
@@ -76,6 +92,10 @@ export const DasRequestsListIntegration = () => {
       visibleReplyModal={visibleReplyModal}
       onSetVisibleReplyModal={setVisibleReplyModal}
       visibleReplyInformationModal={visibleReplyInformationModal}
+      visibledDasRequestProceeds={visibledDasRequestProceeds}
+      onSetVisibledDasRequestProceeds={setVisibledDasRequestProceeds}
+      onDasRequestProceeds={onDasRequestProceeds}
+      user={authUser}
       onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
       onAddReplyDasRequest={onAddReplyDasRequest}
       onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
@@ -93,6 +113,10 @@ const DasRequestsList = ({
   visibleReplyModal,
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
+  visibledDasRequestProceeds,
+  onSetVisibledDasRequestProceeds,
+  onDasRequestProceeds,
+  user,
   onSetVisibleReplyInformationModal,
   onShowReplyDasRequestInformation,
 }) => {
@@ -115,6 +139,8 @@ const DasRequestsList = ({
             dasApplicationsLoading={dasApplicationsLoading}
             onAddReplyDasRequest={onAddReplyDasRequest}
             onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
+            onDasRequestProceeds={onDasRequestProceeds}
+            user={user}
           />
         </Col>
         <ReplyDasRequestInformationModal
@@ -125,6 +151,11 @@ const DasRequestsList = ({
         <ReplyDasRequestModal
           visibleModal={visibleReplyModal}
           onSetVisibleModal={onSetVisibleReplyModal}
+          dasRequest={dasRequest}
+        />
+        <DasRequestProceedsModal
+          visibleModal={visibledDasRequestProceeds}
+          onSetVisibleModal={onSetVisibledDasRequestProceeds}
           dasRequest={dasRequest}
         />
       </Row>

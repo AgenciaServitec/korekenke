@@ -31,8 +31,8 @@ export const PdfRegistrationClinicHistory = ({
               bordered={false}
             />
             <div>
-              <span>{animal?.greatUnit}</span>
-              <span>{unit?.name}</span>
+              <span>{animal?.greatUnitStatic || ""}</span>
+              <span>{animal?.animalUnit}</span>
               <span>{department?.name}</span>
             </div>
           </div>

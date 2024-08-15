@@ -18,10 +18,8 @@ import {
   BodyConditionCattle3,
   BodyConditionCattle4,
   BodyConditionCattle5,
-  BodyConditionCattle6,
-  BodyConditionCattle7,
-  BodyConditionCattle8,
-  BodyConditionCattle9,
+  CaninesPaws,
+  CattlePaws,
   HerradoImg,
   ToilleteCanineImg,
   ToilleteCattleImg,
@@ -86,7 +84,7 @@ export const AnimalMagazineProfiles = {
         { id: 4, name: "Malo" },
       ],
     },
-    horseshoe: {
+    paws: {
       image: HerradoImg,
       items: [
         { id: 1, name: "Muy bueno" },
@@ -100,52 +98,41 @@ export const AnimalMagazineProfiles = {
     bodyCondition: [
       {
         id: 1,
-        name: "Pobre o extremadamente flaco",
+        name: "Extremadamente delgado",
         img: BodyConditionCattle1,
       },
       {
         id: 2,
-        name: "Muy flaco",
+        name: "Delgado",
         img: BodyConditionCattle2,
       },
       {
         id: 3,
-        name: "Flaco",
+        name: "Magro",
         img: BodyConditionCattle3,
       },
       {
         id: 4,
-        name: "Moderadamente flaco",
+        name: "Gordo",
         img: BodyConditionCattle4,
       },
       {
         id: 5,
-        name: "Moderado",
+        name: "Extremadamente Gordo",
         img: BodyConditionCattle5,
-      },
-      {
-        id: 6,
-        name: "Moderadamente encarnado",
-        img: BodyConditionCattle6,
-      },
-      {
-        id: 7,
-        name: "Encarnado",
-        img: BodyConditionCattle7,
-      },
-      {
-        id: 8,
-        name: "Obeso",
-        img: BodyConditionCattle8,
-      },
-      {
-        id: 9,
-        name: "Extremadamente obeso",
-        img: BodyConditionCattle9,
       },
     ],
     toillete: {
       image: ToilleteCattleImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
+    },
+    paws: {
+      image: CattlePaws,
       items: [
         { id: 1, name: "Muy bueno" },
         { id: 2, name: "Bueno" },
@@ -184,6 +171,15 @@ export const AnimalMagazineProfiles = {
     ],
     toillete: {
       image: ToilleteCanineImg,
+      items: [
+        { id: 1, name: "Muy bueno" },
+        { id: 2, name: "Bueno" },
+        { id: 3, name: "Regular" },
+        { id: 4, name: "Malo" },
+      ],
+    },
+    paws: {
+      image: CaninesPaws,
       items: [
         { id: 1, name: "Muy bueno" },
         { id: 2, name: "Bueno" },

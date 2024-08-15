@@ -38,7 +38,7 @@ export const AnimalsIntegration = () => {
     setAnimalsView(
       animals.filter((animal) => animal.type === query?.animalType),
     );
-  }, [query?.animalType]);
+  }, [animals, query?.animalType]);
 
   const navigateTo = (pathname = "new") => navigate(pathname);
 
@@ -133,14 +133,14 @@ const Animals = ({
                 defaultValue={animalType}
               >
                 <Radio.Button value="equine">Equinos</Radio.Button>
-                <Radio.Button value="cattle">Ganados</Radio.Button>
+                <Radio.Button value="cattle">Vacunos</Radio.Button>
                 <Radio.Button value="canine">Caninos</Radio.Button>
               </Radio.Group>
             </Acl>
           </div>
         </Col>
         <Col span={24}>
-          <Title level={3}>{AnimalsType?.[animalType]?.titlePlural}</Title>
+          <Title level={2}>{AnimalsType?.[animalType]?.titlePlural}</Title>
         </Col>
         <Col span={24}>
           <AnimalsTable

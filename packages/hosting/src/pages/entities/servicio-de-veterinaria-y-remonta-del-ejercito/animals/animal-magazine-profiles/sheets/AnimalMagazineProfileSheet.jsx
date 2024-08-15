@@ -102,7 +102,7 @@ export const AnimalMagazineProfilesheet = ({
                           animalMagazineProfile?.bodyCondition?.id && "active"
                       }
                     >
-                      <td>
+                      <td className="img-animal">
                         <img
                           src={_bodyCondition.img}
                           alt={`Imagen de ${_bodyCondition.name}`}
@@ -116,7 +116,7 @@ export const AnimalMagazineProfilesheet = ({
                           animalMagazineProfile?.bodyCondition?.id ? (
                             <FontAwesomeIcon
                               icon={faCircleCheck}
-                              size="3x"
+                              size="2x"
                               style={{ color: "green" }}
                             />
                           ) : (
@@ -182,7 +182,7 @@ export const AnimalMagazineProfilesheet = ({
                         animalMagazineProfile?.toillete?.id ? (
                           <FontAwesomeIcon
                             icon={faCircleCheck}
-                            size="3x"
+                            size="2x"
                             style={{ color: "green" }}
                           />
                         ) : (
@@ -196,54 +196,50 @@ export const AnimalMagazineProfilesheet = ({
             </table>
           </div>
           <br />
-          {AnimalMagazineProfiles?.[animal.type]?.horseshoe && (
-            <div className="main-horseshoe">
+          {AnimalMagazineProfiles?.[animal.type]?.paws && (
+            <div className="main-paws">
               <table>
                 <thead>
                   <tr>
-                    <th colSpan={5}>HERRADO</th>
+                    <th colSpan={5}>PATAS</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td rowSpan={2}>
                       <img
-                        src={
-                          AnimalMagazineProfiles?.[animal.type]?.horseshoe
-                            ?.image
-                        }
-                        alt="Imagen de animal"
+                        src={AnimalMagazineProfiles?.[animal.type]?.paws?.image}
+                        alt="Imagen patas de animal"
                       />
                     </td>
-                    {AnimalMagazineProfiles?.[
-                      animal.type
-                    ]?.horseshoe?.items.map((_horseshoe) => (
-                      <th key={_horseshoe?.id}>{_horseshoe?.name}</th>
-                    ))}
+                    {AnimalMagazineProfiles?.[animal.type]?.paws?.items.map(
+                      (_paws) => (
+                        <th key={_paws?.id}>{_paws?.name}</th>
+                      ),
+                    )}
                   </tr>
                   <tr>
-                    {AnimalMagazineProfiles?.[
-                      animal.type
-                    ]?.horseshoe?.items.map((_horseshoe) => (
-                      <td
-                        key={_horseshoe?.id}
-                        className={
-                          _horseshoe?.id ===
-                            animalMagazineProfile?.horseshoe?.id && "active"
-                        }
-                      >
-                        {_horseshoe?.id ===
-                        animalMagazineProfile?.horseshoe?.id ? (
-                          <FontAwesomeIcon
-                            icon={faCircleCheck}
-                            size="3x"
-                            style={{ color: "green" }}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </td>
-                    ))}
+                    {AnimalMagazineProfiles?.[animal.type]?.paws?.items.map(
+                      (_paws) => (
+                        <td
+                          key={_paws?.id}
+                          className={
+                            _paws?.id === animalMagazineProfile?.paws?.id &&
+                            "active"
+                          }
+                        >
+                          {_paws?.id === animalMagazineProfile?.paws?.id ? (
+                            <FontAwesomeIcon
+                              icon={faCircleCheck}
+                              size="2x"
+                              style={{ color: "green" }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                      ),
+                    )}
                   </tr>
                 </tbody>
               </table>
@@ -272,7 +268,7 @@ export const AnimalMagazineProfilesheet = ({
 const Container = styled.div`
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 12.7px;
 
   * {
     margin: 0;
@@ -315,7 +311,7 @@ const Container = styled.div`
           .value {
             text-transform: uppercase;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
           }
 
           th,
@@ -347,9 +343,15 @@ const Container = styled.div`
     }
 
     .main {
+      margin-bottom: 0.5em;
+
       .main-body-condition {
         &__title {
           text-align: center;
+          font-size: 1.2em;
+        }
+
+        .body-condition-qualification {
           font-size: 1.2em;
         }
 
@@ -370,11 +372,13 @@ const Container = styled.div`
             }
 
             td:first-child {
-              width: 15em;
-              padding: 0;
+              width: 10em;
+              padding: 1px;
+              background: #fff;
               img {
                 width: 100%;
-                height: 4.5em;
+                height: 4.1em;
+                object-fit: contain;
               }
             }
 
@@ -404,7 +408,7 @@ const Container = styled.div`
       }
 
       .main-toillete,
-      .main-horseshoe {
+      .main-paws {
         table {
           width: 100%;
 

@@ -8,8 +8,8 @@
   "cattle": {
     "cardTitle": "SERVICIO VETERINARIO DEL EJÉRCITO",
     "cardSubTitle": "TARJETA DE REGISTRO DE GANADO VACUNO",
-    "titleSingular": "Ganado",
-    "titlePlural": "Ganados"
+    "titleSingular": "Vacuno",
+    "titlePlural": "Vacunos"
   },
   "canine": {
     "cardTitle": "SERVICIO DE VETERINARIA Y REMONTA DEL EJÉRCITO",

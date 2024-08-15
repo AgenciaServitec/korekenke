@@ -5,10 +5,13 @@ import {
   Card,
   Col,
   Form,
+  IconAction,
   InputNumber,
   notification,
   Row,
+  Space,
   TextArea,
+  Title,
 } from "../../../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +33,7 @@ import {
 import { useGlobalData } from "../../../../../../providers";
 import { mediaQuery } from "../../../../../../styles";
 import { AnimalInformation } from "../../../../../../components/ui/entities";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export const AnimalMagazineProfileIntegration = () => {
   const navigate = useNavigate();
@@ -44,10 +48,6 @@ export const AnimalMagazineProfileIntegration = () => {
   const onGoBack = () => navigate(-1);
 
   const isNew = animalMagazineProfileId === "new";
-
-  const isEquine = animal?.type === "equine";
-  const isCattle = animal?.type === "cattle";
-  const isCanine = animal?.type === "canine";
 
   useEffect(() => {
     const _animalMagazineProfile = isNew
@@ -80,13 +80,11 @@ export const AnimalMagazineProfileIntegration = () => {
         (_toillete) => _toillete.id === formData.toillete,
       ),
     },
-    ...(isEquine && {
-      horseshoe: {
-        ...AnimalMagazineProfiles?.[animal.type]?.horseshoe.items.find(
-          (_horseshoe) => _horseshoe.id === formData.horseshoe,
-        ),
-      },
-    }),
+    paws: {
+      ...AnimalMagazineProfiles?.[animal.type]?.paws.items.find(
+        (_paws) => _paws.id === formData.paws,
+      ),
+    },
     bodyWeightEstimation: {
       chestCircumference: {
         typeMeasure: "cm",
@@ -138,6 +136,16 @@ export const AnimalMagazineProfileIntegration = () => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
+        <Space>
+          <IconAction icon={faArrowLeft} onClick={() => onGoBack()} />
+          <Col span={24}>
+            <Title level={2} style={{ margin: "0" }}>
+              Detalle de ficha revista de animal
+            </Title>
+          </Col>
+        </Space>
+      </Col>
+      <Col span={24}>
         <Card
           title={<span style={{ fontSize: "1.5em" }}>Datos del Animal</span>}
           bordered={false}
@@ -149,7 +157,6 @@ export const AnimalMagazineProfileIntegration = () => {
       <Col span={24}>
         <AnimalMagazineProfile
           animal={animal}
-          isEquine={isEquine}
           animalMagazineProfile={animalMagazineProfile}
           animalMagazineProfiles={AnimalMagazineProfiles}
           onSaveAnimalMagazineProfile={onSaveAnimalMagazineProfile}
@@ -163,7 +170,6 @@ export const AnimalMagazineProfileIntegration = () => {
 
 const AnimalMagazineProfile = ({
   animal,
-  isEquine,
   animalMagazineProfile,
   animalMagazineProfiles,
   onSaveAnimalMagazineProfile,
@@ -174,7 +180,7 @@ const AnimalMagazineProfile = ({
   const [bodyConditionObservation, setBodyConditionObservation] =
     useState(null);
   const [toillete, setToillete] = useState(null);
-  const [horseshoe, setHorseshoe] = useState(null);
+  const [paws, setPaws] = useState(null);
 
   const schema = yup.object({
     chestCircumference: yup.number().required(),
@@ -202,7 +208,7 @@ const AnimalMagazineProfile = ({
       animalMagazineProfile?.bodyCondition?.observation || null,
     );
     setToillete(animalMagazineProfile?.toillete?.id || null);
-    setHorseshoe(animalMagazineProfile?.horseshoe?.id || null);
+    setPaws(animalMagazineProfile?.paws?.id || null);
   }, [animalMagazineProfile]);
 
   const resetForm = () => {
@@ -234,10 +240,10 @@ const AnimalMagazineProfile = ({
         title: "Toillete del animal es requerido.",
       });
 
-    if (!horseshoe && isEquine)
+    if (!paws)
       return notification({
         type: "warning",
-        title: "Herrado del equino es requerido.",
+        title: "Patas del animal es requerido.",
       });
 
     onSaveAnimalMagazineProfile({
@@ -245,7 +251,7 @@ const AnimalMagazineProfile = ({
       bodyCondition,
       bodyConditionObservation,
       toillete,
-      horseshoe,
+      paws,
     });
   };
 
@@ -310,8 +316,8 @@ const AnimalMagazineProfile = ({
                 bordered={false}
                 type="inner"
               >
-                <div className="wrapper-toillete-and-herrado">
-                  <div className="wrapper-toillete-and-herrado__image">
+                <div className="wrapper-toillete-and-paws">
+                  <div className="wrapper-toillete-and-paws__image">
                     <img
                       src={
                         animalMagazineProfiles?.[animal.type]?.toillete.image
@@ -334,37 +340,33 @@ const AnimalMagazineProfile = ({
                   </ul>
                 </div>
               </Card>
-              {isEquine && (
-                <Card
-                  title={<span style={{ fontSize: "1.5em" }}>Herrado</span>}
-                  bordered={false}
-                  type="inner"
-                >
-                  <div className="wrapper-toillete-and-herrado">
-                    <div className="wrapper-toillete-and-herrado__image">
-                      <img
-                        src={
-                          animalMagazineProfiles?.[animal.type]?.horseshoe.image
-                        }
-                        alt="Herrado"
-                      />
-                    </div>
-                    <ul>
-                      {animalMagazineProfiles?.[
-                        animal.type
-                      ]?.horseshoe.items.map((_horseshoe) => (
-                        <li
-                          key={_horseshoe.id}
-                          onClick={() => setHorseshoe(_horseshoe.id)}
-                          className={horseshoe === _horseshoe.id && "active"}
-                        >
-                          <h5>{_horseshoe.name}</h5>
-                        </li>
-                      ))}
-                    </ul>
+              <Card
+                title={<span style={{ fontSize: "1.5em" }}>Patas</span>}
+                bordered={false}
+                type="inner"
+              >
+                <div className="wrapper-toillete-and-paws">
+                  <div className="wrapper-toillete-and-paws__image">
+                    <img
+                      src={animalMagazineProfiles?.[animal.type]?.paws?.image}
+                      alt="Herrado"
+                    />
                   </div>
-                </Card>
-              )}
+                  <ul>
+                    {(
+                      animalMagazineProfiles?.[animal.type]?.paws?.items || []
+                    ).map((_paws) => (
+                      <li
+                        key={_paws.id}
+                        onClick={() => setPaws(_paws.id)}
+                        className={paws === _paws.id && "active"}
+                      >
+                        <h5>{_paws.name}</h5>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Card>
             </div>
           </Col>
           <Col span={24}>
@@ -591,7 +593,7 @@ const Container = styled.div`
     }
   }
 
-  .wrapper-toillete-and-herrado {
+  .wrapper-toillete-and-paws {
     display: flex;
     flex-direction: column;
     gap: 1em;

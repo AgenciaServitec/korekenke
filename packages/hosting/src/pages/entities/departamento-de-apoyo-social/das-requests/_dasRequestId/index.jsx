@@ -70,7 +70,7 @@ export const DasRequestIntegration = () => {
     ...dasRequest,
     isHeadline: formData.isHeadline,
     requestType: formData.requestType,
-    status: isNew ? "pending" : dasRequest.status,
+    status: isNew ? "waiting" : dasRequest.status,
     wasRead: dasRequest?.wasRead || false,
     headline: {
       id: authUser.id,
@@ -86,6 +86,7 @@ export const DasRequestIntegration = () => {
       ...formData.applicant,
       to: formData?.isHeadline ? "headline" : "familiar",
     },
+    userId: authUser.id,
   });
 
   const saveDasApplication = async (formData) => {
