@@ -1,0 +1,18 @@
+[
+  {
+    "id": "manager",
+    "name": "Gerente"
+  },
+  {
+    "id": "boss",
+    "name": "Jefe"
+  },
+  {
+    "id": "secondary_boss",
+    "name": "Jefe secundario"
+  },
+  {
+    "id": "assistant",
+    "name": "Asistente"
+  }
+]

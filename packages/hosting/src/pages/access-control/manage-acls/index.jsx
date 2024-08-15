@@ -298,11 +298,14 @@ const ManageAcls = ({
                           const unlabeledAclsForSelectOptions =
                             isObject(items) &&
                             Object.entries(items).filter(
-                              (_item) => !_item.includes("label"),
+                              (_item) =>
+                                !_item.includes("label") &&
+                                !_item.includes("command"),
                             );
 
                           return (
-                            keySubCategory !== "label" && (
+                            keySubCategory !== "label" &&
+                            keySubCategory !== "command" && (
                               <Col span={24} key={keySubCategory}>
                                 <Controller
                                   name={`acls.${keyCategory}.${keySubCategory}`}

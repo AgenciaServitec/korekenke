@@ -228,7 +228,7 @@ const DasRequest = ({
 
   return (
     <Acl
-      category="departamento-de-apoyo-social"
+      category="public"
       subCategory="dasRequests"
       name={isNew ? "/das-requests/new" : "/das-requests/:dasRequestId"}
       redirect

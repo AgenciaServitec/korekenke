@@ -188,7 +188,7 @@ export const DasRequestsTable = ({
       render: (dasRequest) => (
         <Space>
           <Acl
-            category="departamento-de-apoyo-social"
+            category="public"
             subCategory="dasRequests"
             name="/das-requests/:dasRequestId#proceeds"
           >
@@ -200,7 +200,7 @@ export const DasRequestsTable = ({
           </Acl>
           {entity?.entityManageId === user?.id && !isFinalized(dasRequest) && (
             <Acl
-              category="departamento-de-apoyo-social"
+              category="public"
               subCategory="dasRequests"
               name="/das-requests/:dasRequestId#reply"
             >
@@ -213,7 +213,7 @@ export const DasRequestsTable = ({
             </Acl>
           )}
           <Acl
-            category="departamento-de-apoyo-social"
+            category="public"
             subCategory="dasRequests"
             name="/das-requests/:dasRequestId/sheets"
           >
@@ -228,7 +228,7 @@ export const DasRequestsTable = ({
           </Acl>
           {!isFinalized(dasRequest) && (
             <Acl
-              category="departamento-de-apoyo-social"
+              category="public"
               subCategory="dasRequests"
               name="/das-requests/:dasRequestId"
             >
@@ -242,7 +242,7 @@ export const DasRequestsTable = ({
           {!isPositiveOrApproved(dasRequest) &&
             dasRequest.headline.id !== user.id && (
               <Acl
-                category="departamento-de-apoyo-social"
+                category="public"
                 subCategory="dasRequests"
                 name="/das-requests#delete"
               >

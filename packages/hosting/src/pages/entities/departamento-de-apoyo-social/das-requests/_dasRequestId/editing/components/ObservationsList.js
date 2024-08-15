@@ -96,10 +96,10 @@ export const ObservationsList = ({
             action={
               <Space direction="vertical">
                 <Acl
-                  redirect
-                  category="departamento-de-apoyo-social"
+                  category="public"
                   subCategory="dasRequests"
                   name="/das-requests/:dasRequestId#resolverObservation"
+                  redirect
                 >
                   {observation.status === "pending" && (
                     <Button
@@ -112,10 +112,10 @@ export const ObservationsList = ({
                   )}
                 </Acl>
                 <Acl
-                  redirect
-                  category="departamento-de-apoyo-social"
+                  category="public"
                   subCategory="dasRequests"
                   name="/das-requests/:dasRequestId#closeObservation"
+                  redirect
                 >
                   {observation.status === "resolved" && (
                     <Button
