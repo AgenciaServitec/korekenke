@@ -6,7 +6,8 @@ import { isEmpty } from "lodash";
 
 export const AnimalParentsInformation = ({
   animal,
-  onSetIsVisibleModal,
+  onAddAnimalParents,
+  onEditAnimalParents,
   children,
 }) => {
   return (
@@ -16,12 +17,21 @@ export const AnimalParentsInformation = ({
         <span>{animal?.registrationNumber || "Sin registro"}</span>
         <span>{animal?.raceOrLine || "Sin registro"}</span>
         <div className="button-add">
-          <IconAction
-            tooltipTitle="Agregar familiar"
-            icon={isEmpty(animal.parents) ? faSquarePlus : faEdit}
-            styled={{ color: () => "#637A3A" }}
-            onClick={() => onSetIsVisibleModal(true)}
-          />
+          {isEmpty(animal.parents) ? (
+            <IconAction
+              tooltipTitle="Agregar familiar"
+              icon={faSquarePlus}
+              styled={{ color: () => "#637A3A" }}
+              onClick={() => onAddAnimalParents()}
+            />
+          ) : (
+            <IconAction
+              tooltipTitle="Editar familiar"
+              icon={faEdit}
+              styled={{ color: () => "#637A3A" }}
+              onClick={() => onEditAnimalParents(animal.id)}
+            />
+          )}
         </div>
       </div>
       <div className="family-tree-branches">{children}</div>
