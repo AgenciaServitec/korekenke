@@ -121,32 +121,32 @@ export const AnimalIntegration = () => {
 =======
     parents: [
       {
-        id: 1,
+        id: uuidv4(),
         fullName: formData.father,
         registrationNumber: "abc-123",
         raceOrLine: "test raza",
         parents: [
           {
-            id: 1,
+            id: uuidv4(),
             fullName: "test abuelo",
             registrationNumber: "abc-234",
             raceOrLine: "test raza",
             parents: [
               {
-                id: 1,
+                id: uuidv4(),
                 fullName: "test bisabuelo",
                 registrationNumber: "abc-345",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "abc-456",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "abc-678",
                     raceOrLine: "test raza",
@@ -155,20 +155,20 @@ export const AnimalIntegration = () => {
                 ],
               },
               {
-                id: 2,
+                id: uuidv4(),
                 fullName: "test bisabuela",
                 registrationNumber: "abc-789",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "abc-890",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "abc-901",
                     raceOrLine: "test raza",
@@ -179,26 +179,26 @@ export const AnimalIntegration = () => {
             ],
           },
           {
-            id: 2,
+            id: uuidv4(),
             fullName: "test abuela",
             registrationNumber: "abc-012",
             raceOrLine: "test raza",
             parents: [
               {
-                id: 1,
+                id: uuidv4(),
                 fullName: "test bisabuelo",
                 registrationNumber: "abc-098",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "abc-987",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "abc-876",
                     raceOrLine: "test raza",
@@ -207,20 +207,20 @@ export const AnimalIntegration = () => {
                 ],
               },
               {
-                id: 2,
+                id: uuidv4(),
                 fullName: "test bisabuela",
                 registrationNumber: "abc-765",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "abc-654",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "abc-543",
                     raceOrLine: "test raza",
@@ -233,32 +233,32 @@ export const AnimalIntegration = () => {
         ],
       },
       {
-        id: 2,
+        id: uuidv4(),
         fullName: formData.mother,
         registrationNumber: "asd-123",
         raceOrLine: "test raza",
         parents: [
           {
-            id: 1,
+            id: uuidv4(),
             fullName: "test abuelo",
             registrationNumber: "asd-234",
             raceOrLine: "test raza",
             parents: [
               {
-                id: 1,
+                id: uuidv4(),
                 fullName: "test bisabuelo",
                 registrationNumber: "asd-345",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "asd-456",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "asd-567",
                     raceOrLine: "test raza",
@@ -267,20 +267,20 @@ export const AnimalIntegration = () => {
                 ],
               },
               {
-                id: 2,
+                id: uuidv4(),
                 fullName: "test bisabuela",
                 registrationNumber: "asd-678",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "asd-789",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "asd-890",
                     raceOrLine: "test raza",
@@ -291,26 +291,26 @@ export const AnimalIntegration = () => {
             ],
           },
           {
-            id: 2,
+            id: uuidv4(),
             fullName: "test abuela",
             registrationNumber: "asd-901",
             raceOrLine: "test raza",
             parents: [
               {
-                id: 1,
+                id: uuidv4(),
                 fullName: "test bisabuelo",
                 registrationNumber: "asd-012",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "asd-098",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "asd-987",
                     raceOrLine: "test raza",
@@ -319,20 +319,20 @@ export const AnimalIntegration = () => {
                 ],
               },
               {
-                id: 2,
+                id: uuidv4(),
                 fullName: "test bisabuela",
                 registrationNumber: "asd-876",
                 raceOrLine: "test raza",
                 parents: [
                   {
-                    id: 1,
+                    id: uuidv4(),
                     fullName: "test tatarabuelo",
                     registrationNumber: "asd-765",
                     raceOrLine: "test raza",
                     parents: [],
                   },
                   {
-                    id: 2,
+                    id: uuidv4(),
                     fullName: "test tatarabuela",
                     registrationNumber: "asd-654",
                     raceOrLine: "test raza",
@@ -372,7 +372,7 @@ export const AnimalIntegration = () => {
 
   const cologeUsers = users
     .filter((user) =>
-      (user?.commands || []).map((command) => command.code).includes("cologe")
+      (user?.commands || []).map((command) => command.code).includes("cologe"),
     )
     .map((_user) => ({
       label: userFullName(_user),
@@ -420,11 +420,11 @@ const Animal = ({
 }) => {
 <<<<<<< HEAD:packages/hosting/src/pages/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/_animalId/index.jsx
   const [rightProfilePhotoCopy, setRightProfilePhotoCopy] = useState(
-    animal?.rightProfilePhotoCopy
+    animal?.rightProfilePhotoCopy,
   );
   const [frontPhotoCopy, setFrontPhotoCopy] = useState(animal?.frontPhotoCopy);
   const [leftProfilePhotoCopy, setLeftProfilePhotoCopy] = useState(
-    animal?.leftProfilePhotoCopy
+    animal?.leftProfilePhotoCopy,
   );
 
   const isEquine = animalType === "equine";
@@ -492,8 +492,8 @@ const Animal = ({
       unitId: animal?.unitId
         ? animal?.unitId
         : isProduction
-        ? "mVywdUjcwEBT2QxnLzaT"
-        : "R7zZr5jtrN6F3acc0xnr",
+          ? "mVywdUjcwEBT2QxnLzaT"
+          : "R7zZr5jtrN6F3acc0xnr",
       greatUnitStatic: animal?.greatUnitStatic || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",

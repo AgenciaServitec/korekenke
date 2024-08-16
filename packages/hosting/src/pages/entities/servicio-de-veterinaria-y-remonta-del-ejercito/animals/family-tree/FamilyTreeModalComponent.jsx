@@ -102,41 +102,86 @@ export const FamilyTreeModalComponent = ({
   DataEntryModal,
   Form,
   Input,
+  notification,
   Radio,
   Row,
 } from "../../../../../components";
 import styled from "styled-components";
+import { updateAnimal } from "../../../../../firebase/collections";
+import { useParams } from "react-router";
+import { v4 as uuidv4 } from "uuid";
 
 export const FamilyTreeModalComponent = ({
   animal,
-  registrationNumber,
+  parentId,
   isVisibleModal,
   onSetIsVisibleModal,
 }) => {
+  const { animalId } = useParams();
   const [relationship, setRelationship] = useState("father");
+  const [currentAnimal, setCurrentAnimal] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const parentsView = (parents) =>
-    (parent?.parents || []).map((_parent) => {
-      if (_parent.registrationNumber === registrationNumber) return _parent;
-      return parentsView(_parent.parents);
-    });
+  const animalView = (animal) => {
+    if (animal.id === parentId) setCurrentAnimal(animal);
 
-  const animalView = (animal) =>
-    (animal?.parents || []).find((parent) => {
-      if (parent.registrationNumber === registrationNumber) return parent;
-      return parentsView(parent.parents);
+    return (animal?.parents || []).find((parent) => {
+      if (parent.id === parentId) {
+        setCurrentAnimal(parent);
+        return;
+      }
+
+      if (parent.id !== parentId) return animalView(parent);
     });
+  };
 
   useEffect(() => {
     animalView(animal);
-  }, []);
+  }, [parentId, animal]);
 
+<<<<<<< HEAD
   console.log("Animal: ", animal);
   console.log(animalView(animal));
 >>>>>>> 61dfb95 (added family tree)
+=======
+  const fatherInformation = currentAnimal?.parents?.[0];
+  const motherInformation = currentAnimal?.parents?.[1];
+  const mapForm = (formData) => [
+    {
+      id: uuidv4(),
+      fullName: formData.fatherFullName,
+      registrationNumber: formData.fatherRegistrationNumber,
+      raceOrLine: formData.fatherRaceOrLine,
+      parents: [],
+    },
+    {
+      id: uuidv4(),
+      fullName: formData.motherFullName,
+      registrationNumber: formData.motherRegistrationNumber,
+      raceOrLine: formData.motherRaceOrLine,
+      parents: [],
+    },
+  ];
+
+  const onAddAnimalParents = async (formData) => {
+    try {
+      setLoading(true);
+
+      await updateAnimal(animalId, { ...animal, parents: mapForm(formData) });
+
+      notification({ type: "success" });
+      onSetIsVisibleModal(false);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+>>>>>>> 7ca4409 (added reset form)
 
   return (
     <FamilyTreeModal
+      parentId={parentId}
       isVisibleModal={isVisibleModal}
       onSetIsVisibleModal={onSetIsVisibleModal}
 <<<<<<< HEAD
@@ -147,13 +192,22 @@ export const FamilyTreeModalComponent = ({
       loading={loading}
 =======
       relationship={relationship}
+      fatherInformation={fatherInformation}
+      motherInformation={motherInformation}
       onSetRelationship={setRelationship}
+<<<<<<< HEAD
 >>>>>>> 61dfb95 (added family tree)
+=======
+      onAddAnimalParents={onAddAnimalParents}
+      onSetCurrentAnimal={setCurrentAnimal}
+      loading={loading}
+>>>>>>> 7ca4409 (added reset form)
     />
   );
 };
 
 const FamilyTreeModal = ({
+<<<<<<< HEAD
 <<<<<<< HEAD
   isVisibleModal,
   onSetIsVisibleModal,
@@ -164,11 +218,21 @@ const FamilyTreeModal = ({
   loading,
 =======
   animal,
+=======
+>>>>>>> 7ca4409 (added reset form)
   isVisibleModal,
   onSetIsVisibleModal,
   relationship,
+  fatherInformation,
+  motherInformation,
   onSetRelationship,
+<<<<<<< HEAD
 >>>>>>> 61dfb95 (added family tree)
+=======
+  onAddAnimalParents,
+  onSetCurrentAnimal,
+  loading,
+>>>>>>> 7ca4409 (added reset form)
 }) => {
   const schema = yup.object({
     fatherFullName: yup.string(),
@@ -184,6 +248,7 @@ const FamilyTreeModal = ({
     handleSubmit,
     control,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -191,6 +256,7 @@ const FamilyTreeModal = ({
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   useEffect(() => {
+<<<<<<< HEAD
     resetForm();
 <<<<<<< HEAD
   }, [fatherInformation, motherInformation]);
@@ -205,9 +271,14 @@ const FamilyTreeModal = ({
       motherRaceOrLine: motherInformation?.raceOrLine || "",
 =======
   }, []);
+=======
+    resetForm(fatherInformation, motherInformation);
+  }, [fatherInformation, motherInformation, isVisibleModal]);
+>>>>>>> 7ca4409 (added reset form)
 
-  const resetForm = () => {
+  const resetForm = (fatherInformation, motherInformation) => {
     reset({
+<<<<<<< HEAD
       fatherFullName: animal?.fatherFullName || "",
       fatherRegistrationNumber: animal?.fatherRegistrationNumber || "",
       fatherRaceOrLine: animal?.fatherRaceOrLine || "",
@@ -215,6 +286,20 @@ const FamilyTreeModal = ({
       motherRegistrationNumber: animal?.motherRegistrationNumber || "",
       motherRaceOrLine: animal?.motherRaceOrLine || "",
 >>>>>>> 61dfb95 (added family tree)
+=======
+      fatherFullName: fatherInformation?.fullName || watch("fatherFullName"),
+      fatherRegistrationNumber:
+        fatherInformation?.registrationNumber ||
+        watch("fatherRegistrationNumber"),
+      fatherRaceOrLine:
+        fatherInformation?.raceOrLine || watch("fatherRaceOrLine"),
+      motherFullName: motherInformation?.fullName || watch("motherFullName"),
+      motherRegistrationNumber:
+        motherInformation?.registrationNumber ||
+        watch("motherRegistrationNumber"),
+      motherRaceOrLine:
+        motherInformation?.raceOrLine || watch("motherRaceOrLine"),
+>>>>>>> 7ca4409 (added reset form)
     });
   };
 
@@ -222,6 +307,7 @@ const FamilyTreeModal = ({
     <DataEntryModal
       title="Datos del familiar"
       visible={isVisibleModal}
+<<<<<<< HEAD
 <<<<<<< HEAD
       onCancel={() => {
         onSetIsVisibleModal(false);
@@ -358,6 +444,12 @@ const FamilyTreeModal = ({
 };
 =======
       onCancel={() => onSetIsVisibleModal(false)}
+=======
+      onCancel={() => {
+        onSetCurrentAnimal({});
+        onSetIsVisibleModal(false);
+      }}
+>>>>>>> 7ca4409 (added reset form)
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
@@ -378,7 +470,7 @@ const FamilyTreeModal = ({
           </Container>
         </Col>
         <Col span={24}>
-          <Form handleSubmit={""}>
+          <Form onSubmit={handleSubmit(onAddAnimalParents)}>
             <Row gutter={[16, 16]}>
               {relationship === "father" ? (
                 <>
@@ -497,7 +589,7 @@ const FamilyTreeModal = ({
                   size="large"
                   block
                   htmlType="submit"
-                  loading={""}
+                  loading={loading}
                 >
                   Guardar
                 </Button>

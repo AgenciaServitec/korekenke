@@ -7,10 +7,15 @@ import { isEmpty } from "lodash";
 export const AnimalParentsInformation = ({
   animal,
 <<<<<<< HEAD
+<<<<<<< HEAD
   onAddAndEditAnimalParents,
 =======
   onSetIsVisibleModal,
 >>>>>>> 61dfb95 (added family tree)
+=======
+  onAddAnimalParents,
+  onEditAnimalParents,
+>>>>>>> 7ca4409 (added reset form)
   children,
 }) => {
   return (
@@ -21,18 +26,27 @@ export const AnimalParentsInformation = ({
         <span>{animal?.raceOrLine || "Sin registro"}</span>
         <div className="button-add">
 <<<<<<< HEAD
+<<<<<<< HEAD
           {isEmpty(animal?.parents) ? (
+=======
+          {isEmpty(animal.parents) ? (
+>>>>>>> 7ca4409 (added reset form)
             <IconAction
               tooltipTitle="Agregar familiar"
               icon={faSquarePlus}
               styled={{ color: () => "#637A3A" }}
+<<<<<<< HEAD
               onClick={() => onAddAndEditAnimalParents(animal.id)}
+=======
+              onClick={() => onAddAnimalParents()}
+>>>>>>> 7ca4409 (added reset form)
             />
           ) : (
             <IconAction
               tooltipTitle="Editar familiar"
               icon={faEdit}
               styled={{ color: () => "#637A3A" }}
+<<<<<<< HEAD
               onClick={() => onAddAndEditAnimalParents(animal.id)}
             />
           )}
@@ -44,6 +58,11 @@ export const AnimalParentsInformation = ({
             onClick={() => onSetIsVisibleModal(true)}
           />
 >>>>>>> 61dfb95 (added family tree)
+=======
+              onClick={() => onEditAnimalParents(animal.id)}
+            />
+          )}
+>>>>>>> 7ca4409 (added reset form)
         </div>
       </div>
       <div className="family-tree-branches">{children}</div>

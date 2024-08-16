@@ -13,20 +13,29 @@ import { fetchAnimal } from "../../../../../firebase/collections";
 import { FamilyTreeModalComponent } from "./FamilyTreeModalComponent";
 import { AnimalParentsInformation } from "./AnimalParentsInformation";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { isEmpty } from "lodash";
 import styled from "styled-components";
 =======
 >>>>>>> 61dfb95 (added family tree)
+=======
+import { v4 as uuidv4 } from "uuid";
+import { isEmpty } from "lodash";
+>>>>>>> 7ca4409 (added reset form)
 
 export const FamilyTreeIntegration = () => {
   const { animalId } = useParams();
   const navigate = useNavigate();
   const [animal, setAnimal] = useState({});
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [parentId, setParentId] = useState(null);
 =======
   const [registrationNumber, setRegistrationNumber] = useState(null);
 >>>>>>> 61dfb95 (added family tree)
+=======
+  const [parentId, setParentId] = useState(null);
+>>>>>>> 7ca4409 (added reset form)
   const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   useEffect(() => {
@@ -34,6 +43,7 @@ export const FamilyTreeIntegration = () => {
       const _animal = animalId ? await fetchAnimal(animalId) : null;
       setAnimal(_animal);
     })();
+<<<<<<< HEAD
 <<<<<<< HEAD
   }, [isVisibleModal]);
 
@@ -87,30 +97,43 @@ export const FamilyTreeIntegration = () => {
           {animalView(_animal)}
 =======
   }, []);
+=======
+  }, [isVisibleModal]);
+>>>>>>> 7ca4409 (added reset form)
 
   const onNavigateGoTo = (pathname) => navigate(pathname);
 
-  const onAddAnimalParents = (registrationNumber) => {
-    setRegistrationNumber(registrationNumber);
+  const onAddAnimalParents = () => {
+    setParentId(uuidv4());
     setIsVisibleModal(true);
   };
 
-  const parentsView = (parent) =>
-    (parent?.parents || []).map((_parent, index) => {
-      if (!_parent?.parents) return;
+  const onEditAnimalParents = (animalId) => {
+    setParentId(animalId);
+    setIsVisibleModal(true);
+  };
+
+  const animalView = (animal) =>
+    (animal?.parents || []).map((_animal) => {
+      if (isEmpty(_animal?.parents)) return;
 
       return (
         <AnimalParentsInformation
-          key={index}
-          animal={_parent}
-          onSetIsVisibleModal={setIsVisibleModal}
+          key={_animal.id}
+          animal={_animal}
+          onAddAnimalParents={onAddAnimalParents}
         >
+<<<<<<< HEAD
           {parentsView(_parent)}
 >>>>>>> 61dfb95 (added family tree)
+=======
+          {animalView(_animal)}
+>>>>>>> 7ca4409 (added reset form)
         </AnimalParentsInformation>
       );
     });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   const animalParentsInformationView = animalView(animal);
 =======
@@ -131,6 +154,9 @@ export const FamilyTreeIntegration = () => {
 
   const animalParentsInformationView = animalView();
 >>>>>>> 61dfb95 (added family tree)
+=======
+  const animalParentsInformationView = animalView(animal);
+>>>>>>> 7ca4409 (added reset form)
 
   return (
     <Acl
@@ -146,7 +172,7 @@ export const FamilyTreeIntegration = () => {
               icon={faArrowLeft}
               onClick={() =>
                 onNavigateGoTo(
-                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
                 )
               }
             />
@@ -178,14 +204,15 @@ export const FamilyTreeIntegration = () => {
 =======
           <AnimalParentsInformation
             animal={animal}
-            onSetIsVisibleModal={onAddAnimalParents}
+            onAddAnimalParents={onAddAnimalParents}
+            onEditAnimalParents={onEditAnimalParents}
           >
             {animalParentsInformationView}
           </AnimalParentsInformation>
         </Col>
         <FamilyTreeModalComponent
           animal={animal}
-          registrationNumber={registrationNumber}
+          parentId={parentId}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={setIsVisibleModal}
 >>>>>>> 61dfb95 (added family tree)
