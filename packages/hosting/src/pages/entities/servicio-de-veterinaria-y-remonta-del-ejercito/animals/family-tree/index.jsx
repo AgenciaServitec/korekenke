@@ -12,7 +12,6 @@ import { useNavigate, useParams } from "react-router";
 import { fetchAnimal } from "../../../../../firebase/collections";
 import { FamilyTreeModalComponent } from "./FamilyTreeModalComponent";
 import { AnimalParentsInformation } from "./AnimalParentsInformation";
-import { v4 as uuidv4 } from "uuid";
 import { isEmpty } from "lodash";
 
 export const FamilyTreeIntegration = () => {
@@ -31,25 +30,52 @@ export const FamilyTreeIntegration = () => {
 
   const onNavigateGoTo = (pathname) => navigate(pathname);
 
-  const onAddAnimalParents = () => {
-    setParentId(uuidv4());
-    setIsVisibleModal(true);
+  const findAndUpdateAnimalInformation = (
+    animal,
+    nodes = [],
+    id,
+    newValues,
+  ) => {
+    if (animal?.id === parentId) return [...newValues];
+
+    console.log("nodes:", nodes);
+
+    if (typeof nodes !== "string")
+      return nodes.map((node) => {
+        if (node?.id === id) {
+          return { ...node, parents: [...newValues] };
+        }
+
+        if (!isEmpty(node.parents)) {
+          return {
+            ...node,
+            parents: findAndUpdateAnimalInformation(
+              animal,
+              node.parents,
+              id,
+              newValues,
+            ),
+          };
+        }
+
+        return node;
+      });
   };
 
-  const onEditAnimalParents = (animalId) => {
+  const onAddAndEditAnimalParents = (animalId) => {
     setParentId(animalId);
     setIsVisibleModal(true);
   };
 
   const animalView = (animal) =>
     (animal?.parents || []).map((_animal) => {
-      if (isEmpty(_animal?.parents)) return;
+      if (!_animal.parents) return;
 
       return (
         <AnimalParentsInformation
           key={_animal.id}
           animal={_animal}
-          onAddAnimalParents={onAddAnimalParents}
+          onAddAndEditAnimalParents={onAddAndEditAnimalParents}
         >
           {animalView(_animal)}
         </AnimalParentsInformation>
@@ -86,8 +112,7 @@ export const FamilyTreeIntegration = () => {
         <Col span={24}>
           <AnimalParentsInformation
             animal={animal}
-            onAddAnimalParents={onAddAnimalParents}
-            onEditAnimalParents={onEditAnimalParents}
+            onAddAndEditAnimalParents={onAddAndEditAnimalParents}
           >
             {animalParentsInformationView}
           </AnimalParentsInformation>
@@ -95,8 +120,10 @@ export const FamilyTreeIntegration = () => {
         <FamilyTreeModalComponent
           animal={animal}
           parentId={parentId}
+          onSetParentId={setParentId}
           isVisibleModal={isVisibleModal}
           onSetIsVisibleModal={setIsVisibleModal}
+          onFindAndUpdateAnimalInformation={findAndUpdateAnimalInformation}
         />
       </Row>
     </Acl>

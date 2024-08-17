@@ -35,6 +35,7 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { AnimalsType } from "../../../../../data-list";
 import { isProduction } from "../../../../../config";
+import { isEmpty } from "lodash";
 
 export const AnimalIntegration = () => {
   const { animalId } = useParams();
@@ -92,232 +93,26 @@ export const AnimalIntegration = () => {
     type: animalType,
     status: animal?.status || "registered",
     userId: authUser.id,
-    parents: [
-      {
-        id: uuidv4(),
-        fullName: formData.father,
-        registrationNumber: "abc-123",
-        raceOrLine: "test raza",
-        parents: [
-          {
-            id: uuidv4(),
-            fullName: "test abuelo",
-            registrationNumber: "abc-234",
-            raceOrLine: "test raza",
-            parents: [
-              {
-                id: uuidv4(),
-                fullName: "test bisabuelo",
-                registrationNumber: "abc-345",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "abc-456",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "abc-678",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-              {
-                id: uuidv4(),
-                fullName: "test bisabuela",
-                registrationNumber: "abc-789",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "abc-890",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "abc-901",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: uuidv4(),
-            fullName: "test abuela",
-            registrationNumber: "abc-012",
-            raceOrLine: "test raza",
-            parents: [
-              {
-                id: uuidv4(),
-                fullName: "test bisabuelo",
-                registrationNumber: "abc-098",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "abc-987",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "abc-876",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-              {
-                id: uuidv4(),
-                fullName: "test bisabuela",
-                registrationNumber: "abc-765",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "abc-654",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "abc-543",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: uuidv4(),
-        fullName: formData.mother,
-        registrationNumber: "asd-123",
-        raceOrLine: "test raza",
-        parents: [
-          {
-            id: uuidv4(),
-            fullName: "test abuelo",
-            registrationNumber: "asd-234",
-            raceOrLine: "test raza",
-            parents: [
-              {
-                id: uuidv4(),
-                fullName: "test bisabuelo",
-                registrationNumber: "asd-345",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "asd-456",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "asd-567",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-              {
-                id: uuidv4(),
-                fullName: "test bisabuela",
-                registrationNumber: "asd-678",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "asd-789",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "asd-890",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: uuidv4(),
-            fullName: "test abuela",
-            registrationNumber: "asd-901",
-            raceOrLine: "test raza",
-            parents: [
-              {
-                id: uuidv4(),
-                fullName: "test bisabuelo",
-                registrationNumber: "asd-012",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "asd-098",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "asd-987",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-              {
-                id: uuidv4(),
-                fullName: "test bisabuela",
-                registrationNumber: "asd-876",
-                raceOrLine: "test raza",
-                parents: [
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuelo",
-                    registrationNumber: "asd-765",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                  {
-                    id: uuidv4(),
-                    fullName: "test tatarabuela",
-                    registrationNumber: "asd-654",
-                    raceOrLine: "test raza",
-                    parents: [],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    ...(isNew
+      ? {
+          parents: [
+            {
+              id: uuidv4(),
+              fullName: formData.father,
+              registrationNumber: "",
+              raceOrLine: "",
+              parents: [],
+            },
+            {
+              id: uuidv4(),
+              fullName: formData.mother,
+              registrationNumber: "",
+              raceOrLine: "",
+              parents: [],
+            },
+          ],
+        }
+      : animal.parents),
   });
 
   const onSaveAnimal = async (formData) => {

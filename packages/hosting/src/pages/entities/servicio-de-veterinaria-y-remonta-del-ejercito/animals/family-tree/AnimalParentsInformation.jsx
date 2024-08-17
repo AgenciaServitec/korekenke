@@ -6,8 +6,7 @@ import { isEmpty } from "lodash";
 
 export const AnimalParentsInformation = ({
   animal,
-  onAddAnimalParents,
-  onEditAnimalParents,
+  onAddAndEditAnimalParents,
   children,
 }) => {
   return (
@@ -17,19 +16,19 @@ export const AnimalParentsInformation = ({
         <span>{animal?.registrationNumber || "Sin registro"}</span>
         <span>{animal?.raceOrLine || "Sin registro"}</span>
         <div className="button-add">
-          {isEmpty(animal.parents) ? (
+          {isEmpty(animal?.parents) ? (
             <IconAction
               tooltipTitle="Agregar familiar"
               icon={faSquarePlus}
               styled={{ color: () => "#637A3A" }}
-              onClick={() => onAddAnimalParents()}
+              onClick={() => onAddAndEditAnimalParents(animal.id)}
             />
           ) : (
             <IconAction
               tooltipTitle="Editar familiar"
               icon={faEdit}
               styled={{ color: () => "#637A3A" }}
-              onClick={() => onEditAnimalParents(animal.id)}
+              onClick={() => onAddAndEditAnimalParents(animal.id)}
             />
           )}
         </div>

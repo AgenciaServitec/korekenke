@@ -6,6 +6,7 @@ import { useFormUtils } from "../../../../../hooks";
 import {
   Button,
   Col,
+  ComponentContainer,
   DataEntryModal,
   Form,
   Input,
@@ -21,8 +22,10 @@ import { v4 as uuidv4 } from "uuid";
 export const FamilyTreeModalComponent = ({
   animal,
   parentId,
+  onSetParentId,
   isVisibleModal,
   onSetIsVisibleModal,
+  onFindAndUpdateAnimalInformation,
 }) => {
   const { animalId } = useParams();
   const [relationship, setRelationship] = useState("father");
@@ -30,7 +33,7 @@ export const FamilyTreeModalComponent = ({
   const [loading, setLoading] = useState(false);
 
   const animalView = (animal) => {
-    if (animal.id === parentId) setCurrentAnimal(animal);
+    if (animal?.id === parentId) setCurrentAnimal(animal);
 
     return (animal?.parents || []).find((parent) => {
       if (parent.id === parentId) {
@@ -44,24 +47,31 @@ export const FamilyTreeModalComponent = ({
 
   useEffect(() => {
     animalView(animal);
-  }, [parentId, animal]);
+  }, [animal]);
 
-  const fatherInformation = currentAnimal?.parents?.[0];
-  const motherInformation = currentAnimal?.parents?.[1];
+  const fatherInformation = currentAnimal?.parents?.[0] || {};
+  const motherInformation = currentAnimal?.parents?.[1] || {};
+
+  console.log("fatherInformation:", fatherInformation);
+
   const mapForm = (formData) => [
     {
-      id: uuidv4(),
+      id: fatherInformation?.id || uuidv4(),
       fullName: formData.fatherFullName,
       registrationNumber: formData.fatherRegistrationNumber,
       raceOrLine: formData.fatherRaceOrLine,
-      parents: [],
+      ...(currentAnimal.id !== parentId
+        ? { parents: [] }
+        : { parents: [...(fatherInformation.parents || [])] }),
     },
     {
-      id: uuidv4(),
+      id: motherInformation?.id || uuidv4(),
       fullName: formData.motherFullName,
       registrationNumber: formData.motherRegistrationNumber,
       raceOrLine: formData.motherRaceOrLine,
-      parents: [],
+      ...(currentAnimal.id !== parentId
+        ? { parents: [] }
+        : { parents: [...(motherInformation.parents || [])] }),
     },
   ];
 
@@ -69,7 +79,15 @@ export const FamilyTreeModalComponent = ({
     try {
       setLoading(true);
 
-      await updateAnimal(animalId, { ...animal, parents: mapForm(formData) });
+      await updateAnimal(animalId, {
+        ...animal,
+        parents: onFindAndUpdateAnimalInformation(
+          animal,
+          animal.parents,
+          parentId,
+          mapForm(formData),
+        ),
+      });
 
       notification({ type: "success" });
       onSetIsVisibleModal(false);
@@ -82,7 +100,7 @@ export const FamilyTreeModalComponent = ({
 
   return (
     <FamilyTreeModal
-      parentId={parentId}
+      onSetParentId={onSetParentId}
       isVisibleModal={isVisibleModal}
       onSetIsVisibleModal={onSetIsVisibleModal}
       relationship={relationship}
@@ -97,6 +115,7 @@ export const FamilyTreeModalComponent = ({
 };
 
 const FamilyTreeModal = ({
+  onSetParentId,
   isVisibleModal,
   onSetIsVisibleModal,
   relationship,
@@ -129,23 +148,20 @@ const FamilyTreeModal = ({
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   useEffect(() => {
-    resetForm(fatherInformation, motherInformation);
+    resetForm();
   }, [fatherInformation, motherInformation, isVisibleModal]);
 
-  const resetForm = (fatherInformation, motherInformation) => {
+  console.log("fatherFullName:", watch("fatherFullName"));
+  console.log("relationship", relationship);
+
+  const resetForm = () => {
     reset({
-      fatherFullName: fatherInformation?.fullName || watch("fatherFullName"),
-      fatherRegistrationNumber:
-        fatherInformation?.registrationNumber ||
-        watch("fatherRegistrationNumber"),
-      fatherRaceOrLine:
-        fatherInformation?.raceOrLine || watch("fatherRaceOrLine"),
-      motherFullName: motherInformation?.fullName || watch("motherFullName"),
-      motherRegistrationNumber:
-        motherInformation?.registrationNumber ||
-        watch("motherRegistrationNumber"),
-      motherRaceOrLine:
-        motherInformation?.raceOrLine || watch("motherRaceOrLine"),
+      fatherFullName: fatherInformation?.fullName || "",
+      fatherRegistrationNumber: fatherInformation?.registrationNumber || "",
+      fatherRaceOrLine: fatherInformation?.raceOrLine || "",
+      motherFullName: motherInformation?.fullName || "",
+      motherRegistrationNumber: motherInformation?.registrationNumber || "",
+      motherRaceOrLine: motherInformation?.raceOrLine || "",
     });
   };
 
@@ -154,140 +170,123 @@ const FamilyTreeModal = ({
       title="Datos del familiar"
       visible={isVisibleModal}
       onCancel={() => {
-        onSetCurrentAnimal({});
         onSetIsVisibleModal(false);
+        onSetCurrentAnimal({});
+        onSetParentId(null);
       }}
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Container>
-            <span>
-              Información{" "}
-              {relationship === "father" ? "del Padre" : "de la Madre"}
-            </span>
-            <Radio.Group
-              key={""}
-              onChange={(e) => onSetRelationship(e.target.value)}
-              defaultValue={relationship}
-              buttonStyle="solid"
-            >
-              <Radio.Button value="father">Padre</Radio.Button>
-              <Radio.Button value="mother">Madre</Radio.Button>
-            </Radio.Group>
-          </Container>
-        </Col>
-        <Col span={24}>
           <Form onSubmit={handleSubmit(onAddAnimalParents)}>
             <Row gutter={[16, 16]}>
-              {relationship === "father" ? (
-                <>
-                  <Col span={24}>
-                    <Controller
-                      name="fatherFullName"
-                      control={control}
-                      defaultValue=""
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="Nombre"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col span={24}>
-                    <Controller
-                      name="fatherRegistrationNumber"
-                      control={control}
-                      defaultValue=""
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="N° Matrícula"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col span={24}>
-                    <Controller
-                      name="fatherRaceOrLine"
-                      control={control}
-                      defaultValue=""
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="Raza/Línea"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                </>
-              ) : (
-                <>
-                  <Col span={24}>
-                    <Controller
-                      name="motherFullName"
-                      control={control}
-                      defaultValue=""
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="Nombre"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col span={24}>
-                    <Controller
-                      name="motherRegistrationNumber"
-                      control={control}
-                      defaultValue=""
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="N° Matrícula"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col span={24}>
-                    <Controller
-                      name="motherRaceOrLine"
-                      control={control}
-                      defaultValue=""
-                      render={({ field: { onChange, value, name } }) => (
-                        <Input
-                          label="Raza/Línea"
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          error={error(name)}
-                          required={required(name)}
-                        />
-                      )}
-                    />
-                  </Col>
-                </>
-              )}
+              <Col span={24} md={12}>
+                <ComponentContainer.group label="Padre">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Controller
+                        name="fatherFullName"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Nombre"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="fatherRegistrationNumber"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="N° Matrícula"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="fatherRaceOrLine"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Raza/Línea"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </ComponentContainer.group>
+              </Col>
+              <Col span={24} md={12}>
+                <ComponentContainer.group label="Madre">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Controller
+                        name="motherFullName"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Nombre"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="motherRegistrationNumber"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="N° Matrícula"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="motherRaceOrLine"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Raza/Línea"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </ComponentContainer.group>
+              </Col>
             </Row>
             <Row gutter={[16, 16]}>
               <Col span={24}>
