@@ -98,6 +98,9 @@ export const AnimalIntegration = () => {
     status: animal?.status || "registered",
     userId: authUser.id,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6d170a0 (refactored the add and edit animal parents information)
     ...(isNew
       ? {
           parents: [
@@ -118,6 +121,7 @@ export const AnimalIntegration = () => {
           ],
         }
       : animal.parents),
+<<<<<<< HEAD
 =======
     parents: [
       {
@@ -346,6 +350,8 @@ export const AnimalIntegration = () => {
       },
     ],
 >>>>>>> 61dfb95 (added family tree)
+=======
+>>>>>>> 6d170a0 (refactored the add and edit animal parents information)
   });
 
   const onSaveAnimal = async (formData) => {

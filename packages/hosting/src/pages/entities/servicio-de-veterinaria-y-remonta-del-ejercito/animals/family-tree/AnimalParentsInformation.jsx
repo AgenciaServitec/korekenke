@@ -8,6 +8,7 @@ export const AnimalParentsInformation = ({
   animal,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   onAddAndEditAnimalParents,
 =======
   onSetIsVisibleModal,
@@ -16,6 +17,9 @@ export const AnimalParentsInformation = ({
   onAddAnimalParents,
   onEditAnimalParents,
 >>>>>>> 7ca4409 (added reset form)
+=======
+  onAddAndEditAnimalParents,
+>>>>>>> 6d170a0 (refactored the add and edit animal parents information)
   children,
 }) => {
   return (
@@ -27,25 +31,34 @@ export const AnimalParentsInformation = ({
         <div className="button-add">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           {isEmpty(animal?.parents) ? (
 =======
           {isEmpty(animal.parents) ? (
 >>>>>>> 7ca4409 (added reset form)
+=======
+          {isEmpty(animal?.parents) ? (
+>>>>>>> 6d170a0 (refactored the add and edit animal parents information)
             <IconAction
               tooltipTitle="Agregar familiar"
               icon={faSquarePlus}
               styled={{ color: () => "#637A3A" }}
 <<<<<<< HEAD
+<<<<<<< HEAD
               onClick={() => onAddAndEditAnimalParents(animal.id)}
 =======
               onClick={() => onAddAnimalParents()}
 >>>>>>> 7ca4409 (added reset form)
+=======
+              onClick={() => onAddAndEditAnimalParents(animal.id)}
+>>>>>>> 6d170a0 (refactored the add and edit animal parents information)
             />
           ) : (
             <IconAction
               tooltipTitle="Editar familiar"
               icon={faEdit}
               styled={{ color: () => "#637A3A" }}
+<<<<<<< HEAD
 <<<<<<< HEAD
               onClick={() => onAddAndEditAnimalParents(animal.id)}
             />
@@ -60,6 +73,9 @@ export const AnimalParentsInformation = ({
 >>>>>>> 61dfb95 (added family tree)
 =======
               onClick={() => onEditAnimalParents(animal.id)}
+=======
+              onClick={() => onAddAndEditAnimalParents(animal.id)}
+>>>>>>> 6d170a0 (refactored the add and edit animal parents information)
             />
           )}
 >>>>>>> 7ca4409 (added reset form)
