@@ -55,6 +55,7 @@ export const FamilyTreeModalComponent = ({
       fullName: formData.fatherFullName,
       registrationNumber: formData.fatherRegistrationNumber,
       raceOrLine: formData.fatherRaceOrLine,
+      relationship: "father",
       ...(currentAnimal.id !== parentId
         ? { parents: [] }
         : { parents: [...(fatherInformation.parents || [])] }),
@@ -64,6 +65,7 @@ export const FamilyTreeModalComponent = ({
       fullName: formData.motherFullName,
       registrationNumber: formData.motherRegistrationNumber,
       raceOrLine: formData.motherRaceOrLine,
+      relationship: "mother",
       ...(currentAnimal.id !== parentId
         ? { parents: [] }
         : { parents: [...(motherInformation.parents || [])] }),
@@ -121,12 +123,12 @@ const FamilyTreeModal = ({
   loading,
 }) => {
   const schema = yup.object({
-    fatherFullName: yup.string(),
-    fatherRegistrationNumber: yup.string(),
-    fatherRaceOrLine: yup.string(),
-    motherFullName: yup.string(),
-    motherRegistrationNumber: yup.string(),
-    motherRaceOrLine: yup.string(),
+    fatherFullName: yup.string().required(),
+    fatherRegistrationNumber: yup.string().required(),
+    fatherRaceOrLine: yup.string().required(),
+    motherFullName: yup.string().required(),
+    motherRegistrationNumber: yup.string().required(),
+    motherRaceOrLine: yup.string().required(),
   });
 
   const {

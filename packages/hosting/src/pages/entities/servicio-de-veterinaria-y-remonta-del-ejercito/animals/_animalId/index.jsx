@@ -100,6 +100,7 @@ export const AnimalIntegration = () => {
               fullName: formData.father,
               registrationNumber: "",
               raceOrLine: "",
+              relationship: "father",
               parents: [],
             },
             {
@@ -107,6 +108,7 @@ export const AnimalIntegration = () => {
               fullName: formData.mother,
               registrationNumber: "",
               raceOrLine: "",
+              relationship: "mother",
               parents: [],
             },
           ],
