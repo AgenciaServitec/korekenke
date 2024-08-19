@@ -25,13 +25,14 @@ export const FamilyTreeIntegration = () => {
   const [animal, setAnimal] = useState({});
   const [parentId, setParentId] = useState(null);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
 
   useEffect(() => {
     (async () => {
       const _animal = animalId ? await fetchAnimal(animalId) : null;
       setAnimal(_animal);
     })();
-  }, [isVisibleModal]);
+  }, [isVisibleModal, isVisibleModalConfirm]);
 
   const onNavigateGoTo = (pathname) => navigate(pathname);
 
@@ -66,8 +67,6 @@ export const FamilyTreeIntegration = () => {
   };
 
   const findDeleteAnimalInformation = (animal, nodes = [], id) => {
-    if (animal?.id === parentId) return [];
-
     if (typeof nodes !== "string")
       return nodes.map((node) => {
         if (node?.id === id) {
@@ -102,6 +101,8 @@ export const FamilyTreeIntegration = () => {
           ...animal,
           parents: onDeleteAnimalParents(parentId),
         });
+
+        setIsVisibleModalConfirm(!isVisibleModalConfirm);
 
         notification({
           type: "success",
