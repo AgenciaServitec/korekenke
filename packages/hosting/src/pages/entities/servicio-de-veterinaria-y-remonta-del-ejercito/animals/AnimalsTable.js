@@ -20,7 +20,7 @@ export const AnimalsTable = ({
   onNavigateGoToPdfAnimalRegistrationCard,
   onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
-  onNavigateGoToFamilyTree
+  onNavigateGoToFamilyTree,
 }) => {
   const { authUser } = useAuthentication();
 
