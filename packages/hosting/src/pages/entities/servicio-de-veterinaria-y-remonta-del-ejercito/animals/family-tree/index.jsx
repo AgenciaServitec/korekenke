@@ -17,6 +17,7 @@ import { AnimalParentsInformation } from "./AnimalParentsInformation";
 <<<<<<< HEAD
 import { isEmpty } from "lodash";
 import styled from "styled-components";
+<<<<<<< HEAD
 =======
 >>>>>>> 61dfb95 (added family tree)
 =======
@@ -25,6 +26,8 @@ import { v4 as uuidv4 } from "uuid";
 >>>>>>> 6d170a0 (refactored the add and edit animal parents information)
 import { isEmpty } from "lodash";
 >>>>>>> 7ca4409 (added reset form)
+=======
+>>>>>>> d43dd82 (refactored code)
 
 export const FamilyTreeIntegration = () => {
   const { animalId } = useParams();
@@ -61,10 +64,13 @@ export const FamilyTreeIntegration = () => {
     if (animal?.id === parentId) return [...newValues];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     console.log("nodes:", nodes);
 
 >>>>>>> 6d170a0 (refactored the add and edit animal parents information)
+=======
+>>>>>>> d43dd82 (refactored code)
     if (typeof nodes !== "string")
       return nodes.map((node) => {
         if (node?.id === id) {
@@ -119,8 +125,8 @@ export const FamilyTreeIntegration = () => {
 >>>>>>> 6d170a0 (refactored the add and edit animal parents information)
   };
 
-  const onAddAndEditAnimalParents = (animalId) => {
-    setParentId(animalId);
+  const onAddAndEditAnimalParents = (parentId) => {
+    setParentId(parentId);
     setIsVisibleModal(true);
   };
 
@@ -183,7 +189,7 @@ export const FamilyTreeIntegration = () => {
               icon={faArrowLeft}
               onClick={() =>
                 onNavigateGoTo(
-                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`
                 )
               }
             />
@@ -196,6 +202,9 @@ export const FamilyTreeIntegration = () => {
         </Col>
         <Col span={24}>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d43dd82 (refactored code)
           <WrapperContent>
             <AnimalParentsInformation
               animal={animal}
@@ -204,6 +213,7 @@ export const FamilyTreeIntegration = () => {
               {animalParentsInformationView}
             </AnimalParentsInformation>
           </WrapperContent>
+<<<<<<< HEAD
         </Col>
         <FamilyTreeModalComponent
           animal={animal}
@@ -219,6 +229,8 @@ export const FamilyTreeIntegration = () => {
           >
             {animalParentsInformationView}
           </AnimalParentsInformation>
+=======
+>>>>>>> d43dd82 (refactored code)
         </Col>
         <FamilyTreeModalComponent
           animal={animal}
@@ -237,6 +249,9 @@ export const FamilyTreeIntegration = () => {
   );
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d43dd82 (refactored code)
 
 const WrapperContent = styled.div`
   height: 80vh;
@@ -245,5 +260,8 @@ const WrapperContent = styled.div`
   justify-content: center;
   overflow-x: auto;
 `;
+<<<<<<< HEAD
 =======
 >>>>>>> 61dfb95 (added family tree)
+=======
+>>>>>>> d43dd82 (refactored code)
