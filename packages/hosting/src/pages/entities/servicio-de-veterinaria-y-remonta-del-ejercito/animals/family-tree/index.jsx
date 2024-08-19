@@ -13,6 +13,7 @@ import { fetchAnimal } from "../../../../../firebase/collections";
 import { FamilyTreeModalComponent } from "./FamilyTreeModalComponent";
 import { AnimalParentsInformation } from "./AnimalParentsInformation";
 import { isEmpty } from "lodash";
+import styled from "styled-components";
 
 export const FamilyTreeIntegration = () => {
   const { animalId } = useParams();
@@ -34,11 +35,9 @@ export const FamilyTreeIntegration = () => {
     animal,
     nodes = [],
     id,
-    newValues,
+    newValues
   ) => {
     if (animal?.id === parentId) return [...newValues];
-
-    console.log("nodes:", nodes);
 
     if (typeof nodes !== "string")
       return nodes.map((node) => {
@@ -53,7 +52,7 @@ export const FamilyTreeIntegration = () => {
               animal,
               node.parents,
               id,
-              newValues,
+              newValues
             ),
           };
         }
@@ -62,8 +61,8 @@ export const FamilyTreeIntegration = () => {
       });
   };
 
-  const onAddAndEditAnimalParents = (animalId) => {
-    setParentId(animalId);
+  const onAddAndEditAnimalParents = (parentId) => {
+    setParentId(parentId);
     setIsVisibleModal(true);
   };
 
@@ -98,7 +97,7 @@ export const FamilyTreeIntegration = () => {
               icon={faArrowLeft}
               onClick={() =>
                 onNavigateGoTo(
-                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`
                 )
               }
             />
@@ -110,12 +109,14 @@ export const FamilyTreeIntegration = () => {
           </Space>
         </Col>
         <Col span={24}>
-          <AnimalParentsInformation
-            animal={animal}
-            onAddAndEditAnimalParents={onAddAndEditAnimalParents}
-          >
-            {animalParentsInformationView}
-          </AnimalParentsInformation>
+          <WrapperContent>
+            <AnimalParentsInformation
+              animal={animal}
+              onAddAndEditAnimalParents={onAddAndEditAnimalParents}
+            >
+              {animalParentsInformationView}
+            </AnimalParentsInformation>
+          </WrapperContent>
         </Col>
         <FamilyTreeModalComponent
           animal={animal}
@@ -129,3 +130,11 @@ export const FamilyTreeIntegration = () => {
     </Acl>
   );
 };
+
+const WrapperContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: auto;
+`;
