@@ -21,6 +21,8 @@ export * from "./administration/sections/_section";
 export * from "./access-control/default-roles-acls";
 export * from "./access-control/default-roles-acls/_roleAclsId";
 export * from "./access-control/manage-acls";
+export * from "./access-control/modules-administrator";
+export * from "./access-control/modules-administrator/_moduleAdministratorId";
 
 //CORRESPONDENCES "PUBLIC"
 export * from "./correspondences";

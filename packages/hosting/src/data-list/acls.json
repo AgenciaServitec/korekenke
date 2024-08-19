@@ -22,6 +22,11 @@
     "manageAcls": {
       "label": "Administrador de Acls",
       "/manage-acls": "Menu: Administrardor acls"
+    },
+    "modulesAdministrator": {
+      "label": "Administrador de modulos",
+      "/modules-administrator": "Menu: Administrador de modulos",
+      "/modules-administrator/:moduleAdministratorId": "Editar Administrador de modulos"
     }
   },
   "administration": {

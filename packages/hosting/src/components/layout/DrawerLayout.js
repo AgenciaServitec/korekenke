@@ -98,6 +98,16 @@ export const DrawerLayout = ({
           ),
           onClick: () => onClickMenu("/manage-acls"),
         },
+        {
+          label: "Administrador de modulos",
+          key: "modules-administrator",
+          isVisible: existsAclsInAclsOfUser(
+            "accessControl",
+            ["modulesAdministrator"],
+            ["/modules-administrator"],
+          ),
+          onClick: () => onClickMenu("/modules-administrator"),
+        },
       ],
     },
     {

@@ -4,6 +4,7 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
+import { ModuleAdministratorIntegration } from "../pages";
 
 export const Router = () => {
   return (
@@ -62,6 +63,24 @@ export const Router = () => {
           element={
             <AdminLayout>
               <A.ManageAclsIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="modules-administrator"
+          element={
+            <AdminLayout>
+              <A.ModulesAdministrator />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="modules-administrator/:moduleAdministratorId"
+          element={
+            <AdminLayout>
+              <A.ModuleAdministratorIntegration />
             </AdminLayout>
           }
         />
