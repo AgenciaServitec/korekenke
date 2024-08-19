@@ -90,6 +90,9 @@ const Animals = ({
   const onNavigateGoToClinicHistory = (animalId) =>
     onNavigateTo(`${animalId}/clinic-history`);
 
+  const onNavigateGoToFamilyTree = (animalId) =>
+    onNavigateTo(`${animalId}/family-tree`);
+
   return (
     <Acl
       category="servicio-de-veterinaria-y-remonta-del-ejercito"
@@ -154,6 +157,7 @@ const Animals = ({
               onNavigateGoToAnimalMagazineProfiles
             }
             onNavigateGoToClinicHistory={onNavigateGoToClinicHistory}
+            onNavigateGoToFamilyTree={onNavigateGoToFamilyTree}
           />
         </Col>
       </Row>

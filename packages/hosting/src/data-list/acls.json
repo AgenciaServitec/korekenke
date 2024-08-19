@@ -126,7 +126,8 @@
       "/animals/new": "Agregar animal",
       "/animals/:animalId": "Editar animal",
       "/animals#delete": "Eliminar animal",
-      "/animals/:animalId/pdf-animal-card": "Pdf tarjeta de registro animal"
+      "/animals/:animalId/pdf-animal-card": "Pdf tarjeta de registro animal",
+      "/animals/:animalId/family-tree": "Árbol genealógico"
     },
     "animalLogs": {
       "label": "Historial de animales",
