@@ -80,6 +80,7 @@ export const FamilyTreeIntegration = () => {
         </AnimalParentsInformation>
       );
     });
+    
 
   const animalParentsInformationView = animalView(animal);
 
