@@ -92,6 +92,26 @@ export const AnimalIntegration = () => {
     type: animalType,
     status: animal?.status || "registered",
     userId: authUser.id,
+    ...(isNew
+      ? {
+          parents: [
+            {
+              id: uuidv4(),
+              fullName: formData.father,
+              registrationNumber: "",
+              raceOrLine: "",
+              parents: [],
+            },
+            {
+              id: uuidv4(),
+              fullName: formData.mother,
+              registrationNumber: "",
+              raceOrLine: "",
+              parents: [],
+            },
+          ],
+        }
+      : animal.parents),
   });
 
   const onSaveAnimal = async (formData) => {

@@ -6,3 +6,4 @@ export * from "./animals/clinic-history/sheets";
 export * from "./animals/animal-magazine-profiles";
 export * from "./animals/animal-magazine-profiles/_animalMagazineProfileId";
 export * from "./animals/animal-magazine-profiles/sheets";
+export * from "./animals/family-tree";

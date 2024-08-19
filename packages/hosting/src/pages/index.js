@@ -50,6 +50,7 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/animal-magazine-profiles/sheets";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs";
 export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animal-logs/sheets";
+export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals/family-tree";
 
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests";
