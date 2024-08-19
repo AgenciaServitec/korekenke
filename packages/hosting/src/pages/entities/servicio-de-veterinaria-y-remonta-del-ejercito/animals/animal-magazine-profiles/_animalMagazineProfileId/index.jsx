@@ -58,7 +58,7 @@ export const AnimalMagazineProfileIntegration = () => {
               if (!_response) return onGoBack();
               setAnimalMagazineProfile(_response);
               return;
-            },
+            }
           );
         })();
 
@@ -70,19 +70,19 @@ export const AnimalMagazineProfileIntegration = () => {
     id: animalMagazineProfile.id,
     bodyCondition: {
       ...AnimalMagazineProfiles?.[animal.type]?.bodyCondition.find(
-        (_bodyCondition) => _bodyCondition.id === formData.bodyCondition,
+        (_bodyCondition) => _bodyCondition.id === formData.bodyCondition
       ),
       observation: formData.bodyConditionObservation,
       qualification: formData.bodyCondition,
     },
     toillete: {
       ...AnimalMagazineProfiles?.[animal.type]?.toillete.items.find(
-        (_toillete) => _toillete.id === formData.toillete,
+        (_toillete) => _toillete.id === formData.toillete
       ),
     },
     paws: {
       ...AnimalMagazineProfiles?.[animal.type]?.paws.items.find(
-        (_paws) => _paws.id === formData.paws,
+        (_paws) => _paws.id === formData.paws
       ),
     },
     bodyWeightEstimation: {
@@ -115,12 +115,12 @@ export const AnimalMagazineProfileIntegration = () => {
       isNew
         ? await addAnimalMagazineProfile(
             animalId,
-            assignCreateProps(mapForm(formData)),
+            assignCreateProps(mapForm(formData))
           )
         : await updateAnimalMagazineProfile(
             animalId,
             animalMagazineProfile.id,
-            assignUpdateProps(mapForm(formData)),
+            assignUpdateProps(mapForm(formData))
           );
 
       notification({ type: "success" });
@@ -205,7 +205,7 @@ const AnimalMagazineProfile = ({
     resetForm();
     setBodyCondition(animalMagazineProfile?.bodyCondition?.id || null);
     setBodyConditionObservation(
-      animalMagazineProfile?.bodyCondition?.observation || null,
+      animalMagazineProfile?.bodyCondition?.observation || null
     );
     setToillete(animalMagazineProfile?.toillete?.id || null);
     setPaws(animalMagazineProfile?.paws?.id || null);
@@ -297,7 +297,7 @@ const AnimalMagazineProfile = ({
                             </div>
                           </div>
                         </li>
-                      ),
+                      )
                     )}
                   </ul>
                   <br />
@@ -335,7 +335,7 @@ const AnimalMagazineProfile = ({
                         >
                           <h5>{_toillete.name}</h5>
                         </li>
-                      ),
+                      )
                     )}
                   </ul>
                 </div>

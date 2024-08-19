@@ -39,7 +39,7 @@ export const ApplicantDocumentsModal = ({
           ...(!user?.cipPhoto && { cipPhoto: cipPhotoCopy }),
           ...(!user?.dniPhoto && { dniPhoto: dniPhotoCopy }),
           ...(!user?.signaturePhoto && { signaturePhoto: signaturePhotoCopy }),
-        }),
+        })
       );
 
       await updateDasApplication(dasRequest.id, {

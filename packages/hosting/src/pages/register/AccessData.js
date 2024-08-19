@@ -95,7 +95,7 @@ export const AccessData = ({ next, currentStep }) => {
         .collection("users")
         .where("cip", "==", cip)
         .where("isDeleted", "==", false)
-        .limit(1),
+        .limit(1)
     );
 
     return response[0];
@@ -107,7 +107,7 @@ export const AccessData = ({ next, currentStep }) => {
         .collection("users")
         .where("dni", "==", dni)
         .where("isDeleted", "==", false)
-        .limit(1),
+        .limit(1)
     );
 
     return response[0];

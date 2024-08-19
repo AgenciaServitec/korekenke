@@ -53,7 +53,7 @@ export const ObservationPersonalInformationModal = ({
             },
           ],
           ["createAt"],
-          "desc",
+          "desc"
         ),
       },
     };

@@ -10,10 +10,10 @@ export const getAnimalMagazineProfileId = (animalId) =>
 
 export const fetchAnimalMagazineProfile = async (
   animalId,
-  animalIdMagazineProfileId,
+  animalIdMagazineProfileId
 ) =>
   fetchDocumentOnce(
-    animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfileId),
+    animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfileId)
   );
 
 export const fetchAnimalMagazineProfiles = async (animalId) =>
@@ -21,19 +21,19 @@ export const fetchAnimalMagazineProfiles = async (animalId) =>
 
 export const addAnimalMagazineProfile = async (
   animalId,
-  animalIdMagazineProfile,
+  animalIdMagazineProfile
 ) =>
   setDocument(
     animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfile.id),
-    animalIdMagazineProfile,
+    animalIdMagazineProfile
   );
 
 export const updateAnimalMagazineProfile = async (
   animalId,
   animalIdMagazineProfileId,
-  animalIdMagazineProfile,
+  animalIdMagazineProfile
 ) =>
   updateDocument(
     animalMagazineProfilesRef(animalId).doc(animalIdMagazineProfileId),
-    animalIdMagazineProfile,
+    animalIdMagazineProfile
   );

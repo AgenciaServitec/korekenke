@@ -38,7 +38,7 @@ export const CorrespondencesIntegration = () => {
     useCollectionData(
       correspondencesRef
         .where("isDeleted", "==", false)
-        .orderBy("createAt", "desc"),
+        .orderBy("createAt", "desc")
     );
 
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
@@ -70,7 +70,7 @@ export const CorrespondencesIntegration = () => {
       onOk: async () => {
         await updateCorrespondence(
           correspondenceId,
-          assignDeleteProps({ isDeleted: true }),
+          assignDeleteProps({ isDeleted: true })
         );
 
         notification({
@@ -101,7 +101,7 @@ export const CorrespondencesIntegration = () => {
 
   const onChangeStatusToInProgress = async (correspondence) => {
     const MdpEntityManager = await fetchEntityManager(
-      "departamento-de-apoyo-social",
+      "departamento-de-apoyo-social"
     );
 
     if (
@@ -175,7 +175,7 @@ const Correspondences = ({
     useCorrespondenceModal();
 
   const filterCorrespondencesView = correspondences.filter(
-    (reception) => reception,
+    (reception) => reception
   );
 
   const onDecreeCorrespondence = (correspondence) => {

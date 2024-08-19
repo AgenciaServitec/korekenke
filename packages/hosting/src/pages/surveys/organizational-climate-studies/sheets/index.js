@@ -13,7 +13,7 @@ export const OrganizationalClimateStudiesSheets = () => {
   ] = useCollectionData(
     firestore
       .collection("organizational-climate-studies-surveys")
-      .where("isDeleted", "==", false),
+      .where("isDeleted", "==", false)
   );
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const OrganizationalClimateStudiesSheets = () => {
   const organizationClimateStudiesView = orderBy(
     organizationClimateStudies,
     ["createAt"],
-    ["desc"],
+    ["desc"]
   ).map((organizationClimateStudy, index) => ({
     ...organizationClimateStudy,
     number: index + 1,
@@ -40,11 +40,11 @@ export const OrganizationalClimateStudiesSheets = () => {
               organizationClimateStudies={orderBy(
                 _organizationClimateStudies,
                 ["createAt"],
-                ["desc"],
+                ["desc"]
               )}
             />
           </Sheet>
-        ),
+        )
       )}
     </PDF>
   );

@@ -151,7 +151,9 @@ export const AnimalCardSheet = ({ animal }) => {
                     <p>
                       <strong>
                         JEFE{" "}
-                        {`${animal?.department?.name || ""} DEL ${animal?.unit?.name || ""}`}
+                        {`${animal?.department?.name || ""} DEL ${
+                          animal?.unit?.name || ""
+                        }`}
                       </strong>
                     </p>
                   </div>

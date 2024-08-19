@@ -84,7 +84,7 @@ export const DepartmentIntegration = () => {
       //Get users ids deselection
       const usersIdsDeselected = formData?.membersIds
         ? (department?.membersIds || []).filter(
-            (memberId) => !formData.membersIds.includes(memberId),
+            (memberId) => !formData.membersIds.includes(memberId)
           )
         : [];
 
@@ -101,7 +101,7 @@ export const DepartmentIntegration = () => {
         ? await addDepartment(assignCreateProps(mapDepartment(formData)))
         : await updateDepartment(
             department.id,
-            assignUpdateProps(mapDepartment(formData)),
+            assignUpdateProps(mapDepartment(formData))
           );
 
       notification({ type: "success" });
@@ -194,7 +194,7 @@ const Department = ({
   //VIEWS TO SELECTS
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || "",
+      findRole(rolesAcls, user?.roleCode)?.name || ""
     )})`,
     value: user.id,
     key: user.id,
@@ -204,11 +204,11 @@ const Department = ({
   const membersInEdition = departmentUsers.filter((user) =>
     !isEmpty(department?.membersIds)
       ? department.membersIds.includes(user.id)
-      : false,
+      : false
   );
 
   const userBosses = departmentUsers.filter(
-    (user) => user.roleCode === "department_boss",
+    (user) => user.roleCode === "department_boss"
   );
 
   //LIST TO SELECTS
@@ -216,8 +216,8 @@ const Department = ({
     isNew ? [] : membersInEdition,
     departmentUsers.filter(
       (user) =>
-        user.assignedTo.type === "department" && isEmpty(user.assignedTo.id),
-    ),
+        user.assignedTo.type === "department" && isEmpty(user.assignedTo.id)
+    )
   ).map(mapOptionSelectMembers);
 
   const bossesView = (bossId = undefined) =>
@@ -312,7 +312,7 @@ const Department = ({
                       options={orderBy(
                         usersViewForMembers,
                         ["roleCode"],
-                        ["desc"],
+                        ["desc"]
                       )}
                     />
                   )}

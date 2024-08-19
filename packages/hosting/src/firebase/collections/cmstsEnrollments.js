@@ -17,6 +17,6 @@ export const addCmstsEnrollment = async (cmstsEnrollment) =>
 
 export const updateCmstsEnrollment = async (
   cmstsEnrollmentId,
-  cmstsEnrollment,
+  cmstsEnrollment
 ) =>
   updateDocument(cmstsEnrollmentsRef.doc(cmstsEnrollmentId), cmstsEnrollment);

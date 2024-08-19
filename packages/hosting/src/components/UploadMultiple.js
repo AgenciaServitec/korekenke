@@ -174,7 +174,7 @@ export const UploadMultiple = ({
   const addFileToFiles = (file) =>
     setFiles((prevFiles) => {
       const index = prevFiles.findIndex(
-        (prevFile) => prevFile.uid === file.uid,
+        (prevFile) => prevFile.uid === file.uid
       );
 
       const nextFiles = [...prevFiles];
@@ -207,7 +207,7 @@ export const UploadMultiple = ({
     await deleteFileAndFileThumbFromStorage(storage, filePath, file.name);
 
     setFiles((prevFiles) =>
-      prevFiles.filter((prevFile) => prevFile.uid !== file.uid),
+      prevFiles.filter((prevFile) => prevFile.uid !== file.uid)
     );
   };
 

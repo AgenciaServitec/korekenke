@@ -39,7 +39,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
             });
             gRecaptchaReset();
           },
-        },
+        }
       );
 
       if (!applicationVerifier) {
@@ -73,7 +73,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
 
       const credential = firebase.auth.PhoneAuthProvider.credential(
         verificationId,
-        verificationCode.toString(),
+        verificationCode.toString()
       );
 
       const userCredential = await firebase

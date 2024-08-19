@@ -35,7 +35,7 @@ export const OrganizationalClimateStudyIntegration = () => {
         .collection("organizational-climate-studies-surveys")
         .doc(organizationalClimateStudyId)
         .set(
-          assignCreateProps(mapForm(formData, organizationalClimateStudyId)),
+          assignCreateProps(mapForm(formData, organizationalClimateStudyId))
         );
 
       notification({ type: "success" });

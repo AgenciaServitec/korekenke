@@ -113,14 +113,14 @@ export const UserIntegration = () => {
         degree: formData.degree,
         commands: formData?.commandsIds
           ? commands.filter((command) =>
-              formData.commandsIds.includes(command.id),
+              formData.commandsIds.includes(command.id)
             )
           : null,
         initialCommand: formData?.commandsIds
           ? commands.find((command) => command.id === formData?.commandsIds[0])
           : null,
         cgi: formData.cgi,
-      },
+      }
     );
 
   return (
@@ -228,7 +228,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                       .filter((role) =>
                         watch("otherRoleCodes")
                           ? !watch("otherRoleCodes").includes(role.id)
-                          : true,
+                          : true
                       )
                       .map((role) => ({
                         label: capitalize(role.name),

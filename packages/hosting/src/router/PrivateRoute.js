@@ -40,14 +40,14 @@ export const PrivateRoute = () => {
     Object.entries(authUser?.acls || {}).forEach(([key, subCategories = {}]) =>
       Object.entries(subCategories).forEach(([_key, values]) => {
         const response = values.find((aclRoute) =>
-          endsWith(pathnameTemplate(), aclRoute),
+          endsWith(pathnameTemplate(), aclRoute)
         );
 
         if (!isEmpty(response)) {
           result = !isEmpty(response);
           return;
         }
-      }),
+      })
     );
 
     return result;

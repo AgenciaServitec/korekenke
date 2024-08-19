@@ -5,5 +5,5 @@ export const findRole = (rolesAcls = [], roleCode) =>
 
 export const findDegree = (degreeCode) =>
   DegreesArmy.flatMap((degreeArmy) => degreeArmy.options).find(
-    (degree) => degree.value === degreeCode,
+    (degree) => degree.value === degreeCode
   );

@@ -12,7 +12,7 @@ export const fetchEntityByNameId = async (nameId) =>
     entitiesRef
       .where("nameId", "==", nameId)
       .where("isDeleted", "==", false)
-      .limit(1),
+      .limit(1)
   );
 
 export const fetchEntities = async () =>

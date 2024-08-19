@@ -90,7 +90,7 @@ export const AnimalsInformation = ({ animal }) => {
             value={`: ${
               animal?.birthdate
                 ? dayjs(animal?.birthdate, DATE_FORMAT_TO_FIRESTORE).format(
-                    "DD/MM/YYYY",
+                    "DD/MM/YYYY"
                   )
                 : ""
             }`}

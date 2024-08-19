@@ -14,7 +14,7 @@ export const useApiUserPost = () => {
     async (user) => {
       return post("/", user);
     },
-    [post],
+    [post]
   );
 
   return {

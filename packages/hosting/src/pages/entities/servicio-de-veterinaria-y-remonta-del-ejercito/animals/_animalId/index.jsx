@@ -139,7 +139,7 @@ export const AnimalIntegration = () => {
 
   const cologeUsers = users
     .filter((user) =>
-      (user?.commands || []).map((command) => command.code).includes("cologe"),
+      (user?.commands || []).map((command) => command.code).includes("cologe")
     )
     .map((_user) => ({
       label: userFullName(_user),
@@ -175,11 +175,11 @@ const Animal = ({
   onGoBack,
 }) => {
   const [rightProfilePhotoCopy, setRightProfilePhotoCopy] = useState(
-    animal?.rightProfilePhotoCopy,
+    animal?.rightProfilePhotoCopy
   );
   const [frontPhotoCopy, setFrontPhotoCopy] = useState(animal?.frontPhotoCopy);
   const [leftProfilePhotoCopy, setLeftProfilePhotoCopy] = useState(
-    animal?.leftProfilePhotoCopy,
+    animal?.leftProfilePhotoCopy
   );
 
   const isEquine = animalType === "equine";
@@ -239,8 +239,8 @@ const Animal = ({
       unitId: animal?.unitId
         ? animal?.unitId
         : isProduction
-          ? "mVywdUjcwEBT2QxnLzaT"
-          : "R7zZr5jtrN6F3acc0xnr",
+        ? "mVywdUjcwEBT2QxnLzaT"
+        : "R7zZr5jtrN6F3acc0xnr",
       greatUnitStatic: animal?.greatUnitStatic || "",
       name: animal?.name || "",
       slopeNumber: animal?.slopeNumber || "",

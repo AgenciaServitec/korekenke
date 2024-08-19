@@ -20,7 +20,7 @@ export const AnimalsTable = ({
   onNavigateGoToPdfAnimalRegistrationCard,
   onNavigateGoToAnimalMagazineProfiles,
   onNavigateGoToClinicHistory,
-  onNavigateGoToFamilyTree
+  onNavigateGoToFamilyTree,
 }) => {
   const { authUser } = useAuthentication();
 
@@ -144,7 +144,7 @@ export const AnimalsTable = ({
   const animalsView = animals.filter((animal) =>
     ["super_admin", "manager"].includes(authUser.roleCode)
       ? true
-      : animal.userId === authUser.id,
+      : animal.userId === authUser.id
   );
 
   return (

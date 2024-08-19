@@ -18,7 +18,7 @@ export const DefaultRolesAclsIntegration = () => {
     error: deleteRoleAclsError,
     success: deleteRoleAclsSuccess,
   } = useAsync((roleAcls) =>
-    updateRoleAcl(roleAcls.id, assignDeleteProps(roleAcls)),
+    updateRoleAcl(roleAcls.id, assignDeleteProps(roleAcls))
   );
 
   useEffect(() => {

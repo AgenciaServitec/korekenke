@@ -115,7 +115,7 @@ export const CorrespondencesTable = ({
         return (
           <div>
             {(["pending", "inProgress", "finalized"].includes(
-              correspondence.status,
+              correspondence.status
             ) ||
               ["super_admin", "user"].includes(authUser.roleCode)) && (
               <Space align="center">

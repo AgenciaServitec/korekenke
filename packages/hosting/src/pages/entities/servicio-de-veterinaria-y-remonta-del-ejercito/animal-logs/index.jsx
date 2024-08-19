@@ -19,7 +19,7 @@ export const AnimalLogsIntegration = () => {
   const navigate = useNavigate();
   const [animalLogs = [], animalLogsLoading, animalLogsError] =
     useCollectionData(
-      firestore.collection("animal-logs").where("isDeleted", "==", false),
+      firestore.collection("animal-logs").where("isDeleted", "==", false)
     );
 
   useEffect(() => {
@@ -37,8 +37,8 @@ export const AnimalLogsIntegration = () => {
 
     setAnimalsView(
       animalLogs.filter((animal) =>
-        query?.animalType === "all" ? true : animal.type === query?.animalType,
-      ),
+        query?.animalType === "all" ? true : animal.type === query?.animalType
+      )
     );
   }, [query?.animalType, animalLogs]);
 

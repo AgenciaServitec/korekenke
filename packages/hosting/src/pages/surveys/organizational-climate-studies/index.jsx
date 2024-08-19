@@ -30,7 +30,7 @@ export const OrganizationalClimateStudiesIntegration = () => {
   ] = useCollectionData(
     firestore
       .collection("organizational-climate-studies-surveys")
-      .where("isDeleted", "==", false),
+      .where("isDeleted", "==", false)
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const OrganizationalClimateStudiesIntegration = () => {
   const onDeleteOrganizationClimateStudy = async (organizationClimateStudy) => {
     await updateOrganizationalClimateStudy(
       organizationClimateStudy.id,
-      assignDeleteProps(organizationClimateStudy),
+      assignDeleteProps(organizationClimateStudy)
     );
   };
 
@@ -55,7 +55,7 @@ export const OrganizationalClimateStudiesIntegration = () => {
       key: "createAt",
       render: (_, organizationClimateStudy) =>
         dayjs(organizationClimateStudy.createAt.toDate()).format(
-          "DD/MM/YYYY HH:mm",
+          "DD/MM/YYYY HH:mm"
         ),
     },
     {
@@ -147,7 +147,7 @@ export const OrganizationalClimateStudiesIntegration = () => {
             dataSource={orderBy(
               organizationalClimateStudies,
               "createAt",
-              "desc",
+              "desc"
             )}
             loading={organizationalClimateStudiesLoading}
             pagination={false}

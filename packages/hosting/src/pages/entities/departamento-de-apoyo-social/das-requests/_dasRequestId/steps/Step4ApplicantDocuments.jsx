@@ -43,7 +43,7 @@ export const Step4ApplicantDocuments = ({
           ...(!user?.cipPhoto && { cipPhoto: cipPhotoCopy }),
           ...(!user?.dniPhoto && { dniPhoto: dniPhotoCopy }),
           ...(!user?.signaturePhoto && { signaturePhoto: signaturePhotoCopy }),
-        }),
+        })
       );
 
       setLocalStorage("dasRequest", {

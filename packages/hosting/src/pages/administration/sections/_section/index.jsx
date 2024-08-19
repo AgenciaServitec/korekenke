@@ -79,7 +79,7 @@ export const SectionIntegration = () => {
       setLoading(true);
 
       const usersIdsDeselected = (section?.membersIds || []).filter(
-        (memberId) => !(formData?.membersIds || []).includes(memberId),
+        (memberId) => !(formData?.membersIds || []).includes(memberId)
       );
 
       await updateAssignToUser({
@@ -93,7 +93,7 @@ export const SectionIntegration = () => {
         ? await addSection(assignCreateProps(mapSection(formData)))
         : await updateSection(
             section.id,
-            assignUpdateProps(mapSection(formData)),
+            assignUpdateProps(mapSection(formData))
           );
 
       notification({ type: "success" });
@@ -179,7 +179,7 @@ const Section = ({
   //VIEWS TO SELECTS
   const mapOptionSelectMembers = (user) => ({
     label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || "",
+      findRole(rolesAcls, user?.roleCode)?.name || ""
     )})`,
     value: user.id,
     key: user.id,
@@ -187,13 +187,11 @@ const Section = ({
   });
 
   const membersInEdition = sectionUsers.filter((user) =>
-    !isEmpty(section?.membersIds)
-      ? section.membersIds.includes(user.id)
-      : false,
+    !isEmpty(section?.membersIds) ? section.membersIds.includes(user.id) : false
   );
 
   const userBosses = sectionUsers.filter(
-    (user) => user.roleCode === "section_boss",
+    (user) => user.roleCode === "section_boss"
   );
 
   //LIST TO SELECTS
@@ -201,8 +199,8 @@ const Section = ({
     isNew ? [] : membersInEdition,
     sectionUsers.filter(
       (user) =>
-        user?.assignedTo?.type === "section" && isEmpty(user?.assignedTo?.id),
-    ),
+        user?.assignedTo?.type === "section" && isEmpty(user?.assignedTo?.id)
+    )
   ).map(mapOptionSelectMembers);
 
   const bossesView = () =>

@@ -97,7 +97,7 @@ export const DasRequestIntegration = () => {
         ? await addDasApplication(assignCreateProps(mapForm(formData)))
         : await updateDasApplication(
             dasRequest.id,
-            assignUpdateProps(formData),
+            assignUpdateProps(formData)
           );
 
       notification({ type: "success" });

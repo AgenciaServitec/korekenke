@@ -15,7 +15,7 @@ export const PdfAnimalLogRegistrationCardSheet = () => {
   const { animalId } = useParams();
 
   const [animal = {}, animalLoading, animalError] = useDocumentData(
-    animalId ? animalLogsRef.doc(animalId) : null,
+    animalId ? animalLogsRef.doc(animalId) : null
   );
 
   useEffect(() => {

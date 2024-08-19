@@ -4,15 +4,15 @@ import { includes, isEmpty } from "lodash";
 export const filterAcl = (category, subCategory, except = []) =>
   Object.fromEntries(
     Object.entries(acls[category][subCategory]).filter(([acl]) =>
-      except ? !includes(except, acl) : true,
-    ),
+      except ? !includes(except, acl) : true
+    )
   );
 
 export const filterAclExact = (category, subCategory, filter) =>
   Object.fromEntries(
     Object.entries(acls[category][subCategory]).filter(
-      ([acl]) => acl === filter,
-    ),
+      ([acl]) => acl === filter
+    )
   );
 
 export const removeLabelFieldOfObject = (object = {}, field = "label") => {

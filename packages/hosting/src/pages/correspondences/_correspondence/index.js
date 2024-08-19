@@ -54,7 +54,7 @@ export const CorrespondenceIntegration = () => {
 
     (async () => {
       const _entityGuDASBoss = await fetchEntityManager(
-        "departamento-de-apoyo-social",
+        "departamento-de-apoyo-social"
       );
 
       setEntityGuDASBoss(_entityGuDASBoss);
@@ -81,11 +81,11 @@ export const CorrespondenceIntegration = () => {
 
       isNew
         ? await addCorrespondence(
-            assignCreateProps(mapCorrespondence(correspondence, formData)),
+            assignCreateProps(mapCorrespondence(correspondence, formData))
           )
         : await updateCorrespondence(
             correspondence.id,
-            assignUpdateProps(mapCorrespondence(correspondence, formData)),
+            assignUpdateProps(mapCorrespondence(correspondence, formData))
           );
 
       notification({ type: "success" });
@@ -106,7 +106,7 @@ export const CorrespondenceIntegration = () => {
         destination: formData.destination,
         class: formData.class,
         dateCorrespondence: dayjs(formData.dateCorrespondence).format(
-          DATE_FORMAT_TO_FIRESTORE,
+          DATE_FORMAT_TO_FIRESTORE
         ),
         indicative: formData.indicative,
         issue: formData.issue,
@@ -114,7 +114,7 @@ export const CorrespondenceIntegration = () => {
         photos: formData?.photos || null,
         documents: formData?.documents || null,
         status: correspondence?.status || "notDecreed",
-      },
+      }
     );
 
   return (

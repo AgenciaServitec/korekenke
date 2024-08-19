@@ -17,7 +17,7 @@ export const useAnimalLogs = () => {
         ...formData,
         ...result,
         id: animalLog,
-      }),
+      })
     );
   };
 

@@ -17,7 +17,7 @@ export const PdfAnimalRegistrationCardSheet = () => {
   const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
 
   const [animal = {}, animalLoading, animalError] = useDocumentData(
-    animalId ? animalsRef.doc(animalId) : null,
+    animalId ? animalsRef.doc(animalId) : null
   );
 
   useEffect(() => {

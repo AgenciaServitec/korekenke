@@ -38,7 +38,7 @@ export const ClinicHistoryIntegration = () => {
   const navigate = useNavigate();
   const [clinicHistoryId, setClinicHistoryId] = useQueryString(
     "clinicHistoryId",
-    "",
+    ""
   );
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { animals } = useGlobalData();
@@ -54,7 +54,7 @@ export const ClinicHistoryIntegration = () => {
   const [animalEntitiesAndBosses, setAnimalEntitiesAndBosses] = useState({});
 
   const animalsByType = animals.filter(
-    (_animal) => _animal?.type === animal?.type,
+    (_animal) => _animal?.type === animal?.type
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export const ClinicHistoryIntegration = () => {
         .collection("animals")
         .doc(animalId)
         .collection("clinic-history")
-        .where("isDeleted", "==", false),
+        .where("isDeleted", "==", false)
     );
 
   const onNavigateGoTo = (pathname) => navigate(pathname);
@@ -92,7 +92,7 @@ export const ClinicHistoryIntegration = () => {
 
   useEffect(() => {
     const clinicHistory = clinicHistories.find(
-      (clinicHistory) => clinicHistory?.id === clinicHistoryId,
+      (clinicHistory) => clinicHistory?.id === clinicHistoryId
     );
 
     if (!clinicHistory) return setCurrentHistoryClinic(null);
@@ -109,7 +109,7 @@ export const ClinicHistoryIntegration = () => {
       await updateClinicHistory(
         animalId,
         clinicHistory.id,
-        assignDeleteProps({ isDeleted: true }),
+        assignDeleteProps({ isDeleted: true })
       );
     } catch (e) {
       console.error("ErrorDeleteClinicHistory: ", e);
@@ -158,7 +158,7 @@ export const ClinicHistoryIntegration = () => {
               icon={faArrowLeft}
               onClick={() =>
                 onNavigateGoTo(
-                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`,
+                  `/entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals?animalType=${animal?.type}`
                 )
               }
             />
@@ -249,7 +249,9 @@ export const ClinicHistoryIntegration = () => {
           currentHistoryClinic={currentHistoryClinic}
         />
         <ShowImagesAndDocumentsModal
-          title={`Examenes auxiliares "${capitalize(currentHistoryClinic?.auxiliaryExams?.type)}"`}
+          title={`Examenes auxiliares "${capitalize(
+            currentHistoryClinic?.auxiliaryExams?.type
+          )}"`}
           images={currentHistoryClinic?.auxiliaryExams?.images}
           documents={currentHistoryClinic?.auxiliaryExams?.documents}
           isVisibleModal={isVisibleModal.auxiliaryExamsModal}

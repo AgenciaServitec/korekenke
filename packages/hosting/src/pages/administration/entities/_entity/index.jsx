@@ -66,7 +66,7 @@ export const EntityIntegration = () => {
       setLoading(true);
 
       const usersEntityManager = users.filter(
-        (user) => user.roleCode === "manager",
+        (user) => user.roleCode === "manager"
       );
 
       //Update of assignTo of users
@@ -160,7 +160,7 @@ const Entity = ({
     .filter((user) => user.assignedTo.type === "entity")
     .map((user) => ({
       label: `${userFullName(user)} (${capitalize(
-        findRole(rolesAcls, user?.roleCode)?.name || "",
+        findRole(rolesAcls, user?.roleCode)?.name || ""
       )}) (${commandsViewByUser(user?.commands)})`,
       value: user.id,
       key: user.id,

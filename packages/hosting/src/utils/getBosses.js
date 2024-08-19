@@ -20,7 +20,7 @@ export const fetchDepartmentBoss = async (nameId, commandId) => {
   const departments = await fetchDepartments();
 
   const depatment = departments.find(
-    (_depatment) => _depatment?.nameId === nameId,
+    (_depatment) => _depatment?.nameId === nameId
   );
 
   const _departmentBoss = depatment?.bossId

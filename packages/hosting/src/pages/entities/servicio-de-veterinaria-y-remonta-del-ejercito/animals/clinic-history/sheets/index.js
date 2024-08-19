@@ -41,7 +41,7 @@ export const PdfClinicHistorySheets = () => {
         .collection("animals")
         .doc(animalId)
         .collection("clinic-history")
-        .where("isDeleted", "==", false),
+        .where("isDeleted", "==", false)
     );
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const PdfClinicHistorySheets = () => {
               animalEntitiesAndBosses={animalEntitiesAndBosses}
             />
           </Sheet>
-        ),
+        )
       )}
     </PDF>
   );

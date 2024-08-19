@@ -58,7 +58,7 @@ export const Users = () => {
     moduleType = undefined,
     moduleId,
     user,
-    withUserDeletion = true,
+    withUserDeletion = true
   ) => {
     if (!moduleType || !moduleId) return;
 
@@ -92,7 +92,7 @@ export const Users = () => {
           ...(department.bossId === user.id && { bossId: null }),
           ...(department.secondBossId === user.id && { secondBossId: null }),
           membersIds: department.membersIds.filter(
-            (memberId) => memberId !== user.id,
+            (memberId) => memberId !== user.id
           ),
         });
 
@@ -112,7 +112,7 @@ export const Users = () => {
         await updateUnit(moduleId, {
           ...(unit.bossId === user.id && { bossId: null }),
           membersIds: unit.membersIds.filter(
-            (memberId) => memberId !== user.id,
+            (memberId) => memberId !== user.id
           ),
         });
 
@@ -132,7 +132,7 @@ export const Users = () => {
         await updateSection(moduleId, {
           ...(section.bossId === user.id && { bossId: null }),
           membersIds: section.membersIds.filter(
-            (memberId) => memberId !== user.id,
+            (memberId) => memberId !== user.id
           ),
         });
 
@@ -152,7 +152,7 @@ export const Users = () => {
         await updateOffice(moduleId, {
           ...(office.bossId === user.id && { bossId: null }),
           membersIds: office.membersIds.filter(
-            (memberId) => memberId !== user.id,
+            (memberId) => memberId !== user.id
           ),
         });
 
@@ -168,19 +168,19 @@ export const Users = () => {
         user.assignedTo.type === "entity"
           ? "de la ENTIDAD / G.U"
           : user.assignedTo.type === "unit"
-            ? "de la UNIDAD"
-            : user.assignedTo.type === "department"
-              ? "del DEPARTAMENTO"
-              : user.assignedTo.type === "office"
-                ? "de la OFICINA"
-                : "de la SECCIÓN"
+          ? "de la UNIDAD"
+          : user.assignedTo.type === "department"
+          ? "del DEPARTAMENTO"
+          : user.assignedTo.type === "office"
+          ? "de la OFICINA"
+          : "de la SECCIÓN"
       } ${withUserDeletion ? "y eliminar" : ""}?`,
       onOk: async () => {
         await updateModuleAndUser(
           user.assignedTo.type,
           user.assignedTo.id,
           user,
-          withUserDeletion,
+          withUserDeletion
         );
       },
     });
@@ -242,7 +242,7 @@ export const Users = () => {
     removeUserOfGroup(user, false);
 
   const usersView = users.filter((user) =>
-    commandId === "all" ? true : user?.initialCommand?.id === commandId,
+    commandId === "all" ? true : user?.initialCommand?.id === commandId
   );
 
   return (
@@ -268,7 +268,7 @@ export const Users = () => {
               commands.map((command) => ({
                 label: `${command.name} (${command.code.toUpperCase()})`,
                 value: command.id,
-              })),
+              }))
             )}
           />
         </Col>

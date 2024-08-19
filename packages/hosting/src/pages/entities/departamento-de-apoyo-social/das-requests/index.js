@@ -46,7 +46,7 @@ export const DasRequestsListIntegration = () => {
         ? dasApplicationsRef.where("isDeleted", "==", false) || null
         : dasApplicationsRef
             .where("isDeleted", "==", false)
-            .where("headline.id", "==", authUser.id),
+            .where("headline.id", "==", authUser.id)
     );
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const DasRequestsListIntegration = () => {
       onOk: async () => {
         await updateDasApplication(
           dasRequest.id,
-          assignDeleteProps({ isDeleted: true }),
+          assignDeleteProps({ isDeleted: true })
         );
       },
     });

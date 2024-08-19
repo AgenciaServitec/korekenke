@@ -4,6 +4,6 @@ export const userFullName = (user) => {
   if (!user) return null;
 
   return `${capitalize(user.firstName)} ${capitalize(
-    user.paternalSurname,
+    user.paternalSurname
   )} ${capitalize(user.maternalSurname)}`;
 };

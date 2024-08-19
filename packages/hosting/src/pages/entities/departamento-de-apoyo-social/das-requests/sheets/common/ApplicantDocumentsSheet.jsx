@@ -16,7 +16,7 @@ export const ApplicantDocumentsSheet = ({ applicant = null }) => {
   const applicantDocumentsOrdered = orderBy(
     applicantDocumentsView,
     ["order"],
-    ["asc"],
+    ["asc"]
   );
 
   return (
@@ -36,7 +36,7 @@ export const ApplicantDocumentsSheet = ({ applicant = null }) => {
                       </div>
                     </Container>
                   </Sheet>
-                ),
+                )
             )}
           </div>
         );

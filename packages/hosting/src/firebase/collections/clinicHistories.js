@@ -16,15 +16,15 @@ export const fetchClinicHistories = async (animalId) =>
 export const addClinicHistory = async (animalId, clinicHistory) =>
   setDocument(
     clinicHistoriesRef(animalId).doc(clinicHistory.id),
-    clinicHistory,
+    clinicHistory
   );
 
 export const updateClinicHistory = async (
   animalId,
   clinicHistoryId,
-  clinicHistory,
+  clinicHistory
 ) =>
   updateDocument(
     clinicHistoriesRef(animalId).doc(clinicHistoryId),
-    clinicHistory,
+    clinicHistory
   );
