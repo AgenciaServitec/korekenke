@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import {
   Acl,
+  Card,
   Col,
   IconAction,
+  modalConfirm,
+  notification,
   Row,
   Space,
   Title,
 } from "../../../../../components";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router";
-import { fetchAnimal } from "../../../../../firebase/collections";
+import { fetchAnimal, updateAnimal } from "../../../../../firebase/collections";
 import { FamilyTreeModalComponent } from "./FamilyTreeModalComponent";
 import { AnimalParentsInformation } from "./AnimalParentsInformation";
 import { isEmpty } from "lodash";
 import styled from "styled-components";
+import { AnimalInformation } from "../../../../../components/ui/entities";
 
 export const FamilyTreeIntegration = () => {
   const { animalId } = useParams();
@@ -61,10 +65,49 @@ export const FamilyTreeIntegration = () => {
       });
   };
 
+  const findDeleteAnimalInformation = (animal, nodes = [], id) => {
+    if (animal?.id === parentId) return [];
+
+    if (typeof nodes !== "string")
+      return nodes.map((node) => {
+        if (node?.id === id) {
+          return { ...node, parents: [] };
+        }
+
+        if (!isEmpty(node.parents)) {
+          return {
+            ...node,
+            parents: findDeleteAnimalInformation(animal, node.parents, id),
+          };
+        }
+
+        return node;
+      });
+  };
+
   const onAddAndEditAnimalParents = (parentId) => {
     setParentId(parentId);
     setIsVisibleModal(true);
   };
+
+  const onDeleteAnimalParents = (parentId) =>
+    findDeleteAnimalInformation(animal, animal.parents, parentId);
+
+  const onConfirmDeleteAnimalParents = (parentId) =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres eliminar los familiares?",
+      content: "También se eliminarán los ancestros de estos familiares.",
+      onOk: async () => {
+        await updateAnimal(animalId, {
+          ...animal,
+          parents: onDeleteAnimalParents(parentId),
+        });
+
+        notification({
+          type: "success",
+        });
+      },
+    });
 
   const animalView = (animal) =>
     (animal?.parents || []).map((_animal) => {
@@ -75,6 +118,7 @@ export const FamilyTreeIntegration = () => {
           key={_animal.id}
           animal={_animal}
           onAddAndEditAnimalParents={onAddAndEditAnimalParents}
+          onConfirmDeleteAnimalParents={onConfirmDeleteAnimalParents}
         >
           {animalView(_animal)}
         </AnimalParentsInformation>
@@ -109,10 +153,21 @@ export const FamilyTreeIntegration = () => {
           </Space>
         </Col>
         <Col span={24}>
+          <Card
+            title={<span style={{ fontSize: "1.5em" }}>Datos del animal</span>}
+            bordered={false}
+            type="inner"
+          >
+            <AnimalInformation animal={animal} />
+          </Card>
+        </Col>
+        <Col span={24}>
           <WrapperContent>
             <AnimalParentsInformation
+              key={animal.id}
               animal={animal}
               onAddAndEditAnimalParents={onAddAndEditAnimalParents}
+              onConfirmDeleteAnimalParents={onConfirmDeleteAnimalParents}
             >
               {animalParentsInformationView}
             </AnimalParentsInformation>
@@ -135,6 +190,7 @@ const WrapperContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 1rem;
   min-height: 100vh;
   overflow-x: auto;
 `;

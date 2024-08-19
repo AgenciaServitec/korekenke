@@ -1,35 +1,65 @@
 import React from "react";
 import styled from "styled-components";
-import { IconAction } from "../../../../../components";
-import { faEdit, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import { IconAction, Tag } from "../../../../../components";
+import {
+  faEdit,
+  faSquarePlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
 
 export const AnimalParentsInformation = ({
   animal,
   onAddAndEditAnimalParents,
+  onConfirmDeleteAnimalParents,
   children,
 }) => {
+  const isFather = animal?.relationship === "father";
+  const isMother = animal?.relationship === "mother";
+
   return (
     <WrapperContent>
       <div className="item">
+        {animal?.relationship && (
+          <span className="relationship">
+            {isFather && (
+              <Tag color="#0285B4" style={{ textAlign: "center", margin: 0 }}>
+                Padre
+              </Tag>
+            )}
+            {isMother && (
+              <Tag color="#D0588D" style={{ textAlign: "center", margin: 0 }}>
+                Madre
+              </Tag>
+            )}
+          </span>
+        )}
         <span>{animal?.fullName || "Sin registro"}</span>
         <span>{animal?.registrationNumber || "Sin registro"}</span>
         <span>{animal?.raceOrLine || "Sin registro"}</span>
-        <div className="button-add">
+        <div className="buttons">
           {isEmpty(animal?.parents) ? (
             <IconAction
-              tooltipTitle="Agregar familiar"
+              tooltipTitle="Agregar familiares"
               icon={faSquarePlus}
               styled={{ color: () => "#637A3A" }}
               onClick={() => onAddAndEditAnimalParents(animal.id)}
             />
           ) : (
-            <IconAction
-              tooltipTitle="Editar familiar"
-              icon={faEdit}
-              styled={{ color: () => "#637A3A" }}
-              onClick={() => onAddAndEditAnimalParents(animal.id)}
-            />
+            <>
+              <IconAction
+                tooltipTitle="Editar familiares"
+                icon={faEdit}
+                styled={{ color: () => "#637A3A" }}
+                onClick={() => onAddAndEditAnimalParents(animal.id)}
+              />
+              <IconAction
+                tooltipTitle="Eliminar familiares"
+                icon={faTrash}
+                styled={{ color: (theme) => theme.colors.error }}
+                onClick={() => onConfirmDeleteAnimalParents(animal.id)}
+              />
+            </>
           )}
         </div>
       </div>
@@ -44,17 +74,24 @@ const WrapperContent = styled.div`
   gap: 3rem;
 
   .item {
-    width: 12rem;
+    min-width: 12rem;
     display: flex;
     flex-direction: column;
-    border: 1px solid #000;
+    border: 2px solid #000;
     border-radius: 0.5rem;
     padding: 0.5rem;
     text-align: center;
     text-transform: uppercase;
     position: relative;
 
-    .button-add {
+    .relationship {
+      margin-bottom: 1rem;
+      * {
+        width: 100%;
+      }
+    }
+
+    .buttons {
       position: absolute;
       top: 50%;
       right: -2.7rem;
