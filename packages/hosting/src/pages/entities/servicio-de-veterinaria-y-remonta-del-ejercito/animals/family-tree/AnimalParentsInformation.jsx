@@ -21,7 +21,7 @@ export const AnimalParentsInformation = ({
     <WrapperContent>
       <div className="item">
         {animal?.relationship && (
-          <div className="item-information">
+          <div className={`item-information ${animal?.relationship}`}>
             {animal?.relationship && (
               <span className="relationship">
                 {isFather && (
@@ -75,6 +75,7 @@ export const AnimalParentsInformation = ({
               )}
             </>
           )}
+          <div className="arrow-line"></div>
         </div>
       </div>
       <div className="family-tree-branches">{children}</div>
@@ -99,11 +100,81 @@ const WrapperContent = styled.div`
       padding: 0.8rem;
       text-align: center;
       text-transform: uppercase;
+      position: relative;
+
+      &::before {
+        content: "";
+        width: 1rem;
+        height: 2rem;
+        position: absolute;
+        top: 50%;
+        left: -1rem;
+        border: 2px solid #000;
+      }
 
       .relationship {
         margin-bottom: 1rem;
         * {
           width: 100%;
+        }
+      }
+    }
+
+    .father {
+      &::before {
+        transform: translateY(-8%);
+        border-right: none;
+        border-bottom: none;
+        border-top-left-radius: 0.5rem;
+      }
+    }
+
+    .mother {
+      &::before {
+        transform: translateY(-80%);
+        border-top: none;
+        border-right: none;
+        border-bottom-left-radius: 0.5rem;
+      }
+    }
+
+    .buttons {
+      position: relative;
+
+      .arrow-line {
+        width: 3.5px;
+        height: 2px;
+        position: absolute;
+        top: 50%;
+        right: -3.5px;
+        transform: translateY(-50%);
+
+        &::before {
+          content: "";
+          width: 1rem;
+          height: 2rem;
+          position: absolute;
+          top: 50%;
+          right: -1rem;
+          transform: translateY(-97%);
+          border: 2px solid #000;
+          border-left: none;
+          border-top: none;
+          border-bottom-right-radius: 0.5rem;
+        }
+
+        &::after {
+          content: "";
+          width: 1rem;
+          height: 2rem;
+          position: absolute;
+          top: 50%;
+          right: -1rem;
+          transform: translateY(-2.5%);
+          border: 2px solid #000;
+          border-left: none;
+          border-bottom: none;
+          border-top-right-radius: 0.5rem;
         }
       }
     }
