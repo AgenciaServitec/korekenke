@@ -96,7 +96,7 @@ const WrapperContent = styled.div`
       flex-direction: column;
       border: 2px solid #000;
       border-radius: 0.5rem;
-      padding: 0.5rem;
+      padding: 0.8rem;
       text-align: center;
       text-transform: uppercase;
 
