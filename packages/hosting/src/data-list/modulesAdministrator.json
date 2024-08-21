@@ -1,10 +1,17 @@
 [
   {
     "id": "das-requests",
-    "name": "Solicitudes DAS"
+    "name": "Solicitudes DAS",
+    "commandId": "cobiene"
   },
   {
     "id": "correspondencias",
-    "name": "Correspondencias"
+    "name": "Correspondencias",
+    "commandId": "cobiene"
+  },
+  {
+    "id": "servicio_veterinaria_y_remonta_del_ejército",
+    "name": "Servicio de veterinaria y remonta del ejército",
+    "commandId": "cologe"
   }
 ]

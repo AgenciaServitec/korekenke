@@ -54,7 +54,11 @@ export const GlobalDataProvider = ({ children }) => {
     modulesAdministratorLoading,
     modulesAdministratorError,
   ] = useCollectionData(
-    authUser ? modulesAdministratorRef.where("isDeleted", "==", false) : null,
+    authUser
+      ? modulesAdministratorRef
+          .where("isDeleted", "==", false)
+          .where("commandId", "==", _currentCommand)
+      : null,
   );
 
   const [users = [], usersLoading, usersError] = useCollectionData(

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthentication, useCommand } from "../providers";
-import { endsWith, isEmpty, isUndefined } from "lodash";
+import { endsWith, flatMap, isEmpty, isUndefined, uniq } from "lodash";
 import { useNavigate, useParams } from "react-router";
 import { fetchEntityByNameId } from "../firebase/collections";
 
@@ -14,11 +14,11 @@ export const PrivateRoute = () => {
   const { currentCommand } = useCommand();
   const { entityId } = useParams();
 
-  const isLoginPage = location.pathname === "/";
+  const isLoginPage = location.pathname === "/login";
 
   useEffect(() => {
     (async () => {
-      if (!currentCommand && !entityId) return;
+      if (!currentCommand && !entityId && !authUser) return;
 
       const result = await validateAuthorizedModule();
 
@@ -35,22 +35,24 @@ export const PrivateRoute = () => {
   };
 
   const validateAuthorizedRoute = () => {
-    let result = false;
+    let results = false;
 
-    Object.entries(authUser?.acls || {}).forEach(([key, subCategories = {}]) =>
-      Object.entries(subCategories).forEach(([_key, values]) => {
-        const response = values.find((aclRoute) =>
-          endsWith(pathnameTemplate(), aclRoute),
-        );
-
-        if (!isEmpty(response)) {
-          result = !isEmpty(response);
-          return;
-        }
-      }),
+    const stringAcls = uniq(
+      flatMap(
+        flatMap(
+          Object.entries(authUser?.acls || {}).map(
+            ([key, subCategories = {}]) =>
+              Object.entries(subCategories).map(([_key, values]) => values),
+          ),
+        ),
+      ),
     );
 
-    return result;
+    results = stringAcls.find((aclRoute) =>
+      endsWith(pathnameTemplate(), aclRoute),
+    );
+
+    return results;
   };
 
   const isEnabledAccess = () => {
@@ -74,5 +76,9 @@ export const PrivateRoute = () => {
     return pathnameTemplate;
   };
 
-  return isLoginPage || isEnabledAccess() ? <Outlet /> : <Navigate to="/" />;
+  return isLoginPage || isEnabledAccess() ? (
+    <Outlet />
+  ) : (
+    <Navigate to="login" />
+  );
 };

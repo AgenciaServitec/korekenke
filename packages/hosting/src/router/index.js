@@ -4,12 +4,11 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { ModuleAdministratorIntegration } from "../pages";
 
 export const Router = () => {
   return (
     <Routes>
-      <Route exact path="/" element={<A.LoginIntegration />} />
+      <Route exact path="/login" element={<A.LoginIntegration />} />
       <Route exact path="/register" element={<A.RegisterIntegration />} />
       <Route path="/" element={<PrivateRoute />}>
         <Route
