@@ -5,7 +5,7 @@ import * as yup from "yup";
 import {
   useDefaultFirestoreProps,
   useFormUtils,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../../hooks";
 import {
   Acl,
@@ -42,7 +42,7 @@ export const UnitIntegration = () => {
     unitUsers,
   } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
   const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState();

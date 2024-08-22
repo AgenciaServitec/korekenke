@@ -39,7 +39,7 @@ export const ModuleAdministratorIntegration = () => {
 
   useEffect(() => {
     const _moduleAdministrator = modulesAdministrator.find(
-      (module) => module.id === moduleAdministratorId,
+      (module) => module?.id === moduleAdministratorId,
     );
 
     if (!_moduleAdministrator) return onGoBack();
@@ -133,7 +133,6 @@ const ModuleAdministrator = ({
       category="accessControl"
       subCategory="modulesAdministrator"
       name="/modules-administrator/:moduleAdministratorId"
-      redirect
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>

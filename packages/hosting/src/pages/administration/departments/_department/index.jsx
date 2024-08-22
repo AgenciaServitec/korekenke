@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { useCommand, useGlobalData } from "../../../../providers";
 import {
   useDefaultFirestoreProps,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../../hooks";
 import {
   Acl,
@@ -22,15 +22,16 @@ import {
 import { getNameId } from "../../../../utils";
 import { EditingDepartment } from "./EditingDepartment";
 import { RolesByGroupIntegration } from "./RolesByGroup";
+import { AssignmentForUsers } from "../../../../data-list";
 
 export const DepartmentIntegration = () => {
   const { departmentId } = useParams();
   const navigate = useNavigate();
   const { rolesAcls, entities, units, offices, sections, users } =
     useGlobalData();
-  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
   const { currentCommand } = useCommand();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
 
   const [loading, setLoading] = useState(false);
   const [department, setDepartment] = useState({});
@@ -78,11 +79,13 @@ export const DepartmentIntegration = () => {
         : [];
 
       //Update of assignTo of users
-      await updateAssignToUser({
+      await updateAssignToAndAclsOfUser({
         oldUsersIds: usersIdsDeselected,
         newUsersIds: formData?.membersIds,
-        moduleId: department?.id,
+        moduleNameId: AssignmentForUsers.department,
+        module: department,
         users: users,
+        formData: formData,
       });
 
       //Update of department

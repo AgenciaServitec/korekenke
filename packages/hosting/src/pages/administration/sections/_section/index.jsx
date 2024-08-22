@@ -4,7 +4,7 @@ import { useCommand, useGlobalData } from "../../../../providers";
 import {
   useDefaultFirestoreProps,
   useFormUtils,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../../hooks";
 import {
   Acl,
@@ -42,7 +42,7 @@ export const SectionIntegration = () => {
     sectionUsers,
   } = useGlobalData();
   const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
   const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState(false);

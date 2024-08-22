@@ -4,7 +4,7 @@ import { useCommand, useGlobalData } from "../../../../providers";
 import {
   useDefaultFirestoreProps,
   useFormUtils,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../../hooks";
 import { capitalize, concat, isEmpty } from "lodash";
 import {
@@ -42,7 +42,7 @@ export const OfficeIntegration = () => {
     rolesAcls,
   } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
   const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState(false);

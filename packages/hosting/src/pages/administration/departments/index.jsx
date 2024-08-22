@@ -15,7 +15,7 @@ import { useGlobalData } from "../../../providers";
 import {
   useAcl,
   useDefaultFirestoreProps,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
 import { updateDepartment } from "../../../firebase/collections";
 import { concat } from "lodash";
@@ -25,7 +25,7 @@ export const DepartmentsIntegration = () => {
   const { departments, departmentUsers, entities } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
   const [entityId, setEntityId] = useState("all");
 
   const navigateTo = (departmentId) => navigate(departmentId);

@@ -18,7 +18,7 @@ import * as yup from "yup";
 import {
   useDefaultFirestoreProps,
   useFormUtils,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../../hooks";
 import { capitalize, lowerCase } from "lodash";
 import {
@@ -34,7 +34,7 @@ export const EntityIntegration = () => {
   const { entities, users, rolesAcls } = useGlobalData();
   const { currentCommand } = useCommand();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});

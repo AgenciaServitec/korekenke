@@ -4,7 +4,7 @@ import { useGlobalData } from "../../../providers";
 import {
   useAcl,
   useDefaultFirestoreProps,
-  useUpdateAssignToInUser,
+  useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
 import {
   Acl,
@@ -25,7 +25,7 @@ export const SectionsIntegration = () => {
   const { sections, sectionUsers, departments } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
   const [departmentId, setDepartmentId] = useState("all");
 
   const navigateTo = (sectionId) => navigate(sectionId);

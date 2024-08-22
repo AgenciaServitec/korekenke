@@ -37,15 +37,15 @@ import {
   updateSection,
   updateUnit,
 } from "../../../firebase/collections";
-import { useUpdateAssignToInUser } from "../../../hooks";
+import { useUpdateAssignToAndAclsOfUser } from "../../../hooks";
 
 export const Users = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
-  const { users, rolesAcls, commands } = useGlobalData();
+  const { users, commands } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
   const { currentCommand } = useCommand();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
+  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
 
   const [commandId, setCommandId] = useState(currentCommand.id || "all");
 
@@ -275,7 +275,6 @@ export const Users = () => {
         <Col span={24}>
           <UsersTable
             users={usersView}
-            rolesAcls={rolesAcls}
             onEditUser={onEditUser}
             onRemoveUser={onConfirmRemoveUser}
             onUnlinkAssignedToUser={onConfirmUnlinkAssignedToUser}

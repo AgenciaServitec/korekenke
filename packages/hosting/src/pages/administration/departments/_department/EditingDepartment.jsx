@@ -91,10 +91,6 @@ export const EditingDepartment = ({
       : false,
   );
 
-  const userBosses = users.filter(
-    (user) => user.roleCode === "department_boss",
-  );
-
   //LIST TO SELECTS
   const usersViewForMembers = concat(
     isNew ? [] : membersInEdition,
@@ -105,13 +101,13 @@ export const EditingDepartment = ({
   ).map(mapOptionSelectMembers);
 
   const bossesView = (bossId = undefined) =>
-    userBosses
+    users
       .filter((user) => (watch("membersIds") || []).includes(user.id))
       .filter((user) => (!bossId ? true : user.id !== bossId))
       .map(mapOptionSelectMembers);
 
   const onChangeMembersWithValidation = (onChange, value) => {
-    const _userBosses = userBosses.filter((user) => value.includes(user.id));
+    const _userBosses = users.filter((user) => value.includes(user.id));
 
     if (_userBosses.length >= 1) {
       setValue("bossId", bossesView(watch("secondBossId"))?.[0]?.value || "");

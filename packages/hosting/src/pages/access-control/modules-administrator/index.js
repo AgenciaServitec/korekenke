@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Acl, Col, List, Row, Title, Tag } from "../../../components";
+import { Acl, Col, List, Row, Tag, Title } from "../../../components";
 import { useNavigate } from "react-router";
-import { useGlobalData } from "../../../providers";
-import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import { useCommand, useGlobalData } from "../../../providers";
+import { useDefaultFirestoreProps } from "../../../hooks";
 import { isEmpty } from "lodash";
 import { ModulesAdministratorData } from "../../../data-list";
 import { addModuleAdministrator } from "../../../firebase/collections";
@@ -11,8 +11,8 @@ import { Space } from "antd";
 export const ModulesAdministrator = () => {
   const navigate = useNavigate();
   const { modulesAdministrator } = useGlobalData();
+  const { currentCommand } = useCommand();
   const { assignCreateProps } = useDefaultFirestoreProps();
-  const { aclCheck } = useAcl();
 
   const navigateTo = (moduleId) => navigate(moduleId);
 
@@ -20,9 +20,11 @@ export const ModulesAdministrator = () => {
 
   useEffect(() => {
     if (isEmpty(modulesAdministrator)) {
-      const modulesPromises = ModulesAdministratorData.map((module) =>
-        addModuleAdministrator(assignCreateProps(module)),
-      );
+      const modulesPromises = ModulesAdministratorData.map((module) => {
+        if (module.commandId === currentCommand.id) {
+          return addModuleAdministrator(assignCreateProps(module));
+        }
+      });
 
       (async () => await Promise.all(modulesPromises))();
     }
@@ -46,10 +48,10 @@ export const ModulesAdministrator = () => {
             itemTitle={(module) => (
               <Space direction="vertical">
                 <div>
-                  <h3>{module?.name}</h3>
+                  <h3>{module?.name || ""}</h3>
                 </div>
                 <div>
-                  ID: &nbsp; <Tag color="blue">{module.id}</Tag>
+                  ID: &nbsp; <Tag color="blue">{module?.id || ""}</Tag>
                 </div>
                 <div>
                   <Space
@@ -59,31 +61,31 @@ export const ModulesAdministrator = () => {
                     <span>
                       Entidades / G.U:{" "}
                       <strong style={{ fontSize: 13 }}>
-                        {module?.entitiesIds.length}
+                        {(module?.entitiesIds || []).length}
                       </strong>
                     </span>
                     <span>
                       Departaments:{" "}
                       <strong style={{ fontSize: 13 }}>
-                        {module?.departmentsIds.length}
+                        {(module?.departmentsIds || []).length}
                       </strong>
                     </span>
                     <span>
                       Unidades:{" "}
                       <strong style={{ fontSize: 13 }}>
-                        {module?.unitsIds.length}
+                        {(module?.unitsIds || []).length}
                       </strong>
                     </span>
                     <span>
                       Secciones:{" "}
                       <strong style={{ fontSize: 13 }}>
-                        {module?.sectionsIds.length}
+                        {(module?.sectionsIds || []).length}
                       </strong>
                     </span>
                     <span>
                       Oficinas:{" "}
                       <strong style={{ fontSize: 13 }}>
-                        {module?.officesIds.length}
+                        {(module?.officesIds || []).length}
                       </strong>
                     </span>
                   </Space>
