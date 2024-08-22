@@ -67,24 +67,6 @@ export const Router = () => {
         />
         <Route
           exact
-          path="modules-administrator"
-          element={
-            <AdminLayout>
-              <A.ModulesAdministrator />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
-          path="modules-administrator/:moduleAdministratorId"
-          element={
-            <AdminLayout>
-              <A.ModuleAdministratorIntegration />
-            </AdminLayout>
-          }
-        />
-        <Route
-          exact
           path="entities-gu"
           element={
             <AdminLayout>
