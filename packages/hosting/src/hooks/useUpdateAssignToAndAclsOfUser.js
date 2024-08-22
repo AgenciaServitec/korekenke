@@ -89,7 +89,7 @@ export const useUpdateAssignToAndAclsOfUser = () => {
                 roleCode: "user",
                 acls: merge(
                   findUser(memberId)?.acls,
-                  findModuleRole("assistant")?.acls,
+                  findModuleRole("member")?.acls,
                 ),
               }),
             ),

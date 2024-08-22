@@ -15,8 +15,8 @@
     "initialPathname": "/home"
   },
   {
-    "id": "assistant",
-    "name": "Assistente",
+    "id": "member",
+    "name": "Miembro",
     "initialPathname": "/home"
   },
   {
