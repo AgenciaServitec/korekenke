@@ -7,6 +7,7 @@ import {
   DataEntryModal,
   Form,
   List,
+  modalConfirm,
   notification,
   Row,
   Select,
@@ -16,21 +17,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Controller, useForm } from "react-hook-form";
 import { acls, GroupRoles } from "../../../../data-list";
-import { assign, isEmpty, isObject, orderBy } from "lodash";
+import { assign, flatMap, isEmpty, isObject, merge, orderBy } from "lodash";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { findRole, mapAcls } from "../../../../utils";
-import { useCommand } from "../../../../providers";
+import { useCommand, useGlobalData } from "../../../../providers";
 import { firestore } from "../../../../firebase";
+import { updateUser } from "../../../../firebase/collections";
 
 export const RolesByGroupIntegration = ({ moduleType, moduleData }) => {
   const { currentCommand } = useCommand();
   const { assignUpdateProps, assignCreateProps, assignDeleteProps } =
     useDefaultFirestoreProps();
+  const { users } = useGlobalData();
 
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [savingRoleAclsByGroup, setSavingRoleAclsByGroup] = useState(false);
+  const [savingSpreadAclsByRoles, setSavingSpreadAclsByRoles] = useState(false);
   const [currentData, setCurrentData] = useState({});
 
   const saveRoleByGroup = async (_moduleData) => {
@@ -84,6 +88,50 @@ export const RolesByGroupIntegration = ({ moduleType, moduleData }) => {
     }
   };
 
+  const findRoleOfModule = (roleId) =>
+    moduleData?.roles.find((role) => role.roleId === roleId);
+
+  const userUpdate = (userId, roleCode = "member") => {
+    const user = users.find((user) => user.id === userId);
+
+    return updateUser(
+      userId,
+      assignUpdateProps({
+        acls: merge(user?.acls, findRoleOfModule(roleCode)?.acls),
+      }),
+    );
+  };
+
+  const onSpreadAclsByRoles = async () => {
+    try {
+      setSavingSpreadAclsByRoles(true);
+
+      const membersIds = moduleData?.membersIds || [];
+      const bossId = moduleData?.bossId || null;
+      const secondBossId = moduleData?.secondBossId || null;
+
+      const membersPromises = !isEmpty(membersIds)
+        ? membersIds.map((memberId) => userUpdate(memberId, "member"))
+        : undefined;
+
+      const bossPromise = bossId ? userUpdate(bossId, "boss") : undefined;
+      const secondBossPromise = secondBossId
+        ? userUpdate(secondBossId, "second_boss")
+        : undefined;
+
+      await Promise.all(
+        flatMap([membersPromises, bossPromise, secondBossPromise]),
+      );
+
+      notification({ type: "success" });
+    } catch (e) {
+      console.error("errorOnSpreadAclsByRoles: ", e);
+      notification({ type: "error" });
+    } finally {
+      setSavingSpreadAclsByRoles(false);
+    }
+  };
+
   const onConfirmDeleteRole = async (role) => {
     const newRoles = (moduleData?.roles || []).filter(
       (item) => item.roleId !== role.roleId,
@@ -107,6 +155,8 @@ export const RolesByGroupIntegration = ({ moduleType, moduleData }) => {
       onConfirmDeleteRole={onConfirmDeleteRole}
       currentModal={currentData}
       onSetCurrentModal={setCurrentData}
+      onSpreadAclsByRoles={onSpreadAclsByRoles}
+      savingSpreadAclsByRoles={savingSpreadAclsByRoles}
     />
   );
 };
@@ -121,6 +171,8 @@ const RolesByGroup = ({
   onConfirmDeleteRole,
   currentModal,
   onSetCurrentModal,
+  onSpreadAclsByRoles,
+  savingSpreadAclsByRoles,
 }) => {
   const schema = yup.object({
     roleId: yup.string().required(),
@@ -155,19 +207,35 @@ const RolesByGroup = ({
     }),
   );
 
+  const onConfirmSpreadAclsByRoles = () =>
+    modalConfirm({
+      title:
+        "¡Se propagaran los actuales acls en todos los usuarios de este grupo!",
+      onOk: () => onSpreadAclsByRoles(),
+    });
+
   const onSubmitRoleAclsByGroup = (formData) => onSaveRoleAclsByGroup(formData);
 
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <br />
+        <Col span={24} md={12}>
           <Button
             type="primary"
             icon={<FontAwesomeIcon icon={faPlus} />}
             onClick={() => onSetIsVisibleModal(true)}
           >
             Agregar rol
+          </Button>
+        </Col>
+        <Col span={24} md={12} style={{ textAlign: "right" }}>
+          <Button
+            type="primary"
+            danger
+            onClick={() => onConfirmSpreadAclsByRoles()}
+            loading={savingSpreadAclsByRoles}
+          >
+            Propagar los acls de los usuarios
           </Button>
         </Col>
         <Col span={24}>
