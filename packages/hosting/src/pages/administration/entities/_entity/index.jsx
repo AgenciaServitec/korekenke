@@ -34,7 +34,7 @@ export const EntityIntegration = () => {
   const { entities, users, rolesAcls } = useGlobalData();
   const { currentCommand } = useCommand();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
 
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState({});
@@ -70,7 +70,7 @@ export const EntityIntegration = () => {
       );
 
       //Update of assignTo of users
-      await updateAssignToUser({
+      await updateAssignToAndAclsOfUser({
         oldUsersIds: [
           entity?.entityManageId &&
           formData?.entityManageId !== entity?.entityManageId

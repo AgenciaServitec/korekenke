@@ -42,7 +42,7 @@ export const OfficeIntegration = () => {
     rolesAcls,
   } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
   const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ export const OfficeIntegration = () => {
       );
 
       //Update of assignTo of users
-      await updateAssignToUser({
+      await updateAssignToAndAclsOfUser({
         oldUsersIds: usersIdsDeselected,
         newUsersIds: formData.membersIds,
         moduleId: office?.id,

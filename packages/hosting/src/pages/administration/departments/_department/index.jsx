@@ -147,7 +147,7 @@ const Department = ({
       redirect
     >
       <Row gutter={[16, 16]}>
-        <Col span={20}>
+        <Col span={24}>
           <Title level={3}>Departamento</Title>
         </Col>
       </Row>

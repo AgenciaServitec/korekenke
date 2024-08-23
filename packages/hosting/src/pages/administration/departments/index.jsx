@@ -25,7 +25,7 @@ export const DepartmentsIntegration = () => {
   const { departments, departmentUsers, entities } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
   const [entityId, setEntityId] = useState("all");
 
   const navigateTo = (departmentId) => navigate(departmentId);
@@ -34,7 +34,7 @@ export const DepartmentsIntegration = () => {
   const onEditDepartment = (department) => navigateTo(department?.id);
   const onDeleteDepartment = async (department) => {
     try {
-      await updateAssignToUser({
+      await updateAssignToAndAclsOfUser({
         oldUsersIds: department.membersIds,
         users: departmentUsers,
       });

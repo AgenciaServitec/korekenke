@@ -42,7 +42,7 @@ export const UnitIntegration = () => {
     unitUsers,
   } = useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
   const { currentCommand } = useCommand();
 
   const [loading, setLoading] = useState();
@@ -84,7 +84,7 @@ export const UnitIntegration = () => {
           )
         : [];
 
-      await updateAssignToUser({
+      await updateAssignToAndAclsOfUser({
         oldUsersIds: usersIdsDeselected,
         newUsersIds: formData?.membersIds,
         moduleId: unit?.id,

@@ -45,7 +45,7 @@ export const Users = () => {
   const { users, commands } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
   const { currentCommand } = useCommand();
-  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
 
   const [commandId, setCommandId] = useState(currentCommand.id || "all");
 
@@ -69,7 +69,7 @@ export const Users = () => {
         await updateEntity(moduleId, { entityManageId: null });
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -82,7 +82,7 @@ export const Users = () => {
         const department = await fetchDepartment(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -103,7 +103,7 @@ export const Users = () => {
         const unit = await fetchUnit(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -123,7 +123,7 @@ export const Users = () => {
         const section = await fetchSection(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -143,7 +143,7 @@ export const Users = () => {
         const office = await fetchOffice(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
