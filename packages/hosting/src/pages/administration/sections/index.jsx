@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
 import {
@@ -6,27 +6,17 @@ import {
   useDefaultFirestoreProps,
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
-import {
-  Acl,
-  Button,
-  Col,
-  List,
-  notification,
-  Row,
-  Select,
-} from "../../../components";
+import { Acl, Button, Col, List, notification, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { updateSection } from "../../../firebase/collections";
-import { concat } from "lodash";
 
 export const SectionsIntegration = () => {
   const navigate = useNavigate();
-  const { sections, sectionUsers, departments } = useGlobalData();
+  const { sections, sectionUsers } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const { updateAssignToUser } = useUpdateAssignToAndAclsOfUser();
-  const [departmentId, setDepartmentId] = useState("all");
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
 
   const navigateTo = (sectionId) => navigate(sectionId);
 
@@ -34,7 +24,7 @@ export const SectionsIntegration = () => {
   const onEditSection = (section) => navigateTo(section?.id);
   const onDeleteSection = async (section) => {
     try {
-      await updateAssignToUser({
+      await updateAssignToAndAclsOfUser({
         oldUsersIds: section.membersIds,
         users: sectionUsers,
       });
@@ -52,10 +42,6 @@ export const SectionsIntegration = () => {
       notification({ type: "error" });
     }
   };
-
-  const sectionsView = sections.filter((section) =>
-    departmentId === "all" ? true : section.departmentId === departmentId,
-  );
 
   return (
     <Acl
@@ -81,22 +67,9 @@ export const SectionsIntegration = () => {
             </Button>
           </Acl>
         </Col>
-        <Col span={24} md={8}>
-          <Select
-            value={departmentId}
-            onChange={(value) => setDepartmentId(value)}
-            options={concat(
-              [{ label: "Todos", value: "all" }],
-              departments.map((department) => ({
-                label: department.name,
-                value: department.id,
-              })),
-            )}
-          />
-        </Col>
         <Col span={24}>
           <List
-            dataSource={sectionsView}
+            dataSource={sections}
             onDeleteItem={(section) => onDeleteSection(section)}
             onDeleteConfirmOptions={{
               title: "¿Seguro que deseas eliminar la sección?",
