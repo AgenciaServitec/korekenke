@@ -9,20 +9,18 @@ import {
   Acl,
   Col,
   notification,
+  RolesByGroupIntegration,
   Row,
   Tabs,
   Title,
 } from "../../../../components";
 import {
   addSection,
-  departmentsRef,
-  getDepartmentId,
   getSectionId,
   sectionsRef,
   updateSection,
 } from "../../../../firebase/collections";
 import { getNameId } from "../../../../utils";
-import { RolesByGroupIntegration } from "../../departments/_department/RolesByGroup";
 import { EditingSection } from "./EditingSection";
 
 export const SectionIntegration = () => {

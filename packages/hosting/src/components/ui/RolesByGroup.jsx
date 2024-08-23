@@ -12,19 +12,19 @@ import {
   Row,
   Select,
   Title,
-} from "../../../../components";
+} from "../index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Controller, useForm } from "react-hook-form";
-import { acls, GroupRoles } from "../../../../data-list";
+import { acls, GroupRoles } from "../../data-list";
 import { assign, flatMap, isEmpty, isObject, merge, orderBy } from "lodash";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
-import { findRole, mapAcls } from "../../../../utils";
-import { useCommand, useGlobalData } from "../../../../providers";
-import { firestore } from "../../../../firebase";
-import { updateUser } from "../../../../firebase/collections";
+import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
+import { findRole, mapAcls } from "../../utils";
+import { useCommand, useGlobalData } from "../../providers";
+import { firestore } from "../../firebase";
+import { updateUser } from "../../firebase/collections";
 
 export const RolesByGroupIntegration = ({ moduleType, moduleData }) => {
   const { currentCommand } = useCommand();

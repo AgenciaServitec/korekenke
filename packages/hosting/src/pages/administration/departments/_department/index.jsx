@@ -12,6 +12,7 @@ import {
   Row,
   Tabs,
   Title,
+  RolesByGroupIntegration,
 } from "../../../../components";
 import {
   addDepartment,
@@ -21,7 +22,6 @@ import {
 } from "../../../../firebase/collections";
 import { getNameId } from "../../../../utils";
 import { EditingDepartment } from "./EditingDepartment";
-import { RolesByGroupIntegration } from "./RolesByGroup";
 import { AssignmentForUsers } from "../../../../data-list";
 
 export const DepartmentIntegration = () => {
