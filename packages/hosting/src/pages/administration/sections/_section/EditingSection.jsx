@@ -98,13 +98,13 @@ export const EditingSection = ({
       .map(mapOptionSelectMembers);
 
   const onChangeMembersWithValidation = (onChange, value) => {
-    const _userBosses = users.filter((user) => value.includes(user.id));
+    const _users = users.filter((user) => value.includes(user.id));
 
-    if (_userBosses.length > 0) {
-      setValue("bossId", _userBosses?.[0]?.id || "");
+    if (_users.length > 0) {
+      setValue("bossId", _users?.[0]?.id || "");
     }
 
-    if (_userBosses.length <= 0) {
+    if (_users.length <= 0) {
       setValue("bossId", "");
     }
 
