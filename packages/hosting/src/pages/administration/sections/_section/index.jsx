@@ -106,7 +106,6 @@ export const SectionIntegration = () => {
       entities={entities}
       departments={departments}
       units={units}
-      sections={sections}
       offices={offices}
       users={users}
       onSaveSection={onSaveSection}
@@ -123,7 +122,6 @@ const Section = ({
   entities,
   departments,
   units,
-  sections,
   offices,
   users,
   onSaveSection,
