@@ -22,6 +22,7 @@ import {
 } from "../../../../firebase/collections";
 import { getNameId } from "../../../../utils";
 import { EditingSection } from "./EditingSection";
+import { AssignmentForUsers } from "../../../../data-list";
 
 export const SectionIntegration = () => {
   const { sectionId } = useParams();
@@ -72,11 +73,14 @@ export const SectionIntegration = () => {
         (memberId) => !(formData?.membersIds || []).includes(memberId),
       );
 
+      //Update of assignTo of users
       await updateAssignToAndAclsOfUser({
         oldUsersIds: usersIdsDeselected,
-        newUsersIds: formData.membersIds,
-        moduleId: section?.id,
+        newUsersIds: formData?.membersIds,
+        moduleNameId: AssignmentForUsers.section,
+        module: section,
         users: users,
+        formData: formData,
       });
 
       isNew

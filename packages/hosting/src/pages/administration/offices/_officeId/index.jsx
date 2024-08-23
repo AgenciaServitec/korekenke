@@ -22,11 +22,12 @@ import {
 } from "../../../../firebase/collections";
 import { getNameId } from "../../../../utils";
 import { EditingOffice } from "./EditingOffice";
+import { AssignmentForUsers } from "../../../../data-list";
 
 export const OfficeIntegration = () => {
   const { officeId } = useParams();
   const navigate = useNavigate();
-  const { entities, departments, units, sections, offices, users, rolesAcls } =
+  const { entities, departments, units, sections, users, rolesAcls } =
     useGlobalData();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
@@ -75,9 +76,11 @@ export const OfficeIntegration = () => {
       //Update of assignTo of users
       await updateAssignToAndAclsOfUser({
         oldUsersIds: usersIdsDeselected,
-        newUsersIds: formData.membersIds,
-        moduleId: office?.id,
+        newUsersIds: formData?.membersIds,
+        moduleNameId: AssignmentForUsers.office,
+        module: office,
         users: users,
+        formData: formData,
       });
 
       //Update of office
