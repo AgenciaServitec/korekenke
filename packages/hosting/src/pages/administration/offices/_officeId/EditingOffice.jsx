@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
-import { findRole, userFullName } from "../../../../utils";
+import { commandsViewByUser, findRole, userFullName } from "../../../../utils";
 import { capitalize, concat, isEmpty } from "lodash";
 
 export const EditingOffice = ({
@@ -71,9 +71,11 @@ export const EditingOffice = ({
 
   //VIEWS TO SELECTS
   const mapOptionSelectMembers = (user) => ({
-    label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || "",
-    )})`,
+    label: `${userFullName(user)} ${
+      findRole(rolesAcls, user?.roleCode)?.name
+        ? `(${capitalize(findRole(rolesAcls, user?.roleCode)?.name || "")}) (${commandsViewByUser(user?.commands)})`
+        : ""
+    }`,
     value: user.id,
     key: user.id,
     roleCode: user.roleCode,

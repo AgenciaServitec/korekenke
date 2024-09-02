@@ -14,7 +14,7 @@ import { capitalize, concat, isEmpty, orderBy } from "lodash";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
-import { findRole, userFullName } from "../../../../utils";
+import { commandsViewByUser, findRole, userFullName } from "../../../../utils";
 
 export const EditingDepartment = ({
   isNew,
@@ -77,9 +77,11 @@ export const EditingDepartment = ({
 
   //VIEWS TO SELECTS
   const mapOptionSelectMembers = (user) => ({
-    label: `${userFullName(user)} (${capitalize(
-      findRole(rolesAcls, user?.roleCode)?.name || "",
-    )})`,
+    label: `${userFullName(user)} ${
+      findRole(rolesAcls, user?.roleCode)?.name
+        ? `(${capitalize(findRole(rolesAcls, user?.roleCode)?.name || "")}) (${commandsViewByUser(user?.commands)})`
+        : ""
+    }`,
     value: user.id,
     key: user.id,
     roleCode: user.roleCode,
