@@ -13,7 +13,7 @@ import { updateDepartment } from "../../../firebase/collections";
 
 export const DepartmentsIntegration = () => {
   const navigate = useNavigate();
-  const { departments, departmentUsers } = useGlobalData();
+  const { departments, users } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
@@ -26,7 +26,7 @@ export const DepartmentsIntegration = () => {
     try {
       await updateAssignToAndAclsOfUser({
         oldUsersIds: department.membersIds,
-        users: departmentUsers,
+        users: users,
       });
 
       await updateDepartment(

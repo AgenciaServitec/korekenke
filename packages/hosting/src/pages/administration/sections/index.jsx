@@ -13,7 +13,7 @@ import { updateSection } from "../../../firebase/collections";
 
 export const SectionsIntegration = () => {
   const navigate = useNavigate();
-  const { sections, sectionUsers } = useGlobalData();
+  const { sections, users } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
@@ -26,7 +26,7 @@ export const SectionsIntegration = () => {
     try {
       await updateAssignToAndAclsOfUser({
         oldUsersIds: section.membersIds,
-        users: sectionUsers,
+        users: users,
       });
 
       await updateSection(

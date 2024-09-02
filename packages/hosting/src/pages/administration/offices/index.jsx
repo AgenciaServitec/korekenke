@@ -1,17 +1,22 @@
 import React from "react";
-import { Acl, Button, Col, List, Row } from "../../../components";
+import { Acl, Button, Col, List, notification, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
-import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import {
+  useAcl,
+  useDefaultFirestoreProps,
+  useUpdateAssignToAndAclsOfUser,
+} from "../../../hooks";
 import { updateOffice } from "../../../firebase/collections";
 
 export const OfficesIntegration = () => {
   const navigate = useNavigate();
-  const { offices } = useGlobalData();
+  const { users, offices } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
 
   const navigateTo = (officeId) => navigate(officeId);
 
@@ -19,9 +24,23 @@ export const OfficesIntegration = () => {
   const onEditOffice = (office) => navigateTo(office.id);
   const onDeleteOffice = async (office) => {
     try {
-      await updateOffice(office.id, assignDeleteProps({ isDeleted: true }));
-    } catch (error) {
-      console.error("Error deleting office:", error);
+      await updateAssignToAndAclsOfUser({
+        oldUsersIds: office.membersIds,
+        users: users,
+      });
+
+      await updateOffice(
+        office.id,
+        assignDeleteProps({
+          isDeleted: true,
+          membersIds: null,
+          bossId: null,
+          secondBossId: null,
+        }),
+      );
+    } catch (e) {
+      console.error("ErrorDeleteOffice: ", e);
+      notification({ type: "error" });
     }
   };
 
