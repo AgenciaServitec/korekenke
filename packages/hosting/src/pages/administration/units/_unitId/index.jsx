@@ -178,6 +178,7 @@ const Unit = ({
                   <RolesByGroupIntegration
                     moduleType="units"
                     moduleData={unit}
+                    rolesToOptionsSelect={["boss", "member"]}
                   />
                 ),
               },

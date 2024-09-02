@@ -176,6 +176,7 @@ const Office = ({
                       <RolesByGroupIntegration
                         moduleType="offices"
                         moduleData={office}
+                        rolesToOptionsSelect={["boss", "member"]}
                       />
                     ),
                   },

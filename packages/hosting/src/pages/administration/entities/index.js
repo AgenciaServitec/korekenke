@@ -37,7 +37,7 @@ export const EntitiesGUIntegration = () => {
         }),
       );
     } catch (e) {
-      console.error("ErrorDeleteDepartment: ", e);
+      console.error("ErrorDeleteEntity: ", e);
       notification({ type: "error" });
     }
   };

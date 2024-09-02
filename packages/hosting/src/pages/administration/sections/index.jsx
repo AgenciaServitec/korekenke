@@ -71,11 +71,6 @@ export const SectionsIntegration = () => {
           <List
             dataSource={sections}
             onDeleteItem={(section) => onDeleteSection(section)}
-            onDeleteConfirmOptions={{
-              title: "¿Seguro que deseas eliminar la sección?",
-              content:
-                "Al eliminar la sección los usuarios vinculados estaran libres para ser asignados en otras secciónes.",
-            }}
             onEditItem={(section) => onEditSection(section)}
             itemTitle={(section) => section.name}
             visibleEditItem={() =>

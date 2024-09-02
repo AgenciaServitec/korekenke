@@ -72,11 +72,6 @@ export const DepartmentsIntegration = () => {
           <List
             dataSource={departments}
             onDeleteItem={(department) => onDeleteDepartment(department)}
-            onDeleteConfirmOptions={{
-              title: "¿Seguro que deseas eliminar el departamento?",
-              content:
-                "Al eliminar el departamento los usuarios vinculados estaran libres para ser asignados en otros departamentos.",
-            }}
             onEditItem={(department) => onEditDepartment(department)}
             itemTitle={(department) => department.name}
             visibleEditItem={() =>

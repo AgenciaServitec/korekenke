@@ -26,7 +26,11 @@ import { useCommand, useGlobalData } from "../../providers";
 import { firestore } from "../../firebase";
 import { updateUser } from "../../firebase/collections";
 
-export const RolesByGroupIntegration = ({ moduleType, moduleData }) => {
+export const RolesByGroupIntegration = ({
+  moduleType,
+  moduleData,
+  rolesToOptionsSelect = [],
+}) => {
   const { currentCommand } = useCommand();
   const { assignUpdateProps, assignCreateProps, assignDeleteProps } =
     useDefaultFirestoreProps();
@@ -157,6 +161,7 @@ export const RolesByGroupIntegration = ({ moduleType, moduleData }) => {
       onSetCurrentModal={setCurrentData}
       onSpreadAclsByRoles={onSpreadAclsByRoles}
       savingSpreadAclsByRoles={savingSpreadAclsByRoles}
+      rolesToOptionsSelect={rolesToOptionsSelect}
     />
   );
 };
@@ -173,6 +178,7 @@ const RolesByGroup = ({
   onSetCurrentModal,
   onSpreadAclsByRoles,
   savingSpreadAclsByRoles,
+  rolesToOptionsSelect,
 }) => {
   const schema = yup.object({
     roleId: yup.string().required(),
@@ -199,7 +205,9 @@ const RolesByGroup = ({
       acls: currentModal?.acls ? mapAcls(currentModal?.acls) : null,
     });
 
-  const rolesView = GroupRoles.map((role) =>
+  const rolesView = GroupRoles.filter((groupRole) =>
+    rolesToOptionsSelect.includes(groupRole.id),
+  ).map((role) =>
     assign({}, role, {
       disabled: (moduleData?.roles || []).some(
         (_role) => _role?.roleId === role?.id,

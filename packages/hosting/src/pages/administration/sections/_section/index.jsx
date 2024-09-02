@@ -179,6 +179,7 @@ const Section = ({
                       <RolesByGroupIntegration
                         moduleType="sections"
                         moduleData={section}
+                        rolesToOptionsSelect={["boss", "member"]}
                       />
                     ),
                   },

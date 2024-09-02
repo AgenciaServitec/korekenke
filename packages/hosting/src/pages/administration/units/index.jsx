@@ -46,7 +46,7 @@ export const UnitsIntegration = () => {
         }),
       );
     } catch (e) {
-      console.error("ErrorDeleteOffice: ", e);
+      console.error("ErrorDeleteUnit: ", e);
       notification({ type: "error" });
     }
   };
