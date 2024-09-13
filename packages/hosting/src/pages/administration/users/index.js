@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Acl,
   AddButton,
@@ -7,14 +7,9 @@ import {
   modalConfirm,
   notification,
   Row,
-  Select,
   Title,
 } from "../../../components";
-import {
-  useAuthentication,
-  useCommand,
-  useGlobalData,
-} from "../../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
 import { useNavigate } from "react-router";
 import { UsersTable } from "./UserTable";
 import {
@@ -22,7 +17,7 @@ import {
   getApiErrorResponse,
   useApiUserPatch,
 } from "../../../api";
-import { assign, concat, isEmpty } from "lodash";
+import { assign, isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { Button, Space } from "antd";
@@ -44,10 +39,7 @@ export const Users = () => {
   const { authUser } = useAuthentication();
   const { users, commands } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
-  const { currentCommand } = useCommand();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
-
-  const [commandId, setCommandId] = useState(currentCommand.id || "all");
 
   const navigateTo = (userId) => navigate(userId);
 
@@ -241,10 +233,6 @@ export const Users = () => {
   const onConfirmUnlinkAssignedToUser = (user) =>
     removeUserOfGroup(user, false);
 
-  const usersView = users.filter((user) =>
-    commandId === "all" ? true : user?.initialCommand?.id === commandId,
-  );
-
   return (
     <Acl redirect category="administration" subCategory="users" name="/users">
       <Row gutter={[16, 16]}>
@@ -259,22 +247,9 @@ export const Users = () => {
         <Col span={24}>
           <Title level={3}>Usuarios</Title>
         </Col>
-        <Col span={24} md={8}>
-          <Select
-            value={commandId}
-            onChange={(value) => setCommandId(value)}
-            options={concat(
-              [{ label: "Todos", value: "all" }],
-              commands.map((command) => ({
-                label: `${command.name} (${command.code.toUpperCase()})`,
-                value: command.id,
-              })),
-            )}
-          />
-        </Col>
         <Col span={24}>
           <UsersTable
-            users={usersView}
+            users={users}
             onEditUser={onEditUser}
             onRemoveUser={onConfirmRemoveUser}
             onUnlinkAssignedToUser={onConfirmUnlinkAssignedToUser}
