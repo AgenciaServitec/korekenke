@@ -12,6 +12,10 @@ interface ConfigCommon {
 
 interface ConfigEnvironment {
   version: string;
+  hosting: {
+    domain: string;
+    apiUrl: string;
+  };
   mailer: MailerConfig;
   "apis-net-pe": ApisNetPeConfig;
 }
