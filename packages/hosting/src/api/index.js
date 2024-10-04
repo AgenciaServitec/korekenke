@@ -6,3 +6,4 @@ export * from "./useApiUserPatch";
 export * from "./useApiSearchGet";
 export * from "./useApiCorrespondencePost";
 export * from "./useApiPersonDataByDniGet";
+export * from "./useAPiSendMailNotificationDasRequestPost";

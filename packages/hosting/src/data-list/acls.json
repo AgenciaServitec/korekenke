@@ -102,7 +102,8 @@
       "/das-requests/:dasRequestId#resolverObservation": "Solicitud: Resolver observación",
       "/das-requests/:dasRequestId#closeObservation": "Solicitud: Cerrar observación",
       "/das-requests/:dasRequestId#reply": "Responder solicitud",
-      "/das-requests/:dasRequestId#proceeds": "Evaluación Solicitud"
+      "/das-requests/:dasRequestId#proceeds": "Evaluación Solicitud",
+      "/das-requests/:dasRequestId#sendNotificationDasRequest": "Envío de notificación"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {
