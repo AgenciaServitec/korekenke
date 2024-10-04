@@ -101,8 +101,8 @@ interface Correspondence extends DefaultFirestoreProps {
 interface DasApplication {
   id: string;
   applicant: Applicant;
-  familiar?: Familiar | null;
-  headline?: Headline | null;
+  familiar?: Familiar;
+  headline?: Headline;
   institution: Institution;
   isDeleted: boolean;
   isHeadline: boolean;
@@ -165,7 +165,7 @@ interface Familiar {
   firstName: string;
   paternalSurname: string;
   maternalSurname: string;
-  cif: string;
+  cif?: string;
   email: string;
   relationship: string;
 }

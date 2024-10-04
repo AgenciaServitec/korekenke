@@ -25,6 +25,7 @@
     }
   },
   "administration": {
+    "command": "cobiene",
     "label": "Administración",
     "users": {
       "label": "Usuarios",
