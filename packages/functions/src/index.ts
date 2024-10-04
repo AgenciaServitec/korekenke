@@ -2,7 +2,7 @@ import "moment-timezone";
 import { app } from "./api";
 import functionsHttps = require("firebase-functions/v2/https");
 import functionsTrigger = require("firebase-functions/v2/firestore");
-import { OnCreatedDasRequestSendMailNotification } from "./triggers";
+import { OnCreatedSendMailNotificationDasRequest } from "./triggers";
 
 type HttpsOptions = functionsHttps.HttpsOptions;
 type TriggersOptions = functionsTrigger.DocumentOptions;
@@ -26,8 +26,8 @@ const triggersOptions = (
 
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
-exports.onCreatedDasRequestSendMailNotification =
+exports.OnCreatedSendMailNotificationDasRequest =
   functionsTrigger.onDocumentCreated(
     triggersOptions("das-applications/{id}"),
-    OnCreatedDasRequestSendMailNotification
+    OnCreatedSendMailNotificationDasRequest
   );

@@ -329,14 +329,14 @@
                                     width: 100%;
                                   "
                                 >
-                                  <h1
+                                  <h2
                                     style="
                                       margin: 0;
                                       color: #000;
                                       direction: ltr;
                                       font-family: 'Cabin', Arial,
                                         'Helvetica Neue', Helvetica, sans-serif;
-                                      font-size: 28px;
+                                      font-size: 30px;
                                       font-weight: 400;
                                       letter-spacing: normal;
                                       line-height: 120%;
@@ -346,7 +346,40 @@
                                       mso-line-height-alt: 33.6px;
                                     "
                                   >
-                                    <strong>{{requestType}}</strong>
+                                    <strong>Nueva solicitud a revisar</strong>
+                                  </h2>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  class="pad"
+                                  style="
+                                    padding-top: 35px;
+                                    text-align: center;
+                                    width: 100%;
+                                  "
+                                >
+                                  <h1
+                                    style="
+                                      margin: 0;
+                                      color: #000;
+                                      direction: ltr;
+                                      font-family: 'Cabin', Arial,
+                                        'Helvetica Neue', Helvetica, sans-serif;
+                                      font-size: 20px;
+                                      font-weight: 400;
+                                      letter-spacing: normal;
+                                      line-height: 120%;
+                                      text-align: center;
+                                      margin-top: 0;
+                                      margin-bottom: 0;
+                                      mso-line-height-alt: 33.6px;
+                                    "
+                                  >
+                                    <strong
+                                      >Tipo de solicitud:
+                                      {{requestType}}</strong
+                                    >
                                   </h1>
                                 </td>
                               </tr>
@@ -393,14 +426,8 @@
                                     <p
                                       style="margin: 0; word-break: break-word"
                                     >
-                                      Estimado/a
-                                      <strong>Gala Flores Angel Emilio</strong>,
-                                    </p>
-                                    <p
-                                      style="margin: 0; word-break: break-word"
-                                    >
-                                      Por medio de la presente, se notifica la
-                                      solicitud de convenio para mi
+                                      Se notifica la solicitud de
+                                      convenio/descuento para mi
                                       <strong>{{applicant}}</strong> con la
                                       institución
                                       <strong>{{institutionName}}</strong>.
@@ -463,12 +490,14 @@
                                         {{familiar.firstName}}</strong
                                       >
                                     </p>
+                                    {{#familiar.cif}}
                                     <p
                                       style="margin: 0; word-break: break-word"
                                     >
                                       - N° CIF:
                                       <strong>{{familiar.cif}}</strong>
                                     </p>
+                                    {{/familiar.cif}}
                                     <p
                                       style="margin: 0; word-break: break-word"
                                     >

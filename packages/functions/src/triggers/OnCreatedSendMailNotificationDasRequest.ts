@@ -1,9 +1,9 @@
 import { OnDocumentCreated } from "./interface";
-import { sendMailDasRequestNotification } from "../mailer/korekenke";
+import { sendMailNotificationDasRequest } from "../mailer/korekenke";
 import assert from "assert";
 import { logger } from "../utils";
 
-export const OnCreatedDasRequestSendMailNotification: OnDocumentCreated =
+export const OnCreatedSendMailNotificationDasRequest: OnDocumentCreated =
   async (event) => {
     const dasApplication = event.data?.data() as DasApplication | undefined;
 
@@ -11,5 +11,5 @@ export const OnCreatedDasRequestSendMailNotification: OnDocumentCreated =
 
     logger.log("dasApplication: ", dasApplication);
 
-    await sendMailDasRequestNotification(dasApplication);
+    await sendMailNotificationDasRequest(dasApplication);
   };

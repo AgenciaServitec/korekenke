@@ -18,6 +18,10 @@ export const config: Config = {
       sendMailNotifyKorekenkeError: {
         to: "mariano260996@gmail.com",
       },
+      sendMailerNotifyDasApplicant: {
+        to: "mariano260996@gmail.com",
+        bcc: "galafloresangelemilio@gmail.com",
+      },
     },
     "apis-net-pe": {
       apiUrl: "https://api.apis.net.pe/v2",
@@ -33,6 +37,10 @@ export const config: Config = {
     mailer: {
       sendMailNotifyKorekenkeError: {
         to: "ti@korekenke.com",
+      },
+      sendMailerNotifyDasApplicant: {
+        to: "juguar01@hotmail.com",
+        bcc: "beto1perk@gmail.com",
       },
     },
     "apis-net-pe": {

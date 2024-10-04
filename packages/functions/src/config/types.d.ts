@@ -32,6 +32,10 @@ interface MailerConfig {
   sendMailNotifyKorekenkeError: {
     to: string;
   };
+  sendMailerNotifyDasApplicant: {
+    to: string;
+    bcc: string;
+  };
 }
 
 interface ApisNetPeConfig {

@@ -1,1 +1,1 @@
-export * from "./sendMailDasRequestNotification";
+export * from "./sendMailNotificationDasRequest";

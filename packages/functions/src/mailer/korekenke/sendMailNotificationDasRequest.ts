@@ -10,16 +10,16 @@ interface Mail {
   dasApplicationLink: string;
   headline?: Headline;
   familiar?: Familiar;
-  applicant: string;
+  applicant?: string;
 }
 
-export const sendMailDasRequestNotification = async (
+export const sendMailNotificationDasRequest = async (
   dasApplication: DasApplication
 ): Promise<void> =>
   await sendMail({
-    to: "galafloresangelemilio@gmail.com",
-    bcc: "",
-    subject: `Test`,
+    to: environmentConfig.mailer.sendMailerNotifyDasApplicant.to,
+    bcc: environmentConfig.mailer.sendMailerNotifyDasApplicant.bcc,
+    subject: `Nueva solicitud recibida a revisar`,
     html: html(
       template.newDasApplicationEmailTemplate,
       mapMail(dasApplication)
@@ -35,5 +35,7 @@ const mapMail = (dasApplication: DasApplication): Mail => ({
   dasApplicationLink: `${environmentConfig.hosting.domain}/entities/departamento-de-apoyo-social/das-requests/${dasApplication.id}/${dasApplication.requestType}/sheets`,
   headline: dasApplication?.headline,
   familiar: dasApplication?.familiar,
-  applicant: relationships[dasApplication.applicant.to],
+  applicant: dasApplication?.familiar
+    ? relationships[dasApplication?.familiar.relationship]
+    : relationships.headline,
 });
