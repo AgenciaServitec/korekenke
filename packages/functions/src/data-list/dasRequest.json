@@ -1,0 +1,47 @@
+[
+  {
+    "id": "descuento_por_convenio_en_universidad",
+    "institutionId": "universities",
+    "name": "Descuento por convenio en universidad"
+  },
+  {
+    "id": "descuento_por_convenio_postgrado_en_universidad",
+    "institutionId": "universities",
+    "name": "Descuento por convenio postgrado en universidad"
+  },
+  {
+    "id": "beca_de_estudios_en_universidad",
+    "institutionId": "universities",
+    "name": "Beca de estudios en universidad"
+  },
+  {
+    "id": "beca_de_estudio_para_postgrado_en_universidad",
+    "institutionId": "universities",
+    "name": "Beca de estudio para postgrado en universidad"
+  },
+  {
+    "id": "media_beca_en_universidad",
+    "institutionId": "universities",
+    "name": "Media beca en universidad"
+  },
+  {
+    "id": "media_beca_para_postgrado_en_universidad",
+    "institutionId": "universities",
+    "name": "Media beca para postgrado en universidad"
+  },
+  {
+    "id": "descuento_por_convenio_en_instituto",
+    "institutionId": "institutes",
+    "name": "Descuento por convenio en instituto"
+  },
+  {
+    "id": "beca_de_estudios_en_instituto",
+    "institutionId": "institutes",
+    "name": "Beca de estudios en instituto"
+  },
+  {
+    "id": "media_beca_en_instituto",
+    "institutionId": "institutes",
+    "name": "Media beca en instituto"
+  }
+]

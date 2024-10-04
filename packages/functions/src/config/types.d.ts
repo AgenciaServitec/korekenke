@@ -12,6 +12,10 @@ interface ConfigCommon {
 
 interface ConfigEnvironment {
   version: string;
+  hosting: {
+    domain: string;
+    apiUrl: string;
+  };
   mailer: MailerConfig;
   "apis-net-pe": ApisNetPeConfig;
 }
@@ -27,6 +31,10 @@ interface NodeMailerConfig {
 interface MailerConfig {
   sendMailNotifyKorekenkeError: {
     to: string;
+  };
+  sendMailerNotifyDasApplicant: {
+    to: string;
+    bcc: string;
   };
 }
 
