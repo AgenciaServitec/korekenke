@@ -27,6 +27,11 @@ export const config: Config = {
       apiUrl: "https://api.apis.net.pe/v2",
       token: "apis-token-8290.s1Op-FA9ZArlfXq39wpzMuKiaXexehgs",
     },
+    "api-peru-devs": {
+      apiUrl: "https://api.perudevs.com/api/v1",
+      token:
+        "cGVydWRldnMucHJvZHVjdGlvbi5maXRjb2RlcnMuNjcwMDVlOTI5ZmE0MTczZjYxMzIwM2M3",
+    },
   },
   production: {
     version: "0.0.1",
@@ -46,6 +51,11 @@ export const config: Config = {
     "apis-net-pe": {
       apiUrl: "https://api.apis.net.pe/v2",
       token: "apis-token-8290.s1Op-FA9ZArlfXq39wpzMuKiaXexehgs",
+    },
+    "api-peru-devs": {
+      apiUrl: "https://api.perudevs.com/api/v1",
+      token:
+        "cGVydWRldnMucHJvZHVjdGlvbi5maXRjb2RlcnMuNjcwMDVlOTI5ZmE0MTczZjYxMzIwM2M3",
     },
   },
 };

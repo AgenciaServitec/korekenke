@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getPersonDataByDni } from "../../client-api/apis-net-pe";
+import { getPersonDataByDni } from "../../client-api/api-peru-devs";
 
 interface Params {
   dni: string;
