@@ -12,7 +12,11 @@ import {
   Space,
   Title,
 } from "../../../components";
-import { useAuthentication, useGlobalData } from "../../../providers";
+import {
+  useAuthentication,
+  useCommand,
+  useGlobalData,
+} from "../../../providers";
 import { useNavigate } from "react-router";
 import { UsersTable } from "./UserTable";
 import {
@@ -40,10 +44,11 @@ import { faAccessibleIcon } from "@fortawesome/free-brands-svg-icons";
 export const Users = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
-  const { users, commands } = useGlobalData();
+  const { users } = useGlobalData();
+  const { currentCommand } = useCommand();
   const { patchUser, patchUserResponse } = useApiUserPatch();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
-  const [userType, setUserType] = useState("all");
+  const [userType, setUserType] = useState(currentCommand.id);
   const [disabledUser, setDisabledUser] = useState(false);
 
   const navigateTo = (userId) => navigate(userId);
@@ -293,7 +298,7 @@ export const Users = () => {
             type={disabledUser ? "primary" : "default"}
             danger
             block
-            onClick={(e) => setDisabledUser(!disabledUser)}
+            onClick={() => setDisabledUser(!disabledUser)}
             icon={<FontAwesomeIcon icon={faAccessibleIcon} />}
           >
             {disabledUser ? "Discapacitados" : "No Discapacitados"}
