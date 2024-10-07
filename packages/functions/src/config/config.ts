@@ -23,10 +23,6 @@ export const config: Config = {
         bcc: "galafloresangelemilio@gmail.com",
       },
     },
-    "apis-net-pe": {
-      apiUrl: "https://api.apis.net.pe/v2",
-      token: "apis-token-8290.s1Op-FA9ZArlfXq39wpzMuKiaXexehgs",
-    },
     "api-peru-devs": {
       apiUrl: "https://api.perudevs.com/api/v1",
       token:
@@ -47,10 +43,6 @@ export const config: Config = {
         to: "juguar01@hotmail.com",
         bcc: "beto1perk@gmail.com",
       },
-    },
-    "apis-net-pe": {
-      apiUrl: "https://api.apis.net.pe/v2",
-      token: "apis-token-8290.s1Op-FA9ZArlfXq39wpzMuKiaXexehgs",
     },
     "api-peru-devs": {
       apiUrl: "https://api.perudevs.com/api/v1",

@@ -17,7 +17,6 @@ interface ConfigEnvironment {
     apiUrl: string;
   };
   mailer: MailerConfig;
-  "apis-net-pe": ApisNetPeConfig;
   "api-peru-devs": ApiPeruDevsConfig;
 }
 
@@ -37,11 +36,6 @@ interface MailerConfig {
     to: string;
     bcc: string;
   };
-}
-
-interface ApisNetPeConfig {
-  apiUrl: string;
-  token: string;
 }
 
 interface ApiPeruDevsConfig {
