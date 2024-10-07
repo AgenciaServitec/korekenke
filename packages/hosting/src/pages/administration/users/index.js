@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Acl,
   AddButton,
+  Button,
   Col,
   Divider,
   modalConfirm,
   notification,
   Row,
+  Select,
+  Space,
   Title,
 } from "../../../components";
 import { useAuthentication, useGlobalData } from "../../../providers";
@@ -20,7 +23,6 @@ import {
 import { assign, isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
-import { Button, Space } from "antd";
 import {
   fetchDepartment,
   fetchOffice,
@@ -33,6 +35,7 @@ import {
   updateUnit,
 } from "../../../firebase/collections";
 import { useUpdateAssignToAndAclsOfUser } from "../../../hooks";
+import { faAccessibleIcon } from "@fortawesome/free-brands-svg-icons";
 
 export const Users = () => {
   const navigate = useNavigate();
@@ -40,6 +43,8 @@ export const Users = () => {
   const { users, commands } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
+  const [userType, setUserType] = useState("all");
+  const [disabledUser, setDisabledUser] = useState(false);
 
   const navigateTo = (userId) => navigate(userId);
 
@@ -233,6 +238,35 @@ export const Users = () => {
   const onConfirmUnlinkAssignedToUser = (user) =>
     removeUserOfGroup(user, false);
 
+  const options = [
+    { label: "Todos", value: "all" },
+    { label: "Sin Comando", value: "noCommand" },
+    {
+      label: "Comando De Bienestar Del Ejército (COBIENE)",
+      value: "cobiene",
+    },
+    {
+      label: "Comando Logístico Del Ejército (COLOGE)",
+      value: "cologe",
+    },
+    {
+      label: "Comando De Personal Del Ejército (COPERE)",
+      value: "copere",
+    },
+  ];
+
+  const usersView = users.filter((user) =>
+    userType === "all"
+      ? user
+      : user?.commands?.some((command) => command.id === userType)
+        ? user
+        : userType === "noCommand"
+          ? isEmpty(user.commands)
+          : null,
+  );
+
+  const isDisabledUsers = usersView.filter((user) => user.cgi === disabledUser);
+
   return (
     <Acl redirect category="administration" subCategory="users" name="/users">
       <Row gutter={[16, 16]}>
@@ -245,11 +279,29 @@ export const Users = () => {
           </>
         </Acl>
         <Col span={24}>
-          <Title level={3}>Usuarios</Title>
+          <Title level={3}>Usuarios ({isDisabledUsers?.length})</Title>
+        </Col>
+        <Col span={24} md={12} lg={8}>
+          <Select
+            value={userType}
+            onChange={(value) => setUserType(value)}
+            options={options}
+          />
+        </Col>
+        <Col span={24} md={6}>
+          <Button
+            type={disabledUser ? "primary" : "default"}
+            danger
+            block
+            onClick={(e) => setDisabledUser(!disabledUser)}
+            icon={<FontAwesomeIcon icon={faAccessibleIcon} />}
+          >
+            {disabledUser ? "Discapacitados" : "No Discapacitados"}
+          </Button>
         </Col>
         <Col span={24}>
           <UsersTable
-            users={users}
+            users={isDisabledUsers}
             onEditUser={onEditUser}
             onRemoveUser={onConfirmRemoveUser}
             onUnlinkAssignedToUser={onConfirmUnlinkAssignedToUser}
