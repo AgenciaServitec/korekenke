@@ -8,7 +8,7 @@ interface Props {
 }
 
 interface PersonData {
-  name: string;
+  firstName: string;
   paternalSurname: string;
   maternalSurname: string;
   fullName: string;
@@ -39,7 +39,7 @@ export const getPersonDataByDni = async ({
 };
 
 const mapPerson = (resultado: Person["resultado"]): PersonData => ({
-  name: resultado.nombres,
+  firstName: resultado.nombres,
   paternalSurname: resultado.apellido_paterno,
   maternalSurname: resultado.apellido_materno,
   fullName: resultado.nombre_completo,
