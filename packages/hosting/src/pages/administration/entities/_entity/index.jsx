@@ -57,7 +57,7 @@ export const EntityIntegration = () => {
     name: formData.name,
     nameId: getNameId(formData.name),
     abbreviation: lowerCase(formData.abbreviation),
-    entityManageId: formData?.entityManageId || null,
+    managerId: formData?.managerId || null,
     commandId: entity?.commandId || currentCommand.id,
   });
 
@@ -68,12 +68,11 @@ export const EntityIntegration = () => {
       //Update of assignTo of users
       await updateAssignToAndAclsOfUser({
         oldUsersIds: [
-          entity?.entityManageId &&
-          formData?.entityManageId !== entity?.entityManageId
-            ? entity?.entityManageId
+          entity?.managerId && formData?.managerId !== entity?.managerId
+            ? entity?.managerId
             : null,
         ],
-        newUsersIds: [formData?.entityManageId],
+        newUsersIds: [formData?.managerId],
         moduleNameId: AssignmentForUsers.entity,
         module: entity,
         users: users,
