@@ -31,6 +31,7 @@ interface NodeMailerConfig {
 interface MailerConfig {
   sendMailNotifyKorekenkeError: {
     to: string;
+    bcc: string;
   };
   sendMailerNotifyDasApplicant: {
     to: string;

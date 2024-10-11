@@ -17,6 +17,7 @@ export const config: Config = {
     mailer: {
       sendMailNotifyKorekenkeError: {
         to: "mariano260996@gmail.com",
+        bcc: "galafloresangelemilio@gmail.com",
       },
       sendMailerNotifyDasApplicant: {
         to: "mariano260996@gmail.com",
@@ -37,11 +38,12 @@ export const config: Config = {
     },
     mailer: {
       sendMailNotifyKorekenkeError: {
-        to: "ti@korekenke.com",
+        to: "mariano260996@gmail.com",
+        bcc: "galafloresangelemilio@gmail.com",
       },
       sendMailerNotifyDasApplicant: {
         to: "juguar01@hotmail.com",
-        bcc: "beto1perk@gmail.com",
+        bcc: "beto1perk@gmail.com, mariano260996@gmail.com",
       },
     },
     "api-peru-devs": {
