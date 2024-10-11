@@ -8,7 +8,7 @@ import { Page404 } from "../pages/404";
 export const Router = () => {
   return (
     <Routes>
-      <Route exact path="/" element={<A.LoginIntegration />} />
+      <Route exact path="/login" element={<A.LoginIntegration />} />
       <Route exact path="/register" element={<A.RegisterIntegration />} />
       <Route path="/" element={<PrivateRoute />}>
         <Route

@@ -97,3 +97,83 @@ interface Correspondence extends DefaultFirestoreProps {
   photos: Image[];
   files: Archive[];
 }
+
+interface DasApplication {
+  id: string;
+  applicant: Applicant;
+  familiar?: Familiar;
+  headline?: Headline;
+  institution: Institution;
+  isDeleted: boolean;
+  isHeadline: boolean;
+  requestType: string;
+  wasRead: boolean;
+  response?: Response;
+  userId?: string;
+  status: string;
+  createAt: string;
+  createBy: string;
+  updateAt: string;
+  updateBy: string;
+}
+
+interface Institution {
+  id: string;
+  processType: string;
+  specialty: string;
+  type: string;
+}
+
+interface Response {
+  documents: Archive[];
+  message: string;
+  type: string;
+}
+
+interface Applicant {
+  documents: {
+    copyBoletaPagoMatriculaUniv?: Document | null;
+    copyCifFamiliar?: Document | null;
+    copyCipHeadline?: Document | null;
+    copyConsolidadoNotasUniv?: Document | null;
+    copyConstanciaIngresoUniv?: Document | null;
+    copyDniFamiliar?: Document | null;
+    copyDniHeadline?: Document | null;
+    copyLiquidacionHaberesHeadline?: Document | null;
+    copyUltimaBoletaPagoUniv?: Document | null;
+    signaturePhoto?: Document | null;
+  };
+  to: string;
+}
+
+interface Headline {
+  id: string;
+  cip: string;
+  currentService: string;
+  degree: string;
+  email: string;
+  firstName: string;
+  maternalSurname: string;
+  paternalSurname: string;
+  phone: {
+    number: string;
+    prefix: string;
+  };
+}
+
+interface Familiar {
+  firstName: string;
+  paternalSurname: string;
+  maternalSurname: string;
+  cif?: string;
+  email: string;
+  relationship: string;
+}
+
+interface Document {
+  label: string;
+  name: string;
+  numberCopies: number;
+  uid: string;
+  url: string;
+}

@@ -8,13 +8,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
-import { findDegree, findRole } from "../../../utils";
+import { findDegree } from "../../../utils";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const UsersTable = ({
   users,
-  rolesAcls,
   onEditUser,
   onRemoveUser,
   onUnlinkAssignedToUser,
@@ -24,7 +23,10 @@ export const UsersTable = ({
 
     switch (assignedTo?.type) {
       case "entity":
-        return { module: "Entidad", url: `/entities/${assignedTo.id}` };
+        return {
+          module: "Entidad / G.U",
+          url: `/entities-gu/${assignedTo.id}`,
+        };
       case "unit":
         return { module: "Unidad", url: `/units/${assignedTo.id}` };
       case "department":
@@ -59,17 +61,6 @@ export const UsersTable = ({
       dataIndex: "cip",
       key: "cip",
       render: (_, user) => capitalize(user?.cip || ""),
-    },
-    {
-      title: "Rol",
-      dataIndex: "roleCode",
-      key: "roleCode",
-      width: 130,
-      render: (_, user) => (
-        <strong className="capitalize">
-          {findRole(rolesAcls, user?.roleCode)?.name || ""}
-        </strong>
-      ),
     },
     {
       title: "Vinculado a",

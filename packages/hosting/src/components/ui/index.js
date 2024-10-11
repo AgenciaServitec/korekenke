@@ -61,6 +61,7 @@ export * from "./Acl";
 export * from "./sheet";
 export * from "./Legend";
 export * from "./ShowImagesAndDocumentsModal";
+export * from "./RolesByGroup";
 
 const { Link, Paragraph } = Typography;
 

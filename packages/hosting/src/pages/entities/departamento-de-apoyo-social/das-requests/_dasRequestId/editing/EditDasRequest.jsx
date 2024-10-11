@@ -236,7 +236,7 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                category="departamento-de-apoyo-social"
+                category="public"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
               >
@@ -278,7 +278,7 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                category="departamento-de-apoyo-social"
+                category="public"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
               >
@@ -320,7 +320,7 @@ const EditDasRequest = ({
           {!isPositiveOrApproved && (
             <>
               <Acl
-                category="departamento-de-apoyo-social"
+                category="public"
                 subCategory="dasRequests"
                 name="/das-requests/:dasRequestId#addObservation"
               >
@@ -379,7 +379,7 @@ const EditDasRequest = ({
                   </div>
                 )}
                 <Acl
-                  category="departamento-de-apoyo-social"
+                  category="public"
                   subCategory="dasRequests"
                   name="/das-requests/:dasRequestId/sheets"
                 >
@@ -409,7 +409,7 @@ const EditDasRequest = ({
             </Button>
           </Col>
           <Acl
-            category="departamento-de-apoyo-social"
+            category="public"
             subCategory="dasRequests"
             name="/das-requests/:dasRequestId#reply"
           >

@@ -13,10 +13,11 @@ import {
   faEye,
   faFilePdf,
   faFilter,
+  faPaperPlane,
   faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { orderBy } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import { DasRequestStatus } from "../../../../data-list";
 import { useNavigate } from "react-router";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
@@ -24,12 +25,13 @@ import styled from "styled-components";
 import { entitiesRef } from "../../../../firebase/collections";
 import { fetchCollectionOnce } from "../../../../firebase/firestore";
 import { useAuthentication } from "../../../../providers";
+import { useAPiSendMailNotificationDasRequestPost } from "../../../../api";
+import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
 
 export const DasRequestsTable = ({
   dasApplications,
   onEditDasRequest,
   onDeleteDasRequest,
-  dasApplicationsLoading,
   onAddReplyDasRequest,
   onShowReplyDasRequestInformation,
   onDasRequestProceeds,
@@ -37,6 +39,8 @@ export const DasRequestsTable = ({
 }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
+  const { postSendMailNotificationDasRequestPost } =
+    useAPiSendMailNotificationDasRequestPost();
 
   const [entity, setEntity] = useState(null);
 
@@ -52,10 +56,26 @@ export const DasRequestsTable = ({
 
   const navigateTo = (pathname) => navigate(pathname);
 
+  const onResendNotificationDasRequestPost = async (dasRequest) => {
+    try {
+      await postSendMailNotificationDasRequestPost(dasRequest.id);
+
+      await updateDasApplication(dasRequest.id, {
+        sendNotificationDasRequest: true,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const isPositiveOrApproved = (dasRequest) =>
     dasRequest?.status === "finalized" ||
     dasRequest?.status === "inProgess" ||
     dasRequest?.response?.type === "positive";
+
+  const isSendNotificationDasRequest = (dasRequest) =>
+    !isEmpty(dasRequest?.sendNotificationDasRequest) ||
+    dasRequest?.sendNotificationDasRequest === true;
 
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
 
@@ -188,7 +208,20 @@ export const DasRequestsTable = ({
       render: (dasRequest) => (
         <Space>
           <Acl
-            category="departamento-de-apoyo-social"
+            category="public"
+            subCategory="dasRequests"
+            name="/das-requests/:dasRequestId#sendNotificationDasRequest"
+          >
+            {!isSendNotificationDasRequest(dasRequest) && (
+              <IconAction
+                tooltipTitle="Reenviar notificación"
+                icon={faPaperPlane}
+                onClick={() => onResendNotificationDasRequestPost(dasRequest)}
+              />
+            )}
+          </Acl>
+          <Acl
+            category="public"
             subCategory="dasRequests"
             name="/das-requests/:dasRequestId#proceeds"
           >
@@ -200,7 +233,7 @@ export const DasRequestsTable = ({
           </Acl>
           {entity?.entityManageId === user?.id && !isFinalized(dasRequest) && (
             <Acl
-              category="departamento-de-apoyo-social"
+              category="public"
               subCategory="dasRequests"
               name="/das-requests/:dasRequestId#reply"
             >
@@ -213,7 +246,7 @@ export const DasRequestsTable = ({
             </Acl>
           )}
           <Acl
-            category="departamento-de-apoyo-social"
+            category="public"
             subCategory="dasRequests"
             name="/das-requests/:dasRequestId/sheets"
           >
@@ -228,7 +261,7 @@ export const DasRequestsTable = ({
           </Acl>
           {!isFinalized(dasRequest) && (
             <Acl
-              category="departamento-de-apoyo-social"
+              category="public"
               subCategory="dasRequests"
               name="/das-requests/:dasRequestId"
             >
@@ -242,7 +275,7 @@ export const DasRequestsTable = ({
           {!isPositiveOrApproved(dasRequest) &&
             dasRequest.headline.id !== user.id && (
               <Acl
-                category="departamento-de-apoyo-social"
+                category="public"
                 subCategory="dasRequests"
                 name="/das-requests#delete"
               >

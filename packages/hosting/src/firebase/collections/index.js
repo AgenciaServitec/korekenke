@@ -13,3 +13,4 @@ export * from "./equineMagazineProfiles";
 export * from "./animals";
 export * from "./cmstsEnrollments";
 export * from "./animal-logs";
+export * from "./modulesAdministrator";

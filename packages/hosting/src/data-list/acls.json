@@ -25,6 +25,7 @@
     }
   },
   "administration": {
+    "command": "cobiene",
     "label": "Administración",
     "users": {
       "label": "Usuarios",
@@ -89,10 +90,7 @@
       "/organizational-climate-studies#deleted": "Eliminar Estudio del Clima Organizacional",
       "/organizational-climate-studies/:organizationalClimateStudyId": "Editar Estudio del Clima Organizacional",
       "/organizational-climate-studies/sheets": "Pdf de Estudio del Clima Organizacional"
-    }
-  },
-  "departamento-de-apoyo-social": {
-    "label": "Departamento de apoyo social (DAS)",
+    },
     "dasRequests": {
       "label": "Solicitudes DAS",
       "/das-requests": "Menu: Solicitudes",
@@ -104,10 +102,12 @@
       "/das-requests/:dasRequestId#resolverObservation": "Solicitud: Resolver observación",
       "/das-requests/:dasRequestId#closeObservation": "Solicitud: Cerrar observación",
       "/das-requests/:dasRequestId#reply": "Responder solicitud",
-      "/das-requests/:dasRequestId#proceeds": "Evaluación Solicitud"
+      "/das-requests/:dasRequestId#proceeds": "Evaluación Solicitud",
+      "/das-requests/:dasRequestId#sendNotificationDasRequest": "Envío de notificación"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {
+    "command": "cobiene",
     "label": "Jefatura de bienestar del ejército",
     "inscriptions": {
       "label": "Inscripciones",
@@ -119,6 +119,7 @@
     }
   },
   "servicio-de-veterinaria-y-remonta-del-ejercito": {
+    "command": "cologe",
     "label": "Servicio de veterinaria y remonta del ejército",
     "animals": {
       "label": "Animales",

@@ -1,22 +1,7 @@
-[
-  {
-    "roles": ["manager", "sub_manager", "assistant_manager"],
-    "type": "entity"
-  },
-  {
-    "roles": ["unit_boss", "unit_assistant"],
-    "type": "unit"
-  },
-  {
-    "roles": ["department_boss", "department_assistant"],
-    "type": "department"
-  },
-  {
-    "roles": ["section_boss", "section_assistant"],
-    "type": "section"
-  },
-  {
-    "roles": ["office_boss", "office_assistant"],
-    "type": "office"
-  }
-]
+{
+  "entity": "entity",
+  "unit": "unit",
+  "department": "department",
+  "section": "section",
+  "office": "office"
+}

@@ -5,6 +5,26 @@
     "initialPathname": "/home"
   },
   {
+    "id": "boss",
+    "name": "Jefe",
+    "initialPathname": "/home"
+  },
+  {
+    "id": "second_boss",
+    "name": "Jefe secundario",
+    "initialPathname": "/home"
+  },
+  {
+    "id": "member",
+    "name": "Miembro",
+    "initialPathname": "/home"
+  },
+  {
+    "id": "super_admin",
+    "name": "Super Admin",
+    "initialPathname": "/home"
+  },
+  {
     "id": "manager",
     "name": "Gerente",
     "initialPathname": "/home"

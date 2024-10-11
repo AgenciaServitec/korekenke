@@ -6,6 +6,7 @@ import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
 import { getEntityDataByDni } from "./entities";
 import { getUserByCip } from "./consult";
+import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
 
 const app: express.Application = express();
 
@@ -35,6 +36,11 @@ app.post("/correspondence", postCorrespondence);
 app.get("/entities/dni/:dni", getEntityDataByDni);
 
 app.get("/consult/cmsts/:cip", getUserByCip);
+
+app.post(
+  "/emails/notification-das-request/:dasRequestId",
+  onResendMailNotificationDasRequest
+);
 
 app.use(errorHandler);
 

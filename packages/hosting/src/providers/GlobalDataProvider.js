@@ -14,6 +14,7 @@ import {
   sectionsRef,
   unitsRef,
   usersRef,
+  modulesAdministratorRef,
 } from "../firebase/collections";
 import { useCommand } from "./CommandProvider";
 
@@ -29,6 +30,7 @@ const GlobalDataContext = createContext({
   departments: [],
   sections: [],
   rolesAcls: [],
+  modulesAdministrator: [],
   offices: [],
   correspondences: [],
   animals: [],
@@ -44,6 +46,18 @@ export const GlobalDataProvider = ({ children }) => {
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser
       ? firestore.collection("roles-acls").where("isDeleted", "==", false)
+      : null,
+  );
+
+  const [
+    modulesAdministrator = [],
+    modulesAdministratorLoading,
+    modulesAdministratorError,
+  ] = useCollectionData(
+    authUser
+      ? modulesAdministratorRef
+          .where("isDeleted", "==", false)
+          .where("commandId", "==", _currentCommand)
       : null,
   );
 
@@ -113,7 +127,8 @@ export const GlobalDataProvider = ({ children }) => {
     departmentsError ||
     sectionsError ||
     officesError ||
-    animalsError;
+    animalsError ||
+    modulesAdministratorError;
 
   const loading =
     entitiesLoading ||
@@ -124,7 +139,8 @@ export const GlobalDataProvider = ({ children }) => {
     departmentsLoading ||
     sectionsLoading ||
     officesLoading ||
-    animalsLoading;
+    animalsLoading ||
+    modulesAdministratorLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -162,6 +178,7 @@ export const GlobalDataProvider = ({ children }) => {
         departments: orderBy(departments, "createAt", "desc"),
         sections: orderBy(sections, "createAt", "desc"),
         rolesAcls: orderBy(rolesAcls, "createAt", "desc"),
+        modulesAdministrator: orderBy(modulesAdministrator, "createAt", "desc"),
         offices: orderBy(offices, "createAt", "desc"),
         correspondences: orderBy(correspondences, "createAt", "desc"),
         animals: orderBy(animals, "createAt", "desc"),

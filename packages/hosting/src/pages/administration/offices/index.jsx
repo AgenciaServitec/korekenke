@@ -1,19 +1,22 @@
-import React, { useState } from "react";
-import { Acl, Button, Col, List, Row, Select } from "../../../components";
+import React from "react";
+import { Acl, Button, Col, List, notification, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useGlobalData } from "../../../providers";
-import { useAcl, useDefaultFirestoreProps } from "../../../hooks";
+import {
+  useAcl,
+  useDefaultFirestoreProps,
+  useUpdateAssignToAndAclsOfUser,
+} from "../../../hooks";
 import { updateOffice } from "../../../firebase/collections";
-import { concat } from "lodash";
 
 export const OfficesIntegration = () => {
   const navigate = useNavigate();
-  const { offices, sections } = useGlobalData();
+  const { users, offices } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
-  const [sectionId, setSectionId] = useState("all");
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
 
   const navigateTo = (officeId) => navigate(officeId);
 
@@ -21,15 +24,25 @@ export const OfficesIntegration = () => {
   const onEditOffice = (office) => navigateTo(office.id);
   const onDeleteOffice = async (office) => {
     try {
-      await updateOffice(office.id, assignDeleteProps({ isDeleted: true }));
-    } catch (error) {
-      console.error("Error deleting office:", error);
+      await updateAssignToAndAclsOfUser({
+        oldUsersIds: office.membersIds,
+        users: users,
+      });
+
+      await updateOffice(
+        office.id,
+        assignDeleteProps({
+          isDeleted: true,
+          membersIds: null,
+          bossId: null,
+          secondBossId: null,
+        }),
+      );
+    } catch (e) {
+      console.error("ErrorDeleteOffice: ", e);
+      notification({ type: "error" });
     }
   };
-
-  const officesView = offices.filter((office) =>
-    sectionId === "all" ? true : office.sectionId === sectionId,
-  );
 
   return (
     <Acl
@@ -55,22 +68,9 @@ export const OfficesIntegration = () => {
             </Button>
           </Acl>
         </Col>
-        <Col span={24} md={8}>
-          <Select
-            value={sectionId}
-            onChange={(value) => setSectionId(value)}
-            options={concat(
-              [{ label: "Todos", value: "all" }],
-              sections.map((section) => ({
-                label: section.name,
-                value: section.id,
-              })),
-            )}
-          />
-        </Col>
         <Col span={24}>
           <List
-            dataSource={officesView}
+            dataSource={offices}
             onDeleteItem={(office) => onDeleteOffice(office)}
             onEditItem={(office) => onEditOffice(office)}
             itemTitle={(office) => office.name}

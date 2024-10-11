@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import {
   Acl,
   AddButton,
+  Button,
   Col,
   Divider,
   modalConfirm,
   notification,
   Row,
   Select,
+  Space,
   Title,
 } from "../../../components";
 import {
@@ -22,10 +24,9 @@ import {
   getApiErrorResponse,
   useApiUserPatch,
 } from "../../../api";
-import { assign, concat, isEmpty } from "lodash";
+import { assign, isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
-import { Button, Space } from "antd";
 import {
   fetchDepartment,
   fetchOffice,
@@ -37,17 +38,18 @@ import {
   updateSection,
   updateUnit,
 } from "../../../firebase/collections";
-import { useUpdateAssignToInUser } from "../../../hooks";
+import { useUpdateAssignToAndAclsOfUser } from "../../../hooks";
+import { faAccessibleIcon } from "@fortawesome/free-brands-svg-icons";
 
 export const Users = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
-  const { users, rolesAcls, commands } = useGlobalData();
-  const { patchUser, patchUserResponse } = useApiUserPatch();
+  const { users } = useGlobalData();
   const { currentCommand } = useCommand();
-  const { updateAssignToUser } = useUpdateAssignToInUser();
-
-  const [commandId, setCommandId] = useState(currentCommand.id || "all");
+  const { patchUser, patchUserResponse } = useApiUserPatch();
+  const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
+  const [userType, setUserType] = useState(currentCommand.id);
+  const [disabledUser, setDisabledUser] = useState(false);
 
   const navigateTo = (userId) => navigate(userId);
 
@@ -69,7 +71,7 @@ export const Users = () => {
         await updateEntity(moduleId, { entityManageId: null });
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -82,7 +84,7 @@ export const Users = () => {
         const department = await fetchDepartment(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -103,7 +105,7 @@ export const Users = () => {
         const unit = await fetchUnit(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -123,7 +125,7 @@ export const Users = () => {
         const section = await fetchSection(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -143,7 +145,7 @@ export const Users = () => {
         const office = await fetchOffice(moduleId);
 
         //Update of assignTo of users
-        await updateAssignToUser({
+        await updateAssignToAndAclsOfUser({
           oldUsersIds: [user.id],
           moduleId: moduleId,
           users: users,
@@ -241,9 +243,34 @@ export const Users = () => {
   const onConfirmUnlinkAssignedToUser = (user) =>
     removeUserOfGroup(user, false);
 
+  const options = [
+    { label: "Todos", value: "all" },
+    { label: "Sin Comando", value: "noCommand" },
+    {
+      label: "Comando De Bienestar Del Ejército (COBIENE)",
+      value: "cobiene",
+    },
+    {
+      label: "Comando Logístico Del Ejército (COLOGE)",
+      value: "cologe",
+    },
+    {
+      label: "Comando De Personal Del Ejército (COPERE)",
+      value: "copere",
+    },
+  ];
+
   const usersView = users.filter((user) =>
-    commandId === "all" ? true : user?.initialCommand?.id === commandId,
+    userType === "all"
+      ? user
+      : user?.commands?.some((command) => command.id === userType)
+        ? user
+        : userType === "noCommand"
+          ? isEmpty(user.commands)
+          : null,
   );
+
+  const isDisabledUsers = usersView.filter((user) => user.cgi === disabledUser);
 
   return (
     <Acl redirect category="administration" subCategory="users" name="/users">
@@ -257,25 +284,29 @@ export const Users = () => {
           </>
         </Acl>
         <Col span={24}>
-          <Title level={3}>Usuarios</Title>
+          <Title level={3}>Usuarios ({isDisabledUsers?.length})</Title>
         </Col>
-        <Col span={24} md={8}>
+        <Col span={24} md={12} lg={8}>
           <Select
-            value={commandId}
-            onChange={(value) => setCommandId(value)}
-            options={concat(
-              [{ label: "Todos", value: "all" }],
-              commands.map((command) => ({
-                label: `${command.name} (${command.code.toUpperCase()})`,
-                value: command.id,
-              })),
-            )}
+            value={userType}
+            onChange={(value) => setUserType(value)}
+            options={options}
           />
+        </Col>
+        <Col span={24} md={6}>
+          <Button
+            type={disabledUser ? "primary" : "default"}
+            danger
+            block
+            onClick={() => setDisabledUser(!disabledUser)}
+            icon={<FontAwesomeIcon icon={faAccessibleIcon} />}
+          >
+            {disabledUser ? "Discapacitados" : "No Discapacitados"}
+          </Button>
         </Col>
         <Col span={24}>
           <UsersTable
-            users={usersView}
-            rolesAcls={rolesAcls}
+            users={isDisabledUsers}
             onEditUser={onEditUser}
             onRemoveUser={onConfirmRemoveUser}
             onUnlinkAssignedToUser={onConfirmUnlinkAssignedToUser}

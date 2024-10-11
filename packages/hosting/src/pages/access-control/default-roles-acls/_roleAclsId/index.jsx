@@ -7,7 +7,7 @@ import {
   useDefaultFirestoreProps,
   useFormUtils,
 } from "../../../../hooks";
-import { isEmpty, isObject } from "lodash";
+import { assign, isEmpty, isObject } from "lodash";
 import {
   Acl,
   Button,
@@ -145,6 +145,12 @@ const RoleAcl = ({
       acls: mapAcls(roleAcls?.acls),
     });
 
+  const rolesView = Roles.map((role) =>
+    assign({}, role, {
+      disabled: role?.id === roleAcls?.roleCode,
+    }),
+  );
+
   const onSubmitRoleAcls = (formData) => onSaveRoleAcls(formData);
 
   return (
@@ -169,9 +175,10 @@ const RoleAcl = ({
                   onChange={onChange}
                   value={value}
                   error={error(name)}
-                  options={Roles.map((role) => ({
+                  options={rolesView.map((role) => ({
                     label: role.name,
                     value: role.id,
+                    disabled: role.disabled,
                   }))}
                 />
               )}
@@ -184,12 +191,6 @@ const RoleAcl = ({
           </Col>
           {Object.entries(acls).map(([keyCategory, subCategories]) => (
             <Col span={24} key={keyCategory}>
-              {/*{keyCategory === "jefatura-de-bienestar-del-ejercito" && (*/}
-              {/*  <>*/}
-              {/*    <h5>Entidades:</h5>*/}
-              {/*    <br />*/}
-              {/*  </>*/}
-              {/*)}*/}
               <ComponentContainer.group label={subCategories.label}>
                 <Row gutter={[16, 16]}>
                   {Object.entries(subCategories).map(
@@ -197,11 +198,14 @@ const RoleAcl = ({
                       const unlabeledAclsForSelectOptions =
                         isObject(items) &&
                         Object.entries(items).filter(
-                          (_item) => !_item.includes("label"),
+                          (_item) =>
+                            !_item.includes("label") &&
+                            !_item.includes("command"),
                         );
 
                       return (
-                        keySubCategory !== "label" && (
+                        keySubCategory !== "label" &&
+                        keySubCategory !== "command" && (
                           <Col span={24} key={keySubCategory}>
                             <Controller
                               name={`acls.${keyCategory}.${keySubCategory}`}

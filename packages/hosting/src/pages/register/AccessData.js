@@ -75,9 +75,9 @@ export const AccessData = ({ next, currentStep }) => {
       setLocalStorage("register", {
         cip,
         dni,
-        firstName: capitalize(personData?.nombres || ""),
-        paternalSurname: capitalize(personData?.apellidoPaterno || ""),
-        maternalSurname: capitalize(personData?.apellidoMaterno || ""),
+        firstName: capitalize(personData?.firstName || ""),
+        paternalSurname: capitalize(personData?.paternalSurname || ""),
+        maternalSurname: capitalize(personData?.maternalSurname || ""),
       });
 
       next();

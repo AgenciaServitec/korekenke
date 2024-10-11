@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { environmentConfig } from "../../config";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { catchAxiosError } from "../axios.utils";
 
-const { apiUrl } = environmentConfig["apis-net-pe"];
+const { apiUrl } = environmentConfig["api-peru-devs"];
 
 const fetch = axios.create({
   baseURL: apiUrl,
