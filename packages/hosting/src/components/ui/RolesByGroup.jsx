@@ -110,21 +110,31 @@ export const RolesByGroupIntegration = ({
     try {
       setSavingSpreadAclsByRoles(true);
 
-      const membersIds = moduleData?.membersIds || [];
+      console.log("moduleData: ", moduleData);
+
+      const managerId = moduleData?.managerId || null;
       const bossId = moduleData?.bossId || null;
       const secondBossId = moduleData?.secondBossId || null;
+      const membersIds = moduleData?.membersIds || [];
 
-      const membersPromises = !isEmpty(membersIds)
-        ? membersIds.map((memberId) => userUpdate(memberId, "member"))
+      const managerPromise = managerId
+        ? userUpdate(managerId, "manager")
         : undefined;
-
       const bossPromise = bossId ? userUpdate(bossId, "boss") : undefined;
       const secondBossPromise = secondBossId
         ? userUpdate(secondBossId, "second_boss")
         : undefined;
+      const membersPromises = !isEmpty(membersIds)
+        ? membersIds.map((memberId) => userUpdate(memberId, "member"))
+        : undefined;
 
       await Promise.all(
-        flatMap([membersPromises, bossPromise, secondBossPromise]),
+        flatMap([
+          managerPromise,
+          bossPromise,
+          secondBossPromise,
+          membersPromises,
+        ]),
       );
 
       notification({ type: "success" });

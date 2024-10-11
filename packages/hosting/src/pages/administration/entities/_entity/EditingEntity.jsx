@@ -18,7 +18,7 @@ export const EditingEntityGU = ({
   const schema = yup.object({
     name: yup.string().required(),
     abbreviation: yup.string(),
-    entityManageId: yup.string().nullable(),
+    managerId: yup.string().nullable(),
   });
 
   const {
@@ -40,7 +40,7 @@ export const EditingEntityGU = ({
     reset({
       name: entity?.name || "",
       abbreviation: entity?.abbreviation || "",
-      entityManageId: entity?.entityManageId || null,
+      managerId: entity?.managerId || null,
     });
   };
 
@@ -99,7 +99,7 @@ export const EditingEntityGU = ({
             </Col>
             <Col span={24}>
               <Controller
-                name="entityManageId"
+                name="managerId"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (

@@ -96,6 +96,20 @@ export const useUpdateAssignToAndAclsOfUser = () => {
           )
       : undefined;
 
+    // MANAGER: Rol, Acls
+    const managerPromises = formData?.managerId
+      ? updateUser(
+          formData.managerId,
+          assignUpdateProps({
+            roleCode: "manager",
+            acls: merge(
+              findUser(formData.managerId)?.acls,
+              findModuleRole("manager")?.acls,
+            ),
+          }),
+        )
+      : undefined;
+
     // BOSS: Rol, Acls
     const bossPromises = formData?.bossId
       ? updateUser(
@@ -131,6 +145,7 @@ export const useUpdateAssignToAndAclsOfUser = () => {
       flatMap([
         membersPromises,
         oldUsersPromises,
+        managerPromises,
         bossPromises,
         secondBossPromises,
       ]),
