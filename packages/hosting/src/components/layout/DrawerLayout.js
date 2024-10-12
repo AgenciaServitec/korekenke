@@ -373,6 +373,40 @@ export const DrawerLayout = ({
         },
       ],
     },
+    {
+      label: "Reclutamiento militar",
+      key: "military-recruitment",
+      icon: <FontAwesomeIcon icon={faShield} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+        "public",
+        ["militaryServiceRecruitment"],
+        ["/military-service-recruitment", "/military-service-recruitment/new"],
+      ),
+      children: [
+        {
+          label: "Realizar inscripción",
+          key: "military-service-recruitment",
+          icon: <FontAwesomeIcon icon={faFilePen} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["militaryServiceRecruitment"],
+            ["/military-service-recruitment/new"],
+          ),
+          onClick: () => onClickMenu("/military-service-recruitment/new"),
+        },
+        {
+          label: "Lista de inscripciones",
+          key: "military-service-recruitment-list",
+          icon: <FontAwesomeIcon icon={faList} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["militaryServiceRecruitment"],
+            ["/military-service-recruitment"],
+          ),
+          onClick: () => onClickMenu("/military-service-recruitment"),
+        },
+      ],
+    },
   ];
 
   const filterByRoleCode = (items) => {

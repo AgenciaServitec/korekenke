@@ -4,6 +4,11 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
+import {
+  IntegrationMilitaryRecruitmentService,
+  MilitaryRecruitmentServiceIntegration,
+  MilitaryRecruitmentServiceIntegrations,
+} from "../pages";
 
 export const Router = () => {
   return (
@@ -346,6 +351,24 @@ export const Router = () => {
         element={
           <AdminLayout>
             <A.DasRequestIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/military-service-recruitment"
+        element={
+          <AdminLayout>
+            <A.MilitaryRecruitmentServicesIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/military-service-recruitment/:militaryServiceRecruitmentId"
+        element={
+          <AdminLayout>
+            <A.MilitaryRecruitmentServiceIntegration />
           </AdminLayout>
         }
       />
