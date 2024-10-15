@@ -16,7 +16,7 @@ export const OrganizationalClimateStudyIntegration = () => {
   const { organizationalClimateStudyId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
   const [stepData1, setStepData1] = useState(null);
 
   const mapForm = (formData, organizationalClimateStudyId) => ({

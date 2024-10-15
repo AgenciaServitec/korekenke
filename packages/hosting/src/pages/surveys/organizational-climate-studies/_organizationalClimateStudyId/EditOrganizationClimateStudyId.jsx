@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row, Spinner, Button } from "../../../../components";
-import { useParams, useNavigate } from "react-router";
+import { Button, Card, Col, Row, Spinner } from "../../../../components";
+import { useNavigate, useParams } from "react-router";
 import { fetchOrganizationalClimateStudy } from "../../../../firebase/collections/organizationalClimateStudies";
 import { isEmpty } from "lodash";
 import styled from "styled-components";
@@ -47,6 +47,21 @@ export const EditOrganizationClimateStudyId = () => {
     return acc;
   }, []);
 
+  const getQuestionValue = (code, value) =>
+    Surveys.questions
+      .find((question) => question.code === code)
+      ?.options?.find((option) => option.value === value)?.label;
+
+  const getOcupationalGroup = (code, value) => {
+    const _options = Surveys.questions.find(
+      (question) => question.code === code,
+    )?.options;
+
+    const options = [..._options[0].options, ..._options[1].options];
+
+    return options.find((option) => option.value === value)?.label;
+  };
+
   const onGoBack = () => navigate(-1);
 
   return (
@@ -61,105 +76,82 @@ export const EditOrganizationClimateStudyId = () => {
             <Row gutter={[16, 16]}>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>1. Nombre de la Organización: </span>
-                  <span>{questions?.establishment}</span>
+                  <span>1. Nombre de la dependencia donde laboras: </span>
+                  <span>{questions?.dependencyName}</span>
                 </WrapperComponent>
               </Col>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>2. Tipo de Organización: </span>
+                  <span>2. Cargo que desempeña en la dependencia: </span>
+                  <span>{questions?.positionHeld}</span>
+                </WrapperComponent>
+              </Col>
+              <Col span={24} md={8}>
+                <WrapperComponent>
+                  <span>3. Tipo de dependencia: </span>
                   <span>
-                    {
-                      Surveys.questions[1].options.find(
-                        (option) => option.value === questions?.type,
-                      ).label
-                    }
+                    {getQuestionValue(
+                      "questions.dependencyType",
+                      questions?.dependencyType,
+                    )}
                   </span>
                 </WrapperComponent>
               </Col>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>3. Sub Sector: </span>
-                  <span>{questions?.subsector}</span>
-                </WrapperComponent>
-              </Col>
-              <Col span={24} md={8}>
-                <WrapperComponent>
-                  <span>4. Ubicación Geográfica: </span>
-                  <span>
-                    {
-                      Surveys.questions[3].options.find(
-                        (option) => option.value === questions?.ubigeus,
-                      ).label
-                    }
-                  </span>
-                </WrapperComponent>
-              </Col>
-              <Col span={24} md={8}>
-                <WrapperComponent>
-                  <span>5. Edad: </span>
+                  <span>4. Edad: </span>
                   <span>{questions?.age}</span>
                 </WrapperComponent>
               </Col>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>6. Sexo: </span>
+                  <span>5. Sexo: </span>
                   <span>
-                    {
-                      Surveys.questions[5].options.find(
-                        (option) => option.value === questions?.gender,
-                      ).label
-                    }
+                    {getQuestionValue("questions.gender", questions?.gender)}
                   </span>
                 </WrapperComponent>
               </Col>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>7. Grupo Ocupacional: </span>
+                  <span>6. Grupo ocupacional: </span>
                   <span>
-                    {
-                      Surveys.questions[6].options.find(
-                        (option) =>
-                          option.value === questions?.occupationalGroup,
-                      ).label
-                    }
+                    {getOcupationalGroup(
+                      "questions.ocupationalGroup",
+                      questions?.ocupationalGroup,
+                    )}
                   </span>
                 </WrapperComponent>
               </Col>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>8. Personal: </span>
+                  <span>7. Condición: </span>
                   <span>
-                    {
-                      Surveys.questions[7].options.find(
-                        (option) => option.value === questions?.personal,
-                      ).label
-                    }
+                    {getQuestionValue(
+                      "questions.condition",
+                      questions?.condition,
+                    )}
                   </span>
                 </WrapperComponent>
               </Col>
               <Col span={24} md={8}>
                 <WrapperComponent>
-                  <span>9. Condición: </span>
+                  <span>8. Tiempo trabajando en la Institución: </span>
+                  <span>{questions?.timeWorkingInstitution}</span>
+                </WrapperComponent>
+              </Col>
+              <Col span={24} md={8}>
+                <WrapperComponent>
+                  <span>9. Tiempo trabajando en el puesto actual: </span>
+                  <span>{questions?.timeWorkingCurrentPosition}</span>
+                </WrapperComponent>
+              </Col>
+              <Col span={24} md={8}>
+                <WrapperComponent>
                   <span>
-                    {
-                      Surveys.questions[8].options.find(
-                        (option) => option.value === questions?.condition,
-                      ).label
-                    }
+                    10. Se han realizado actividades recreativas en los últimos
+                    seis (06) meses:{" "}
                   </span>
-                </WrapperComponent>
-              </Col>
-              <Col span={24} md={8}>
-                <WrapperComponent>
-                  <span>10. Tiempo trabajando en la Institución: </span>
-                  <span>{questions?.dwellTime}</span>
-                </WrapperComponent>
-              </Col>
-              <Col span={24} md={8}>
-                <WrapperComponent>
-                  <span>11. Tiempo trabajando en el Puesto Actual: </span>
-                  <span>{questions?.timeInCurrentPosition}</span>
+                  <span>{questions?.recreationalActivitiesInSixMonths}</span>
                 </WrapperComponent>
               </Col>
             </Row>

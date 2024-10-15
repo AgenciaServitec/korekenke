@@ -1,760 +1,175 @@
 {
   "questions": [
     {
-      "label": "Nombre de la Organización (Núcleo, RRMM, GGUU)",
-      "code": "questions.establishment",
+      "label": "Nombre de la dependencia donde laboras",
+      "element": "input",
+      "code": "questions.dependencyName",
       "description": "",
       "options": null
     },
     {
-      "label": "Tipo de Organización",
-      "code": "questions.type",
+      "label": "Cargo que desempeña en la dependencia",
+      "element": "input",
+      "code": "questions.positionHeld",
       "description": "",
-      "options": [
-        {
-          "label": "CGE",
-          "value": 1
-        },
-        {
-          "label": "REGIÓN MILITAR",
-          "value": 2
-        },
-        {
-          "label": "COMANDO NÚCLEO",
-          "value": 3
-        },
-        {
-          "label": "GRAN UNIDAD",
-          "value": 4
-        },
-        {
-          "label": "UNIDAD",
-          "value": 5
-        },
-        {
-          "label": "PATRULLA OPNES",
-          "value": 6
-        }
-      ]
+      "options": null
     },
     {
-      "label": "Sub Sector (UU, Cia. Dpto u Oficina)",
-      "code": "questions.subsector",
+      "label": "Tipo de dependencia",
+      "element": "radio",
+      "code": "questions.dependencyType",
       "description": "Sub Sector al que pertenece la organización de salud",
-      "options": null
-    },
-    {
-      "label": "Ubicación Geográfica",
-      "code": "questions.ubigeus",
-      "description": "",
       "options": [
         {
-          "label": "Costa",
-          "value": 1
+          "label": "BAZAR CENTRAL DEL EJÉRCITO",
+          "value": "bazar-central-del-ejercito"
         },
         {
-          "label": "Sierra (Andes)",
-          "value": 2
+          "label": "JACE",
+          "value": "jace"
         },
         {
-          "label": "Selva",
-          "value": 3
+          "label": "JAE",
+          "value": "jae"
+        },
+        {
+          "label": "FOSSEP",
+          "value": "fossep"
+        },
+        {
+          "label": "ACMP",
+          "value": "acmp"
+        },
+        {
+          "label": "ACM-STS",
+          "value": "acm-sts"
+        },
+        {
+          "label": "FOVIME",
+          "value": "fovime"
+        },
+        {
+          "label": "CIVIME",
+          "value": "civime"
         }
       ]
     },
     {
       "label": "Edad",
+      "element": "input",
       "code": "questions.age",
       "description": "",
       "options": null
     },
     {
       "label": "Sexo",
+      "element": "input",
       "code": "questions.gender",
       "description": "",
       "options": [
         {
-          "label": "Femenino",
-          "value": 1
-        },
-        {
           "label": "Masculino",
-          "value": 2
+          "value": "male"
+        },
+        {
+          "label": "Femenino",
+          "value": "female"
         }
       ]
     },
     {
-      "label": "Grupo Ocupacional",
-      "code": "questions.occupationalGroup",
+      "label": "Grupo ocupacional",
+      "element": "select",
+      "code": "questions.ocupationalGroup",
       "description": "",
       "options": [
         {
-          "label": "GENERAL EP",
-          "value": 1
-        },
-        {
-          "label": "CORONEL EP",
-          "value": 2
-        },
-        {
-          "label": "TTE CORONEL CMTE EP",
-          "value": 3
-        },
-        {
-          "label": "MAYOR EP",
-          "value": 4
-        },
-        {
-          "label": "CAPITÁN EP",
-          "value": 5
-        },
-        {
-          "label": "TENIENTE EP",
-          "value": 6
-        },
-        {
-          "label": "SUB TENIENTE EP",
-          "value": 7
-        },
-        {
-          "label": "TÉCNICOS PERSSON. MILITAR",
-          "value": 8
-        },
-        {
-          "label": "SUB OFICIALES PERSONAL MILITAR",
-          "value": 9
-        },
-        {
-          "label": "TROPA REE",
-          "value": 10
-        },
-        {
-          "label": "TROPA S.A. ACUARTELADO",
-          "value": 11
-        },
-        {
-          "label": "TROPA S.A.N.A. FEMENINO",
-          "value": 12
-        },
-        {
-          "label": "AUXILIARES PERSON. CIVIL",
-          "value": 13
-        },
-        {
-          "label": "TÉCNICOS PERSON. CIVIL",
-          "value": 14
-        },
-        {
-          "label": "PROFESIONALES",
-          "value": 15
-        },
-        {
-          "label": "PROFESIONAL SALUD",
-          "value": 16
-        },
-        {
-          "label": "DOCENTES DE COLEGIOS",
-          "value": 16
-        }
-      ]
-    },
-    {
-      "label": "Personal",
-      "code": "questions.personal",
-      "description": "",
-      "options": [
-        {
-          "label": "Abogado",
-          "value": "abogado"
-        },
-        {
-          "label": "Administrador De Red",
-          "value": "administrador_de_red"
-        },
-        {
-          "label": "Arquitecto",
-          "value": "arquitecto"
-        },
-        {
-          "label": "Artesano",
-          "value": "artesano"
-        },
-        {
-          "label": "Asesor",
-          "value": "asesor"
-        },
-        {
-          "label": "Asist Administivo",
-          "value": "asist_administivo"
-        },
-        {
-          "label": "Asist Contable",
-          "value": "asist_contable"
-        },
-        {
-          "label": "Asist Serv Comunicaciones",
-          "value": "asist_serv_comunicaciones"
-        },
-        {
-          "label": "Asist Serv de Salud",
-          "value": "asist_serv_de_salud"
-        },
-        {
-          "label": "Asist Serv Ec Fin",
-          "value": "asist_serv_ec_fin"
-        },
-        {
-          "label": "Asist Serv Econo Finac",
-          "value": "asist_serv_econo_finac"
-        },
-        {
-          "label": "Asist Serv Ed Cult",
-          "value": "asist_serv_ed_cult"
-        },
-        {
-          "label": "Asist Serv Infraest",
-          "value": "asist_serv_infraest"
-        },
-        {
-          "label": "Asist Serv Juridico",
-          "value": "asist_serv_juridico"
-        },
-        {
-          "label": "Asist Serv Rec Naturales",
-          "value": "asist_serv_rec_naturales"
-        },
-        {
-          "label": "Asist Serv Social",
-          "value": "asist_serv_social"
-        },
-        {
-          "label": "Asistente Social",
-          "value": "asistente_social"
-        },
-        {
-          "label": "Auditor",
-          "value": "auditor"
-        },
-        {
-          "label": "Aux Agropecuaria",
-          "value": "aux_agropecuaria"
-        },
-        {
-          "label": "Aux Artesania",
-          "value": "aux_artesania"
-        },
-        {
-          "label": "Aux Asistencia Social",
-          "value": "aux_asistencia_social"
-        },
-        {
-          "label": "Aux Biblioteca",
-          "value": "aux_biblioteca"
-        },
-        {
-          "label": "Aux Contabilidad",
-          "value": "aux_contabilidad"
-        },
-        {
-          "label": "Aux Educacion",
-          "value": "aux_educacion"
-        },
-        {
-          "label": "Aux Electricidad",
-          "value": "aux_electricidad"
-        },
-        {
-          "label": "Aux Enfermeria",
-          "value": "aux_enfermeria"
-        },
-        {
-          "label": "Aux Estadistica",
-          "value": "aux_estadistica"
-        },
-        {
-          "label": "Aux Farmacia",
-          "value": "aux_farmacia"
-        },
-        {
-          "label": "Aux Laboratorio",
-          "value": "aux_laboratorio"
-        },
-        {
-          "label": "Aux Mantenimiento",
-          "value": "aux_mantenimiento"
-        },
-        {
-          "label": "Aux Mecanica",
-          "value": "aux_mecanica"
-        },
-        {
-          "label": "Aux Morgue",
-          "value": "aux_morgue"
-        },
-        {
-          "label": "Aux Nutricion",
-          "value": "aux_nutricion"
-        },
-        {
-          "label": "Aux Publicaciones",
-          "value": "aux_publicaciones"
-        },
-        {
-          "label": "Aux Sistadministrativ",
-          "value": "aux_sistadministrativ"
-        },
-        {
-          "label": "Bibliotecario",
-          "value": "bibliotecario"
-        },
-        {
-          "label": "Biologo",
-          "value": "biologo"
-        },
-        {
-          "label": "Cajero",
-          "value": "cajero"
-        },
-        {
-          "label": "Capellan",
-          "value": "capellan"
-        },
-        {
-          "label": "Chofer",
-          "value": "chofer"
-        },
-        {
-          "label": "Cirujano Dentista",
-          "value": "cirujano_dentista"
-        },
-        {
-          "label": "Contador",
-          "value": "contador"
-        },
-        {
-          "label": "Dibujante",
-          "value": "dibujante"
-        },
-        {
-          "label": "Director Adminis",
-          "value": "director_adminis"
-        },
-        {
-          "label": "Director Ejecutivo",
-          "value": "director_ejecutivo"
-        },
-        {
-          "label": "Director General",
-          "value": "director_general"
-        },
-        {
-          "label": "Director Prog Sectorial",
-          "value": "director_prog_sectorial"
-        },
-        {
-          "label": "Director Sistadm",
-          "value": "director_sistadm"
-        },
-        {
-          "label": "Director Tecnico",
-          "value": "director_tecnico"
-        },
-        {
-          "label": "Docente De Escuela Sup",
-          "value": "docente_de_escuela_sup"
-        },
-        {
-          "label": "Economista",
-          "value": "economista"
-        },
-        {
-          "label": "Educador",
-          "value": "educador"
-        },
-        {
-          "label": "Electricista",
-          "value": "electricista"
-        },
-        {
-          "label": "Enfermeria",
-          "value": "enfermeria"
-        },
-        {
-          "label": "Espec Administ",
-          "value": "espec_administ"
-        },
-        {
-          "label": "Espec Audicy Lenguaje",
-          "value": "espec_audic_y_lenguaje"
-        },
-        {
-          "label": "Espec Capacitacion",
-          "value": "espec_capacitacion"
-        },
-        {
-          "label": "Espec Educacion",
-          "value": "espec_educacion"
-        },
-        {
-          "label": "Espec Finanzas",
-          "value": "espec_finanzas"
-        },
-        {
-          "label": "Espec Prod Soc",
-          "value": "espec_prod_soc"
-        },
-        {
-          "label": "Espec Promocion Social",
-          "value": "espec_promocion_social"
-        },
-        {
-          "label": "Espec Racionalizacion",
-          "value": "espec_racionalizacion"
-        },
-        {
-          "label": "Estadistico",
-          "value": "estadistico"
-        },
-        {
-          "label": "Experto Sist Adm",
-          "value": "experto_sist_adm"
-        },
-        {
-          "label": "Fisioterapista Clinico Esc Sup",
-          "value": "fisioterapista_clinico_esc_sup"
-        },
-        {
-          "label": "Fogonero",
-          "value": "fogonero"
-        },
-        {
-          "label": "Ingeniero",
-          "value": "ingeniero"
-        },
-        {
-          "label": "Inspector Sanitario",
-          "value": "inspector_sanitario"
-        },
-        {
-          "label": "Jefe De Division",
-          "value": "jefe_de_division"
-        },
-        {
-          "label": "Jefe Gabinete Asesores",
-          "value": "jefe_gabinete_asesores"
-        },
-        {
-          "label": "Jefe Inst Publ Descentral",
-          "value": "jefe_inst_publ_descentral"
-        },
-        {
-          "label": "Laboratorista Clin",
-          "value": "laboratorista_clin"
-        },
-        {
-          "label": "Mecanico",
-          "value": "mecanico"
-        },
-        {
-          "label": "Mecanico Dental",
-          "value": "mecanico_dental"
-        },
-        {
-          "label": "Mecanico Electronico",
-          "value": "mecanico_electronico"
-        },
-        {
-          "label": "Medico",
-          "value": "medico"
-        },
-        {
-          "label": "Nutricionista",
-          "value": "nutricionista"
-        },
-        {
-          "label": "Obstetriz",
-          "value": "obstetriz"
-        },
-        {
-          "label": "Oficinista",
-          "value": "oficinista"
-        },
-        {
-          "label": "Operad Central Telef",
-          "value": "operad_central_telef"
-        },
-        {
-          "label": "Operad Eq  Elec",
-          "value": "operad_eq__elec"
-        },
-        {
-          "label": "Operad Eq De Imprenta",
-          "value": "operad_eq_de_imprenta"
-        },
-        {
-          "label": "Operad Equipo Medico",
-          "value": "operad_equipo_medico"
-        },
-        {
-          "label": "Operad Maq Industrial",
-          "value": "operad_maq_industrial"
-        },
-        {
-          "label": "Operad P A D I",
-          "value": "operad_p_a_d_i"
-        },
-        {
-          "label": "Operad Radio",
-          "value": "operad_radio"
-        },
-        {
-          "label": "Periodista",
-          "value": "periodista"
-        },
-        {
-          "label": "Prog De Sistemas Pad",
-          "value": "prog_de_sistemas_pad"
-        },
-        {
-          "label": "Promotor Social",
-          "value": "promotor_social"
-        },
-        {
-          "label": "Psicologo",
-          "value": "psicologo"
-        },
-        {
-          "label": "Quimico",
-          "value": "quimico"
-        },
-        {
-          "label": "Quimico Farmaceutico",
-          "value": "quimico_farmaceutico"
-        },
-        {
-          "label": "Relacionador Publico",
-          "value": "relacionador_publico"
-        },
-        {
-          "label": "Residente",
-          "value": "residente"
-        },
-        {
-          "label": "Secretaria",
-          "value": "secretaria"
-        },
-        {
-          "label": "Secretario General",
-          "value": "secretario_general"
-        },
-        {
-          "label": "Seguridad Interna",
-          "value": "seguridad_interna"
-        },
-        {
-          "label": "Sociologo",
-          "value": "sociologo"
-        },
-        {
-          "label": "Sub Jefe Inst Publ Descent",
-          "value": "sub_jefe_inst_publ_descent"
-        },
-        {
-          "label": "Sub-Director",
-          "value": "sub_director"
-        },
-        {
-          "label": "Sup Conserv Y Serv ",
-          "value": "sup_conserv_y_serv"
-        },
-        {
-          "label": "Sup Prog Sectorial",
-          "value": "sup_prog_sectorial"
-        },
-        {
-          "label": "Sup Taller",
-          "value": "sup_taller"
-        },
-        {
-          "label": "Tec Abogacia",
-          "value": "tec_abogacia"
-        },
-        {
-          "label": "Tec Administrativo",
-          "value": "tec_administrativo"
-        },
-        {
-          "label": "Tec Agropecuario",
-          "value": "tec_agropecuario"
-        },
-        {
-          "label": "Tec Almacen",
-          "value": "tec_almacen"
-        },
-        {
-          "label": "Tec Analisis Clinico",
-          "value": "tec_analisis_clinico"
-        },
-        {
-          "label": "Tec Archivo",
-          "value": "tec_archivo"
-        },
-        {
-          "label": "Tec Artes Graficas",
-          "value": "tec_artes_graficas"
-        },
-        {
-          "label": "Tec Asistencia Social",
-          "value": "tec_asistencia_social"
-        },
-        {
-          "label": "Tec Biblioteca",
-          "value": "tec_biblioteca"
-        },
-        {
-          "label": "Tec Biologia",
-          "value": "tec_biologia"
-        },
-        {
-          "label": "Tec Capac Y Difusion",
-          "value": "tec_capac_y_difusion"
-        },
-        {
-          "label": "Tec Computacion Informatica",
-          "value": "tec_computacion_informatica"
-        },
-        {
-          "label": "Tec Electricista",
-          "value": "tec_electricista"
-        },
-        {
-          "label": "Tec Enfermeria",
-          "value": "tec_enfermeria"
-        },
-        {
-          "label": "Tec Estadistica",
-          "value": "tec_estadistica"
-        },
-        {
-          "label": "Tec Farmacia",
-          "value": "tec_farmacia"
-        },
-        {
-          "label": "Tec Finanzas",
-          "value": "tec_finanzas"
-        },
-        {
-          "label": "Tec Fisioterapia",
-          "value": "tec_fisioterapia"
-        },
-        {
-          "label": "Tec Impresiones",
-          "value": "tec_impresiones"
-        },
-        {
-          "label": "Tec Ingenieria",
-          "value": "tec_ingenieria"
-        },
-        {
-          "label": "Tec Laboratorio",
-          "value": "tec_laboratorio"
-        },
-        {
-          "label": "Tec Nutricion",
-          "value": "tec_nutricion"
-        },
-        {
-          "label": "Tec Planificacion",
-          "value": "tec_planificacion"
-        },
-        {
-          "label": "Tec Protesis Ortop",
-          "value": "tec_protesis_ortop"
-        },
-        {
-          "label": "Tec Racionalizacion",
-          "value": "tec_racionalizacion"
-        },
-        {
-          "label": "Tec Rayos X",
-          "value": "tec_rayos_x"
-        },
-        {
-          "label": "Tec Saneamiento",
-          "value": "tec_saneamiento"
-        },
-        {
-          "label": "Tec Sanitario",
-          "value": "tec_sanitario"
-        },
-        {
-          "label": "Tec Seguridad",
-          "value": "tec_seguridad"
-        },
-        {
-          "label": "Tec Transporte",
-          "value": "tec_transporte"
-        },
-        {
-          "label": "Tecnologo Medico",
-          "value": "tecnologo_medico"
-        },
-        {
-          "label": "Terapista",
-          "value": "terapista"
-        },
-        {
-          "label": "Tesorero",
-          "value": "tesorero"
-        },
-        {
-          "label": "Topografo",
-          "value": "topografo"
-        },
-        {
-          "label": "Trabajador De Servicios",
-          "value": "trabajador_de_servicios"
-        },
-        {
-          "label": "Trabajador Social Esc Sup",
-          "value": "trabajador_social_esc_sup"
-        },
-        {
-          "label": "Veterinario",
-          "value": "veterinario"
+          "label": "Personal Militar",
+          "title": "personal-militar",
+          "options": [
+            {
+              "label": "Oficial",
+              "value": "officer"
+            },
+            {
+              "label": "Suboficial",
+              "value": "nonCommissionedOfficer"
+            },
+            {
+              "label": "Técnico",
+              "value": "technician"
+            },
+            {
+              "label": "Tropa",
+              "value": "troop"
+            }
+          ]
+        },
+        {
+          "label": "Personal Civil",
+          "title": "personal-civil",
+          "options": [
+            {
+              "label": "Administrativo",
+              "value": "administrative"
+            },
+            {
+              "label": "Personal de Salud",
+              "value": "healthPersonnel"
+            },
+            {
+              "label": "Docente",
+              "value": "teaching"
+            }
+          ]
         }
       ]
     },
     {
       "label": "Condición",
+      "element": "input",
       "code": "questions.condition",
       "description": "",
       "options": [
         {
           "label": "Nombrado",
-          "value": 1
+          "value": "named"
         },
         {
           "label": "Contratado",
-          "value": 2
-        },
-        {
-          "label": "Retirado",
-          "value": 3
+          "value": "contracted"
         }
       ]
     },
     {
       "label": "Tiempo trabajando en la Institución",
-      "code": "questions.dwellTime",
+      "element": "input",
+      "code": "questions.timeWorkingInstitution",
       "description": "",
       "options": null
     },
     {
-      "label": "Tiempo trabajando en el Puesto Actual",
-      "code": "questions.timeInCurrentPosition",
+      "label": "Tiempo trabajando en el puesto actual",
+      "element": "input",
+      "code": "questions.timeWorkingCurrentPosition",
       "description": "",
       "options": null
+    },
+    {
+      "label": "Se han realizado actividades recreativas en los últimos seis (06) meses",
+      "element": "radio",
+      "code": "questions.recreationalActivitiesInSixMonths",
+      "description": "",
+      "options": [
+        {
+          "label": "Si",
+          "value": "si"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ]
     }
   ],
   "items": {
