@@ -278,16 +278,16 @@ export const Router = () => {
             </AdminLayout>
           }
         />
-        <Route
-          exact
-          path="surveys/organizational-climate-studies/:organizationalClimateStudyId"
-          element={
-            <AdminLayout>
-              <A.OrganizationalClimateStudyIntegration />
-            </AdminLayout>
-          }
-        />
       </Route>
+      <Route
+        exact
+        path="surveys/organizational-climate-studies/:organizationalClimateStudyId"
+        element={
+          <PublicLayout>
+            <A.OrganizationalClimateStudyIntegration />
+          </PublicLayout>
+        }
+      />
       {/*SHEETS*/}
       <Route
         exact

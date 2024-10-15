@@ -9,6 +9,7 @@ import { useAuthentication } from "../../../../providers";
 import { CompletedQuestionnaire } from "./CompletedQuestionnaire";
 import { useParams } from "react-router";
 import { EditOrganizationClimateStudyId } from "./EditOrganizationClimateStudyId";
+import styled from "styled-components";
 
 export const OrganizationalClimateStudyIntegration = () => {
   const { authUser } = useAuthentication();
@@ -20,7 +21,7 @@ export const OrganizationalClimateStudyIntegration = () => {
 
   const mapForm = (formData, organizationalClimateStudyId) => ({
     id: organizationalClimateStudyId,
-    userId: authUser.id,
+    userId: authUser?.id,
     questions: stepData1.questions,
     items: formData.items,
   });
@@ -83,24 +84,36 @@ export const OrganizationalClimateStudyIntegration = () => {
   }));
 
   return (
-    <Row justify="center" gutter={[16, 16]}>
-      <Col span={24}>
-        <Title level={2}>
-          Cuestionario para el estudio del Clima Organizacional
-        </Title>
-      </Col>
-      {organizationalClimateStudyId !== "new" ? (
-        <Col span={24}>
-          <EditOrganizationClimateStudyId />
-        </Col>
-      ) : (
-        <>
-          <Col span={10}>
-            <Steps current={current} items={items} />
+    <Container>
+      <div className="card-wrapper">
+        <Row justify="center" gutter={[16, 16]}>
+          <Col span={24}>
+            <Title level={2}>
+              Cuestionario para el estudio del Clima Organizacional
+            </Title>
           </Col>
-          <Col span={24}>{steps[current].content}</Col>
-        </>
-      )}
-    </Row>
+          {organizationalClimateStudyId !== "new" ? (
+            <Col span={24}>
+              <EditOrganizationClimateStudyId />
+            </Col>
+          ) : (
+            <>
+              <Col span={10}>
+                <Steps current={current} items={items} />
+                <br />
+              </Col>
+              <Col span={24}>{steps[current].content}</Col>
+            </>
+          )}
+        </Row>
+      </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  min-height: 100svh;
+  height: auto;
+  padding: 1em;
+`;
