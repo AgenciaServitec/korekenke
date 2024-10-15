@@ -1,14 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { AdminLayout } from "../components/layout/AdminLayout";
+import { AdminLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import {
-  IntegrationMilitaryRecruitmentService,
-  MilitaryRecruitmentServiceIntegration,
-  MilitaryRecruitmentServiceIntegrations,
-} from "../pages";
 import { PublicLayout } from "../components/layout";
 
 export const Router = () => {
