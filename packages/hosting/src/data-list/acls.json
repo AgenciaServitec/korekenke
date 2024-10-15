@@ -104,6 +104,13 @@
       "/das-requests/:dasRequestId#reply": "Responder solicitud",
       "/das-requests/:dasRequestId#proceeds": "Evaluación Solicitud",
       "/das-requests/:dasRequestId#sendNotificationDasRequest": "Envío de notificación"
+    },
+    "militaryServiceRecruitment": {
+      "label": "Servicio de reclutamiento militar",
+      "/military-service-recruitment": "Menu: Servicio de reclutamiento militar",
+      "/military-service-recruitment/new": "Agregar inscripción",
+      "/military-service-recruitment/:militaryServiceRecruitmentId": "Editar inscripción",
+      "/military-service-recruitment#delete": "Eliminar inscripción"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {

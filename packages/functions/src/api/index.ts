@@ -7,6 +7,7 @@ import { postCorrespondence } from "./correspondences";
 import { getEntityDataByDni } from "./entities";
 import { getUserByCip } from "./consult";
 import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
+import { getIp } from "./consult/getIp";
 
 const app: express.Application = express();
 
@@ -41,6 +42,8 @@ app.post(
   "/emails/notification-das-request/:dasRequestId",
   onResendMailNotificationDasRequest
 );
+
+app.get("/get-api", getIp);
 
 app.use(errorHandler);
 
