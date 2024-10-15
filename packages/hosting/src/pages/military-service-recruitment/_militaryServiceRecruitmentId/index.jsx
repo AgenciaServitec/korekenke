@@ -3,8 +3,12 @@ import {
   Button,
   Col,
   Form,
+  IconAction,
   Input,
+  notification,
   Row,
+  Select,
+  Spinner,
   Steps,
   Title,
 } from "../../../components";
@@ -15,6 +19,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import styled from "styled-components";
 import {
   addMilitaryRecruitment,
+  fetchMilitaryRecruitment,
   getMilitaryRecruitmentId,
 } from "../../../firebase/collections";
 import {
@@ -24,40 +29,148 @@ import {
 } from "../../../api";
 import { capitalize } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { RegisterSuccess } from "./RegisterSuccess";
+import { apiUrl, firestore } from "../../../firebase";
+import { fetchCollectionOnce } from "../../../firebase/utils";
+import { EducationLevel } from "../../../data-list";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { RecruitedInformation } from "./RecruitedInformation";
 
 export const MilitaryRecruitmentServiceIntegration = () => {
+  const navigate = useNavigate();
+  const { militaryServiceRecruitmentId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [loading, setLoading] = useState(false);
-
   const {
     getPersonDataByDni,
     getPersonDataByDniLoading,
     getPersonDataByDniResponse,
   } = useApiPersonDataByDniGet();
 
-  const mapForm = (formData) => ({
-    id: getMilitaryRecruitmentId(),
+  const [currentStep, setCurrentStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+  });
+  const [recruited, setRecruited] = useState(null);
+
+  const isNew = militaryServiceRecruitmentId === "new";
+
+  const onGoBack = () => navigate(-1);
+
+  useEffect(() => {
+    (async () => {
+      const _recruited = isNew
+        ? { id: getMilitaryRecruitmentId() }
+        : await fetchMilitaryRecruitment(militaryServiceRecruitmentId);
+
+      setRecruited(_recruited);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) =>
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        }),
+      );
+    }
+  }, []);
+
+  if (!recruited) return <Spinner height="80vh" />;
+
+  const mapForm = (formData, ip) => ({
+    ...recruited,
     dni: formData.dni,
     firstName: formData.firstName,
     paternalSurname: formData.paternalSurname,
     maternalSurname: formData.maternalSurname,
-    phone: formData.phone,
+    phone: {
+      prefix: "+51",
+      number: formData.phoneNumber,
+    },
     email: formData.email,
     educationLevel: formData.educationLevel,
+    location: location,
+    ...ip,
   });
 
   const onSaveMilitaryRecruitmentService = async (formData) => {
     try {
       setLoading(true);
-      await addMilitaryRecruitment(assignCreateProps(mapForm(formData)));
+
+      const clientId = await fetch(`${apiUrl}/get-api`);
+      const ip = await clientId.json();
+
+      const userWithDni = await userByDni(formData.dni);
+      const userWithEmail = await userByEmail(formData.email);
+      const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
+
+      if (userWithDni || userWithEmail || userWithPhoneNumber) {
+        return notification({
+          type: "warning",
+          title: `El ${
+            userWithDni
+              ? "dni"
+              : userWithEmail
+                ? "email"
+                : userWithPhoneNumber
+                  ? "celular"
+                  : ""
+          } ya se encuentra registrado.`,
+        });
+      }
+
+      await addMilitaryRecruitment(assignCreateProps(mapForm(formData, ip)));
+
+      notification({ type: "success" });
       setCurrentStep(1);
     } catch (e) {
       console.log(e);
+      notification({ type: "error" });
     } finally {
       setLoading(false);
     }
+  };
+
+  const userByDni = async (dni) => {
+    const response = await fetchCollectionOnce(
+      firestore
+        .collection("military-recruitment")
+        .where("dni", "==", dni)
+        .where("isDeleted", "==", false)
+        .limit(1),
+    );
+
+    return response[0];
+  };
+
+  const userByEmail = async (email) => {
+    const response = await fetchCollectionOnce(
+      firestore
+        .collection("military-recruitment")
+        .where("isDeleted", "==", false)
+        .where("email", "==", email)
+        .limit(1),
+    );
+
+    return response[0];
+  };
+
+  const userByPhoneNumber = async (phoneNumber) => {
+    const response = await fetchCollectionOnce(
+      firestore
+        .collection("military-recruitment")
+        .where("isDeleted", "==", false)
+        .where("phone.number", "==", phoneNumber)
+        .limit(1),
+    );
+
+    return response[0];
   };
 
   const stepsItems = [
@@ -66,6 +179,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
       content: (
         <MilitaryServiceRecruitment
           onSaveMilitaryRecruitmentService={onSaveMilitaryRecruitmentService}
+          recruited={recruited}
           currentStep={currentStep}
           loading={loading}
           getPersonDataByDni={getPersonDataByDni}
@@ -76,7 +190,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     },
     {
       title: "Completado",
-      content: <div>Completado</div>,
+      content: <RegisterSuccess />,
     },
   ];
 
@@ -84,24 +198,35 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     <Container>
       <Row gutter={[16, 16]} justify="center">
         <Col span={24}>
-          <Title level={2} align="center">
-            Registro de Reclutamiento Militar
-          </Title>
+          <IconAction icon={faArrowLeft} onClick={() => onGoBack()} />
         </Col>
-        <Col span={8}>
-          <Steps
-            labelPlacement="vertical"
-            current={currentStep}
-            items={stepsItems}
-          />
-        </Col>
-        <Col span={24}>
-          <Row gutter={[16, 16]} justify="center">
-            <Col span={24} md={10}>
-              {stepsItems[currentStep].content}
+        {isNew ? (
+          <>
+            <Col span={24}>
+              <Title level={2} align="center">
+                Registro de Reclutamiento Militar
+              </Title>
             </Col>
-          </Row>
-        </Col>
+            <Col span={8}>
+              <Steps
+                labelPlacement="vertical"
+                current={currentStep}
+                items={stepsItems}
+              />
+            </Col>
+            <Col span={24}>
+              <Row gutter={[16, 16]} justify="center">
+                <Col span={24} md={10}>
+                  {stepsItems[currentStep].content}
+                </Col>
+              </Row>
+            </Col>
+          </>
+        ) : (
+          <Col span={24}>
+            <RecruitedInformation recruited={recruited} />
+          </Col>
+        )}
       </Row>
     </Container>
   );
@@ -113,13 +238,14 @@ const MilitaryServiceRecruitment = ({
   getPersonDataByDni,
   getPersonDataByDniLoading,
   getPersonDataByDniResponse,
+  recruited,
 }) => {
   const schema = yup.object({
     dni: yup.string().min(8).max(8).required(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
-    phone: yup.number().required(),
+    phoneNumber: yup.string().min(9).required(),
     email: yup.string().email().required(),
     educationLevel: yup.string().required(),
   });
@@ -139,7 +265,7 @@ const MilitaryServiceRecruitment = ({
 
   useEffect(() => {
     resetForm();
-  }, []);
+  }, [recruited]);
 
   const resetForm = () => {
     reset({
@@ -147,7 +273,7 @@ const MilitaryServiceRecruitment = ({
       firstName: "",
       paternalSurname: "",
       maternalSurname: "",
-      phone: "",
+      phoneNumber: "",
       email: "",
       educationLevel: "",
     });
@@ -259,7 +385,7 @@ const MilitaryServiceRecruitment = ({
         </Col>
         <Col span={24}>
           <Controller
-            name="phone"
+            name="phoneNumber"
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <Input
@@ -296,11 +422,12 @@ const MilitaryServiceRecruitment = ({
             name="educationLevel"
             control={control}
             render={({ field: { onChange, value, name } }) => (
-              <Input
+              <Select
                 label="Nivel de educación"
                 name={name}
                 value={value}
                 onChange={onChange}
+                options={EducationLevel}
                 error={error(name)}
                 helperText={errorMessage(name)}
                 required={required(name)}

@@ -1,0 +1,26 @@
+[
+  {
+    "label": "Primaria",
+    "value": "primary"
+  },
+  {
+    "label": "Primaria Incompleta",
+    "value": "incomplete_primary"
+  },
+  {
+    "label": "Secundaria",
+    "value": "secondary"
+  },
+  {
+    "label": "Secundaria Incompleta",
+    "value": "incomplete_secondary"
+  },
+  {
+    "label": "Técnico",
+    "value": "technical"
+  },
+  {
+    "label": "Técnico Incompleto",
+    "value": "incomplete_technical"
+  }
+]
