@@ -1,11 +1,20 @@
 import React, { useEffect } from "react";
-import { Button, Col, Form, Input, Row, Select } from "../../../../components";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  RadioGroup,
+  Row,
+  Select,
+} from "../../../../components";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
 import { Surveys } from "../../../../data-list";
 import { useNavigate } from "react-router";
+import { Space } from "antd";
 
 export const QuestionsOrganizationalStudyStep1 = ({
   onSetCurrent,
@@ -19,17 +28,16 @@ export const QuestionsOrganizationalStudyStep1 = ({
 
   const schema = yup.object({
     questions: yup.object({
-      establishment: yup.string().required(),
-      type: yup.number().required(),
-      subsector: yup.string().required(),
-      ubigeus: yup.number().required(),
+      dependencyName: yup.string().required(),
+      positionHeld: yup.string().required(),
+      dependencyType: yup.string().required(),
       age: yup.number().required(),
-      gender: yup.number().required(),
-      occupationalGroup: yup.number().required(),
-      personal: yup.string().required(),
-      condition: yup.number().required(),
-      dwellTime: yup.number().required(),
-      timeInCurrentPosition: yup.number().required(),
+      gender: yup.string().required(),
+      ocupationalGroup: yup.string().required(),
+      condition: yup.string().required(),
+      timeWorkingInstitution: yup.number().required(),
+      timeWorkingCurrentPosition: yup.number().required(),
+      recreationalActivitiesInSixMonths: yup.string().required(),
     }),
   });
 
@@ -51,18 +59,19 @@ export const QuestionsOrganizationalStudyStep1 = ({
   const resetForm = () => {
     reset({
       questions: {
-        establishment: stepData1?.questions?.establishment || "",
-        type: stepData1?.questions?.type || "",
-        subsector: stepData1?.questions?.subsector || "",
-        ubigeus: stepData1?.questions?.ubigeus || "",
+        dependencyName: stepData1?.questions?.dependencyName || "",
+        positionHeld: stepData1?.questions?.positionHeld || "",
+        dependencyType: stepData1?.questions?.dependencyType || "",
         age: stepData1?.questions?.age || "",
         gender: stepData1?.questions?.gender || "",
-        occupationalGroup: stepData1?.questions?.occupationalGroup || "",
-        personal: stepData1?.questions?.personal || "",
+        ocupationalGroup: stepData1?.questions?.ocupationalGroup || "",
         condition: stepData1?.questions?.condition || "",
-        dwellTime: stepData1?.questions?.dwellTime || "",
-        timeInCurrentPosition:
-          stepData1?.questions?.timeInCurrentPosition || "",
+        timeWorkingInstitution:
+          stepData1?.questions?.timeWorkingInstitution || "",
+        timeWorkingCurrentPosition:
+          stepData1?.questions?.timeWorkingCurrentPosition || "",
+        recreationalActivitiesInSixMonths:
+          stepData1?.questions?.recreationalActivitiesInSixMonths || "",
       },
     });
   };
@@ -77,23 +86,45 @@ export const QuestionsOrganizationalStudyStep1 = ({
       <Row gutter={[16, 16]}>
         {Surveys.questions.map((question, index) => {
           return question?.options ? (
-            <Col key={index} span={24} md={12}>
-              <Controller
-                name={question.code}
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <Select
-                    label={`${index + 1}. ${question.label}`}
-                    name={name}
-                    value={value}
-                    options={question.options}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
+            question?.element === "select" ? (
+              <Col key={index} span={24} md={12}>
+                <Controller
+                  name={question.code}
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      variant="outlined"
+                      label={`${index + 1}. ${question.label}`}
+                      name={name}
+                      value={value}
+                      options={question.options}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+            ) : (
+              <Col key={index} span={24} md={12}>
+                <Controller
+                  name={question.code}
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <RadioGroup
+                      variant="outlined"
+                      label={`${index + 1}. ${question.label}`}
+                      name={name}
+                      value={value}
+                      options={question.options}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+            )
           ) : (
             <Col key={index} span={24} md={12}>
               <Controller
@@ -101,6 +132,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Input
+                    variant="outlined"
                     label={`${index + 1}. ${question.label}`}
                     name={name}
                     value={value}
