@@ -1,7 +1,11 @@
 import React from "react";
 import { Card, Col, Row } from "../../../components";
+import { EducationLevel } from "../../../data-list";
 
 export const RecruitedInformation = ({ recruited }) => {
+  const getEducationLevel = (education) =>
+    EducationLevel.find((_education) => _education.value === education);
+
   return (
     <Card
       title={<span style={{ fontSize: "1.5em" }}>Datos del Registrado</span>}
@@ -40,7 +44,7 @@ export const RecruitedInformation = ({ recruited }) => {
         <Col span={24} md={12}>
           Nivel de educación:{" "}
           <strong className="capitalize">
-            {recruited?.educationLevel || ""}
+            {getEducationLevel(recruited?.educationLevel)?.label || ""}
           </strong>
         </Col>
       </Row>

@@ -1,6 +1,6 @@
 import React from "react";
 import dayjs from "dayjs";
-import { IconAction, Space, TableVirtualized } from "../../components";
+import { Acl, IconAction, Space, TableVirtualized } from "../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 
@@ -42,17 +42,29 @@ export const MilitaryRecruitmentTable = ({
       width: ["14rem", "100%"],
       render: (recruited) => (
         <Space>
-          <IconAction
-            tooltipTitle="Editar"
-            icon={faEdit}
-            onClick={() => onEditMilitaryRecruitment(recruited)}
-          />
-          <IconAction
-            tooltipTitle="Eliminar"
-            icon={faTrash}
-            styled={{ color: (theme) => theme.colors.error }}
-            onClick={() => onConfirmDeleteMilitaryRecruitment(recruited)}
-          />
+          <Acl
+            category="public"
+            subCategory="militaryServiceRecruitment"
+            name="/military-service-recruitment/:militaryServiceRecruitmentId"
+          >
+            <IconAction
+              tooltipTitle="Editar"
+              icon={faEdit}
+              onClick={() => onEditMilitaryRecruitment(recruited)}
+            />
+          </Acl>
+          <Acl
+            category="public"
+            subCategory="militaryServiceRecruitment"
+            name="/military-service-recruitment#delete"
+          >
+            <IconAction
+              tooltipTitle="Eliminar"
+              icon={faTrash}
+              styled={{ color: (theme) => theme.colors.error }}
+              onClick={() => onConfirmDeleteMilitaryRecruitment(recruited)}
+            />
+          </Acl>
         </Space>
       ),
     },

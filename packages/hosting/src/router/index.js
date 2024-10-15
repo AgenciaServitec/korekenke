@@ -9,6 +9,7 @@ import {
   MilitaryRecruitmentServiceIntegration,
   MilitaryRecruitmentServiceIntegrations,
 } from "../pages";
+import { PublicLayout } from "../components/layout";
 
 export const Router = () => {
   return (
@@ -367,9 +368,9 @@ export const Router = () => {
         exact
         path="/military-service-recruitment/:militaryServiceRecruitmentId"
         element={
-          <AdminLayout>
+          <PublicLayout>
             <A.MilitaryRecruitmentServiceIntegration />
-          </AdminLayout>
+          </PublicLayout>
         }
       />
       <Route

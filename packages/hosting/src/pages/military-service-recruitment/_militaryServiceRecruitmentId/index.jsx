@@ -197,9 +197,6 @@ export const MilitaryRecruitmentServiceIntegration = () => {
   return (
     <Container>
       <Row gutter={[16, 16]} justify="center">
-        <Col span={24}>
-          <IconAction icon={faArrowLeft} onClick={() => onGoBack()} />
-        </Col>
         {isNew ? (
           <>
             <Col span={24}>

@@ -1,6 +1,6 @@
 [
   {
-    "label": "Primaria",
+    "label": "Primaria Completa",
     "value": "primary"
   },
   {
@@ -8,7 +8,7 @@
     "value": "incomplete_primary"
   },
   {
-    "label": "Secundaria",
+    "label": "Secundaria Completa",
     "value": "secondary"
   },
   {
@@ -16,7 +16,7 @@
     "value": "incomplete_secondary"
   },
   {
-    "label": "Técnico",
+    "label": "Técnico Completo",
     "value": "technical"
   },
   {
