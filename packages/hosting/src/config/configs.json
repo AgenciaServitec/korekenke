@@ -28,7 +28,7 @@
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito-dev",
       "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social-dev"
     },
-    "apiUrl": "https://korekenke-dev.web.app/api"
+    "apiUrl": "https://api-korekenke-dev.web.app"
   },
   "production": {
     "version": "0.0.1",
@@ -48,6 +48,6 @@
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito",
       "departamentoDeApoyoSocial": "gs://departamento-apoyo-social"
     },
-    "apiUrl": "https://korekenke-prod.web.app/api"
+    "apiUrl": "https://api-korekenke.web.app"
   }
 }

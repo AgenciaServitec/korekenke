@@ -8,13 +8,19 @@
       "hosting": {
         "app": [
           "korekenke-prod"
-        ]
+        ],
+         "api": [
+           "api-korekenke"
+         ]
       }
     },
     "korekenke-dev": {
       "hosting": {
         "app": [
           "korekenke-dev"
+        ],
+        "api": [
+           "api-korekenke-dev"
         ]
       }
     }
