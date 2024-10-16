@@ -19,6 +19,12 @@ export const MilitaryRecruitmentTable = ({
         dayjs(recruited.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
+      title: "DNI",
+      align: "center",
+      width: ["9rem", "100%"],
+      render: (recruited) => recruited.dni,
+    },
+    {
       title: "Nombres",
       align: "center",
       width: ["15rem", "100%"],
