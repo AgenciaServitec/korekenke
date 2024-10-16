@@ -27,7 +27,7 @@ import {
   getApiErrorResponse,
   useApiPersonDataByDniGet,
 } from "../../../api";
-import { capitalize } from "lodash";
+import { capitalize, isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { RegisterSuccess } from "./RegisterSuccess";
@@ -50,10 +50,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [userLocation, setUserLocation] = useState({
-    latitude: null,
-    longitude: null,
-  });
+  const [userLocation, setUserLocation] = useState(null);
   const [recruited, setRecruited] = useState(null);
 
   const isNew = militaryServiceRecruitmentId === "new";
@@ -106,7 +103,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
   const onSaveMilitaryRecruitmentService = async (formData) => {
     try {
       setLoading(true);
-      if (!userLocation) {
+      if (isEmpty(userLocation)) {
         getUserLocation();
       }
 
