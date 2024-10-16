@@ -6,8 +6,11 @@ import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { mediaQuery } from "../../../styles";
+import { useAuthentication } from "../../../providers";
 
 export const RegisterSuccess = () => {
+  const { authUser } = useAuthentication();
+
   return (
     <Container>
       <Row gutter={[16, 16]}>
@@ -22,12 +25,14 @@ export const RegisterSuccess = () => {
                 Gracias por tu interés en servir al Ejército del Perú. Nos
                 pondremos en contacto contigo cuando haya vacantes disponibles.
               </p>
-              <div>
-                <Link to="/military-service-recruitment">
-                  <FontAwesomeIcon icon={faLink} size="lg" />
-                  Ver mi registro
-                </Link>
-              </div>
+              {authUser && (
+                <div>
+                  <Link to="/military-service-recruitment">
+                    <FontAwesomeIcon icon={faLink} size="lg" />
+                    Ver mi registro
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </Col>
