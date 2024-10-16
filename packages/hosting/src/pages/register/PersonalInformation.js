@@ -74,6 +74,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     paternalSurname: formData.paternalSurname,
     maternalSurname: formData.maternalSurname,
     email: formData.email,
+    birthdate: step1Data?.birthdate,
     phone: {
       prefix: "+51",
       number: formData.phoneNumber,
