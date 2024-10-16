@@ -78,6 +78,7 @@ export const AccessData = ({ next, currentStep }) => {
         firstName: capitalize(personData?.firstName || ""),
         paternalSurname: capitalize(personData?.paternalSurname || ""),
         maternalSurname: capitalize(personData?.maternalSurname || ""),
+        birthdate: personData?.birthdate || "",
       });
 
       next();

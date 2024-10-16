@@ -28,6 +28,7 @@ interface User extends DefaultFirestoreProps {
   email: string | null;
   cip: string;
   dni: string;
+  birthdate: string;
   phone: {
     prefix: string;
     number: string;
