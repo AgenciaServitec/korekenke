@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   militaryRecruitmentRef,
   updateMilitaryRecruitment,
 } from "../../firebase/collections";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { Col, modalConfirm, Row, Title } from "../../components";
+import { Col, modalConfirm, notification, Row, Title } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { MilitaryRecruitmentTable } from "./militaryRecruitmentTable";
@@ -18,6 +18,10 @@ export const MilitaryRecruitmentServicesIntegration = () => {
     militaryRecruitmentLoading,
     militaryRecruitmentError,
   ] = useCollectionData(militaryRecruitmentRef.where("isDeleted", "==", false));
+
+  useEffect(() => {
+    militaryRecruitmentError && notification({ type: "error" });
+  }, [militaryRecruitmentError]);
 
   const navigateTo = (pathname = "new") => navigate(pathname);
 
@@ -37,6 +41,7 @@ export const MilitaryRecruitmentServicesIntegration = () => {
 
   return (
     <MilitaryRecruitmentServiceList
+      militaryRecruitmentLoading={militaryRecruitmentLoading}
       militaryRecruitment={militaryRecruitment}
       onEditMilitaryRecruitment={onEditMilitaryRecruitment}
       onConfirmDeleteMilitaryRecruitment={onConfirmDeleteMilitaryRecruitment}
@@ -45,6 +50,7 @@ export const MilitaryRecruitmentServicesIntegration = () => {
 };
 
 const MilitaryRecruitmentServiceList = ({
+  militaryRecruitmentLoading,
   militaryRecruitment,
   onEditMilitaryRecruitment,
   onConfirmDeleteMilitaryRecruitment,
@@ -58,6 +64,7 @@ const MilitaryRecruitmentServiceList = ({
       </Col>
       <Col span={24}>
         <MilitaryRecruitmentTable
+          loading={militaryRecruitmentLoading}
           militaryRecruitment={militaryRecruitment}
           onEditMilitaryRecruitment={onEditMilitaryRecruitment}
           onConfirmDeleteMilitaryRecruitment={

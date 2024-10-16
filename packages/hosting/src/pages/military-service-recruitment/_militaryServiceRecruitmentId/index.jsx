@@ -3,7 +3,6 @@ import {
   Button,
   Col,
   Form,
-  IconAction,
   Input,
   notification,
   Row,
@@ -21,6 +20,7 @@ import {
   addMilitaryRecruitment,
   fetchMilitaryRecruitment,
   getMilitaryRecruitmentId,
+  militaryRecruitmentRef,
 } from "../../../firebase/collections";
 import {
   apiErrorNotification,
@@ -29,9 +29,9 @@ import {
 } from "../../../api";
 import { capitalize } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { RegisterSuccess } from "./RegisterSuccess";
-import { apiUrl, firestore } from "../../../firebase";
+import { apiUrl } from "../../../firebase";
 import { fetchCollectionOnce } from "../../../firebase/utils";
 import { EducationLevel } from "../../../data-list";
 import { useParams } from "react-router";
@@ -50,7 +50,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [location, setLocation] = useState({
+  const [userLocation, setUserLocation] = useState({
     latitude: null,
     longitude: null,
   });
@@ -70,15 +70,19 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     })();
   }, []);
 
-  useEffect(() => {
+  const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) =>
-        setLocation({
+        setUserLocation({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         }),
       );
     }
+  };
+
+  useEffect(() => {
+    getUserLocation();
   }, []);
 
   if (!recruited) return <Spinner height="80vh" />;
@@ -95,20 +99,26 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     },
     email: formData.email,
     educationLevel: formData.educationLevel,
-    location: location,
+    location: userLocation,
     ...ip,
   });
 
   const onSaveMilitaryRecruitmentService = async (formData) => {
     try {
       setLoading(true);
+      if (!userLocation) {
+        getUserLocation();
+      }
 
       const clientId = await fetch(`${apiUrl}/get-api`);
       const ip = await clientId.json();
 
-      const userWithDni = await userByDni(formData.dni);
-      const userWithEmail = await userByEmail(formData.email);
-      const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
+      const [userWithDni, userWithEmail, userWithPhoneNumber] =
+        await Promise.all([
+          userByDni(formData.dni),
+          userByEmail(formData.email),
+          userByPhoneNumber(formData.phoneNumber),
+        ]);
 
       if (userWithDni || userWithEmail || userWithPhoneNumber) {
         return notification({
@@ -139,8 +149,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
 
   const userByDni = async (dni) => {
     const response = await fetchCollectionOnce(
-      firestore
-        .collection("military-recruitment")
+      militaryRecruitmentRef
         .where("dni", "==", dni)
         .where("isDeleted", "==", false)
         .limit(1),
@@ -151,8 +160,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
 
   const userByEmail = async (email) => {
     const response = await fetchCollectionOnce(
-      firestore
-        .collection("military-recruitment")
+      militaryRecruitmentRef
         .where("isDeleted", "==", false)
         .where("email", "==", email)
         .limit(1),
@@ -163,8 +171,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
 
   const userByPhoneNumber = async (phoneNumber) => {
     const response = await fetchCollectionOnce(
-      firestore
-        .collection("military-recruitment")
+      militaryRecruitmentRef
         .where("isDeleted", "==", false)
         .where("phone.number", "==", phoneNumber)
         .limit(1),
@@ -204,7 +211,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
                 Registro de Reclutamiento Militar
               </Title>
             </Col>
-            <Col span={8}>
+            <Col span={24} md={8}>
               <Steps
                 labelPlacement="vertical"
                 current={currentStep}
@@ -386,7 +393,7 @@ const MilitaryServiceRecruitment = ({
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <Input
-                label="Celular"
+                label="Teléfono"
                 name={name}
                 value={value}
                 onChange={onChange}

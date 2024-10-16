@@ -5,6 +5,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 
 export const MilitaryRecruitmentTable = ({
+  loading,
   militaryRecruitment,
   onEditMilitaryRecruitment,
   onConfirmDeleteMilitaryRecruitment,
@@ -72,6 +73,7 @@ export const MilitaryRecruitmentTable = ({
 
   return (
     <TableVirtualized
+      loading={loading}
       dataSource={orderBy(militaryRecruitment, "createAt", "desc")}
       columns={columns}
       rowHeaderHeight={50}
