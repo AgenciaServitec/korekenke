@@ -16,7 +16,7 @@ export const OrganizationalClimateStudyIntegration = () => {
   const { organizationalClimateStudyId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(0);
   const [stepData1, setStepData1] = useState(null);
 
   const mapForm = (formData, organizationalClimateStudyId) => ({
@@ -88,7 +88,7 @@ export const OrganizationalClimateStudyIntegration = () => {
       <div className="card-wrapper">
         <Row justify="center" gutter={[16, 16]}>
           <Col span={24}>
-            <Title level={2}>
+            <Title level={2} align="center">
               Cuestionario para el estudio del Clima Organizacional
             </Title>
           </Col>
@@ -98,7 +98,7 @@ export const OrganizationalClimateStudyIntegration = () => {
             </Col>
           ) : (
             <>
-              <Col span={10}>
+              <Col span={24} md={8}>
                 <Steps current={current} items={items} />
                 <br />
               </Col>

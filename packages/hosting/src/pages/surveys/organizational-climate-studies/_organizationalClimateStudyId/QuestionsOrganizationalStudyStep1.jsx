@@ -14,7 +14,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
 import { Surveys } from "../../../../data-list";
 import { useNavigate } from "react-router";
-import { Space } from "antd";
 
 export const QuestionsOrganizationalStudyStep1 = ({
   onSetCurrent,
@@ -34,7 +33,7 @@ export const QuestionsOrganizationalStudyStep1 = ({
       age: yup.number().required(),
       gender: yup.string().required(),
       ocupationalGroup: yup.string().required(),
-      condition: yup.string().required(),
+      condition: yup.string(),
       timeWorkingInstitution: yup.number().required(),
       timeWorkingCurrentPosition: yup.number().required(),
       recreationalActivitiesInSixMonths: yup.string().required(),
@@ -147,11 +146,6 @@ export const QuestionsOrganizationalStudyStep1 = ({
         })}
       </Row>
       <Row justify="end" gutter={[16, 16]}>
-        <Col xs={24} sm={6} md={4}>
-          <Button size="large" block onClick={onGoBack} loading={loading}>
-            Cancelar
-          </Button>
-        </Col>
         <Col xs={24} sm={6} md={4}>
           <Button
             type="primary"
