@@ -2,6 +2,7 @@ import { html, sendMail } from "../sendMail";
 import { template } from "./templates";
 import { environmentConfig } from "../../config";
 import { DasRequest, relationships } from "../../data-list";
+import { getDegreesArmy, getFullName } from "../../utils";
 
 interface Mail {
   dasApplication: DasApplication;
@@ -10,6 +11,8 @@ interface Mail {
   dasApplicationLink: string;
   headline?: Headline;
   familiar?: Familiar;
+  headlineName: string;
+  headlineDegree?: string;
   applicant?: string;
 }
 
@@ -35,6 +38,8 @@ const mapMail = (dasApplication: DasApplication): Mail => ({
   dasApplicationLink: `${environmentConfig.hosting.domain}/entities/departamento-de-apoyo-social/das-requests/${dasApplication.id}/${dasApplication.requestType}/sheets`,
   headline: dasApplication?.headline,
   familiar: dasApplication?.familiar,
+  headlineName: getFullName(dasApplication?.headline, "reverse"),
+  headlineDegree: getDegreesArmy(dasApplication?.headline?.degree),
   applicant: dasApplication?.familiar
     ? relationships[dasApplication?.familiar.relationship]
     : relationships.headline,
