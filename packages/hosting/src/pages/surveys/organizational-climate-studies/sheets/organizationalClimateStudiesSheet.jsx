@@ -31,6 +31,21 @@ export const OrganizationalClimateStudiesSheet = ({
     if (exclude.length >= 4 && exclude.length <= 6) return "Excluir";
   };
 
+  const getQuestionValue = (code, value) =>
+    Surveys.questions
+      .find((question) => question.code === code)
+      ?.options.find((option) => option.value === value)?.label;
+
+  const getOcupationalGroup = (code, value) => {
+    const _options = Surveys.questions.find(
+      (question) => question.code === code,
+    )?.options;
+
+    const options = [..._options[0].options, ..._options[1].options];
+
+    return options.find((option) => option.value === value)?.label;
+  };
+
   return (
     <Container>
       <div className="sheet">
@@ -44,17 +59,19 @@ export const OrganizationalClimateStudiesSheet = ({
                 <thead>
                   <tr>
                     <th>N°</th>
-                    <th>Establecimiento</th>
-                    <th>Tipo</th>
-                    <th>Sector</th>
-                    <th>Ubigeo</th>
+                    <th>Nombre de la dependencia donde laboras</th>
+                    <th>Cargo que desempeña en la dependencia</th>
+                    <th>Tipo de dependencia</th>
                     <th>Edad</th>
                     <th>Sexo</th>
-                    <th>Grupo</th>
-                    <th>Personal</th>
-                    <th>Condicion</th>
-                    <th>Tiempo de permanencia</th>
-                    <th>Tiempo de puesto</th>
+                    <th>Grupo ocupacional</th>
+                    <th>Condición</th>
+                    <th>Tiempo trabajando en la Institución</th>
+                    <th>Tiempo trabajando en el puesto actual</th>
+                    <th>
+                      Se han realizado actividades recreativas en los últimos
+                      seis (06) meses
+                    </th>
                     <th>Item 1</th>
                     <th>Item 2</th>
                     <th>Item 3</th>
@@ -98,30 +115,54 @@ export const OrganizationalClimateStudiesSheet = ({
                       <tr key={index}>
                         <td>{organizationClimateStudy.number}</td>
                         <td>
-                          {organizationClimateStudy.questions.establishment}
+                          {organizationClimateStudy.questions.dependencyName}
                         </td>
-                        <td>{organizationClimateStudy.questions.type}</td>
-                        <td>{organizationClimateStudy.questions.subsector}</td>
-                        <td>{organizationClimateStudy.questions.ubigeus}</td>
+                        <td>
+                          {organizationClimateStudy.questions.positionHeld}
+                        </td>
+                        <td>
+                          {getQuestionValue(
+                            "questions.dependencyType",
+                            organizationClimateStudy.questions.dependencyType,
+                          )}
+                        </td>
                         <td>{organizationClimateStudy.questions.age}</td>
-                        <td>{organizationClimateStudy.questions.gender}</td>
                         <td>
-                          {organizationClimateStudy.questions.occupationalGroup}
+                          {getQuestionValue(
+                            "questions.gender",
+                            organizationClimateStudy.questions.gender,
+                          )}
                         </td>
                         <td>
-                          {Surveys.questions[7].options.find(
-                            (_personal) =>
-                              _personal.value ===
-                              organizationClimateStudy?.questions?.personal,
-                          )?.label || ""}
+                          {getOcupationalGroup(
+                            "questions.ocupationalGroup",
+                            organizationClimateStudy.questions.ocupationalGroup,
+                          )}
                         </td>
-                        <td>{organizationClimateStudy.questions.condition}</td>
-                        <td>{organizationClimateStudy.questions.dwellTime}</td>
+                        <td>
+                          {getQuestionValue(
+                            "questions.condition",
+                            organizationClimateStudy.questions.condition,
+                          )}
+                        </td>
                         <td>
                           {
                             organizationClimateStudy.questions
-                              .timeInCurrentPosition
+                              .timeWorkingInstitution
                           }
+                        </td>
+                        <td>
+                          {
+                            organizationClimateStudy.questions
+                              .timeWorkingCurrentPosition
+                          }
+                        </td>
+                        <td>
+                          {getQuestionValue(
+                            "questions.recreationalActivitiesInSixMonths",
+                            organizationClimateStudy.questions
+                              .recreationalActivitiesInSixMonths,
+                          )}
                         </td>
                         <td>{organizationClimateStudy.items.item1}</td>
                         <td>{organizationClimateStudy.items.item2}</td>
