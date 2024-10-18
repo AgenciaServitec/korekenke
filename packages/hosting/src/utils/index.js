@@ -13,3 +13,4 @@ export * from "./dasRequests";
 export * from "./animals";
 export * from "./calculators";
 export * from "./getBosses";
+export * from "./surveys";

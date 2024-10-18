@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Acl,
   IconAction,
+  notification,
   Space,
   TableVirtualized,
   Tag,
@@ -63,8 +64,11 @@ export const DasRequestsTable = ({
       await updateDasApplication(dasRequest.id, {
         sendNotificationDasRequest: true,
       });
+
+      notification({ type: "success" });
     } catch (e) {
       console.log(e);
+      notification({ type: "error" });
     }
   };
 

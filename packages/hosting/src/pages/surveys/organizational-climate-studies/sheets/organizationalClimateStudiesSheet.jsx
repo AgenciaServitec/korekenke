@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Surveys } from "../../../../data-list";
+import { getQuestionValue, getOcupationalGroup } from "../../../../utils";
 
 export const OrganizationalClimateStudiesSheet = ({
   organizationClimateStudies,
@@ -29,21 +29,6 @@ export const OrganizationalClimateStudiesSheet = ({
 
     if (include.length >= 1 && include.length <= 3) return "Incluir";
     if (exclude.length >= 4 && exclude.length <= 6) return "Excluir";
-  };
-
-  const getQuestionValue = (code, value) =>
-    Surveys.questions
-      .find((question) => question.code === code)
-      ?.options.find((option) => option.value === value)?.label;
-
-  const getOcupationalGroup = (code, value) => {
-    const _options = Surveys.questions.find(
-      (question) => question.code === code,
-    )?.options;
-
-    const options = [..._options[0].options, ..._options[1].options];
-
-    return options.find((option) => option.value === value)?.label;
   };
 
   return (
