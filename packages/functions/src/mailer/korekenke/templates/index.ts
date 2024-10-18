@@ -8,4 +8,10 @@ export const template = {
   newDasApplicationEmailTemplate: htmlTemplate(
     "./newDasApplicationEmailTemplate.html"
   ),
+  dasRequestFinalizedEmailTemplate: htmlTemplate(
+    "./dasRequestFinalizedEmailTemplate.html"
+  ),
+  dasRequestNotProceedsEmailTemplate: htmlTemplate(
+    "./dasRequestNotProceedsEmailTemplate.html"
+  ),
 };

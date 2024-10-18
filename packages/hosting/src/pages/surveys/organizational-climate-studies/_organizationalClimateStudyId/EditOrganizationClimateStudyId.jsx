@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { fetchOrganizationalClimateStudy } from "../../../../firebase/collections/organizationalClimateStudies";
 import { isEmpty } from "lodash";
 import styled from "styled-components";
+import { getOcupationalGroup, getQuestionValue } from "../../../../utils";
 import { Surveys } from "../../../../data-list";
 
 export const EditOrganizationClimateStudyId = () => {
@@ -46,21 +47,6 @@ export const EditOrganizationClimateStudyId = () => {
     }
     return acc;
   }, []);
-
-  const getQuestionValue = (code, value) =>
-    Surveys.questions
-      .find((question) => question.code === code)
-      ?.options?.find((option) => option.value === value)?.label;
-
-  const getOcupationalGroup = (code, value) => {
-    const _options = Surveys.questions.find(
-      (question) => question.code === code,
-    )?.options;
-
-    const options = [..._options[0].options, ..._options[1].options];
-
-    return options.find((option) => option.value === value)?.label;
-  };
 
   const onGoBack = () => navigate(-1);
 
