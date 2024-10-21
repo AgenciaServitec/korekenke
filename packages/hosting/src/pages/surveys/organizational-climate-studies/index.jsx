@@ -18,6 +18,7 @@ import { faEye, faFilePdf, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
 import { useDefaultFirestoreProps } from "../../../hooks";
 import dayjs from "dayjs";
+import { getOcupationalGroup, getQuestionValue } from "../../../utils";
 
 export const OrganizationalClimateStudiesIntegration = () => {
   const navigate = useNavigate();
@@ -59,11 +60,37 @@ export const OrganizationalClimateStudiesIntegration = () => {
         ),
     },
     {
-      title: "Nombre de la Organización",
-      dataIndex: "establishment",
-      key: "establishment",
+      title: "Nombre de la dependencia",
+      dataIndex: "dependencyName",
+      key: "dependencyName",
       render: (_, organizationClimateStudy) => (
-        <span>{organizationClimateStudy?.questions?.establishment}</span>
+        <span>{organizationClimateStudy?.questions?.dependencyName}</span>
+      ),
+    },
+    {
+      title: "Tipo de dependencia",
+      dataIndex: "dependencyType",
+      key: "dependencyType",
+      render: (_, organizationClimateStudy) => (
+        <span>
+          {getQuestionValue(
+            "questions.dependencyType",
+            organizationClimateStudy?.questions?.dependencyType,
+          )}
+        </span>
+      ),
+    },
+    {
+      title: "Grupo ocupacional",
+      dataIndex: "ocupationalGroup",
+      key: "ocupationalGroup",
+      render: (_, organizationClimateStudy) => (
+        <span>
+          {getOcupationalGroup(
+            "questions.ocupationalGroup",
+            organizationClimateStudy?.questions?.ocupationalGroup,
+          )}
+        </span>
       ),
     },
     {
