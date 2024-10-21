@@ -90,6 +90,7 @@ const addUser = async (user: User): Promise<void> => {
               updateAt: Timestamp.now(),
             }))
           : null,
+        commandsIds: user?.commandsIds ? user.commandsIds : ["ep"],
         initialCommand: initialCommand || null,
         iAcceptPrivacyPolicies: true,
         status: "registered",

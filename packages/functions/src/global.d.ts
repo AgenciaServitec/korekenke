@@ -20,6 +20,7 @@ interface User extends DefaultFirestoreProps {
   acls: string[];
   roleCode: string;
   otherRoles?: Role[];
+  commandsIds: string[];
   commands: Command[];
   initialCommand: Command | null;
   firstName: string;
