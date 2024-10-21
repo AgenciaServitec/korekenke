@@ -111,6 +111,7 @@ export const UserIntegration = () => {
               }
             : user.assignedTo,
         degree: formData.degree,
+        commandsIds: formData?.commandsIds,
         commands: formData?.commandsIds
           ? commands.filter((command) =>
               formData.commandsIds.includes(command.id),
@@ -125,6 +126,7 @@ export const UserIntegration = () => {
 
   return (
     <User
+      authUser={authUser}
       user={user}
       onSaveUser={saveUser}
       onGoBack={onGoBack}
@@ -134,7 +136,14 @@ export const UserIntegration = () => {
   );
 };
 
-const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
+const User = ({
+  authUser,
+  user,
+  onSaveUser,
+  onGoBack,
+  rolesAcls,
+  isSavingUser,
+}) => {
   const schema = yup.object({
     roleCode: yup.string().required(),
     firstName: yup.string().required(),
@@ -204,6 +213,8 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
   };
 
   const submitSaveUser = (formData) => onSaveUser(formData);
+
+  console.log("roleCode: ", authUser.roleCode);
 
   return (
     <Row gutter={[16, 16]}>
@@ -375,7 +386,7 @@ const User = ({ user, onSaveUser, onGoBack, rolesAcls, isSavingUser }) => {
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Select
-                    label="¿A que comandos pertenece?"
+                    label="¿A que comando pertenece?"
                     mode="multiple"
                     onChange={onChange}
                     value={value}

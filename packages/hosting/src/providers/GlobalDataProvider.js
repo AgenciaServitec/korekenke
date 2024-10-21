@@ -7,14 +7,13 @@ import { orderBy } from "lodash";
 import { usersByRoleCode } from "../utils";
 import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 import {
+  animalsRef,
   correspondencesRef,
   departmentsRef,
   entitiesRef,
-  animalsRef,
   sectionsRef,
   unitsRef,
   usersRef,
-  modulesAdministratorRef,
 } from "../firebase/collections";
 import { useCommand } from "./CommandProvider";
 
@@ -30,7 +29,6 @@ const GlobalDataContext = createContext({
   departments: [],
   sections: [],
   rolesAcls: [],
-  modulesAdministrator: [],
   offices: [],
   correspondences: [],
   animals: [],
@@ -49,20 +47,25 @@ export const GlobalDataProvider = ({ children }) => {
       : null,
   );
 
-  const [
-    modulesAdministrator = [],
-    modulesAdministratorLoading,
-    modulesAdministratorError,
-  ] = useCollectionData(
-    authUser
-      ? modulesAdministratorRef
-          .where("isDeleted", "==", false)
-          .where("commandId", "==", _currentCommand)
-      : null,
-  );
+  // const getUsersQueryByRoleCode = () => {
+  //   if (!authUser) return null;
+  //   let usersQuery;
+  //
+  //   if(currentCommand.id === "ep"){
+  //
+  //   }
+  // };
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser ? usersRef.where("isDeleted", "==", false) : null,
+    authUser
+      ? usersRef
+          .where("commands", "array-contains-any", [
+            currentCommand?.id,
+            authUser.initialCommand.id,
+            "ep",
+          ])
+          .where("isDeleted", "==", false)
+      : null,
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
@@ -127,8 +130,7 @@ export const GlobalDataProvider = ({ children }) => {
     departmentsError ||
     sectionsError ||
     officesError ||
-    animalsError ||
-    modulesAdministratorError;
+    animalsError;
 
   const loading =
     entitiesLoading ||
@@ -139,8 +141,7 @@ export const GlobalDataProvider = ({ children }) => {
     departmentsLoading ||
     sectionsLoading ||
     officesLoading ||
-    animalsLoading ||
-    modulesAdministratorLoading;
+    animalsLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -178,7 +179,6 @@ export const GlobalDataProvider = ({ children }) => {
         departments: orderBy(departments, "createAt", "desc"),
         sections: orderBy(sections, "createAt", "desc"),
         rolesAcls: orderBy(rolesAcls, "createAt", "desc"),
-        modulesAdministrator: orderBy(modulesAdministrator, "createAt", "desc"),
         offices: orderBy(offices, "createAt", "desc"),
         correspondences: orderBy(correspondences, "createAt", "desc"),
         animals: orderBy(animals, "createAt", "desc"),
