@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoArmyPeru } from "../../../../../images";
+import { LogoCobiene, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import {
@@ -21,9 +21,9 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
     <Container>
       <div className="sheet">
         <div className="header">
-          <img src={LogoArmyPeru} alt="Logo del Ejército del Perú" />
+          <img src={LogoPrimary} alt="Logo del Ejército del Perú" />
           <h2>Descuento por convenio en universidad</h2>
-          <img src={LogoPrimary} alt="Logo de COBIENE" />
+          <img src={LogoCobiene} alt="Logo de COBIENE" />
         </div>
         <div className="main">
           <div className="request-type">
@@ -93,7 +93,7 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
         <div className="footer">
           <QRCode
             value={window.location.href}
-            icon={LogoArmyPeru}
+            icon={LogoPrimary}
             iconSize={25}
             type="svg"
             size={110}

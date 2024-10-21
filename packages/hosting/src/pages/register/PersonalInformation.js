@@ -19,7 +19,7 @@ import { DegreesArmy } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
-import { LogoArmyPeru } from "../../images";
+import { LogoPrimary } from "../../images";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
@@ -135,7 +135,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   return (
     <Container>
       <div className="logo-login">
-        <img src={LogoArmyPeru} alt="ejercito del peru logo" />
+        <img src={LogoPrimary} alt="ejercito del peru logo" />
       </div>
       <div className="title">
         <Title level={3}>DATOS PERSONALES</Title>

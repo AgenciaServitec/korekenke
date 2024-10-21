@@ -1,7 +1,7 @@
 import React from "react";
 import {
   ImgNoFound,
-  LogoArmyPeru,
+  LogoPrimary,
   LogoServicioVeterinarioRemontaEjercito,
 } from "../../images";
 import { userFullName } from "../../utils/users/userFullName2";
@@ -16,7 +16,7 @@ export const AnimalCardSheet = ({ animal }) => {
       <div className="sheet">
         <div className="header">
           <div className="header__item-left">
-            <img src={LogoArmyPeru} alt="Ejercito del perú" />
+            <img src={LogoPrimary} alt="Ejercito del perú" />
           </div>
           <div className="header__item-center">
             <div>

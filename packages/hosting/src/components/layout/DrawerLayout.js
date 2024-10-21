@@ -119,7 +119,7 @@ export const DrawerLayout = ({
             ["users"],
             ["/users"],
           ),
-          onClick: () => onClickMenu("/users"),
+          onClick: () => onClickMenu(`/users?userType=${currentCommand?.id}`),
         },
         {
           label: "Entidades / G.U",

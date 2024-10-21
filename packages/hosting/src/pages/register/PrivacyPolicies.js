@@ -15,7 +15,7 @@ import {
 } from "../../api";
 import { assign } from "lodash";
 import { fetchRoleAcl } from "../../firebase/collections";
-import { LogoArmyPeru } from "../../images";
+import { LogoPrimary } from "../../images";
 
 export const PrivacyPolicies = ({ prev }) => {
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ export const PrivacyPolicies = ({ prev }) => {
   return (
     <Container>
       <div className="logo-login">
-        <img src={LogoArmyPeru} alt="ejercito del peru logo" />
+        <img src={LogoPrimary} alt="ejercito del peru logo" />
       </div>
       <div className="title-login">
         <Title level={3}>POLÍTICAS DE PRIVACIDAD</Title>

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary } from "../images";
+import { LogoCobiene } from "../images";
 
 export const spinLoader = () => {
   return (
     <ContainerSpinLoader type="relative">
       <img
-        src={LogoPrimary}
+        src={LogoCobiene}
         className="spin-version-icon"
         alt="animes gozu spinner"
       />
@@ -18,7 +18,7 @@ export const spinLoaderFixed = () => {
   return (
     <ContainerSpinLoader type="fixed">
       <img
-        src={LogoPrimary}
+        src={LogoCobiene}
         className="spin-version-icon"
         alt="animes gozu spinner"
       />
