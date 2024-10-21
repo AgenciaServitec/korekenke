@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  LogoArmyPeru,
+  LogoPrimary,
   LogoServicioVeterinarioRemontaEjercito,
 } from "../../../../../../images";
 import { AnimalMagazineProfiles } from "../../../../../../data-list";
@@ -22,7 +22,7 @@ export const AnimalMagazineProfilesheet = ({
         <div className="header">
           <div className="header__top">
             <img
-              src={LogoArmyPeru}
+              src={LogoPrimary}
               alt="Logo de Servicio Veterinario y Remonta del Ejercito"
             />
             <h1 className="header__top-title">

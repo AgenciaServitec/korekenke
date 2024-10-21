@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { DecreeList } from "../../../../../data-list";
 import { QRCode } from "../../../../../components";
-import { LogoArmyPeru } from "../../../../../images";
+import { LogoPrimary } from "../../../../../images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -118,7 +118,7 @@ export const DecreeSheet = ({ decree }) => {
             <div className="qr-sheet">
               <QRCode
                 value={window.location.href}
-                icon={LogoArmyPeru}
+                icon={LogoPrimary}
                 iconSize={25}
                 type="svg"
                 size={110}

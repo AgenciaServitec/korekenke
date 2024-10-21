@@ -17,7 +17,7 @@ import { fetchCollectionOnce } from "../../firebase/utils";
 import { firestore } from "../../firebase";
 import { useApiPersonDataByDniGet } from "../../api";
 import { capitalize } from "lodash";
-import { LogoArmyPeru } from "../../images";
+import { LogoPrimary } from "../../images";
 
 export const AccessData = ({ next, currentStep }) => {
   const { getPersonDataByDni } = useApiPersonDataByDniGet();
@@ -117,7 +117,7 @@ export const AccessData = ({ next, currentStep }) => {
   return (
     <Container>
       <div className="logo-login">
-        <img src={LogoArmyPeru} alt="ejercito del peru logo" />
+        <img src={LogoPrimary} alt="ejercito del peru logo" />
       </div>
       <div className="title-login">
         <Title level={3}>Registro</Title>

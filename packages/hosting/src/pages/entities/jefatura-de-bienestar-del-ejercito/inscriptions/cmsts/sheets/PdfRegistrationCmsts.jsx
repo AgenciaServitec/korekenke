@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { QRCode } from "../../../../../../components";
 import dayjs from "dayjs";
-import { LogoPrimary, PhotoNoFound } from "../../../../../../images";
+import { LogoCobiene, PhotoNoFound } from "../../../../../../images";
 import { defaultTo, isEmpty } from "lodash";
 import {
   CivilStatus,
@@ -299,7 +299,7 @@ export const PdfRegistrationCmsts = ({ user, cmstsEnrollment }) => {
           <QRCode
             value={`${window.location.href}`}
             errorLevel="H"
-            icon={LogoPrimary}
+            icon={LogoCobiene}
             iconSize={30}
             type="svg"
             size={110}
