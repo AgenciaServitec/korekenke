@@ -70,7 +70,7 @@ const defaultCommand = {
   code: "ep",
   name: "Ejército del Perú",
   logoImgUrl:
-    "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/logo-ep.png",
+    "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/logo.webp",
   entities: [
     {
       id: "departamento_de_apoyo_social",

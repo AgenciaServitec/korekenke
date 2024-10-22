@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Acl,
   AddButton,
@@ -10,6 +10,7 @@ import {
   Row,
   Select,
   Space,
+  Switch,
   Title,
 } from "../../../components";
 import {
@@ -38,8 +39,9 @@ import {
   updateSection,
   updateUnit,
 } from "../../../firebase/collections";
-import { useUpdateAssignToAndAclsOfUser } from "../../../hooks";
-import { faAccessibleIcon } from "@fortawesome/free-brands-svg-icons";
+import { useQueryString, useUpdateAssignToAndAclsOfUser } from "../../../hooks";
+import styled from "styled-components";
+import { upperCase } from "lodash/string";
 
 export const Users = () => {
   const navigate = useNavigate();
@@ -48,8 +50,14 @@ export const Users = () => {
   const { currentCommand } = useCommand();
   const { patchUser, patchUserResponse } = useApiUserPatch();
   const { updateAssignToAndAclsOfUser } = useUpdateAssignToAndAclsOfUser();
-  const [userType, setUserType] = useState(currentCommand.id);
-  const [disabledUser, setDisabledUser] = useState(false);
+  const [userType, onSetUserType] = useQueryString(
+    "userType",
+    currentCommand.id,
+  );
+  const [disabledUser, onSetDisabledUser] = useQueryString(
+    "disabledUser",
+    false,
+  );
 
   const navigateTo = (userId) => navigate(userId);
 
@@ -243,21 +251,32 @@ export const Users = () => {
   const onConfirmUnlinkAssignedToUser = (user) =>
     removeUserOfGroup(user, false);
 
+  const isSuperAdmin = authUser?.roleCode === "super_admin";
+
   const options = [
-    { label: "Todos", value: "all" },
+    ...(isSuperAdmin ? [{ label: "Todos", value: "all" }] : []),
     { label: "Sin Comando", value: "noCommand" },
-    {
-      label: "Comando De Bienestar Del Ejército (COBIENE)",
-      value: "cobiene",
-    },
-    {
-      label: "Comando Logístico Del Ejército (COLOGE)",
-      value: "cologe",
-    },
-    {
-      label: "Comando De Personal Del Ejército (COPERE)",
-      value: "copere",
-    },
+    ...(isSuperAdmin
+      ? [
+          {
+            label: "Comando De Bienestar Del Ejército (COBIENE)",
+            value: "cobiene",
+          },
+          {
+            label: "Comando Logístico Del Ejército (COLOGE)",
+            value: "cologe",
+          },
+          {
+            label: "Comando De Personal Del Ejército (COPERE)",
+            value: "copere",
+          },
+        ]
+      : [
+          {
+            label: `${currentCommand?.name} (${upperCase(currentCommand?.id)})`,
+            value: currentCommand?.id,
+          },
+        ]),
   ];
 
   const usersView = users.filter((user) =>
@@ -289,20 +308,22 @@ export const Users = () => {
         <Col span={24} md={12} lg={8}>
           <Select
             value={userType}
-            onChange={(value) => setUserType(value)}
+            onChange={(value) => onSetUserType(value)}
             options={options}
           />
         </Col>
         <Col span={24} md={6}>
-          <Button
-            type={disabledUser ? "primary" : "default"}
-            danger
-            block
-            onClick={() => setDisabledUser(!disabledUser)}
-            icon={<FontAwesomeIcon icon={faAccessibleIcon} />}
-          >
-            {disabledUser ? "Discapacitados" : "No Discapacitados"}
-          </Button>
+          <ContainerDisabledUser>
+            <Space>
+              <span>Visualizar Discapacitados</span>
+              <Switch
+                value={disabledUser}
+                onChange={(value) => onSetDisabledUser(value)}
+                checkedChildren="Si"
+                unCheckedChildren="No"
+              />
+            </Space>
+          </ContainerDisabledUser>
         </Col>
         <Col span={24}>
           <UsersTable
@@ -316,3 +337,14 @@ export const Users = () => {
     </Acl>
   );
 };
+
+const ContainerDisabledUser = styled.div`
+  span {
+    font-weight: 500;
+  }
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
