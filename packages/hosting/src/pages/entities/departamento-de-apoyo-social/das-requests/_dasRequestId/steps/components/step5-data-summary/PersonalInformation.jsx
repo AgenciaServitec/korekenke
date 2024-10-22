@@ -1,11 +1,24 @@
 import React from "react";
-import { Col, Row, Title, Divider } from "../../../../../../../../components";
+import {
+  Col,
+  Row,
+  Title,
+  Divider,
+  IconAction,
+} from "../../../../../../../../components";
 import { findDegree } from "../../../../../../../../utils";
 import styled from "styled-components";
 import { FamiliarInformation } from "./FamiliarInformation";
 import { isEmpty } from "lodash";
+import { Space, Tag } from "antd";
+import { faHome, faRefresh, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const PersonalInformation = ({ dasRequest }) => {
+export const PersonalInformation = ({
+  dasRequest,
+  isHeadlineCurrentData,
+  onUpdateHeadlineEmail,
+}) => {
   const { headline, familiar } = dasRequest;
 
   return (
@@ -65,7 +78,25 @@ export const PersonalInformation = ({ dasRequest }) => {
         </Col>
         <Col span={24} sm={8}>
           <div className="wrapper-item">
-            <span className="label">Email</span>
+            <span className="label">
+              <Space>
+                Email
+                {!isHeadlineCurrentData && (
+                  <>
+                    <Tag color="red">El usuario actualizó su correo</Tag>{" "}
+                    <IconAction
+                      tooltipTitle="Actualizar"
+                      icon={faRefresh}
+                      size={33}
+                      onClick={() => onUpdateHeadlineEmail(headline)}
+                      styled={{
+                        color: () => "blue",
+                      }}
+                    />
+                  </>
+                )}
+              </Space>
+            </span>
             <span className="value">{headline?.email || ""}</span>
           </div>
         </Col>
