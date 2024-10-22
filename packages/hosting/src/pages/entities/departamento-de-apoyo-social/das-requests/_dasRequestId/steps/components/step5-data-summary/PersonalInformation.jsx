@@ -1,18 +1,17 @@
 import React from "react";
 import {
   Col,
-  Row,
-  Title,
   Divider,
   IconAction,
+  Row,
+  Title,
 } from "../../../../../../../../components";
 import { findDegree } from "../../../../../../../../utils";
 import styled from "styled-components";
 import { FamiliarInformation } from "./FamiliarInformation";
 import { isEmpty } from "lodash";
 import { Space, Tag } from "antd";
-import { faHome, faRefresh, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 
 export const PersonalInformation = ({
   dasRequest,
