@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useCommand, useGlobalData } from "../../../../providers";
+import {
+  useAuthentication,
+  useCommand,
+  useGlobalData,
+} from "../../../../providers";
 import {
   Acl,
   Col,
@@ -26,6 +30,7 @@ import { EditingEntityGU } from "./EditingEntity";
 import { AssignmentForUsers } from "../../../../data-list";
 
 export const EntityIntegration = () => {
+  const { authUser } = useAuthentication();
   const { entityGUId } = useParams();
   const navigate = useNavigate();
   const { users, rolesAcls } = useGlobalData();
@@ -38,6 +43,9 @@ export const EntityIntegration = () => {
 
   const isNew = entityGUId === "new";
   const onGoBack = () => navigate(-1);
+
+  const isHasPermissionsToRoles =
+    authUser?.roleCode === "super_admin" || authUser?.roleCode === "manager";
 
   useEffect(() => {
     (async () => {
@@ -103,6 +111,7 @@ export const EntityIntegration = () => {
       loading={loading}
       onSaveEntity={saveEntity}
       onGoBack={onGoBack}
+      isHasPermissionsToRoles={isHasPermissionsToRoles}
     />
   );
 };
@@ -115,6 +124,7 @@ const Entity = ({
   loading,
   onSaveEntity,
   onGoBack,
+  isHasPermissionsToRoles,
 }) => {
   const [tabView, setTabView] = useState(1);
 
@@ -153,7 +163,7 @@ const Entity = ({
                   },
                   {
                     label: "Roles",
-                    disabled: !entity?.name,
+                    disabled: !entity?.name || !isHasPermissionsToRoles,
                     key: 2,
                     children: (
                       <RolesByGroupIntegration
