@@ -6,6 +6,9 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { isEmpty, orderBy } from "lodash";
 import { Timestamp } from "@google-cloud/firestore";
+import { INITIAL_HIGHER_ENTITIES } from "../../data-list";
+
+const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
 export const postUser = async (
   req: Request<unknown, unknown, User, unknown>,
@@ -65,6 +68,8 @@ const addUser = async (user: User): Promise<void> => {
     ["asc"]
   );
 
+  const defaultCommand = commands.find((command) => command.id === "ep");
+
   await firestore
     .collection("users")
     .doc(user.id)
@@ -89,9 +94,9 @@ const addUser = async (user: User): Promise<void> => {
               ...command,
               updateAt: Timestamp.now(),
             }))
-          : null,
+          : defaultCommand,
         commandsIds: user?.commandsIds ? user.commandsIds : ["ep"],
-        initialCommand: initialCommand || null,
+        initialCommand: initialCommand || defaultCommand,
         iAcceptPrivacyPolicies: true,
         status: "registered",
       })
