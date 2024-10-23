@@ -9,7 +9,6 @@ import {
 } from "../../../../components";
 import { DasRequestsTable } from "./DasRequestsTable";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { firestore } from "../../../../firebase";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../../../hooks";
 import {
@@ -19,7 +18,6 @@ import {
 import { useAuthentication } from "../../../../providers";
 import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
-import { CorrespondenceProceeds } from "../../../correspondences/CorrespondenceProceeds";
 import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
 
 export const DasRequestsListIntegration = () => {
