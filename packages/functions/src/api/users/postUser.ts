@@ -94,7 +94,7 @@ const addUser = async (user: User): Promise<void> => {
               ...command,
               updateAt: Timestamp.now(),
             }))
-          : defaultCommand,
+          : [defaultCommand],
         commandsIds: user?.commandsIds ? user.commandsIds : ["ep"],
         initialCommand: initialCommand || defaultCommand,
         iAcceptPrivacyPolicies: true,
