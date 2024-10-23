@@ -57,9 +57,9 @@ export const DasRequestSheets = () => {
       (entity) => entity?.nameId === "departamento-de-apoyo-social",
     );
 
-    if (!manageDas?.entityManageId) return;
+    if (!manageDas?.managerId) return;
 
-    return await fetchUser(manageDas?.entityManageId);
+    return await fetchUser(manageDas?.managerId);
   };
 
   if (dasRequestLoading) return <Spinner height="80vh" />;

@@ -9,14 +9,15 @@ import {
 } from "../../../../components";
 import { DasRequestsTable } from "./DasRequestsTable";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { firestore } from "../../../../firebase";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../../../hooks";
-import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
+import {
+  dasApplicationsRef,
+  updateDasApplication,
+} from "../../../../firebase/collections/dasApplications";
 import { useAuthentication } from "../../../../providers";
 import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
-import { CorrespondenceProceeds } from "../../../correspondences/CorrespondenceProceeds";
 import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
 
 export const DasRequestsListIntegration = () => {
@@ -31,23 +32,8 @@ export const DasRequestsListIntegration = () => {
     useState(false);
   const [dasRequest, setDasRequest] = useState(null);
 
-  const dasApplicationsRef = firestore
-    .collection("das-applications")
-    .where("isDeleted", "==", false);
-
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
-    useCollectionData(
-      [
-        "super_admin",
-        "manager",
-        "department_boss",
-        "department_assistant",
-      ].includes(authUser.roleCode)
-        ? dasApplicationsRef.where("isDeleted", "==", false) || null
-        : dasApplicationsRef
-            .where("isDeleted", "==", false)
-            .where("headline.id", "==", authUser.id),
-    );
+    useCollectionData(dasApplicationsRef.where("isDeleted", "==", false));
 
   useEffect(() => {
     dasApplicationsError && notification({ type: "error" });
