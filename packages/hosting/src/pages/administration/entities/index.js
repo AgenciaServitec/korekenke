@@ -2,7 +2,7 @@ import React from "react";
 import { Acl, Button, Col, List, notification, Row } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useGlobalData } from "../../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
 import { useNavigate } from "react-router";
 import {
   useAcl,
@@ -13,6 +13,7 @@ import { updateEntity } from "../../../firebase/collections";
 
 export const EntitiesGUIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const { entities, users } = useGlobalData();
   const { aclCheck } = useAcl();
   const { assignDeleteProps } = useDefaultFirestoreProps();
@@ -78,7 +79,9 @@ export const EntitiesGUIntegration = () => {
               ])
             }
             visibleDeleteItem={() =>
-              aclCheck("administration", "entities-gu", ["/entities-gu#delete"])
+              aclCheck("administration", "entities-gu", [
+                "/entities-gu#delete",
+              ]) && authUser.roleCode === "super_admin"
             }
           />
         </Col>
