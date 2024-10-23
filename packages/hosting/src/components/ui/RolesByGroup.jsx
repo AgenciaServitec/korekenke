@@ -303,7 +303,11 @@ const RolesByGroup = ({
               <Title level={4}>Privilegios de usuario</Title>
             </Col>
             {Object.entries(acls)
-              .filter(([, category]) => category.command === currentCommand.id)
+              .filter(
+                ([, category]) =>
+                  category.command === currentCommand.id ||
+                  category.command === "public",
+              )
               .map(([keyCategory, subCategories]) => (
                 <Col span={24} key={keyCategory}>
                   <ComponentContainer.group label={subCategories.label}>
