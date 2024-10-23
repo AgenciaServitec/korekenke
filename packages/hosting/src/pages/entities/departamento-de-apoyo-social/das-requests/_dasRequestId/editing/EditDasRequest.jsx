@@ -53,9 +53,16 @@ export const EditDasRequestIntegration = ({
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
+  const [headlineCurrentData, setHeadlineCurrentData] = useState(null);
+  const [isHeadlineCurrentData, setIsHeadlineCurrentData] = useState(true);
 
   useEffect(() => {
     (async () => {
+      if (!dasRequest) return;
+
+      const _headlineCurrentData = await fetchUser(dasRequest?.headline?.id);
+      setHeadlineCurrentData(_headlineCurrentData);
+
       if (dasRequest?.status === "inProgress") return;
 
       const dasEntityManager = await fetchEntityManager();
@@ -71,6 +78,20 @@ export const EditDasRequestIntegration = ({
       }
     })();
   }, [dasRequest]);
+
+  useEffect(() => {
+    (async () => {
+      if (!headlineCurrentData) return;
+
+      const headlineData = dasRequest?.headline;
+
+      if (headlineCurrentData?.email !== headlineData?.email) {
+        setIsHeadlineCurrentData(false);
+      } else {
+        setIsHeadlineCurrentData(true);
+      }
+    })();
+  }, [headlineCurrentData]);
 
   const fetchEntityManager = async () => {
     const _entities = await fetchEntities();
@@ -100,6 +121,8 @@ export const EditDasRequestIntegration = ({
         onSetVisibleReplyModal={onSetVisibleReplyModal}
         visibleReplyInformationModal={visibleReplyInformationModal}
         setVisibleReplyInformationModal={setVisibleReplyInformationModal}
+        headlineCurrentData={headlineCurrentData}
+        isHeadlineCurrentData={isHeadlineCurrentData}
       />
     </DasRequestModalProvider>
   );
@@ -115,10 +138,22 @@ const EditDasRequest = ({
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
   setVisibleReplyInformationModal,
+  headlineCurrentData,
+  isHeadlineCurrentData,
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
   const { isTablet } = useDevice();
+
+  const onUpdateHeadlineEmail = async (headline) => {
+    await updateDasApplication(dasRequest.id, {
+      ...dasRequest,
+      headline: {
+        ...headline,
+        email: headlineCurrentData?.email,
+      },
+    });
+  };
 
   const onEditPersonalInformation = (dasRequest) => {
     onShowDasRequestModal({
@@ -223,7 +258,11 @@ const EditDasRequest = ({
       ),
       children: (
         <>
-          <PersonalInformation dasRequest={dasRequest} />
+          <PersonalInformation
+            dasRequest={dasRequest}
+            isHeadlineCurrentData={isHeadlineCurrentData}
+            onUpdateHeadlineEmail={onUpdateHeadlineEmail}
+          />
           <ObservationsList
             section="headline"
             observations={dasRequest?.headline?.observations}

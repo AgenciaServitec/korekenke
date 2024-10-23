@@ -25,7 +25,7 @@
     }
   },
   "administration": {
-    "command": "cobiene",
+    "command": "public",
     "label": "Administración",
     "users": {
       "label": "Usuarios",
@@ -71,6 +71,7 @@
     }
   },
   "public": {
+    "command": "public",
     "label": "Público",
     "correspondences": {
       "label": "Correspondencias",
