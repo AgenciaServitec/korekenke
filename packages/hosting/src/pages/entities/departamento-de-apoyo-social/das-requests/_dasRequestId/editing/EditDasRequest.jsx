@@ -66,6 +66,7 @@ export const EditDasRequestIntegration = ({
       if (dasRequest?.status === "inProgress") return;
 
       const dasEntityManager = await fetchEntityManager();
+
       if (
         dasRequest?.wasRead === false &&
         dasRequest?.status === "proceeds" &&
@@ -100,8 +101,8 @@ export const EditDasRequestIntegration = ({
       (entity) => entity?.nameId === "departamento-de-apoyo-social",
     );
 
-    const _entityManager = manageDas?.entityManageId
-      ? await fetchUser(manageDas?.entityManageId)
+    const _entityManager = manageDas?.managerId
+      ? await fetchUser(manageDas?.managerId)
       : {};
 
     return _entityManager;

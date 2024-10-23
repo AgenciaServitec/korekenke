@@ -14,7 +14,6 @@ import {
   faEye,
   faFilePdf,
   faFilter,
-  faPaperPlane,
   faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +22,11 @@ import { DasRequestStatus } from "../../../../data-list";
 import { useNavigate } from "react-router";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import styled from "styled-components";
-import { entitiesRef } from "../../../../firebase/collections";
+import {
+  departmentsRef,
+  entitiesRef,
+  fetchUser,
+} from "../../../../firebase/collections";
 import { fetchCollectionOnce } from "../../../../firebase/firestore";
 import { useAuthentication } from "../../../../providers";
 import { useAPiSendMailNotificationDasRequestPost } from "../../../../api";
@@ -44,16 +47,29 @@ export const DasRequestsTable = ({
     useAPiSendMailNotificationDasRequestPost();
 
   const [entity, setEntity] = useState(null);
+  const [bossMDP, setBossMDP] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const entities = await fetchCollectionOnce(
+      const p0 = fetchCollectionOnce(
         entitiesRef.where("nameId", "==", "departamento-de-apoyo-social"),
       );
 
+      const p1 = fetchCollectionOnce(
+        departmentsRef.where("nameId", "==", "mesa-de-partes"),
+      );
+
+      const [entities, departments] = await Promise.all([p0, p1]);
+
       setEntity(entities?.[0]);
+
+      const _bossMDP = await fetchUser(departments?.[0]?.bossId);
+
+      setBossMDP(_bossMDP);
     })();
   }, []);
+
+  const isBossMDP = authUser.id === bossMDP?.id;
 
   const navigateTo = (pathname) => navigate(pathname);
 
@@ -88,10 +104,7 @@ export const DasRequestsTable = ({
 
     if (dasApplication.userId === authUser.id) return dasApplication;
 
-    if (
-      ["waiting", "notProceeds"].includes(dasApplication.status) ===
-      ["department_boss"].includes(authUser.roleCode)
-    )
+    if (["waiting", "notProceeds"].includes(dasApplication.status) && isBossMDP)
       return dasApplication;
 
     if (
@@ -214,41 +227,31 @@ export const DasRequestsTable = ({
           <Acl
             category="public"
             subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#sendNotificationDasRequest"
+            name="/das-requests/:dasRequestId#proceeds"
           >
-            {!isSendNotificationDasRequest(dasRequest) && (
+            {["waiting", "notProceeds"].includes(dasRequest.status) && (
               <IconAction
-                tooltipTitle="Reenviar notificación"
-                icon={faPaperPlane}
-                onClick={() => onResendNotificationDasRequestPost(dasRequest)}
+                tooltipTitle="Evaluación de solicitud"
+                icon={faFilter}
+                onClick={() => onDasRequestProceeds(dasRequest)}
               />
             )}
           </Acl>
-          <Acl
-            category="public"
-            subCategory="dasRequests"
-            name="/das-requests/:dasRequestId#proceeds"
-          >
-            <IconAction
-              tooltipTitle="Evaluación de solicitud"
-              icon={faFilter}
-              onClick={() => onDasRequestProceeds(dasRequest)}
-            />
-          </Acl>
-          {entity?.entityManageId === user?.id && !isFinalized(dasRequest) && (
-            <Acl
-              category="public"
-              subCategory="dasRequests"
-              name="/das-requests/:dasRequestId#reply"
-            >
-              <IconAction
-                tooltipTitle="Responder solicitud"
-                icon={faReply}
-                styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => onAddReplyDasRequest(dasRequest)}
-              />
-            </Acl>
-          )}
+          {entity?.managerId === user?.id &&
+            dasRequest?.status === "inProgress" && (
+              <Acl
+                category="public"
+                subCategory="dasRequests"
+                name="/das-requests/:dasRequestId#reply"
+              >
+                <IconAction
+                  tooltipTitle="Responder solicitud"
+                  icon={faReply}
+                  styled={{ color: (theme) => theme.colors.primary }}
+                  onClick={() => onAddReplyDasRequest(dasRequest)}
+                />
+              </Acl>
+            )}
           <Acl
             category="public"
             subCategory="dasRequests"
@@ -276,21 +279,22 @@ export const DasRequestsTable = ({
               />
             </Acl>
           )}
-          {!isPositiveOrApproved(dasRequest) &&
-            dasRequest.headline.id !== user.id && (
-              <Acl
-                category="public"
-                subCategory="dasRequests"
-                name="/das-requests#delete"
-              >
-                <IconAction
-                  tooltipTitle="Eliminar"
-                  icon={faTrash}
-                  styled={{ color: (theme) => theme.colors.error }}
-                  onClick={() => onDeleteDasRequest(dasRequest)}
-                />
-              </Acl>
-            )}
+          {((!isPositiveOrApproved(dasRequest) &&
+            user.roleCode === "manager") ||
+            dasRequest.headline.id === user.id) && (
+            <Acl
+              category="public"
+              subCategory="dasRequests"
+              name="/das-requests#delete"
+            >
+              <IconAction
+                tooltipTitle="Eliminar"
+                icon={faTrash}
+                styled={{ color: (theme) => theme.colors.error }}
+                onClick={() => onDeleteDasRequest(dasRequest)}
+              />
+            </Acl>
+          )}
         </Space>
       ),
     },
