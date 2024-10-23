@@ -44,7 +44,7 @@ export const HomeIntegration = () => {
             <FontAwesomeIcon icon={faShield} size="5x" />
           </div>
           <div>
-            <h2>{currentCommand.entities[0].name}</h2>
+            <h2>DEPARTAMENTO DE APOYO SOCIAL</h2>
             <ul>
               <li>
                 <Link

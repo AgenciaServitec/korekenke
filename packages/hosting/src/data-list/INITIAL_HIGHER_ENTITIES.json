@@ -10,72 +10,28 @@
         "category": "organo_de_administracion_interna",
         "commands": [
           {
+            "id": "ep",
+            "code": "ep",
+            "name": "Ejército del Perú",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/logo.webp"
+          },
+          {
             "id": "cobiene",
             "code": "cobiene",
             "name": "Comando de bienestar del ejercito",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cobiene.webp",
-            "entities": [
-              {
-                "id": "departamento_de_apoyo_social",
-                "name": "DEPARTAMENTO DE APOYO SOCIAL"
-              }
-            ]
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cobiene.webp"
           },
           {
             "id": "copere",
             "code": "copere",
             "name": "Comando De Personal Del Ejército",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/copere.webp",
-            "entities": [
-              {
-                "id": "jefatura_de_administracion_de_personal_civil_del_ejercito",
-                "name": "Jefatura De Administración De Personal Civil Del Ejército"
-              },
-              {
-                "id": "jefatura_de_administracion_de_derechos_de_personal_del_ejercito",
-                "name": "Jefatura De Administración De Derechos De Personal Del Ejército"
-              },
-              {
-                "id": "jefatura_de_bienestar_del_ejercito",
-                "name": "Jefatura De Bienestar Del Ejército"
-              }
-            ]
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/copere.webp"
           },
           {
             "id": "cologe",
             "code": "cologe",
             "name": "Comando Logístico Del Ejército",
-            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cologe.webp",
-            "entities": [
-              {
-                "id": "servicio_de_comunicaciones_del_ejercito",
-                "name": "Servicio De Comunicaciones Del Ejército"
-              },
-              {
-                "id": "servicio_de_ingenieria_del_ejercito",
-                "name": "Servicio De Ingeniería Del Ejército"
-              },
-              {
-                "id": "servicio_de_intendencia_del_ejercito",
-                "name": "Servicio De Intendencia Del Ejército"
-              },
-              {
-                "id": "servicio_de_material_de_guerra_del_ejercito",
-                "name": "Servicio De Material De Guerra Del Ejército"
-              },
-              {
-                "id": "servicio_de_transportes_del_ejercito",
-                "name": "Servicio De Transportes Del Ejército"
-              },
-              {
-                "id": "servicio_de_veterinaria_y_remonta_del_ejercito",
-                "name": "Servicio De Veterinaria y Remonta Del Ejército"
-              },
-              {
-                "id": "jefatura_de_patrimonio_del_ejercito",
-                "name": "Jefatura De Patrimonio Del Ejército"
-              }
-            ]
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cologe.webp"
           }
         ]
       },
@@ -83,69 +39,7 @@
         "id": "emge",
         "code": "emge",
         "name": "Estado Mayor General Del Ejército",
-        "category": "organo_de_planeamiento_y_asesoramiento",
-        "entities": [
-          {
-            "id": "diplane",
-            "code": "diplane",
-            "name": "Dirección De Planeamiento Del Ejército"
-          },
-          {
-            "id": "dipere",
-            "code": "dipere",
-            "name": "Dirección De Personal Del Ejército"
-          },
-          {
-            "id": "die",
-            "code": "die",
-            "name": "Dirección De Inteligencia Del Ejército"
-          },
-          {
-            "id": "diedoce",
-            "code": "diedoce",
-            "name": "Dirección De Educación y Doctrina Del Ejército"
-          },
-          {
-            "id": "diloge",
-            "code": "diloge",
-            "name": "Dirección De Logística Del Ejército"
-          },
-          {
-            "id": "diradne",
-            "code": "diradne",
-            "name": "Dirección De Apoyo Al Desarrollo Nacional Del Ejército"
-          },
-          {
-            "id": "ditele",
-            "code": "ditele",
-            "name": "Dirección De Telemática y Estadística Del Ejército"
-          },
-          {
-            "id": "dinfe",
-            "code": "dinfe",
-            "name": "Dirección De Informaciones Del Ejército"
-          },
-          {
-            "id": "dicitece",
-            "code": "dicitece",
-            "name": "Dirección De Ciencia y Tecnología Del Ejército"
-          },
-          {
-            "id": "drie",
-            "code": "drie",
-            "name": "Dirección De Relaciones Internacionales Del Ejército"
-          },
-          {
-            "id": "disale",
-            "code": "disale",
-            "name": "Dirección De Salud Del Ejército"
-          },
-          {
-            "id": "direccion_inversiones_del_ejercito",
-            "code": "direccion_inversiones_del_ejercito",
-            "name": "Dirección Inversiones Del Ejército"
-          }
-        ]
+        "category": "organo_de_planeamiento_y_asesoramiento"
       }
     ]
   }

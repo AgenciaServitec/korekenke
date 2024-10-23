@@ -17,15 +17,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../hooks";
 import { useAuthentication, useGlobalData } from "../../../../providers";
-import { assign, capitalize, isEmpty } from "lodash";
+import { assign, capitalize, isEmpty, isString, omit } from "lodash";
 import {
   apiErrorNotification,
   getApiErrorResponse,
   useApiUserPost,
   useApiUserPut,
 } from "../../../../api";
-import { getTypeForAssignedToByRoleCode } from "../../../../utils";
-import { DegreesArmy, INITIAL_HIGHER_ENTITIES } from "../../../../data-list";
+import {
+  AssignmentForUsers,
+  DegreesArmy,
+  INITIAL_HIGHER_ENTITIES,
+} from "../../../../data-list";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -77,17 +80,20 @@ export const UserIntegration = () => {
 
       return onGoBack();
     } catch (e) {
+      console.log("user: ", e);
       const errorResponse = await getApiErrorResponse(e);
       apiErrorNotification(errorResponse);
     }
   };
 
-  const mapUserToApi = (formData) =>
-    assign(
+  const mapUserToApi = (formData) => {
+    const defaultCommand = commands.find((command) => command.id === "ep");
+
+    return assign(
       {},
       {
         ...(user?.id && { id: user.id }),
-        roleCode: formData.roleCode,
+        roleCode: formData?.roleCode || "user",
         firstName: formData.firstName.toLowerCase(),
         paternalSurname: formData.paternalSurname.toLowerCase(),
         maternalSurname: formData.maternalSurname.toLowerCase(),
@@ -98,31 +104,32 @@ export const UserIntegration = () => {
           prefix: "+51",
           number: formData.phoneNumber,
         },
-        acls: rolesAcls.find((role) => role.id === formData.roleCode)?.acls || [
-          "/home",
-          "/profile",
-        ],
+        acls: rolesAcls.find((role) => role.id === formData?.roleCode || "user")
+          ?.acls || ["/home", "/profile"],
         updateBy: `${authUser.firstName} ${authUser.paternalSurname} ${authUser.maternalSurname}|${authUser.cip}|${authUser.dni}`,
         assignedTo:
           user.roleCode !== formData.roleCode
             ? {
-                type: getTypeForAssignedToByRoleCode(formData.roleCode),
+                type: AssignmentForUsers[formData.roleCode],
                 id: null,
               }
             : user.assignedTo,
         degree: formData.degree,
-        commandsIds: formData?.commandsIds,
+        commandsIds: isString(formData?.commandsIds)
+          ? [formData?.commandsIds]
+          : formData?.commandsIds,
         commands: formData?.commandsIds
-          ? commands.filter((command) =>
-              formData.commandsIds.includes(command.id),
-            )
-          : null,
+          ? commands
+              .filter((command) => formData.commandsIds.includes(command.id))
+              .map((command) => omit(command, "entities"))
+          : [defaultCommand],
         initialCommand: formData?.commandsIds
           ? commands.find((command) => command.id === formData?.commandsIds[0])
-          : null,
+          : defaultCommand,
         cgi: formData.cgi,
       },
     );
+  };
 
   return (
     <User
@@ -144,8 +151,10 @@ const User = ({
   rolesAcls,
   isSavingUser,
 }) => {
+  const isSuperAdmin = authUser.roleCode === "super_admin";
+
   const schema = yup.object({
-    roleCode: yup.string().required(),
+    roleCode: yup.string(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
@@ -169,7 +178,9 @@ const User = ({
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string().required(),
-    commandsIds: yup.array().nullable(),
+    commandsIds: isSuperAdmin
+      ? yup.array().nullable()
+      : yup.string().nullable(),
     cgi: yup.boolean().required(),
   });
 
@@ -205,16 +216,12 @@ const User = ({
       dni: user?.dni || "",
       phoneNumber: user?.phone?.number || "",
       degree: user?.degree || "",
-      commandsIds: !isEmpty(user?.commands)
-        ? user?.commands.map((command) => command.id)
-        : null,
+      commandsIds: isSuperAdmin ? user?.commandsIds : user?.commandsIds?.[0],
       cgi: user?.cgi || false,
     });
   };
 
   const submitSaveUser = (formData) => onSaveUser(formData);
-
-  console.log("roleCode: ", authUser.roleCode);
 
   return (
     <Row gutter={[16, 16]}>
@@ -224,31 +231,33 @@ const User = ({
       <Col span={24}>
         <Form onSubmit={handleSubmit(submitSaveUser)}>
           <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <Controller
-                name="roleCode"
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <Select
-                    label="Rol"
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                    options={rolesAcls
-                      .filter((role) =>
-                        watch("otherRoleCodes")
-                          ? !watch("otherRoleCodes").includes(role.id)
-                          : true,
-                      )
-                      .map((role) => ({
-                        label: capitalize(role.name),
-                        value: role.id,
-                      }))}
-                  />
-                )}
-              />
-            </Col>
+            {isSuperAdmin && (
+              <Col span={24}>
+                <Controller
+                  name="roleCode"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Select
+                      label="Rol"
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      options={rolesAcls
+                        .filter((role) =>
+                          watch("otherRoleCodes")
+                            ? !watch("otherRoleCodes").includes(role.id)
+                            : true,
+                        )
+                        .map((role) => ({
+                          label: capitalize(role.name),
+                          value: role.id,
+                        }))}
+                    />
+                  )}
+                />
+              </Col>
+            )}
             <Col span={24}>
               <Controller
                 name="firstName"
@@ -387,7 +396,7 @@ const User = ({
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="¿A que comando pertenece?"
-                    mode="multiple"
+                    mode={isSuperAdmin ? "multiple" : "simple"}
                     onChange={onChange}
                     value={value}
                     name={name}

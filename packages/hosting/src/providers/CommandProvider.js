@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
 import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 import { updateUser } from "../firebase/collections";
@@ -18,6 +18,10 @@ export const CommandProvider = ({ children }) => {
   const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
 
   const [command, setCommand] = useState(authUser?.initialCommand || null);
+
+  useEffect(() => {
+    authUser?.initialCommand && setCommand(authUser.initialCommand);
+  }, [authUser?.initialCommand]);
 
   const onChangeCommand = async (commandId = null) => {
     const command = commands.find((command) => command.id === commandId);
@@ -49,7 +53,7 @@ export const CommandProvider = ({ children }) => {
   return (
     <CommandContext.Provider
       value={{
-        currentCommand: command ? mapCurrentCommand(command) : defaultCommand,
+        currentCommand: command,
         onChangeCommand,
         onNavigateInCommand,
       }}
@@ -60,21 +64,3 @@ export const CommandProvider = ({ children }) => {
 };
 
 export const useCommand = () => useContext(CommandContext);
-
-const mapCurrentCommand = (command) => ({
-  ...command,
-});
-
-const defaultCommand = {
-  id: "ep",
-  code: "ep",
-  name: "Ejército del Perú",
-  logoImgUrl:
-    "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/logo.webp",
-  entities: [
-    {
-      id: "departamento_de_apoyo_social",
-      name: "DEPARTAMENTO DE APOYO SOCIAL",
-    },
-  ],
-};

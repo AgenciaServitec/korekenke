@@ -4,7 +4,6 @@ import { firestore } from "../firebase";
 import { useAuthentication } from "./AuthenticationProvider";
 import { notification, Spinner } from "../components";
 import { orderBy } from "lodash";
-import { usersByRoleCode } from "../utils";
 import { INITIAL_HIGHER_ENTITIES } from "../data-list";
 import {
   animalsRef,
@@ -20,10 +19,6 @@ import { useCommand } from "./CommandProvider";
 const GlobalDataContext = createContext({
   commands: [],
   users: [],
-  unitUsers: [],
-  departmentUsers: [],
-  sectionUsers: [],
-  officeUsers: [],
   entities: [],
   units: [],
   departments: [],
@@ -47,25 +42,19 @@ export const GlobalDataProvider = ({ children }) => {
       : null,
   );
 
-  // const getUsersQueryByRoleCode = () => {
-  //   if (!authUser) return null;
-  //   let usersQuery;
-  //
-  //   if(currentCommand.id === "ep"){
-  //
-  //   }
-  // };
+  const getUsersQueryByRoleCode = () => {
+    if (!authUser) return null;
+    let usersQuery = usersRef;
+
+    if (authUser.roleCode !== "super_admin") {
+      usersQuery.where("commandsIds", "array-contains", authUser.commandsIds);
+    }
+
+    return usersQuery.where("isDeleted", "==", false);
+  };
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser
-      ? usersRef
-          .where("commands", "array-contains-any", [
-            currentCommand?.id,
-            authUser.initialCommand.id,
-            "ep",
-          ])
-          .where("isDeleted", "==", false)
-      : null,
+    authUser ? getUsersQueryByRoleCode() : null,
   );
 
   const [entities = [], entitiesLoading, entitiesError] = useCollectionData(
@@ -154,26 +143,6 @@ export const GlobalDataProvider = ({ children }) => {
       value={{
         commands: orderBy(commands, (command) => [command.name], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["desc"]),
-        unitUsers: orderBy(
-          usersByRoleCode(users, ["unit_boss", "unit_assistant"]),
-          (user) => [user.createAt],
-          ["desc"],
-        ),
-        departmentUsers: orderBy(
-          usersByRoleCode(users, ["department_boss", "department_assistant"]),
-          (user) => [user.createAt],
-          ["desc"],
-        ),
-        sectionUsers: orderBy(
-          usersByRoleCode(users, ["section_boss", "section_assistant"]),
-          (user) => [user.createAt],
-          ["desc"],
-        ),
-        officeUsers: orderBy(
-          usersByRoleCode(users, ["office_boss", "office_assistant"]),
-          (user) => [user.createAt],
-          ["desc"],
-        ),
         entities: orderBy(entities, "createAt", "desc"),
         units: orderBy(units, "createAt", "desc"),
         departments: orderBy(departments, "createAt", "desc"),

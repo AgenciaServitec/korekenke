@@ -110,8 +110,6 @@ export const RolesByGroupIntegration = ({
     try {
       setSavingSpreadAclsByRoles(true);
 
-      console.log("moduleData: ", moduleData);
-
       const managerId = moduleData?.managerId || null;
       const bossId = moduleData?.bossId || null;
       const secondBossId = moduleData?.secondBossId || null;
