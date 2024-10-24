@@ -32,7 +32,8 @@ export const PdfAnimalRegistrationCardSheet = () => {
     })();
   }, [animal]);
 
-  if (animalLoading) return <Spinner height="80vh" />;
+  if (animalLoading || !animalEntitiesAndBosses)
+    return <Spinner height="80vh" />;
 
   const animalMapper = (animal) => {
     const cardTitle = AnimalsType?.[animal.type]?.cardTitle;

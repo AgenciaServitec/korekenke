@@ -12,6 +12,7 @@ import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import { useAuthentication } from "../../../../providers";
+import { getAnimalEntitiesAndBosses } from "../../../../utils";
 
 export const AnimalsTable = ({
   animals,
