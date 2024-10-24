@@ -21,6 +21,7 @@ import { assign, capitalize, isEmpty, isString, omit } from "lodash";
 import {
   apiErrorNotification,
   getApiErrorResponse,
+  useApiPersonDataByDniGet,
   useApiUserPost,
   useApiUserPut,
 } from "../../../../api";
@@ -29,6 +30,10 @@ import {
   DegreesArmy,
   INITIAL_HIGHER_ENTITIES,
 } from "../../../../data-list";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { fetchCollectionOnce } from "../../../../firebase/utils";
+import { usersRef } from "../../../../firebase/collections";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -36,6 +41,11 @@ export const UserIntegration = () => {
   const { userId } = useParams();
   const { postUser, postUserResponse, postUserLoading } = useApiUserPost();
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
+  const {
+    getPersonDataByDni,
+    getPersonDataByDniLoading,
+    getPersonDataByDniResponse,
+  } = useApiPersonDataByDniGet();
   const { rolesAcls, users, commands } = useGlobalData();
 
   const [user, setUser] = useState({});
@@ -53,6 +63,29 @@ export const UserIntegration = () => {
 
   const saveUser = async (formData) => {
     try {
+      const [userWithDni, userWithEmail, userWithPhoneNumber] =
+        await Promise.all([
+          userByDni(formData.dni),
+          userByCip(formData.cip),
+          userByEmail(formData.email),
+          userByPhoneNumber(formData.phoneNumber),
+        ]);
+
+      if (userWithDni || userWithEmail || userWithPhoneNumber) {
+        return notification({
+          type: "warning",
+          title: `El ${
+            userWithDni
+              ? "dni"
+              : userWithEmail
+                ? "email"
+                : userWithPhoneNumber
+                  ? "celular"
+                  : ""
+          } ya se encuentra registrado.`,
+        });
+      }
+
       //Validate to assignTo when role code change of user
       if (user.roleCode !== formData.roleCode) {
         if (!isEmpty(user?.assignedTo?.id)) {
@@ -84,6 +117,44 @@ export const UserIntegration = () => {
       const errorResponse = await getApiErrorResponse(e);
       apiErrorNotification(errorResponse);
     }
+  };
+
+  const userByDni = async (dni) => {
+    const response = await fetchCollectionOnce(
+      usersRef.where("dni", "==", dni).where("isDeleted", "==", false).limit(1),
+    );
+
+    return response[0];
+  };
+
+  const userByCip = async (cip) => {
+    const response = await fetchCollectionOnce(
+      usersRef.where("cip", "==", cip).where("isDeleted", "==", false).limit(1),
+    );
+
+    return response[0];
+  };
+
+  const userByEmail = async (email) => {
+    const response = await fetchCollectionOnce(
+      usersRef
+        .where("isDeleted", "==", false)
+        .where("email", "==", email)
+        .limit(1),
+    );
+
+    return response[0];
+  };
+
+  const userByPhoneNumber = async (phoneNumber) => {
+    const response = await fetchCollectionOnce(
+      usersRef
+        .where("isDeleted", "==", false)
+        .where("phone.number", "==", phoneNumber)
+        .limit(1),
+    );
+
+    return response[0];
   };
 
   const mapUserToApi = (formData) => {
@@ -139,6 +210,10 @@ export const UserIntegration = () => {
       onGoBack={onGoBack}
       rolesAcls={rolesAcls}
       isSavingUser={postUserLoading || putUserLoading}
+      isNew={isNew}
+      getPersonDataByDni={getPersonDataByDni}
+      getPersonDataByDniLoading={getPersonDataByDniLoading}
+      getPersonDataByDniResponse={getPersonDataByDniResponse}
     />
   );
 };
@@ -150,6 +225,10 @@ const User = ({
   onGoBack,
   rolesAcls,
   isSavingUser,
+  isNew,
+  getPersonDataByDni,
+  getPersonDataByDniLoading,
+  getPersonDataByDniResponse,
 }) => {
   const isSuperAdmin = authUser.roleCode === "super_admin";
 
@@ -190,6 +269,7 @@ const User = ({
     control,
     reset,
     watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -220,6 +300,34 @@ const User = ({
       cgi: user?.cgi || false,
     });
   };
+
+  const userResetFields = (user) => {
+    setValue("firstName", capitalize(user?.firstName || ""));
+    setValue("paternalSurname", capitalize(user?.paternalSurname || ""));
+    setValue("maternalSurname", capitalize(user?.maternalSurname || ""));
+  };
+
+  useEffect(() => {
+    const existsDni = (watch("dni") || "").length === 8;
+
+    if (existsDni && isNew) {
+      (async () => {
+        try {
+          const response = await getPersonDataByDni(watch("dni"));
+
+          if (!getPersonDataByDniResponse.ok) {
+            throw new Error(response);
+          }
+
+          userResetFields(response);
+        } catch (e) {
+          const errorResponse = getApiErrorResponse(e);
+          apiErrorNotification(errorResponse);
+          userResetFields(null);
+        }
+      })();
+    }
+  }, [watch("dni")]);
 
   const submitSaveUser = (formData) => onSaveUser(formData);
 
@@ -258,6 +366,28 @@ const User = ({
                 />
               </Col>
             )}
+            <Col span={24}>
+              <Controller
+                name="dni"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="DNI"
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    error={error(name)}
+                    required={required(name)}
+                    disabled={user?.dni}
+                    suffix={
+                      getPersonDataByDniLoading && (
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                      )
+                    }
+                  />
+                )}
+              />
+            </Col>
             <Col span={24}>
               <Controller
                 name="firstName"
@@ -335,23 +465,6 @@ const User = ({
                     error={error(name)}
                     required={required(name)}
                     disabled={user?.cip}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24}>
-              <Controller
-                name="dni"
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <InputNumber
-                    label="DNI"
-                    onChange={onChange}
-                    value={value}
-                    name={name}
-                    error={error(name)}
-                    required={required(name)}
-                    disabled={user?.dni}
                   />
                 )}
               />

@@ -255,7 +255,7 @@ export const Users = () => {
 
   const options = [
     ...(isSuperAdmin ? [{ label: "Todos", value: "all" }] : []),
-    { label: "Sin Comando", value: "noCommand" },
+    { label: "Sin Comando", value: "ep" },
     ...(isSuperAdmin
       ? [
           {
@@ -284,7 +284,7 @@ export const Users = () => {
       ? user
       : user?.commands?.some((command) => command.id === userType)
         ? user
-        : userType === "noCommand"
+        : userType === "ep"
           ? isEmpty(user.commands)
           : null,
   );
