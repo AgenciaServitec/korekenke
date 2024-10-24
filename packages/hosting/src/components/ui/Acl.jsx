@@ -1,15 +1,17 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import assert from "assert";
 import { useAuthentication } from "../../providers";
 import { isEmpty } from "lodash";
 
 export const Acl = ({ children, category, subCategory, name, redirect }) => {
   const navigate = useNavigate();
 
-  const { authUser } = useAuthentication();
+  const { authUser, logout } = useAuthentication();
 
-  assert(authUser, "Missing user");
+  if (!authUser) {
+    navigate("/login");
+    return logout();
+  }
 
   const [enabled, setEnabled] = useState(true);
 
