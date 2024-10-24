@@ -9,8 +9,12 @@ import { findDegree } from "../../utils";
 import { QRCode } from "../index";
 import styled from "styled-components";
 import { AnimalsInformation } from "./AnimalsInformation";
+import { isEmpty } from "lodash";
 
 export const AnimalCardSheet = ({ animal }) => {
+  const isExistsManagerOrBoss = (managerOrBoss, signature) =>
+    isEmpty(managerOrBoss) ? false : isEmpty(signature);
+
   return (
     <Container>
       <div className="sheet">
@@ -71,11 +75,21 @@ export const AnimalCardSheet = ({ animal }) => {
                     <strong>JEFE DEL SVETRE</strong>
                   </div>
                   <div className="signature_img">
-                    {animal?.entityGUManage?.signaturePhoto && (
-                      <img
-                        src={animal?.entityGUManage?.signaturePhoto.url}
-                        alt="Perfil Izquierdo"
-                      />
+                    {isExistsManagerOrBoss(
+                      animal?.entityGUManage,
+                      animal?.entityGUManage?.signaturePhoto,
+                    ) ? (
+                      <p className="message-empty-signaturePhoto">
+                        EL JEFE DEL {animal?.entityGU?.name} DEBE SUBIR SU FIRMA
+                        EN SU CUENTA
+                      </p>
+                    ) : (
+                      animal?.entityGUManage?.signaturePhoto && (
+                        <img
+                          src={animal?.entityGUManage?.signaturePhoto.url}
+                          alt="Perfil Izquierdo"
+                        />
+                      )
                     )}
                   </div>
                   <div className="signature_info">
@@ -100,11 +114,21 @@ export const AnimalCardSheet = ({ animal }) => {
                     <strong> JEFE DE UNIDAD</strong>
                   </div>
                   <div className="signature_img">
-                    {animal?.unitBoss?.signaturePhoto && (
-                      <img
-                        src={animal?.unitBoss?.signaturePhoto.url}
-                        alt="Perfil Izquierdo"
-                      />
+                    {isExistsManagerOrBoss(
+                      animal?.unitBoss,
+                      animal?.unitBoss?.signaturePhoto,
+                    ) ? (
+                      <p className="message-empty-signaturePhoto">
+                        EL JEFE DEL {animal?.unit?.name} DEBE SUBIR SU FIRMA EN
+                        SU CUENTA
+                      </p>
+                    ) : (
+                      animal?.unitBoss?.signaturePhoto && (
+                        <img
+                          src={animal?.unitBoss?.signaturePhoto.url}
+                          alt="Perfil Izquierdo"
+                        />
+                      )
                     )}
                   </div>
                   <div className="signature_info">
@@ -129,11 +153,22 @@ export const AnimalCardSheet = ({ animal }) => {
                     <strong>OFICIAL VETERINARIO</strong>
                   </div>
                   <div className="signature_img">
-                    {animal?.departmentBoss?.signaturePhoto && (
-                      <img
-                        src={animal?.departmentBoss?.signaturePhoto.url}
-                        alt="Perfil Izquierdo"
-                      />
+                    {isExistsManagerOrBoss(
+                      animal?.departmentBoss,
+                      animal?.departmentBoss?.signaturePhoto,
+                    ) ? (
+                      <p className="message-empty-signaturePhoto">
+                        EL JEFE DEL{" "}
+                        {`${animal?.department?.name || ""} DEL ${animal?.unit?.name || ""}`}{" "}
+                        DEBE SUBIR SU FIRMA EN SU CUENTA
+                      </p>
+                    ) : (
+                      animal?.departmentBoss?.signaturePhoto && (
+                        <img
+                          src={animal?.departmentBoss?.signaturePhoto.url}
+                          alt="Perfil Izquierdo"
+                        />
+                      )
                     )}
                   </div>
                   <div className="signature_info">
@@ -200,6 +235,7 @@ const Container = styled.div`
       display: grid;
       grid-template-columns: auto 1fr auto;
       margin-bottom: 0.5em;
+
       &__item-left {
         img {
           width: auto;
@@ -207,22 +243,27 @@ const Container = styled.div`
           object-fit: contain;
         }
       }
+
       &__item-center {
         display: grid;
         place-items: center;
+
         div {
           text-align: center;
+
           h2,
           h3 {
             margin: 0;
             font-weight: 500;
           }
+
           h2 {
             font-size: 2em;
             font-weight: 600;
           }
         }
       }
+
       &__item-right {
         img {
           width: auto;
@@ -252,15 +293,18 @@ const Container = styled.div`
         width: 100%;
         height: 100%;
         margin: auto;
+
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
+
         &:first-child {
           display: flex;
           justify-content: end;
         }
+
         &:last-child {
           display: flex;
           justify-content: start;
@@ -273,6 +317,7 @@ const Container = styled.div`
     text-transform: uppercase;
     margin-bottom: 1em;
     font-size: 0.75em;
+
     p {
       text-transform: uppercase;
     }
@@ -303,10 +348,22 @@ const Container = styled.div`
       }
 
       .signature_img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         height: 5em;
+
         img {
           width: auto;
           height: 5em;
+        }
+
+        .message-empty-signaturePhoto {
+          width: 9rem;
+          font-size: 0.45rem;
+          color: red;
+          font-weight: 500;
         }
       }
 
@@ -318,6 +375,7 @@ const Container = styled.div`
         width: 19em;
         padding-top: 0.3em;
         text-transform: uppercase;
+
         p {
           margin: 0;
           letter-spacing: -1px;

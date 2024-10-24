@@ -8,28 +8,32 @@ import {
 export const getAnimalEntitiesAndBosses = async (animal) => {
   if (!animal) return {};
 
-  const _unit = await fetchUnit(animal?.unitId);
-  if (!_unit) return {};
+  const unit = await fetchUnit(animal?.unitId);
+  if (!unit) return {};
 
-  const { entityId, departmentId } = _unit;
+  const { entityId, departmentId } = unit;
 
-  const _department = departmentId ? await fetchDepartment(departmentId) : {};
-  const _entity = entityId ? await fetchEntity(entityId) : {};
+  const p0 = departmentId ? fetchDepartment(departmentId) : {};
+  const p1 = entityId ? fetchEntity(entityId) : {};
 
-  const _entityManage = _entity?.managerId
-    ? await fetchUser(_entity.managerId)
-    : {};
-  const __unitBoss = _unit?.bossId ? await fetchUser(_unit.bossId) : {};
-  const _departmentBoss = _department?.bossId
-    ? await fetchUser(_department.bossId)
-    : {};
+  const [department, entityGU] = await Promise.all([p0, p1]);
+
+  const p2 = entityGU.managerId ? fetchUser(entityGU.managerId) : {};
+  const p3 = unit.bossId ? fetchUser(unit.bossId) : {};
+  const p4 = department.bossId ? fetchUser(department.bossId) : {};
+
+  const [entityGUManage, unitBoss, departmentBoss] = await Promise.all([
+    p2,
+    p3,
+    p4,
+  ]);
 
   return {
-    entityGU: _entity || {},
-    entityGUManage: _entityManage || {},
-    department: _department || {},
-    unit: _unit || {},
-    departmentBoss: _departmentBoss || {},
-    unitBoss: __unitBoss || {},
+    entityGU: entityGU || {},
+    entityGUManage: entityGUManage || {},
+    unit: unit || {},
+    unitBoss: unitBoss || {},
+    department: department || {},
+    departmentBoss: departmentBoss || {},
   };
 };
