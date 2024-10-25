@@ -34,7 +34,8 @@ import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import {
-  animalParentsDefaultData,
+  animalParentsDefaultDataByFather,
+  animalParentsDefaultDataByMother,
   AnimalsType,
 } from "../../../../../data-list";
 import { isProduction } from "../../../../../config";
@@ -105,7 +106,7 @@ export const AnimalIntegration = () => {
               registrationNumber: "",
               raceOrLine: "",
               relationship: "father",
-              parents: animalParentsDefaultData,
+              parents: animalParentsDefaultDataByFather,
             },
             {
               id: uuidv4(),
@@ -114,7 +115,7 @@ export const AnimalIntegration = () => {
               registrationNumber: "",
               raceOrLine: "",
               relationship: "mother",
-              parents: animalParentsDefaultData,
+              parents: animalParentsDefaultDataByMother,
             },
           ],
         }

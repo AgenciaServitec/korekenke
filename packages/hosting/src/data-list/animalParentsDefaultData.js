@@ -1,9 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 
-const createAnimalParent = (relationship, parents = [], props) => {
+const createAnimalParent = (
+  id = uuidv4(),
+  relationship,
+  parents = [],
+  type,
+  props,
+) => {
   return {
-    id: uuidv4(),
-    type: "default",
+    id: id,
+    ...(type && { type: type }),
     fullName: "",
     registrationNumber: "",
     raceOrLine: "",
@@ -13,7 +19,7 @@ const createAnimalParent = (relationship, parents = [], props) => {
   };
 };
 
-export const animalParentsDefaultData = [
+export const animalParentsDefaultDataByFather = [
   {
     id: uuidv4(),
     type: "default",
@@ -22,14 +28,24 @@ export const animalParentsDefaultData = [
     raceOrLine: "",
     relationship: "father",
     parents: [
-      createAnimalParent("father", [
-        createAnimalParent("father", []),
-        createAnimalParent("mother", []),
-      ]),
-      createAnimalParent("mother", [
-        createAnimalParent("father", []),
-        createAnimalParent("mother", []),
-      ]),
+      createAnimalParent(
+        uuidv4(),
+        "father",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
+      createAnimalParent(
+        uuidv4(),
+        "mother",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
     ],
   },
   {
@@ -40,14 +56,82 @@ export const animalParentsDefaultData = [
     raceOrLine: "",
     relationship: "mother",
     parents: [
-      createAnimalParent("father", [
-        createAnimalParent("father", []),
-        createAnimalParent("mother", []),
-      ]),
-      createAnimalParent("mother", [
-        createAnimalParent("father", []),
-        createAnimalParent("mother", []),
-      ]),
+      createAnimalParent(
+        uuidv4(),
+        "father",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
+      createAnimalParent(
+        uuidv4(),
+        "mother",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
+    ],
+  },
+];
+export const animalParentsDefaultDataByMother = [
+  {
+    id: uuidv4(),
+    type: "default",
+    fullName: "",
+    registrationNumber: "",
+    raceOrLine: "",
+    relationship: "father",
+    parents: [
+      createAnimalParent(
+        uuidv4(),
+        "father",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
+      createAnimalParent(
+        uuidv4(),
+        "mother",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
+    ],
+  },
+  {
+    id: uuidv4(),
+    type: "default",
+    fullName: "",
+    registrationNumber: "",
+    raceOrLine: "",
+    relationship: "mother",
+    parents: [
+      createAnimalParent(
+        uuidv4(),
+        "father",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
+      createAnimalParent(
+        uuidv4(),
+        "mother",
+        [
+          createAnimalParent(uuidv4(), "father", []),
+          createAnimalParent(uuidv4(), "mother", []),
+        ],
+        "default",
+      ),
     ],
   },
 ];
