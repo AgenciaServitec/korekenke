@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 const createAnimalParent = (relationship, parents = [], props) => {
   return {
     id: uuidv4(),
+    type: "default",
     fullName: "",
     registrationNumber: "",
     raceOrLine: "",
@@ -15,6 +16,7 @@ const createAnimalParent = (relationship, parents = [], props) => {
 export const animalParentsDefaultData = [
   {
     id: uuidv4(),
+    type: "default",
     fullName: "",
     registrationNumber: "",
     raceOrLine: "",
@@ -32,6 +34,7 @@ export const animalParentsDefaultData = [
   },
   {
     id: uuidv4(),
+    type: "default",
     fullName: "",
     registrationNumber: "",
     raceOrLine: "",

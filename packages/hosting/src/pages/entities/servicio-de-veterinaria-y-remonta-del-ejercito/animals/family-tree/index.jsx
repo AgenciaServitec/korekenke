@@ -10,7 +10,7 @@ import {
   Space,
   Title,
 } from "../../../../../components";
-import { faArrowLeft, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router";
 import { fetchAnimal, updateAnimal } from "../../../../../firebase/collections";
 import { FamilyTreeModalComponent } from "./FamilyTreeModalComponent";
