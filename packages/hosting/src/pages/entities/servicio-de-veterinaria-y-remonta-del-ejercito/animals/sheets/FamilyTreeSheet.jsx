@@ -9,18 +9,6 @@ export const FamilyTreeSheet = ({ animal }) => {
     return (animal?.parents || []).map((_animal) => {
       count = count + 1;
 
-      if (count === 4) {
-        return (
-          <ItemParent key={1} className="item" existsInformation={false}>
-            <div className="item-information">
-              <span className="full-name"></span>
-              <span></span>
-              <span></span>
-            </div>
-          </ItemParent>
-        );
-      }
-
       return (
         <ItemParent
           key={_animal.id}
@@ -32,7 +20,11 @@ export const FamilyTreeSheet = ({ animal }) => {
             <span>{_animal?.registrationNumber}</span>
             <span>{_animal?.raceOrLine}</span>
           </div>
-          {<div className="family-tree-branch">{familyTreeView(_animal)}</div>}
+          {count === 4 ? (
+            ""
+          ) : (
+            <div className="family-tree-branch">{familyTreeView(_animal)}</div>
+          )}
         </ItemParent>
       );
     });
@@ -115,7 +107,7 @@ const ItemParent = styled.div`
     flex-direction: column;
     justify-content: center;
     padding: ${({ existsInformation }) =>
-      existsInformation ? " 0.1rem 0.2em" : " .8rem 0.2em"};
+      existsInformation ? " 0.1rem 0.2em" : " .9rem 0.2em"};
 
     border-bottom: 1px solid #000;
     gap: 0.2em;
