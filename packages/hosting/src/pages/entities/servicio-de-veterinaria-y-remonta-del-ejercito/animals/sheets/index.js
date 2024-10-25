@@ -49,29 +49,13 @@ export const PdfAnimalRegistrationCardSheet = () => {
 
   const animalView = animalMapper(animal);
 
-  const familyTreeView = (animal) =>
-    (animal?.parents || []).map((_animal) => {
-      if (!_animal.parents) return;
-
-      return (
-        <div key={_animal.id} className="item">
-          <div className="item-information">
-            <span>{_animal?.fullName}</span>
-            <span>{_animal?.registrationNumber}</span>
-            <span>{_animal?.raceOrLine}</span>
-          </div>
-          <div className="family-tree-branch">{familyTreeView(_animal)}</div>
-        </div>
-      );
-    });
-
   return (
     <PDF>
       <Sheet layout="landscape">
         <AnimalCardSheet animal={animalView} />
       </Sheet>
       <Sheet layout="landscape">
-        <FamilyTreeSheet animal={animalView} familyTreeView={familyTreeView} />
+        <FamilyTreeSheet animal={animalView} />
       </Sheet>
     </PDF>
   );

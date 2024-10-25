@@ -21,3 +21,4 @@ export { default as AnimalsType } from "./animals.json";
 export { default as ApplicantDocumentsOrdered } from "./applicantDocumentsOrdered.json";
 export { default as GroupRoles } from "./groupRoles.json";
 export { default as EducationLevel } from "./educationLevel.json";
+export * from "./animalParentsDefaultData";

@@ -1,7 +1,43 @@
 import React from "react";
 import styled from "styled-components";
+import { isEmpty } from "lodash";
 
-export const FamilyTreeSheet = ({ animal, familyTreeView }) => {
+export const FamilyTreeSheet = ({ animal }) => {
+  let count = 0;
+
+  const familyTreeView = (animal) => {
+    return (animal?.parents || []).map((_animal) => {
+      count = count + 1;
+
+      if (count === 4) {
+        return (
+          <ItemParent key={1} className="item" existsInformation={false}>
+            <div className="item-information">
+              <span className="full-name"></span>
+              <span></span>
+              <span></span>
+            </div>
+          </ItemParent>
+        );
+      }
+
+      return (
+        <ItemParent
+          key={_animal.id}
+          className="item"
+          existsInformation={!isEmpty(_animal?.fullName)}
+        >
+          <div className="item-information">
+            <span className="full-name">{_animal?.fullName}</span>
+            <span>{_animal?.registrationNumber}</span>
+            <span>{_animal?.raceOrLine}</span>
+          </div>
+          {<div className="family-tree-branch">{familyTreeView(_animal)}</div>}
+        </ItemParent>
+      );
+    });
+  };
+
   return (
     <Container>
       <div className="sheet">
@@ -34,7 +70,7 @@ const Container = styled.div`
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     border: 5px solid #000;
     outline: 1px solid #000;
     outline-offset: 2px;
@@ -43,7 +79,7 @@ const Container = styled.div`
     .title,
     .subTitle {
       padding: 0.5rem;
-      border-bottom: 1.5px solid #000;
+      border-bottom: 1px solid #000;
       text-align: center;
 
       h2 {
@@ -60,25 +96,36 @@ const Container = styled.div`
 
   .family-tree-section {
     text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+`;
 
-    .item {
-      display: flex;
-      font-size: 0.5rem;
+const ItemParent = styled.div`
+  display: flex;
+  font-size: 0.46rem;
 
-      .item-information {
-        min-width: 15.52rem;
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        justify-content: center;
-        padding: 0.1rem;
-        border-bottom: 1.5px solid #000;
-      }
+  .item-information {
+    min-width: 15.52rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    padding: ${({ existsInformation }) =>
+      existsInformation ? " 0.1rem 0.2em" : " .8rem 0.2em"};
 
-      .family-tree-branch {
-        display: flex;
-        flex-direction: column;
-      }
+    border-bottom: 1px solid #000;
+    gap: 0.2em;
+    .full-name {
+      font-weight: 700;
     }
+  }
+
+  .family-tree-branch {
+    display: flex;
+    flex-direction: column;
   }
 `;

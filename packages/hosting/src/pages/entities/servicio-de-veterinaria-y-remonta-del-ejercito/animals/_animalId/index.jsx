@@ -33,7 +33,10 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import { AnimalsType } from "../../../../../data-list";
+import {
+  animalParentsDefaultData,
+  AnimalsType,
+} from "../../../../../data-list";
 import { isProduction } from "../../../../../config";
 
 export const AnimalIntegration = () => {
@@ -101,7 +104,7 @@ export const AnimalIntegration = () => {
               registrationNumber: "",
               raceOrLine: "",
               relationship: "father",
-              parents: [],
+              parents: animalParentsDefaultData,
             },
             {
               id: uuidv4(),
@@ -109,7 +112,7 @@ export const AnimalIntegration = () => {
               registrationNumber: "",
               raceOrLine: "",
               relationship: "mother",
-              parents: [],
+              parents: animalParentsDefaultData,
             },
           ],
         }
