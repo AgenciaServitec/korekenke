@@ -23,7 +23,7 @@ export const AnimalParentsInformation = ({
         {animal?.relationship && (
           <div className={`item-information ${animal?.relationship}`}>
             {animal?.relationship && (
-              <span className="relationship">
+              <div className="relationship">
                 {isFather && (
                   <Tag
                     color="#0285B4"
@@ -40,11 +40,13 @@ export const AnimalParentsInformation = ({
                     Madre
                   </Tag>
                 )}
-              </span>
+              </div>
             )}
-            <span>{animal?.fullName || "Sin registro"}</span>
-            <span>{animal?.registrationNumber || "Sin registro"}</span>
-            <span>{animal?.raceOrLine || "Sin registro"}</span>
+            <div className="content">
+              <strong>{animal?.fullName || "Sin registro"}</strong>
+              <span>{animal?.registrationNumber || "Sin registro"}</span>
+              <span>{animal?.raceOrLine || "Sin registro"}</span>
+            </div>
           </div>
         )}
         <div className="buttons">
@@ -97,7 +99,6 @@ const WrapperContent = styled.div`
       flex-direction: column;
       border: 2px solid #000;
       border-radius: 0.5rem;
-      padding: 0.8rem;
       text-align: center;
       text-transform: uppercase;
       position: relative;
@@ -113,10 +114,18 @@ const WrapperContent = styled.div`
       }
 
       .relationship {
-        margin-bottom: 1rem;
-        * {
+        .ant-tag {
           width: 100%;
+          border-top-left-radius: 0.37rem;
+          border-top-right-radius: 0.37rem;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
         }
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+        padding: 0.4em 0.2em;
       }
     }
 
