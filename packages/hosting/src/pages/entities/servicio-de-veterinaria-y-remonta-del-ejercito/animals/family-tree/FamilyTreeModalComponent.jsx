@@ -125,12 +125,12 @@ const FamilyTreeModal = ({
   loading,
 }) => {
   const schema = yup.object({
-    fatherFullName: yup.string().required(),
-    fatherRegistrationNumber: yup.string().required(),
-    fatherRaceOrLine: yup.string().required(),
-    motherFullName: yup.string().required(),
-    motherRegistrationNumber: yup.string().required(),
-    motherRaceOrLine: yup.string().required(),
+    fatherFullName: yup.string().notRequired(),
+    fatherRegistrationNumber: yup.string().notRequired(),
+    fatherRaceOrLine: yup.string().notRequired(),
+    motherFullName: yup.string().notRequired(),
+    motherRegistrationNumber: yup.string().notRequired(),
+    motherRaceOrLine: yup.string().notRequired(),
   });
 
   const {
