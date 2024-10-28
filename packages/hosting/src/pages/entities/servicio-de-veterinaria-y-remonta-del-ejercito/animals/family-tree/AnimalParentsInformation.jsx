@@ -78,16 +78,19 @@ export const AnimalParentsInformation = ({
             </>
           )}
           <div className="arrow-line"></div>
+          <div className="line-white"></div>
         </div>
       </div>
-      <div className="family-tree-branches">{children}</div>
+      <div className="family-tree-branches">
+        <div className="root-line"></div>
+        <div className="family-tree-branches-content">{children}</div>
+      </div>
     </WrapperContent>
   );
 };
 
 const WrapperContent = styled.div`
   display: flex;
-  align-items: center;
   gap: 2rem;
 
   .item {
@@ -102,16 +105,6 @@ const WrapperContent = styled.div`
       text-align: center;
       text-transform: uppercase;
       position: relative;
-
-      &::before {
-        content: "";
-        width: 1rem;
-        height: 2rem;
-        position: absolute;
-        top: 50%;
-        left: -1rem;
-        border: 2px solid #000;
-      }
 
       .relationship {
         .ant-tag {
@@ -134,7 +127,13 @@ const WrapperContent = styled.div`
         transform: translateY(-8%);
         border-right: none;
         border-bottom: none;
-        border-top-left-radius: 0.5rem;
+      }
+      &::after {
+        min-height: 105%;
+        transform: translateY(5%);
+        border-top: none;
+        border-bottom: none;
+        border-right: none;
       }
     }
 
@@ -143,7 +142,13 @@ const WrapperContent = styled.div`
         transform: translateY(-80%);
         border-top: none;
         border-right: none;
-        border-bottom-left-radius: 0.5rem;
+      }
+      &::after {
+        min-height: 105%;
+        transform: translateY(-100%);
+        border-top: none;
+        border-bottom: none;
+        border-right: none;
       }
     }
 
@@ -151,17 +156,18 @@ const WrapperContent = styled.div`
       position: relative;
 
       .arrow-line {
-        width: 3.5px;
-        height: 2px;
+        width: 1rem;
+        height: 1rem;
         position: absolute;
         top: 50%;
         right: -3.5px;
         transform: translateY(-50%);
+        z-index: 500;
 
         &::before {
           content: "";
           width: 1rem;
-          height: 2rem;
+          height: 1.1rem;
           position: absolute;
           top: 50%;
           right: -1rem;
@@ -175,7 +181,7 @@ const WrapperContent = styled.div`
         &::after {
           content: "";
           width: 1rem;
-          height: 2rem;
+          height: 1.1rem;
           position: absolute;
           top: 50%;
           right: -1rem;
@@ -185,6 +191,17 @@ const WrapperContent = styled.div`
           border-bottom: none;
           border-top-right-radius: 0.5rem;
         }
+      }
+
+      .line-white {
+        width: 2px;
+        height: 2rem;
+        position: absolute;
+        top: 50%;
+        right: -1.2rem;
+        transform: translateY(-50%);
+        background-color: #fff;
+        z-index: 1;
       }
     }
 
@@ -197,7 +214,27 @@ const WrapperContent = styled.div`
 
   .family-tree-branches {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    position: relative;
+
+    .root-line {
+      width: 1rem;
+      height: 50%;
+      min-height: 3rem;
+      position: absolute;
+      top: 50%;
+      left: -0.9rem;
+      transform: translateY(-50%);
+      border: 2px solid #000;
+      border-right: none;
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+
+    .family-tree-branches-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 `;
