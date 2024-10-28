@@ -49,10 +49,10 @@ export const FamilyTreeModalComponent = ({
   const fatherInformation = currentAnimal?.parents?.[0] || {};
   const motherInformation = currentAnimal?.parents?.[1] || {};
 
-  const mapForm = (formData, animal) => [
+  const mapForm = (formData) => [
     {
       id: fatherInformation?.id || uuidv4(),
-      type: animal?.type,
+      isDefault: !!fatherInformation?.id,
       fullName: formData.fatherFullName,
       registrationNumber: formData.fatherRegistrationNumber,
       raceOrLine: formData.fatherRaceOrLine,
@@ -63,7 +63,7 @@ export const FamilyTreeModalComponent = ({
     },
     {
       id: motherInformation?.id || uuidv4(),
-      type: animal?.type,
+      isDefault: !!fatherInformation?.id,
       fullName: formData.motherFullName,
       registrationNumber: formData.motherRegistrationNumber,
       raceOrLine: formData.motherRaceOrLine,
@@ -84,7 +84,7 @@ export const FamilyTreeModalComponent = ({
           animal,
           animal.parents,
           parentId,
-          mapForm(formData, animal),
+          mapForm(formData),
         ),
       });
 

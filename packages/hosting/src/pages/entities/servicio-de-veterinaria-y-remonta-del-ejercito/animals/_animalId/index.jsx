@@ -101,7 +101,7 @@ export const AnimalIntegration = () => {
           parents: [
             {
               id: uuidv4(),
-              type: "default",
+              isDefault: true,
               fullName: formData.father,
               registrationNumber: "",
               raceOrLine: "",
@@ -110,7 +110,7 @@ export const AnimalIntegration = () => {
             },
             {
               id: uuidv4(),
-              type: "default",
+              isDefault: true,
               fullName: formData.mother,
               registrationNumber: "",
               raceOrLine: "",

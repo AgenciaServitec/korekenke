@@ -67,7 +67,7 @@ export const AnimalParentsInformation = ({
                   onClick={() => onAddAndEditAnimalParents(animal.id)}
                 />
               </div>
-              {animal?.relationship && animal?.type !== "default" && (
+              {animal?.relationship && !animal?.["isDefault"] && (
                 <IconAction
                   tooltipTitle="Eliminar familiares"
                   icon={faTrash}

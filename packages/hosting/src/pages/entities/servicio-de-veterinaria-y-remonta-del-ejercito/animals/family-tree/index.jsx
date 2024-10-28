@@ -42,7 +42,9 @@ export const FamilyTreeIntegration = () => {
     id,
     newValues,
   ) => {
-    if (animal?.id === parentId) return [...newValues];
+    if (animal?.id === parentId) {
+      return [...newValues];
+    }
 
     if (typeof nodes !== "string")
       return nodes.map((node) => {
@@ -51,6 +53,8 @@ export const FamilyTreeIntegration = () => {
         }
 
         if (!isEmpty(node.parents)) {
+          console.log("ENTRE33!!");
+
           return {
             ...node,
             parents: findAndUpdateAnimalInformation(
