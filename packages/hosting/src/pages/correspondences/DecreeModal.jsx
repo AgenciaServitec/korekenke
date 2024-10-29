@@ -15,7 +15,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
 import { updateCorrespondence } from "../../firebase/collections";
 import { DecreeList } from "../../data-list";
 
-export const DecreeModal = ({ correspondence, onCloseDecreeModal }) => {
+export const DecreeModal = ({ correspondence, onCloseModal }) => {
   const { assignUpdateProps, assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
@@ -52,7 +52,7 @@ export const DecreeModal = ({ correspondence, onCloseDecreeModal }) => {
         }),
       );
 
-      onCloseDecreeModal();
+      onCloseModal();
       notification({
         type: "success",
         title: "El decreto ha sido realizado exitosamente",

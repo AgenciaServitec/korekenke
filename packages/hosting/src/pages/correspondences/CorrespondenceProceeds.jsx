@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDevice, useFormUtils } from "../../hooks";
 import { updateCorrespondence } from "../../firebase/collections";
 
-export const CorrespondenceProceeds = ({
+export const CorrespondenceProceedsModal = ({
   visibleModal,
   onSetVisibleModal,
   correspondence,
@@ -35,7 +35,7 @@ export const CorrespondenceProceeds = ({
     resolver: yupResolver(schema),
   });
 
-  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+  const { required, error } = useFormUtils({ errors, schema });
 
   const onSubmitCorrespondenceProceeds = async (formData) => {
     try {

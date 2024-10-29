@@ -20,14 +20,17 @@ import {
   CorrespondenceModalProvider,
   useCorrespondenceModal,
 } from "./Correspondence.ModalProvider";
-import { DecreeModal } from "./DecreeModal";
 import { CorrespondencesTable } from "./Correspondences.Table";
 import { ReplyCorrespondenceModal } from "./ReplyCorrespondence";
 import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInformation";
 import { useAuthentication } from "../../providers";
 import { ReceivedByModal } from "./ReceivedBy";
-import { CorrespondenceProceeds } from "./CorrespondenceProceeds";
+import { CorrespondenceProceedsModal } from "./CorrespondenceProceeds";
 import { fetchEntityManager } from "../../utils";
+import { CorrespondenceFilesModal } from "./CorrespondenceFilesModal";
+
+const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
+const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
@@ -42,7 +45,7 @@ export const CorrespondencesIntegration = () => {
     );
 
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
-  const [visibleReplyInformatioModal, setVisibleReplyInformationModal] =
+  const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
   const [visibleReceivedByModal, setVisibleReceivedByModal] = useState(false);
   const [
@@ -100,13 +103,11 @@ export const CorrespondencesIntegration = () => {
   };
 
   const onChangeStatusToInProgress = async (correspondence) => {
-    const MdpEntityManager = await fetchEntityManager(
-      "departamento-de-apoyo-social",
-    );
+    const entityGuManager = await fetchEntityManager(ENTITY_GU_NAME_ID);
 
     if (
       correspondence?.status === "pending" &&
-      MdpEntityManager.id === authUser.id
+      entityGuManager.id === authUser.id
     ) {
       await updateCorrespondence(correspondence.id, {
         status: "inProgress",
@@ -118,6 +119,8 @@ export const CorrespondencesIntegration = () => {
     <Spin size="large" spinning={correspondencesLoading}>
       <CorrespondenceModalProvider>
         <Correspondences
+          entityGuDASNameId={ENTITY_GU_NAME_ID}
+          departmentNameId={DEPARTMENT_NAME_ID}
           correspondences={correspondences}
           correspondence={correspondence}
           onChangeStatusToInProgress={onChangeStatusToInProgress}
@@ -128,13 +131,13 @@ export const CorrespondencesIntegration = () => {
           onAddReplyCorrespondence={onAddReplyCorrespondence}
           visibleReplyModal={visibleReplyModal}
           onSetVisibleReplyModal={setVisibleReplyModal}
-          visibleReplyInformatioModal={visibleReplyInformatioModal}
+          visibleReplyInformationModal={visibleReplyInformationModal}
           onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
           onShowReplyCorrespondenceInformation={
             onShowReplyCorrespondenceInformation
           }
           visibleReceivedByModal={visibleReceivedByModal}
-          onSetvisibleReceivedByModal={setVisibleReceivedByModal}
+          onSetVisibleReceivedByModal={setVisibleReceivedByModal}
           onAddCorrespondenceReceivedBy={onAddCorrespondenceReceivedBy}
           visibleCorrespondenceProceedsModal={
             visibleCorrespondenceProceedsModal
@@ -150,43 +153,39 @@ export const CorrespondencesIntegration = () => {
 };
 
 const Correspondences = ({
+  entityGuDASNameId,
+  departmentNameId,
   correspondences,
   correspondence,
   onChangeStatusToInProgress,
   onAddCorrespondence,
   onEditCorrespondence,
-  onConfirmDeleteCorrespondence,
-  onGoToDecreeSheets,
   onAddReplyCorrespondence,
   visibleReplyModal,
   onSetVisibleReplyModal,
-  visibleReplyInformatioModal,
+  visibleReplyInformationModal,
   onSetVisibleReplyInformationModal,
   onShowReplyCorrespondenceInformation,
   visibleReceivedByModal,
-  onSetvisibleReceivedByModal,
+  onSetVisibleReceivedByModal,
   onAddCorrespondenceReceivedBy,
   visibleCorrespondenceProceedsModal,
   onSetVisibleCorrespondenceProceedsModal,
   onCorrespondenceProceeds,
 }) => {
   const { isTablet } = useDevice();
-  const { onShowCorrespondenceModal, onCloseCorrespondenceModal } =
-    useCorrespondenceModal();
+  const { onShowCorrespondenceModal } = useCorrespondenceModal();
 
   const filterCorrespondencesView = correspondences.filter(
     (reception) => reception,
   );
 
-  const onDecreeCorrespondence = (correspondence) => {
+  const onCorrespondenceFiles = (correspondence) => {
     onShowCorrespondenceModal({
-      title: "Decreto",
+      title: "Archivos de Correspondencia",
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
-        <DecreeModal
-          correspondence={correspondence}
-          onCloseDecreeModal={onCloseCorrespondenceModal}
-        />
+        <CorrespondenceFilesModal correspondence={correspondence} />
       ),
     });
   };
@@ -212,22 +211,22 @@ const Correspondences = ({
         </div>
         <div>
           <CorrespondencesTable
+            entityGuDASNameId={entityGuDASNameId}
+            departmentNameId={departmentNameId}
             correspondences={filterCorrespondencesView}
-            onChangeStatusToInProgress={onChangeStatusToInProgress}
             onClickEditCorrespondence={onEditCorrespondence}
-            onClickDeleteCorrespondence={onConfirmDeleteCorrespondence}
-            onDecreeCorrespondence={onDecreeCorrespondence}
-            onGoToDecreeSheets={onGoToDecreeSheets}
             onAddReplyCorrespondence={onAddReplyCorrespondence}
             onShowReplyCorrespondenceInformation={
               onShowReplyCorrespondenceInformation
             }
             onAddCorrespondenceReceivedBy={onAddCorrespondenceReceivedBy}
             onCorrespondenceProceeds={onCorrespondenceProceeds}
+            onCorrespondenceFiles={onCorrespondenceFiles}
+            onChangeStatusToInProgress={onChangeStatusToInProgress}
           />
         </div>
         <ReplyCorrespondenceInformationModal
-          visibleModal={visibleReplyInformatioModal}
+          visibleModal={visibleReplyInformationModal}
           onSetVisibleModal={onSetVisibleReplyInformationModal}
           response={correspondence?.response}
         />
@@ -238,10 +237,10 @@ const Correspondences = ({
         />
         <ReceivedByModal
           visibleModal={visibleReceivedByModal}
-          onSetVisibleModal={onSetvisibleReceivedByModal}
+          onSetVisibleModal={onSetVisibleReceivedByModal}
           correspondence={correspondence}
         />
-        <CorrespondenceProceeds
+        <CorrespondenceProceedsModal
           visibleModal={visibleCorrespondenceProceedsModal}
           onSetVisibleModal={onSetVisibleCorrespondenceProceedsModal}
           correspondence={correspondence}

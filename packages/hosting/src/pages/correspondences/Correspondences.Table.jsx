@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import {
   Acl,
   IconAction,
-  ShowImagesAndDocumentsModal,
   Space,
   TableVirtualized,
   Tag,
@@ -14,7 +13,6 @@ import {
   faEnvelopeOpenText,
   faEye,
   faFilter,
-  faPrint,
   faReply,
 } from "@fortawesome/free-solid-svg-icons";
 import { CorrespondencesStatus } from "../../data-list";
@@ -22,55 +20,52 @@ import { useAuthentication } from "../../providers";
 import { fetchDepartmentBoss, fetchEntityManager } from "../../utils";
 
 export const CorrespondencesTable = ({
+  entityGuDASNameId,
+  departmentNameId,
   correspondences,
-  onChangeStatusToInProgress,
   onClickEditCorrespondence,
-  onClickPrintTicket,
   onAddReplyCorrespondence,
   onShowReplyCorrespondenceInformation,
   onAddCorrespondenceReceivedBy,
   onCorrespondenceProceeds,
+  onCorrespondenceFiles,
+  onChangeStatusToInProgress,
 }) => {
   const { authUser } = useAuthentication();
-  const [departmentMPBoss, setDepartmentMPBoss] = useState({});
-  const [entityGuDASBoss, setEntityGuDASBoss] = useState({});
-  const [isVisibleFiles, setIsVisibleFiles] = useState(false);
-  const [correspondence, setCorrespondence] = useState(null);
-
-  const entityGuDASNameId = "departamento-de-apoyo-social";
-  const departmentNameId = "mesa-de-partes";
+  const [bossEntityGu, setBossEntityGu] = useState({});
+  const [bossMDP, setBossMDP] = useState({});
 
   useEffect(() => {
     (async () => {
-      const _entityDasBoss = await fetchEntityManager(entityGuDASNameId);
-      const _departmentMpBoss = await fetchDepartmentBoss(departmentNameId);
+      const p0 = fetchEntityManager(entityGuDASNameId);
+      const p1 = fetchDepartmentBoss(departmentNameId);
 
-      setEntityGuDASBoss(_entityDasBoss);
-      setDepartmentMPBoss(_departmentMpBoss);
+      const [_bossEntityGu, _bossMDP] = await Promise.all([p0, p1]);
+
+      setBossEntityGu(_bossEntityGu);
+      setBossMDP(_bossMDP);
     })();
   }, []);
+
+  const isBossMDP = authUser.id === bossMDP?.id;
 
   const correspondencesViewBy = correspondences.filter((correspondence) => {
     if (["super_admin"].includes(authUser.roleCode)) return correspondence;
 
     if (correspondence.userId === authUser.id) return correspondence;
 
-    if (
-      ["waiting", "notProceeds"].includes(correspondence.status) ===
-      ["department_boss"].includes(authUser.roleCode)
-    )
+    if (["waiting", "notProceeds"].includes(correspondence.status) && isBossMDP)
       return correspondence;
 
     if (
       !["waiting", "notProceeds"].includes(correspondence.status) ===
-      ["department_boss"].includes(authUser.roleCode)
+      ["manager"].includes(authUser.roleCode)
     )
       return correspondence;
   });
 
-  const onShowFiles = async (correspondence) => {
-    setCorrespondence(correspondence);
-    setIsVisibleFiles(true);
+  const onShowCorrespondenceFiles = async (correspondence) => {
+    onCorrespondenceFiles(correspondence);
 
     if (correspondence.status === "inProgress") return;
 
@@ -122,7 +117,7 @@ export const CorrespondencesTable = ({
                 <IconAction
                   tooltipTitle="Ver archivos"
                   icon={faEye}
-                  onClick={() => onShowFiles(correspondence)}
+                  onClick={() => onShowCorrespondenceFiles(correspondence)}
                 />
               </Space>
             )}
@@ -173,7 +168,7 @@ export const CorrespondencesTable = ({
       width: ["14rem", "100%"],
       render: (correspondence) => (
         <Space>
-          {departmentMPBoss.id === authUser.id && (
+          {bossMDP.id === authUser.id && (
             <Acl
               category="public"
               subCategory="correspondences"
@@ -187,7 +182,7 @@ export const CorrespondencesTable = ({
             </Acl>
           )}
           {correspondence?.status === "proceeds" &&
-            entityGuDASBoss.id === authUser.id && (
+            bossEntityGu.id === authUser.id && (
               <IconAction
                 tooltipTitle="Recibido por"
                 icon={faEnvelopeOpenText}
@@ -195,7 +190,7 @@ export const CorrespondencesTable = ({
               />
             )}
           {correspondence?.status === "inProgress" &&
-            authUser.id === entityGuDASBoss.id && (
+            authUser.id === bossEntityGu.id && (
               <Acl
                 category="public"
                 subCategory="correspondences"
@@ -221,20 +216,6 @@ export const CorrespondencesTable = ({
               icon={faEdit}
             />
           </Acl>
-          {correspondence?.status === "finalized" && (
-            <Acl
-              category="public"
-              subCategory="correspondences"
-              name="/correspondences/:correspondenceId#"
-            >
-              <IconAction
-                className="pointer"
-                onClick={() => onClickPrintTicket(correspondence.id)}
-                styled={{ color: (theme) => theme.colors.info }}
-                icon={faPrint}
-              />
-            </Acl>
-          )}
         </Space>
       ),
     },
@@ -250,13 +231,6 @@ export const CorrespondencesTable = ({
           rowBodyHeight={150}
         />
       </Col>
-      <ShowImagesAndDocumentsModal
-        title="Archivos de Correspondencia"
-        images={correspondence?.photos}
-        documents={correspondence?.documents}
-        isVisibleModal={isVisibleFiles}
-        onSetIsVisibleModal={setIsVisibleFiles}
-      />
     </Row>
   );
 };
