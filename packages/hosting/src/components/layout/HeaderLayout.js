@@ -79,12 +79,9 @@ export const HeaderLayout = ({
         <Space align="center" className="items-wrapper">
           <div
             style={{ fontSize: "1.7em", display: "flex", alignItems: "center" }}
+            onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
           >
-            <FontAwesomeIcon
-              icon={faBars}
-              onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
-              className="icon-item"
-            />
+            <FontAwesomeIcon icon={faBars} className="icon-item" />
           </div>
           <div>
             <img
