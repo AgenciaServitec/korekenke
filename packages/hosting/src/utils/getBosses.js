@@ -16,7 +16,7 @@ export const fetchEntityManager = async (nameId) => {
   return _entityManager;
 };
 
-export const fetchDepartmentBoss = async (nameId, commandId) => {
+export const fetchDepartmentBoss = async (nameId) => {
   const departments = await fetchDepartments();
 
   const depatment = departments.find(

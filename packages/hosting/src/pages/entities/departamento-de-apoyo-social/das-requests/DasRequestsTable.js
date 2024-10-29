@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import {
   Acl,
   IconAction,
-  notification,
   Space,
   TableVirtualized,
   Tag,
 } from "../../../../components";
-import { findDasRequest, userFullName } from "../../../../utils";
+import {
+  fetchDepartmentBoss,
+  fetchEntityManager,
+  findDasRequest,
+  userFullName,
+} from "../../../../utils";
 import dayjs from "dayjs";
 import {
   faEdit,
@@ -17,20 +21,15 @@ import {
   faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { isEmpty, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import { DasRequestStatus } from "../../../../data-list";
 import { useNavigate } from "react-router";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import styled from "styled-components";
-import {
-  departmentsRef,
-  entitiesRef,
-  fetchUser,
-} from "../../../../firebase/collections";
-import { fetchCollectionOnce } from "../../../../firebase/firestore";
 import { useAuthentication } from "../../../../providers";
-import { useAPiSendMailNotificationDasRequestPost } from "../../../../api";
-import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
+
+const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
+const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const DasRequestsTable = ({
   dasApplications,
@@ -43,28 +42,18 @@ export const DasRequestsTable = ({
 }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
-  const { postSendMailNotificationDasRequestPost } =
-    useAPiSendMailNotificationDasRequestPost();
 
-  const [entity, setEntity] = useState(null);
+  const [bossEntityGu, setBossEntityGu] = useState(null);
   const [bossMDP, setBossMDP] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const p0 = fetchCollectionOnce(
-        entitiesRef.where("nameId", "==", "departamento-de-apoyo-social"),
-      );
+      const p0 = fetchEntityManager(ENTITY_GU_NAME_ID);
+      const p1 = fetchDepartmentBoss(DEPARTMENT_NAME_ID);
 
-      const p1 = fetchCollectionOnce(
-        departmentsRef.where("nameId", "==", "mesa-de-partes"),
-      );
+      const [_bossEntityGu, _bossMDP] = await Promise.all([p0, p1]);
 
-      const [entities, departments] = await Promise.all([p0, p1]);
-
-      setEntity(entities?.[0]);
-
-      const _bossMDP = await fetchUser(departments?.[0]?.bossId);
-
+      setBossEntityGu(_bossEntityGu);
       setBossMDP(_bossMDP);
     })();
   }, []);
@@ -73,29 +62,10 @@ export const DasRequestsTable = ({
 
   const navigateTo = (pathname) => navigate(pathname);
 
-  const onResendNotificationDasRequestPost = async (dasRequest) => {
-    try {
-      await postSendMailNotificationDasRequestPost(dasRequest.id);
-
-      await updateDasApplication(dasRequest.id, {
-        sendNotificationDasRequest: true,
-      });
-
-      notification({ type: "success" });
-    } catch (e) {
-      console.log(e);
-      notification({ type: "error" });
-    }
-  };
-
   const isPositiveOrApproved = (dasRequest) =>
     dasRequest?.status === "finalized" ||
     dasRequest?.status === "inProgess" ||
     dasRequest?.response?.type === "positive";
-
-  const isSendNotificationDasRequest = (dasRequest) =>
-    !isEmpty(dasRequest?.sendNotificationDasRequest) ||
-    dasRequest?.sendNotificationDasRequest === true;
 
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
 
@@ -116,7 +86,7 @@ export const DasRequestsTable = ({
 
   const columns = [
     {
-      title: "Fecha creación",
+      title: "F. Creación",
       align: "center",
       width: ["9rem", "100%"],
       render: (dasRequest) =>
@@ -192,18 +162,13 @@ export const DasRequestsTable = ({
       align: "center",
       width: ["9rem", "100%"],
       render: (dasRequest) => {
+        const status = dasRequest?.response?.type === "positive";
         return (
           dasRequest?.response && (
             <Space>
               <div>
-                <Tag
-                  color={
-                    dasRequest?.response?.type === "positive" ? "green" : "red"
-                  }
-                >
-                  {dasRequest?.response?.type === "positive"
-                    ? "Positivo"
-                    : "Negativo"}
+                <Tag color={status ? "green" : "red"}>
+                  {status ? "Positivo" : "Negativo"}
                 </Tag>
               </div>
               <IconAction
@@ -237,7 +202,7 @@ export const DasRequestsTable = ({
               />
             )}
           </Acl>
-          {entity?.managerId === user?.id &&
+          {bossEntityGu?.id === user?.id &&
             dasRequest?.status === "inProgress" && (
               <Acl
                 category="public"
