@@ -13,3 +13,4 @@ export * from "./useAcl";
 export * from "./userInfo";
 export * from "./useUpdateAssignToAndAclsOfUser";
 export * from "./useAnimalLogs";
+export * from "./useBosses";
