@@ -24,6 +24,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { UbigeosPeru } from "../../../../../data-list";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../../firebase/firestore";
 
 export const CmstsForm = ({ cmstsEnrollment }) => {
   const { authUser } = useAuthentication();
@@ -39,9 +40,9 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
       id: authUser.id,
       email: authUser.email,
       phone: authUser.phone,
-      birthdate: dayjs(formData.birthdate).format("YYYY-MM-DD HH:mm:ss"),
-      houseLocation: findPlaceByUbigeo(formData.houseLocation),
+      birthdate: dayjs(formData.birthdate).format(DATE_FORMAT_TO_FIRESTORE),
       placeBirth: findPlaceByUbigeo(formData.placeBirth),
+      houseLocation: findPlaceByUbigeo(formData.houseLocation),
       emergencyCellPhone: {
         number: formData.emergencyCellPhone,
         prefix: "+51",
@@ -107,7 +108,7 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
       gender: authUser?.gender || "",
       placeBirth: authUser?.placeBirth?.ubigeo || null,
       birthdate: authUser?.birthdate
-        ? dayjs(authUser.birthdate, "YYYY-MM-DD HH:mm:ss")
+        ? dayjs(authUser.birthdate, DATE_FORMAT_TO_FIRESTORE)
         : undefined,
       houseLocation: authUser?.houseLocation?.ubigeo || null,
       urbanization: authUser?.urbanization || "",
@@ -157,7 +158,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="firstName"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Nombres"
@@ -174,7 +174,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="paternalSurname"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Apellido Paterno"
@@ -191,7 +190,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="maternalSurname"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Apellido Materno"
@@ -208,7 +206,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="cip"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="CIP"
@@ -225,7 +222,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="dni"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="DNI"
@@ -242,11 +238,9 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="civilStatus"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Estado Civil"
-                    defaultValue=""
                     value={value}
                     onChange={onChange}
                     error={error(name)}
@@ -285,11 +279,9 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="gender"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Género"
-                    defaultValue=""
                     value={value}
                     onChange={onChange}
                     error={error(name)}
@@ -312,7 +304,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="placeBirth"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Ubigeo de Nacimiento"
@@ -329,7 +320,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="birthdate"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <DatePicker
                     label="Fecha de Nacimiento"
@@ -346,7 +336,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="houseLocation"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Select
                     label="Ubigeo de Vivienda"
@@ -363,7 +352,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="urbanization"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Urbanización"
@@ -380,7 +368,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="address"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Dirección"
@@ -397,7 +384,6 @@ export const CmstsForm = ({ cmstsEnrollment }) => {
               <Controller
                 name="emergencyCellPhone"
                 control={control}
-                defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <InputNumber
                     label="Celular de Emergencia"

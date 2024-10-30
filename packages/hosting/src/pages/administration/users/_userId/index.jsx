@@ -32,8 +32,6 @@ import {
 } from "../../../../data-list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { fetchCollectionOnce } from "../../../../firebase/utils";
-import { usersRef } from "../../../../firebase/collections";
 
 export const UserIntegration = () => {
   const { authUser } = useAuthentication();
@@ -63,29 +61,6 @@ export const UserIntegration = () => {
 
   const saveUser = async (formData) => {
     try {
-      const [userWithDni, userWithEmail, userWithPhoneNumber] =
-        await Promise.all([
-          userByDni(formData.dni),
-          userByCip(formData.cip),
-          userByEmail(formData.email),
-          userByPhoneNumber(formData.phoneNumber),
-        ]);
-
-      if (userWithDni || userWithEmail || userWithPhoneNumber) {
-        return notification({
-          type: "warning",
-          title: `El ${
-            userWithDni
-              ? "dni"
-              : userWithEmail
-                ? "email"
-                : userWithPhoneNumber
-                  ? "celular"
-                  : ""
-          } ya se encuentra registrado.`,
-        });
-      }
-
       //Validate to assignTo when role code change of user
       if (user.roleCode !== formData.roleCode) {
         if (!isEmpty(user?.assignedTo?.id)) {
@@ -117,44 +92,6 @@ export const UserIntegration = () => {
       const errorResponse = await getApiErrorResponse(e);
       apiErrorNotification(errorResponse);
     }
-  };
-
-  const userByDni = async (dni) => {
-    const response = await fetchCollectionOnce(
-      usersRef.where("dni", "==", dni).where("isDeleted", "==", false).limit(1),
-    );
-
-    return response[0];
-  };
-
-  const userByCip = async (cip) => {
-    const response = await fetchCollectionOnce(
-      usersRef.where("cip", "==", cip).where("isDeleted", "==", false).limit(1),
-    );
-
-    return response[0];
-  };
-
-  const userByEmail = async (email) => {
-    const response = await fetchCollectionOnce(
-      usersRef
-        .where("isDeleted", "==", false)
-        .where("email", "==", email)
-        .limit(1),
-    );
-
-    return response[0];
-  };
-
-  const userByPhoneNumber = async (phoneNumber) => {
-    const response = await fetchCollectionOnce(
-      usersRef
-        .where("isDeleted", "==", false)
-        .where("phone.number", "==", phoneNumber)
-        .limit(1),
-    );
-
-    return response[0];
   };
 
   const mapUserToApi = (formData) => {

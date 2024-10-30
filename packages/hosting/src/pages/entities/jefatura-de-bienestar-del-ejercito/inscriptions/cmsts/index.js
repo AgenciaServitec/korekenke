@@ -23,6 +23,7 @@ import {
 } from "../../../../../firebase/collections";
 import { fetchCollectionOnce } from "../../../../../firebase/firestore";
 import { useDefaultFirestoreProps } from "../../../../../hooks";
+import { isEmpty } from "lodash";
 
 export const CmstsIntegration = () => {
   const navigate = useNavigate();
@@ -183,11 +184,21 @@ export const CmstsIntegration = () => {
                 {!cmstsEnrollment && (
                   <Col span={24}>
                     <Button
+                      danger
                       type="primary"
                       size="large"
                       block
                       loading={savingCmstsEnrollment}
-                      onClick={() => signUpInCmsts()}
+                      onClick={() => {
+                        if (isEmpty(authUser?.emergencyCellPhone))
+                          return notification({
+                            type: "warning",
+                            title:
+                              "Por favor, complete toda su información personal y composición familiar para inscribirse en círculo militar",
+                          });
+
+                        return signUpInCmsts();
+                      }}
                     >
                       Enviar inscripción a Circulo militar
                     </Button>

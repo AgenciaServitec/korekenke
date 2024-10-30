@@ -20,6 +20,8 @@ import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
 import { LogoPrimary } from "../../images";
+import dayjs from "dayjs";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
 export const PersonalInformation = ({ prev, next, currentStep }) => {
   const [savingData, setSavingData] = useState(false);
@@ -74,7 +76,11 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     paternalSurname: formData.paternalSurname,
     maternalSurname: formData.maternalSurname,
     email: formData.email,
-    birthdate: step1Data?.birthdate,
+    birthdate: step1Data?.birthdate
+      ? dayjs(step1Data.birthdate, "DD/MM/YYYY").format(
+          DATE_FORMAT_TO_FIRESTORE,
+        )
+      : undefined,
     phone: {
       prefix: "+51",
       number: formData.phoneNumber,

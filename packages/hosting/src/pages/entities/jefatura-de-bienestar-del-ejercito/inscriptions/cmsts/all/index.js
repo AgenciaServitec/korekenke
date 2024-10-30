@@ -111,11 +111,13 @@ export const AllRegistered = () => {
     },
   ];
 
-  const cmstsEnrollmentsView = cmstsEnrollments.map((cmstsEnrollment) => {
-    const user = users.find((user) => user.id === cmstsEnrollment.userId);
+  const cmstsEnrollmentsView = cmstsEnrollments
+    .map((cmstsEnrollment) => {
+      const user = users.find((user) => user.id === cmstsEnrollment.userId);
 
-    return { ...user, ...cmstsEnrollment };
-  });
+      return { ...user, ...cmstsEnrollment };
+    })
+    .filter((cmstsEnrollment) => cmstsEnrollment?.houseLocation);
 
   return (
     <Acl
