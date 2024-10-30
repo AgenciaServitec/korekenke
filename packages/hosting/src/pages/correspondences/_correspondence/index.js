@@ -16,7 +16,11 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import {
+  useBosses,
+  useDefaultFirestoreProps,
+  useFormUtils,
+} from "../../../hooks";
 import { useAuthentication, useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import dayjs from "dayjs";
@@ -26,14 +30,18 @@ import {
   updateCorrespondence,
 } from "../../../firebase/collections";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
-import { fetchEntityManager } from "../../../utils";
+
+const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
+const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const CorrespondenceIntegration = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
   const { correspondenceId } = useParams();
-  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+
   const { correspondences } = useGlobalData();
+  const { fetchEntityManager } = useBosses();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [correspondence, setCorrespondence] = useState({});
   const [savingCorrespondence, setSavingCorrespondence] = useState(false);
@@ -53,9 +61,7 @@ export const CorrespondenceIntegration = () => {
     setCorrespondence(correspondence_);
 
     (async () => {
-      const _entityGuDASBoss = await fetchEntityManager(
-        "departamento-de-apoyo-social",
-      );
+      const _entityGuDASBoss = await fetchEntityManager(ENTITY_GU_NAME_ID);
 
       setEntityGuDASBoss(_entityGuDASBoss);
     })();
@@ -114,6 +120,7 @@ export const CorrespondenceIntegration = () => {
         photos: formData?.photos || null,
         documents: formData?.documents || null,
         status: correspondence?.status || "waiting",
+        wasRead: correspondence?.wasRead || false,
       },
     );
 

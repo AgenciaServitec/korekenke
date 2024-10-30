@@ -15,7 +15,7 @@ import {
 } from "../../firebase/collections";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
-import { useDefaultFirestoreProps, useDevice } from "../../hooks";
+import { useBosses, useDefaultFirestoreProps, useDevice } from "../../hooks";
 import {
   CorrespondenceModalProvider,
   useCorrespondenceModal,
@@ -26,7 +26,6 @@ import { ReplyCorrespondenceInformationModal } from "./ReplyCorrespondenceInform
 import { useAuthentication } from "../../providers";
 import { ReceivedByModal } from "./ReceivedBy";
 import { CorrespondenceProceedsModal } from "./CorrespondenceProceeds";
-import { fetchEntityManager } from "../../utils";
 import { CorrespondenceFilesModal } from "./CorrespondenceFilesModal";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
@@ -36,6 +35,7 @@ export const CorrespondencesIntegration = () => {
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { authUser } = useAuthentication();
+  const { fetchEntityManager } = useBosses();
 
   const [correspondences = [], correspondencesLoading, correspondencesError] =
     useCollectionData(
@@ -185,7 +185,10 @@ const Correspondences = ({
       title: "Archivos de Correspondencia",
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
-        <CorrespondenceFilesModal correspondence={correspondence} />
+        <CorrespondenceFilesModal
+          correspondence={correspondence}
+          entityGuDASNameId={entityGuDASNameId}
+        />
       ),
     });
   };

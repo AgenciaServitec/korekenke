@@ -6,12 +6,7 @@ import {
   TableVirtualized,
   Tag,
 } from "../../../../components";
-import {
-  fetchDepartmentBoss,
-  fetchEntityManager,
-  findDasRequest,
-  userFullName,
-} from "../../../../utils";
+import { findDasRequest, userFullName } from "../../../../utils";
 import dayjs from "dayjs";
 import {
   faEdit,
@@ -27,6 +22,7 @@ import { useNavigate } from "react-router";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import styled from "styled-components";
 import { useAuthentication } from "../../../../providers";
+import { useBosses } from "../../../../hooks";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
 const DEPARTMENT_NAME_ID = "mesa-de-partes";
@@ -42,6 +38,7 @@ export const DasRequestsTable = ({
 }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
+  const { fetchEntityManager, fetchDepartmentBoss } = useBosses();
 
   const [bossEntityGu, setBossEntityGu] = useState(null);
   const [bossMDP, setBossMDP] = useState(null);

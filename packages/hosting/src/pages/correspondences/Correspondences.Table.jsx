@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CorrespondencesStatus } from "../../data-list";
 import { useAuthentication } from "../../providers";
-import { fetchDepartmentBoss, fetchEntityManager } from "../../utils";
+import { useBosses } from "../../hooks";
 
 export const CorrespondencesTable = ({
   entityGuDASNameId,
@@ -29,9 +29,10 @@ export const CorrespondencesTable = ({
   onAddCorrespondenceReceivedBy,
   onCorrespondenceProceeds,
   onCorrespondenceFiles,
-  onChangeStatusToInProgress,
 }) => {
   const { authUser } = useAuthentication();
+  const { fetchEntityManager, fetchDepartmentBoss } = useBosses();
+
   const [bossEntityGu, setBossEntityGu] = useState({});
   const [bossMDP, setBossMDP] = useState({});
 
@@ -63,14 +64,6 @@ export const CorrespondencesTable = ({
     )
       return correspondence;
   });
-
-  const onShowCorrespondenceFiles = async (correspondence) => {
-    onCorrespondenceFiles(correspondence);
-
-    if (correspondence.status === "inProgress") return;
-
-    await onChangeStatusToInProgress(correspondence);
-  };
 
   const columns = [
     {
@@ -109,18 +102,16 @@ export const CorrespondencesTable = ({
       render: (correspondence) => {
         return (
           <div>
-            {(["pending", "inProgress", "finalized"].includes(
-              correspondence.status,
-            ) ||
-              ["super_admin", "user"].includes(authUser.roleCode)) && (
-              <Space align="center">
-                <IconAction
-                  tooltipTitle="Ver archivos"
-                  icon={faEye}
-                  onClick={() => onShowCorrespondenceFiles(correspondence)}
-                />
-              </Space>
-            )}
+            {["inProgress", "pending"].includes(correspondence?.status) &&
+              bossEntityGu?.id === authUser?.id && (
+                <Space align="center">
+                  <IconAction
+                    tooltipTitle="Ver archivos"
+                    icon={faEye}
+                    onClick={() => onCorrespondenceFiles(correspondence)}
+                  />
+                </Space>
+              )}
           </div>
         );
       },
@@ -168,7 +159,7 @@ export const CorrespondencesTable = ({
       width: ["14rem", "100%"],
       render: (correspondence) => (
         <Space>
-          {bossMDP.id === authUser.id && (
+          {["waiting", "notProceeds"].includes(correspondence.status) && (
             <Acl
               category="public"
               subCategory="correspondences"
@@ -182,15 +173,15 @@ export const CorrespondencesTable = ({
             </Acl>
           )}
           {correspondence?.status === "proceeds" &&
-            bossEntityGu.id === authUser.id && (
+            bossEntityGu?.id === authUser?.id && (
               <IconAction
                 tooltipTitle="Recibido por"
                 icon={faEnvelopeOpenText}
                 onClick={() => onAddCorrespondenceReceivedBy(correspondence)}
               />
             )}
-          {correspondence?.status === "inProgress" &&
-            authUser.id === bossEntityGu.id && (
+          {["inProgress", "pending"].includes(correspondence?.status) &&
+            authUser.id === bossEntityGu?.id && (
               <Acl
                 category="public"
                 subCategory="correspondences"

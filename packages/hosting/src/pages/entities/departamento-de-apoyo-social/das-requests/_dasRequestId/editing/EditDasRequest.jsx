@@ -29,7 +29,7 @@ import {
   useDasRequestModal,
 } from "./components";
 import { ObservationsList } from "./components/ObservationsList";
-import { useDevice } from "../../../../../../hooks";
+import { useBosses, useDevice } from "../../../../../../hooks";
 import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
 import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
@@ -37,11 +37,11 @@ import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
 import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
 import { DasRequestStatus } from "../../../../../../data-list";
-import {
-  fetchEntities,
-  fetchUser,
-} from "../../../../../../firebase/collections";
+import { fetchUser } from "../../../../../../firebase/collections";
 import { useAuthentication } from "../../../../../../providers";
+
+const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
+const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const EditDasRequestIntegration = ({
   isNew,
@@ -56,6 +56,8 @@ export const EditDasRequestIntegration = ({
   const [headlineCurrentData, setHeadlineCurrentData] = useState(null);
   const [isHeadlineCurrentData, setIsHeadlineCurrentData] = useState(true);
 
+  const { fetchEntityManager } = useBosses();
+
   useEffect(() => {
     (async () => {
       if (!dasRequest) return;
@@ -65,7 +67,7 @@ export const EditDasRequestIntegration = ({
 
       if (dasRequest?.status === "inProgress") return;
 
-      const dasEntityManager = await fetchEntityManager();
+      const dasEntityManager = await fetchEntityManager(ENTITY_GU_NAME_ID);
 
       if (
         dasRequest?.wasRead === false &&
@@ -93,20 +95,6 @@ export const EditDasRequestIntegration = ({
       }
     })();
   }, [headlineCurrentData]);
-
-  const fetchEntityManager = async () => {
-    const _entities = await fetchEntities();
-
-    const manageDas = _entities.find(
-      (entity) => entity?.nameId === "departamento-de-apoyo-social",
-    );
-
-    const _entityManager = manageDas?.managerId
-      ? await fetchUser(manageDas?.managerId)
-      : {};
-
-    return _entityManager;
-  };
 
   if (isEmpty(dasRequest)) return <Spinner height="80vh" />;
 

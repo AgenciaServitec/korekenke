@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Image, Row } from "../../components";
 import { isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { useAuthentication } from "../../providers";
+import { updateCorrespondence } from "../../firebase/collections";
+import { useBosses } from "../../hooks";
 
-export const CorrespondenceFilesModal = ({ correspondence }) => {
+export const CorrespondenceFilesModal = ({
+  correspondence,
+  entityGuDASNameId,
+}) => {
+  const { authUser } = useAuthentication();
+  const { fetchEntityManager } = useBosses();
   const { photos = [], documents = [] } = correspondence;
+
+  useEffect(() => {
+    (async () => {
+      if (!correspondence) return;
+
+      const entityGuManager = await fetchEntityManager(entityGuDASNameId);
+
+      if (
+        correspondence?.status === "pending" &&
+        entityGuManager?.id === authUser?.id
+      ) {
+        await updateCorrespondence(correspondence.id, {
+          status: "inProgress",
+          wasRead: true,
+        });
+      }
+    })();
+  }, [correspondence]);
 
   return (
     <Container>
