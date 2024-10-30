@@ -8,5 +8,10 @@
     "id": "user",
     "name": "Usuario",
     "initialPathname": "/home"
+  },
+  {
+    "id": "manager",
+    "name": "Gerente",
+    "initialPathname": "/home"
   }
 ]

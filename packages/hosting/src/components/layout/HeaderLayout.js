@@ -14,6 +14,7 @@ import { Divider, Dropdown } from "../ui";
 import { Link } from "react-router-dom";
 import { userFullName } from "../../utils";
 import { useGlobalData } from "../../providers";
+import { Roles } from "../../data-list";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -230,7 +231,10 @@ export const HeaderLayout = ({
               <span className="capitalize">
                 (
                 {rolesAcls.find((roleAcl) => roleAcl.id === user.roleCode)
-                  ?.name || ""}
+                  ?.name ||
+                  Roles.find((roleAcl) => roleAcl.id === user?.roleCode)
+                    ?.name ||
+                  ""}
                 )
               </span>
             </span>
