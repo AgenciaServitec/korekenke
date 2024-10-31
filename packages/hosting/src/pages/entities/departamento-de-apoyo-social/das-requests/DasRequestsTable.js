@@ -75,7 +75,7 @@ export const DasRequestsTable = ({
       return dasApplication;
 
     if (
-      !["waiting", "notProceeds"].includes(dasApplication.status) ===
+      !["waiting", "notProceeds"].includes(dasApplication.status) &&
       ["manager"].includes(authUser.roleCode)
     )
       return dasApplication;
