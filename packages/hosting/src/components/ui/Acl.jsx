@@ -8,9 +8,10 @@ export const Acl = ({ children, category, subCategory, name, redirect }) => {
 
   const { authUser, logout } = useAuthentication();
 
-  if (!authUser) {
+  if (isEmpty(authUser)) {
+    logout();
     navigate("/login");
-    return logout();
+    return;
   }
 
   const [enabled, setEnabled] = useState(true);
