@@ -77,11 +77,17 @@ export const UploadBody = ({ buttonText, visible = true }) =>
 // }
 
 export const UploadDraggerBody = ({ text, hint }) => (
-  <>
+  <Wrapper>
     <p className="ant-upload-drag-icon">
       <FontAwesomeIcon icon={faBox} size="2x" />
     </p>
     <p className="ant-upload-text">{text}</p>
     <p className="ant-upload-hint">{hint}</p>
-  </>
+  </Wrapper>
 );
+
+const Wrapper = styled.div`
+  p {
+    font-size: 1em !important;
+  }
+`;
