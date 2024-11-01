@@ -22,5 +22,17 @@
   {
     "label": "Técnico Incompleto",
     "value": "incomplete_technical"
+  },
+  {
+    "label": "Universidad Completo",
+    "value": "university"
+  },
+  {
+    "label": "Universidad Incompleto",
+    "value": "incomplete_university"
+  },
+  {
+    "label": "Otro",
+    "value": "other"
   }
 ]
