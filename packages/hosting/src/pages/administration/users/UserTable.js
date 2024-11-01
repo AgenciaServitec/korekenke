@@ -6,7 +6,7 @@ import {
   faLinkSlash,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { capitalize, isEmpty, orderBy } from "lodash";
+import { capitalize, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { findDegree } from "../../../utils";
 import { Link } from "react-router-dom";
