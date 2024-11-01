@@ -6,7 +6,7 @@ import {
   faLinkSlash,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { capitalize, orderBy } from "lodash";
+import { capitalize, isEmpty, orderBy } from "lodash";
 import dayjs from "dayjs";
 import { findDegree } from "../../../utils";
 import { Link } from "react-router-dom";
@@ -163,7 +163,7 @@ export const UsersTable = ({
     <Table
       columns={columns}
       dataSource={orderBy(users, ["createAt"], ["desc"])}
-      pagination={false}
+      pagination={true}
       scroll={{ x: "max-content" }}
     />
   );
