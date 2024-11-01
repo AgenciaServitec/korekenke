@@ -426,7 +426,7 @@ export const DrawerLayout = ({
       key="right"
       title={
         <div style={{ width: "100%", textAlign: "right" }}>
-          <h5>version: {version}</h5>
+          <h5 style={{ color: "#fff" }}>version: {version}</h5>
         </div>
       }
       placement="left"
@@ -448,16 +448,7 @@ export const DrawerLayout = ({
 };
 
 const DrawerContainer = styled(Drawer)`
-  //background: #fff;
-  //.ant-drawer-wrapper-body {
-  //  background: #fff !important;
-  //  .ant-drawer-body {
-  //    padding: 0 !important;
-  //    background: #fff !important;
-  //  }
-  //}
-  //.ant-drawer-content-wrapper {
-  //  width: 100% !important;
-  //  background: #fff;
-  //}
+  .drawer-content {
+    color: #fff;
+  }
 `;
