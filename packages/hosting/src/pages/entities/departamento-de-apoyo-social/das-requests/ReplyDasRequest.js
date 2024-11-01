@@ -27,6 +27,7 @@ export const ReplyDasRequestModal = ({
   const schema = yup.object({
     message: yup.string().required(),
     documents: yup.mixed(),
+    images: yup.mixed(),
     type: yup.string().required(),
   });
 
@@ -49,6 +50,7 @@ export const ReplyDasRequestModal = ({
     reset({
       message: dasRequest?.response?.message || "",
       documents: dasRequest?.response?.documents || undefined,
+      images: dasRequest?.response?.images || undefined,
       type: dasRequest?.response?.type || undefined,
     });
   };
@@ -77,7 +79,7 @@ export const ReplyDasRequestModal = ({
       onCancel={() => onSetVisibleModal(false)}
       title="Responder solicitud"
       closable
-      width="50%"
+      width="70%"
       centered={false}
       destroyOnClose
     >
@@ -101,7 +103,30 @@ export const ReplyDasRequestModal = ({
               )}
             />
           </Col>
-          <Col sm={24}>
+          <Col span={12}>
+            <Controller
+              name="images"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <UploadMultiple
+                  label="Imagenes (Jpg)"
+                  withThumbImage={false}
+                  isImage={true}
+                  accept="image/*"
+                  name={name}
+                  value={value}
+                  bucket="departamentoDeApoyoSocial"
+                  filePath={`das-applicants/${dasRequest.id}/images`}
+                  buttonText="Subir imagen"
+                  error={error(name)}
+                  required={required(name)}
+                  onChange={(file) => onChange(file)}
+                  onUploading={setUploadingImage}
+                />
+              )}
+            />
+          </Col>
+          <Col sm={12}>
             <Controller
               name="documents"
               control={control}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Modal, Row, Tag } from "../../../../components";
+import { Col, Modal, Row, Tag, Image } from "../../../../components";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
@@ -40,6 +40,24 @@ export const ReplyDasRequestInformationModal = ({
               </div>
             </div>
           </Col>
+          {!isEmpty(response?.images) && (
+            <Col span={24}>
+              <div className="wrapper-item">
+                <span className="label">Imagenes adjuntos:</span>
+                <div className="images-wrapper">
+                  {(response?.images || []).map((image, index) => {
+                    return (
+                      <div key={index} className="item-card">
+                        <div className="body">
+                          <Image src={image.url} width={70} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </Col>
+          )}
           {!isEmpty(response?.documents) && (
             <Col span={24}>
               <div className="wrapper-item">
