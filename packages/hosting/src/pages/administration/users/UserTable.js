@@ -163,7 +163,7 @@ export const UsersTable = ({
     <Table
       columns={columns}
       dataSource={orderBy(users, ["createAt"], ["desc"])}
-      pagination={false}
+      pagination={true}
       scroll={{ x: "max-content" }}
     />
   );

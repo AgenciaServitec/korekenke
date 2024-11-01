@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   AddButton,
   Button,
   Col,
   Divider,
+  Input,
   modalConfirm,
   notification,
   Row,
@@ -27,7 +28,7 @@ import {
 } from "../../../api";
 import { assign, isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faWarning } from "@fortawesome/free-solid-svg-icons";
 import {
   fetchDepartment,
   fetchOffice,
@@ -58,6 +59,8 @@ export const Users = () => {
     "disabledUser",
     false,
   );
+  const [userSearch, setUserSearch] = useState("");
+  const [usersView, setUsersView] = useState([]);
 
   const navigateTo = (userId) => navigate(userId);
 
@@ -279,7 +282,7 @@ export const Users = () => {
         ]),
   ];
 
-  const usersView = users.filter((user) =>
+  const usersViewTable = users.filter((user) =>
     userType === "all"
       ? user
       : user?.commands?.some((command) => command.id === userType)
@@ -288,6 +291,28 @@ export const Users = () => {
           ? isEmpty(user.commands)
           : null,
   );
+
+  const handleUserSearch = (e) => {
+    const user = e.target.value;
+    setUserSearch(user);
+  };
+
+  useEffect(() => {
+    const usersMatch = usersViewTable.filter((_user) => {
+      if (
+        `${_user.firstName} ${_user.paternalSurname} ${_user.maternalSurname} ${_user.degree} ${_user.cip}`.includes(
+          userSearch,
+        )
+      )
+        return _user;
+    });
+
+    if (isEmpty(userSearch)) {
+      setUsersView(usersViewTable);
+    } else {
+      setUsersView(usersMatch);
+    }
+  }, [userSearch, userType]);
 
   const isDisabledUsers = usersView.filter((user) => user.cgi === disabledUser);
 
@@ -306,13 +331,24 @@ export const Users = () => {
           <Title level={3}>Usuarios ({isDisabledUsers?.length})</Title>
         </Col>
         <Col span={24} md={12} lg={8}>
+          <Container>
+            <Input
+              label="Búsqueda de usuarios (Nombres, Grado y Cip)"
+              value={userSearch}
+              onChange={handleUserSearch}
+              name={name}
+              suffix={<FontAwesomeIcon icon={faSearch} />}
+            />
+          </Container>
+        </Col>
+        <Col span={24} md={12} lg={8}>
           <Select
             value={userType}
             onChange={(value) => onSetUserType(value)}
             options={options}
           />
         </Col>
-        <Col span={24} md={6}>
+        <Col span={24} md={12} lg={8}>
           <ContainerDisabledUser>
             <Space>
               <span>Visualizar Discapacitados</span>
@@ -337,6 +373,12 @@ export const Users = () => {
     </Acl>
   );
 };
+
+const Container = styled.div`
+  input {
+    height: 1.65rem;
+  }
+`;
 
 const ContainerDisabledUser = styled.div`
   span {

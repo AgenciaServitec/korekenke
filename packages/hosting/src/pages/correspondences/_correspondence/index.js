@@ -311,11 +311,10 @@ const Correspondence = ({
                     <UploadMultiple
                       label="Fotos (523x404)"
                       isImage={true}
+                      withThumbImage={false}
                       accept="image/png, image/jpeg, image/jpg"
-                      resize="423x304"
                       name={name}
                       value={value}
-                      bucket="documents"
                       filePath={`correspondences/${correspondence.id}/photos`}
                       buttonText="Subir imagen"
                       error={error(name)}
