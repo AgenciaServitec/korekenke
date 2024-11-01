@@ -311,7 +311,7 @@ const Correspondence = ({
                     <UploadMultiple
                       label="Fotos (523x404)"
                       isImage={true}
-                      accept="image/*"
+                      accept="image/png, image/jpeg, image/jpg"
                       resize="423x304"
                       name={name}
                       value={value}
