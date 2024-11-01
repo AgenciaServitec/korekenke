@@ -34,7 +34,7 @@ export const GlobalDataProvider = ({ children }) => {
   const { currentCommand } = useCommand();
 
   const commands = INITIAL_HIGHER_ENTITIES?.[0]?.organs?.[0]?.commands || [];
-  const _currentCommand = currentCommand?.id || null;
+  const _currentCommandId = currentCommand?.id || null;
 
   const [rolesAcls = [], rolesAclsLoading, rolesAclsError] = useCollectionData(
     authUser
@@ -47,7 +47,9 @@ export const GlobalDataProvider = ({ children }) => {
     let usersQuery = usersRef;
 
     if (authUser.roleCode !== "super_admin") {
-      usersQuery.where("commandsIds", "array-contains", authUser.commandsIds);
+      return usersQuery
+        .where("commandsIds", "array-contains", currentCommand.id)
+        .where("isDeleted", "==", false);
     }
 
     return usersQuery.where("isDeleted", "==", false);
@@ -61,7 +63,7 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? entitiesRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", _currentCommand)
+          .where("commandId", "==", _currentCommandId)
       : null,
   );
 
@@ -69,7 +71,7 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? unitsRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", _currentCommand)
+          .where("commandId", "==", _currentCommandId)
       : null,
   );
 
@@ -78,7 +80,7 @@ export const GlobalDataProvider = ({ children }) => {
       authUser
         ? departmentsRef
             .where("isDeleted", "==", false)
-            .where("commandId", "==", _currentCommand)
+            .where("commandId", "==", _currentCommandId)
         : null,
     );
 
@@ -86,7 +88,7 @@ export const GlobalDataProvider = ({ children }) => {
     authUser
       ? sectionsRef
           .where("isDeleted", "==", false)
-          .where("commandId", "==", _currentCommand)
+          .where("commandId", "==", _currentCommandId)
       : null,
   );
 
@@ -95,12 +97,12 @@ export const GlobalDataProvider = ({ children }) => {
       ? firestore
           .collection("offices")
           .where("isDeleted", "==", false)
-          .where("commandId", "==", _currentCommand)
+          .where("commandId", "==", _currentCommandId)
       : null,
   );
 
   const [animals = [], animalsLoading, animalsError] = useCollectionData(
-    _currentCommand === "cologe"
+    _currentCommandId === "cologe"
       ? animalsRef.where("isDeleted", "==", false)
       : null,
   );
