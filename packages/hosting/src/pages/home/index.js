@@ -20,6 +20,12 @@ export const HomeIntegration = () => {
 
   const onNavigateGoTo = (pathname) => pathname;
 
+  const numberRamdon = Math.floor(
+    Math.random() * (800000 - 100000 + 1) + 100000,
+  );
+
+  console.log("numberRamdon: ", numberRamdon);
+
   return (
     <Container>
       <h1 className="title">
