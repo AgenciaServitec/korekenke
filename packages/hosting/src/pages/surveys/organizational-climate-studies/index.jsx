@@ -19,8 +19,10 @@ import { orderBy } from "lodash";
 import { useDefaultFirestoreProps } from "../../../hooks";
 import dayjs from "dayjs";
 import { getOcupationalGroup, getQuestionValue } from "../../../utils";
+import { useAuthentication } from "../../../providers";
 
 export const OrganizationalClimateStudiesIntegration = () => {
+  const { authUser } = useAuthentication();
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
@@ -48,6 +50,16 @@ export const OrganizationalClimateStudiesIntegration = () => {
       assignDeleteProps(organizationClimateStudy),
     );
   };
+
+  const organizationalClimateStudiesView = organizationalClimateStudies.filter(
+    (organizationalClimateStudy) => {
+      if (["super_admin"].includes(authUser.roleCode))
+        return organizationalClimateStudy;
+
+      if (organizationalClimateStudy.userId === authUser.id)
+        return organizationalClimateStudy;
+    },
+  );
 
   const columns = [
     {
@@ -172,7 +184,7 @@ export const OrganizationalClimateStudiesIntegration = () => {
           <Table
             columns={columns}
             dataSource={orderBy(
-              organizationalClimateStudies,
+              organizationalClimateStudiesView,
               "createAt",
               "desc",
             )}

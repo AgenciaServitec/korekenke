@@ -142,14 +142,14 @@
       ]
     },
     {
-      "label": "Tiempo trabajando en la Institución",
+      "label": "Tiempo trabajando en la Institución (meses)",
       "element": "input",
       "code": "questions.timeWorkingInstitution",
       "description": "",
       "options": null
     },
     {
-      "label": "Tiempo trabajando en el puesto actual",
+      "label": "Tiempo trabajando en el puesto actual (meses)",
       "element": "input",
       "code": "questions.timeWorkingCurrentPosition",
       "description": "",
