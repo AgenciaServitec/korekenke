@@ -1,18 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { fetchDocument, firestore, firestoreTimestamp } from "../../_firebase";
+import { fetchDocument, firestore } from "../../_firebase";
 import { logger } from "../../utils";
 import assert from "assert";
-import { sendMailSendcodeEmail } from "../../mailer/korekenke";
 import { isEmpty } from "lodash";
-
-interface SessionVerification {
-  id: string;
-  type: "email" | "sms";
-  userId: string;
-  verifyCode: string;
-  isVerified: boolean;
-  createAt: string;
-}
 
 interface VerifyCode {
   id: string;
