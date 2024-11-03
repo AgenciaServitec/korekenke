@@ -8,7 +8,7 @@ import { getEntityDataByDni } from "./entities";
 import { getUserByCip } from "./consult";
 import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
 import { getIp } from "./consult/getIp";
-import { onVerificationCode } from "./verify-code";
+import { postSendCode, postVerificationCode } from "./sign-in";
 
 const app: express.Application = express();
 
@@ -46,7 +46,9 @@ app.post(
 
 app.get("/get-api", getIp);
 
-app.post("/verify-email/verify-code", onVerificationCode);
+app.post("/verify-email/send-code", postSendCode);
+
+app.post("/verify-email/verify-code", postVerificationCode);
 
 app.use(errorHandler);
 

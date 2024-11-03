@@ -12,6 +12,11 @@ export const fetchUser = async (id) => fetchDocumentOnce(usersRef.doc(id));
 export const fetchUsers = async () =>
   fetchCollectionOnce(usersRef.where("isDeleted", "==", false));
 
+export const fetchUsersByCip = async (cip) =>
+  fetchCollectionOnce(
+    usersRef.where("cip", "==", cip).where("isDeleted", "==", false).limit(1),
+  );
+
 export const updateUsersWithBatch = async (users = []) => {
   const batch = firestore.batch();
 

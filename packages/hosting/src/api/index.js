@@ -7,3 +7,5 @@ export * from "./useApiSearchGet";
 export * from "./useApiCorrespondencePost";
 export * from "./useApiPersonDataByDniGet";
 export * from "./useAPiSendMailNotificationDasRequestPost";
+export * from "./useApiVerifyEmailSendCodePost";
+export * from "./useApiVerifyEmailVerifyCodePost";

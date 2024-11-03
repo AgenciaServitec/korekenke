@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase/compat/app";
 
-export const SendCodeSmsAndSignInWithCodeIntegration = ({
+export const VerificationBySmsAndSignInIntegration = ({
   prev,
   next,
   currentStep,
@@ -114,7 +114,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
   };
 
   return (
-    <SendCodeSmsAndSignInWithCode
+    <VerificationBySmsAndSignIn
       currentStep={currentStep}
       onSendCodeSms={onSendCodeSms}
       onVerifyCodeSmsAndSignIn={onVerifyCodeSmsAndSignIn}
@@ -125,7 +125,7 @@ export const SendCodeSmsAndSignInWithCodeIntegration = ({
   );
 };
 
-const SendCodeSmsAndSignInWithCode = ({
+const VerificationBySmsAndSignIn = ({
   currentStep,
   loading,
   phoneNumber,
@@ -154,7 +154,7 @@ const SendCodeSmsAndSignInWithCode = ({
 
   return (
     <Container>
-      {currentStep === 1 && (
+      {currentStep === 2 && (
         <div className="send-phone-code-wrapper">
           <div className="title-login">
             <Title level={3}>Verificación Código</Title>
@@ -187,7 +187,7 @@ const SendCodeSmsAndSignInWithCode = ({
         </div>
       )}
       <div id="recaptcha-container"></div>
-      {currentStep === 2 && (
+      {currentStep === 3 && (
         <Form onSubmit={handleSubmit(onSubmitSignIn)}>
           <div className="title-login">
             <Title level={3}>Verifica e inicia sesión</Title>

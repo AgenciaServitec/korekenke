@@ -174,7 +174,6 @@ export const ProfileDataForm = () => {
             )}
           />
         </Col>
-
         <Col span={24} md={12}>
           <Controller
             name="maternalSurname"

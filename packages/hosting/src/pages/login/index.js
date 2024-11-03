@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { SendCodeSmsAndSignInWithCodeIntegration } from "./SendCodeSmsAndSignInWithCode";
+import { VerificationBySmsAndSignInIntegration } from "./VerificationBySmsAndSignIn";
 import { AccessDataLogin } from "./AccessDataLogin";
 import { useAuthentication } from "../../providers";
 import { useNavigate } from "react-router";
+import { VerificationByEmailIntegration } from "./VerificationByEmail";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
@@ -29,8 +30,15 @@ export const LoginIntegration = () => {
       <div className="content-wrapper">
         <div className="content-step-wrapper">
           {currentStep === 0 && <AccessDataLogin next={next} />}
-          {currentStep !== 0 && (
-            <SendCodeSmsAndSignInWithCodeIntegration
+          {currentStep === 1 && (
+            <VerificationByEmailIntegration
+              prev={prev}
+              next={next}
+              currentStep={currentStep}
+            />
+          )}
+          {[2, 3].includes(currentStep) && (
+            <VerificationBySmsAndSignInIntegration
               prev={prev}
               next={next}
               currentStep={currentStep}

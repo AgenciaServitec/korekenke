@@ -9,7 +9,7 @@ interface VerifyCode {
   verifyCode: string;
 }
 
-export const onVerificationCode = async (
+export const postVerificationCode = async (
   req: Request<unknown, unknown, VerifyCode, unknown>,
   res: Response,
   next: NextFunction
@@ -21,8 +21,6 @@ export const onVerificationCode = async (
     assert(user, "Missing user!");
 
     const _verifyCode = await fetchVerifyCode(userId);
-    assert(_verifyCode, "Missing _verifyCode!");
-
     if (
       isEmpty(_verifyCode) ||
       userId !== user.id ||

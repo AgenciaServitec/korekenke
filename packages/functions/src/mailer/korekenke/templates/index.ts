@@ -14,4 +14,7 @@ export const template = {
   dasRequestNotProceedsEmailTemplate: htmlTemplate(
     "./dasRequestNotProceedsEmailTemplate.html"
   ),
+  verifyEmailSendCodeEmailTemplate: htmlTemplate(
+    "./verifyEmailSendCodeEmailTemplate.html"
+  ),
 };
