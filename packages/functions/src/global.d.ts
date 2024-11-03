@@ -179,3 +179,13 @@ interface Document {
   uid: string;
   url: string;
 }
+
+interface SessionVerification {
+  id: string;
+  type: "email" | "sms";
+  userId: string;
+  email: string;
+  verifyCode: string;
+  isVerified: false;
+  createAt: FirebaseFirestore.Timestamp;
+}
