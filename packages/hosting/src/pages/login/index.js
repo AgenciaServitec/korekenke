@@ -6,6 +6,8 @@ import { AccessDataLogin } from "./AccessDataLogin";
 import { useAuthentication } from "../../providers";
 import { useNavigate } from "react-router";
 import { VerificationByEmailIntegration } from "./VerificationByEmail";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
@@ -46,6 +48,16 @@ export const LoginIntegration = () => {
           )}
         </div>
       </div>
+      <div className="btn-whatsapp">
+        <a
+          href="https://api.whatsapp.com/send?phone=941801827"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FontAwesomeIcon icon={faWhatsapp} size="3x" />
+        </a>
+        <span>Soporte Korekenke</span>
+      </div>
     </Container>
   );
 };
@@ -56,6 +68,7 @@ const Container = styled.div`
   height: auto;
   display: flex;
   justify-content: center;
+  position: relative;
 
   .content-wrapper {
     max-width: 40em;
@@ -82,5 +95,50 @@ const Container = styled.div`
     border-radius: 1em;
     background: ${({ theme }) => theme.colors.white};
     margin-top: 3em;
+  }
+
+  .btn-whatsapp {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    background-color: #5cc753;
+    animation-name: btn-whatsapp;
+    animation-duration: 2s;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+
+    @keyframes btn-whatsapp {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.1);
+      }
+    }
+
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    span {
+      width: 4.85rem;
+      display: flex;
+      position: absolute;
+      top: 50%;
+      left: -5.5rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.3rem;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      font-weight: 500;
+      background-color: #fff;
+    }
   }
 `;
