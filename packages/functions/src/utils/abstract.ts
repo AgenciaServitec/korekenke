@@ -11,7 +11,7 @@ export const uniq = (strings: string[]): string[] =>
   );
 
 export const getFullName = (
-  user: Headline | Familiar | undefined,
+  user: Headline | Familiar | User | undefined,
   direction = "obverse"
 ): string =>
   direction === "obverse"
