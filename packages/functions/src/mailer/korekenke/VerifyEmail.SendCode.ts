@@ -7,7 +7,7 @@ export const verifyEmailSendCode = async (
   await sendMail({
     to: sessionVerification.email,
     bcc: "",
-    subject: "Código de verificación por Email",
+    subject: `${sessionVerification.verifyCode} es tu código para iniciar sesión en Korekenke`,
     html: html(
       template.verifyEmailSendCodeEmailTemplate,
       mapMail(sessionVerification)

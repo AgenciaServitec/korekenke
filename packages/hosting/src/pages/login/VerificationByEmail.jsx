@@ -92,8 +92,8 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
     );
 
     console.log(
-      "verifyEmailVerifyCodeResponse: ",
-      verifyEmailVerifyCodeResponse,
+      "postVerifyEmailVerifyCodeResponse: ",
+      postVerifyEmailVerifyCodeResponse,
     );
 
     if (!verifyEmailVerifyCodeResponse) {
@@ -114,6 +114,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
   return (
     <VerificationByEmail
       prev={prev}
+      user={user}
       onVerifyEmailCode={onVerifyEmailCode}
       expiredVerifiedCode={expiredVerifiedCode}
       setExpiredVerifiedCode={setExpiredVerifiedCode}
@@ -126,6 +127,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
 
 const VerificationByEmail = ({
   prev,
+  user,
   onVerifyEmailCode,
   expiredVerifiedCode,
   setExpiredVerifiedCode,
@@ -137,6 +139,7 @@ const VerificationByEmail = ({
     verificationCode: yup
       .string()
       .min(6)
+      .max(6)
       .required()
       .transform((value) => (value === null ? "" : value)),
   });
@@ -160,6 +163,15 @@ const VerificationByEmail = ({
             <h3 onClick={() => setExpiredVerifiedCode(false)}>
               Verificación por Email
             </h3>
+          </Col>
+          <Col span={24}>
+            <p>
+              Ingresa el código de verificación de 6 dígitos enviado a{" "}
+              <strong>{user?.email}</strong>.
+            </p>
+            <p>
+              Si no le llego el código vuelva a reenviarlo e intentelo de nuevo.
+            </p>
           </Col>
           <Col span={24}>
             <Controller
@@ -188,7 +200,7 @@ const VerificationByEmail = ({
                         </a>
                       )
                     ) : (
-                      <span>En espera</span>
+                      <span>Código enviado</span>
                     )
                   }
                 />
