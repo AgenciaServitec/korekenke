@@ -13,7 +13,10 @@ import {
   useApiVerifyEmailVerifyCodePost,
 } from "../../api";
 import { getLocalStorage } from "../../utils";
-import { fetchUsersByCip } from "../../firebase/collections";
+import {
+  fetchUsersByCip,
+  updateSessionVerification,
+} from "../../firebase/collections";
 import { isEmpty } from "lodash";
 
 export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
@@ -60,11 +63,11 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
       if (postVerifyEmailSendCodeResponse.data === "verify_code_exists") {
         return notification({
           type: "warning",
-          title: "El código ya a sido enviado!",
+          title: "¡El código ya ha sido enviado!",
         });
       }
 
-      notification({ type: "success", title: "Código enviado exitosamente!" });
+      notification({ type: "success", title: "¡Código enviado exitosamente!" });
     } catch (e) {
       console.error("Error postVerifyEmailSendCode: ", e);
       notification({ type: "error" });
@@ -77,7 +80,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
     if (!expiredVerifiedCode) {
       const interval = setTimeout(() => {
         setExpiredVerifiedCode(true);
-      }, 5000);
+      }, 290000);
 
       return () => clearInterval(interval);
     }
@@ -91,22 +94,17 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
       verificationCode,
     );
 
-    console.log(
-      "postVerifyEmailVerifyCodeResponse: ",
-      postVerifyEmailVerifyCodeResponse,
-    );
-
     if (!verifyEmailVerifyCodeResponse) {
       setExpiredVerifiedCode(true);
       notification({
         type: "warning",
-        title:
-          "El código no es correcto o a expirado, vuelva a reenviar un nuevo código, e intentelo de nuevo!",
+        title: "¡El código no es correcto vuelva a inténtelo de nuevo!",
       });
       return;
     }
 
     setExpiredVerifiedCode(true);
+    await updateSessionVerification(user.id, { isVerified: true });
 
     next();
   };
@@ -114,6 +112,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
   return (
     <VerificationByEmail
       prev={prev}
+      next={next}
       user={user}
       onVerifyEmailCode={onVerifyEmailCode}
       expiredVerifiedCode={expiredVerifiedCode}
@@ -127,6 +126,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
 
 const VerificationByEmail = ({
   prev,
+  next,
   user,
   onVerifyEmailCode,
   expiredVerifiedCode,
@@ -160,9 +160,7 @@ const VerificationByEmail = ({
       <Form onSubmit={handleSubmit(onSubmitVerifyEmailCode)}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <h3 onClick={() => setExpiredVerifiedCode(false)}>
-              Verificación por Email
-            </h3>
+            <h3>Verificación por Email</h3>
           </Col>
           <Col span={24}>
             <p>
@@ -172,6 +170,11 @@ const VerificationByEmail = ({
             <p>
               Si no le llego el código vuelva a reenviarlo e intentelo de nuevo.
             </p>
+            {user?.roleCode === "super_admin" && (
+              <p className="link-color" onClick={() => next()}>
+                Soy super admin
+              </p>
+            )}
           </Col>
           <Col span={24}>
             <Controller
@@ -196,7 +199,7 @@ const VerificationByEmail = ({
                           href="#"
                           onClick={() => onFetchVerifyEmailSendCode()}
                         >
-                          Reenviar
+                          Enviar
                         </a>
                       )
                     ) : (

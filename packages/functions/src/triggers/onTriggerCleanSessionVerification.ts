@@ -13,6 +13,11 @@ export const onTriggerCleanSessionVerification: OnDocumentCreated = async (
 
     assert(sessionVerification, "Missing sessionVerification!");
 
+    // if (sessionVerification.isVerified) {
+    //   logger.log("sessionVerification: ", sessionVerification);
+    //   return;
+    // }
+
     await CleanSessionVerification(sessionVerification);
   } catch (e) {
     logger.error(e);
@@ -27,5 +32,5 @@ const CleanSessionVerification = async (
       .collection("session-verification")
       .doc(sessionVerification.id)
       .delete();
-  }, 60000);
+  }, 300000);
 };

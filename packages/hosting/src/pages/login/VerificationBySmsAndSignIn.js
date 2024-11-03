@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, Form, InputCode, notification, Title } from "../../components";
+import {
+  Button,
+  Col,
+  Form,
+  InputCode,
+  notification,
+  Title,
+} from "../../components";
 import styled from "styled-components";
 import { getLocalStorage } from "../../utils";
 import * as yup from "yup";
@@ -9,6 +16,7 @@ import { useFormUtils } from "../../hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase/compat/app";
+import { Row } from "antd";
 
 export const VerificationBySmsAndSignInIntegration = ({
   prev,
@@ -156,10 +164,19 @@ const VerificationBySmsAndSignIn = ({
     <Container>
       {currentStep === 2 && (
         <div className="send-phone-code-wrapper">
-          <div className="title-login">
-            <Title level={3}>Verificación Código</Title>
-            <Title level={3}>+51 {phoneNumber}</Title>
-          </div>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <h3>Verificación por Teléfono</h3>
+            </Col>
+            <Col span={24}>
+              <p>Envía el código de 6 dígitos al siguiente teléfono:</p>
+            </Col>
+            <Col span={24}>
+              <div className="title-login">
+                <Title level={3}>+51 {phoneNumber}</Title>
+              </div>
+            </Col>
+          </Row>
           <br />
           <Button
             block
@@ -190,7 +207,7 @@ const VerificationBySmsAndSignIn = ({
       {currentStep === 3 && (
         <Form onSubmit={handleSubmit(onSubmitSignIn)}>
           <div className="title-login">
-            <Title level={3}>Verifica e inicia sesión</Title>
+            <Title level={3}>Ingresa el código e inicia sesión</Title>
           </div>
           <Controller
             name="verificationCode"
