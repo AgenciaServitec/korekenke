@@ -9,13 +9,14 @@ import {
   VersionProvider,
 } from "./providers";
 import { deleteSessionVerification } from "./firebase/collections";
+import { isEmpty } from "lodash";
 
 const App = () => {
   const { authUser } = useAuthentication();
 
   useEffect(() => {
     (async () => {
-      if (authUser) {
+      if (!isEmpty(authUser)) {
         await deleteSessionVerification(authUser.id);
       }
     })();
