@@ -48,7 +48,7 @@ export const GlobalDataProvider = ({ children }) => {
 
     if (authUser.roleCode !== "super_admin") {
       return usersQuery
-        .where("commandsIds", "array-contains", currentCommand?.id)
+        .where("commandsIds", "array-contains", currentCommand?.id || "ep")
         .where("isDeleted", "==", false);
     }
 

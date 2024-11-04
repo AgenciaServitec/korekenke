@@ -13,10 +13,7 @@ import {
   useApiVerifyEmailVerifyCodePost,
 } from "../../api";
 import { getLocalStorage } from "../../utils";
-import {
-  fetchUsersByCip,
-  updateSessionVerification,
-} from "../../firebase/collections";
+import { fetchUsersByCip } from "../../firebase/collections";
 import { isEmpty } from "lodash";
 
 export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
@@ -80,7 +77,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
     if (!expiredVerifiedCode) {
       const interval = setTimeout(() => {
         setExpiredVerifiedCode(true);
-      }, 290000);
+      }, 60000);
 
       return () => clearInterval(interval);
     }
@@ -104,8 +101,6 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
     }
 
     setExpiredVerifiedCode(true);
-    await updateSessionVerification(user.id, { isVerified: true });
-
     next();
   };
 

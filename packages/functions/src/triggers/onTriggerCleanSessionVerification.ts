@@ -32,5 +32,5 @@ const CleanSessionVerification = async (
       .collection("session-verification")
       .doc(sessionVerification.id)
       .delete();
-  }, 300000);
+  }, 60000);
 };
