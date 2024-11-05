@@ -4,7 +4,14 @@ import {
   updateMilitaryRecruitment,
 } from "../../firebase/collections";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { Col, modalConfirm, notification, Row, Title } from "../../components";
+import {
+  Acl,
+  Col,
+  modalConfirm,
+  notification,
+  Row,
+  Title,
+} from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { MilitaryRecruitmentTable } from "./militaryRecruitmentTable";
@@ -56,22 +63,29 @@ const MilitaryRecruitmentServiceList = ({
   onConfirmDeleteMilitaryRecruitment,
 }) => {
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Space>
-          <Title level={3}>Lista de Registrados</Title>
-        </Space>
-      </Col>
-      <Col span={24}>
-        <MilitaryRecruitmentTable
-          loading={militaryRecruitmentLoading}
-          militaryRecruitment={militaryRecruitment}
-          onEditMilitaryRecruitment={onEditMilitaryRecruitment}
-          onConfirmDeleteMilitaryRecruitment={
-            onConfirmDeleteMilitaryRecruitment
-          }
-        />
-      </Col>
-    </Row>
+    <Acl
+      category="public"
+      subCategory="militaryServiceRecruitment"
+      name="/military-service-recruitment"
+      redirect
+    >
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Space>
+            <Title level={3}>Lista de Registrados</Title>
+          </Space>
+        </Col>
+        <Col span={24}>
+          <MilitaryRecruitmentTable
+            loading={militaryRecruitmentLoading}
+            militaryRecruitment={militaryRecruitment}
+            onEditMilitaryRecruitment={onEditMilitaryRecruitment}
+            onConfirmDeleteMilitaryRecruitment={
+              onConfirmDeleteMilitaryRecruitment
+            }
+          />
+        </Col>
+      </Row>
+    </Acl>
   );
 };

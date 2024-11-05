@@ -1,8 +1,14 @@
 import React from "react";
 import dayjs from "dayjs";
 import { Acl, IconAction, Space, TableVirtualized } from "../../components";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faMapLocation,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from "styled-components";
 
 export const MilitaryRecruitmentTable = ({
   loading,
@@ -42,6 +48,37 @@ export const MilitaryRecruitmentTable = ({
       align: "center",
       width: ["15rem", "100%"],
       render: (recruited) => recruited.email,
+    },
+    {
+      title: "Ubicación",
+      align: "center",
+      width: ["10rem", "100%"],
+      render: (recruited) => (
+        <>
+          {recruited?.location?.latitude === null ? (
+            <Container>
+              <span>No se obtuvo su ubicación</span>
+            </Container>
+          ) : (
+            <>
+              <a
+                href={`https://www.google.com/maps/place/${recruited?.location?.latitude},${recruited?.location?.longitude}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Space>
+                  <FontAwesomeIcon
+                    icon={faMapLocation}
+                    color="blue"
+                    size="lg"
+                  />
+                  Ver mapa
+                </Space>
+              </a>
+            </>
+          )}
+        </>
+      ),
     },
     {
       title: "Opciones",
@@ -87,3 +124,8 @@ export const MilitaryRecruitmentTable = ({
     />
   );
 };
+
+const Container = styled.div`
+  color: red;
+  font-weight: 500;
+`;
