@@ -5,6 +5,7 @@ import {
   Form,
   Input,
   notification,
+  RadioGroup,
   Row,
   Select,
   Spinner,
@@ -90,6 +91,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     firstName: formData.firstName,
     paternalSurname: formData.paternalSurname,
     maternalSurname: formData.maternalSurname,
+    gender: formData.gender === "m" ? "male" : "female",
     phone: {
       prefix: "+51",
       number: formData.phoneNumber,
@@ -184,7 +186,6 @@ export const MilitaryRecruitmentServiceIntegration = () => {
         <MilitaryServiceRecruitment
           onSaveMilitaryRecruitmentService={onSaveMilitaryRecruitmentService}
           recruited={recruited}
-          currentStep={currentStep}
           loading={loading}
           getPersonDataByDni={getPersonDataByDni}
           getPersonDataByDniLoading={getPersonDataByDniLoading}
@@ -246,6 +247,7 @@ const MilitaryServiceRecruitment = ({
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
+    gender: yup.string().required(),
     phoneNumber: yup.string().min(9).required(),
     email: yup.string().email().required(),
     educationLevel: yup.string().required(),
@@ -274,6 +276,7 @@ const MilitaryServiceRecruitment = ({
       firstName: "",
       paternalSurname: "",
       maternalSurname: "",
+      gender: "",
       phoneNumber: "",
       email: "",
       educationLevel: "",
@@ -284,6 +287,7 @@ const MilitaryServiceRecruitment = ({
     setValue("firstName", capitalize(user?.firstName || ""));
     setValue("paternalSurname", capitalize(user?.paternalSurname || ""));
     setValue("maternalSurname", capitalize(user?.maternalSurname || ""));
+    setValue("gender", capitalize(user?.gender || ""));
   };
 
   useEffect(() => {
@@ -300,6 +304,7 @@ const MilitaryServiceRecruitment = ({
 
           userResetFields(response);
         } catch (e) {
+          notification({ type: "info", title: "No se encontró el DNI." });
           const errorResponse = getApiErrorResponse(e);
           apiErrorNotification(errorResponse);
           userResetFields(null);
@@ -360,6 +365,27 @@ const MilitaryServiceRecruitment = ({
                 name={name}
                 value={value}
                 onChange={onChange}
+                error={error(name)}
+                helperText={errorMessage(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24}>
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <RadioGroup
+                label="Sexo"
+                name={name}
+                value={value}
+                onChange={onChange}
+                options={[
+                  { label: "Hombre", value: "m" },
+                  { label: "Mujer", value: "f" },
+                ]}
                 error={error(name)}
                 helperText={errorMessage(name)}
                 required={required(name)}

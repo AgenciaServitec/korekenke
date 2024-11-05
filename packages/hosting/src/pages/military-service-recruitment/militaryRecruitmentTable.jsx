@@ -1,8 +1,14 @@
 import React from "react";
 import dayjs from "dayjs";
 import { Acl, IconAction, Space, TableVirtualized } from "../../components";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faHome,
+  faMapLocation,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const MilitaryRecruitmentTable = ({
   loading,
@@ -42,6 +48,23 @@ export const MilitaryRecruitmentTable = ({
       align: "center",
       width: ["15rem", "100%"],
       render: (recruited) => recruited.email,
+    },
+    {
+      title: "Ubicación",
+      align: "center",
+      width: ["10rem", "100%"],
+      render: (recruited) => (
+        <Space>
+          <FontAwesomeIcon icon={faMapLocation} size="lg" />
+          <a
+            href={`https://www.google.com/maps/@${recruited?.location?.latitude},${recruited?.location?.longitude}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Ver mapa
+          </a>
+        </Space>
+      ),
     },
     {
       title: "Opciones",
