@@ -33,7 +33,7 @@ export const getPersonDataByDni = async ({
 
   const dataJson = { ...data };
 
-  logger.log("dataJson: ", dataJson);
+  logger.info("DATA_JSON: ", dataJson);
 
   return mapPerson(data.resultado);
 };
