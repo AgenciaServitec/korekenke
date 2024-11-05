@@ -3,11 +3,10 @@ import dayjs from "dayjs";
 import { Acl, IconAction, Space, TableVirtualized } from "../../components";
 import {
   faEdit,
-  faHome,
   faMapLocation,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { isEmpty, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
