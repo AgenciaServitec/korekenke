@@ -205,7 +205,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
           <>
             <Col span={24}>
               <Title level={2} align="center">
-                Registro de Reclutamiento Militar
+                Reclutamiento Militar
               </Title>
             </Col>
             <Col span={24} md={8}>
