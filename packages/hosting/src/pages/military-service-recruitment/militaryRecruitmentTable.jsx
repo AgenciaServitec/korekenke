@@ -7,8 +7,9 @@ import {
   faMapLocation,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { orderBy } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from "styled-components";
 
 export const MilitaryRecruitmentTable = ({
   loading,
@@ -54,16 +55,30 @@ export const MilitaryRecruitmentTable = ({
       align: "center",
       width: ["10rem", "100%"],
       render: (recruited) => (
-        <Space>
-          <FontAwesomeIcon icon={faMapLocation} size="lg" />
-          <a
-            href={`https://www.google.com/maps/@${recruited?.location?.latitude},${recruited?.location?.longitude}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Ver mapa
-          </a>
-        </Space>
+        <>
+          {recruited?.location?.latitude === null ? (
+            <Container>
+              <span>No se obtuvo su ubicación</span>
+            </Container>
+          ) : (
+            <>
+              <a
+                href={`https://www.google.com/maps/place/${recruited?.location?.latitude},${recruited?.location?.longitude}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Space>
+                  <FontAwesomeIcon
+                    icon={faMapLocation}
+                    color="blue"
+                    size="lg"
+                  />
+                  Ver mapa
+                </Space>
+              </a>
+            </>
+          )}
+        </>
       ),
     },
     {
@@ -110,3 +125,8 @@ export const MilitaryRecruitmentTable = ({
     />
   );
 };
+
+const Container = styled.div`
+  color: red;
+  font-weight: 500;
+`;
