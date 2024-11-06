@@ -374,18 +374,14 @@ const MilitaryServiceRecruitment = ({
         </Col>
         <Col span={24}>
           <Controller
-            name="gender"
+            name="maternalSurname"
             control={control}
             render={({ field: { onChange, value, name } }) => (
-              <RadioGroup
-                label="Sexo"
+              <Input
+                label="Apellido Materno"
                 name={name}
                 value={value}
                 onChange={onChange}
-                options={[
-                  { label: "Hombre", value: "m" },
-                  { label: "Mujer", value: "f" },
-                ]}
                 error={error(name)}
                 helperText={errorMessage(name)}
                 required={required(name)}
@@ -395,14 +391,18 @@ const MilitaryServiceRecruitment = ({
         </Col>
         <Col span={24}>
           <Controller
-            name="maternalSurname"
+            name="gender"
             control={control}
             render={({ field: { onChange, value, name } }) => (
-              <Input
-                label="Apellido Materno"
+              <RadioGroup
+                label="Sexo"
                 name={name}
                 value={value}
                 onChange={onChange}
+                options={[
+                  { label: "Hombre", value: "M" },
+                  { label: "Mujer", value: "F" },
+                ]}
                 error={error(name)}
                 helperText={errorMessage(name)}
                 required={required(name)}
