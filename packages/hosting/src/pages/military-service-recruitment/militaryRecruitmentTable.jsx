@@ -126,7 +126,9 @@ export const MilitaryRecruitmentTable = ({
       render: (recruited) => (
         <>
           {isEmpty(recruited?.location) ? (
-            <span style={{ color: "red" }}>No se obtuvo su ubicación</span>
+            <span style={{ color: "red" }}>
+              El usuario no proporcionó su ubicación
+            </span>
           ) : (
             <>
               <a
