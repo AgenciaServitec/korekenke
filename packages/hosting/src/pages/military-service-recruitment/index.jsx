@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   militaryRecruitmentRef,
   updateMilitaryRecruitment,
@@ -19,6 +19,8 @@ import { MilitaryRecruitmentTable } from "./militaryRecruitmentTable";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartPie } from "@fortawesome/free-solid-svg-icons";
+import { ReplyMilitaryServiceRecruitment } from "./ReplyMilitaryServiceRecruitment";
+import { ReplyMilitaryServiceRecruitmentInformation } from "./ReplyMilitaryServiceRecruitmentInformation";
 
 export const MilitaryRecruitmentServicesIntegration = () => {
   const navigate = useNavigate();
@@ -28,6 +30,11 @@ export const MilitaryRecruitmentServicesIntegration = () => {
     militaryRecruitmentLoading,
     militaryRecruitmentError,
   ] = useCollectionData(militaryRecruitmentRef.where("isDeleted", "==", false));
+
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleModalReplyInformation, setVisibleModalReplyInformation] =
+    useState(false);
+  const [military, setMilitary] = useState(null);
 
   useEffect(() => {
     militaryRecruitmentError && notification({ type: "error" });
@@ -49,12 +56,29 @@ export const MilitaryRecruitmentServicesIntegration = () => {
     });
   };
 
+  const onShowReplyModal = (military) => {
+    setMilitary(military);
+    setVisibleModal(true);
+  };
+
+  const onShowReplyInformationModal = (military) => {
+    setMilitary(military);
+    setVisibleModalReplyInformation(true);
+  };
+
   return (
     <MilitaryRecruitmentServiceList
       militaryRecruitmentLoading={militaryRecruitmentLoading}
       militaryRecruitment={militaryRecruitment}
       onEditMilitaryRecruitment={onEditMilitaryRecruitment}
       onConfirmDeleteMilitaryRecruitment={onConfirmDeleteMilitaryRecruitment}
+      visibleModal={visibleModal}
+      onSetVisibleModal={setVisibleModal}
+      onShowReplyModal={onShowReplyModal}
+      military={military}
+      visibleModalReplyInformation={visibleModalReplyInformation}
+      onSetvisibleModalReplyInformation={setVisibleModalReplyInformation}
+      onShowReplyInformationModal={onShowReplyInformationModal}
     />
   );
 };
@@ -64,6 +88,13 @@ const MilitaryRecruitmentServiceList = ({
   militaryRecruitment,
   onEditMilitaryRecruitment,
   onConfirmDeleteMilitaryRecruitment,
+  visibleModal,
+  onSetVisibleModal,
+  onShowReplyModal,
+  visibleModalReplyInformation,
+  onSetvisibleModalReplyInformation,
+  onShowReplyInformationModal,
+  military,
 }) => {
   const onGoToStatistics = () =>
     window.open("https://lookerstudio.google.com/s/laniAI0kxnA", "_blank");
@@ -98,9 +129,21 @@ const MilitaryRecruitmentServiceList = ({
               onConfirmDeleteMilitaryRecruitment={
                 onConfirmDeleteMilitaryRecruitment
               }
+              onShowReplyModal={onShowReplyModal}
+              onShowReplyInformationModal={onShowReplyInformationModal}
             />
           </Col>
         </Row>
+        <ReplyMilitaryServiceRecruitment
+          visibleModal={visibleModal}
+          onSetVisibleModal={onSetVisibleModal}
+          military={military}
+        />
+        <ReplyMilitaryServiceRecruitmentInformation
+          visibleModal={visibleModalReplyInformation}
+          onSetVisibleModal={onSetvisibleModalReplyInformation}
+          response={military?.response}
+        />
       </Container>
     </Acl>
   );

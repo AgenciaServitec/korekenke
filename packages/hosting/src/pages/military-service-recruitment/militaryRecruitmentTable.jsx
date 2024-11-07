@@ -1,21 +1,32 @@
 import React from "react";
 import dayjs from "dayjs";
-import { Acl, IconAction, Space, TableVirtualized } from "../../components";
+import {
+  Acl,
+  IconAction,
+  Space,
+  TableVirtualized,
+  Tag,
+} from "../../components";
 import {
   faEdit,
+  faEye,
   faMapLocation,
+  faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { capitalize, orderBy } from "lodash";
+import { capitalize, isEmpty, orderBy } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { MilitaryRecruitmentStatus } from "../../data-list";
 
 export const MilitaryRecruitmentTable = ({
   loading,
   militaryRecruitment,
   onEditMilitaryRecruitment,
   onConfirmDeleteMilitaryRecruitment,
+  onShowReplyModal,
+  onShowReplyInformationModal,
 }) => {
   const columns = [
     {
@@ -32,17 +43,11 @@ export const MilitaryRecruitmentTable = ({
       render: (recruited) => recruited.dni,
     },
     {
-      title: "Nombres",
-      align: "center",
-      width: ["15rem", "100%"],
-      render: (recruited) => capitalize(recruited.firstName),
-    },
-    {
-      title: "Apellidos",
+      title: "Apellidos y Nombres",
       align: "center",
       width: ["15rem", "100%"],
       render: (recruited) =>
-        `${capitalize(recruited.paternalSurname)} ${capitalize(recruited.maternalSurname)}`,
+        `${capitalize(recruited.paternalSurname)} ${capitalize(recruited.maternalSurname)} ${capitalize(recruited.firstName)}`,
     },
     {
       title: "Contácto",
@@ -77,13 +82,53 @@ export const MilitaryRecruitmentTable = ({
       ),
     },
     {
+      title: "Estado",
+      align: "center",
+      width: ["5rem", "100%"],
+      render: (recruited) => {
+        const recruitedStatus = MilitaryRecruitmentStatus[recruited.status];
+
+        return (
+          <Tag color={recruitedStatus?.color}>{recruitedStatus?.name}</Tag>
+        );
+      },
+    },
+    {
+      title: "Respuesta",
+      align: "center",
+      width: ["9rem", "100%"],
+      render: (recruited) => {
+        const status = recruited?.response?.type === "positive";
+        return (
+          recruited?.response && (
+            <Space>
+              <div>
+                <Tag color={status ? "green" : "red"}>
+                  {status ? "Positivo" : "Negativo"}
+                </Tag>
+              </div>
+              <IconAction
+                tooltipTitle="Ver detalle de respuesta"
+                icon={faEye}
+                size={30}
+                styled={{ color: (theme) => theme.colors.info }}
+                onClick={() => onShowReplyInformationModal(recruited)}
+              />
+            </Space>
+          )
+        );
+      },
+    },
+    {
       title: "Ubicación",
       align: "center",
       width: ["10rem", "100%"],
       render: (recruited) => (
         <>
-          {recruited?.location?.latitude === null ? (
-            <span style={{ color: "red" }}>No se obtuvo su ubicación</span>
+          {isEmpty(recruited?.location) ? (
+            <span style={{ color: "red" }}>
+              El usuario no proporcionó su ubicación
+            </span>
           ) : (
             <>
               <a
@@ -114,13 +159,29 @@ export const MilitaryRecruitmentTable = ({
           <Acl
             category="public"
             subCategory="militaryServiceRecruitment"
+            name="/military-service-recruitment#reply"
+          >
+            {recruited?.status !== "finalized" && (
+              <IconAction
+                tooltipTitle="Responder registro"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.primary }}
+                onClick={() => onShowReplyModal(recruited)}
+              />
+            )}
+          </Acl>
+          <Acl
+            category="public"
+            subCategory="militaryServiceRecruitment"
             name="/military-service-recruitment/:militaryServiceRecruitmentId"
           >
-            <IconAction
-              tooltipTitle="Editar"
-              icon={faEdit}
-              onClick={() => onEditMilitaryRecruitment(recruited)}
-            />
+            {recruited?.status !== "finalized" && (
+              <IconAction
+                tooltipTitle="Editar"
+                icon={faEdit}
+                onClick={() => onEditMilitaryRecruitment(recruited)}
+              />
+            )}
           </Acl>
           <Acl
             category="public"
