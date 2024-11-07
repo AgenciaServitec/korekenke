@@ -248,7 +248,7 @@ const MilitaryServiceRecruitment = ({
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
     gender: yup.string().required(),
-    phoneNumber: yup.string().min(9).required(),
+    phoneNumber: yup.string().min(9).max(9).required(),
     email: yup.string().email().required(),
     educationLevel: yup.string().required(),
   });
@@ -412,11 +412,11 @@ const MilitaryServiceRecruitment = ({
         </Col>
         <Col span={24}>
           <Controller
-            name="phoneNumber"
+            name="email"
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <Input
-                label="Teléfono"
+                label="Correo Electrónico"
                 name={name}
                 value={value}
                 onChange={onChange}
@@ -429,11 +429,11 @@ const MilitaryServiceRecruitment = ({
         </Col>
         <Col span={24}>
           <Controller
-            name="email"
+            name="phoneNumber"
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <Input
-                label="Correo Electrónico"
+                label="Teléfono"
                 name={name}
                 value={value}
                 onChange={onChange}
