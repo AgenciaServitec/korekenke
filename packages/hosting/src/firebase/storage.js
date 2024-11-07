@@ -19,6 +19,9 @@ export const buckets = {
   departamentoDeApoyoSocial: firebase
     .app()
     .storage(currentConfig.buckets.departamentoDeApoyoSocial),
+  militaryServiceRecruitment: firebase
+    .app()
+    .storage(currentConfig.buckets.militaryServiceRecruitment),
 };
 
 export const imageResizes = ["423x304", "313x370"];
