@@ -112,7 +112,7 @@
       "/military-service-recruitment/new": "Agregar inscripción",
       "/military-service-recruitment/:militaryServiceRecruitmentId": "Editar inscripción",
       "/military-service-recruitment#delete": "Eliminar inscripción",
-      "/military-service-recruitment#reply": "Responder solicitud"
+      "/military-service-recruitment#reply": "Responder registro"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {
