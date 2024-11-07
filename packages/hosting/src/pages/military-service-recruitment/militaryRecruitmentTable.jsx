@@ -6,9 +6,10 @@ import {
   faMapLocation,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { orderBy } from "lodash";
+import { capitalize, orderBy } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 export const MilitaryRecruitmentTable = ({
   loading,
@@ -34,20 +35,46 @@ export const MilitaryRecruitmentTable = ({
       title: "Nombres",
       align: "center",
       width: ["15rem", "100%"],
-      render: (recruited) => recruited.firstName,
+      render: (recruited) => capitalize(recruited.firstName),
     },
     {
       title: "Apellidos",
       align: "center",
       width: ["15rem", "100%"],
       render: (recruited) =>
-        `${recruited.paternalSurname} ${recruited.maternalSurname}`,
+        `${capitalize(recruited.paternalSurname)} ${capitalize(recruited.maternalSurname)}`,
     },
     {
-      title: "Correo",
+      title: "Contácto",
       align: "center",
-      width: ["15rem", "100%"],
-      render: (recruited) => recruited.email,
+      width: ["13rem", "100%"],
+      render: (recruited) => (
+        <div className="contact">
+          <div className="contact__item">
+            <a href={`mailto:${recruited.email}`}>{recruited.email}</a>
+          </div>
+          <div className="contact__item">
+            <IconAction
+              tooltipTitle="Whatsapp"
+              icon={faWhatsapp}
+              size={27}
+              styled={{ color: (theme) => theme.colors.success }}
+              onClick={() =>
+                window.open(
+                  `https://api.whatsapp.com/send?phone=${recruited.phone.prefix.replace(
+                    "+",
+                    "",
+                  )}${recruited.phone.number}`,
+                )
+              }
+            />
+            <span>
+              {recruited.phone.prefix} &nbsp;
+              {recruited.phone.number}
+            </span>
+          </div>
+        </div>
+      ),
     },
     {
       title: "Ubicación",
@@ -56,9 +83,7 @@ export const MilitaryRecruitmentTable = ({
       render: (recruited) => (
         <>
           {recruited?.location?.latitude === null ? (
-            <Container>
-              <span>No se obtuvo su ubicación</span>
-            </Container>
+            <span style={{ color: "red" }}>No se obtuvo su ubicación</span>
           ) : (
             <>
               <a
@@ -69,7 +94,7 @@ export const MilitaryRecruitmentTable = ({
                 <Space>
                   <FontAwesomeIcon
                     icon={faMapLocation}
-                    color="blue"
+                    color="#1677ff"
                     size="lg"
                   />
                   Ver mapa
@@ -115,17 +140,23 @@ export const MilitaryRecruitmentTable = ({
   ];
 
   return (
-    <TableVirtualized
-      loading={loading}
-      dataSource={orderBy(militaryRecruitment, "createAt", "desc")}
-      columns={columns}
-      rowHeaderHeight={50}
-      rowBodyHeight={150}
-    />
+    <Container>
+      <TableVirtualized
+        loading={loading}
+        dataSource={orderBy(militaryRecruitment, "createAt", "desc")}
+        columns={columns}
+        rowHeaderHeight={50}
+        rowBodyHeight={90}
+      />
+    </Container>
   );
 };
 
 const Container = styled.div`
-  color: red;
-  font-weight: 500;
+  .contact {
+    &__item {
+      display: flex;
+      align-items: center;
+    }
+  }
 `;

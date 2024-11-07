@@ -64,6 +64,8 @@ export const MilitaryRecruitmentServiceIntegration = () => {
         ? { id: getMilitaryRecruitmentId() }
         : await fetchMilitaryRecruitment(militaryServiceRecruitmentId);
 
+      if (!_recruited) return onGoBack();
+
       setRecruited(_recruited);
     })();
   }, []);
@@ -99,6 +101,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     email: formData.email,
     educationLevel: formData.educationLevel,
     location: userLocation,
+    status: "pending",
     ...ip,
   });
 

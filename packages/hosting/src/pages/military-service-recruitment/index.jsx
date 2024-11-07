@@ -6,6 +6,7 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   Acl,
+  Button,
   Col,
   modalConfirm,
   notification,
@@ -15,7 +16,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { MilitaryRecruitmentTable } from "./militaryRecruitmentTable";
-import { Space } from "antd";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartPie } from "@fortawesome/free-solid-svg-icons";
 
 export const MilitaryRecruitmentServicesIntegration = () => {
   const navigate = useNavigate();
@@ -62,6 +65,9 @@ const MilitaryRecruitmentServiceList = ({
   onEditMilitaryRecruitment,
   onConfirmDeleteMilitaryRecruitment,
 }) => {
+  const onGoToStatistics = () =>
+    window.open("https://lookerstudio.google.com/s/laniAI0kxnA", "_blank");
+
   return (
     <Acl
       category="public"
@@ -69,23 +75,42 @@ const MilitaryRecruitmentServiceList = ({
       name="/military-service-recruitment"
       redirect
     >
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Space>
-            <Title level={3}>Lista de Registrados</Title>
-          </Space>
-        </Col>
-        <Col span={24}>
-          <MilitaryRecruitmentTable
-            loading={militaryRecruitmentLoading}
-            militaryRecruitment={militaryRecruitment}
-            onEditMilitaryRecruitment={onEditMilitaryRecruitment}
-            onConfirmDeleteMilitaryRecruitment={
-              onConfirmDeleteMilitaryRecruitment
-            }
-          />
-        </Col>
-      </Row>
+      <Container>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <div className="header-content">
+              <Title level={3}>Lista de Registrados</Title>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faChartPie} />}
+                onClick={() => onGoToStatistics()}
+              >
+                {" "}
+                Ver estadísticas
+              </Button>
+            </div>
+          </Col>
+          <Col span={24}>
+            <MilitaryRecruitmentTable
+              loading={militaryRecruitmentLoading}
+              militaryRecruitment={militaryRecruitment}
+              onEditMilitaryRecruitment={onEditMilitaryRecruitment}
+              onConfirmDeleteMilitaryRecruitment={
+                onConfirmDeleteMilitaryRecruitment
+              }
+            />
+          </Col>
+        </Row>
+      </Container>
     </Acl>
   );
 };
+
+const Container = styled.div`
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1em;
+  }
+`;
