@@ -91,7 +91,7 @@ export const MilitaryRecruitmentServiceIntegration = () => {
     firstName: formData.firstName,
     paternalSurname: formData.paternalSurname,
     maternalSurname: formData.maternalSurname,
-    gender: formData.gender === "m" ? "male" : "female",
+    gender: formData.gender,
     phone: {
       prefix: "+51",
       number: formData.phoneNumber,
@@ -400,8 +400,8 @@ const MilitaryServiceRecruitment = ({
                 value={value}
                 onChange={onChange}
                 options={[
-                  { label: "Hombre", value: "M" },
-                  { label: "Mujer", value: "F" },
+                  { label: "Hombre", value: "male" },
+                  { label: "Mujer", value: "female" },
                 ]}
                 error={error(name)}
                 helperText={errorMessage(name)}
