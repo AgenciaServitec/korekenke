@@ -287,7 +287,10 @@ const MilitaryServiceRecruitment = ({
     setValue("firstName", capitalize(user?.firstName || ""));
     setValue("paternalSurname", capitalize(user?.paternalSurname || ""));
     setValue("maternalSurname", capitalize(user?.maternalSurname || ""));
-    setValue("gender", capitalize(user?.gender || ""));
+    setValue(
+      "gender",
+      user?.gender ? (user.gender === "M" ? "male" : "female") : "",
+    );
   };
 
   useEffect(() => {
