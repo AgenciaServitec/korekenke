@@ -4,7 +4,8 @@ import ListAntd from "antd/lib/list";
 import { IconAction } from "../IconAction";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { modalConfirm } from "../modalConfirm";
-import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { darken } from "polished";
 
 export const List = ({
   actions,
@@ -32,7 +33,7 @@ export const List = ({
           key="edit"
           data-testid="edit"
           onClick={onClickEdit}
-          icon={faPencil}
+          icon={faEdit}
         />,
       );
     }
@@ -97,29 +98,14 @@ const ListWrapper = styled.section`
         .ant-list-item {
           position: relative;
           box-sizing: border-box;
-          box-shadow: inset 0 -1px 0 0 rgb(100 121 143 / 12%);
           transition: all ease-in-out 80ms;
-          border-radius: ${theme.border_radius.xx_large};
+          border-radius: ${theme.border_radius.small};
           margin-bottom: 0.5rem;
           border: 1px solid #e4e4e4;
 
           &:hover {
-            border: 1px solid #dadce0;
-            box-shadow:
-              inset 1px 0 0 #dadce0,
-              inset -1px 0 0 #dadce0,
-              0 1px 2px 0 rgb(60 64 67 / 30%),
-              0 1px 3px 1px rgb(60 64 67 / 15%);
+            border: 1px solid ${darken(0.09, "#dadce0")};
             box-sizing: border-box;
-          }
-
-          .ant-list-item-action {
-            li {
-              .ant-list-item-action-split {
-                height: 1.5rem;
-                margin-top: -10px;
-              }
-            }
           }
         }
       }
