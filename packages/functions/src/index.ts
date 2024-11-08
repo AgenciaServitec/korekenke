@@ -1,18 +1,16 @@
 import "moment-timezone";
 import { app } from "./api";
 import {
-  onCreatedSendMailNotificationDasRequest,
-  onUpdatedSendMailDasRequest,
   onTriggerCleanSessionVerification,
-  onUpdatedSendMailMilitaryRecruitment,
+  onTriggerCreatedSendMailNotificationDasRequest,
+  onTriggerUpdatedSendMailDasRequest,
+  onTriggerUpdatedSendMailMilitaryRecruitment,
 } from "./triggers";
 import functionsHttps = require("firebase-functions/v2/https");
 import functionsTrigger = require("firebase-functions/v2/firestore");
-import functionScheduler = require("firebase-functions/v2/scheduler");
 
 type HttpsOptions = functionsHttps.HttpsOptions;
 type TriggersOptions = functionsTrigger.DocumentOptions;
-type ScheduleOptions = functionScheduler.ScheduleOptions;
 
 const httpsOptions = (httpsOptions?: Partial<HttpsOptions>): HttpsOptions => ({
   timeoutSeconds: 540,
@@ -31,34 +29,23 @@ const triggersOptions = (
   ...triggerOptions,
 });
 
-const scheduleOptions = (
-  schedule: string,
-  options?: Partial<ScheduleOptions>
-): ScheduleOptions => ({
-  schedule: schedule || "0 1 * * *",
-  memory: "256MiB",
-  timeoutSeconds: 540,
-  timeZone: "America/Lima",
-  ...options,
-});
-
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
-exports.onCreatedSendMailNotificationDasRequest =
+exports.onTriggerCreatedSendMailNotificationDasRequest =
   functionsTrigger.onDocumentCreated(
     triggersOptions("das-applications/{id}"),
-    onCreatedSendMailNotificationDasRequest
+    onTriggerCreatedSendMailNotificationDasRequest
   );
 
-exports.onUpdatedSendMailDasRequest = functionsTrigger.onDocumentUpdated(
+exports.onTriggerUpdatedSendMailDasRequest = functionsTrigger.onDocumentUpdated(
   triggersOptions("das-applications/{id}"),
-  onUpdatedSendMailDasRequest
+  onTriggerUpdatedSendMailDasRequest
 );
 
-exports.onUpdatedSendMailMilitaryRecruitment =
+exports.onTriggerUpdatedSendMailMilitaryRecruitment =
   functionsTrigger.onDocumentUpdated(
     triggersOptions("military-recruitment/{id}"),
-    onUpdatedSendMailMilitaryRecruitment
+    onTriggerUpdatedSendMailMilitaryRecruitment
   );
 
 exports.onTriggerCleanSessionVerification = functionsTrigger.onDocumentCreated(

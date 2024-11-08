@@ -1,4 +1,4 @@
-export * from "./onCreatedSendMailNotificationDasRequest";
-export * from "./onUpdatedSendMailDasRequest";
-export * from "./onUpdatedSendMailMilitaryRecruitment";
+export * from "./onTriggerCreatedSendMailNotificationDasRequest";
+export * from "./onTriggerUpdatedSendMailDasRequest";
+export * from "./onTriggerUpdatedSendMailMilitaryRecruitment";
 export * from "./onTriggerCleanSessionVerification";

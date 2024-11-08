@@ -6,7 +6,9 @@ import {
 } from "../mailer/korekenke";
 import { sendMailMilitaryServiceRecruitmentFinalized } from "../mailer/korekenke/sendMailMilitaryServiceRecruitmentFinalized";
 
-export const onUpdatedSendMailDasRequest: OnDocumentUpdated = async (event) => {
+export const onTriggerUpdatedSendMailDasRequest: OnDocumentUpdated = async (
+  event
+) => {
   const dasApplication = event.data?.after.data() as DasApplication | undefined;
   const militaryRecruitment = event.data?.after.data() as
     | MilitaryRecruiment

@@ -3,7 +3,7 @@ import { sendMailNotificationDasRequest } from "../mailer/korekenke";
 import assert from "assert";
 import { logger } from "../utils";
 
-export const onCreatedSendMailNotificationDasRequest: OnDocumentCreated =
+export const onTriggerCreatedSendMailNotificationDasRequest: OnDocumentCreated =
   async (event) => {
     const dasApplication = event.data?.data() as DasApplication | undefined;
 
