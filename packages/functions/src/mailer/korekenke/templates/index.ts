@@ -17,4 +17,7 @@ export const template = {
   verifyEmailSendCodeEmailTemplate: htmlTemplate(
     "./verifyEmailSendCodeEmailTemplate.html"
   ),
+  militaryServiceRecruitmentFinalizedEmailTemplate: htmlTemplate(
+    "./militaryServiceRecruitmentFinalizedEmailTemplate.html"
+  ),
 };
