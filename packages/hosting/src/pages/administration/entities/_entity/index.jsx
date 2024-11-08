@@ -64,7 +64,7 @@ export const EntityIntegration = () => {
     ...entity,
     name: formData.name,
     nameId: getNameId(formData.name),
-    abbreviation: lowerCase(formData.abbreviation),
+    abbreviation: formData?.abbreviation.toUpperCase(),
     managerId: formData?.managerId || null,
     commandId: entity?.commandId || currentCommand.id,
   });

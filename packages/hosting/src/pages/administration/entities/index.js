@@ -1,5 +1,13 @@
 import React from "react";
-import { Acl, Button, Col, List, notification, Row } from "../../../components";
+import {
+  Acl,
+  Button,
+  Col,
+  List,
+  notification,
+  Row,
+  Title,
+} from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAuthentication, useGlobalData } from "../../../providers";
@@ -10,6 +18,9 @@ import {
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
 import { updateEntity } from "../../../firebase/collections";
+import { Tag } from "antd";
+import { userFullName } from "../../../utils";
+import { Link } from "react-router-dom";
 
 export const EntitiesGUIntegration = () => {
   const navigate = useNavigate();
@@ -43,6 +54,15 @@ export const EntitiesGUIntegration = () => {
     }
   };
 
+  const entitiesViews = entities.map((entity) => {
+    const manager = users.find((user) => user.id === entity?.managerId);
+
+    return {
+      ...entity,
+      manager: manager || null,
+    };
+  });
+
   return (
     <Acl
       category="administration"
@@ -69,10 +89,32 @@ export const EntitiesGUIntegration = () => {
         </Col>
         <Col span={24}>
           <List
-            dataSource={entities}
+            dataSource={entitiesViews}
             onDeleteItem={(entity) => onDeleteEntity(entity)}
             onEditItem={(entity) => onEditEntity(entity)}
-            itemTitle={(entity) => entity.name}
+            itemTitle={(entity) => (
+              <div>
+                <Title level={5}>
+                  {entity.name}{" "}
+                  {entity?.abbreviation && (
+                    <span>({entity?.abbreviation.toUpperCase()})</span>
+                  )}
+                </Title>
+                <div style={{ fontSize: 12 }}>
+                  Gerente:{" "}
+                  {entity?.managerId ? (
+                    <Link
+                      to={`/users/${entity?.managerId}`}
+                      style={{ fontSize: 12 }}
+                    >
+                      {entity?.manager ? userFullName(entity?.manager) : null}
+                    </Link>
+                  ) : (
+                    "No se asignó un gerente"
+                  )}
+                </div>
+              </div>
+            )}
             visibleEditItem={() =>
               aclCheck("administration", "entities-gu", [
                 "/entities-gu/:entityGUId",
