@@ -1,9 +1,10 @@
 import "moment-timezone";
 import { app } from "./api";
 import {
-  OnCreatedSendMailNotificationDasRequest,
-  OnUpdatedSendMailDasRequest,
+  onCreatedSendMailNotificationDasRequest,
+  onUpdatedSendMailDasRequest,
   onTriggerCleanSessionVerification,
+  onUpdatedSendMailMilitaryRecruitment,
 } from "./triggers";
 import functionsHttps = require("firebase-functions/v2/https");
 import functionsTrigger = require("firebase-functions/v2/firestore");
@@ -43,16 +44,22 @@ const scheduleOptions = (
 
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
-exports.OnCreatedSendMailNotificationDasRequest =
+exports.onCreatedSendMailNotificationDasRequest =
   functionsTrigger.onDocumentCreated(
     triggersOptions("das-applications/{id}"),
-    OnCreatedSendMailNotificationDasRequest
+    onCreatedSendMailNotificationDasRequest
   );
 
-exports.OnUpdatedSendMailDasRequest = functionsTrigger.onDocumentUpdated(
+exports.onUpdatedSendMailDasRequest = functionsTrigger.onDocumentUpdated(
   triggersOptions("das-applications/{id}"),
-  OnUpdatedSendMailDasRequest
+  onUpdatedSendMailDasRequest
 );
+
+exports.onUpdatedSendMailMilitaryRecruitment =
+  functionsTrigger.onDocumentUpdated(
+    triggersOptions("military-recruitment/{id}"),
+    onUpdatedSendMailMilitaryRecruitment
+  );
 
 exports.onTriggerCleanSessionVerification = functionsTrigger.onDocumentCreated(
   triggersOptions("session-verification/{id}"),

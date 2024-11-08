@@ -119,6 +119,32 @@ interface DasApplication {
   updateBy: string;
 }
 
+interface MilitaryRecruiment {
+  id: string;
+  dni: string;
+  firstName: string;
+  paternalSurname: string;
+  maternalSurname: string;
+  gender: string;
+  phone: {
+    prefix: string;
+    number: string;
+  };
+  email: string;
+  educationLevel: string;
+  location: {
+    latitude: string;
+    longitude: string;
+  } | null;
+  response?: Response;
+  status: string;
+  isDeleted: boolean;
+  createAt: string;
+  createBy: string;
+  updateAt: string;
+  updateBy: string;
+}
+
 interface Institution {
   id: string;
   processType: string;
