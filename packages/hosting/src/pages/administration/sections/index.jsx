@@ -6,10 +6,20 @@ import {
   useDefaultFirestoreProps,
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
-import { Acl, Button, Col, List, notification, Row } from "../../../components";
+import {
+  Acl,
+  Button,
+  Col,
+  List,
+  notification,
+  Row,
+  Title,
+} from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { updateSection } from "../../../firebase/collections";
+import { Link } from "react-router-dom";
+import { userFullName } from "../../../utils";
 
 export const SectionsIntegration = () => {
   const navigate = useNavigate();
@@ -43,6 +53,15 @@ export const SectionsIntegration = () => {
     }
   };
 
+  const sectionsViews = sections.map((section) => {
+    const boss = users.find((user) => user.id === section?.bossId);
+
+    return {
+      ...section,
+      boss: boss || null,
+    };
+  });
+
   return (
     <Acl
       category="administration"
@@ -69,10 +88,38 @@ export const SectionsIntegration = () => {
         </Col>
         <Col span={24}>
           <List
-            dataSource={sections}
+            dataSource={sectionsViews}
             onDeleteItem={(section) => onDeleteSection(section)}
             onEditItem={(section) => onEditSection(section)}
-            itemTitle={(section) => section.name}
+            itemTitle={(section) => (
+              <div>
+                <Title level={5}>
+                  {section.name}{" "}
+                  {section?.abbreviation && (
+                    <span>({section?.abbreviation.toUpperCase()})</span>
+                  )}
+                </Title>
+                <div style={{ fontSize: 12 }}>
+                  Jefe:{" "}
+                  {section?.bossId ? (
+                    <Link
+                      to={`/users/${section?.bossId}`}
+                      style={{ fontSize: 12 }}
+                    >
+                      {section?.boss ? userFullName(section?.boss) : null}
+                    </Link>
+                  ) : (
+                    "No se asignó un jefe"
+                  )}
+                </div>
+                <div style={{ fontSize: 12 }}>
+                  Miembros:{" "}
+                  {section?.membersIds
+                    ? section?.membersIds.length
+                    : "No hay miembros"}
+                </div>
+              </div>
+            )}
             visibleEditItem={() =>
               aclCheck("administration", "sections", ["/sections/:sectionId"])
             }

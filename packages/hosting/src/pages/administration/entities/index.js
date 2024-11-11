@@ -18,7 +18,6 @@ import {
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
 import { updateEntity } from "../../../firebase/collections";
-import { Tag } from "antd";
 import { userFullName } from "../../../utils";
 import { Link } from "react-router-dom";
 

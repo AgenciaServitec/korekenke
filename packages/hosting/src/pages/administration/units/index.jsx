@@ -5,7 +5,7 @@ import {
   useDefaultFirestoreProps,
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
-import { updateOffice, updateUnit } from "../../../firebase/collections";
+import { updateUnit } from "../../../firebase/collections";
 import {
   Acl,
   Button,
@@ -13,11 +13,13 @@ import {
   List,
   notification,
   Row,
-  Spinner,
+  Title,
 } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useGlobalData } from "../../../providers";
+import { Link } from "react-router-dom";
+import { userFullName } from "../../../utils";
 
 export const UnitsIntegration = () => {
   const navigate = useNavigate();
@@ -51,6 +53,15 @@ export const UnitsIntegration = () => {
     }
   };
 
+  const unitsViews = units.map((unit) => {
+    const boss = users.find((user) => user.id === unit?.bossId);
+
+    return {
+      ...unit,
+      boss: boss || null,
+    };
+  });
+
   return (
     <Acl category="administration" subCategory="units" name="/units" redirect>
       <Row gutter={[0, 24]}>
@@ -68,10 +79,38 @@ export const UnitsIntegration = () => {
         </Col>
         <Col span={24}>
           <List
-            dataSource={units}
+            dataSource={unitsViews}
             onDeleteItem={(unit) => onDeleteUnit(unit)}
             onEditItem={(unit) => onEditUnit(unit)}
-            itemTitle={(unit) => unit.name}
+            itemTitle={(unit) => (
+              <div>
+                <Title level={5}>
+                  {unit.name}{" "}
+                  {unit?.abbreviation && (
+                    <span>({unit?.abbreviation.toUpperCase()})</span>
+                  )}
+                </Title>
+                <div style={{ fontSize: 12 }}>
+                  Jefe:{" "}
+                  {unit?.bossId ? (
+                    <Link
+                      to={`/users/${unit?.bossId}`}
+                      style={{ fontSize: 12 }}
+                    >
+                      {unit?.boss ? userFullName(unit?.boss) : null}
+                    </Link>
+                  ) : (
+                    "No se asignó un jefe"
+                  )}
+                </div>
+                <div style={{ fontSize: 12 }}>
+                  Miembros:{" "}
+                  {unit?.membersIds
+                    ? unit?.membersIds.length
+                    : "No hay miembros"}
+                </div>
+              </div>
+            )}
             visibleEditItem={() =>
               aclCheck("administration", "units", ["/units/:unitId"])
             }
