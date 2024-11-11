@@ -1,5 +1,13 @@
 import React from "react";
-import { Acl, Button, Col, List, notification, Row } from "../../../components";
+import {
+  Acl,
+  Button,
+  Col,
+  List,
+  notification,
+  Row,
+  Title,
+} from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
@@ -10,6 +18,8 @@ import {
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
 import { updateDepartment } from "../../../firebase/collections";
+import { Link } from "react-router-dom";
+import { userFullName } from "../../../utils";
 
 export const DepartmentsIntegration = () => {
   const navigate = useNavigate();
@@ -44,6 +54,15 @@ export const DepartmentsIntegration = () => {
     }
   };
 
+  const departmentsViews = departments.map((department) => {
+    const boss = users.find((user) => user.id === department?.bossId);
+
+    return {
+      ...department,
+      boss: boss || null,
+    };
+  });
+
   return (
     <Acl
       category="administration"
@@ -70,10 +89,38 @@ export const DepartmentsIntegration = () => {
         </Col>
         <Col span={24}>
           <List
-            dataSource={departments}
+            dataSource={departmentsViews}
             onDeleteItem={(department) => onDeleteDepartment(department)}
             onEditItem={(department) => onEditDepartment(department)}
-            itemTitle={(department) => department.name}
+            itemTitle={(department) => (
+              <div>
+                <Title level={5}>
+                  {department.name}{" "}
+                  {department?.abbreviation && (
+                    <span>({department?.abbreviation.toUpperCase()})</span>
+                  )}
+                </Title>
+                <div style={{ fontSize: 12 }}>
+                  Jefe:{" "}
+                  {department?.bossId ? (
+                    <Link
+                      to={`/users/${department?.bossId}`}
+                      style={{ fontSize: 12 }}
+                    >
+                      {department?.boss ? userFullName(department?.boss) : null}
+                    </Link>
+                  ) : (
+                    "No se asignó un jefe"
+                  )}
+                </div>
+                <div style={{ fontSize: 12 }}>
+                  Miembros:{" "}
+                  {department?.membersIds
+                    ? department?.membersIds.length
+                    : "No hay miembros"}
+                </div>
+              </div>
+            )}
             visibleEditItem={() =>
               aclCheck("administration", "departments", [
                 "/departments/:departmentId",

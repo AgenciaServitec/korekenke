@@ -1,5 +1,13 @@
 import React from "react";
-import { Acl, Button, Col, List, notification, Row } from "../../../components";
+import {
+  Acl,
+  Button,
+  Col,
+  List,
+  notification,
+  Row,
+  Title,
+} from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
@@ -10,6 +18,8 @@ import {
   useUpdateAssignToAndAclsOfUser,
 } from "../../../hooks";
 import { updateOffice } from "../../../firebase/collections";
+import { Link } from "react-router-dom";
+import { userFullName } from "../../../utils";
 
 export const OfficesIntegration = () => {
   const navigate = useNavigate();
@@ -44,6 +54,15 @@ export const OfficesIntegration = () => {
     }
   };
 
+  const officesViews = offices.map((office) => {
+    const boss = users.find((user) => user.id === office?.bossId);
+
+    return {
+      ...office,
+      boss: boss || null,
+    };
+  });
+
   return (
     <Acl
       category="administration"
@@ -70,10 +89,38 @@ export const OfficesIntegration = () => {
         </Col>
         <Col span={24}>
           <List
-            dataSource={offices}
+            dataSource={officesViews}
             onDeleteItem={(office) => onDeleteOffice(office)}
             onEditItem={(office) => onEditOffice(office)}
-            itemTitle={(office) => office.name}
+            itemTitle={(office) => (
+              <div>
+                <Title level={5}>
+                  {office.name}{" "}
+                  {office?.abbreviation && (
+                    <span>({office?.abbreviation.toUpperCase()})</span>
+                  )}
+                </Title>
+                <div style={{ fontSize: 12 }}>
+                  Jefe:{" "}
+                  {office?.bossId ? (
+                    <Link
+                      to={`/users/${office?.bossId}`}
+                      style={{ fontSize: 12 }}
+                    >
+                      {office?.boss ? userFullName(office?.boss) : null}
+                    </Link>
+                  ) : (
+                    "No se asignó un jefe"
+                  )}
+                </div>
+                <div style={{ fontSize: 12 }}>
+                  Miembros:{" "}
+                  {office?.membersIds
+                    ? office?.membersIds.length
+                    : "No hay miembros"}
+                </div>
+              </div>
+            )}
             visibleEditItem={() =>
               aclCheck("administration", "offices", ["/offices/:officeId"])
             }
