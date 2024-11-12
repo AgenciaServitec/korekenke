@@ -20,7 +20,7 @@ import {
   faList,
   faNetworkWired,
   faPoll,
-  faShield,
+  faShield, faUmbrellaBeach,
   faUsers,
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
@@ -407,6 +407,40 @@ export const DrawerLayout = ({
         },
       ],
     },
+    {
+      label: "Solicitud de Vacaciones",
+      key: "holiday",
+      icon: <FontAwesomeIcon icon={faUmbrellaBeach} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+          "public",
+          ["holidayRequest"],
+          ["/holiday-request", "/holiday-request/new"],
+      ),
+      children: [
+        {
+          label: "Realizar solicitud",
+          key: "holiday-request",
+          icon: <FontAwesomeIcon icon={faFilePen} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+              "public",
+              ["holidayRequest"],
+              ["/holiday-request/new"],
+          ),
+          onClick: () => onClickMenu("/holiday-request/new"),
+        },
+        {
+          label: "Lista de solicitudes",
+          key: "holiday-request-list",
+          icon: <FontAwesomeIcon icon={faList} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+              "public",
+              ["holidayRequest"],
+              ["/holiday-request"],
+          ),
+          onClick: () => onClickMenu("/holiday-request"),
+        },
+      ],
+    }
   ];
 
   const filterByRoleCode = (items) => {

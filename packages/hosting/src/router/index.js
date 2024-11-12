@@ -370,6 +370,24 @@ export const Router = () => {
       />
       <Route
         exact
+        path="/holiday-request"
+        element={
+          <AdminLayout>
+            <A.HolidayRequestIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/holiday-request/:holidayRequestId"
+        element={
+          <PublicLayout>
+            <A.HolidayRequestIntegration />
+          </PublicLayout>
+        }
+      />
+      <Route
+        exact
         path="/entities/:entityId/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
       />
