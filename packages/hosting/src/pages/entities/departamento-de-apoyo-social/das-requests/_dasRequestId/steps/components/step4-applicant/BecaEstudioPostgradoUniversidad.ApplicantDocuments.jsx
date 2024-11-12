@@ -10,7 +10,10 @@ import {
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../../../../../../../hooks";
+import {
+  useFormUtils,
+  useIsHaveDocuments,
+} from "../../../../../../../../hooks";
 import { v4 as uuidv4 } from "uuid";
 
 export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
@@ -25,6 +28,8 @@ export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
   onSaveApplicantDocuments,
 }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
+  const { isHeadlineHaveCip, isHeadlineHaveDni, isHeadlineHaveSignature } =
+    useIsHaveDocuments(dasRequest?.headline);
 
   const isHeadline = dasRequest?.isHeadline;
 
@@ -165,141 +170,143 @@ export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
               )}
             />
           </Col>
-          {isHeadline && (
-            <>
-              <Col sm={24} md={12}>
-                <Controller
-                  name="applicant.documents.copyCipHeadline"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Upload
-                      isImage
-                      label="Foto de CIP del Titular"
-                      accept="image/*"
-                      name={name}
-                      value={value}
-                      withThumbImage={false}
-                      bucket="departamentoDeApoyoSocial"
-                      fileName={`copyCipHeadline-photo-${uuidv4()}`}
-                      filePath={`das-applicants/${dasRequest.id}/files`}
-                      additionalFields={{
-                        numberCopies: 2,
-                        label: "Foto de CIP del Titular",
-                      }}
-                      copyFilesTo={
-                        user?.cipPhoto
-                          ? null
-                          : {
-                              withThumbImage: true,
-                              isImage: true,
-                              bucket: "default",
-                              resize: "423x304",
-                              fileName: `cip-photo-${uuidv4()}`,
-                              filePath: `users/${user?.id}/documents`,
-                            }
-                      }
-                      buttonText="Subir archivo"
-                      error={error(name)}
-                      helperText={errorMessage(name)}
-                      required={required(name)}
-                      onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) =>
-                        onSetCipPhotoCopy && onSetCipPhotoCopy(file)
-                      }
-                      onUploading={setUploadingImage}
-                    />
-                  )}
-                />
-              </Col>
-              <Col sm={24} md={12}>
-                <Controller
-                  name="applicant.documents.copyDniHeadline"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Upload
-                      isImage
-                      label="Foto de DNI del Titular"
-                      accept="image/*"
-                      name={name}
-                      value={value}
-                      withThumbImage={false}
-                      bucket="departamentoDeApoyoSocial"
-                      fileName={`copyDniHeadline-photo-${uuidv4()}`}
-                      filePath={`das-applicants/${dasRequest.id}/files`}
-                      additionalFields={{
-                        numberCopies: 2,
-                        label: "Foto de DNI del Titular",
-                      }}
-                      copyFilesTo={
-                        user?.dniPhoto
-                          ? null
-                          : {
-                              withThumbImage: true,
-                              isImage: true,
-                              bucket: "default",
-                              resize: "423x304",
-                              fileName: `dni-photo-${uuidv4()}`,
-                              filePath: `users/${user?.id}/documents`,
-                            }
-                      }
-                      buttonText="Subir archivo"
-                      error={error(name)}
-                      helperText={errorMessage(name)}
-                      required={required(name)}
-                      onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) =>
-                        onSetDniPhotoCopy && onSetDniPhotoCopy(file)
-                      }
-                      onUploading={setUploadingImage}
-                    />
-                  )}
-                />
-              </Col>
-              <Col sm={24} md={12}>
-                <Controller
-                  name="applicant.documents.signaturePhoto"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Upload
-                      isImage
-                      label="Foto de firma del titular"
-                      accept="image/*"
-                      name={name}
-                      value={value}
-                      withThumbImage={false}
-                      bucket="departamentoDeApoyoSocial"
-                      fileName={`signature-photo-${uuidv4()}`}
-                      filePath={`das-applicants/${dasRequest.id}/files`}
-                      additionalFields={{
-                        numberCopies: 2,
-                        label: "Foto de firma del titular",
-                      }}
-                      copyFilesTo={
-                        user?.signaturePhoto
-                          ? null
-                          : {
-                              withThumbImage: true,
-                              isImage: true,
-                              bucket: "default",
-                              resize: "423x304",
-                              fileName: `signature-photo-${uuidv4()}`,
-                              filePath: `users/${user?.id}/documents`,
-                            }
-                      }
-                      buttonText="Subir archivo"
-                      error={error(name)}
-                      helperText={errorMessage(name)}
-                      required={required(name)}
-                      onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) =>
-                        onSetSignaturePhotoCopy && onSetSignaturePhotoCopy(file)
-                      }
-                      onUploading={setUploadingImage}
-                    />
-                  )}
-                />
-              </Col>
-            </>
+          {isHeadlineHaveCip && (
+            <Col sm={24} md={12}>
+              <Controller
+                name="applicant.documents.copyCipHeadline"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Upload
+                    isImage
+                    label="Foto de CIP del Titular"
+                    accept="image/*"
+                    name={name}
+                    value={value}
+                    withThumbImage={false}
+                    bucket="departamentoDeApoyoSocial"
+                    fileName={`copyCipHeadline-photo-${uuidv4()}`}
+                    filePath={`das-applicants/${dasRequest.id}/files`}
+                    additionalFields={{
+                      numberCopies: 2,
+                      label: "Foto de CIP del Titular",
+                    }}
+                    copyFilesTo={
+                      user?.cipPhoto
+                        ? null
+                        : {
+                            withThumbImage: true,
+                            isImage: true,
+                            bucket: "default",
+                            resize: "423x304",
+                            fileName: `cip-photo-${uuidv4()}`,
+                            filePath: `users/${user?.id}/documents`,
+                          }
+                    }
+                    buttonText="Subir archivo"
+                    error={error(name)}
+                    helperText={errorMessage(name)}
+                    required={required(name)}
+                    onChange={(file) => onChange(file)}
+                    onChangeCopy={(file) =>
+                      onSetCipPhotoCopy && onSetCipPhotoCopy(file)
+                    }
+                    onUploading={setUploadingImage}
+                  />
+                )}
+              />
+            </Col>
+          )}
+          {isHeadlineHaveDni && (
+            <Col sm={24} md={12}>
+              <Controller
+                name="applicant.documents.copyDniHeadline"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Upload
+                    isImage
+                    label="Foto de DNI del Titular"
+                    accept="image/*"
+                    name={name}
+                    value={value}
+                    withThumbImage={false}
+                    bucket="departamentoDeApoyoSocial"
+                    fileName={`copyDniHeadline-photo-${uuidv4()}`}
+                    filePath={`das-applicants/${dasRequest.id}/files`}
+                    additionalFields={{
+                      numberCopies: 2,
+                      label: "Foto de DNI del Titular",
+                    }}
+                    copyFilesTo={
+                      user?.dniPhoto
+                        ? null
+                        : {
+                            withThumbImage: true,
+                            isImage: true,
+                            bucket: "default",
+                            resize: "423x304",
+                            fileName: `dni-photo-${uuidv4()}`,
+                            filePath: `users/${user?.id}/documents`,
+                          }
+                    }
+                    buttonText="Subir archivo"
+                    error={error(name)}
+                    helperText={errorMessage(name)}
+                    required={required(name)}
+                    onChange={(file) => onChange(file)}
+                    onChangeCopy={(file) =>
+                      onSetDniPhotoCopy && onSetDniPhotoCopy(file)
+                    }
+                    onUploading={setUploadingImage}
+                  />
+                )}
+              />
+            </Col>
+          )}
+          {isHeadlineHaveSignature && (
+            <Col sm={24} md={12}>
+              <Controller
+                name="applicant.documents.signaturePhoto"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Upload
+                    isImage
+                    label="Foto de firma del titular"
+                    accept="image/*"
+                    name={name}
+                    value={value}
+                    withThumbImage={false}
+                    bucket="departamentoDeApoyoSocial"
+                    fileName={`signature-photo-${uuidv4()}`}
+                    filePath={`das-applicants/${dasRequest.id}/files`}
+                    additionalFields={{
+                      numberCopies: 2,
+                      label: "Foto de firma del titular",
+                    }}
+                    copyFilesTo={
+                      user?.signaturePhoto
+                        ? null
+                        : {
+                            withThumbImage: true,
+                            isImage: true,
+                            bucket: "default",
+                            resize: "423x304",
+                            fileName: `signature-photo-${uuidv4()}`,
+                            filePath: `users/${user?.id}/documents`,
+                          }
+                    }
+                    buttonText="Subir archivo"
+                    error={error(name)}
+                    helperText={errorMessage(name)}
+                    required={required(name)}
+                    onChange={(file) => onChange(file)}
+                    onChangeCopy={(file) =>
+                      onSetSignaturePhotoCopy && onSetSignaturePhotoCopy(file)
+                    }
+                    onUploading={setUploadingImage}
+                  />
+                )}
+              />
+            </Col>
           )}
           {!isHeadline && (
             <>
