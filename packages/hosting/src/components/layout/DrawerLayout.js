@@ -20,7 +20,8 @@ import {
   faList,
   faNetworkWired,
   faPoll,
-  faShield, faUmbrellaBeach,
+  faShield,
+  faUmbrellaBeach,
   faUsers,
   faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
@@ -412,9 +413,9 @@ export const DrawerLayout = ({
       key: "holiday",
       icon: <FontAwesomeIcon icon={faUmbrellaBeach} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
-          "public",
-          ["holidayRequest"],
-          ["/holiday-request", "/holiday-request/new"],
+        "public",
+        ["holidayRequest"],
+        ["/holiday-request", "/holiday-request/new"],
       ),
       children: [
         {
@@ -422,9 +423,9 @@ export const DrawerLayout = ({
           key: "holiday-request",
           icon: <FontAwesomeIcon icon={faFilePen} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
-              "public",
-              ["holidayRequest"],
-              ["/holiday-request/new"],
+            "public",
+            ["holidayRequest"],
+            ["/holiday-request/new"],
           ),
           onClick: () => onClickMenu("/holiday-request/new"),
         },
@@ -433,14 +434,14 @@ export const DrawerLayout = ({
           key: "holiday-request-list",
           icon: <FontAwesomeIcon icon={faList} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
-              "public",
-              ["holidayRequest"],
-              ["/holiday-request"],
+            "public",
+            ["holidayRequest"],
+            ["/holiday-request"],
           ),
           onClick: () => onClickMenu("/holiday-request"),
         },
       ],
-    }
+    },
   ];
 
   const filterByRoleCode = (items) => {

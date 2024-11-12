@@ -1,5 +1,8 @@
 import React from "react";
+import styled from "styled-components";
 
 export const HolidayRequestIntegration = () => {
-  return <div></div>;
+  return <Container></Container>;
 };
+
+const Container = styled.div``;
