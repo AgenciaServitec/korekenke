@@ -33,6 +33,7 @@ export * from "./surveys/organizational-climate-studies/_organizationalClimateSt
 export * from "./surveys/organizational-climate-studies/sheets";
 export * from "./military-service-recruitment";
 export * from "./military-service-recruitment/_militaryServiceRecruitmentId";
+export * from "./holiday-request";
 
 //ENTITIES "departamento-de-apoyo-social"
 export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
