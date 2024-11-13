@@ -114,13 +114,13 @@
       "/military-service-recruitment#delete": "Eliminar inscripción",
       "/military-service-recruitment#reply": "Responder inscripción"
     },
-    "holidayRequest": {
+    "holidaysRequest": {
       "label": "Solicitud de Vacaciones",
-      "/holiday-request": "Menu: Solicitud de Vacaciones",
-      "/holiday-request/new": "Añadir solicitud",
-      "/holiday-request/:holidayRequestId": "Editar solicitud",
-      "/holiday-request#delete": "Eliminar solicitud",
-      "/holiday-request#reply": "Responder solicitud"
+      "/holidays-request": "Menu: Solicitud de Vacaciones",
+      "/holidays-request/new": "Añadir solicitud",
+      "/holidays-request/:holidayRequestId": "Editar solicitud",
+      "/holidays-request#delete": "Eliminar solicitud",
+      "/holidays-request#reply": "Responder solicitud"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {
