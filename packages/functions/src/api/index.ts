@@ -1,6 +1,10 @@
 import express from "express";
 import cors from "cors";
-import { errorHandler, hostingToApi } from "./_middlewares";
+import {
+  errorHandler,
+  hostingToApi,
+  validateFirebaseIdToken,
+} from "./_middlewares";
 import { body } from "express-validator";
 import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
@@ -9,16 +13,20 @@ import { getUserByCip } from "./consult";
 import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
 import { getIp } from "./consult/getIp";
 import { postSendCode, postVerificationCode } from "./sign-in";
+import cookieParser from "cookie-parser";
 
 const app: express.Application = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(hostingToApi);
+app.use(cookieParser());
 
-app.get("/", (req, res) => res.status(200).send("Welcome!").end());
+app.get("/", validateFirebaseIdToken, (req, res) =>
+  res.status(200).send("Welcome!").end()
+);
 
 app.post(
   "/user",

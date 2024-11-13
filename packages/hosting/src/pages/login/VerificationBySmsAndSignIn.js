@@ -88,6 +88,13 @@ export const VerificationBySmsAndSignInIntegration = ({
         .auth()
         .signInWithCredential(credential);
 
+      const response = await fetch("https://api-korekenke-dev.web.app/", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      console.log(data.message);
+
       if (!userCredential.user) throw new Error(userCredential);
 
       setVerificationId("");

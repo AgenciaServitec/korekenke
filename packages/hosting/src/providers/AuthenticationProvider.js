@@ -63,6 +63,10 @@ export const AuthenticationProvider = ({ children }) => {
       await auth.setPersistence(authPersistence.LOCAL);
       await auth.signInWithEmailAndPassword(email, password);
 
+      const token = await auth.currentUser.getIdToken();
+
+      document.cookie = `authToken=${token};HttpOnly;Secure;SameSite=Strict;Path=/;`;
+
       setLoginLoading(false);
     } catch (e) {
       const error = isError(e) ? e : undefined;
