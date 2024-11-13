@@ -1,0 +1,26 @@
+{
+  "waiting": {
+    "name": "En espera",
+    "color": "yellow"
+  },
+  "proceeds": {
+    "name": "Procede",
+    "color": "blue"
+  },
+  "notProceeds": {
+    "name": "No Procede",
+    "color": "red"
+  },
+  "pending": {
+    "name": "Pendiente",
+    "color": "orange"
+  },
+  "inProgress": {
+    "name": "En proceso",
+    "color": "blue"
+  },
+  "finalized": {
+    "name": "Finalizado",
+    "color": "green"
+  }
+}
