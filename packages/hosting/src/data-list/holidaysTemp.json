@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1",
+    "createAt": "2023-10-12T12:00:00",
+    "user": {
+      "firstName": "Joaquin",
+      "paternalSurname": "Huaranga",
+      "maternalSurname": "Orihuela"
+    },
+    "startDate": "Hoy",
+    "endDate": "Mañana",
+    "status": "ñose",
+    "response": "Confirmada"
+  }
+]

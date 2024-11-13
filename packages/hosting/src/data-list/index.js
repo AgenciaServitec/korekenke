@@ -22,4 +22,6 @@ export { default as ApplicantDocumentsOrdered } from "./applicantDocumentsOrdere
 export { default as GroupRoles } from "./groupRoles.json";
 export { default as EducationLevel } from "./educationLevel.json";
 export { default as MilitaryRecruitmentStatus } from "./militaryRecruitmentStatus.json";
+export { default as HolidaysRequestStatus } from "./holidaysRequestStatus.json";
+export { default as HolidaysTemps } from "./holidaysTemp.json";
 export * from "./animalParentsDefaultData";
