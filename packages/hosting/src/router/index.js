@@ -370,20 +370,20 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/holiday-request"
+        path="/holidays-request"
         element={
           <AdminLayout>
-            <A.HolidayRequestIntegration />
+            <A.HolidaysRequestIntegration />
           </AdminLayout>
         }
       />
       <Route
         exact
-        path="/holiday-request/:holidayRequestId"
+        path="/holidays-request/:holidayRequestId"
         element={
-          <PublicLayout>
+          <AdminLayout>
             <A.HolidayRequestIntegration />
-          </PublicLayout>
+          </AdminLayout>
         }
       />
       <Route
