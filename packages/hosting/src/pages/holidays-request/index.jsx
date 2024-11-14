@@ -5,8 +5,6 @@ import { Acl, Row, Col, Title } from "../../components";
 import { useNavigate } from "react-router";
 
 export const HolidaysRequestIntegration = () => {
-  const navigate = useNavigate();
-
   return <HolidayList />;
 };
 

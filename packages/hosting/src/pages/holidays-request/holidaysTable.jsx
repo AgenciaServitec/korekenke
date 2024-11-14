@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {Acl, IconAction, TableVirtualized} from "../../components";
 import { capitalize } from "lodash";
 import {HolidaysRequestStatus, HolidaysTemps} from "../../data-list";
-import dayjs from "dayjs";
 import {Space, Tag} from "antd";
 import {faEdit, faReply, faTrash} from "@fortawesome/free-solid-svg-icons";
 
