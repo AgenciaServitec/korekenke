@@ -2,8 +2,6 @@ import React from "react";
 import { DatePicker as AntdDatePicker } from "antd";
 import { ComponentContainer } from "./component-container";
 import dayjs from "dayjs";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const DatePicker = ({
   value = undefined,
@@ -19,6 +17,7 @@ export const DatePicker = ({
   allowClear = true,
   onChange,
   prefix = null,
+  disabledDate,
 }) => {
   const Container = ComponentContainer[variant];
 
@@ -46,6 +45,7 @@ export const DatePicker = ({
         allowClear={allowClear}
         variant="borderless"
         prefix={prefix}
+        disabledDate={disabledDate}
       />
     </Container>
   );
