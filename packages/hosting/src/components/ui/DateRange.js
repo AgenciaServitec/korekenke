@@ -3,7 +3,7 @@ import { DatePicker as AntdDatePicker } from "antd";
 import { ComponentContainer } from "./component-container";
 import dayjs from "dayjs";
 
-export const DatePicker = ({
+export const DateRange = ({
   value = undefined,
   name,
   required = false,
@@ -34,7 +34,7 @@ export const DatePicker = ({
       helperText={helperText}
       dataTestId={dataTestId}
     >
-      <AntdDatePicker
+      <AntdDatePicker.RangePicker
         size="large"
         format="DD/MM/YYYY"
         value={value}
