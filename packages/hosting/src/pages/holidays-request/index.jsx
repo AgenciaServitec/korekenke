@@ -10,26 +10,25 @@ export const HolidaysRequestIntegration = () => {
 
 const HolidayList = () => {
   return (
-      <Acl
-          category="public"
-          subCategory="holidaysRequest"
-          name="/holidays-request"
-          redirect
-      >
-        <Container>
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <div className="header-content">
-                <Title level={3}>Lista de Peticiones</Title>
-              </div>
-            </Col>
-            <Col span={24}>
-              <HolidaysTable />
-            </Col>
-          </Row>
-        </Container>
-      </Acl>
-
+    <Acl
+      category="public"
+      subCategory="holidaysRequest"
+      name="/holidays-request"
+      redirect
+    >
+      <Container>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <div className="header-content">
+              <Title level={3}>Lista de Peticiones</Title>
+            </div>
+          </Col>
+          <Col span={24}>
+            <HolidaysTable />
+          </Col>
+        </Row>
+      </Container>
+    </Acl>
   );
 };
 
