@@ -1,57 +1,103 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, DatePicker, Row } from "antd";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import dayjs from "dayjs";
-import { isEmpty } from "lodash";
-import { HolidaysCalendar } from "./HolidaysCalendar";
+import {
+  Row,
+  Col,
+  Button,
+  DateRange,
+  Form,
+  FullCalendarComponent,
+} from "../../../components";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useFormUtils } from "../../../hooks";
+
+const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
 
 export const SearchHolidays = () => {
-  const { RangePicker } = DatePicker;
-  const [date, setDate] = useState([]);
-  const [dateString, setDateString] = useState([]);
-  const [holidaysRangeData, setHolidaysRangeData] = useState([]);
+  const [holidaysRangeData, setHolidaysRangeData] = useState([
+    dayjs(),
+    dayjs(),
+  ]);
+
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
   };
 
-  const setStartDateAndEndDate = async (date, dateString) => {
-    setDate(date);
-    setDateString(dateString);
+  const schema = yup.object({
+    dateRange: yup.mixed().required(),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
+  const onSubmit = (formData) => {
+    console.log("formData: ", formData);
+
+    setHolidaysRangeData(formData.dateRange);
   };
 
-  useEffect(() => {
-    if (!isEmpty(date && dateString)) {
-      console.log("Fechas:", date);
-      console.log("Fechas en String:", dateString);
-    }
-  }, [date]);
+  const dateRangeRules = () => {
+    const [startDate, endDate] = holidaysRangeData;
 
-  const holidaysRange = () => {};
+    const _dateRange = {
+      startDate: dayjs(startDate.toDate()).format(FORMAT_DATE_FULLCALENDAR),
+      endDate: dayjs(endDate.toDate()).format(FORMAT_DATE_FULLCALENDAR),
+    };
+
+    return _dateRange;
+  };
 
   return (
-    <Row gutter={[16, 16]} justify="center">
-      <Col span={8}>
-        <RangePicker
-          disabledDate={disabledDate}
-          style={{ width: "100%", height: "100%" }}
-          onChange={setStartDateAndEndDate}
-        />
-      </Col>
-      <Col span={4}>
-        <Button
-          color="success"
-          variant="solid"
-          size="large"
-          style={{ width: "100%" }}
-          // onclick={getHolidaysRange}
-        >
-          <FontAwesomeIcon icon={faCircleCheck} />
-          GENERAR
-        </Button>
-      </Col>
+    <Row gutter={[16, 16]}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row gutter={[16, 16]} style={{ width: "100%" }}>
+          <Col span={12}>
+            <Controller
+              name="dateRange"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <DateRange
+                  name={name}
+                  value={value}
+                  style={{ width: "100%", height: "100%" }}
+                  disabledDate={disabledDate}
+                  onChange={onChange}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={12}>
+            <Button
+              htmlType="submit"
+              color="success"
+              variant="solid"
+              size="large"
+              style={{ width: "100%" }}
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+              BUSCAR
+            </Button>
+          </Col>
+        </Row>
+      </Form>
       <Col span={24}>
-        <HolidaysCalendar />
+        <FullCalendarComponent
+          startDate={dateRangeRules().startDate}
+          endDate={dateRangeRules().endDate}
+          size="small"
+        />
       </Col>
     </Row>
   );

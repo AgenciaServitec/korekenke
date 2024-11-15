@@ -62,6 +62,8 @@ export * from "./sheet";
 export * from "./Legend";
 export * from "./ShowImagesAndDocumentsModal";
 export * from "./RolesByGroup";
+export * from "./FullCalendar";
+export * from "./DateRange";
 
 const { Link, Paragraph } = Typography;
 

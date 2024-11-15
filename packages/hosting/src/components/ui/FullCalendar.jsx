@@ -1,24 +1,25 @@
 import React from "react";
-import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import styled from "styled-components";
 import esLocale from "@fullcalendar/core/locales/es";
+import FullCalendar from "@fullcalendar/react";
 
-export const HolidaysCalendar = () => {
+export const FullCalendarComponent = ({ startDate, endDate, props }) => {
   const events = [
     {
-      start: "2024-11-21",
-      end: "2024-11-23",
+      start: startDate,
+      end: endDate,
       display: "background",
     },
   ];
-  const today = "2024-11-14";
+
   return (
     <Container>
       <FullCalendar
         plugins={[dayGridPlugin]}
         locale={esLocale}
         events={events}
+        {...props}
       />
     </Container>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SearchHolidays } from "./SearchHolidays";
-import { HolidaysCalendar } from "./HolidaysCalendar";
+import { FullCalendar } from "../../../components/ui/FullCalendar";
 import { Title } from "../../../components";
 import { Space } from "antd";
 
