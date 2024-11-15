@@ -1,45 +1,41 @@
-import React from "react";
-import { Button, Col, Row } from "antd";
-import { DatePicker } from "../../../components";
+import React, { useEffect, useState } from "react";
+import { Button, Col, DatePicker, Row } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import {
-  faHourglassEnd,
-  faHourglassStart,
-} from "@fortawesome/free-solid-svg-icons";
+import dayjs from "dayjs";
+import { isEmpty } from "lodash";
+import { HolidaysCalendar } from "./HolidaysCalendar";
 
 export const SearchHolidays = () => {
-  const showStartAndEndDate = (date, dateString) => {
-    let count = 0;
-
-    const dayAndNumber = [
-      {
-        day: date.format("dddd"),
-        number: date.$D,
-      },
-    ];
-
-    dayAndNumber.map((item) => {
-      if (item.day === "viernes" || item.day === "lunes") {
-        count++;
-      }
-      console.log("limite", count);
-    });
-    // console.log("Date String", dateString);
+  const { RangePicker } = DatePicker;
+  const [date, setDate] = useState([]);
+  const [dateString, setDateString] = useState([]);
+  const [holidaysRangeData, setHolidaysRangeData] = useState([]);
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf("day");
   };
+
+  const setStartDateAndEndDate = async (date, dateString) => {
+    setDate(date);
+    setDateString(dateString);
+  };
+
+  useEffect(() => {
+    if (!isEmpty(date && dateString)) {
+      console.log("Fechas:", date);
+      console.log("Fechas en String:", dateString);
+    }
+  }, [date]);
+
+  const holidaysRange = () => {};
 
   return (
     <Row gutter={[16, 16]} justify="center">
-      <Col span={6}>
-        <DatePicker
-          prefix={<FontAwesomeIcon icon={faHourglassStart} />}
-          onChange={showStartAndEndDate}
-        />
-      </Col>
-      <Col span={6}>
-        <DatePicker
-          prefix={<FontAwesomeIcon icon={faHourglassEnd} />}
-          onChange={showStartAndEndDate}
+      <Col span={8}>
+        <RangePicker
+          disabledDate={disabledDate}
+          style={{ width: "100%", height: "100%" }}
+          onChange={setStartDateAndEndDate}
         />
       </Col>
       <Col span={4}>
@@ -48,10 +44,14 @@ export const SearchHolidays = () => {
           variant="solid"
           size="large"
           style={{ width: "100%" }}
+          // onclick={getHolidaysRange}
         >
           <FontAwesomeIcon icon={faCircleCheck} />
           GENERAR
         </Button>
+      </Col>
+      <Col span={24}>
+        <HolidaysCalendar />
       </Col>
     </Row>
   );
