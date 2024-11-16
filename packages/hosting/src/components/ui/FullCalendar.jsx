@@ -19,13 +19,16 @@ export const FullCalendarComponent = ({ startDate, endDate, props }) => {
         plugins={[dayGridPlugin]}
         locale={esLocale}
         events={events}
+        allDayContent={true}
         {...props}
+        height={500}
       />
     </Container>
   );
 };
 
 const Container = styled.div`
+  margin: 1.5em 0;
   .fc {
     text-transform: uppercase;
     .fc-day-today {
