@@ -18,7 +18,12 @@ import { userFullName } from "../../utils";
 import { orderBy } from "lodash";
 import dayjs from "dayjs";
 
-export const HolidaysTable = ({ loading, holidays, onShowCalendarModal }) => {
+export const HolidaysTable = ({
+  loading,
+  holidays,
+  onShowCalendarModal,
+  onConfirmDeleteHolidayRequest,
+}) => {
   const columns = [
     {
       title: "Fecha creación",
@@ -122,7 +127,7 @@ export const HolidaysTable = ({ loading, holidays, onShowCalendarModal }) => {
               tooltipTitle="Eliminar"
               icon={faTrash}
               styled={{ color: (theme) => theme.colors.error }}
-              onClick={() => console.log("Aun no existe")}
+              onClick={() => onConfirmDeleteHolidayRequest(holiday)}
             />
           </Acl>
         </Space>
