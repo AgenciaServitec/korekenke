@@ -1,16 +1,12 @@
 import React from "react";
-import { FullCalendarComponent, Modal, Row, Col } from "../../components";
+import { FullCalendarComponent, Modal } from "../../components";
 
 export const ViewRequestCalendar = ({
   visibleModal,
   onSetVisibleModal,
-  calendarData,
+  request,
 }) => {
-  const processedDates = calendarData.map((datesTemp) => ({
-    startDate: datesTemp.startDate,
-    endDate: datesTemp.endDate,
-  }));
-
+  // console.log("holidays:", request);
   return (
     <Modal
       style={{ height: "auto" }}
@@ -23,8 +19,8 @@ export const ViewRequestCalendar = ({
       destroyOnClose
     >
       <FullCalendarComponent
-        startDate={processedDates[0]?.startDate}
-        endDate={processedDates[0]?.endDate}
+        startDate={request?.startDate}
+        endDate={request?.endDate}
       />
     </Modal>
   );

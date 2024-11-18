@@ -11,7 +11,6 @@ import {
 } from "../../components";
 import { useNavigate } from "react-router";
 import { ViewRequestCalendar } from "./ViewRequestCalendar";
-import calendarData from "../../data-list/holidaysTemp.json";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { holidaysRef } from "../../firebase/collections/holidays";
 
@@ -23,6 +22,7 @@ export const HolidaysRequestIntegration = () => {
   const [holidays, holidaysLoading, holidaysError] = useCollectionData(
     holidaysRef.where("isDeleted", "==", false),
   );
+  const [holidaysCalendar, setHolidaysCalendar] = useState(null);
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [request, setRequest] = useState(null);
@@ -32,6 +32,7 @@ export const HolidaysRequestIntegration = () => {
   }, [holidaysError]);
 
   const onShowCalendarModal = (request) => {
+    // console.log("request:", request.id);
     setRequest(request);
     setVisibleModal(true);
   };
@@ -40,27 +41,25 @@ export const HolidaysRequestIntegration = () => {
 
   return (
     <HolidayList
+      request={request}
       holidaysLoading={holidaysLoading}
       holidays={holidays}
       visibleModal={visibleModal}
       onSetVisibleModal={setVisibleModal}
       onShowCalendarModal={onShowCalendarModal}
-      calendarData={calendarData}
-      request={request}
       onAddRequest={onAddRequest}
     />
   );
 };
 
 const HolidayList = ({
+  request,
   holidaysLoading,
   holidays,
   visibleModal,
   onSetVisibleModal,
   onShowCalendarModal,
   onAddRequest,
-  request,
-  calendarData,
 }) => {
   return (
     <Acl
@@ -94,7 +93,7 @@ const HolidayList = ({
         <ViewRequestCalendar
           visibleModal={visibleModal}
           onSetVisibleModal={onSetVisibleModal}
-          calendarData={calendarData}
+          request={request}
         />
       </Container>
     </Acl>
