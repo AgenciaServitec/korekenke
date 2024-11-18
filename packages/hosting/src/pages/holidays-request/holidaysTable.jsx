@@ -7,30 +7,31 @@ import {
   Space,
   Tag,
 } from "../../components";
-import { capitalize } from "lodash";
-import { HolidaysRequestStatus, HolidaysTemps } from "../../data-list";
+import { HolidaysRequestStatus } from "../../data-list";
 import {
   faCalendar,
   faEdit,
   faEye,
-  faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { userFullName } from "../../utils";
+import { orderBy } from "lodash";
+import dayjs from "dayjs";
 
-export const HolidaysTable = ({ loading, onShowCalendarModal }) => {
+export const HolidaysTable = ({ loading, holidays, onShowCalendarModal }) => {
   const columns = [
     {
       title: "Fecha creación",
       align: "center",
       width: ["9rem", "100%"],
-      render: (holiday) => holiday.createAt,
+      render: (holiday) =>
+        dayjs(holiday.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Apellidos y Nombres",
       align: "center",
       width: ["15rem", "100%"],
-      render: (holiday) =>
-        `${capitalize(holiday.user.paternalSurname)} ${capitalize(holiday.user.maternalSurname)} ${capitalize(holiday.user.firstName)}`,
+      render: (holiday) => userFullName(holiday.user),
     },
     {
       title: "Fecha de Inicio",
@@ -133,7 +134,8 @@ export const HolidaysTable = ({ loading, onShowCalendarModal }) => {
     <Container>
       <TableVirtualized
         loading={loading}
-        dataSource={HolidaysTemps}
+        // dataSource={HolidaysTemps}
+        dataSource={orderBy(holidays, "createAt", "desc")}
         columns={columns}
         rowHeaderHeight={50}
         rowBodyHeight={90}

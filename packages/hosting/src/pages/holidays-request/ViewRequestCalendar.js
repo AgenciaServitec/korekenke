@@ -22,12 +22,10 @@ export const ViewRequestCalendar = ({
       centered={false}
       destroyOnClose
     >
-      <Col span={24}>
-        <FullCalendarComponent
-          startDate={processedDates[0]?.startDate}
-          endDate={processedDates[0]?.endDate}
-        />
-      </Col>
+      <FullCalendarComponent
+        startDate={processedDates[0]?.startDate}
+        endDate={processedDates[0]?.endDate}
+      />
     </Modal>
   );
 };

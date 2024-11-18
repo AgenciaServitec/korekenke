@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HolidaysTable } from "./holidaysTable";
-import { Acl, Row, Col, Title, AddButton } from "../../components";
+import {
+  Acl,
+  Row,
+  Col,
+  Title,
+  AddButton,
+  notification,
+} from "../../components";
 import { useNavigate } from "react-router";
 import { ViewRequestCalendar } from "./ViewRequestCalendar";
 import calendarData from "../../data-list/holidaysTemp.json";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { holidaysRef } from "../../firebase/collections/holidays";
 
 export const HolidaysRequestIntegration = () => {
   const navigate = useNavigate();
 
   // const navigateTo = (pathname = "new") => navigate(pathname);
 
+  const [holidays, holidaysLoading, holidaysError] = useCollectionData(
+    holidaysRef.where("isDeleted", "==", false),
+  );
+
   const [visibleModal, setVisibleModal] = useState(false);
   const [request, setRequest] = useState(null);
+
+  useEffect(() => {
+    holidaysError && notification({ type: "error" });
+  }, [holidaysError]);
 
   const onShowCalendarModal = (request) => {
     setRequest(request);
@@ -23,6 +40,8 @@ export const HolidaysRequestIntegration = () => {
 
   return (
     <HolidayList
+      holidaysLoading={holidaysLoading}
+      holidays={holidays}
       visibleModal={visibleModal}
       onSetVisibleModal={setVisibleModal}
       onShowCalendarModal={onShowCalendarModal}
@@ -34,6 +53,8 @@ export const HolidaysRequestIntegration = () => {
 };
 
 const HolidayList = ({
+  holidaysLoading,
+  holidays,
   visibleModal,
   onSetVisibleModal,
   onShowCalendarModal,
@@ -63,7 +84,11 @@ const HolidayList = ({
             </Row>
           </div>
           <Col span={24}>
-            <HolidaysTable onShowCalendarModal={onShowCalendarModal} />
+            <HolidaysTable
+              loading={holidaysLoading}
+              holidays={holidays}
+              onShowCalendarModal={onShowCalendarModal}
+            />
           </Col>
         </Row>
         <ViewRequestCalendar
