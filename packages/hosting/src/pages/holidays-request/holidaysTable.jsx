@@ -1,44 +1,56 @@
 import React from "react";
 import styled from "styled-components";
-import { Acl, IconAction, TableVirtualized } from "../../components";
-import { capitalize } from "lodash";
-import { HolidaysRequestStatus, HolidaysTemps } from "../../data-list";
-import { Space, Tag } from "antd";
-import { faEdit, faReply, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  Acl,
+  IconAction,
+  TableVirtualized,
+  Space,
+  Tag,
+} from "../../components";
+import { HolidaysRequestStatus } from "../../data-list";
+import {
+  faCalendar,
+  faEdit,
+  faEye,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { userFullName } from "../../utils";
+import { orderBy } from "lodash";
+import dayjs from "dayjs";
 
-export const HolidaysTable = ({ loading }) => {
+export const HolidaysTable = ({ loading, holidays, onShowCalendarModal }) => {
   const columns = [
     {
       title: "Fecha creación",
       align: "center",
       width: ["9rem", "100%"],
-      render: (added) => added.createAt,
+      render: (holiday) =>
+        dayjs(holiday.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Apellidos y Nombres",
       align: "center",
       width: ["15rem", "100%"],
-      render: (added) =>
-        `${capitalize(added.user.paternalSurname)} ${capitalize(added.user.maternalSurname)} ${capitalize(added.user.firstName)}`,
+      render: (holiday) => userFullName(holiday.user),
     },
     {
       title: "Fecha de Inicio",
       align: "center",
       width: ["11rem", "100%"],
-      render: (added) => added.startDate,
+      render: (holiday) => holiday.startDate,
     },
     {
       title: "Fecha de Finalización",
       align: "center",
       width: ["15rem", "100%"],
-      render: (added) => added.endDate,
+      render: (holiday) => holiday.endDate,
     },
     {
       title: "Estado",
       align: "center",
       width: ["7rem", "100%"],
-      render: (added) => {
-        const holidayStatus = HolidaysRequestStatus[added.status];
+      render: (holiday) => {
+        const holidayStatus = HolidaysRequestStatus[holiday.status];
         return <Tag color={holidayStatus?.color}>{holidayStatus?.name}</Tag>;
       },
     },
@@ -46,25 +58,45 @@ export const HolidaysTable = ({ loading }) => {
       title: "Respuesta",
       align: "center",
       width: ["8rem", "100%"],
-      render: (added) => "Sin respuesta",
+      render: (holiday) => {
+        const status = holiday?.response?.type === "positive";
+        return (
+          holiday?.response && (
+            <Space>
+              <div>
+                <Tag color={status ? "green" : "red"}>
+                  {status ? "Positivo" : "Negativo"}
+                </Tag>
+              </div>
+              <IconAction
+                tooltipTitle="Ver detalle de respuesta"
+                icon={faEye}
+                size={30}
+                styled={{ color: (theme) => theme.colors.info }}
+                onClick={() => console.log("Aun no existe")}
+              />
+            </Space>
+          )
+        );
+      },
     },
     {
       title: "Opciones",
       align: "center",
       width: ["8rem", "100%"],
-      render: (added) => (
+      render: (holiday) => (
         <Space>
           <Acl
             category="public"
             subCategory="holidaysRequest"
             name="/holidays-request#reply"
           >
-            {added.status !== "finalized" && (
+            {holiday.status !== "finalized" && (
               <IconAction
-                tooltipTitle="Responder registro"
-                icon={faReply}
+                tooltipTitle="Ver calendario"
+                icon={faCalendar}
                 styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => console.log("Aun no disponible")}
+                onClick={() => onShowCalendarModal(holiday)}
               />
             )}
           </Acl>
@@ -73,7 +105,7 @@ export const HolidaysTable = ({ loading }) => {
             subCategory="holidaysRequest"
             name="/holidays-request/:holidayRequestId"
           >
-            {added?.status !== "finalized" && (
+            {holiday?.status !== "finalized" && (
               <IconAction
                 tooltipTitle="Editar"
                 icon={faEdit}
@@ -102,7 +134,8 @@ export const HolidaysTable = ({ loading }) => {
     <Container>
       <TableVirtualized
         loading={loading}
-        dataSource={HolidaysTemps}
+        // dataSource={HolidaysTemps}
+        dataSource={orderBy(holidays, "createAt", "desc")}
         columns={columns}
         rowHeaderHeight={50}
         rowBodyHeight={90}
