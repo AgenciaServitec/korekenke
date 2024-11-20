@@ -24,8 +24,10 @@ import styled from "styled-components";
 import { Space } from "antd";
 import { useNavigate, useParams } from "react-router";
 import {
-  addHoliday,
   getHolidaysId,
+  addHoliday,
+  updateHoliday,
+  fetchHoliday,
 } from "../../../firebase/collections/holidays";
 
 const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
@@ -46,10 +48,23 @@ export const SearchHolidays = ({ user }) => {
 
   useEffect(() => {
     (async () => {
-      const _holidayRequest = isNew ? { id: getHolidaysId() } : null;
-      setHolidayRequest(_holidayRequest);
+      if (!isNew) {
+        try {
+          const fetchedHolidayRequest = await fetchHoliday(holidayRequestId);
+          setHolidayRequest(fetchedHolidayRequest);
+          setHolidaysRangeData([
+            dayjs(fetchedHolidayRequest.startDate),
+            dayjs(fetchedHolidayRequest.endDate),
+          ]);
+        } catch (e) {
+          console.error("Error fetching holiday request:", e);
+        }
+      } else {
+        const _holidayRequest = { id: getHolidaysId() };
+        setHolidayRequest(_holidayRequest);
+      }
     })();
-  }, []);
+  }, [holidayRequestId]);
 
   const { acls, createdAt, updateAt, updateBy, role, ...newUser } = user;
 
@@ -114,11 +129,13 @@ export const SearchHolidays = ({ user }) => {
   const onSubmit = async (formData) => {
     try {
       setLoading(true);
-      await addHoliday(assignCreateProps(mapForm(formData)));
-      notification({
-        type: "success",
-        message: "¡Se registró la solicitud!",
-      });
+
+      const holidayData = mapForm(formData);
+
+      isNew
+        ? await addHoliday(assignCreateProps(holidayData))
+        : await updateHoliday(holidayRequestId, holidayData);
+
       navigate("/holidays-request");
     } catch (e) {
       console.log("Error:", e);

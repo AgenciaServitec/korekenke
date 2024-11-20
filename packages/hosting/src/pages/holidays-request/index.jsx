@@ -17,13 +17,10 @@ import {
   holidaysRef,
   updateHoliday,
 } from "../../firebase/collections/holidays";
-import { assign } from "lodash";
 import { useDefaultFirestoreProps } from "../../hooks";
 
 export const HolidaysRequestIntegration = () => {
   const navigate = useNavigate();
-
-  // const navigateTo = (pathname = "new") => navigate(pathname);
 
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const [holidays, holidaysLoading, holidaysError] = useCollectionData(
@@ -31,11 +28,18 @@ export const HolidaysRequestIntegration = () => {
   );
 
   const [visibleModal, setVisibleModal] = useState(false);
+  // const [visibleModalReplyInformation, setVisibleModalReplyInformation] =
+  // useState(false);
   const [request, setRequest] = useState(null);
 
   useEffect(() => {
     holidaysError && notification({ type: "error" });
   }, [holidaysError]);
+
+  const navigateTo = (pathname = "new") => navigate(pathname);
+
+  const onEditHolidayRequest = (request) =>
+    navigate(`/holidays-request/${request.id}`);
 
   const onConfirmDeleteHolidayRequest = async (request) => {
     modalConfirm({
@@ -59,6 +63,7 @@ export const HolidaysRequestIntegration = () => {
       request={request}
       holidaysLoading={holidaysLoading}
       holidays={holidays}
+      onEditHolidayRequest={onEditHolidayRequest}
       onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
       visibleModal={visibleModal}
       onSetVisibleModal={setVisibleModal}
@@ -72,6 +77,7 @@ const HolidayList = ({
   request,
   holidaysLoading,
   holidays,
+  onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
   visibleModal,
   onSetVisibleModal,
@@ -104,6 +110,7 @@ const HolidayList = ({
               loading={holidaysLoading}
               holidays={holidays}
               onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
+              onEditHolidayRequest={onEditHolidayRequest}
               onShowCalendarModal={onShowCalendarModal}
             />
           </Col>
