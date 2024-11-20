@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { HolidaysTable } from "./holidaysTable";
 import {
   Acl,
-  Row,
-  Col,
-  Title,
   AddButton,
-  notification,
+  Col,
   modalConfirm,
+  notification,
+  Row,
+  Title,
 } from "../../components";
 import { useNavigate } from "react-router";
 import { ViewRequestCalendar } from "./ViewRequestCalendar";
@@ -28,31 +28,25 @@ export const HolidaysRequestIntegration = () => {
   );
 
   const [visibleModal, setVisibleModal] = useState(false);
-  // const [visibleModalReplyInformation, setVisibleModalReplyInformation] =
-  // useState(false);
   const [request, setRequest] = useState(null);
 
   useEffect(() => {
     holidaysError && notification({ type: "error" });
   }, [holidaysError]);
 
-  const navigateTo = (pathname = "new") => navigate(pathname);
-
   const onEditHolidayRequest = (request) =>
     navigate(`/holidays-request/${request.id}`);
 
   const onConfirmDeleteHolidayRequest = async (request) => {
     modalConfirm({
-      title: "¿Estás seguro de que quieres eliminar la petición?",
       onOk: async () => {
         await updateHoliday(request.id, assignDeleteProps({ isDeleted: true }));
       },
     });
   };
 
-  const onShowCalendarModal = (request) => {
-    // console.log("request:", request.id);
-    setRequest(request);
+  const onShowCalendarModal = (holiday) => {
+    setRequest(holiday);
     setVisibleModal(true);
   };
 

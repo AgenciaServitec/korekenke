@@ -6,7 +6,6 @@ export const ViewRequestCalendar = ({
   onSetVisibleModal,
   request,
 }) => {
-  // console.log("holidays:", request);
   return (
     <Modal
       style={{ height: "auto" }}
@@ -19,6 +18,7 @@ export const ViewRequestCalendar = ({
       destroyOnClose
     >
       <FullCalendarComponent
+        key={request?.id}
         startDate={request?.startDate}
         endDate={request?.endDate}
       />

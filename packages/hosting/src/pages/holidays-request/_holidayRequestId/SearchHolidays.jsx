@@ -24,11 +24,13 @@ import styled from "styled-components";
 import { Space } from "antd";
 import { useNavigate, useParams } from "react-router";
 import {
-  getHolidaysId,
   addHoliday,
-  updateHoliday,
   fetchHoliday,
+  getHolidaysId,
+  updateHoliday,
 } from "../../../firebase/collections/holidays";
+import { omit } from "lodash";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 
 const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
 
@@ -49,24 +51,19 @@ export const SearchHolidays = ({ user }) => {
   useEffect(() => {
     (async () => {
       if (!isNew) {
-        try {
-          const fetchedHolidayRequest = await fetchHoliday(holidayRequestId);
-          setHolidayRequest(fetchedHolidayRequest);
-          setHolidaysRangeData([
-            dayjs(fetchedHolidayRequest.startDate),
-            dayjs(fetchedHolidayRequest.endDate),
-          ]);
-        } catch (e) {
-          console.error("Error fetching holiday request:", e);
-        }
-      } else {
-        const _holidayRequest = { id: getHolidaysId() };
+        const _holidayRequest = await fetchHoliday(holidayRequestId);
         setHolidayRequest(_holidayRequest);
+        setHolidaysRangeData([
+          dayjs(_holidayRequest.startDate, DATE_FORMAT_TO_FIRESTORE),
+          dayjs(_holidayRequest.endDate, DATE_FORMAT_TO_FIRESTORE),
+        ]);
+        return;
       }
-    })();
-  }, [holidayRequestId]);
 
-  const { acls, createdAt, updateAt, updateBy, role, ...newUser } = user;
+      const _holidayRequest = { id: getHolidaysId() };
+      setHolidayRequest(_holidayRequest);
+    })();
+  }, []);
 
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
@@ -85,17 +82,29 @@ export const SearchHolidays = ({ user }) => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
+  useEffect(() => {
+    reset({
+      dateRange: [
+        dayjs(holidayRequest?.startDate, DATE_FORMAT_TO_FIRESTORE),
+        dayjs(holidayRequest?.endDate, DATE_FORMAT_TO_FIRESTORE),
+      ],
+      reason: holidayRequest?.reason || "",
+    });
+  }, [holidayRequest]);
+
   const onSubmitDateRange = (formData) => {
     const [start, end] = formData.dateRange;
-    if (start.$W === 1) {
+
+    if (dayjs(start).day() === 1) {
       formData.dateRange[0] = dayjs(start.toDate()).subtract(1, "day");
     }
 
-    if (end.$W === 5) {
+    if (dayjs(end).day() === 5) {
       formData.dateRange[1] = dayjs(end.toDate()).add(1, "day");
     }
 
@@ -115,12 +124,12 @@ export const SearchHolidays = ({ user }) => {
 
   const mapForm = (formData) => ({
     ...holidayRequest,
-    user: newUser,
+    user: omit(user, "acls"),
     startDate: dayjs(formData.dateRange[0].toDate()).format(
-      FORMAT_DATE_FULLCALENDAR,
+      DATE_FORMAT_TO_FIRESTORE,
     ),
     endDate: dayjs(formData.dateRange[1].toDate()).format(
-      FORMAT_DATE_FULLCALENDAR,
+      DATE_FORMAT_TO_FIRESTORE,
     ),
     reason: formData.reason,
     status: "pending",
@@ -244,4 +253,7 @@ export const SearchHolidays = ({ user }) => {
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 100%;
+  height: auto;
+`;
