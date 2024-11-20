@@ -22,6 +22,7 @@ export const HolidaysTable = ({
   loading,
   holidays,
   onShowCalendarModal,
+  onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
 }) => {
   const columns = [
@@ -114,7 +115,7 @@ export const HolidaysTable = ({
               <IconAction
                 tooltipTitle="Editar"
                 icon={faEdit}
-                onClick={() => console.log("No disponible")}
+                onClick={() => onEditHolidayRequest(holiday)}
               />
             )}
           </Acl>

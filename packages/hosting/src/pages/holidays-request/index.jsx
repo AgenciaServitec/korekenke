@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { HolidaysTable } from "./holidaysTable";
 import {
   Acl,
-  Row,
-  Col,
-  Title,
   AddButton,
-  notification,
+  Col,
   modalConfirm,
+  notification,
+  Row,
+  Title,
 } from "../../components";
 import { useNavigate } from "react-router";
 import { ViewRequestCalendar } from "./ViewRequestCalendar";
@@ -17,13 +17,10 @@ import {
   holidaysRef,
   updateHoliday,
 } from "../../firebase/collections/holidays";
-import { assign } from "lodash";
 import { useDefaultFirestoreProps } from "../../hooks";
 
 export const HolidaysRequestIntegration = () => {
   const navigate = useNavigate();
-
-  // const navigateTo = (pathname = "new") => navigate(pathname);
 
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const [holidays, holidaysLoading, holidaysError] = useCollectionData(
@@ -37,18 +34,19 @@ export const HolidaysRequestIntegration = () => {
     holidaysError && notification({ type: "error" });
   }, [holidaysError]);
 
+  const onEditHolidayRequest = (request) =>
+    navigate(`/holidays-request/${request.id}`);
+
   const onConfirmDeleteHolidayRequest = async (request) => {
     modalConfirm({
-      title: "¿Estás seguro de que quieres eliminar la petición?",
       onOk: async () => {
         await updateHoliday(request.id, assignDeleteProps({ isDeleted: true }));
       },
     });
   };
 
-  const onShowCalendarModal = (request) => {
-    // console.log("request:", request.id);
-    setRequest(request);
+  const onShowCalendarModal = (holiday) => {
+    setRequest(holiday);
     setVisibleModal(true);
   };
 
@@ -59,6 +57,7 @@ export const HolidaysRequestIntegration = () => {
       request={request}
       holidaysLoading={holidaysLoading}
       holidays={holidays}
+      onEditHolidayRequest={onEditHolidayRequest}
       onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
       visibleModal={visibleModal}
       onSetVisibleModal={setVisibleModal}
@@ -72,6 +71,7 @@ const HolidayList = ({
   request,
   holidaysLoading,
   holidays,
+  onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
   visibleModal,
   onSetVisibleModal,
@@ -104,6 +104,7 @@ const HolidayList = ({
               loading={holidaysLoading}
               holidays={holidays}
               onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
+              onEditHolidayRequest={onEditHolidayRequest}
               onShowCalendarModal={onShowCalendarModal}
             />
           </Col>
