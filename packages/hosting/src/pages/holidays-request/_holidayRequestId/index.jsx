@@ -13,7 +13,7 @@ export const HolidayRequestIntegration = () => {
   return (
     <Container>
       <Space size={15} style={{ width: "100%" }} direction="vertical">
-        <Title level={2}>NUEVAS SOLICITUDES DE VACACIONES</Title>
+        <Title level={2}>NUEVA SOLICITUD DE VACACIONES</Title>
         <SearchHolidays
           user={authUser}
           holidayRequestId={holidayRequestId || "new"}
