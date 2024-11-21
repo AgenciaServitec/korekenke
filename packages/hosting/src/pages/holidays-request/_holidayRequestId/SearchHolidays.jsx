@@ -26,7 +26,7 @@ import { useNavigate, useParams } from "react-router";
 import {
   addHoliday,
   fetchHoliday,
-  fetchHolidays,
+  fetchHolidaysByUserId,
   getHolidaysId,
   updateHoliday,
 } from "../../../firebase/collections/holidays";
@@ -68,8 +68,6 @@ export const SearchHolidays = ({ user }) => {
     })();
   }, [isNew]);
 
-  const { acls, ...newUser } = user;
-
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
   };
@@ -79,16 +77,14 @@ export const SearchHolidays = ({ user }) => {
   };
 
   const validateHolidaysLimitYear = async () => {
-    const allHolidaysFetch = await fetchHolidays();
-    const userHolidays = allHolidaysFetch
-      .filter((item) => item.user.id === user.id)
-      .map((index) => ({
-        _startDate: dayjs(index.startDate),
-        _endDate: dayjs(index.endDate),
-      }));
+    const holidays = await fetchHolidaysByUserId(user.id);
 
-    const lengthDays = userHolidays.map(
-      (item) => item._endDate.diff(item._startDate, "day") + 1,
+    const lengthDays = holidays.map(
+      (holiday) =>
+        dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
+          dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+          "day",
+        ) + 1,
     );
 
     return lengthDays.reduce((a, b) => a + b, 0);
@@ -165,16 +161,16 @@ export const SearchHolidays = ({ user }) => {
 
       const holidayData = mapForm(formData);
 
+      await validateHolidaysLimitYear();
+
       isNew
         ? await addHoliday(assignCreateProps(holidayData))
         : await updateHoliday(holidayRequestId, holidayData);
 
-      await validateHolidaysLimitYear();
-      await addHoliday(assignCreateProps(mapForm(formData)));
       notification({
         type: "success",
-        message: "¡Se registró la solicitud!",
       });
+
       navigate("/holidays-request");
     } catch (e) {
       console.log("Error:", e);

@@ -12,6 +12,11 @@ export const fetchHoliday = async (id) =>
 export const fetchHolidays = async () =>
   fetchCollectionOnce(holidaysRef.where("isDeleted", "==", false));
 
+export const fetchHolidaysByUserId = async (userId) =>
+  fetchCollectionOnce(
+    holidaysRef.where("user.id", "==", userId).where("isDeleted", "==", false),
+  );
+
 export const addHoliday = async (holiday) =>
   setDocument(holidaysRef.doc(holiday.id), holiday);
 
