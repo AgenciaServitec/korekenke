@@ -5,6 +5,7 @@ import esLocale from "@fullcalendar/core/locales/es";
 import FullCalendar from "@fullcalendar/react";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
+import { mediaQuery } from "../../styles";
 
 export const FullCalendarComponent = ({ startDate, endDate, props }) => {
   const events = [
@@ -36,6 +37,15 @@ const Container = styled.div`
     text-transform: uppercase;
     .fc-day-today {
       background-color: transparent;
+    }
+    .fc-toolbar {
+      flex-wrap: wrap;
+    }
+    .fc-toolbar-title {
+      font-size: 1.25em;
+      ${mediaQuery.minTablet} {
+        font-size: 1.75em;
+      }
     }
   }
 `;

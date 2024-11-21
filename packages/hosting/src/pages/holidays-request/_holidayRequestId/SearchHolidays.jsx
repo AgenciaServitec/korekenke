@@ -57,13 +57,15 @@ export const SearchHolidays = ({ user }) => {
           dayjs(_holidayRequest.startDate, DATE_FORMAT_TO_FIRESTORE),
           dayjs(_holidayRequest.endDate, DATE_FORMAT_TO_FIRESTORE),
         ]);
+
         return;
       }
 
       const _holidayRequest = { id: getHolidaysId() };
+      setHolidaysRangeData([dayjs(), dayjs()]);
       setHolidayRequest(_holidayRequest);
     })();
-  }, []);
+  }, [isNew]);
 
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
@@ -86,13 +88,16 @@ export const SearchHolidays = ({ user }) => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
-
+  console.log(holidayRequest);
   useEffect(() => {
     reset({
-      dateRange: [
-        dayjs(holidayRequest?.startDate, DATE_FORMAT_TO_FIRESTORE),
-        dayjs(holidayRequest?.endDate, DATE_FORMAT_TO_FIRESTORE),
-      ],
+      dateRange:
+        holidayRequest?.startDate && holidayRequest?.endDate
+          ? [
+              dayjs(holidayRequest?.startDate, DATE_FORMAT_TO_FIRESTORE),
+              dayjs(holidayRequest?.endDate, DATE_FORMAT_TO_FIRESTORE),
+            ]
+          : [dayjs(), dayjs()],
       reason: holidayRequest?.reason || "",
     });
   }, [holidayRequest]);
@@ -203,14 +208,14 @@ export const SearchHolidays = ({ user }) => {
             </Row>
           </Form>
         </Row>
-        <Row gutter={[16, 16]} justify="space-between">
-          <Col span={12}>
+        <Row gutter={[16, 16]} justify="center">
+          <Col xs={24} sm={24} md={12} lg={12}>
             <FullCalendarComponent
               startDate={dateRangeRules().startDate}
               endDate={dateRangeRules().endDate}
             />
           </Col>
-          <Col span={11}>
+          <Col xs={24} sm={24} md={12} lg={12}>
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Title level={2}>Motivo y/o Asunto</Title>
@@ -254,6 +259,27 @@ export const SearchHolidays = ({ user }) => {
 };
 
 const Container = styled.div`
+  margin: 1.5em 0;
   width: 100%;
+  max-width: 100%;
   height: auto;
+
+  .fc {
+    text-transform: uppercase;
+
+    .fc-toolbar {
+      flex-wrap: wrap;
+    }
+
+    .fc-daygrid-event {
+      font-size: 0.8em;
+      padding: 2px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .fc {
+      font-size: 0.75em;
+    }
+  }
 `;

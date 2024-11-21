@@ -13,7 +13,7 @@ export const ViewRequestCalendar = ({
       onCancel={() => onSetVisibleModal(false)}
       title="Calendario de vacaciones"
       closable
-      width="50%"
+      width="90%"
       centered={false}
       destroyOnClose
     >
