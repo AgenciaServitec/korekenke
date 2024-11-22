@@ -66,4 +66,4 @@ export * from "./privacy-policies";
 //HOLIDAYS
 export * from "./holidays-request";
 export * from "./holidays-request/_holidayRequestId";
-export * from "./holidays-request/sheets";
+export * from "./holidays-request/_holidayRequestId/sheets";

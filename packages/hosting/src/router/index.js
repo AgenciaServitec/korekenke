@@ -387,7 +387,7 @@ export const Router = () => {
       />
       <Route
         exact
-        path="/holidays-request/sheets/:userId"
+        path="/holidays-request/:holidayRequestId/sheets/:userId"
         element={<A.HolidaysSheets />}
       />
       <Route

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   Acl,
@@ -12,28 +12,84 @@ import {
   faCalendar,
   faEdit,
   faEye,
+  faFilePdf,
+  faFilter,
+  faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { userFullName } from "../../utils";
 import { orderBy } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
+import { useNavigate } from "react-router";
+import { useBosses } from "../../hooks";
+
+const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
+const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const HolidaysTable = ({
   loading,
+  user,
   holidays,
   onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
   onShowCalendar,
+  onEvaluationHolidayRequest,
+  onAddReplyHolidayRequest,
+  onShowHolidayRequestInformation,
 }) => {
-  const displayValidationEditAndDeleted = (holiday) => {
+  const navigate = useNavigate();
+  const { fetchEntityManager, fetchDepartmentBoss } = useBosses();
+
+  const [bossEntityGu, setBossEntityGu] = useState(null);
+  const [bossMDP, setBossMDP] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const p0 = fetchEntityManager(ENTITY_GU_NAME_ID);
+      const p1 = fetchDepartmentBoss(DEPARTMENT_NAME_ID);
+
+      const [_bossEntityGu, _bossMDP] = await Promise.all([p0, p1]);
+
+      setBossEntityGu(_bossEntityGu);
+      setBossMDP(_bossMDP);
+    })();
+  }, []);
+
+  const isBossMDP = user.id === bossMDP?.id;
+
+  const onNavigateTo = (pathname) => navigate(pathname);
+
+  const displayValidationEditAndDeleted = (holidayRequest) => {
     const startDate = dayjs(
-      holiday.startDate,
+      holidayRequest.startDate,
       DATE_FORMAT_TO_FIRESTORE,
     ).subtract(1, "day");
 
-    return dayjs().isBefore(startDate);
+    return (
+      dayjs().isBefore(startDate) && holidayRequest?.status !== "finalized"
+    );
   };
+
+  const isPositiveOrApproved = (holidayRequest) =>
+    holidayRequest?.status === "finalized" ||
+    holidayRequest?.status === "inProgress" ||
+    holidayRequest?.response?.type === "positive";
+
+  const holidaysRequestViewBy = holidays.filter((holiday) => {
+    if (["super_admin"].includes(user.roleCode)) return holiday;
+
+    if (holiday.userId === user.id) return holiday;
+
+    if (["waiting", "notProceeds"].includes(holiday.status) && isBossMDP)
+      return holiday;
+
+    if (
+      !["waiting", "notProceeds"].includes(holiday.status) &&
+      ["manager"].includes(user.roleCode)
+    )
+      return holiday;
+  });
 
   const columns = [
     {
@@ -91,7 +147,7 @@ export const HolidaysTable = ({
                 icon={faEye}
                 size={30}
                 styled={{ color: (theme) => theme.colors.info }}
-                onClick={() => console.log("Aun no existe")}
+                onClick={() => onShowHolidayRequestInformation(holiday)}
               />
             </Space>
           )
@@ -100,7 +156,7 @@ export const HolidaysTable = ({
     },
     {
       title: "Opciones",
-      align: "center",
+      align: "start",
       width: ["8rem", "100%"],
       render: (holiday) => {
         return (
@@ -108,13 +164,53 @@ export const HolidaysTable = ({
             <Acl
               category="public"
               subCategory="holidaysRequest"
-              name="/holidays-request#reply"
+              name="/holidays-request#showCalendar"
             >
               <IconAction
                 tooltipTitle="Ver calendario"
                 icon={faCalendar}
                 styled={{ color: (theme) => theme.colors.primary }}
                 onClick={() => onShowCalendar(holiday)}
+              />
+            </Acl>
+            <Acl
+              category="public"
+              subCategory="holidaysRequest"
+              name="/holidays-request#proceeds"
+            >
+              {["waiting", "notProceeds"].includes(holiday.status) && (
+                <IconAction
+                  tooltipTitle="Evaluación de solicitud"
+                  icon={faFilter}
+                  onClick={() => onEvaluationHolidayRequest(holiday)}
+                />
+              )}
+            </Acl>
+            {bossEntityGu?.id === user?.id &&
+              holiday?.status === "inProgress" && (
+                <Acl
+                  category="public"
+                  subCategory="holidaysRequest"
+                  name="/holidays-request#reply"
+                >
+                  <IconAction
+                    tooltipTitle="Responder solicitud"
+                    icon={faReply}
+                    styled={{ color: (theme) => theme.colors.primary }}
+                    onClick={() => onAddReplyHolidayRequest(holiday)}
+                  />
+                </Acl>
+              )}
+            <Acl
+              category="public"
+              subCategory="holidaysRequest"
+              name="/holidays-request/:holidayRequestId/sheets/:userId"
+            >
+              <IconAction
+                tooltipTitle="PDF"
+                icon={faFilePdf}
+                styled={{ color: (theme) => theme.colors.error }}
+                onClick={() => onNavigateTo(`${holiday.id}/sheets/${user.id}`)}
               />
             </Acl>
             {displayValidationEditAndDeleted(holiday) && (
@@ -132,18 +228,21 @@ export const HolidaysTable = ({
                     />
                   )}
                 </Acl>
-                <Acl
-                  category="public"
-                  subCategory="holidaysRequest"
-                  name="/holidays-request#delete"
-                >
-                  <IconAction
-                    tooltipTitle="Eliminar"
-                    icon={faTrash}
-                    styled={{ color: (theme) => theme.colors.error }}
-                    onClick={() => onConfirmDeleteHolidayRequest(holiday)}
-                  />
-                </Acl>
+                {!isPositiveOrApproved(holiday) &&
+                  user.roleCode === "manager" && (
+                    <Acl
+                      category="public"
+                      subCategory="holidaysRequest"
+                      name="/holidays-request#delete"
+                    >
+                      <IconAction
+                        tooltipTitle="Eliminar"
+                        icon={faTrash}
+                        styled={{ color: (theme) => theme.colors.error }}
+                        onClick={() => onConfirmDeleteHolidayRequest(holiday)}
+                      />
+                    </Acl>
+                  )}
               </>
             )}
           </Space>
@@ -156,7 +255,7 @@ export const HolidaysTable = ({
     <Container>
       <TableVirtualized
         loading={loading}
-        dataSource={orderBy(holidays, "createAt", "desc")}
+        dataSource={orderBy(holidaysRequestViewBy, "createAt", "desc")}
         columns={columns}
         rowHeaderHeight={50}
         rowBodyHeight={90}

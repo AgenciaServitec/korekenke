@@ -5,7 +5,6 @@ import {
   Acl,
   AddButton,
   Alert,
-  Button,
   Col,
   Flex,
   FullCalendarComponent,
@@ -21,11 +20,12 @@ import {
   updateHoliday,
 } from "../../firebase/collections/holidays";
 import { useDefaultFirestoreProps, useDevice } from "../../hooks";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
+import { HolidayRequestProceedsModal } from "./HolidayRequestProceeds";
+import { HolidayRequestReply } from "./HolidayRequestReply";
+import { HolidayRequestInformation } from "./HolidayRequestInformation";
 
 const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
 
@@ -35,7 +35,7 @@ export const HolidaysRequestIntegration = () => {
 
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
-  const [holidays, holidaysLoading, holidaysError] = useCollectionData(
+  const [holidays = [], holidaysLoading, holidaysError] = useCollectionData(
     holidaysRef.where("isDeleted", "==", false),
   );
 
@@ -63,6 +63,7 @@ export const HolidaysRequestIntegration = () => {
       <HolidayList
         holidaysLoading={holidaysLoading}
         holidays={holidays}
+        user={authUser}
         onEditHolidayRequest={onEditHolidayRequest}
         onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
         onAddRequest={onAddRequest}
@@ -75,13 +76,13 @@ export const HolidaysRequestIntegration = () => {
 const HolidayList = ({
   holidaysLoading,
   holidays,
+  user,
   onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
   onAddRequest,
-  onGoToSheets,
 }) => {
   const { isTablet } = useDevice();
-  const { onShowModal } = useModal();
+  const { onShowModal, onCloseModal } = useModal();
 
   const onShowCalendar = (holiday) => {
     onShowModal({
@@ -97,6 +98,44 @@ const HolidayList = ({
             FORMAT_DATE_FULLCALENDAR,
           )}
         />
+      ),
+    });
+  };
+
+  const onEvaluationHolidayRequest = (holiday) => {
+    onShowModal({
+      title: "Evaluación de la solicitud",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <HolidayRequestProceedsModal
+          key={holiday.id}
+          holidayRequest={holiday}
+          onCloseModal={onCloseModal}
+        />
+      ),
+    });
+  };
+
+  const onAddReplyHolidayRequest = (holiday) => {
+    onShowModal({
+      title: "Responder solicitud",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <HolidayRequestReply
+          key={holiday.id}
+          holidayRequest={holiday}
+          onCloseModal={onCloseModal}
+        />
+      ),
+    });
+  };
+
+  const onShowHolidayRequestInformation = (holiday) => {
+    onShowModal({
+      title: "Información de respuesta",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <HolidayRequestInformation key={holiday.id} holidayRequest={holiday} />
       ),
     });
   };
@@ -130,24 +169,19 @@ const HolidayList = ({
               style={{ width: "100%" }}
             >
               <AddButton onClick={onAddRequest} title="Petición" margin="0" />
-              <Button
-                type="primary"
-                danger
-                icon={<FontAwesomeIcon icon={faFilePdf} />}
-                size="large"
-                onClick={() => onGoToSheets()}
-              >
-                Pdf
-              </Button>
             </Flex>
           </Col>
           <Col span={24}>
             <HolidaysTable
               loading={holidaysLoading}
+              user={user}
               holidays={holidays}
               onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
               onEditHolidayRequest={onEditHolidayRequest}
               onShowCalendar={onShowCalendar}
+              onEvaluationHolidayRequest={onEvaluationHolidayRequest}
+              onAddReplyHolidayRequest={onAddReplyHolidayRequest}
+              onShowHolidayRequestInformation={onShowHolidayRequestInformation}
             />
           </Col>
         </Row>

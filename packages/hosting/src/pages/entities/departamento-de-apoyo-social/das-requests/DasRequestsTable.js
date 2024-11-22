@@ -61,7 +61,7 @@ export const DasRequestsTable = ({
 
   const isPositiveOrApproved = (dasRequest) =>
     dasRequest?.status === "finalized" ||
-    dasRequest?.status === "inProgess" ||
+    dasRequest?.status === "inProgress" ||
     dasRequest?.response?.type === "positive";
 
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
