@@ -53,13 +53,15 @@ export const HolidaysTable = ({
       title: "Fecha de Inicio",
       align: "center",
       width: ["11rem", "100%"],
-      render: (holiday) => holiday.startDate,
+      render: (holiday) =>
+        dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE).format("DD/MM/YYYY"),
     },
     {
       title: "Fecha de Finalización",
       align: "center",
       width: ["15rem", "100%"],
-      render: (holiday) => holiday.endDate,
+      render: (holiday) =>
+        dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).format("DD/MM/YYYY"),
     },
     {
       title: "Estado",
