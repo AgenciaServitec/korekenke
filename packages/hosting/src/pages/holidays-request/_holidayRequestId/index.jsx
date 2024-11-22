@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
-import { SearchHolidays } from "./SearchHolidays";
+import { SearchHolidays } from "./steps/SearchHolidays";
 import { Title, Steps } from "../../../components";
 import { useAuthentication } from "../../../providers";
-import { SubmitVacationRequest } from "./SubmitVacationRequest";
+import { SubmitVacationRequest } from "./steps/SubmitVacationRequest";
 import dayjs from "dayjs";
 import {
   fetchHoliday,
   getHolidaysId,
 } from "../../../firebase/collections/holidays";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
-import { ShowCalendar } from "./ShowCalendar";
+import { ShowCalendar } from "./steps/ShowCalendar";
 import { mediaQuery } from "../../../styles";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EditHolidayIntegration } from "./editing/EditHoliday";
 
 export const HolidayRequestIntegration = () => {
   const navigate = useNavigate();
@@ -84,43 +85,49 @@ export const HolidayRequestIntegration = () => {
   return (
     <Container>
       <Title level={2}>SOLICITUD DE VACACIONES</Title>
-      <div className="header-wrapper">
-        {currentStep === 0 ? (
-          <SearchHolidays
-            holidaysRange={holidaysRange}
-            holidayRequest={holidayRequest}
-            onSetHolidaysRange={onSetHolidaysRange}
-          />
-        ) : (
-          <div className="item-date-range">
-            <div className="item-date">
-              <label>Desde</label>
-              <h3>{dayjs(holidaysRange[0]).format("DD MMM YYYY")}</h3>
-            </div>
-            <div className="item-icon">
-              <FontAwesomeIcon icon={faArrowRight} size="2x" />
-            </div>
-            <div className="item-date">
-              <label>Hasta</label>
-              <h3>{dayjs(holidaysRange[1]).format("DD MMM YYYY")}</h3>
-            </div>
+      {isNew ? (
+        <>
+          <div className="header-wrapper">
+            {currentStep === 0 ? (
+              <SearchHolidays
+                holidaysRange={holidaysRange}
+                holidayRequest={holidayRequest}
+                onSetHolidaysRange={onSetHolidaysRange}
+              />
+            ) : (
+              <div className="item-date-range">
+                <div className="item-date">
+                  <label>Desde</label>
+                  <h3>{dayjs(holidaysRange[0]).format("DD MMM YYYY")}</h3>
+                </div>
+                <div className="item-icon">
+                  <FontAwesomeIcon icon={faArrowRight} size="2x" />
+                </div>
+                <div className="item-date">
+                  <label>Hasta</label>
+                  <h3>{dayjs(holidaysRange[1]).format("DD MMM YYYY")}</h3>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="steps-wrapper">
-        <Steps
-          current={currentStep}
-          items={[
-            {
-              title: "Dias de vacaciones",
-            },
-            {
-              title: "Motivo y/o asunto",
-            },
-          ]}
-        />
-      </div>
-      {onShowStep()}
+          <div className="steps-wrapper">
+            <Steps
+              current={currentStep}
+              items={[
+                {
+                  title: "Dias de vacaciones",
+                },
+                {
+                  title: "Motivo y/o asunto",
+                },
+              ]}
+            />
+          </div>
+          {onShowStep()}
+        </>
+      ) : (
+        <EditHolidayIntegration />
+      )}
     </Container>
   );
 };

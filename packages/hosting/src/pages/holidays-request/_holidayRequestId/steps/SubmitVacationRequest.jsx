@@ -7,7 +7,7 @@ import {
   Row,
   TextArea,
   Title,
-} from "../../../components";
+} from "../../../../components";
 import { Controller, useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
@@ -15,13 +15,13 @@ import {
   addHoliday,
   fetchHolidaysByUserId,
   updateHoliday,
-} from "../../../firebase/collections/holidays";
+} from "../../../../firebase/collections/holidays";
 import { omit } from "lodash";
 import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 
 export const SubmitVacationRequest = ({
   isNew,

@@ -8,12 +8,12 @@ import {
   Form,
   notification,
   Row,
-} from "../../../components";
+} from "../../../../components";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormUtils } from "../../../hooks";
+import { useFormUtils } from "../../../../hooks";
 import styled from "styled-components";
 
 export const SearchHolidays = ({

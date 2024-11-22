@@ -6,7 +6,7 @@ import {
   Row,
   Text,
   Space,
-} from "../../../components";
+} from "../../../../components";
 import dayjs from "dayjs";
 import {
   faArrowRight,
@@ -14,7 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-import { mediaQuery } from "../../../styles";
+import { mediaQuery } from "../../../../styles";
 
 const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
 
