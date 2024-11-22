@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import styled from "styled-components";
 import esLocale from "@fullcalendar/core/locales/es";
@@ -6,6 +6,12 @@ import FullCalendar from "@fullcalendar/react";
 import { mediaQuery } from "../../styles";
 
 export const FullCalendarComponent = ({ startDate, endDate, props }) => {
+  const [rerender, setRerender] = useState(null);
+
+  useEffect(() => {
+    setRerender(Math.random());
+  }, []);
+
   const events = [
     {
       start: startDate,
@@ -18,12 +24,13 @@ export const FullCalendarComponent = ({ startDate, endDate, props }) => {
   return (
     <Container>
       <FullCalendar
+        key={rerender}
         plugins={[dayGridPlugin]}
         locale={esLocale}
         events={events}
         allDayContent={true}
-        {...props}
         height={500}
+        {...props}
       />
     </Container>
   );
@@ -31,6 +38,8 @@ export const FullCalendarComponent = ({ startDate, endDate, props }) => {
 
 const Container = styled.div`
   margin: 1.5em 0;
+  width: 100%;
+  height: 100%;
 
   .fc {
     text-transform: uppercase;

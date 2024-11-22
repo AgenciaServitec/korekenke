@@ -1,41 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { HolidaysTable } from "./holidaysTable";
 import {
   Acl,
   AddButton,
+  Alert,
+  Button,
   Col,
+  Flex,
+  FullCalendarComponent,
   modalConfirm,
   notification,
   Row,
   Title,
-  Flex,
-  Alert,
-  Button,
 } from "../../components";
 import { useNavigate } from "react-router";
-import { ViewRequestCalendar } from "./ViewRequestCalendar";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   holidaysRef,
   updateHoliday,
 } from "../../firebase/collections/holidays";
-import { useDefaultFirestoreProps } from "../../hooks";
+import { useDefaultFirestoreProps, useDevice } from "../../hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
-import { useAuthentication } from "../../providers";
+import { ModalProvider, useAuthentication, useModal } from "../../providers";
+import dayjs from "dayjs";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
+
+const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
 
 export const HolidaysRequestIntegration = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
 
   const { assignDeleteProps } = useDefaultFirestoreProps();
+
   const [holidays, holidaysLoading, holidaysError] = useCollectionData(
     holidaysRef.where("isDeleted", "==", false),
   );
-
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [request, setRequest] = useState(null);
 
   useEffect(() => {
     holidaysError && notification({ type: "error" });
@@ -54,41 +56,51 @@ export const HolidaysRequestIntegration = () => {
     });
   };
 
-  const onShowCalendarModal = (holiday) => {
-    setRequest(holiday);
-    setVisibleModal(true);
-  };
-
   const onAddRequest = () => navigate("new");
 
   return (
-    <HolidayList
-      request={request}
-      holidaysLoading={holidaysLoading}
-      holidays={holidays}
-      onEditHolidayRequest={onEditHolidayRequest}
-      onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
-      visibleModal={visibleModal}
-      onSetVisibleModal={setVisibleModal}
-      onShowCalendarModal={onShowCalendarModal}
-      onAddRequest={onAddRequest}
-      onGoToSheets={onGoToSheets}
-    />
+    <ModalProvider>
+      <HolidayList
+        holidaysLoading={holidaysLoading}
+        holidays={holidays}
+        onEditHolidayRequest={onEditHolidayRequest}
+        onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
+        onAddRequest={onAddRequest}
+        onGoToSheets={onGoToSheets}
+      />
+    </ModalProvider>
   );
 };
 
 const HolidayList = ({
-  request,
   holidaysLoading,
   holidays,
   onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
-  visibleModal,
-  onSetVisibleModal,
-  onShowCalendarModal,
   onAddRequest,
   onGoToSheets,
 }) => {
+  const { isTablet } = useDevice();
+  const { onShowModal } = useModal();
+
+  const onShowCalendar = (holiday) => {
+    onShowModal({
+      title: "Calendario de vacaciones",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <FullCalendarComponent
+          key={holiday.id}
+          startDate={dayjs(holiday?.startDate, DATE_FORMAT_TO_FIRESTORE).format(
+            FORMAT_DATE_FULLCALENDAR,
+          )}
+          endDate={dayjs(holiday?.endDate, DATE_FORMAT_TO_FIRESTORE).format(
+            FORMAT_DATE_FULLCALENDAR,
+          )}
+        />
+      ),
+    });
+  };
+
   return (
     <Acl
       category="public"
@@ -135,15 +147,10 @@ const HolidayList = ({
               holidays={holidays}
               onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
               onEditHolidayRequest={onEditHolidayRequest}
-              onShowCalendarModal={onShowCalendarModal}
+              onShowCalendar={onShowCalendar}
             />
           </Col>
         </Row>
-        <ViewRequestCalendar
-          visibleModal={visibleModal}
-          onSetVisibleModal={onSetVisibleModal}
-          request={request}
-        />
       </Container>
     </Acl>
   );

@@ -22,9 +22,9 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 export const HolidaysTable = ({
   loading,
   holidays,
-  onShowCalendarModal,
   onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
+  onShowCalendar,
 }) => {
   const displayValidationEditAndDeleted = (holiday) => {
     const startDate = dayjs(
@@ -114,7 +114,7 @@ export const HolidaysTable = ({
                 tooltipTitle="Ver calendario"
                 icon={faCalendar}
                 styled={{ color: (theme) => theme.colors.primary }}
-                onClick={() => onShowCalendarModal(holiday)}
+                onClick={() => onShowCalendar(holiday)}
               />
             </Acl>
             {displayValidationEditAndDeleted(holiday) && (
