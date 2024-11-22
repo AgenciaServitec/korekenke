@@ -62,3 +62,8 @@ export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestI
 
 //PRIVACY POLICIES
 export * from "./privacy-policies";
+
+//HOLIDAYS
+export * from "./holidays-request";
+export * from "./holidays-request/_holidayRequestId";
+export * from "./holidays-request/sheets";

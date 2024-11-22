@@ -23,6 +23,7 @@ import {
   Typography,
   Switch,
   Collapse,
+  Flex,
 } from "antd";
 
 export * from "./component-container";
@@ -93,4 +94,5 @@ export {
   Table,
   Switch,
   Collapse,
+  Flex,
 };

@@ -1,10 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { AdminLayout } from "../components/layout";
+import { AdminLayout, PublicLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
-import { PublicLayout } from "../components/layout";
 
 export const Router = () => {
   return (
@@ -385,6 +384,11 @@ export const Router = () => {
             <A.HolidayRequestIntegration />
           </AdminLayout>
         }
+      />
+      <Route
+        exact
+        path="/holidays-request/sheets/:userId"
+        element={<A.HolidaysSheets />}
       />
       <Route
         exact

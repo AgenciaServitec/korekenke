@@ -9,6 +9,9 @@ import {
   notification,
   Row,
   Title,
+  Flex,
+  Alert,
+  Button,
 } from "../../components";
 import { useNavigate } from "react-router";
 import { ViewRequestCalendar } from "./ViewRequestCalendar";
@@ -18,9 +21,13 @@ import {
   updateHoliday,
 } from "../../firebase/collections/holidays";
 import { useDefaultFirestoreProps } from "../../hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { useAuthentication } from "../../providers";
 
 export const HolidaysRequestIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
 
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const [holidays, holidaysLoading, holidaysError] = useCollectionData(
@@ -36,6 +43,8 @@ export const HolidaysRequestIntegration = () => {
 
   const onEditHolidayRequest = (request) =>
     navigate(`/holidays-request/${request.id}`);
+  const onGoToSheets = (userId) =>
+    navigate(`/holidays-request/sheets/${userId || authUser.id}`);
 
   const onConfirmDeleteHolidayRequest = async (request) => {
     modalConfirm({
@@ -63,6 +72,7 @@ export const HolidaysRequestIntegration = () => {
       onSetVisibleModal={setVisibleModal}
       onShowCalendarModal={onShowCalendarModal}
       onAddRequest={onAddRequest}
+      onGoToSheets={onGoToSheets}
     />
   );
 };
@@ -77,6 +87,7 @@ const HolidayList = ({
   onSetVisibleModal,
   onShowCalendarModal,
   onAddRequest,
+  onGoToSheets,
 }) => {
   return (
     <Acl
@@ -92,13 +103,32 @@ const HolidayList = ({
               <Title level={3}>Lista de Peticiones</Title>
             </div>
           </Col>
-          <div>
-            <Row justify="space-between" align="middle" gutter={[16, 16]}>
-              <Col span={24}>
-                <AddButton onClick={onAddRequest} title="Petición" margin="0" />
-              </Col>
-            </Row>
-          </div>
+          <Col span={24}>
+            <Alert
+              type="info"
+              size="small"
+              message="Recuerde que tiene hasta 1 día para modificar sus solicitudes, luego ya no se podrá modificar, ni eliminar"
+            />
+          </Col>
+          <Col span={24}>
+            <Flex
+              gap="middle"
+              justify="space-between"
+              wrap="wrap"
+              style={{ width: "100%" }}
+            >
+              <AddButton onClick={onAddRequest} title="Petición" margin="0" />
+              <Button
+                type="primary"
+                danger
+                icon={<FontAwesomeIcon icon={faFilePdf} />}
+                size="large"
+                onClick={() => onGoToSheets()}
+              >
+                Pdf
+              </Button>
+            </Flex>
+          </Col>
           <Col span={24}>
             <HolidaysTable
               loading={holidaysLoading}

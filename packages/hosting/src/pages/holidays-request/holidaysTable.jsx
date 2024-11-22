@@ -3,8 +3,8 @@ import styled from "styled-components";
 import {
   Acl,
   IconAction,
-  TableVirtualized,
   Space,
+  TableVirtualized,
   Tag,
 } from "../../components";
 import { HolidaysRequestStatus } from "../../data-list";
@@ -17,6 +17,7 @@ import {
 import { userFullName } from "../../utils";
 import { orderBy } from "lodash";
 import dayjs from "dayjs";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
 export const HolidaysTable = ({
   loading,
@@ -25,6 +26,15 @@ export const HolidaysTable = ({
   onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
 }) => {
+  const displayValidationEditAndDeleted = (holiday) => {
+    const startDate = dayjs(
+      holiday.startDate,
+      DATE_FORMAT_TO_FIRESTORE,
+    ).subtract(1, "day");
+
+    return dayjs().isBefore(startDate);
+  };
+
   const columns = [
     {
       title: "Fecha creación",
@@ -90,49 +100,53 @@ export const HolidaysTable = ({
       title: "Opciones",
       align: "center",
       width: ["8rem", "100%"],
-      render: (holiday) => (
-        <Space>
-          <Acl
-            category="public"
-            subCategory="holidaysRequest"
-            name="/holidays-request#reply"
-          >
-            {holiday.status !== "finalized" && (
+      render: (holiday) => {
+        return (
+          <Space>
+            <Acl
+              category="public"
+              subCategory="holidaysRequest"
+              name="/holidays-request#reply"
+            >
               <IconAction
                 tooltipTitle="Ver calendario"
                 icon={faCalendar}
                 styled={{ color: (theme) => theme.colors.primary }}
                 onClick={() => onShowCalendarModal(holiday)}
               />
+            </Acl>
+            {displayValidationEditAndDeleted(holiday) && (
+              <>
+                <Acl
+                  category="public"
+                  subCategory="holidaysRequest"
+                  name="/holidays-request/:holidayRequestId"
+                >
+                  {holiday?.status !== "finalized" && (
+                    <IconAction
+                      tooltipTitle="Editar"
+                      icon={faEdit}
+                      onClick={() => onEditHolidayRequest(holiday)}
+                    />
+                  )}
+                </Acl>
+                <Acl
+                  category="public"
+                  subCategory="holidaysRequest"
+                  name="/holidays-request#delete"
+                >
+                  <IconAction
+                    tooltipTitle="Eliminar"
+                    icon={faTrash}
+                    styled={{ color: (theme) => theme.colors.error }}
+                    onClick={() => onConfirmDeleteHolidayRequest(holiday)}
+                  />
+                </Acl>
+              </>
             )}
-          </Acl>
-          <Acl
-            category="public"
-            subCategory="holidaysRequest"
-            name="/holidays-request/:holidayRequestId"
-          >
-            {holiday?.status !== "finalized" && (
-              <IconAction
-                tooltipTitle="Editar"
-                icon={faEdit}
-                onClick={() => onEditHolidayRequest(holiday)}
-              />
-            )}
-          </Acl>
-          <Acl
-            category="public"
-            subCategory="holidaysRequest"
-            name="/holidays-request#delete"
-          >
-            <IconAction
-              tooltipTitle="Eliminar"
-              icon={faTrash}
-              styled={{ color: (theme) => theme.colors.error }}
-              onClick={() => onConfirmDeleteHolidayRequest(holiday)}
-            />
-          </Acl>
-        </Space>
-      ),
+          </Space>
+        );
+      },
     },
   ];
 
@@ -140,7 +154,6 @@ export const HolidaysTable = ({
     <Container>
       <TableVirtualized
         loading={loading}
-        // dataSource={HolidaysTemps}
         dataSource={orderBy(holidays, "createAt", "desc")}
         columns={columns}
         rowHeaderHeight={50}
