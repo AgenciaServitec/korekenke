@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FullCalendarComponent, Modal } from "../../components";
+import dayjs from "dayjs";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
 export const ViewRequestCalendar = ({
   visibleModal,
   onSetVisibleModal,
   request,
 }) => {
+  const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
+
+  const [renderCalendar, setRenderCalendar] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (visibleModal) {
+      timer = setTimeout(() => {
+        setRenderCalendar(true);
+      }, 300);
+    } else {
+      setRenderCalendar(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [visibleModal]);
+
   return (
     <Modal
       style={{ height: "auto" }}
@@ -17,11 +36,17 @@ export const ViewRequestCalendar = ({
       centered={false}
       destroyOnClose
     >
-      <FullCalendarComponent
-        key={request?.id}
-        startDate={request?.startDate}
-        endDate={request?.endDate}
-      />
+      {renderCalendar && (
+        <FullCalendarComponent
+          key={request?.id}
+          startDate={dayjs(request?.startDate, DATE_FORMAT_TO_FIRESTORE).format(
+            FORMAT_DATE_FULLCALENDAR,
+          )}
+          endDate={dayjs(request?.endDate, DATE_FORMAT_TO_FIRESTORE).format(
+            FORMAT_DATE_FULLCALENDAR,
+          )}
+        />
+      )}
     </Modal>
   );
 };

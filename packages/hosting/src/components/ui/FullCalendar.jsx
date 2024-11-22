@@ -11,6 +11,7 @@ export const FullCalendarComponent = ({ startDate, endDate, props }) => {
       start: startDate,
       end: endDate,
       display: "background",
+      backgroundColor: "lightgreen",
     },
   ];
 
