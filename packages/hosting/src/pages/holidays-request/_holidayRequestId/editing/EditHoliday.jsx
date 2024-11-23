@@ -110,13 +110,37 @@ const EditHoliday = ({ holidayRequest, onGoBack, onSaveRequest, loading }) => {
     });
   }, [holidayRequest]);
 
-  console.log("holidayRequest: ", holidayRequest);
-
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
   };
 
-  const onSubmit = (formData) => onSaveRequest(formData);
+  const validateDateRange = (request) => {
+    return Math.abs(request) > 30;
+  };
+
+  const onSubmit = (formData) => {
+    const [start, end] = formData.dateRange;
+
+    if (dayjs(start).day() === 1) {
+      formData.dateRange[0] = dayjs(start.toDate()).subtract(1, "day");
+    }
+
+    if (dayjs(end).day() === 5) {
+      formData.dateRange[1] = dayjs(end.toDate()).add(1, "day");
+    }
+
+    if (
+      validateDateRange(
+        formData.dateRange[0].diff(formData.dateRange[1], "day"),
+      )
+    )
+      return notification({
+        type: "warning",
+        title: "¡No puedes superar los 30 días!",
+      });
+
+    onSaveRequest(formData);
+  };
 
   return (
     <Row>
