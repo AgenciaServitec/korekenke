@@ -151,7 +151,7 @@ const HolidayList = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <div className="header-content">
-              <Title level={3}>Lista de Peticiones</Title>
+              <Title level={2}>SOLICITUDES DE VACACIONES</Title>
             </div>
           </Col>
           <Col span={24}>
