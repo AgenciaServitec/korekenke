@@ -32,26 +32,28 @@ export const ShowCalendar = ({ holidaysRange, onSetCurrentStep }) => {
 
   return (
     <Container gutter={[16, 16]}>
-      <Col span={24}>
-        {holidaysRange ? (
-          <>
+      {holidaysRange ? (
+        <>
+          <Col span={24}>
             <FullCalendarComponent
               startDate={dateRangeRules().startDate}
               endDate={dateRangeRules().endDate}
             />
-            <Col span={24} style={{ display: "flex", justifyContent: "end" }}>
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => onSetCurrentStep(1)}
-                className="btn-next"
-                icon={<FontAwesomeIcon icon={faArrowRight} />}
-              >
-                Continuar
-              </Button>
-            </Col>
-          </>
-        ) : (
+          </Col>
+          <Col span={24} style={{ display: "flex", justifyContent: "end" }}>
+            <Button
+              type="primary"
+              size="large"
+              onClick={() => onSetCurrentStep(1)}
+              className="btn-next"
+              icon={<FontAwesomeIcon icon={faArrowRight} />}
+            >
+              Continuar
+            </Button>
+          </Col>
+        </>
+      ) : (
+        <Col span={24}>
           <div className="search-make">
             <Space direction="vertical" align="center">
               <div className="icon">
@@ -64,8 +66,8 @@ export const ShowCalendar = ({ holidaysRange, onSetCurrentStep }) => {
               </div>
             </Space>
           </div>
-        )}
-      </Col>
+        </Col>
+      )}
     </Container>
   );
 };
@@ -81,8 +83,10 @@ const Container = styled(Row)`
     height: auto;
     opacity: 0.8;
   }
+
   .btn-next {
     padding: 1em 5em;
+
     ${mediaQuery.minTablet} {
       padding: 1em 8em;
     }
