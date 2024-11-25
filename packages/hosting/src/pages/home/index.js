@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {
   faClipboardList,
   faHorseHead,
-  faLock,
   faPoll,
   faShield,
   faUser,
@@ -163,17 +162,6 @@ export const HomeIntegration = () => {
                   2. Lista de estudio del clima organizacional
                 </Link>
               </li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <div className="items-icon">
-            <FontAwesomeIcon icon={faLock} size="5x" />
-          </div>
-          <div>
-            <h2>SEGURIDAD</h2>
-            <ul>
-              <li>Tu información 100% segura en nuestra base de datos</li>
             </ul>
           </div>
         </div>
