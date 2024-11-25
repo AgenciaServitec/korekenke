@@ -17,7 +17,6 @@ import {
 } from "../../../../firebase/collections/holidays";
 import { omit } from "lodash";
 import dayjs from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -63,29 +62,31 @@ export const SubmitVacationRequest = ({
   };
 
   const weekDays = (startDate, endDate) => {
-    dayjs.extend(isSameOrBefore);
-
     const workDays = [1, 2, 3, 4, 5];
-    let days = 0;
+
+    let workingDays = 0;
     let saturdays = 0;
     let sundays = 0;
 
     while (dayjs(startDate).isSameOrBefore(dayjs(endDate))) {
-      if (workDays.includes(startDate.day())) {
-        days++;
+      const dayOfStartDate = startDate.day();
+
+      if (workDays.includes(dayOfStartDate)) {
+        workingDays++;
       }
-      if (startDate.day() === 6) {
+      if (dayOfStartDate === 6) {
         saturdays++;
       }
-      if (startDate.day() === 0) {
+      if (dayOfStartDate === 0) {
         sundays++;
       }
       startDate = startDate.add(1, "day");
     }
+
     return {
-      workingDays: days,
-      saturdays: saturdays,
-      sundays: sundays,
+      workingDays,
+      saturdays,
+      sundays,
     };
   };
 
