@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {
   faClipboardList,
   faHorseHead,
-  faLock,
   faPoll,
   faShield,
   faUser,
