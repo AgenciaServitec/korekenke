@@ -71,8 +71,6 @@ export const EditHolidayIntegration = () => {
     }
   };
 
-  console.log("holidayRequest", holidayRequest);
-
   return (
     <EditHoliday
       holidayRequest={holidayRequest}
