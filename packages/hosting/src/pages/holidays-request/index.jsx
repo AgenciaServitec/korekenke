@@ -94,9 +94,9 @@ const HolidayList = ({
           startDate={dayjs(holiday?.startDate, DATE_FORMAT_TO_FIRESTORE).format(
             FORMAT_DATE_FULLCALENDAR,
           )}
-          endDate={dayjs(holiday?.endDate, DATE_FORMAT_TO_FIRESTORE).format(
-            FORMAT_DATE_FULLCALENDAR,
-          )}
+          endDate={dayjs(holiday?.endDate, DATE_FORMAT_TO_FIRESTORE)
+            .add(1, "day")
+            .format(FORMAT_DATE_FULLCALENDAR)}
         />
       ),
     });
