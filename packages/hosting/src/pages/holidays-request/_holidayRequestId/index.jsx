@@ -64,7 +64,6 @@ export const HolidayRequestIntegration = () => {
       case 1:
         return (
           <SubmitVacationRequest
-            isNew={isNew}
             user={authUser}
             holidaysRange={holidaysRange}
             holidayRequest={holidayRequest}
