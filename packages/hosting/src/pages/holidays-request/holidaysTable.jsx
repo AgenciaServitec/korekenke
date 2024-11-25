@@ -157,7 +157,7 @@ export const HolidaysTable = ({
     {
       title: "Opciones",
       align: "start",
-      width: ["8rem", "100%"],
+      width: ["12rem", "100%"],
       render: (holiday) => {
         return (
           <Space>
