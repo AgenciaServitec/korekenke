@@ -4,10 +4,9 @@ import { Button, Col, Form, Input, notification, Row } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { useFormUtils } from "../../hooks";
+import { useCountdown, useFormUtils } from "../../hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Spin } from "antd";
 import {
   useApiVerifyEmailSendCodePost,
   useApiVerifyEmailVerifyCodePost,
@@ -15,8 +14,10 @@ import {
 import { getLocalStorage } from "../../utils";
 import { fetchUsersByCip } from "../../firebase/collections";
 import { isEmpty } from "lodash";
+import { Spin } from "antd";
 
 export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
+  const { secondsLeft, start } = useCountdown();
   const [expiredVerifiedCode, setExpiredVerifiedCode] = useState(false);
   const [loadingSendCode, setLoadingSendCode] = useState(false);
   const [user, setUser] = useState(null);
@@ -43,11 +44,11 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
       }
 
       setUser(user);
-      await fetchVerifyEmailSendCode();
+      await fetchVerifyEmailSendCode(user);
     })();
   }, []);
 
-  const fetchVerifyEmailSendCode = async () => {
+  const fetchVerifyEmailSendCode = async (user) => {
     try {
       setLoadingSendCode(true);
       if (!user) {
@@ -56,6 +57,8 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
       }
 
       await postVerifyEmailSendCode(user.id);
+      setExpiredVerifiedCode(false);
+      start(60);
 
       if (postVerifyEmailSendCodeResponse.data === "verify_code_exists") {
         return notification({
@@ -111,10 +114,10 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
       user={user}
       onVerifyEmailCode={onVerifyEmailCode}
       expiredVerifiedCode={expiredVerifiedCode}
-      setExpiredVerifiedCode={setExpiredVerifiedCode}
       loadingSendCode={loadingSendCode || postVerifyEmailSendCodeLoading}
       loadingValidateCode={postVerifyEmailVerifyCodeLoading}
       onFetchVerifyEmailSendCode={fetchVerifyEmailSendCode}
+      secondsLeft={secondsLeft}
     />
   );
 };
@@ -125,10 +128,10 @@ const VerificationByEmail = ({
   user,
   onVerifyEmailCode,
   expiredVerifiedCode,
-  setExpiredVerifiedCode,
   loadingSendCode,
   loadingValidateCode,
   onFetchVerifyEmailSendCode,
+  secondsLeft,
 }) => {
   const schema = yup.object({
     verificationCode: yup
@@ -192,13 +195,13 @@ const VerificationByEmail = ({
                       ) : (
                         <a
                           href="#"
-                          onClick={() => onFetchVerifyEmailSendCode()}
+                          onClick={() => onFetchVerifyEmailSendCode(user)}
                         >
-                          Enviar
+                          Obtener código
                         </a>
                       )
                     ) : (
-                      <span>Código enviado</span>
+                      <span>{secondsLeft > 0 && `${secondsLeft}`}</span>
                     )
                   }
                 />
@@ -213,7 +216,7 @@ const VerificationByEmail = ({
               loading={loadingValidateCode}
               htmlType="submit"
             >
-              Enviar
+              Validar código
             </Button>
           </Col>
           <Col span={24}>
