@@ -7,6 +7,9 @@ export const Holiday1Sheet = ({ user }) => {
   return (
     <Container>
       <div className="sheet">
+        <div className="header">
+          <h1>DETALLES DE LA SOLICITUD</h1>
+        </div>
         <div className="main">
           <div className="request-content">
             <table className="summary-table">
@@ -74,6 +77,16 @@ const Container = styled.div`
 
   .sheet {
     width: 100%;
+
+    .header {
+      display: grid;
+      h1 {
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        text-decoration: underline;
+        margin-bottom: 1em;
+      }
+    }
 
     .main {
       .request-type {
