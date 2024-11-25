@@ -106,7 +106,7 @@ export const SubmitVacationRequest = ({
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Title level={2}>Motivo y/o Asunto</Title>
+        <Title level={3}>Motivo y/o Asunto</Title>
       </Col>
       <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
         <Row gutter={[16, 16]}>
