@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -14,7 +14,6 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import {
   addHoliday,
   fetchHolidaysByUserId,
-  updateHoliday,
 } from "../../../../firebase/collections/holidays";
 import { omit } from "lodash";
 import dayjs from "dayjs";
@@ -24,7 +23,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 
 export const SubmitVacationRequest = ({
-  isNew,
   user,
   holidaysRange,
   holidayRequest,
@@ -35,6 +33,8 @@ export const SubmitVacationRequest = ({
 
   const [loading, setLoading] = useState(false);
 
+  const [startDate, endDate] = holidaysRange;
+
   const schema = yup.object({
     reason: yup.string(),
   });
@@ -43,53 +43,93 @@ export const SubmitVacationRequest = ({
     handleSubmit,
     control,
     formState: { errors },
-    reset,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
-  const validateHolidaysLimitYear = async () => {
-    const holidays = await fetchHolidaysByUserId(user.id);
+  const validateHolidaysRules = (holidaysOfUser = []) => {
+    const lengthDays = holidaysOfUser
+      .map(
+        (holiday) =>
+          dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
+            dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+            "day",
+          ) + 1,
+      )
+      .reduce((a, b) => a + b, 0);
 
-    const lengthDays = holidays.map(
-      (holiday) =>
-        dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
-          dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
-          "day",
-        ) + 1,
-    );
+    return lengthDays >= 30;
+  };
 
-    return lengthDays.reduce((a, b) => a + b, 0);
+  const weekDays = (startDate, endDate) => {
+    const workDays = [1, 2, 3, 4, 5];
+
+    let workingDays = 0;
+    let saturdays = 0;
+    let sundays = 0;
+
+    while (dayjs(startDate).isSameOrBefore(dayjs(endDate))) {
+      const dayOfStartDate = startDate.day();
+
+      if (workDays.includes(dayOfStartDate)) {
+        workingDays++;
+      }
+      if (dayOfStartDate === 6) {
+        saturdays++;
+      }
+      if (dayOfStartDate === 0) {
+        sundays++;
+      }
+      startDate = startDate.add(1, "day");
+    }
+
+    return {
+      workingDays,
+      saturdays,
+      sundays,
+    };
+  };
+
+  const _user = {
+    ...user,
+    holidays: {
+      daysRemaining: "10",
+      daysUsed: "20",
+      ...weekDays(startDate, endDate),
+    },
   };
 
   const mapForm = (formData) => ({
     ...holidayRequest,
-    user: omit(user, "acls"),
+    user: omit(_user, "acls"),
     startDate: dayjs(holidaysRange[0].toDate()).format(
       DATE_FORMAT_TO_FIRESTORE,
     ),
     endDate: dayjs(holidaysRange[1].toDate()).format(DATE_FORMAT_TO_FIRESTORE),
     reason: formData.reason,
-    status: "pending",
+    status: "waiting",
+    wasRead: false,
   });
-
-  useEffect(() => {
-    reset({
-      reason: holidayRequest?.reason || "",
-    });
-  }, [holidayRequest]);
 
   const onSubmit = async (formData) => {
     try {
       setLoading(true);
+      const holidaysOfUser = await fetchHolidaysByUserId(user.id);
+
+      const validationResult = validateHolidaysRules(holidaysOfUser);
+
+      if (validationResult) {
+        notification({
+          type: "warning",
+          title: "Límite de días alcanzado!",
+          description:
+            "No se puede registrar, ya que has alcanzado o superado el límite de 30 días calendario.",
+        });
+        return;
+      }
 
       const holidayData = mapForm(formData);
-
-      await validateHolidaysLimitYear();
-
-      isNew
-        ? await addHoliday(assignCreateProps(holidayData))
-        : await updateHoliday(holidayRequest.id, holidayData);
+      await addHoliday(assignCreateProps(holidayData));
 
       notification({
         type: "success",
