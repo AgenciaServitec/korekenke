@@ -11,10 +11,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import {
-  addHoliday,
-  fetchHolidaysByUserId,
-} from "../../../../firebase/collections/holidays";
+import { addHoliday } from "../../../../firebase/collections/holidays";
 import { omit } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
@@ -46,20 +43,6 @@ export const SubmitVacationRequest = ({
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
-
-  const validateHolidaysRules = (holidaysOfUser = []) => {
-    const lengthDays = holidaysOfUser
-      .map(
-        (holiday) =>
-          dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
-            dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
-            "day",
-          ) + 1,
-      )
-      .reduce((a, b) => a + b, 0);
-
-    return lengthDays >= 30;
-  };
 
   const weekDays = (startDate, endDate) => {
     const workDays = [1, 2, 3, 4, 5];
@@ -114,19 +97,6 @@ export const SubmitVacationRequest = ({
   const onSubmit = async (formData) => {
     try {
       setLoading(true);
-      const holidaysOfUser = await fetchHolidaysByUserId(user.id);
-
-      const validationResult = validateHolidaysRules(holidaysOfUser);
-
-      if (validationResult) {
-        notification({
-          type: "warning",
-          title: "Límite de días alcanzado!",
-          description:
-            "No se puede registrar, ya que has alcanzado o superado el límite de 30 días calendario.",
-        });
-        return;
-      }
 
       const holidayData = mapForm(formData);
       await addHoliday(assignCreateProps(holidayData));
