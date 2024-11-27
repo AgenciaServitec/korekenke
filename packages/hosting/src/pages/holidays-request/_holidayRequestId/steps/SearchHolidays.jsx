@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import {
@@ -15,18 +15,37 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
 import styled from "styled-components";
+import { fetchHolidaysByUserId } from "../../../../firebase/collections/holidays";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
 export const SearchHolidays = ({
+  user,
   holidaysRange,
   holidayRequest,
   onSetHolidaysRange,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
   };
 
   const validateDateRange = (request) => {
     return Math.abs(request) > 30;
+  };
+
+  const validateHolidaysRules = (holidaysOfUser = []) => {
+    const lengthDays = holidaysOfUser
+      .map(
+        (holiday) =>
+          dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
+            dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+            "day",
+          ) + 1,
+      )
+      .reduce((a, b) => a + b, 0);
+
+    return lengthDays >= 30;
   };
 
   const schema = yup.object({
@@ -53,28 +72,49 @@ export const SearchHolidays = ({
     });
   }, [holidayRequest]);
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     const [start, end] = formData.dateRange;
 
-    if (dayjs(start).day() === 1) {
-      formData.dateRange[0] = dayjs(start.toDate()).subtract(1, "day");
-    }
+    try {
+      setLoading(true);
+      const holidaysOfUser = await fetchHolidaysByUserId(user.id);
 
-    if (dayjs(end).day() === 5) {
-      formData.dateRange[1] = dayjs(end.toDate()).add(1, "day");
-    }
+      const validationResult = validateHolidaysRules(holidaysOfUser);
 
-    if (
-      validateDateRange(
-        formData.dateRange[0].diff(formData.dateRange[1], "day"),
+      if (validationResult) {
+        notification({
+          type: "warning",
+          title: "Límite de días alcanzado!",
+          description:
+            "No se puede registrar, ya que has alcanzado o superado el límite de 30 días calendario.",
+        });
+        return;
+      }
+
+      if (dayjs(start).day() === 1) {
+        formData.dateRange[0] = dayjs(start.toDate()).subtract(1, "day");
+      }
+
+      if (dayjs(end).day() === 5) {
+        formData.dateRange[1] = dayjs(end.toDate()).add(1, "day");
+      }
+
+      if (
+        validateDateRange(
+          formData.dateRange[0].diff(formData.dateRange[1], "day"),
+        )
       )
-    )
-      return notification({
-        type: "warning",
-        title: "¡No puedes superar los 30 días!",
-      });
+        return notification({
+          type: "warning",
+          title: "¡No puedes superar los 30 días!",
+        });
 
-    onSetHolidaysRange(formData.dateRange);
+      onSetHolidaysRange(formData.dateRange);
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -101,7 +141,14 @@ export const SearchHolidays = ({
                 />
               </Col>
               <Col span={24} lg={8}>
-                <Button htmlType="submit" type="primary" size="large" block>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  size="large"
+                  block
+                  loading={loading}
+                  disabled={loading}
+                >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                   BUSCAR
                 </Button>

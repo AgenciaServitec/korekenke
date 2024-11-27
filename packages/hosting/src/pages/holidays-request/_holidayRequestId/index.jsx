@@ -89,6 +89,7 @@ export const HolidayRequestIntegration = () => {
           <div className="header-wrapper">
             {currentStep === 0 ? (
               <SearchHolidays
+                user={authUser}
                 holidaysRange={holidaysRange}
                 holidayRequest={holidayRequest}
                 onSetHolidaysRange={onSetHolidaysRange}
