@@ -11,10 +11,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import {
-  addHoliday,
-  fetchHolidaysByUserId,
-} from "../../../../firebase/collections/holidays";
+import { addHoliday } from "../../../../firebase/collections/holidays";
 import { omit } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
