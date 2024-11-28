@@ -26,7 +26,7 @@ export const HolidayRequestIntegration = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [holidayRequest, setHolidayRequest] = useState(null);
   const [holidaysRange, setHolidaysRange] = useState(null);
-  const [holidays, setHolidays] = useState([]);
+  const [holidaysByUser, setHolidaysByUser] = useState([]);
 
   const isNew = holidayRequestId === "new";
 
@@ -49,8 +49,8 @@ export const HolidayRequestIntegration = () => {
         if (!_holidayRequest) return onGoBack();
       }
 
-      const _holidays = await fetchHolidaysByUserId(authUser.id);
-      setHolidays(_holidays);
+      const _holidaysByUser = await fetchHolidaysByUserId(authUser.id);
+      setHolidaysByUser(_holidaysByUser);
 
       const _holidayRequest = { id: getHolidaysId() };
       setHolidayRequest(_holidayRequest);
@@ -70,7 +70,7 @@ export const HolidayRequestIntegration = () => {
         return (
           <SubmitVacationRequest
             user={authUser}
-            holidays={holidays}
+            holidaysByUser={holidaysByUser}
             holidaysRange={holidaysRange}
             holidayRequest={holidayRequest}
             onNavigateGoTo={onNavigateGoTo}

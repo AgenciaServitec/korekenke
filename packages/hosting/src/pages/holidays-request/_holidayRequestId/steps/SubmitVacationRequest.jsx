@@ -21,7 +21,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 
 export const SubmitVacationRequest = ({
   user,
-  holidays,
+  holidaysByUser,
   holidaysRange,
   holidayRequest,
   onNavigateGoTo,
@@ -79,7 +79,7 @@ export const SubmitVacationRequest = ({
       dayjs(endDate).diff(dayjs(startDate), "day") + 1;
 
     const lengthDays =
-      holidays
+      holidaysByUser
         .map(
           (holiday) =>
             dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
