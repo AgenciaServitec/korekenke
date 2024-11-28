@@ -21,6 +21,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 
 export const SubmitVacationRequest = ({
   user,
+  holidaysByUser,
   holidaysRange,
   holidayRequest,
   onNavigateGoTo,
@@ -73,11 +74,33 @@ export const SubmitVacationRequest = ({
     };
   };
 
+  const daysRemainingAndUsed = () => {
+    const lengthCountSelectedDateRange =
+      dayjs(endDate).diff(dayjs(startDate), "day") + 1;
+
+    const lengthDays =
+      holidaysByUser
+        .map(
+          (holiday) =>
+            dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
+              dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+              "day",
+            ) + 1,
+        )
+        .reduce((a, b) => a + b, 0) + lengthCountSelectedDateRange;
+
+    const daysRemaining = 30 - lengthDays;
+    const daysUsed = lengthDays;
+    return {
+      daysRemaining,
+      daysUsed,
+    };
+  };
+
   const _user = {
     ...user,
     holidays: {
-      daysRemaining: "10",
-      daysUsed: "20",
+      ...daysRemainingAndUsed(),
       ...weekDays(startDate, endDate),
     },
   };

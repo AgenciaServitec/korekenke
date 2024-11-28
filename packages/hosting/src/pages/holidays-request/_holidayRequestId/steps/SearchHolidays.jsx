@@ -30,22 +30,8 @@ export const SearchHolidays = ({
     return current && current < dayjs().endOf("day");
   };
 
-  const validateDateRange = (request) => {
-    return Math.abs(request) > 30;
-  };
-
-  const validateHolidaysRules = (holidaysOfUser = []) => {
-    const lengthDays = holidaysOfUser
-      .map(
-        (holiday) =>
-          dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
-            dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
-            "day",
-          ) + 1,
-      )
-      .reduce((a, b) => a + b, 0);
-
-    return lengthDays >= 30;
+  const validateDateRange = (countHolidays) => {
+    return Math.abs(countHolidays) > 30;
   };
 
   const schema = yup.object({
@@ -57,9 +43,29 @@ export const SearchHolidays = ({
     control,
     formState: { errors },
     reset,
+    watch,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error } = useFormUtils({ errors, schema });
+
+  const validateHolidaysRules = (holidaysOfUser = []) => {
+    const countSelectedDateRange = watch("dateRange");
+    const [start, end] = countSelectedDateRange;
+    const lengthCountSelectedDateRange =
+      dayjs(end).diff(dayjs(start), "day") + 1;
+
+    const lengthDays =
+      holidaysOfUser
+        .map(
+          (holiday) =>
+            dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
+              dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+              "day",
+            ) + 1,
+        )
+        .reduce((a, b) => a + b, 0) + lengthCountSelectedDateRange;
+    return lengthDays > 30;
+  };
 
   useEffect(() => {
     reset({
@@ -77,16 +83,17 @@ export const SearchHolidays = ({
 
     try {
       setLoading(true);
-      const holidaysOfUser = await fetchHolidaysByUserId(user.id);
 
-      const validationResult = validateHolidaysRules(holidaysOfUser);
+      const validationResult = validateHolidaysRules(
+        await fetchHolidaysByUserId(user.id),
+      );
 
       if (validationResult) {
         notification({
           type: "warning",
           title: "Límite de días alcanzado!",
           description:
-            "No se puede registrar, ya que has alcanzado o superado el límite de 30 días calendario.",
+            "No se pueden seleccionar estas fechas, ya que alcanzan o superan el límite de 30 días calendario.",
         });
         return;
       }

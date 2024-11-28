@@ -8,6 +8,7 @@ import { SubmitVacationRequest } from "./steps/SubmitVacationRequest";
 import dayjs from "dayjs";
 import {
   fetchHoliday,
+  fetchHolidaysByUserId,
   getHolidaysId,
 } from "../../../firebase/collections/holidays";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
@@ -25,6 +26,7 @@ export const HolidayRequestIntegration = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [holidayRequest, setHolidayRequest] = useState(null);
   const [holidaysRange, setHolidaysRange] = useState(null);
+  const [holidaysByUser, setHolidaysByUser] = useState([]);
 
   const isNew = holidayRequestId === "new";
 
@@ -47,6 +49,9 @@ export const HolidayRequestIntegration = () => {
         if (!_holidayRequest) return onGoBack();
       }
 
+      const _holidaysByUser = await fetchHolidaysByUserId(authUser.id);
+      setHolidaysByUser(_holidaysByUser);
+
       const _holidayRequest = { id: getHolidaysId() };
       setHolidayRequest(_holidayRequest);
     })();
@@ -65,6 +70,7 @@ export const HolidayRequestIntegration = () => {
         return (
           <SubmitVacationRequest
             user={authUser}
+            holidaysByUser={holidaysByUser}
             holidaysRange={holidaysRange}
             holidayRequest={holidayRequest}
             onNavigateGoTo={onNavigateGoTo}
@@ -126,7 +132,7 @@ export const HolidayRequestIntegration = () => {
           {onShowStep()}
         </>
       ) : (
-        <EditHolidayIntegration />
+        <EditHolidayIntegration user={authUser} />
       )}
     </Container>
   );
