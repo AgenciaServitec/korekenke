@@ -48,7 +48,9 @@ export const HolidayRequestIntegration = () => {
 
         if (!_holidayRequest) return onGoBack();
       }
-      setHolidays(await fetchHolidaysByUserId(authUser.id));
+
+      const _holidays = await fetchHolidaysByUserId(authUser.id);
+      setHolidays(_holidays);
 
       const _holidayRequest = { id: getHolidaysId() };
       setHolidayRequest(_holidayRequest);
