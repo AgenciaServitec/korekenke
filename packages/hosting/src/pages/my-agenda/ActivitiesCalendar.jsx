@@ -2,10 +2,21 @@ import React from "react";
 import { FullCalendarComponent } from "../../components";
 import styled from "styled-components";
 
-export const ActivitiesCalendar = ({ activitiesLoading, activities }) => {
+export const ActivitiesCalendar = ({
+  activitiesLoading,
+  activities,
+  onShowActivityInformation,
+}) => {
   return (
     <Container>
-      <FullCalendarComponent />
+      {activitiesLoading ? (
+        <p>Cargando actividades...</p>
+      ) : (
+        <FullCalendarComponent
+          activities={activities}
+          onShowActivityInformation={onShowActivityInformation}
+        />
+      )}
     </Container>
   );
 };

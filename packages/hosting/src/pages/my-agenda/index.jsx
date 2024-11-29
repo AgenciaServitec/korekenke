@@ -7,7 +7,7 @@ import {
   useAuthentication,
   useModal,
 } from "../../providers";
-import { useDefaultFirestoreProps, useDevice } from "../../hooks";
+import { useDevice } from "../../hooks";
 import { ActivitiesCalendar } from "./ActivitiesCalendar";
 import { ActivitiesDropdown } from "./ActivitiesDropdown";
 import { AddActivityIntegration } from "./AddActivity";
@@ -18,7 +18,7 @@ import {
 } from "../../firebase/collections/activities";
 import { ActivitiesList } from "./ActivitiesList";
 import { EditActivityIntegration } from "./editing/EditActivities";
-import { firestore } from "../../firebase";
+import { ActivityInformation } from "./editing/ActivityInformation";
 
 export const Activities = () => {
   const { authUser } = useAuthentication();
@@ -49,7 +49,6 @@ const Activity = ({ activities, activitiesLoading, user }) => {
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
   const { setActivities } = useActivitiesContext();
-  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const onAddActivity = (newActivity) => {
     setActivities((prev) => [...prev, newActivity]);
@@ -88,6 +87,23 @@ const Activity = ({ activities, activitiesLoading, user }) => {
     }
   };
 
+  const onShowActivityInformation = (activityId) => {
+    const activity = activities.find((activity) => activity.id === activityId);
+    if (activity) {
+      onShowModal({
+        title: activity.type === "task" ? "Tarea" : "Evento",
+        width: `${isTablet ? "90%" : "30%"}`,
+        onRenderBody: () => (
+          <ActivityInformation
+            activity={activity}
+            onEditActivity={onEditActivity}
+            onConfirmDeleteActivity={onConfirmDeleteActivity}
+          />
+        ),
+      });
+    }
+  };
+
   const onConfirmDeleteActivity = async (activityId) => {
     modalConfirm({
       onOk: async () => {
@@ -114,6 +130,7 @@ const Activity = ({ activities, activitiesLoading, user }) => {
                 activitiesLoading={activitiesLoading}
                 onEditActivity={onEditActivity}
                 onConfirmDeleteActivity={onConfirmDeleteActivity}
+                onShowActivityInformation={onShowActivityInformation}
               />
             </Col>
             <Col span={24} md={6}>
