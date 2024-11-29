@@ -39,6 +39,8 @@ export const HolidaysRequestIntegration = () => {
     holidaysRef.where("isDeleted", "==", false),
   );
 
+  console.log("holidays", holidays);
+
   useEffect(() => {
     holidaysError && notification({ type: "error" });
   }, [holidaysError]);

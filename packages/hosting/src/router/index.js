@@ -184,6 +184,15 @@ export const Router = () => {
         />
         <Route
           exact
+          path="my-agenda"
+          element={
+            <AdminLayout>
+              <A.Activities />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="inscriptions/cmsts"
           element={
             <AdminLayout>
