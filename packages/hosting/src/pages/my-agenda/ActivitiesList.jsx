@@ -1,0 +1,94 @@
+import React, { useState } from "react";
+import { Title, Tabs, List } from "../../components";
+import styled from "styled-components";
+import { orderBy } from "lodash";
+
+export const ActivitiesList = ({
+  activities,
+  onEditActivity,
+  onConfirmDeleteActivity,
+}) => {
+  const [activeTab, setActiveTab] = useState("1");
+
+  const filterActivities =
+    activeTab === "1"
+      ? activities.filter((activity) => activity.type === "task")
+      : activities.filter((activity) => activity.type === "event");
+
+  const items = [
+    {
+      key: "1",
+      label: "Tareas",
+    },
+    {
+      key: "2",
+      label: "Eventos",
+    },
+  ];
+
+  return (
+    <Container>
+      <Title level={3}>Actividades</Title>
+      <Tabs
+        items={items}
+        defaultActiveKey="1"
+        onChange={(key) => setActiveTab(key)}
+      />
+      <List
+        dataSource={orderBy(filterActivities, "createAt", "desc")}
+        itemTitle={(activity) => (
+          <div className="title-wrapper">
+            {activity.title}
+            <br />
+            {activity.date}
+          </div>
+        )}
+        onEditItem={(activity) => {
+          onEditActivity(activity.id);
+        }}
+        onDeleteItem={(activity) => {
+          console.log("activity", activity);
+          onConfirmDeleteActivity(activity.id);
+        }}
+      />
+    </Container>
+  );
+};
+
+const Container = styled.div`
+  max-width: 100%;
+  width: 100%;
+  height: 85vh;
+  padding: 1em;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  box-shadow:
+    0px 4px 8px rgba(0, 0, 0, 0.2),
+    inset 0px 2px 4px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  overflow-y: auto;
+
+  .title-wrapper {
+    font-size: 1em;
+  }
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 0.5em;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+
+    .title-wrapper {
+      font-size: 0.9em;
+      word-wrap: break-word;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5em;
+    border-radius: 5px;
+
+    .title-wrapper {
+      font-size: 0.8em;
+    }
+  }
+`;

@@ -67,3 +67,6 @@ export * from "./privacy-policies";
 export * from "./holidays-request";
 export * from "./holidays-request/_holidayRequestId";
 export * from "./holidays-request/_holidayRequestId/sheets";
+
+//AGENDA
+export * from "./my-agenda";
