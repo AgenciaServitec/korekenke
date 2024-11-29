@@ -23,32 +23,39 @@ export const Holiday2Sheet = ({ user, holiday }) => {
               <h1>PAPELETA DE PERMISO</h1>
               <p>
                 Este Comando de Bienestar del Ejército, autoriza al PC{" "}
-                <span>{userFullName(user)}</span>, para hacer el uso de (DIAS DE
-                PERMISO) días de permiso, (REASON).
+                <span>{userFullName(user)}</span>, para hacer el uso de{" "}
+                {holiday?.user?.holidays?.daysUsed || "0"} días de permiso, por
+                el motivo: {holiday?.reason}
               </p>
               <table>
                 <tr>
                   <td>EMPIEZA</td>
                   <td>:</td>
                   <td>
-                    {dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE).format(
-                      "MM/DD/YYYY",
-                    )}
+                    {holiday?.startDate
+                      ? dayjs(
+                          holiday?.startDate,
+                          DATE_FORMAT_TO_FIRESTORE,
+                        ).format("DD/MM/YYYY")
+                      : "Sin registro"}
                   </td>
                 </tr>
                 <tr>
                   <td>TERMINA</td>
                   <td>:</td>
                   <td>
-                    {dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).format(
-                      "MM/DD/YYYY",
-                    )}
+                    {holiday?.endDate
+                      ? dayjs(
+                          holiday?.endDate,
+                          DATE_FORMAT_TO_FIRESTORE,
+                        ).format("DD/MM/YYYY")
+                      : "Sin registro"}
                   </td>
                 </tr>
                 <tr>
                   <td>DIRECCIÓN</td>
                   <td>:</td>
-                  <td>ADDRESS</td>
+                  <td>Av. Vargas 179 Piso 1</td>
                 </tr>
                 <tr>
                   <td>TELÉFONO</td>

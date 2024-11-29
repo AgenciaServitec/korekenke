@@ -2,8 +2,54 @@ import React from "react";
 import styled from "styled-components";
 import { findDegree, userFullName } from "../../../../utils";
 import { SignatureSheet } from "../../../../components";
+import dayjs from "dayjs";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
-export const Holiday1Sheet = ({ user }) => {
+export const Holiday1Sheet = ({ user, holiday, holidays }) => {
+  const holidaysByUser = holidays
+    .filter((holidayByUser) => holidayByUser.id !== holiday.id)
+    .map((_holiday) => ({
+      start: dayjs(_holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+      end: dayjs(_holiday.endDate, DATE_FORMAT_TO_FIRESTORE),
+    }));
+
+  const countDays = holidaysByUser.map(({ start, end }) => {
+    const workDays = [1, 2, 3, 4, 5];
+    let workingDays = 0,
+      saturdays = 0,
+      sundays = 0;
+
+    while (start.isSameOrBefore(end, "day")) {
+      const dayOfStart = start.day();
+      if (workDays.includes(dayOfStart)) workingDays++;
+      if (dayOfStart === 6) saturdays++;
+      if (dayOfStart === 0) sundays++;
+      start = start.add(1, "day");
+    }
+
+    return {
+      workingDays,
+      saturdays,
+      sundays,
+    };
+  });
+
+  const oldHolidays = countDays.reduce(
+    (acc, { workingDays, saturdays, sundays }) => {
+      acc.workingDays += workingDays;
+      acc.saturdays += saturdays;
+      acc.sundays += sundays;
+      acc.total += workingDays + saturdays + sundays;
+      return acc;
+    },
+    {
+      workingDays: 0,
+      saturdays: 0,
+      sundays: 0,
+      total: 0,
+    },
+  );
+
   return (
     <Container>
       <div className="sheet">
@@ -23,25 +69,39 @@ export const Holiday1Sheet = ({ user }) => {
               </tr>
               <tr>
                 <th>DÍAS USADOS</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td rowSpan={3}></td>
+                <td>{oldHolidays?.workingDays || 0}</td>
+                <td>{oldHolidays?.saturdays || 0}</td>
+                <td>{oldHolidays?.sundays || 0}</td>
+                <td>{oldHolidays?.total || 0}</td>
+                <td rowSpan={3}>
+                  {holiday?.user?.holidays?.daysRemaining || 0}
+                </td>
               </tr>
               <tr>
                 <th>PTE PAPELETA</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{holiday?.user?.holidays?.workingDays || 0}</td>
+                <td>{holiday?.user?.holidays?.saturdays || 0}</td>
+                <td>{holiday?.user?.holidays?.sundays || 0}</td>
+                <td>{holiday?.user?.holidays?.daysUsed || 0}</td>
               </tr>
               <tr>
                 <th>TOTALES</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                  {(oldHolidays?.workingDays || 0) +
+                    (holiday?.user?.holidays?.workingDays || 0)}
+                </td>
+                <td>
+                  {(oldHolidays?.saturdays || 0) +
+                    (holiday?.user?.holidays?.saturdays || 0)}
+                </td>
+                <td>
+                  {(oldHolidays?.sundays || 0) +
+                    (holiday?.user?.holidays?.sundays || 0)}
+                </td>
+                <td>
+                  {(oldHolidays?.total || 0) +
+                    (holiday?.user?.holidays?.daysUsed || 0)}
+                </td>
               </tr>
             </table>
 
