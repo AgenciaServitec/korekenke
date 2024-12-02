@@ -22,28 +22,66 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 import { updateActivity } from "../../../firebase/collections/activities";
 
 export const EditActivityIntegration = ({ activity }) => {
-  const { authUser } = useAuthentication();
-
-  return <EditActivity activity={activity} authUser={authUser} />;
-};
-
-const EditActivity = ({ activity, authUser }) => {
   const [loading, setLoading] = React.useState(false);
 
   const { assignUpdateProps } = useDefaultFirestoreProps();
+  const { authUser } = useAuthentication();
 
   const isTask = activity.type === "task";
 
+  const mapForm = (formData) => ({
+    ...activity,
+    title: formData.title,
+    description: formData.description,
+    address: formData.address || null,
+    date: dayjs(formData.date).format(DATE_FORMAT_TO_FIRESTORE),
+    allDay: formData.allDay,
+    color: isTask ? "#3498db" : "#58d68d",
+    type: isTask ? "task" : "event",
+  });
+
+  const onSaveActivity = async (formData) => {
+    try {
+      setLoading(true);
+      const _activity = mapForm(formData);
+      await updateActivity(
+        authUser.id,
+        _activity,
+        assignUpdateProps(_activity),
+      );
+
+      notification({
+        type: "success",
+      });
+    } catch (e) {
+      console.log("Error:", e);
+      notification({
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <EditActivity
+      activity={activity}
+      isTask={isTask}
+      onSaveActivity={onSaveActivity}
+      loading={loading}
+    />
+  );
+};
+
+const EditActivity = ({ activity, isTask, onSaveActivity, loading }) => {
   const schema = yup.object({
     title: yup.string(),
     date: yup.string().required(),
     allDay: yup.boolean(),
     description: yup.string(),
-    ...(isTask
-      ? {}
-      : {
-          location: yup.string().required(),
-        }),
+    ...(isTask && {
+      address: yup.string().required(),
+    }),
   });
 
   const {
@@ -68,48 +106,16 @@ const EditActivity = ({ activity, authUser }) => {
         date: formattedDate.isValid() ? formattedDate : dayjs(),
         allDay: activity.allDay,
         description: activity.description,
-        location: activity.location || "",
+        address: activity.address || "",
       });
     }
   }, [activity, reset]);
 
-  const mapForm = (data) => ({
-    ...activity,
-    title: data.title,
-    description: data.description,
-    location: data.location || null,
-    date: dayjs(data.date).format(DATE_FORMAT_TO_FIRESTORE),
-    allDay: data.allDay,
-    color: isTask ? "#3498db" : "#58d68d",
-    type: isTask ? "task" : "event",
-  });
-
-  const onSaveActivity = async (data) => {
-    try {
-      setLoading(true);
-      const activityData = mapForm(data);
-      await updateActivity(
-        authUser.id,
-        activityData,
-        assignUpdateProps(activityData),
-      );
-
-      notification({
-        type: "success",
-      });
-    } catch (e) {
-      console.log("Error:", e);
-      notification({
-        type: "error",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const onSubmit = (formData) => onSaveActivity(formData);
 
   return (
     <Row gutter={[16, 16]}>
-      <Form onSubmit={handleSubmit(onSaveActivity)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Controller
@@ -184,11 +190,11 @@ const EditActivity = ({ activity, authUser }) => {
           {!isTask && (
             <Col span={24}>
               <Controller
-                name="location"
+                name="address"
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Ubicación"
+                    label="Dirección"
                     name={name}
                     value={value}
                     onChange={onChange}
