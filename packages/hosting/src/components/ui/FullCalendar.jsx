@@ -58,7 +58,7 @@ export const FullCalendarComponent = ({
         events={events}
         eventClick={handleEventClick}
         allDayContent={true}
-        height={500}
+        height="95%"
         {...props}
       />
     </Container>
