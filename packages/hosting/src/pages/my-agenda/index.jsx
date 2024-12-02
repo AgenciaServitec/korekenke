@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Acl, Col, modalConfirm, notification, Row } from "../../components";
+import React, { useEffect } from "react";
+import { Acl, Col, notification, Row, Tag } from "../../components";
 import {
   ActivitiesProvider,
   ModalProvider,
@@ -91,7 +91,12 @@ const Activity = ({ activities, activitiesLoading, user }) => {
     const activity = activities.find((activity) => activity.id === activityId);
     if (activity) {
       onShowModal({
-        title: activity.type === "task" ? "Tarea" : "Evento",
+        title:
+          activity.type === "task" ? (
+            <Tag color="blue">Tarea</Tag>
+          ) : (
+            <Tag color="green">Evento</Tag>
+          ),
         width: `${isTablet ? "90%" : "30%"}`,
         onRenderBody: () => (
           <ActivityInformation
@@ -105,18 +110,14 @@ const Activity = ({ activities, activitiesLoading, user }) => {
   };
 
   const onConfirmDeleteActivity = async (activityId) => {
-    modalConfirm({
-      onOk: async () => {
-        try {
-          await updateActivity(user.id, {
-            id: activityId,
-            isDeleted: true,
-          });
-        } catch (error) {
-          console.error("Error: ", error);
-        }
-      },
-    });
+    try {
+      await updateActivity(user.id, {
+        id: activityId,
+        isDeleted: true,
+      });
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   };
 
   return (
@@ -124,7 +125,7 @@ const Activity = ({ activities, activitiesLoading, user }) => {
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row gutter={[16, 16]}>
-            <Col span={24} md={18}>
+            <Col span={24} sm={24} md={18}>
               <ActivitiesCalendar
                 activities={activities}
                 activitiesLoading={activitiesLoading}
@@ -133,7 +134,7 @@ const Activity = ({ activities, activitiesLoading, user }) => {
                 onShowActivityInformation={onShowActivityInformation}
               />
             </Col>
-            <Col span={24} md={6}>
+            <Col span={24} sm={24} md={6}>
               <Row gutter={[8, 8]}>
                 <Col span={24}>
                   <ActivitiesDropdown

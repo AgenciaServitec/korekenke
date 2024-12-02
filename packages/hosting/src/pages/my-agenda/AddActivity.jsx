@@ -40,23 +40,17 @@ export const AddActivityIntegration = ({
 
   useEffect(() => {
     (async () => {
-      if (!authUser) return;
-
-      try {
-        if (!isNew) {
-          const _activity = await fetchActivity(activityId);
-          setActivity(_activity);
-
-          if (!_activity) return;
-        }
-
-        const _activity = { id: getActivityId(authUser.uid) };
+      if (!isNew) {
+        const _activity = await fetchActivity(activityId);
         setActivity(_activity);
-      } catch (error) {
-        console.error("Error fetching activity:", error);
+
+        if (!_activity) return;
       }
+
+      const _activity = { id: getActivityId(authUser.uid) };
+      setActivity(_activity);
     })();
-  }, [isNew, activityId, authUser]);
+  }, [isNew, activityId]);
 
   return (
     <AddActivity
@@ -80,7 +74,7 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
     ...(isTask
       ? {}
       : {
-          location: yup.string().required(),
+          address: yup.string().required(),
         }),
   });
 
@@ -94,23 +88,23 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
   });
   const { required, error } = useFormUtils({ errors, schema });
 
-  const mapForm = (data) => ({
+  const mapActivity = (formData) => ({
     ...activity,
     id: getActivityId(user.id),
-    title: data.title,
-    description: data.description,
-    location: data.location || null,
-    date: dayjs(data.date).format(DATE_FORMAT_TO_FIRESTORE),
-    allDay: data.allDay,
+    title: formData.title,
+    description: formData.description,
+    address: formData.address || null,
+    date: dayjs(formData.date).format(DATE_FORMAT_TO_FIRESTORE),
+    allDay: formData.allDay,
     color: isTask ? "#3498db" : "#58d68d",
     type: isTask ? "task" : "event",
   });
 
-  const onSubmitActivity = async (data) => {
+  const onSubmitActivity = async (formData) => {
     try {
       setLoading(true);
-      const activityData = mapForm(data);
-      await addActivity(user.id, assignCreateProps(activityData));
+      const _activity = mapActivity(formData);
+      await addActivity(user.id, assignCreateProps(_activity));
 
       notification({
         type: "success",
@@ -205,11 +199,11 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
           {!isTask && (
             <Col span={24}>
               <Controller
-                name="location"
+                name="address"
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Ubicación"
+                    label="Dirección"
                     name={name}
                     value={value}
                     onChange={onChange}

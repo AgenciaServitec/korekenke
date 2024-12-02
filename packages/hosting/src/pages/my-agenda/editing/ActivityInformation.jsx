@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { IconAction, Title } from "../../../components";
+import { IconAction } from "../../../components";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const ActivityInformation = ({
@@ -15,12 +15,12 @@ export const ActivityInformation = ({
   return (
     <Container>
       <div className="title-wrapper">
-        <h1>{activity.title}</h1>
+        <span>{activity.title}</span>
       </div>
       <div className="all-content">
         <div className="information">
           <div className="date">
-            <p>fecha: {activity.date}</p>
+            <p>Fecha: {activity.date}</p>
           </div>
           <div className="extra-data">
             <p>Todo el día: {allDay}</p>
@@ -55,10 +55,14 @@ const Container = styled.div`
   .title-wrapper {
     text-align: center;
     text-decoration: underline;
-    font-size: 1.3em;
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 0.7em;
   }
   .all-content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5em;
 
     .information {
       max-width: 60%;
@@ -69,7 +73,6 @@ const Container = styled.div`
       text-align: right;
       max-width: 40%;
       width: 40%;
-      align-content: center;
       font-size: 3em;
     }
   }

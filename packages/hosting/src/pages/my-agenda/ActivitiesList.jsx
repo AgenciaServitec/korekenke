@@ -28,7 +28,7 @@ export const ActivitiesList = ({
 
   return (
     <Container>
-      <Title level={3}>Actividades</Title>
+      <Title level={3}>Mi Agenda</Title>
       <Tabs
         items={items}
         defaultActiveKey="1"
