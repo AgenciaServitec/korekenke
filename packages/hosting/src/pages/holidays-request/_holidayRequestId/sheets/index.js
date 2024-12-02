@@ -8,13 +8,11 @@ import {
 import { usersRef } from "../../../../firebase/collections";
 import { Holiday1Sheet } from "./Holiday1Sheet";
 import {
-  fetchHoliday,
   holidaysRef,
   updateHoliday,
 } from "../../../../firebase/collections/holidays";
 import { useBosses } from "../../../../hooks";
 import { Holiday2Sheet } from "./Holiday2Sheet";
-import { useGlobalData } from "../../../../providers";
 import { firestore } from "../../../../firebase";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
@@ -24,7 +22,11 @@ export const HolidaysSheets = () => {
   const { holidayRequestId, userId } = useParams();
   const { fetchEntityManager } = useBosses();
 
-  const [holiday, holidayLoading, holidayError] = useDocumentData(
+  const [holidays] = useCollectionData(
+    firestore.collection("holidays").where("isDeleted", "==", false),
+  );
+
+  const [holiday] = useDocumentData(
     firestore.collection("holidays").doc(holidayRequestId),
   );
 
@@ -66,7 +68,7 @@ export const HolidaysSheets = () => {
   return (
     <PDF>
       <Sheet layout="landscape">
-        <Holiday1Sheet user={user} holidays={holiday} />
+        <Holiday1Sheet user={user} holiday={holiday} holidays={holidays} />
       </Sheet>
       <Sheet layout="landscape">
         <Holiday2Sheet user={user} holiday={holiday} />

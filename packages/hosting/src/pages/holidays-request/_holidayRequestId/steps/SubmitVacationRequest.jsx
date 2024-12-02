@@ -90,7 +90,7 @@ export const SubmitVacationRequest = ({
         .reduce((a, b) => a + b, 0) + lengthCountSelectedDateRange;
 
     const daysRemaining = 30 - lengthDays;
-    const daysUsed = lengthDays;
+    const daysUsed = lengthCountSelectedDateRange;
     return {
       daysRemaining,
       daysUsed,
