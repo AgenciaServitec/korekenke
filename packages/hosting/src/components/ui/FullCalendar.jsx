@@ -4,15 +4,22 @@ import styled from "styled-components";
 import esLocale from "@fullcalendar/core/locales/es";
 import FullCalendar from "@fullcalendar/react";
 import { mediaQuery } from "../../styles";
+import dayjs from "dayjs";
 
-export const FullCalendarComponent = ({ startDate, endDate, props }) => {
+export const FullCalendarComponent = ({
+  startDate,
+  endDate,
+  props,
+  activities,
+  onShowActivityInformation,
+}) => {
   const [rerender, setRerender] = useState(null);
 
   useEffect(() => {
     setRerender(Math.random());
   }, []);
 
-  const events = [
+  const defaultEvents = [
     {
       start: startDate,
       end: endDate,
@@ -21,6 +28,27 @@ export const FullCalendarComponent = ({ startDate, endDate, props }) => {
     },
   ];
 
+  const activityEvents =
+    activities?.map((activity) => ({
+      title: activity.title,
+      start: dayjs(activity.date, "DD/MM/YYYY HH:mm").toISOString(),
+      allDay: activity.allDay,
+      location: activity.location || null,
+      backgroundColor: activity.color,
+      borderColor: activity.color,
+      extendedProps: {
+        description: activity.description,
+        activityId: activity.id,
+      },
+    })) || [];
+
+  const events = [...defaultEvents, ...activityEvents];
+
+  const handleEventClick = (info) => {
+    const event = info.event;
+    onShowActivityInformation(event.extendedProps.activityId);
+  };
+
   return (
     <Container>
       <FullCalendar
@@ -28,6 +56,7 @@ export const FullCalendarComponent = ({ startDate, endDate, props }) => {
         plugins={[dayGridPlugin]}
         locale={esLocale}
         events={events}
+        eventClick={handleEventClick}
         allDayContent={true}
         height={500}
         {...props}

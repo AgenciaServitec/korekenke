@@ -26,7 +26,10 @@ import {
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
-export const AddActivityIntegration = ({ activityType = "task" }) => {
+export const AddActivityIntegration = ({
+  activityType = "task",
+  onCloseModal,
+}) => {
   const { authUser } = useAuthentication();
   const { activityId } = useParams();
   const [activity, setActivity] = useState(null);
@@ -55,10 +58,17 @@ export const AddActivityIntegration = ({ activityType = "task" }) => {
     })();
   }, [isNew, activityId, authUser]);
 
-  return <AddActivity isTask={isTask} user={authUser} activity={activity} />;
+  return (
+    <AddActivity
+      isTask={isTask}
+      user={authUser}
+      activity={activity}
+      onCloseModal={onCloseModal}
+    />
+  );
 };
 
-const AddActivity = ({ isTask, user, activity }) => {
+const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
 
@@ -105,6 +115,12 @@ const AddActivity = ({ isTask, user, activity }) => {
       notification({
         type: "success",
       });
+
+      reset();
+
+      if (onCloseModal) {
+        onCloseModal();
+      }
     } catch (e) {
       console.log("Error:", e);
     } finally {

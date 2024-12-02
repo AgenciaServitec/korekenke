@@ -47,7 +47,6 @@ export const ActivitiesList = ({
           onEditActivity(activity.id);
         }}
         onDeleteItem={(activity) => {
-          console.log("activity", activity);
           onConfirmDeleteActivity(activity.id);
         }}
       />
@@ -70,6 +69,33 @@ const Container = styled.div`
 
   .title-wrapper {
     font-size: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+
+    .text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5em;
+
+      button {
+        padding: 0.3em 0.5em;
+        font-size: 0.8em;
+        cursor: pointer;
+
+        @media (max-width: 480px) {
+          font-size: 0.7em;
+          padding: 0.2em 0.4em;
+        }
+      }
+    }
   }
 
   @media (max-width: 768px) {
@@ -79,7 +105,10 @@ const Container = styled.div`
 
     .title-wrapper {
       font-size: 0.9em;
-      word-wrap: break-word;
+
+      .text {
+        font-size: 0.85em;
+      }
     }
   }
 
@@ -89,6 +118,10 @@ const Container = styled.div`
 
     .title-wrapper {
       font-size: 0.8em;
+
+      .text {
+        font-size: 0.8em;
+      }
     }
   }
 `;
