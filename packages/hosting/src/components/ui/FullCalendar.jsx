@@ -13,7 +13,6 @@ export const FullCalendarComponent = ({
   activities,
   onShowActivityInformation,
 }) => {
-  console.log("activities:", activities);
   const [rerender, setRerender] = useState(null);
 
   useEffect(() => {
@@ -47,7 +46,6 @@ export const FullCalendarComponent = ({
 
   const handleEventClick = (info) => {
     const event = info.event;
-    // Llamar a la función que muestra la información de la actividad
     onShowActivityInformation(event.extendedProps.activityId);
   };
 
