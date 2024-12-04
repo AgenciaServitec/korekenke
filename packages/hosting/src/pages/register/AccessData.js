@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Form,
-  InputNumber,
-  notification,
-  Title,
-} from "../../components";
+import { Button, Form, Input, notification, Title } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -127,7 +121,7 @@ export const AccessData = ({ next, currentStep }) => {
           name="cip"
           control={control}
           render={({ field: { onChange, value, name } }) => (
-            <InputNumber
+            <Input
               label="Ingrese CIP"
               onChange={onChange}
               value={value}
@@ -142,7 +136,7 @@ export const AccessData = ({ next, currentStep }) => {
           name="dni"
           control={control}
           render={({ field: { onChange, value, name } }) => (
-            <InputNumber
+            <Input
               label="Ingrese DNI"
               onChange={onChange}
               value={value}
