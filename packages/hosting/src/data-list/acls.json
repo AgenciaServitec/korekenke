@@ -10,6 +10,7 @@
       "/profile": "Menu: Perfil"
     },
     "myAgenda": {
+      "label": "Mi agenda",
       "/my-agenda": "/my-agenda"
     }
   },
