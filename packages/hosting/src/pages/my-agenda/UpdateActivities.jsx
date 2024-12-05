@@ -4,6 +4,6 @@ export const UpdateActivitiesIntegration = () => {
   return <div></div>;
 };
 
-const ActivitiesIntegration = () => {
+const UpdateActivities = () => {
   return <div></div>;
 };
