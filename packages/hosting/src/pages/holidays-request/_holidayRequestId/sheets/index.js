@@ -16,7 +16,6 @@ import { Holiday2Sheet } from "./Holiday2Sheet";
 import { firestore } from "../../../../firebase";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
-const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const HolidaysSheets = () => {
   const { holidayRequestId, userId } = useParams();

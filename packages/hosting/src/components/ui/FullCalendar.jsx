@@ -68,7 +68,7 @@ export const FullCalendarComponent = ({
 const Container = styled.div`
   margin: 1.5em 0;
   width: 100%;
-  height: 100%;
+  height: 80svh;
 
   .fc {
     text-transform: uppercase;
