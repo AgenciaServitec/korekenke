@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import {
+  faCalendarCheck,
+  faCalendarDays,
   faClipboardList,
   faHorseHead,
   faPoll,
@@ -26,6 +28,9 @@ export const HomeIntegration = () => {
       </h1>
       <div className="items">
         <div>
+          <div className="decoration-one"></div>
+          <div className="decoration-two"></div>
+          <div className="decoration-three"></div>
           <div className="items-icon">
             <FontAwesomeIcon icon={faUser} size="5x" />
           </div>
@@ -63,6 +68,39 @@ export const HomeIntegration = () => {
                     "/entities/departamento-de-apoyo-social/das-requests",
                   )}
                 >
+                  2. Tu lista de solicitudes
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faCalendarDays} size="5x" />
+          </div>
+          <div>
+            <h2>MI AGENDA</h2>
+            <ul>
+              <li>
+                <Link to={onNavigateGoTo("/")}>1. Mi agenda</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faCalendarCheck} size="5x" />
+          </div>
+          <div>
+            <h2>SOLICITUD DE VACACIONES</h2>
+            <ul>
+              <li>
+                <Link to={onNavigateGoTo("/holidays-request/new")}>
+                  1. Realizar solicitud
+                </Link>
+              </li>
+              <li>
+                <Link to={onNavigateGoTo("/holidays-request")}>
                   2. Tu lista de solicitudes
                 </Link>
               </li>
@@ -196,9 +234,49 @@ const Container = styled.section`
       flex-direction: column;
       align-items: flex-start;
       gap: 2em;
-      background-color: rgb(186, 243, 186);
+      //background-color: rgb(186, 243, 186);
+      background-color: #d4f62e;
       border-radius: 1em;
       padding: 3em;
+      position: relative;
+      overflow: hidden;
+
+      &:last-child {
+        z-index: 10;
+      }
+
+      .decoration-one {
+        width: 8rem;
+        height: 8rem;
+        border: 2px dashed #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: -20px;
+        right: -20px;
+      }
+
+      .decoration-two {
+        width: 8rem;
+        height: 8rem;
+        border: 2px dashed #fff;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .decoration-three {
+        width: 8rem;
+        height: 8rem;
+        border: 2px dashed #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        transform: translateY(-50%);
+        z-index: 0;
+      }
 
       ${mediaQuery.minDesktop} {
         flex-direction: row;
@@ -210,7 +288,7 @@ const Container = styled.section`
 
       h2 {
         text-align: center;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 1.2em;
         margin-bottom: 1em;
         text-transform: uppercase;
@@ -226,6 +304,7 @@ const Container = styled.section`
         display: flex;
         flex-direction: column;
         gap: 1em;
+        font-weight: 500;
       }
     }
   }
