@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 import { updateActivity } from "../../../firebase/collections/activities";
 
-export const EditActivityIntegration = ({ activity }) => {
+export const EditActivityIntegration = ({ activity, onCloseModal }) => {
   const [loading, setLoading] = useState(false);
 
   const { assignUpdateProps } = useDefaultFirestoreProps();
@@ -53,6 +53,10 @@ export const EditActivityIntegration = ({ activity }) => {
       notification({
         type: "success",
       });
+
+      if (onCloseModal) {
+        onCloseModal();
+      }
     } catch (e) {
       console.log("Error:", e);
       notification({
