@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -22,7 +22,7 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 import { updateActivity } from "../../../firebase/collections/activities";
 
 export const EditActivityIntegration = ({ activity }) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { assignUpdateProps } = useDefaultFirestoreProps();
   const { authUser } = useAuthentication();
@@ -79,9 +79,11 @@ const EditActivity = ({ activity, isTask, onSaveActivity, loading }) => {
     date: yup.string().required(),
     allDay: yup.boolean(),
     description: yup.string(),
-    ...(isTask && {
-      address: yup.string().required(),
-    }),
+    ...(isTask
+      ? {}
+      : {
+          address: yup.string().required(),
+        }),
   });
 
   const {
