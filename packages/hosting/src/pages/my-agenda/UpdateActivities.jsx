@@ -1,9 +1,9 @@
 import React from "react";
 
-export const UpdateActivitiesIntegration = () => {
+export const ActivityIntegration = () => {
   return <div></div>;
 };
 
-const UpdateActivities = () => {
+const Activity = () => {
   return <div></div>;
 };
