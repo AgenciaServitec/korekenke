@@ -25,7 +25,11 @@ export const ActivityInformation = ({
           <div className="extra-data">
             <p>Todo el día: {allDay}</p>
             <p>Descripción: {activity.description}</p>
-            <p>Ubicación: {activity.location}</p>
+            {activity.type === "event" ? (
+              <p>Dirección: {activity.address}</p>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="actions">
