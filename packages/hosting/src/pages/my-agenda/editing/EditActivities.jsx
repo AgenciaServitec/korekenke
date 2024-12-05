@@ -54,9 +54,7 @@ export const EditActivityIntegration = ({ activity, onCloseModal }) => {
         type: "success",
       });
 
-      if (onCloseModal) {
-        onCloseModal();
-      }
+      onCloseModal();
     } catch (e) {
       console.log("Error:", e);
       notification({
