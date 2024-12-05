@@ -15,6 +15,7 @@ import { getLocalStorage } from "../../utils";
 import { fetchUsersByCip } from "../../firebase/collections";
 import { isEmpty } from "lodash";
 import { Spin } from "antd";
+import { isProduction } from "../../config";
 
 export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
   const { secondsLeft, start } = useCountdown();
@@ -171,6 +172,11 @@ const VerificationByEmail = ({
             {user?.roleCode === "super_admin" && (
               <p className="link-color" onClick={() => next()}>
                 Soy super admin
+              </p>
+            )}
+            {!isProduction && user?.roleCode !== "super_admin" && (
+              <p className="link-color" onClick={() => next()}>
+                Omit en dev
               </p>
             )}
           </Col>
