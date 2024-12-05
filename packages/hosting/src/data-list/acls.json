@@ -8,6 +8,9 @@
     "profile": {
       "label": "Perfil",
       "/profile": "Menu: Perfil"
+    },
+    "myAgenda": {
+      "/my-agenda": "/my-agenda"
     }
   },
   "accessControl": {
