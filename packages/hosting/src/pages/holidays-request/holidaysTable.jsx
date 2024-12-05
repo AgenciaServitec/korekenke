@@ -79,7 +79,7 @@ export const HolidaysTable = ({
   const holidaysRequestViewBy = holidays.filter((holiday) => {
     if (["super_admin"].includes(user.roleCode)) return holiday;
 
-    if (holiday.userId === user.id) return holiday;
+    if (holiday.user.id === user.id) return holiday;
 
     if (["waiting", "notProceeds"].includes(holiday.status) && isBossMDP)
       return holiday;

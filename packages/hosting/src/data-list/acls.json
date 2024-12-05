@@ -11,7 +11,7 @@
     },
     "myAgenda": {
       "label": "Mi agenda",
-      "/my-agenda": "/my-agenda"
+      "/my-agenda": "Menu: Mi agenda"
     }
   },
   "accessControl": {
