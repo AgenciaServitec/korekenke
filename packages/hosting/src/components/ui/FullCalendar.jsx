@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import styled from "styled-components";
 import esLocale from "@fullcalendar/core/locales/es";
 import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
+import multiMonthPlugin from "@fullcalendar/multimonth";
+
 import { mediaQuery } from "../../styles";
 import dayjs from "dayjs";
 
@@ -53,9 +58,32 @@ export const FullCalendarComponent = ({
     <Container>
       <FullCalendar
         key={rerender}
-        plugins={[dayGridPlugin]}
         locale={esLocale}
         events={events}
+        selectable
+        headerToolbar={{
+          start: "today prev next",
+          center: "title",
+          end: "timeGridDay timeGridWeek dayGridMonth multiMonth",
+        }}
+        buttonText={{
+          multiMonth: "Meses",
+        }}
+        duration={{ months: 12 }}
+        timeZone="America/Lima"
+        plugins={[
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin,
+          listPlugin,
+          multiMonthPlugin,
+        ]}
+        eventTimeFormat={{
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+          timeZone: "America/Lima",
+        }}
         eventClick={handleEventClick}
         allDayContent={true}
         height="95%"
