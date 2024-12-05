@@ -22,7 +22,6 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 import { updateActivity } from "../../../firebase/collections/activities";
 
 export const EditActivityIntegration = ({ activity }) => {
-  console.log("activity", activity);
   const [loading, setLoading] = useState(false);
 
   const { assignUpdateProps } = useDefaultFirestoreProps();
