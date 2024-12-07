@@ -15,7 +15,6 @@ export const Holiday1Sheet = ({ user, holiday }) => {
 
   const daysRemaining = 30 - totalHolidays?.total || 0;
 
-  console.log("holiday: ", holiday);
   return (
     <Container>
       <div className="sheet">

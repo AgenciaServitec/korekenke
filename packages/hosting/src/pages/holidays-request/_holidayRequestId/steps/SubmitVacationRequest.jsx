@@ -88,8 +88,6 @@ export const SubmitVacationRequest = ({
     };
   };
 
-  console.log("oldHolidays: ", oldHolidaysRequest(oldHolidaysByUser));
-
   const weekDays = (startDate, endDate) => {
     const workDays = [1, 2, 3, 4, 5];
 
@@ -121,8 +119,6 @@ export const SubmitVacationRequest = ({
       totalDays,
     };
   };
-
-  console.log("holidaysCount: ", weekDays(startDate, endDate));
 
   const _user = {
     ...user,
