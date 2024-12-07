@@ -30,6 +30,11 @@ export const SignatureSheet = ({
           Grado: <span>{degree || ""}</span>
         </p>
       </div>
+      <div className="cip">
+        <p>
+          <span>{}</span>
+        </p>
+      </div>
     </div>
   );
 };

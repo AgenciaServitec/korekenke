@@ -1,67 +1,85 @@
 import React from "react";
 import styled from "styled-components";
+import dayjs from "dayjs";
 import { findDegree, userFullName } from "../../../../utils";
 import { SignatureSheet } from "../../../../components";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
+import { capitalize } from "lodash";
 
 export const Holiday1Sheet = ({ user, holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
-
-  const totalHolidays = {
-    totalWorkingDays: current.workingDays + old.oldWorkingDays,
-    totalSaturdays: current.saturdays + old.oldSaturdays,
-    totalSundays: current.sundays + old.oldSundays,
-    total: current.totalDays + old.totalDays,
-  };
-
-  const daysRemaining = 30 - totalHolidays?.total || 0;
-
   return (
     <Container>
       <div className="sheet">
         <div className="header">
-          <h1>DETALLES DE LA SOLICITUD</h1>
+          <h1>EJÉRCITO DEL PERÚ</h1>
         </div>
         <div className="main">
           <div className="request-content">
-            <table className="summary-table">
-              <thead>
+            <div className="request-content__title">
+              <h1>GU : COBIENE</h1>
+              <h1>UU : SGC</h1>
+            </div>
+            <p className="request-content__body">
+              <h1>PAPELETA DE PERMISO</h1>
+              <p>
+                Este Comando de Bienestar del Ejército, autoriza al PC &nbsp;
+                <span>{userFullName(user)}</span>, para hacer el uso de &nbsp;
+                {current?.totalDays || "0"} días de permiso, por el
+                motivo:&nbsp;
+                {holiday?.reason}
+              </p>
+              <table>
                 <tr>
-                  <th>RESUMEN</th>
-                  <th>DÍAS LABORABLES</th>
-                  <th>DÍAS SABADOS</th>
-                  <th>DÍAS DOMINGOS</th>
-                  <th>TOTAL DÍAS USADOS</th>
-                  <th>DÍAS PENDIENTES</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>DÍAS USADOS</th>
-                  <td>{old?.oldWorkingDays || 0}</td>
-                  <td>{old?.oldSaturdays || 0}</td>
-                  <td>{old?.oldSundays || 0}</td>
-                  <td>{old?.totalDays || 0}</td>
-                  <td rowSpan={3}>{daysRemaining}</td>
-                </tr>
-
-                <tr>
-                  <th>PTE PAPELETA</th>
-                  <td>{current?.workingDays || 0}</td>
-                  <td>{current?.saturdays || 0}</td>
-                  <td>{current?.sundays || 0}</td>
-                  <td>{current?.totalDays || 0}</td>
+                  <td>EMPIEZA</td>
+                  <td>:</td>
+                  <td>
+                    {holiday?.startDate
+                      ? dayjs(
+                          holiday?.startDate,
+                          DATE_FORMAT_TO_FIRESTORE,
+                        ).format("dddd D [de] MMMM [del] YYYY")
+                      : "Sin registro"}
+                  </td>
                 </tr>
                 <tr>
-                  <th>TOTALES</th>
-                  <td>{totalHolidays?.totalWorkingDays || 0}</td>
-                  <td>{totalHolidays?.totalSaturdays || 0}</td>
-                  <td>{totalHolidays?.totalSundays || 0}</td>
-                  <td>{totalHolidays?.total || 0}</td>
+                  <td>TERMINA</td>
+                  <td>:</td>
+                  <td>
+                    {holiday?.endDate
+                      ? dayjs(
+                          holiday?.endDate,
+                          DATE_FORMAT_TO_FIRESTORE,
+                        ).format("dddd D [de] MMMM [del] YYYY")
+                      : "Sin registro"}
+                  </td>
                 </tr>
-              </tbody>
-            </table>
+                <tr>
+                  <td>DIRECCIÓN</td>
+                  <td>:</td>
+                  <td>Av. Vargas 179 Piso 1</td>
+                </tr>
+                <tr>
+                  <td>TELÉFONO</td>
+                  <td>:</td>
+                  <td>{user?.phone?.number}</td>
+                </tr>
+              </table>
+            </p>
 
             <div className="request-content__footer">
+              <p className="date">
+                San Borja,{" "}
+                <span> {dayjs(user.createAt.toDate()).format("DD")} </span> de
+                <span>
+                  {" "}
+                  {capitalize(
+                    dayjs(user.createAt.toDate()).format("MMMM"),
+                  )}{" "}
+                </span>{" "}
+                del
+                <span> {dayjs(user.createAt.toDate()).format("YYYY")} </span>
+              </p>
               <SignatureSheet
                 signaturethumbUrl={user?.signaturePhoto?.thumbUrl}
                 signatureUrl={user?.signaturePhoto?.url}
@@ -99,8 +117,6 @@ const Container = styled.div`
       h1 {
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
-        text-decoration: underline;
-        margin-bottom: 1em;
       }
     }
 
@@ -122,18 +138,47 @@ const Container = styled.div`
       }
 
       .request-content {
-        .summary-table {
-          width: 100%;
-          height: 15em;
-          border: 1px solid black;
+        &__title {
+          font-size: 1.1em;
           text-align: center;
-          font-size: 1.3em;
+          text-transform: uppercase;
+          line-height: 1.5;
+          margin-bottom: 1em;
+          display: flex;
+          justify-content: space-between;
+        }
 
-          th,
-          td {
-            width: 8em;
-            border: 1px solid black;
-            padding: 0.5em 1.2em;
+        &__body {
+          line-height: 1.5;
+          margin-bottom: 1em;
+          text-indent: 3em;
+          text-align: justify;
+
+          h1 {
+            text-decoration: underline;
+            margin-bottom: 1em;
+          }
+
+          p {
+            text-transform: none;
+            font-size: 1.5em;
+            text-indent: 2em;
+            text-align: justify;
+          }
+
+          table {
+            margin-top: 1em;
+            font-size: 1.5em;
+
+            td {
+              text-align: left;
+              text-transform: none;
+              padding: 0 0.8em 0 0;
+            }
+          }
+
+          span {
+            font-weight: 500;
           }
         }
 
@@ -142,6 +187,14 @@ const Container = styled.div`
           flex-direction: column;
           align-items: flex-end;
           gap: 1em;
+
+          .date {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+            span {
+              font-weight: 500;
+            }
+          }
 
           & > div {
             display: flex;
@@ -157,7 +210,6 @@ const Container = styled.div`
               font-weight: 500;
 
               div {
-                margin-top: 4em;
                 width: 14em;
                 height: 8em;
                 padding-bottom: 0.5em;
@@ -170,7 +222,7 @@ const Container = styled.div`
 
               p {
                 border-top: 1px dotted #000;
-                text-align: center;
+                text-align: start;
                 padding-top: 0.5em;
               }
             }
@@ -179,10 +231,8 @@ const Container = styled.div`
           .cip {
             width: 12em;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
             font-weight: 500;
-            text-align: center;
+            text-align: start;
 
             span {
               width: 100%;
