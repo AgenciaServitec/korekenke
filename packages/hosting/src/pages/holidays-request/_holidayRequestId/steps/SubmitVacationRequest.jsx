@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { addHoliday } from "../../../../firebase/collections/holidays";
-import { omit } from "lodash";
+import { isEmpty, omit } from "lodash";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import * as yup from "yup";
@@ -30,8 +30,12 @@ export const SubmitVacationRequest = ({
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
-
   const [startDate, endDate] = holidaysRange;
+
+  const oldHolidaysByUser = holidaysByUser.map((holiday) => ({
+    start: dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+    end: dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE),
+  }));
 
   const schema = yup.object({
     reason: yup.string(),
@@ -45,12 +49,54 @@ export const SubmitVacationRequest = ({
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
+  const oldHolidaysRequest = (_oldHolidaysByUser) => {
+    let workDays = [1, 2, 3, 4, 5];
+    let oldWorkingDays = 0;
+    let oldSaturdays = 0;
+    let oldSundays = 0;
+    let totalDays = 0;
+
+    if (!isEmpty(_oldHolidaysByUser)) {
+      _oldHolidaysByUser.map(({ start, end }) => {
+        while (start.isSameOrBefore(end)) {
+          const numberDayStart = start.day();
+          if (workDays.includes(numberDayStart)) {
+            oldWorkingDays++;
+          }
+          if (numberDayStart === 0) {
+            oldSundays++;
+          }
+          if (numberDayStart === 6) {
+            oldSaturdays++;
+          }
+          start = start.add(1, "day");
+          totalDays = oldWorkingDays + oldSaturdays + oldSundays;
+        }
+        return {
+          oldWorkingDays,
+          oldSaturdays,
+          oldSundays,
+          totalDays,
+        };
+      });
+    }
+    return {
+      oldWorkingDays,
+      oldSaturdays,
+      oldSundays,
+      totalDays,
+    };
+  };
+
+  console.log("oldHolidays: ", oldHolidaysRequest(oldHolidaysByUser));
+
   const weekDays = (startDate, endDate) => {
     const workDays = [1, 2, 3, 4, 5];
 
     let workingDays = 0;
     let saturdays = 0;
     let sundays = 0;
+    let totalDays = 0;
 
     while (dayjs(startDate).isSameOrBefore(dayjs(endDate))) {
       const dayOfStartDate = startDate.day();
@@ -65,43 +111,28 @@ export const SubmitVacationRequest = ({
         sundays++;
       }
       startDate = startDate.add(1, "day");
+      totalDays = workingDays + saturdays + sundays;
     }
 
     return {
       workingDays,
       saturdays,
       sundays,
+      totalDays,
     };
   };
 
-  const daysRemainingAndUsed = () => {
-    const lengthCountSelectedDateRange =
-      dayjs(endDate).diff(dayjs(startDate), "day") + 1;
-
-    const lengthDays =
-      holidaysByUser
-        .map(
-          (holiday) =>
-            dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
-              dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
-              "day",
-            ) + 1,
-        )
-        .reduce((a, b) => a + b, 0) + lengthCountSelectedDateRange;
-
-    const daysRemaining = 30 - lengthDays;
-    const daysUsed = lengthCountSelectedDateRange;
-    return {
-      daysRemaining,
-      daysUsed,
-    };
-  };
+  console.log("holidaysCount: ", weekDays(startDate, endDate));
 
   const _user = {
     ...user,
-    holidays: {
-      ...daysRemainingAndUsed(),
-      ...weekDays(startDate, endDate),
+    holidaysDetail: {
+      current: {
+        ...weekDays(startDate, endDate),
+      },
+      old: {
+        ...oldHolidaysRequest(oldHolidaysByUser),
+      },
     },
   };
 
