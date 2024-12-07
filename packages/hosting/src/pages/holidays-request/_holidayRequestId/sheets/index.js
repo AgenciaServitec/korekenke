@@ -6,13 +6,13 @@ import {
   useDocumentData,
 } from "react-firebase-hooks/firestore";
 import { usersRef } from "../../../../firebase/collections";
-import { Holiday1Sheet } from "./Holiday1Sheet";
+import { Holiday2Sheet } from "./Holiday2Sheet";
 import {
   holidaysRef,
   updateHoliday,
 } from "../../../../firebase/collections/holidays";
 import { useBosses } from "../../../../hooks";
-import { Holiday2Sheet } from "./Holiday2Sheet";
+import { Holiday1Sheet } from "./Holiday1Sheet";
 import { firestore } from "../../../../firebase";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
@@ -67,7 +67,7 @@ export const HolidaysSheets = () => {
   return (
     <PDF>
       <Sheet layout="landscape">
-        <Holiday1Sheet user={user} holiday={holiday} holidays={holidays} />
+        <Holiday1Sheet user={user} holiday={holiday} />
       </Sheet>
       <Sheet layout="landscape">
         <Holiday2Sheet user={user} holiday={holiday} />
