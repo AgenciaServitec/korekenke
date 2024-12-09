@@ -2,6 +2,7 @@ export { default as LogoPrimary } from "./webp/logo.webp";
 export { default as LogoCobiene } from "./webp/logo-cobiene.webp";
 
 export { default as PhotoNoFound } from "./webp/photo-no-found.webp";
+export { default as DecorativeLine } from "./webp/decorative-line.webp";
 
 export { default as BodyConditionCanine1 } from "./webp/body-condition/excesivamente-delgado-canino.webp";
 export { default as BodyConditionCanine2 } from "./webp/body-condition/delgado-canino.webp";

@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { userFullName } from "../../utils";
 import { useGlobalData } from "../../providers";
 import { Roles } from "../../data-list";
+import { useDevice } from "../../hooks";
 
 const { Header } = Layout;
 const { useToken } = theme;
@@ -32,6 +33,7 @@ export const HeaderLayout = ({
 }) => {
   const { token } = useToken();
   const { rolesAcls } = useGlobalData();
+  const { isMobile } = useDevice();
 
   const [isVisibleMoreCommands, setIsVisibleMoreCommands] = useState(false);
 
@@ -224,20 +226,22 @@ export const HeaderLayout = ({
           )}
         >
           <Space key="user-avatar" align="center" style={{ lineHeight: "1em" }}>
-            <span>
-              <h4 className="capitalize">
-                {capitalize(userFullName(user) || "")}
-              </h4>
-              <span className="capitalize">
-                (
-                {rolesAcls.find((roleAcl) => roleAcl.id === user.roleCode)
-                  ?.name ||
-                  Roles.find((roleAcl) => roleAcl.id === user?.roleCode)
+            {!isMobile && (
+              <span>
+                <h4 className="capitalize">
+                  {capitalize(userFullName(user) || "")}
+                </h4>
+                <span className="capitalize">
+                  (
+                  {rolesAcls.find((roleAcl) => roleAcl.id === user.roleCode)
                     ?.name ||
-                  ""}
-                )
+                    Roles.find((roleAcl) => roleAcl.id === user?.roleCode)
+                      ?.name ||
+                    ""}
+                  )
+                </span>
               </span>
-            </span>
+            )}
             <img
               src={user?.profilePhoto?.thumbUrl || PhotoNoFound}
               alt="user"
