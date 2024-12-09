@@ -6,7 +6,7 @@ import { SignatureSheet } from "../../../../components";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
 export const Holiday1Sheet = ({ user, holiday }) => {
-  const { current, old } = holiday.user.holidaysDetail;
+  const { current } = holiday.user.holidaysDetail;
   return (
     <Container>
       <div className="sheet">
