@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import { findDegree, userFullName } from "../../../../utils";
 import { SignatureSheet } from "../../../../components";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
-import { capitalize } from "lodash";
 
 export const Holiday1Sheet = ({ user, holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
@@ -24,7 +23,8 @@ export const Holiday1Sheet = ({ user, holiday }) => {
               <h1>PAPELETA DE PERMISO</h1>
               <p>
                 Este Comando de Bienestar del Ejército, autoriza al PC &nbsp;
-                <span>{userFullName(user)}</span>, para hacer el uso de &nbsp;
+                <span className="capitalize">{userFullName(user)}</span>, para
+                hacer el uso de &nbsp;
                 {current?.totalDays || "0"} días de permiso, por el
                 motivo:&nbsp;
                 {holiday?.reason}
@@ -34,24 +34,28 @@ export const Holiday1Sheet = ({ user, holiday }) => {
                   <td>EMPIEZA</td>
                   <td>:</td>
                   <td>
-                    {holiday?.startDate
-                      ? dayjs(
-                          holiday?.startDate,
-                          DATE_FORMAT_TO_FIRESTORE,
-                        ).format("dddd D [de] MMMM [del] YYYY")
-                      : "Sin registro"}
+                    <span className="capitalize">
+                      {holiday?.startDate
+                        ? dayjs(
+                            holiday?.startDate,
+                            DATE_FORMAT_TO_FIRESTORE,
+                          ).format("dddd D [de] MMMM [del] YYYY")
+                        : "Sin registro"}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>TERMINA</td>
                   <td>:</td>
                   <td>
-                    {holiday?.endDate
-                      ? dayjs(
-                          holiday?.endDate,
-                          DATE_FORMAT_TO_FIRESTORE,
-                        ).format("dddd D [de] MMMM [del] YYYY")
-                      : "Sin registro"}
+                    <span className="capitalize">
+                      {holiday?.endDate
+                        ? dayjs(
+                            holiday?.endDate,
+                            DATE_FORMAT_TO_FIRESTORE,
+                          ).format("dddd D [de] MMMM [del] YYYY")
+                        : "Sin registro"}
+                    </span>
                   </td>
                 </tr>
                 <tr>
@@ -69,16 +73,12 @@ export const Holiday1Sheet = ({ user, holiday }) => {
 
             <div className="request-content__footer">
               <p className="date">
-                San Borja,{" "}
-                <span> {dayjs(user.createAt.toDate()).format("DD")} </span> de
-                <span>
-                  {" "}
-                  {capitalize(
-                    dayjs(user.createAt.toDate()).format("MMMM"),
-                  )}{" "}
-                </span>{" "}
-                del
-                <span> {dayjs(user.createAt.toDate()).format("YYYY")} </span>
+                San Borja,&nbsp;
+                {holiday
+                  ? dayjs(holiday?.createAt.toDate()).format(
+                      "D [del] MMMM [del] YYYY",
+                    )
+                  : ""}
               </p>
               <SignatureSheet
                 signaturethumbUrl={user?.signaturePhoto?.thumbUrl}

@@ -157,7 +157,6 @@ const Container = styled.div`
               font-weight: 500;
 
               div {
-                margin-top: 4em;
                 width: 14em;
                 height: 8em;
                 padding-bottom: 0.5em;
@@ -170,7 +169,7 @@ const Container = styled.div`
 
               p {
                 border-top: 1px dotted #000;
-                text-align: center;
+                text-align: start;
                 padding-top: 0.5em;
               }
             }
@@ -179,10 +178,8 @@ const Container = styled.div`
           .cip {
             width: 12em;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
             font-weight: 500;
-            text-align: center;
+            text-align: start;
 
             span {
               width: 100%;
