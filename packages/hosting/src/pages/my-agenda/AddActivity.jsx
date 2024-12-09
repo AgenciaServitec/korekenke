@@ -131,7 +131,7 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
       startTime: startDateTime ? startDateTime.format("HH:mm") : null,
       endDate: formData.endDate
         ? dayjs(formData.endDate).format(DATE_FORMAT)
-        : null,
+        : dayjs(formData.startDate).format(DATE_FORMAT),
       endTime: endDateTime ? endDateTime.format("HH:mm") : null,
       allDay: formData.allDay,
       color: isTask ? "#3498db" : "#58d68d",
@@ -213,77 +213,73 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
             />
           </Col>
 
-          <Col span={24}>
-            <Row gutter={16}>
-              <Col span={8}>
-                <Controller
-                  name="allDay"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <RadioGroup
-                      rows={1}
-                      label="¿Es todo el día?"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      options={[
-                        { label: "Si", value: true },
-                        { label: "No", value: false },
-                      ]}
-                      error={error(name)}
-                    />
-                  )}
+          <Col span={24} md={12}>
+            <Controller
+              name="startTime"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <TimePicker
+                  label="Hora de inicio"
+                  picker="time"
+                  format="HH:mm"
+                  minuteStep={5}
+                  showNow={false}
+                  use12hours={false}
+                  name={name}
+                  value={value ? dayjs(value, "HH:mm") : null}
+                  onChange={(time) =>
+                    onChange(time ? time.format("HH:mm") : null)
+                  }
+                  error={error(name)}
+                  required={required(name)}
                 />
-              </Col>
-              <Col span={8}>
-                <Controller
-                  name="startTime"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <TimePicker
-                      label="Hora de inicio"
-                      picker="time"
-                      format="HH:mm"
-                      minuteStep={5}
-                      showNow={false}
-                      use12hours={false}
-                      name={name}
-                      value={value ? dayjs(value, "HH:mm") : null}
-                      onChange={(time) =>
-                        onChange(time ? time.format("HH:mm") : null)
-                      }
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
-
-              <Col span={8}>
-                <Controller
-                  name="endTime"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <TimePicker
-                      label="Hora de fin (opcional)"
-                      picker="time"
-                      format="HH:mm"
-                      minuteStep={5}
-                      showNow={false}
-                      use12hours={false}
-                      name={name}
-                      value={value ? dayjs(value, "HH:mm") : null}
-                      onChange={(time) =>
-                        onChange(time ? time.format("HH:mm") : null)
-                      }
-                      error={error(name)}
-                    />
-                  )}
-                />
-              </Col>
-            </Row>
+              )}
+            />
           </Col>
 
+          <Col span={24} md={12}>
+            <Controller
+              name="endTime"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <TimePicker
+                  label="Hora de fin (opcional)"
+                  picker="time"
+                  format="HH:mm"
+                  minuteStep={5}
+                  showNow={false}
+                  use12hours={false}
+                  name={name}
+                  value={value ? dayjs(value, "HH:mm") : null}
+                  onChange={(time) =>
+                    onChange(time ? time.format("HH:mm") : null)
+                  }
+                  error={error(name)}
+                />
+              )}
+            />
+          </Col>
+
+          <Col span={24} md={12}>
+            <Controller
+              name="allDay"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <RadioGroup
+                  rows={1}
+                  label="¿Es todo el día?"
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  options={[
+                    { label: "Si", value: true },
+                    { label: "No", value: false },
+                  ]}
+                  error={error(name)}
+                />
+              )}
+            />
+          </Col>
           {isTask && (
             <Col span={24}>
               <Controller
