@@ -20,7 +20,12 @@ export const ActivityInformation = ({
       <div className="all-content">
         <div className="information">
           <div className="date">
-            <p>Fecha: {activity.date}</p>
+            <p>
+              Fecha: {activity.startDate} - {activity?.endDate}
+            </p>
+            <p>
+              Hora: {activity.startTime} - {activity?.endTime}
+            </p>
           </div>
           <div className="extra-data">
             <p>Todo el día: {allDay}</p>
@@ -69,14 +74,14 @@ const Container = styled.div`
     gap: 0.5em;
 
     .information {
-      max-width: 60%;
-      width: 60%;
+      max-width: 70%;
+      width: 70%;
       text-align: left;
     }
     .actions {
       text-align: right;
-      max-width: 40%;
-      width: 40%;
+      max-width: 30%;
+      width: 30%;
       font-size: 3em;
     }
   }

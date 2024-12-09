@@ -17,6 +17,7 @@ export const FullCalendarComponent = ({
   props,
   activities,
   onShowActivityInformation,
+  onShowAddActivity,
 }) => {
   const [rerender, setRerender] = useState(null);
 
@@ -33,19 +34,32 @@ export const FullCalendarComponent = ({
     },
   ];
 
-  const activityEvents =
-    activities?.map((activity) => ({
-      title: activity.title,
-      start: dayjs(activity.date, "DD/MM/YYYY HH:mm").toISOString(),
-      allDay: activity.allDay,
-      location: activity.location || null,
-      backgroundColor: activity.color,
-      borderColor: activity.color,
-      extendedProps: {
-        description: activity.description,
-        activityId: activity.id,
-      },
-    })) || [];
+  const activityEvents = activities
+    ?.map((activity) => {
+      const startDateTime = dayjs(activity.startDate, "DD/MM/YYYY")
+        .set("hour", dayjs(activity.startTime, "HH:mm").hour())
+        .set("minute", dayjs(activity.startTime, "HH:mm").minute());
+
+      const endDateTime = activity.endDate
+        ? dayjs(activity.endDate, "DD/MM/YYYY")
+            .set("hour", dayjs(activity.endTime, "HH:mm").hour())
+            .set("minute", dayjs(activity.endTime, "HH:mm").minute())
+        : null;
+
+      return {
+        title: activity.title,
+        start: startDateTime.toISOString(),
+        end: endDateTime ? endDateTime.toISOString() : null,
+        location: activity.location || null,
+        backgroundColor: activity.color,
+        borderColor: activity.color,
+        extendedProps: {
+          description: activity.description,
+          activityId: activity.id,
+        },
+      };
+    })
+    .filter(Boolean);
 
   const events = [...defaultEvents, ...activityEvents];
 
@@ -54,6 +68,10 @@ export const FullCalendarComponent = ({
     onShowActivityInformation(event.extendedProps.activityId);
   };
 
+  const handleDateClick = (info) => {
+    const selectedDate = info.date;
+    onShowAddActivity(selectedDate);
+  };
   return (
     <Container>
       <FullCalendar
@@ -70,7 +88,6 @@ export const FullCalendarComponent = ({
           multiMonth: "Meses",
         }}
         duration={{ months: 12 }}
-        timeZone="America/Lima"
         plugins={[
           dayGridPlugin,
           timeGridPlugin,
@@ -81,12 +98,12 @@ export const FullCalendarComponent = ({
         eventTimeFormat={{
           hour: "2-digit",
           minute: "2-digit",
-          hour12: true,
           timeZone: "America/Lima",
         }}
         eventClick={handleEventClick}
         allDayContent={true}
         height="95%"
+        dateClick={handleDateClick}
         {...props}
       />
     </Container>
