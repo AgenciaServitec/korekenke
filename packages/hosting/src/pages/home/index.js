@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import {
   faCalendarCheck,
-  faCalendarDays,
   faClipboardList,
   faHorseHead,
   faPoll,
@@ -28,9 +27,6 @@ export const HomeIntegration = () => {
       </h1>
       <div className="items">
         <div>
-          <div className="decoration-one"></div>
-          <div className="decoration-two"></div>
-          <div className="decoration-three"></div>
           <div className="items-icon">
             <FontAwesomeIcon icon={faUser} size="5x" />
           </div>
@@ -70,19 +66,6 @@ export const HomeIntegration = () => {
                 >
                   2. Tu lista de solicitudes
                 </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <div className="items-icon">
-            <FontAwesomeIcon icon={faCalendarDays} size="5x" />
-          </div>
-          <div>
-            <h2>MI AGENDA</h2>
-            <ul>
-              <li>
-                <Link to={onNavigateGoTo("/")}>1. Mi agenda</Link>
               </li>
             </ul>
           </div>
@@ -229,54 +212,19 @@ const Container = styled.section`
       grid-template-columns: 1fr 1fr;
     }
 
-    > div {
+    & > div {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 2em;
-      //background-color: rgb(186, 243, 186);
-      background-color: #d4f62e;
+      background-color: rgba(212, 246, 46, 0.23);
       border-radius: 1em;
       padding: 3em;
       position: relative;
-      overflow: hidden;
-
-      &:last-child {
-        z-index: 10;
-      }
-
-      .decoration-one {
-        width: 8rem;
-        height: 8rem;
-        border: 2px dashed #fff;
-        border-radius: 50%;
-        position: absolute;
-        top: -20px;
-        right: -20px;
-      }
-
-      .decoration-two {
-        width: 8rem;
-        height: 8rem;
-        border: 2px dashed #fff;
-        border-radius: 50%;
-        position: absolute;
-        bottom: -50px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .decoration-three {
-        width: 8rem;
-        height: 8rem;
-        border: 2px dashed #fff;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        left: -20px;
-        transform: translateY(-50%);
-        z-index: 0;
-      }
+      box-shadow:
+        0px 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0px 2px 4px rgba(255, 255, 255, 0.1);
 
       ${mediaQuery.minDesktop} {
         flex-direction: row;
@@ -304,7 +252,10 @@ const Container = styled.section`
         display: flex;
         flex-direction: column;
         gap: 1em;
-        font-weight: 500;
+
+        ${mediaQuery.minDesktop} {
+          font-size: 1.1rem;
+        }
       }
     }
   }

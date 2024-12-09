@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import styled from "styled-components";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { mediaQuery } from "../../styles";
 
 const { Footer } = Layout;
 
@@ -25,8 +26,12 @@ export const FooterLayout = () => {
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
+
+  ${mediaQuery.minTablet} {
+    justify-content: space-between;
+  }
 
   .secure {
     display: flex;
