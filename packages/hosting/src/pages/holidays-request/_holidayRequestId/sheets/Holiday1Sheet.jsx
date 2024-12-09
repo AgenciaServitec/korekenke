@@ -203,7 +203,7 @@ const Container = styled.div`
           .signature {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            text-align: center;
             gap: 0.3em;
 
             &__item {
@@ -222,17 +222,16 @@ const Container = styled.div`
 
               p {
                 border-top: 1px dotted #000;
-                text-align: start;
                 padding-top: 0.5em;
               }
             }
           }
 
           .cip {
-            width: 12em;
+            width: 100%;
             display: flex;
             font-weight: 500;
-            text-align: start;
+            justify-content: center;
 
             span {
               width: 100%;

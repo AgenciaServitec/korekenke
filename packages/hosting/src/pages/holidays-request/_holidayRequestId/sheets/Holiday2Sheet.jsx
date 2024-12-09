@@ -150,7 +150,7 @@ const Container = styled.div`
           .signature {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: center;
             gap: 0.3em;
 
             &__item {
@@ -176,10 +176,10 @@ const Container = styled.div`
           }
 
           .cip {
-            width: 12em;
+            width: 100%;
             display: flex;
             font-weight: 500;
-            text-align: start;
+            justify-content: center;
 
             span {
               width: 100%;
