@@ -22,7 +22,6 @@ import { ActivityInformation } from "./editing/ActivityInformation";
 
 export const Activities = () => {
   const { authUser } = useAuthentication();
-
   const [activities = [], activitiesLoading, activitiesError] =
     useCollectionData(
       activitiesRef(authUser.id).where("isDeleted", "==", false),
@@ -56,8 +55,10 @@ const Activity = ({ activities, activitiesLoading, user }) => {
   };
 
   const onShowAddActivity = (type) => {
+    const title = type === "task" ? "Agregar Tarea" : "Agregar Evento"; // Cambiar el título basado en el tipo
+
     onShowModal({
-      title: type === "task" ? "Agregar Tarea" : "Agregar Evento",
+      title: title,
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <AddActivityIntegration
@@ -132,6 +133,7 @@ const Activity = ({ activities, activitiesLoading, user }) => {
                 onEditActivity={onEditActivity}
                 onConfirmDeleteActivity={onConfirmDeleteActivity}
                 onShowActivityInformation={onShowActivityInformation}
+                onShowAddActivity={onShowAddActivity}
               />
             </Col>
             <Col span={24} sm={24} md={6}>

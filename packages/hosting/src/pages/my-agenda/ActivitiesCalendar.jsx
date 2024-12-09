@@ -6,6 +6,7 @@ export const ActivitiesCalendar = ({
   activitiesLoading,
   activities,
   onShowActivityInformation,
+  onShowAddActivity,
 }) => {
   return (
     <Container>
@@ -15,6 +16,7 @@ export const ActivitiesCalendar = ({
         <FullCalendarComponent
           activities={activities}
           onShowActivityInformation={onShowActivityInformation}
+          onShowAddActivity={onShowAddActivity}
         />
       )}
     </Container>

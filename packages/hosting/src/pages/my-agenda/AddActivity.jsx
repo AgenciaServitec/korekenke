@@ -9,6 +9,7 @@ import {
   RadioGroup,
   Button,
   notification,
+  TimePicker,
 } from "../../components";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
@@ -24,7 +25,6 @@ import {
   getActivityId,
 } from "../../firebase/collections/activities";
 import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 
 export const AddActivityIntegration = ({
   activityType = "task",
@@ -33,8 +33,9 @@ export const AddActivityIntegration = ({
   const { authUser } = useAuthentication();
   const { activityId } = useParams();
   const [activity, setActivity] = useState(null);
+  const [currentActivityType, setCurrentActivityType] = useState(activityType);
 
-  const isTask = activityType === "task";
+  const isTask = currentActivityType === "task";
 
   const isNew = activityId === "new";
 
@@ -52,13 +53,26 @@ export const AddActivityIntegration = ({
     })();
   }, [isNew, activityId]);
 
+  const toggleActivityType = () => {
+    setCurrentActivityType(isTask ? "event" : "task");
+  };
+
   return (
-    <AddActivity
-      isTask={isTask}
-      user={authUser}
-      activity={activity}
-      onCloseModal={onCloseModal}
-    />
+    <div>
+      <Button
+        onClick={toggleActivityType}
+        type="default"
+        style={{ marginBottom: "10px" }}
+      >
+        Cambiar a {isTask ? "Evento" : "Tarea"}
+      </Button>
+      <AddActivity
+        isTask={isTask}
+        user={authUser}
+        activity={activity}
+        onCloseModal={onCloseModal}
+      />
+    </div>
   );
 };
 
@@ -66,13 +80,19 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [loading, setLoading] = useState(false);
 
+  const DATE_FORMAT = "DD/MM/YYYY";
+
   const schema = yup.object({
     title: yup.string(),
-    date: yup.string().required(),
+    startDate: yup.string().required(),
+    startTime: yup.string().required(),
+    endDate: yup.string(),
+    endTime: yup.string(),
     allDay: yup.boolean(),
-    description: yup.string(),
     ...(isTask
-      ? {}
+      ? {
+          description: yup.string(),
+        }
       : {
           address: yup.string().required(),
         }),
@@ -88,17 +108,36 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
   });
   const { required, error } = useFormUtils({ errors, schema });
 
-  const mapActivity = (formData) => ({
-    ...activity,
-    id: getActivityId(user.id),
-    title: formData.title,
-    description: formData.description,
-    address: formData.address || null,
-    date: dayjs(formData.date).format(DATE_FORMAT_TO_FIRESTORE),
-    allDay: formData.allDay,
-    color: isTask ? "#3498db" : "#58d68d",
-    type: isTask ? "task" : "event",
-  });
+  const mapActivity = (formData) => {
+    const startDateTime = formData.startTime
+      ? dayjs(formData.startDate)
+          .set("hour", dayjs(formData.startTime, "HH:mm").hour())
+          .set("minute", dayjs(formData.startTime, "HH:mm").minute())
+      : null;
+
+    const endDateTime = formData.endTime
+      ? dayjs(formData.endDate)
+          .set("hour", dayjs(formData.endTime, "HH:mm").hour())
+          .set("minute", dayjs(formData.endTime, "HH:mm").minute())
+      : null;
+
+    return {
+      ...activity,
+      id: getActivityId(user.id),
+      title: formData.title,
+      description: formData.description,
+      address: formData.address || null,
+      startDate: dayjs(formData.startDate).format(DATE_FORMAT),
+      startTime: startDateTime ? startDateTime.format("HH:mm") : null,
+      endDate: formData.endDate
+        ? dayjs(formData.endDate).format(DATE_FORMAT)
+        : null,
+      endTime: endDateTime ? endDateTime.format("HH:mm") : null,
+      allDay: formData.allDay,
+      color: isTask ? "#3498db" : "#58d68d",
+      type: isTask ? "task" : "event",
+    };
+  };
 
   const onSubmitActivity = async (formData) => {
     try {
@@ -144,11 +183,11 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
 
           <Col span={24} md={12}>
             <Controller
-              name="date"
+              name="startDate"
               control={control}
               render={({ field: { onChange, value, name } }) => (
                 <DatePicker
-                  label="Fecha"
+                  label="Fecha de inicio"
                   name={name}
                   value={value}
                   onChange={onChange}
@@ -158,22 +197,16 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
               )}
             />
           </Col>
-
           <Col span={24} md={12}>
             <Controller
-              name="allDay"
+              name="endDate"
               control={control}
               render={({ field: { onChange, value, name } }) => (
-                <RadioGroup
-                  rows={1}
-                  label="¿Es todo el día?"
+                <DatePicker
+                  label="Fecha de fin (opcional)"
                   name={name}
                   value={value}
                   onChange={onChange}
-                  options={[
-                    { label: "Si", value: true },
-                    { label: "No", value: false },
-                  ]}
                   error={error(name)}
                 />
               )}
@@ -181,20 +214,93 @@ const AddActivity = ({ isTask, user, activity, onCloseModal }) => {
           </Col>
 
           <Col span={24}>
-            <Controller
-              name="description"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <TextArea
-                  rows={3}
-                  label="Descripción"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
+            <Row gutter={16}>
+              <Col span={8}>
+                <Controller
+                  name="allDay"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <RadioGroup
+                      rows={1}
+                      label="¿Es todo el día?"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      options={[
+                        { label: "Si", value: true },
+                        { label: "No", value: false },
+                      ]}
+                      error={error(name)}
+                    />
+                  )}
                 />
-              )}
-            />
+              </Col>
+              <Col span={8}>
+                <Controller
+                  name="startTime"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <TimePicker
+                      label="Hora de inicio"
+                      picker="time"
+                      format="HH:mm"
+                      minuteStep={5}
+                      showNow={false}
+                      use12hours={false}
+                      name={name}
+                      value={value ? dayjs(value, "HH:mm") : null}
+                      onChange={(time) =>
+                        onChange(time ? time.format("HH:mm") : null)
+                      }
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+
+              <Col span={8}>
+                <Controller
+                  name="endTime"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <TimePicker
+                      label="Hora de fin (opcional)"
+                      picker="time"
+                      format="HH:mm"
+                      minuteStep={5}
+                      showNow={false}
+                      use12hours={false}
+                      name={name}
+                      value={value ? dayjs(value, "HH:mm") : null}
+                      onChange={(time) =>
+                        onChange(time ? time.format("HH:mm") : null)
+                      }
+                      error={error(name)}
+                    />
+                  )}
+                />
+              </Col>
+            </Row>
           </Col>
+
+          {isTask && (
+            <Col span={24}>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <TextArea
+                    rows={3}
+                    label="Descripción"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
+              />
+            </Col>
+          )}
 
           {!isTask && (
             <Col span={24}>
