@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import {
+  faCalendarCheck,
   faClipboardList,
   faHorseHead,
   faPoll,
@@ -63,6 +64,26 @@ export const HomeIntegration = () => {
                     "/entities/departamento-de-apoyo-social/das-requests",
                   )}
                 >
+                  2. Tu lista de solicitudes
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div className="items-icon">
+            <FontAwesomeIcon icon={faCalendarCheck} size="5x" />
+          </div>
+          <div>
+            <h2>SOLICITUD DE VACACIONES</h2>
+            <ul>
+              <li>
+                <Link to={onNavigateGoTo("/holidays-request/new")}>
+                  1. Realizar solicitud
+                </Link>
+              </li>
+              <li>
+                <Link to={onNavigateGoTo("/holidays-request")}>
                   2. Tu lista de solicitudes
                 </Link>
               </li>
@@ -191,14 +212,19 @@ const Container = styled.section`
       grid-template-columns: 1fr 1fr;
     }
 
-    > div {
+    & > div {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 2em;
-      background-color: rgb(186, 243, 186);
+      background-color: rgba(212, 246, 46, 0.23);
       border-radius: 1em;
       padding: 3em;
+      position: relative;
+      box-shadow:
+        0px 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0px 2px 4px rgba(255, 255, 255, 0.1);
 
       ${mediaQuery.minDesktop} {
         flex-direction: row;
@@ -210,7 +236,7 @@ const Container = styled.section`
 
       h2 {
         text-align: center;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 1.2em;
         margin-bottom: 1em;
         text-transform: uppercase;
@@ -226,6 +252,10 @@ const Container = styled.section`
         display: flex;
         flex-direction: column;
         gap: 1em;
+
+        ${mediaQuery.minDesktop} {
+          font-size: 1.1rem;
+        }
       }
     }
   }

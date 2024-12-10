@@ -159,6 +159,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
               error={error(name)}
               helperText={errorMessage(name)}
               required={required(name)}
+              disabled
             />
           )}
         />
