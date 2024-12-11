@@ -14,10 +14,11 @@ import dayjs from "dayjs";
 export const FullCalendarComponent = ({
   startDate,
   endDate,
-  props,
+  viewTypes = "timeGridDay timeGridWeek dayGridMonth multiMonth",
   activities,
   onShowActivityInformation,
   onShowAddActivity,
+  props,
 }) => {
   const [rerender, setRerender] = useState(null);
 
@@ -61,17 +62,20 @@ export const FullCalendarComponent = ({
     })
     .filter(Boolean);
 
-  const events = [...defaultEvents, ...activityEvents];
+  const events = [...defaultEvents, ...(activityEvents ? activityEvents : [])];
 
   const handleEventClick = (info) => {
+    if (!onShowActivityInformation) return;
     const event = info.event;
     onShowActivityInformation(event.extendedProps.activityId);
   };
 
   const handleDateClick = (info) => {
+    if (!onShowAddActivity) return;
     const selectedDate = info.date;
     onShowAddActivity(selectedDate);
   };
+
   return (
     <Container>
       <FullCalendar
@@ -82,7 +86,7 @@ export const FullCalendarComponent = ({
         headerToolbar={{
           start: "today prev next",
           center: "title",
-          end: "timeGridDay timeGridWeek dayGridMonth multiMonth",
+          end: viewTypes,
         }}
         buttonText={{
           multiMonth: "Meses",
@@ -101,9 +105,9 @@ export const FullCalendarComponent = ({
           timeZone: "America/Lima",
         }}
         eventClick={handleEventClick}
+        dateClick={handleDateClick}
         allDayContent={true}
         height="95%"
-        dateClick={handleDateClick}
         {...props}
       />
     </Container>

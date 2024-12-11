@@ -4,8 +4,8 @@ import {
   Col,
   FullCalendarComponent,
   Row,
-  Text,
   Space,
+  Text,
 } from "../../../../components";
 import dayjs from "dayjs";
 import {
@@ -38,6 +38,7 @@ export const ShowCalendar = ({ holidaysRange, onSetCurrentStep }) => {
             <FullCalendarComponent
               startDate={dateRangeRules().startDate}
               endDate={dateRangeRules().endDate}
+              viewTypes="dayGridMonth multiMonth"
             />
           </Col>
           <Col span={24} style={{ display: "flex", justifyContent: "end" }}>
