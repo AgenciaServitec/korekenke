@@ -109,7 +109,7 @@ export const UsersTable = ({
         dayjs(user?.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
     {
-      title: "Commandos",
+      title: "Comandos",
       dataIndex: "commands",
       key: "commands",
       width: 200,

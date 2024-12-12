@@ -150,7 +150,7 @@ export const HeaderLayout = ({
                               />
                               <img
                                 src={lastCommand.logoImgUrl}
-                                alt="Commando seleccionado"
+                                alt="Comando seleccionado"
                               />
                             </div>
                             <div className="text-command">
@@ -167,7 +167,7 @@ export const HeaderLayout = ({
                           <span
                             onClick={() => onSetIsVisibleMoreCommands(false)}
                           >
-                            Ver todos los commandos
+                            Ver todos los comandos
                           </span>
                         </div>
                       </>
