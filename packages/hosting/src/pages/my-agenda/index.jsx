@@ -54,16 +54,14 @@ const Activity = ({ activities, activitiesLoading, user }) => {
     onCloseModal();
   };
 
-  const onShowAddActivity = (type) => {
-    const title = type === "task" ? "Agregar Tarea" : "Agregar Evento"; // Cambiar el título basado en el tipo
-
+  const onShowAddActivity = (type, selectedDate) => {
     onShowModal({
-      title: title,
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <AddActivityIntegration
           onCloseModal={onCloseModal}
           activityType={type}
+          selectedDate={selectedDate}
           onSubmit={(data) => {
             onAddActivity(data);
           }}
@@ -116,6 +114,10 @@ const Activity = ({ activities, activitiesLoading, user }) => {
         id: activityId,
         isDeleted: true,
       });
+
+      if (onCloseModal) {
+        onCloseModal();
+      }
     } catch (error) {
       console.error("Error: ", error);
     }

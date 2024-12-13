@@ -37,20 +37,25 @@ export const FullCalendarComponent = ({
 
   const activityEvents = activities
     ?.map((activity) => {
-      const startDateTime = dayjs(activity.startDate, "DD/MM/YYYY")
-        .set("hour", dayjs(activity.startTime, "HH:mm").hour())
-        .set("minute", dayjs(activity.startTime, "HH:mm").minute());
+      const startDateTime = activity.allDay
+        ? dayjs(activity.startDate, "DD/MM/YYYY").startOf("day")
+        : dayjs(activity.startDate, "DD/MM/YYYY")
+            .set("hour", dayjs(activity.startTime, "HH:mm").hour())
+            .set("minute", dayjs(activity.startTime, "HH:mm").minute());
 
       const endDateTime = activity.endDate
-        ? dayjs(activity.endDate, "DD/MM/YYYY")
-            .set("hour", dayjs(activity.endTime, "HH:mm").hour())
-            .set("minute", dayjs(activity.endTime, "HH:mm").minute())
+        ? activity.allDay
+          ? dayjs(activity.endDate, "DD/MM/YYYY").endOf("day")
+          : dayjs(activity.endDate, "DD/MM/YYYY")
+              .set("hour", dayjs(activity.endTime, "HH:mm").hour())
+              .set("minute", dayjs(activity.endTime, "HH:mm").minute())
         : null;
 
       return {
         title: activity.title,
         start: startDateTime.toISOString(),
         end: endDateTime ? endDateTime.toISOString() : null,
+        allDay: activity.allDay,
         location: activity.location || null,
         backgroundColor: activity.color,
         borderColor: activity.color,
@@ -72,8 +77,8 @@ export const FullCalendarComponent = ({
 
   const handleDateClick = (info) => {
     if (!onShowAddActivity) return;
-    const selectedDate = info.date;
-    onShowAddActivity(selectedDate);
+    const selectedDate = dayjs(info.date);
+    onShowAddActivity("task", selectedDate);
   };
 
   return (
