@@ -157,7 +157,6 @@ const AddActivity = ({
   }, [selectedDate]);
 
   const mapActivity = (formData) => {
-    console.log("formData: ", formData);
     const startDateTime = formData.allDay
       ? null
       : formData.startTime
