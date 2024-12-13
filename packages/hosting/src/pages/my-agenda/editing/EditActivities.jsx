@@ -33,19 +33,25 @@ export const EditActivityIntegration = ({ activity, onCloseModal }) => {
 
   const isTask = activity.type === "task";
   const DATE_FORMAT = "DD/MM/YYYY";
+  const [isAllDay, setIsAllDay] = useState(false);
+  const [startDateValue, setStartDateValue] = useState(null);
 
   const mapForm = (formData) => {
-    const startDateTime = formData.startTime
-      ? dayjs(formData.startDate)
-          .set("hour", dayjs(formData.startTime, "HH:mm").hour())
-          .set("minute", dayjs(formData.startTime, "HH:mm").minute())
-      : null;
+    const startDateTime = formData.allDay
+      ? null
+      : formData.startTime
+        ? dayjs(formData.startDate)
+            .set("hour", dayjs(formData.startTime, "HH:mm").hour())
+            .set("minute", dayjs(formData.startTime, "HH:mm").minute())
+        : null;
 
-    const endDateTime = formData.endTime
-      ? dayjs(formData.endDate)
-          .set("hour", dayjs(formData.endTime, "HH:mm").hour())
-          .set("minute", dayjs(formData.endTime, "HH:mm").minute())
-      : null;
+    const endDateTime = formData.allDay
+      ? null
+      : formData.endTime
+        ? dayjs(formData.endDate)
+            .set("hour", dayjs(formData.endTime, "HH:mm").hour())
+            .set("minute", dayjs(formData.endTime, "HH:mm").minute())
+        : null;
 
     return {
       ...activity,
@@ -55,15 +61,22 @@ export const EditActivityIntegration = ({ activity, onCloseModal }) => {
       address: formData.address || null,
       startDate: dayjs(formData.startDate).format(DATE_FORMAT),
       startTime: startDateTime ? startDateTime.format("HH:mm") : null,
-      endDate: formData.endDate
-        ? dayjs(formData.endDate).format(DATE_FORMAT)
-        : dayjs(formData.startDate).format(DATE_FORMAT),
-      endTime: endDateTime ? endDateTime.format("HH:mm") : null,
+      endDate: formData.allDay
+        ? dayjs(formData.startDate).format(DATE_FORMAT)
+        : formData.endDate
+          ? dayjs(formData.endDate).format(DATE_FORMAT)
+          : dayjs(formData.startDate).format(DATE_FORMAT),
+      endTime: endDateTime
+        ? endDateTime.format("HH:mm")
+        : startDateTime
+          ? startDateTime.format("HH:mm")
+          : null,
       allDay: formData.allDay,
       color: isTask ? "#3498db" : "#58d68d",
       type: isTask ? "task" : "event",
     };
   };
+
   const onSaveActivity = async (formData) => {
     try {
       setLoading(true);
@@ -94,24 +107,61 @@ export const EditActivityIntegration = ({ activity, onCloseModal }) => {
       isTask={isTask}
       onSaveActivity={onSaveActivity}
       loading={loading}
+      isAllDay={isAllDay}
+      setIsAllDay={setIsAllDay}
+      startDateValue={startDateValue}
+      setStartDateValue={setStartDateValue}
     />
   );
 };
 
-const EditActivity = ({ activity, isTask, onSaveActivity, loading }) => {
+const EditActivity = ({
+  activity,
+  isTask,
+  onSaveActivity,
+  loading,
+  isAllDay,
+  setIsAllDay,
+  startDateValue,
+  setStartDateValue,
+}) => {
   const schema = yup.object({
     title: yup.string(),
-    startDate: yup.string().required(),
-    startTime: yup.string().required(),
+    startDate: yup.string().required("La fecha de inicio es requerida"),
+    startTime: yup
+      .string()
+      .test("startTime-required", function (value) {
+        const { allDay } = this.parent;
+        if (allDay) {
+          return true;
+        }
+        if (!value) {
+          return false;
+        }
+        return true;
+      })
+      .nullable(),
     endDate: yup.string(),
-    endTime: yup.string(),
+    endTime: yup
+      .string()
+      .test("endTime-required", function (value) {
+        const { allDay, startTime } = this.parent;
+        if (allDay) {
+          return true;
+        }
+        if (!startTime) {
+          return false;
+        }
+        return !!value;
+      })
+      .nullable(),
     allDay: yup.boolean(),
     ...(isTask
       ? {
           description: yup.string(),
         }
       : {
-          address: yup.string().required(),
+          address: yup.string().required("La dirección es requerida"),
         }),
   });
 
@@ -128,6 +178,11 @@ const EditActivity = ({ activity, isTask, onSaveActivity, loading }) => {
 
   useEffect(() => {
     if (activity) {
+      setIsAllDay(activity.allDay || false);
+      setStartDateValue(
+        activity.startDate ? dayjs(activity.startDate, "DD/MM/YYYY") : null,
+      );
+
       reset({
         title: activity.title || "",
         startDate: activity.startDate
@@ -188,76 +243,87 @@ const EditActivity = ({ activity, isTask, onSaveActivity, loading }) => {
                   label="Fecha de inicio"
                   name={name}
                   value={value}
-                  onChange={onChange}
+                  onChange={(date) => {
+                    onChange(date);
+                    setStartDateValue(date);
+                  }}
                   error={error(name)}
                   required={required(name)}
                 />
               )}
             />
           </Col>
-          <Col span={24} md={12}>
-            <Controller
-              name="endDate"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <DatePicker
-                  label="Fecha de fin (opcional)"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
+          {!isAllDay && (
+            <>
+              <Col span={24} md={12}>
+                <Controller
+                  name="endDate"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <DatePicker
+                      label="Fecha de fin (opcional)"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      disabled={
+                        startDateValue && dayjs(value).isBefore(startDateValue)
+                      }
+                      disabledDate={(current) =>
+                        current && current.isBefore(startDateValue)
+                      }
+                    />
+                  )}
                 />
-              )}
-            />
-          </Col>
-
-          <Col span={24} md={12}>
-            <Controller
-              name="startTime"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <TimePicker
-                  label="Hora de inicio"
-                  picker="time"
-                  format="HH:mm"
-                  minuteStep={5}
-                  showNow={false}
-                  use12hours={false}
-                  name={name}
-                  value={value ? dayjs(value, "HH:mm") : null}
-                  onChange={(time) =>
-                    onChange(time ? time.format("HH:mm") : null)
-                  }
-                  error={error(name)}
-                  required={required(name)}
+              </Col>
+              <Col span={24} md={12}>
+                <Controller
+                  name="startTime"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <TimePicker
+                      label="Hora de inicio"
+                      picker="time"
+                      format="HH:mm"
+                      minuteStep={5}
+                      showNow={false}
+                      use12hours={false}
+                      name={name}
+                      value={value ? dayjs(value, "HH:mm") : null}
+                      onChange={(time) =>
+                        onChange(time ? time.format("HH:mm") : null)
+                      }
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
                 />
-              )}
-            />
-          </Col>
+              </Col>
 
-          <Col span={24} md={12}>
-            <Controller
-              name="endTime"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <TimePicker
-                  label="Hora de fin (opcional)"
-                  picker="time"
-                  format="HH:mm"
-                  minuteStep={5}
-                  showNow={false}
-                  use12hours={false}
-                  name={name}
-                  value={value ? dayjs(value, "HH:mm") : null}
-                  onChange={(time) =>
-                    onChange(time ? time.format("HH:mm") : null)
-                  }
-                  error={error(name)}
+              <Col span={24} md={12}>
+                <Controller
+                  name="endTime"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <TimePicker
+                      label="Hora de fin (opcional)"
+                      picker="time"
+                      format="HH:mm"
+                      minuteStep={5}
+                      showNow={false}
+                      use12hours={false}
+                      name={name}
+                      value={value ? dayjs(value, "HH:mm") : null}
+                      onChange={(time) =>
+                        onChange(time ? time.format("HH:mm") : null)
+                      }
+                      error={error(name)}
+                    />
+                  )}
                 />
-              )}
-            />
-          </Col>
-
+              </Col>
+            </>
+          )}
           <Col span={24} md={12}>
             <Controller
               name="allDay"
@@ -268,9 +334,12 @@ const EditActivity = ({ activity, isTask, onSaveActivity, loading }) => {
                   label="¿Es todo el día?"
                   name={name}
                   value={value}
-                  onChange={onChange}
+                  onChange={(e) => {
+                    onChange(e);
+                    setIsAllDay(e.target.value);
+                  }}
                   options={[
-                    { label: "Si", value: true },
+                    { label: "Sí", value: true },
                     { label: "No", value: false },
                   ]}
                   error={error(name)}
