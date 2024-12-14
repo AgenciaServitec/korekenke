@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { userFullName } from "../../../../utils";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
-import { LogoCobiene } from "../../../../images";
+import { LogoPrimary } from "../../../../images";
 
 export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
   const { current, old } = holiday.user.holidaysDetail;
@@ -68,7 +68,7 @@ export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
               <span className="qr">
                 <QRCode
                   value={`${window.location.href}`}
-                  icon={LogoCobiene}
+                  icon={LogoPrimary}
                   style={{ objectFit: "contain" }}
                 />
               </span>
