@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { findDegree, userFullName } from "../../../../utils";
-import { SignatureSheet } from "../../../../components";
+import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 
-export const Holiday2Sheet = ({ user, holiday }) => {
+export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
   const { current, old } = holiday.user.holidaysDetail;
+  const position = `Jefe Dpto. Personal - ${holiday.gu}`;
 
   const totalHolidays = {
     totalWorkingDays: current.workingDays + old.oldWorkingDays,
@@ -62,12 +63,12 @@ export const Holiday2Sheet = ({ user, holiday }) => {
             </table>
 
             <div className="request-content__footer">
-              <SignatureSheet
-                signaturethumbUrl={user?.signaturePhoto?.thumbUrl}
-                signatureUrl={user?.signaturePhoto?.url}
-                name={userFullName(user)}
-                cip={user?.cip}
-                degree={findDegree(user?.degree)?.label}
+              <SignatureSheet2
+                signaturethumbUrl={departmentBoss?.signaturePhoto?.thumbUrl}
+                signatureUrl={departmentBoss?.signaturePhoto?.url}
+                name={userFullName(departmentBoss)}
+                cip={departmentBoss?.cip}
+                position={position}
               />
             </div>
           </div>
@@ -142,6 +143,7 @@ const Container = styled.div`
           flex-direction: column;
           align-items: flex-end;
           gap: 1em;
+          margin-top: 3em;
 
           & > div {
             display: flex;
@@ -150,16 +152,19 @@ const Container = styled.div`
           .signature {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            text-align: center;
             gap: 0.3em;
 
             &__item {
               font-weight: 500;
 
-              div {
-                width: 14em;
+              .img {
+                width: 100%;
                 height: 8em;
-                padding-bottom: 0.5em;
+                padding: 0.5em;
+                border-bottom: 2px solid black;
+                margin-bottom: 0.5em;
+
                 img {
                   width: 100%;
                   height: 100%;
@@ -168,22 +173,20 @@ const Container = styled.div`
               }
 
               p {
-                border-top: 1px dotted #000;
-                text-align: start;
                 padding-top: 0.5em;
               }
             }
           }
+        }
 
-          .cip {
+        .cip {
+          width: 100%;
+          display: flex;
+          font-weight: 500;
+          justify-content: center;
+
+          span {
             width: 100%;
-            display: flex;
-            font-weight: 500;
-            justify-content: center;
-
-            span {
-              width: 100%;
-            }
           }
         }
       }

@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { findDegree, userFullName } from "../../../../utils";
-import { SignatureSheet } from "../../../../components";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
+import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 
-export const Holiday1Sheet = ({ user, holiday }) => {
+export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
+  const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
+
   const { current } = holiday.user.holidaysDetail;
   return (
     <Container>
@@ -16,8 +18,8 @@ export const Holiday1Sheet = ({ user, holiday }) => {
         <div className="main">
           <div className="request-content">
             <div className="request-content__title">
-              <h1>GU : COBIENE</h1>
-              <h1>UU : SGC</h1>
+              <h1>GU : {holiday?.gu.toUpperCase() || "NO REGISTRADO"}</h1>
+              <h1>UU : {holiday?.uu.toUpperCase() || "NO REGISTRADO"}</h1>
             </div>
             <p className="request-content__body">
               <h1>PAPELETA DE PERMISO</h1>
@@ -80,12 +82,11 @@ export const Holiday1Sheet = ({ user, holiday }) => {
                     )
                   : ""}
               </p>
-              <SignatureSheet
-                signaturethumbUrl={user?.signaturePhoto?.thumbUrl}
-                signatureUrl={user?.signaturePhoto?.url}
-                name={userFullName(user)}
-                cip={user?.cip}
-                degree={findDegree(user?.degree)?.label}
+              <SignatureSheet2
+                name={userFullName(entityManager)}
+                cip={entityManager?.cip}
+                degree={findDegree(entityManager?.degree)?.label}
+                position={position}
               />
             </div>
           </div>
@@ -209,10 +210,13 @@ const Container = styled.div`
             &__item {
               font-weight: 500;
 
-              div {
-                width: 14em;
+              .img {
+                width: 100%;
                 height: 8em;
-                padding-bottom: 0.5em;
+                padding: 0.5em;
+                border-bottom: 2px solid black;
+                margin-bottom: 0.5em;
+
                 img {
                   width: 100%;
                   height: 100%;
@@ -221,7 +225,6 @@ const Container = styled.div`
               }
 
               p {
-                border-top: 1px dotted #000;
                 padding-top: 0.5em;
               }
             }

@@ -3,6 +3,7 @@ import {
   Button,
   Col,
   Form,
+  Input,
   notification,
   Row,
   TextArea,
@@ -38,6 +39,8 @@ export const SubmitVacationRequest = ({
   }));
 
   const schema = yup.object({
+    gu: yup.string().required(),
+    uu: yup.string().required(),
     reason: yup.string(),
   });
 
@@ -139,6 +142,8 @@ export const SubmitVacationRequest = ({
       DATE_FORMAT_TO_FIRESTORE,
     ),
     endDate: dayjs(holidaysRange[1].toDate()).format(DATE_FORMAT_TO_FIRESTORE),
+    gu: formData.gu,
+    uu: formData.uu,
     reason: formData.reason,
     status: "waiting",
     wasRead: false,
@@ -165,10 +170,49 @@ export const SubmitVacationRequest = ({
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Title level={3}>Motivo y/o Asunto</Title>
-      </Col>
       <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+        <Col span={24}>
+          <Title level={3}>Unidades Asignadas</Title>
+        </Col>
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Controller
+              name="gu"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Ingrese su Gran Unidad (GU):"
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={12}>
+            <Controller
+              name="uu"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Ingrese la Unidad a la que pertenece (UU):"
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+        </Row>
+        <Col span={24}>
+          <Title level={3}>Motivo y/o Asunto</Title>
+        </Col>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Controller
