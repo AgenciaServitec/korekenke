@@ -5,7 +5,7 @@ import { findDegree, userFullName } from "../../../../utils";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
-import { LogoCobiene } from "../../../../images";
+import { LogoPrimary } from "../../../../images";
 
 export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
   const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
@@ -79,7 +79,7 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
               <span className="qr">
                 <QRCode
                   value={`${window.location.href}`}
-                  icon={LogoCobiene}
+                  icon={LogoPrimary}
                   style={{
                     objectFit: "contain",
                   }}
