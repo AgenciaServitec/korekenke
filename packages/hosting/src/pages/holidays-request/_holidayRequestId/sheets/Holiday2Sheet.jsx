@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { findDegree, userFullName } from "../../../../utils";
+import { userFullName } from "../../../../utils";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 
 export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
