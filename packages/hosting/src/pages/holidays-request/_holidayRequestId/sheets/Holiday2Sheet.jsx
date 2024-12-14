@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { userFullName } from "../../../../utils";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
+import { QRCode } from "antd";
+import { LogoCobiene } from "../../../../images";
 
 export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
   const { current, old } = holiday.user.holidaysDetail;
@@ -63,6 +65,13 @@ export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
             </table>
 
             <div className="request-content__footer">
+              <span className="qr">
+                <QRCode
+                  value={`${window.location.href}`}
+                  icon={LogoCobiene}
+                  style={{ objectFit: "contain" }}
+                />
+              </span>
               <SignatureSheet2
                 signaturethumbUrl={departmentBoss?.signaturePhoto?.thumbUrl}
                 signatureUrl={departmentBoss?.signaturePhoto?.url}
@@ -139,11 +148,16 @@ const Container = styled.div`
         }
 
         &__footer {
+          width: 100%;
+          justify-content: space-between;
           display: flex;
-          flex-direction: column;
-          align-items: flex-end;
           gap: 1em;
           margin-top: 3em;
+
+          .qr {
+            display: flex;
+            align-items: center;
+          }
 
           & > div {
             display: flex;

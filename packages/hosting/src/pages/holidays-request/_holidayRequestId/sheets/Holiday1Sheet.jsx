@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 import { findDegree, userFullName } from "../../../../utils";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
+import { QRCode } from "antd";
+import { LogoCobiene } from "../../../../images";
 
 export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
   const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
@@ -74,20 +76,29 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
             </p>
 
             <div className="request-content__footer">
-              <p className="date">
+              <span className="qr">
+                <QRCode
+                  value={`${window.location.href}`}
+                  icon={LogoCobiene}
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+              </span>
+              <span className="date">
                 San Borja,&nbsp;
                 {holiday
                   ? dayjs(holiday?.createAt.toDate()).format(
                       "D [del] MMMM [del] YYYY",
                     )
                   : ""}
-              </p>
-              <SignatureSheet2
-                name={userFullName(entityManager)}
-                cip={entityManager?.cip}
-                degree={findDegree(entityManager?.degree)?.label}
-                position={position}
-              />
+                <SignatureSheet2
+                  name={userFullName(entityManager)}
+                  cip={entityManager?.cip}
+                  degree={findDegree(entityManager?.degree)?.label}
+                  position={position}
+                />
+              </span>
             </div>
           </div>
         </div>
@@ -185,13 +196,21 @@ const Container = styled.div`
 
         &__footer {
           display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 1em;
+
+          .qr {
+            width: 50%;
+            display: flex;
+            align-items: end;
+          }
 
           .date {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            text-align: end;
             font-size: 1.5em;
-            margin-bottom: 1em;
+
             span {
               font-weight: 500;
             }
@@ -202,10 +221,12 @@ const Container = styled.div`
           }
 
           .signature {
+            width: 50%;
             display: flex;
             flex-direction: column;
             text-align: center;
             gap: 0.3em;
+            font-size: 0.7em;
 
             &__item {
               font-weight: 500;
