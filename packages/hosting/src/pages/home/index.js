@@ -39,6 +39,9 @@ export const HomeIntegration = () => {
               <li>
                 <Link to={onNavigateGoTo("/my-agenda")}>2. Mi agenda</Link>
               </li>
+              <li>
+                <Link to={onNavigateGoTo("/assistance")}>3. Asistencia</Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -70,3 +70,6 @@ export * from "./holidays-request/_holidayRequestId/sheets";
 
 //AGENDA
 export * from "./my-agenda";
+
+//ASSISTANCE
+export * from "./assistance";
