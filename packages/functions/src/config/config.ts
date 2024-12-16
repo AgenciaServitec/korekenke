@@ -42,8 +42,8 @@ export const config: Config = {
         bcc: "galafloresangelemilio@gmail.com",
       },
       sendMailerNotifyDasApplicant: {
-        to: "beto1perk@gmail.com",
-        bcc: "mariano260996@gmail.com",
+        to: "juguar01@hotmail.com",
+        bcc: "beto1perk@gmail.com,mariano260996@gmail.com",
       },
     },
     "api-peru-devs": {
