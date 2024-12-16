@@ -17,6 +17,10 @@ export const AssistanceIntegration = () => {
     assistancesError && notification({ type: "error" });
   }, [assistancesError]);
 
+  if (assistancesLoading) {
+    return;
+  }
+
   return <Assistance user={authUser} />;
 };
 
