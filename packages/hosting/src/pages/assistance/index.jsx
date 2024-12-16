@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Acl, Row, Col, Title, notification } from "../../components";
+import { Acl, Row, Col, Title, notification, Spinner } from "../../components";
 import { useAuthentication } from "../../providers";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -17,9 +17,7 @@ export const AssistanceIntegration = () => {
     assistancesError && notification({ type: "error" });
   }, [assistancesError]);
 
-  if (assistancesLoading) {
-    return;
-  }
+  if (assistancesLoading) return <Spinner height="80svh" />;
 
   return <Assistance user={authUser} />;
 };
