@@ -12,7 +12,7 @@ export const fetchAssistance = async (id) =>
 export const fetchAssistances = async () =>
   fetchCollectionOnce(assistancesRef.where("isDeleted", "==", false));
 
-export const fetchAssistancesByUserID = async (userId) =>
+export const fetchAssistancesByUserId = async (userId) =>
   fetchCollectionOnce(
     assistancesRef
       .where("user.id", "==", userId)

@@ -6,11 +6,12 @@ import {
   getAssistancesId,
 } from "../../firebase/collections/assistance";
 import dayjs from "dayjs";
-import { userFullName } from "../../utils/users/userFullName2";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
+import { useDefaultFirestoreProps } from "../../hooks";
 
 export const GetAssistance = ({ user }) => {
   const { assistanceId } = useParams();
+  const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [isEntry, setIsEntry] = useState(false);
 
@@ -19,13 +20,12 @@ export const GetAssistance = ({ user }) => {
 
     const assistanceData = {
       id: assistanceId || getAssistancesId(),
-      userName: userFullName(user),
       type: type,
       date: dayjs(currentDate).format(DATE_FORMAT_TO_FIRESTORE),
     };
 
     try {
-      await addAssistance(assistanceData);
+      await addAssistance(assignCreateProps(assistanceData));
       notification({ type: "success" });
 
       if (type === "entry") {
@@ -50,7 +50,7 @@ const AssistanceButtons = ({ handleMarkAssistance, isEntry }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Flex>
+        <Flex gap={5}>
           <Button
             onClick={() => handleMarkAssistance("entry")}
             disabled={isEntry}
