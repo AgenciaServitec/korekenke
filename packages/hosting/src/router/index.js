@@ -193,6 +193,15 @@ export const Router = () => {
         />
         <Route
           exact
+          path="assistance"
+          element={
+            <AdminLayout>
+              <A.AssistanceIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="inscriptions/cmsts"
           element={
             <AdminLayout>

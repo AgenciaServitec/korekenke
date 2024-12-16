@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Acl, Col, notification, Row, Tag } from "../../components";
+import { Acl, Col, notification, Row, Spinner, Tag } from "../../components";
 import {
   ActivitiesProvider,
   ModalProvider,
@@ -30,6 +30,10 @@ export const Activities = () => {
   useEffect(() => {
     activitiesError && notification({ type: "error" });
   }, [activitiesError]);
+
+  if (activitiesLoading) {
+    return <Spinner height="80svh" />;
+  }
 
   return (
     <ActivitiesProvider>
