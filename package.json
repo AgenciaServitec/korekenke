@@ -12,7 +12,10 @@
     "deploy:hosting": "yarn hosting deploy",
     "deploy:indexes": "firebase deploy --only firestore:indexes",
     "deploy:extensions": "firebase deploy --only extensions",
-    "export:extensions": "firebase ext:export",      
+    "export:extensions": "firebase ext:export",
     "ext:export": "firebase ext:export"
+  },
+  "dependencies": {
+    "@react-google-maps/api": "^2.20.3"
   }
 }

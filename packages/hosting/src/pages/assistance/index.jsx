@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Acl, Row, Col, Title, notification, Spinner } from "../../components";
 import { useAuthentication } from "../../providers";
-import { useDefaultFirestoreProps } from "../../hooks";
+import { useDefaultFirestoreProps, useUserLocation } from "../../hooks";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { assistancesRef } from "../../firebase/collections/assistance";
 import { GetAssistance } from "./GetAssistance";
@@ -23,6 +23,8 @@ export const AssistanceIntegration = () => {
 };
 
 const Assistance = ({ user }) => {
+  const { userLocation } = useUserLocation();
+
   return (
     <Acl
       redirect
@@ -35,7 +37,7 @@ const Assistance = ({ user }) => {
           <Title level={3}>Control de asistencia</Title>
         </Col>
         <Col span={24}>
-          <GetAssistance user={user} />
+          <GetAssistance user={user} userLocation={userLocation} />
         </Col>
       </Row>
     </Acl>

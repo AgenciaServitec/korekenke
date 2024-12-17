@@ -15,3 +15,4 @@ export * from "./useUpdateAssignToAndAclsOfUser";
 export * from "./useAnimalLogs";
 export * from "./useBosses";
 export * from "./useCountdown";
+export * from "./useUserLocation";
