@@ -65,6 +65,7 @@ export * from "./ShowImagesAndDocumentsModal";
 export * from "./RolesByGroup";
 export * from "./FullCalendar";
 export * from "./DateRange";
+export * from "./MapComponent";
 
 const { Link, Paragraph } = Typography;
 
