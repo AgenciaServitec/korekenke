@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { Acl, Row, Col, Title, notification, Spinner } from "../../components";
 import { useAuthentication } from "../../providers";
-import { useDefaultFirestoreProps, useUserLocation } from "../../hooks";
+import { useUserLocation } from "../../hooks";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { assistancesRef } from "../../firebase/collections/assistance";
 import { GetAssistance } from "./GetAssistance";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
-  const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const [assistances = [], assistancesLoading, assistancesError] =
     useCollectionData(assistancesRef.where("isDeleted", "==", false));

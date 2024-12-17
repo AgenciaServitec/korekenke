@@ -52,14 +52,6 @@ export const MapComponent = ({
 
       const isWithinGeofence = distance <= 50;
       onGeofenceValidate(isWithinGeofence);
-
-      console.log("Distance to geofence center: ", distance);
-
-      if (isWithinGeofence) {
-        console.log("Dentro de la geocerca");
-      } else {
-        console.log("Fuera de la geocerca");
-      }
     }
   };
 
