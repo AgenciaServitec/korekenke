@@ -1,19 +1,15 @@
 import React, { useEffect } from "react";
 import { Circle, GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { useAuthentication } from "../../providers";
+import { WorkPlaces } from "../../data-list";
 
 const mapStyle = {
   width: "100%",
   height: "400px",
 };
 
-const mapCenter = {
-  lat: -12.169445,
-  lng: -77.021013,
-};
-
-const otherCenter = {
-  lat: -12.175648,
-  lng: -77.020647,
+const getWorkPlaceById = (workPlaceId) => {
+  return WorkPlaces.find((place) => place.value === workPlaceId) || null;
 };
 
 const geofenceOptions = {
@@ -25,19 +21,29 @@ const geofenceOptions = {
 };
 
 export const MapComponent = ({
-  center = mapCenter,
+  center = null,
   markers = [],
   zoom = 18,
   geofence,
   userLocation,
   onGeofenceValidate,
 }) => {
+  const { authUser } = useAuthentication();
+
+  const workPlace = getWorkPlaceById(authUser?.workPlace);
+
+  const mapCenter = center ||
+    workPlace?.coordinates || { lat: -12.169445, lng: -77.021013 };
+
   const userValidate = () => {
-    if (!userLocation) return;
+    if (!userLocation || !mapCenter) return;
 
     if (window.google && window.google.maps && window.google.maps.geometry) {
       // eslint-disable-next-line no-undef
-      const geofenceCenter = new google.maps.LatLng(center.lat, center.lng);
+      const geofenceCenter = new google.maps.LatLng(
+        mapCenter.lat,
+        mapCenter.lng,
+      );
       // eslint-disable-next-line no-undef
       const userPosition = new google.maps.LatLng(
         userLocation.lat,
@@ -56,8 +62,10 @@ export const MapComponent = ({
   };
 
   useEffect(() => {
-    userValidate();
-  }, [userLocation]);
+    if (mapCenter) {
+      userValidate();
+    }
+  }, [userLocation, mapCenter]);
 
   return (
     <LoadScript
@@ -66,7 +74,7 @@ export const MapComponent = ({
     >
       <GoogleMap
         mapContainerStyle={mapStyle}
-        center={center}
+        center={userLocation ? userLocation : mapCenter}
         zoom={zoom}
         onLoad={userValidate}
       >
@@ -82,7 +90,7 @@ export const MapComponent = ({
         ))}
 
         {geofence && (
-          <Circle center={center} radius={50} options={geofenceOptions} />
+          <Circle center={mapCenter} radius={50} options={geofenceOptions} />
         )}
       </GoogleMap>
     </LoadScript>

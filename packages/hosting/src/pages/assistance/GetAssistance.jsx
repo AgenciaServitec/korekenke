@@ -16,6 +16,8 @@ import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 import { useDefaultFirestoreProps } from "../../hooks";
 import styled from "styled-components";
+import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const GetAssistance = ({ user, userLocation }) => {
   const { assistanceId } = useParams();
@@ -68,13 +70,14 @@ const AssistanceButtons = ({
   return (
     <Container>
       <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Flex gap={5} justify="space-between">
+        <Col span={24} md={8}>
+          <div className="buttons">
             <Button
               onClick={() => handleMarkAssistance("entry")}
               disabled={isEntry || !isWithinGeofence}
               className={`entry-btn ${isEntry || !isWithinGeofence ? "disabled" : ""}`}
             >
+              <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Entrada
             </Button>
             <Button
@@ -82,9 +85,12 @@ const AssistanceButtons = ({
               disabled={!isEntry || !isWithinGeofence}
               className={`outlet-btn ${!isEntry || !isWithinGeofence ? "disabled" : ""}`}
             >
+              <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
             </Button>
-          </Flex>
+          </div>
+        </Col>
+        <Col span={24} md={16}>
           <div className="map-container">
             <MapComponent
               geofence
@@ -110,19 +116,39 @@ const AssistanceButtons = ({
 };
 
 const Container = styled.div`
-  .entry-btn {
-    padding: 12px 30px;
+  height: 100vh;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+
+  .buttons {
+    width: 100%;
+    height: 100%;
+    align-content: center;
+  }
+
+  .entry-btn,
+  .outlet-btn {
+    padding: 40px 40px;
     font-size: 1.1rem;
     font-weight: 600;
     border: none;
     border-radius: 25px;
     color: white;
-    background-color: #4caf50;
     cursor: pointer;
     transition: all 0.3s ease;
-    flex: 1;
-    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+
+  .entry-btn {
+    background-color: #4caf50;
   }
 
   .entry-btn:hover {
@@ -142,18 +168,7 @@ const Container = styled.div`
   }
 
   .outlet-btn {
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 25px;
-    color: white;
     background-color: #e57373;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    flex: 1;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
   .outlet-btn:hover {
@@ -173,7 +188,6 @@ const Container = styled.div`
   }
 
   .map-container {
-    margin-top: 20px;
     height: 400px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -214,7 +228,7 @@ const Container = styled.div`
   @media (max-width: 350px) {
     .entry-btn,
     .outlet-btn {
-      padding: 10px 20px;
+      padding: 10px 30px;
       font-size: 1rem;
     }
   }
