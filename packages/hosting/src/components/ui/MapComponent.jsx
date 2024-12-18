@@ -8,11 +8,8 @@ const mapStyle = {
   height: "400px",
 };
 
-const getCoordinatesFromWorkPlace = (workPlaceValue) => {
-  const place = WorkPlaces[0]?.options.find(
-    (place) => place.value === workPlaceValue,
-  );
-  return place?.coordinates || null;
+const getWorkPlaceById = (workPlaceId) => {
+  return WorkPlaces.find((place) => place.value === workPlaceId) || null;
 };
 
 const geofenceOptions = {
@@ -33,13 +30,13 @@ export const MapComponent = ({
 }) => {
   const { authUser } = useAuthentication();
 
-  const workPlaceCoordinates = getCoordinatesFromWorkPlace(authUser?.workPlace);
+  const workPlace = getWorkPlaceById(authUser?.workPlace);
 
   const mapCenter = center ||
-    workPlaceCoordinates || { lat: -12.169445, lng: -77.021013 };
+    workPlace?.coordinates || { lat: -12.169445, lng: -77.021013 };
 
   const userValidate = () => {
-    if (!userLocation) return;
+    if (!userLocation || !mapCenter) return;
 
     if (window.google && window.google.maps && window.google.maps.geometry) {
       // eslint-disable-next-line no-undef
@@ -77,7 +74,7 @@ export const MapComponent = ({
     >
       <GoogleMap
         mapContainerStyle={mapStyle}
-        center={mapCenter}
+        center={userLocation ? userLocation : mapCenter}
         zoom={zoom}
         onLoad={userValidate}
       >
