@@ -20,8 +20,21 @@ export const HomeIntegration = () => {
 
   const onNavigateGoTo = (pathname) => pathname;
 
+  const showAlert = !authUser?.workPlace;
+
   return (
     <Container>
+      {showAlert && (
+        <div className="alert-wrapper">
+          <p>
+            <strong>Atención:</strong> No tienes un lugar de trabajo
+            configurado. Por favor, dirígete a tu perfil para agregarlo.
+          </p>
+          <Link to="/profile" className="alert-link">
+            Ir a mi perfil
+          </Link>
+        </div>
+      )}
       <h1 className="title">
         ({currentCommand?.code}) {currentCommand?.name}
       </h1>
@@ -260,6 +273,33 @@ const Container = styled.section`
           font-size: 1.1rem;
         }
       }
+    }
+  }
+
+  .alert-wrapper {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 1.5em;
+    margin-bottom: 1em;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px;
+
+    p {
+      margin: 0 0 1em 0;
+    }
+
+    .alert-link {
+      display: inline-block;
+      padding: 0.5em 1em;
+      background-color: #842029;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .alert-link:hover {
+      background-color: #6d1a22;
     }
   }
 `;

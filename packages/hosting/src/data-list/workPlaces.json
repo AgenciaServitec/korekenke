@@ -1,0 +1,31 @@
+[
+  {
+    "label": "Lugar de trabajo",
+    "options": [
+      {
+        "label": "Villa Militar Chorrillos Oeste",
+        "value": "Villa-Militar-Chorrillos-Oeste",
+        "coordinates": {
+          "lat": -12.160362,
+          "lng": -77.019443
+        }
+      },
+      {
+        "label": "Servitec",
+        "value": "Servitec",
+        "coordinates": {
+          "lat": -12.169543,
+          "lng": -77.021059
+        }
+      },
+      {
+        "label": "IESTP Gilda",
+        "value": "IESTP-Gilda",
+        "coordinates": {
+          "lat": -12.165643,
+          "lng": -76.974778
+        }
+      }
+    ]
+  }
+]

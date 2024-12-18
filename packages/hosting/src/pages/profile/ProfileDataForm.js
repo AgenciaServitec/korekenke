@@ -11,6 +11,7 @@ import {
   notification,
   RadioGroup,
   Row,
+  Select,
   Upload,
 } from "../../components";
 import { useAuthentication } from "../../providers";
@@ -21,6 +22,7 @@ import {
 } from "../../api";
 import { assign } from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { WorkPlaces } from "../../data-list";
 
 export const ProfileDataForm = () => {
   const { authUser } = useAuthentication();
@@ -45,6 +47,7 @@ export const ProfileDataForm = () => {
       .max(8)
       .required()
       .transform((value) => (value === null ? "" : value)),
+    workPlace: yup.string(),
   });
 
   const {
@@ -90,6 +93,7 @@ export const ProfileDataForm = () => {
       cip: authUser?.cip || "",
       dni: authUser?.dni || "",
       cgi: authUser?.cgi || false,
+      workPlace: authUser?.workPlace || "",
     });
   };
 
@@ -263,6 +267,23 @@ export const ProfileDataForm = () => {
                     value: false,
                   },
                 ]}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24} md={12}>
+          <Controller
+            name="workPlace"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <Select
+                label="Lugar de trabajo"
+                onChange={onChange}
+                value={value}
+                name={name}
+                error={error(name)}
+                helperText={errorMessage(name)}
+                options={WorkPlaces}
               />
             )}
           />
