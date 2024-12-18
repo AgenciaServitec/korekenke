@@ -27,6 +27,7 @@ export const GetAssistance = ({ user, userLocation }) => {
 
   const [isEntry, setIsEntry] = useState(false);
   const [isOutlet, setIsOutlet] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
   const handleMarkAssistance = async (type) => {
@@ -90,13 +91,9 @@ export const GetAssistance = ({ user, userLocation }) => {
           assistance.date === currentDate && assistance.type === "outlet",
       );
 
-      if (existingEntry) {
-        setIsEntry(true);
-      }
-
-      if (existingOutlet) {
-        setIsOutlet(true);
-      }
+      setIsEntry(existingEntry);
+      setIsOutlet(existingOutlet);
+      setIsLoading(false);
     };
 
     fetchTodayAssistance();
@@ -107,6 +104,7 @@ export const GetAssistance = ({ user, userLocation }) => {
       handleMarkAssistance={handleMarkAssistance}
       isEntry={isEntry}
       isOutlet={isOutlet}
+      isLoading={isLoading}
       userLocation={userLocation}
       isWithinGeofence={isWithinGeofence}
       onGeofenceValidate={setIsWithinGeofence}
@@ -121,6 +119,7 @@ const AssistanceButtons = ({
   isWithinGeofence,
   onGeofenceValidate,
   isOutlet,
+  isLoading,
 }) => {
   return (
     <Container>
@@ -129,16 +128,16 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={() => handleMarkAssistance("entry")}
-              disabled={isEntry || !isWithinGeofence || isOutlet}
-              className={`entry-btn ${isEntry || !isWithinGeofence || isOutlet ? "disabled" : ""}`}
+              disabled={isLoading || isEntry || !isWithinGeofence || isOutlet}
+              className={`entry-btn ${isLoading || isEntry || !isWithinGeofence || isOutlet ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
               onClick={() => handleMarkAssistance("outlet")}
-              disabled={isOutlet || !isWithinGeofence || !isEntry}
-              className={`outlet-btn ${isOutlet || !isWithinGeofence || !isEntry ? "disabled" : ""}`}
+              disabled={isLoading || isOutlet || !isWithinGeofence || !isEntry}
+              className={`outlet-btn ${isLoading || isOutlet || !isWithinGeofence || !isEntry ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
