@@ -27,11 +27,11 @@ export const AssistanceIntegration = () => {
 const Assistance = ({ user }) => {
   const { userLocation } = useUserLocation();
 
+  const showAlert = !user?.workPlace;
+
   const [currentDateTime, setCurrentDateTime] = useState(
     dayjs().format("DD/MM/YYYY HH:mm A"),
   );
-
-  const showAlert = !user?.workPlace;
 
   useEffect(() => {
     const interval = setInterval(() => {
