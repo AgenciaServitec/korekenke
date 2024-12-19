@@ -72,4 +72,5 @@ export * from "./holidays-request/_holidayRequestId/sheets";
 export * from "./my-agenda";
 
 //ASSISTANCE
-export * from "./assistance";
+export * from "./assistances";
+export * from "./assistances/assistance";

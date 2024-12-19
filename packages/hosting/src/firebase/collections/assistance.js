@@ -17,7 +17,7 @@ export const fetchAssistance = async (id) =>
 export const fetchAssistances = async () =>
   fetchCollectionOnce(assistancesRef.where("isDeleted", "==", false));
 
-export const fetchAssistancesByUserId = async (userId) => {
+export const fetchTodayAssistancesByUserId = async (userId) => {
   const today = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
   return fetchCollectionOnce(
     assistancesRef

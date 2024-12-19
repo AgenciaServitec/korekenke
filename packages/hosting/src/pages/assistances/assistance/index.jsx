@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Acl, Row, Col, Title, notification, Spinner } from "../../components";
-import { useAuthentication } from "../../providers";
-import { useUserLocation } from "../../hooks";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { assistancesRef } from "../../firebase/collections/assistance";
+import { Acl, Col, Row } from "../../../components";
+import { useAuthentication } from "../../../providers";
+import { useUserLocation } from "../../../hooks";
 import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -11,15 +9,6 @@ import dayjs from "dayjs";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
-
-  const [assistances = [], assistancesLoading, assistancesError] =
-    useCollectionData(assistancesRef.where("isDeleted", "==", false));
-
-  useEffect(() => {
-    assistancesError && notification({ type: "error" });
-  }, [assistancesError]);
-
-  if (assistancesLoading) return <Spinner height="80svh" />;
 
   return <Assistance user={authUser} />;
 };
@@ -30,12 +19,12 @@ const Assistance = ({ user }) => {
   const showAlert = !user?.workPlace;
 
   const [currentDateTime, setCurrentDateTime] = useState(
-    dayjs().format("DD/MM/YYYY HH:mm A"),
+    dayjs().format("DD/MM/YYYY HH:mm:ss A"),
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentDateTime(dayjs().format("DD/MM/YYYY HH:mm A"));
+      setCurrentDateTime(dayjs().format("DD/MM/YYYY HH:mm:ss A"));
     }, 1000);
 
     return () => clearInterval(interval);
@@ -46,12 +35,12 @@ const Assistance = ({ user }) => {
       <Acl
         redirect
         category="default"
-        subCategory="assistance"
-        name="/assistance"
+        subCategory="assistances"
+        name="/assistances/assistance"
       >
         <div className="datetime">
           <p>
-            <strong>FECHA Y HORA : {currentDateTime}</strong>
+            <strong>{currentDateTime}</strong>
           </p>
         </div>
         {showAlert && (

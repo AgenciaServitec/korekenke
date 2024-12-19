@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import {
-  Flex,
-  Row,
-  Col,
   Button,
-  notification,
+  Col,
   MapComponent,
-} from "../../components";
+  notification,
+  Row,
+} from "../../../components";
 import {
   addAssistance,
-  fetchAssistancesByUserId,
+  fetchTodayAssistancesByUserId,
   getAssistancesId,
-} from "../../firebase/collections/assistance";
+} from "../../../firebase/collections/assistance";
 import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
-import { useDefaultFirestoreProps } from "../../hooks";
+import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
+import { useDefaultFirestoreProps } from "../../../hooks";
 import styled from "styled-components";
 import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,34 +31,48 @@ export const GetAssistance = ({ user, userLocation }) => {
 
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
+  const exitsTodayAssistance = (
+    todayAssistancesUser = [],
+    currentDate,
+    typeAssistance,
+  ) =>
+    todayAssistancesUser.some(
+      (assistance) =>
+        assistance.date === currentDate && assistance.type === typeAssistance,
+    );
+
   const handleMarkAssistance = async (type) => {
     if (isProcessing) return;
     setIsProcessing(true);
+
     const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
 
     try {
-      const assistancesToday = await fetchAssistancesByUserId(user.id);
-      const existingEntry = assistancesToday.some(
-        (assistance) =>
-          assistance.date === currentDate && assistance.type === "entry",
+      const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
+
+      const existingEntry = exitsTodayAssistance(
+        todayAssistancesUser,
+        currentDate,
+        "entry",
       );
-      const existingOutlet = assistancesToday.some(
-        (assistance) =>
-          assistance.date === currentDate && assistance.type === "outlet",
+      const existingOutlet = exitsTodayAssistance(
+        todayAssistancesUser,
+        currentDate,
+        "outlet",
       );
-      if (type === "entry" && existingEntry) {
+
+      if (type === "entry" && existingEntry)
         return notification({
           type: "warning",
           message: "Ya ha marcado su ingreso hoy",
         });
-      }
 
-      if (type === "outlet" && existingOutlet) {
+      if (type === "outlet" && existingOutlet)
         return notification({
           type: "warning",
           message: "Ya ha marcado su salida hoy",
         });
-      }
+
       const assistanceData = {
         userId: user.id,
         id: assistanceId || getAssistancesId(),
@@ -67,15 +80,15 @@ export const GetAssistance = ({ user, userLocation }) => {
         date: currentDate,
         user: omit(user, "acls"),
       };
+
       await addAssistance(assignCreateProps(assistanceData));
       notification({ type: "success" });
 
-      if (type === "entry") {
-        setIsEntry(true);
-      } else if (type === "outlet") {
-        setIsOutlet(true);
-      }
+      if (type === "entry") return setIsEntry(true);
+
+      setIsOutlet(true);
     } catch (error) {
+      console.error("handleMarkAssistance:", error);
       notification({ type: "error" });
     } finally {
       setIsProcessing(false);
@@ -85,16 +98,18 @@ export const GetAssistance = ({ user, userLocation }) => {
   useEffect(() => {
     const fetchTodayAssistance = async () => {
       const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
-      const assistanceToday = await fetchAssistancesByUserId(user.id);
+      const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
 
-      const existingEntry = assistanceToday.some(
-        (assistance) =>
-          assistance.date === currentDate && assistance.type === "entry",
+      const existingEntry = exitsTodayAssistance(
+        todayAssistancesUser,
+        currentDate,
+        "entry",
       );
 
-      const existingOutlet = assistanceToday.some(
-        (assistance) =>
-          assistance.date === currentDate && assistance.type === "outlet",
+      const existingOutlet = exitsTodayAssistance(
+        todayAssistancesUser,
+        currentDate,
+        "outlet",
       );
 
       setIsEntry(existingEntry);
@@ -102,7 +117,9 @@ export const GetAssistance = ({ user, userLocation }) => {
       setIsLoading(false);
     };
 
-    fetchTodayAssistance();
+    (async () => {
+      await fetchTodayAssistance();
+    })();
   }, [user.id]);
 
   return (
