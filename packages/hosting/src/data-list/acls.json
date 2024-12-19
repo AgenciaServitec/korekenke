@@ -16,7 +16,7 @@
     "assistances": {
       "label": "Asistencias",
       "/assistances": "Menu: Asistencias",
-      "/assistances/assistance": "Marcar my asistencia"
+      "/assistances/assistance": "Marcar mi asistencia"
     }
   },
   "accessControl": {
