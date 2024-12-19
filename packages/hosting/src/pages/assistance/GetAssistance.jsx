@@ -28,9 +28,13 @@ export const GetAssistance = ({ user, userLocation }) => {
   const [isEntry, setIsEntry] = useState(false);
   const [isOutlet, setIsOutlet] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
   const handleMarkAssistance = async (type) => {
+    if (isProcessing) return;
+    setIsProcessing(true);
     const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
 
     try {
@@ -73,6 +77,8 @@ export const GetAssistance = ({ user, userLocation }) => {
       }
     } catch (error) {
       notification({ type: "error" });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -105,6 +111,7 @@ export const GetAssistance = ({ user, userLocation }) => {
       isEntry={isEntry}
       isOutlet={isOutlet}
       isLoading={isLoading}
+      isProcessing={isProcessing}
       userLocation={userLocation}
       isWithinGeofence={isWithinGeofence}
       onGeofenceValidate={setIsWithinGeofence}
@@ -120,6 +127,7 @@ const AssistanceButtons = ({
   onGeofenceValidate,
   isOutlet,
   isLoading,
+  isProcessing,
 }) => {
   return (
     <Container>
@@ -128,16 +136,28 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={() => handleMarkAssistance("entry")}
-              disabled={isLoading || isEntry || !isWithinGeofence || isOutlet}
-              className={`entry-btn ${isLoading || isEntry || !isWithinGeofence || isOutlet ? "disabled" : ""}`}
+              disabled={
+                isLoading ||
+                isEntry ||
+                !isWithinGeofence ||
+                isOutlet ||
+                isProcessing
+              }
+              className={`entry-btn ${isLoading || isEntry || !isWithinGeofence || isOutlet || isProcessing ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
               onClick={() => handleMarkAssistance("outlet")}
-              disabled={isLoading || isOutlet || !isWithinGeofence || !isEntry}
-              className={`outlet-btn ${isLoading || isOutlet || !isWithinGeofence || !isEntry ? "disabled" : ""}`}
+              disabled={
+                isLoading ||
+                isOutlet ||
+                !isWithinGeofence ||
+                !isEntry ||
+                isProcessing
+              }
+              className={`outlet-btn ${isLoading || isOutlet || !isWithinGeofence || !isEntry || isProcessing ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
