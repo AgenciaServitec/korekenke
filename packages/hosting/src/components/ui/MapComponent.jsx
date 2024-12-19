@@ -62,10 +62,10 @@ export const MapComponent = ({
   };
 
   useEffect(() => {
-    if (mapCenter) {
+    if (userLocation) {
       userValidate();
     }
-  }, [userLocation, mapCenter]);
+  }, [userLocation]);
 
   return (
     <LoadScript

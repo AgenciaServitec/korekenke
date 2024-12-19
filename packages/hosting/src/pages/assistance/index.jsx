@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Acl, Row, Col, Title, notification, Spinner } from "../../components";
 import { useAuthentication } from "../../providers";
 import { useUserLocation } from "../../hooks";
@@ -27,9 +27,19 @@ export const AssistanceIntegration = () => {
 const Assistance = ({ user }) => {
   const { userLocation } = useUserLocation();
 
+  const [currentDateTime, setCurrentDateTime] = useState(
+    dayjs().format("DD/MM/YYYY HH:mm A"),
+  );
+
   const showAlert = !user?.workPlace;
 
-  const currentDateTime = dayjs().format("DD/MM/YYYY HH:mm A");
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDateTime(dayjs().format("DD/MM/YYYY HH:mm A"));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Container>
@@ -41,7 +51,7 @@ const Assistance = ({ user }) => {
       >
         <div className="datetime">
           <p>
-            <strong>Fecha y hora:</strong> {currentDateTime}
+            <strong>FECHA Y HORA : {currentDateTime}</strong>
           </p>
         </div>
         {showAlert && (
@@ -57,9 +67,6 @@ const Assistance = ({ user }) => {
         )}
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <Title level={3}>Control de asistencia</Title>
-          </Col>
-          <Col span={24}>
             <GetAssistance user={user} userLocation={userLocation} />
           </Col>
         </Row>
@@ -71,6 +78,17 @@ const Assistance = ({ user }) => {
 const Container = styled.div`
   .datetime {
     text-align: right;
+    font-size: 1.4em;
+
+    @media (max-width: 768px) {
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1em;
+      text-align: left;
+    }
   }
 
   .alert-wrapper {

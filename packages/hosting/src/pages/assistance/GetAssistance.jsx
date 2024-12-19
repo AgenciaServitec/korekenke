@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import {
   Flex,
@@ -10,6 +10,7 @@ import {
 } from "../../components";
 import {
   addAssistance,
+  fetchAssistancesByUserId,
   getAssistancesId,
 } from "../../firebase/collections/assistance";
 import dayjs from "dayjs";
@@ -18,41 +19,94 @@ import { useDefaultFirestoreProps } from "../../hooks";
 import styled from "styled-components";
 import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { omit } from "lodash";
 
 export const GetAssistance = ({ user, userLocation }) => {
   const { assistanceId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [isEntry, setIsEntry] = useState(false);
+  const [isOutlet, setIsOutlet] = useState(false);
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
   const handleMarkAssistance = async (type) => {
-    const currentDate = dayjs();
-
-    const assistanceData = {
-      id: assistanceId || getAssistancesId(),
-      type: type,
-      date: dayjs(currentDate).format(DATE_FORMAT_TO_FIRESTORE),
-    };
+    const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
 
     try {
+      const assistancesToday = await fetchAssistancesByUserId(user.id);
+      const existingEntry = assistancesToday.some(
+        (assistance) =>
+          assistance.date === currentDate && assistance.type === "entry",
+      );
+      const existingOutlet = assistancesToday.some(
+        (assistance) =>
+          assistance.date === currentDate && assistance.type === "outlet",
+      );
+      if (type === "entry" && existingEntry) {
+        return notification({
+          type: "warning",
+          message: "Ya ha marcado su ingreso hoy",
+        });
+      }
+
+      if (type === "outlet" && existingOutlet) {
+        return notification({
+          type: "warning",
+          message: "Ya ha marcado su salida hoy",
+        });
+      }
+      const assistanceData = {
+        userId: user.id,
+        id: assistanceId || getAssistancesId(),
+        type: type,
+        date: currentDate,
+        user: omit(user, "acls"),
+      };
       await addAssistance(assignCreateProps(assistanceData));
       notification({ type: "success" });
 
       if (type === "entry") {
         setIsEntry(true);
       } else if (type === "outlet") {
-        setIsEntry(false);
+        setIsOutlet(true);
       }
     } catch (error) {
       notification({ type: "error" });
     }
   };
 
+  useEffect(() => {
+    const fetchTodayAssistance = async () => {
+      const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
+      const assistanceToday = await fetchAssistancesByUserId(user.id);
+
+      const existingEntry = assistanceToday.some(
+        (assistance) =>
+          assistance.date === currentDate && assistance.type === "entry",
+      );
+
+      const existingOutlet = assistanceToday.some(
+        (assistance) =>
+          assistance.date === currentDate && assistance.type === "outlet",
+      );
+
+      if (existingEntry) {
+        setIsEntry(true);
+      }
+
+      if (existingOutlet) {
+        setIsOutlet(true);
+      }
+    };
+
+    fetchTodayAssistance();
+  }, [user.id]);
+
   return (
     <AssistanceButtons
       handleMarkAssistance={handleMarkAssistance}
       isEntry={isEntry}
+      isOutlet={isOutlet}
       userLocation={userLocation}
       isWithinGeofence={isWithinGeofence}
       onGeofenceValidate={setIsWithinGeofence}
@@ -66,6 +120,7 @@ const AssistanceButtons = ({
   userLocation,
   isWithinGeofence,
   onGeofenceValidate,
+  isOutlet,
 }) => {
   return (
     <Container>
@@ -74,16 +129,16 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={() => handleMarkAssistance("entry")}
-              disabled={isEntry || !isWithinGeofence}
-              className={`entry-btn ${isEntry || !isWithinGeofence ? "disabled" : ""}`}
+              disabled={isEntry || !isWithinGeofence || isOutlet}
+              className={`entry-btn ${isEntry || !isWithinGeofence || isOutlet ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
-              Marcar Entrada
+              Marcar Ingreso
             </Button>
             <Button
               onClick={() => handleMarkAssistance("outlet")}
-              disabled={!isEntry || !isWithinGeofence}
-              className={`outlet-btn ${!isEntry || !isWithinGeofence ? "disabled" : ""}`}
+              disabled={isOutlet || !isWithinGeofence || !isEntry}
+              className={`outlet-btn ${isOutlet || !isWithinGeofence || !isEntry ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
@@ -116,7 +171,7 @@ const AssistanceButtons = ({
 };
 
 const Container = styled.div`
-  height: 100vh;
+  height: auto;
   padding: 20px;
   background: #fafafa;
   border-radius: 15px;
@@ -131,8 +186,8 @@ const Container = styled.div`
 
   .entry-btn,
   .outlet-btn {
-    padding: 40px 40px;
-    font-size: 1.1rem;
+    padding: 90px 40px;
+    font-size: 1.5rem;
     font-weight: 600;
     border: none;
     border-radius: 25px;

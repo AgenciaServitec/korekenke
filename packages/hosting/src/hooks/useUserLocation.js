@@ -6,7 +6,7 @@ export const useUserLocation = () => {
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
@@ -31,14 +31,20 @@ export const useUserLocation = () => {
               );
           }
         },
+        { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 },
       );
+
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+      };
     } else {
       setLocationError("Geolocalización no soportada");
     }
   };
 
   useEffect(() => {
-    getUserLocation();
+    const cleanup = getUserLocation();
+    return cleanup;
   }, []);
 
   return {
