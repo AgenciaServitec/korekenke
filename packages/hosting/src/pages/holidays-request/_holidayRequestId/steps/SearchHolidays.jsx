@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
 import styled from "styled-components";
+import { fetchHolidaysByUserId } from "../../../../firebase/collections/holidays";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
 export const SearchHolidays = ({
@@ -43,6 +44,7 @@ export const SearchHolidays = ({
     control,
     formState: { errors },
     reset,
+    watch,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error } = useFormUtils({ errors, schema });
