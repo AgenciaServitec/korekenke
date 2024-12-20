@@ -22,8 +22,7 @@ export const SearchHolidays = ({
   holidaysRange,
   holidayRequest,
   onSetHolidaysRange,
-  vacationDays,
-  onSetVacationDays,
+  onSetHolidayDays,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +43,6 @@ export const SearchHolidays = ({
     control,
     formState: { errors },
     reset,
-    watch,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error } = useFormUtils({ errors, schema });
@@ -61,7 +59,7 @@ export const SearchHolidays = ({
             ) + 1,
         )
         .reduce((a, b) => a + b, 0) + holidaysSelected;
-    onSetVacationDays(accumulatedOldHolidays);
+    onSetHolidayDays(accumulatedOldHolidays);
     return accumulatedOldHolidays;
   };
 

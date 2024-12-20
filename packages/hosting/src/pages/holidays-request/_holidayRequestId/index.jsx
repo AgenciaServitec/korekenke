@@ -27,13 +27,13 @@ export const HolidayRequestIntegration = () => {
   const [holidayRequest, setHolidayRequest] = useState(null);
   const [holidaysRange, setHolidaysRange] = useState(null);
   const [holidaysByUser, setHolidaysByUser] = useState([]);
-  const [vacationDays, setVacationDays] = useState(0);
+  const [holidayDays, setHolidayDays] = useState(0);
 
   const isNew = holidayRequestId === "new";
 
   const onSetCurrentStep = (step) => setCurrentStep(step);
   const onSetHolidaysRange = (range) => setHolidaysRange(range);
-  const onSetVacationDays = (_vacationDays) => setVacationDays(_vacationDays);
+  const onSetHolidayDays = (_holidayDays) => setHolidayDays(_holidayDays);
   const onNavigateGoTo = (pathname) => navigate(pathname);
   const onGoBack = () => navigate(-1);
 
@@ -76,7 +76,7 @@ export const HolidayRequestIntegration = () => {
             holidayRequest={holidayRequest}
             onNavigateGoTo={onNavigateGoTo}
             onSetCurrentStep={onSetCurrentStep}
-            vacationDays={vacationDays}
+            holidayDays={holidayDays}
           />
         );
       default:
@@ -102,8 +102,7 @@ export const HolidayRequestIntegration = () => {
                 holidaysRange={holidaysRange}
                 holidayRequest={holidayRequest}
                 onSetHolidaysRange={onSetHolidaysRange}
-                vacationDays={vacationDays}
-                onSetVacationDays={onSetVacationDays}
+                onSetHolidayDays={onSetHolidayDays}
               />
             ) : (
               <div className="item-date-range">

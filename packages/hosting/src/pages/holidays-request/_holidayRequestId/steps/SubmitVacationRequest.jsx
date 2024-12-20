@@ -28,7 +28,7 @@ export const SubmitVacationRequest = ({
   holidayRequest,
   onNavigateGoTo,
   onSetCurrentStep,
-  vacationDays,
+  holidayDays,
 }) => {
   const { assignCreateProps } = useDefaultFirestoreProps();
 
@@ -36,7 +36,7 @@ export const SubmitVacationRequest = ({
 
   const [startDate, endDate] = holidaysRange;
 
-  console.log("vacationDays: ", vacationDays);
+  console.log("holidayDays: ", holidayDays);
 
   const oldHolidaysByUser = holidaysByUser.map((holiday) => ({
     start: dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
@@ -138,7 +138,7 @@ export const SubmitVacationRequest = ({
         ...oldHolidaysRequest(oldHolidaysByUser),
       },
     },
-    vacationDays: vacationDays || 0,
+    holidayDays: holidayDays || 0,
   };
 
   const mapForm = (formData) => ({
@@ -164,7 +164,7 @@ export const SubmitVacationRequest = ({
 
       await updateUser(user.id, {
         ...user,
-        vacationDays: vacationDays || 0,
+        holidayDays: holidayDays || 0,
       });
 
       notification({
