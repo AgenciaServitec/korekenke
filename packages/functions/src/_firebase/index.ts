@@ -13,7 +13,7 @@ const projectId = process.env.GCLOUD_PROJECT;
 const currentEnvironment =
   projectId === "korekenke-prod" ? "production" : "development";
 
-const isProduction = currentEnvironment === "production";
+export const isProduction = currentEnvironment === "production";
 
 export const bucketAtFunction = projectId + ".appspot.com";
 export const firestoreFieldValue = admin.firestore.FieldValue;
