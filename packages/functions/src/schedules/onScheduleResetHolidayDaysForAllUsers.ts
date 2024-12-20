@@ -20,7 +20,7 @@ const onResetHolidayDays = async (): Promise<void> => {
 
   if (today === "12-31") {
     users.map(async (user) => {
-      await updateUser(user.id, { vacationDays: 0 });
+      await updateUser(user.id, { holidayDays: 0 });
     });
     logger.log("Users Updated");
   } else {
