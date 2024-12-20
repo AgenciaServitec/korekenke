@@ -164,7 +164,7 @@ export const SendHolidayRequest = ({
         ...user,
         holidayDays: holidayDays || 0,
       });
-
+      
       notification({
         type: "success",
       });
