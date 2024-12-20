@@ -19,6 +19,7 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
+import { updateUser } from "../../../../firebase/collections";
 
 export const SendHolidayRequest = ({
   user,
@@ -27,10 +28,12 @@ export const SendHolidayRequest = ({
   holidayRequest,
   onNavigateGoTo,
   onSetCurrentStep,
+  holidayDays,
 }) => {
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
+
   const [startDate, endDate] = holidaysRange;
 
   const oldHolidaysByUser = holidaysByUser.map((holiday) => ({
@@ -133,6 +136,7 @@ export const SendHolidayRequest = ({
         ...oldHolidaysRequest(oldHolidaysByUser),
       },
     },
+    holidayDays: holidayDays || 0,
   };
 
   const mapForm = (formData) => ({
@@ -155,6 +159,11 @@ export const SendHolidayRequest = ({
 
       const holidayData = mapForm(formData);
       await addHoliday(assignCreateProps(holidayData));
+
+      await updateUser(user.id, {
+        ...user,
+        holidayDays: holidayDays || 0,
+      });
 
       notification({
         type: "success",

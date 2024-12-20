@@ -19,10 +19,11 @@ import { fetchHolidaysByUserId } from "../../../../firebase/collections/holidays
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 
 export const SearchHolidays = ({
-  user,
+  holidaysByUser,
   holidaysRange,
   holidayRequest,
   onSetHolidaysRange,
+  onSetHolidayDays,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -43,28 +44,24 @@ export const SearchHolidays = ({
     control,
     formState: { errors },
     reset,
-    watch,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  const validateHolidaysRules = (holidaysOfUser = []) => {
-    const countSelectedDateRange = watch("dateRange");
-    const [start, end] = countSelectedDateRange;
-    const lengthCountSelectedDateRange =
-      dayjs(end).diff(dayjs(start), "day") + 1;
-
-    const lengthDays =
-      holidaysOfUser
+  const validateHolidaysRules = (_start, _end) => {
+    const holidaysSelected = dayjs(_end).diff(dayjs(_start), "day") + 1;
+    const accumulatedOldHolidays =
+      holidaysByUser
         .map(
           (holiday) =>
-            dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
-              dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
+            dayjs(holiday?.endDate, DATE_FORMAT_TO_FIRESTORE).diff(
+              dayjs(holiday?.startDate, DATE_FORMAT_TO_FIRESTORE),
               "day",
             ) + 1,
         )
-        .reduce((a, b) => a + b, 0) + lengthCountSelectedDateRange;
-    return lengthDays > 30;
+        .reduce((a, b) => a + b, 0) + holidaysSelected;
+    onSetHolidayDays(accumulatedOldHolidays);
+    return accumulatedOldHolidays;
   };
 
   useEffect(() => {
@@ -84,11 +81,9 @@ export const SearchHolidays = ({
     try {
       setLoading(true);
 
-      const validationResult = validateHolidaysRules(
-        await fetchHolidaysByUserId(user.id),
-      );
+      const validationRules = validateHolidaysRules(start, end);
 
-      if (validationResult) {
+      if (validationRules > 30) {
         notification({
           type: "warning",
           title: "Límite de días alcanzado!",
@@ -96,6 +91,15 @@ export const SearchHolidays = ({
             "No se pueden seleccionar estas fechas, ya que alcanzan o superan el límite de 30 días calendario.",
         });
         return;
+      }
+
+      if (validationRules === 30) {
+        notification({
+          type: "success",
+          title: "Has completado tus 30 días!",
+          description:
+            "Has utilizado tus 30 días calendario de este año. Se renovará el próximo año",
+        });
       }
 
       if (dayjs(start).day() === 1) {
@@ -108,7 +112,7 @@ export const SearchHolidays = ({
 
       if (
         validateDateRange(
-          formData.dateRange[0].diff(formData.dateRange[1], "day"),
+          formData.dateRange[0].diff(formData.dateRange[1], "day") + 1,
         )
       )
         return notification({
