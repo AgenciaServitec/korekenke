@@ -37,7 +37,7 @@ const scheduleOptions = (
   schedule: string,
   options?: Partial<ScheduleOptions>
 ): ScheduleOptions => ({
-  schedule: isProduction ? schedule : "59 23 31 * *",
+  schedule: isProduction ? schedule : "0 1 * * *",
   memory: "256MiB",
   timeoutSeconds: 540,
   timeZone: "America/Lima",
@@ -69,6 +69,6 @@ exports.onTriggerCleanSessionVerification = functionsTrigger.onDocumentCreated(
 );
 
 exports.onScheduleResetHolidayDaysForAllUsers = functionScheduler.onSchedule(
-  scheduleOptions("0 1 * * *"),
+  scheduleOptions("59 23 31 * *"),
   onScheduleResetHolidayDaysForAllUsers
 );
