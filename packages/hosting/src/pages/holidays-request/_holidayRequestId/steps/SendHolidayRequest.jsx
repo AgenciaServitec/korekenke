@@ -20,7 +20,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 
-export const SubmitVacationRequest = ({
+export const SendHolidayRequest = ({
   user,
   holidaysByUser,
   holidaysRange,

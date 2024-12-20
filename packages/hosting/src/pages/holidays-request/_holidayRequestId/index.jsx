@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { SearchHolidays } from "./steps/SearchHolidays";
 import { Title, Steps } from "../../../components";
 import { useAuthentication } from "../../../providers";
-import { SubmitVacationRequest } from "./steps/SubmitVacationRequest";
+import { SendHolidayRequest } from "./steps/SendHolidayRequest";
 import dayjs from "dayjs";
 import {
   fetchHoliday,
@@ -68,7 +68,7 @@ export const HolidayRequestIntegration = () => {
         );
       case 1:
         return (
-          <SubmitVacationRequest
+          <SendHolidayRequest
             user={authUser}
             holidaysByUser={holidaysByUser}
             holidaysRange={holidaysRange}
