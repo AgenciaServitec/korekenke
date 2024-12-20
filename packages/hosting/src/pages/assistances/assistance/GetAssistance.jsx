@@ -13,7 +13,6 @@ import {
   getAssistancesId,
 } from "../../../firebase/collections/assistance";
 import dayjs from "dayjs";
-import { DATE_FORMAT_TO_FIRESTORE } from "../../../firebase/firestore";
 import { useDefaultFirestoreProps } from "../../../hooks";
 import styled from "styled-components";
 import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -31,65 +30,55 @@ export const GetAssistance = ({ user, userLocation }) => {
 
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
-  const exitsTodayAssistance = (
-    todayAssistancesUser = [],
-    currentDate,
-    typeAssistance,
-  ) =>
-    todayAssistancesUser.some(
-      (assistance) =>
-        assistance.date === currentDate && assistance.type === typeAssistance,
-    );
-
   const handleMarkAssistance = async (type) => {
     if (isProcessing) return;
     setIsProcessing(true);
 
-    const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
-
     try {
+      const currentDate = dayjs().format("DD/MM/YYYY");
       const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
 
-      const existingEntry = exitsTodayAssistance(
-        todayAssistancesUser,
-        currentDate,
-        "entry",
-      );
-      const existingOutlet = exitsTodayAssistance(
-        todayAssistancesUser,
-        currentDate,
-        "outlet",
+      const isMarkedEntry = todayAssistancesUser.some(
+        (assistance) =>
+          assistance.type === "entry" && assistance.date === currentDate,
       );
 
-      if (type === "entry" && existingEntry)
-        return notification({
-          type: "warning",
-          message: "Ya ha marcado su ingreso hoy",
-        });
+      const isMarkedOutlet = todayAssistancesUser.some(
+        (assistance) =>
+          assistance.type === "outlet" && assistance.date === currentDate,
+      );
 
-      if (type === "outlet" && existingOutlet)
+      if (
+        (type === "entry" && isMarkedEntry) ||
+        (type === "outlet" && isMarkedOutlet)
+      ) {
         return notification({
           type: "warning",
-          message: "Ya ha marcado su salida hoy",
+          message: `Ya ha marcado su ${type === "entry" ? "ingreso" : "salida"} hoy`,
         });
+      }
 
       const assistanceData = {
         userId: user.id,
         id: assistanceId || getAssistancesId(),
-        type: type,
+        type,
         date: currentDate,
         user: omit(user, "acls"),
       };
 
       await addAssistance(assignCreateProps(assistanceData));
-      notification({ type: "success" });
+      notification({
+        type: "success",
+        message: `${type === "entry" ? "Ingreso" : "Salida"} marcada con éxito`,
+      });
 
-      if (type === "entry") return setIsEntry(true);
-
-      setIsOutlet(true);
+      type === "entry" ? setIsEntry(true) : setIsOutlet(true);
     } catch (error) {
-      console.error("handleMarkAssistance:", error);
-      notification({ type: "error" });
+      console.error("Error marcando asistencia:", error);
+      notification({
+        type: "error",
+        message: "Ocurrió un error al marcar la asistencia",
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -97,23 +86,21 @@ export const GetAssistance = ({ user, userLocation }) => {
 
   useEffect(() => {
     const fetchTodayAssistance = async () => {
-      const currentDate = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
+      const currentDate = dayjs().format("DD/MM/YYYY");
       const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
 
-      const existingEntry = exitsTodayAssistance(
-        todayAssistancesUser,
-        currentDate,
-        "entry",
+      const isMarkedEntry = todayAssistancesUser.some(
+        (assistance) =>
+          assistance.type === "entry" && assistance.date === currentDate,
       );
 
-      const existingOutlet = exitsTodayAssistance(
-        todayAssistancesUser,
-        currentDate,
-        "outlet",
+      const isMarkedOutlet = todayAssistancesUser.some(
+        (assistance) =>
+          assistance.type === "outlet" && assistance.date === currentDate,
       );
 
-      setIsEntry(existingEntry);
-      setIsOutlet(existingOutlet);
+      setIsEntry(isMarkedEntry);
+      setIsOutlet(isMarkedOutlet);
       setIsLoading(false);
     };
 
@@ -146,6 +133,12 @@ const AssistanceButtons = ({
   isLoading,
   isProcessing,
 }) => {
+  const isEntryBtnDisabled =
+    isLoading || isEntry || !isWithinGeofence || isOutlet || isProcessing;
+
+  const isOutletBtnDisabled =
+    isLoading || isOutlet || !isWithinGeofence || !isEntry || isProcessing;
+
   return (
     <Container>
       <Row gutter={[16, 16]}>
@@ -153,28 +146,16 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={() => handleMarkAssistance("entry")}
-              disabled={
-                isLoading ||
-                isEntry ||
-                !isWithinGeofence ||
-                isOutlet ||
-                isProcessing
-              }
-              className={`entry-btn ${isLoading || isEntry || !isWithinGeofence || isOutlet || isProcessing ? "disabled" : ""}`}
+              disabled={isEntryBtnDisabled}
+              className={`entry-btn ${isEntryBtnDisabled ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
               onClick={() => handleMarkAssistance("outlet")}
-              disabled={
-                isLoading ||
-                isOutlet ||
-                !isWithinGeofence ||
-                !isEntry ||
-                isProcessing
-              }
-              className={`outlet-btn ${isLoading || isOutlet || !isWithinGeofence || !isEntry || isProcessing ? "disabled" : ""}`}
+              disabled={isOutletBtnDisabled}
+              className={`outlet-btn ${isOutletBtnDisabled ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
@@ -207,12 +188,9 @@ const AssistanceButtons = ({
 };
 
 const Container = styled.div`
-  height: auto;
-  padding: 20px;
-  background: #fafafa;
-  border-radius: 15px;
+  padding-top: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 
   .buttons {
     width: 100%;
@@ -222,8 +200,8 @@ const Container = styled.div`
 
   .entry-btn,
   .outlet-btn {
-    padding: 90px 40px;
-    font-size: 1.5rem;
+    padding: 4em 3em;
+    font-size: 2.1rem;
     font-weight: 600;
     border: none;
     border-radius: 25px;
@@ -279,7 +257,8 @@ const Container = styled.div`
   }
 
   .map-container {
-    height: 400px;
+    width: 100%;
+    height: calc(90vh - 20px);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -291,12 +270,14 @@ const Container = styled.div`
 
   @media (max-width: 768px) {
     .map-container {
-      height: 300px;
+      width: 100%;
+      height: 100vh;
     }
 
     .entry-btn,
     .outlet-btn {
-      width: 48%;
+      font-size: 1.5rem;
+      width: 100%;
       margin-bottom: 10px;
     }
 
@@ -307,7 +288,7 @@ const Container = styled.div`
 
   @media (max-width: 480px) {
     .map-container {
-      height: 250px;
+      height: 100vh;
     }
 
     .entry-btn,
@@ -319,8 +300,19 @@ const Container = styled.div`
   @media (max-width: 350px) {
     .entry-btn,
     .outlet-btn {
-      padding: 10px 30px;
+      padding: 3em 1em;
       font-size: 1rem;
+    }
+  }
+
+  @media (orientation: landscape) {
+    .map-container {
+      height: 70vh;
+    }
+  }
+  @media (orientation: portrait) {
+    .map-container {
+      height: 50vh;
     }
   }
 `;

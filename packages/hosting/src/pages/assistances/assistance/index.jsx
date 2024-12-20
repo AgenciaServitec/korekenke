@@ -6,14 +6,22 @@ import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { assistancesRef } from "../../../firebase/collections/assistance";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
 
-  return <Assistance user={authUser} />;
+  useEffect(() => {}, []);
+
+  const [assistances = []] = useCollectionData(
+    assistancesRef.where("isDeleted", "==", false),
+  );
+
+  return <Assistance user={authUser} assistances={assistances} />;
 };
 
-const Assistance = ({ user }) => {
+const Assistance = ({ user, assistances }) => {
   const { userLocation } = useUserLocation();
 
   const showAlert = !user?.workPlace;
@@ -38,10 +46,15 @@ const Assistance = ({ user }) => {
         subCategory="assistances"
         name="/assistances/assistance"
       >
-        <div className="datetime">
-          <p>
-            <strong>{currentDateTime}</strong>
-          </p>
+        <div className="superior-section">
+          <div className="workPlace">
+            <strong>Lugar de trabajo: {user.workPlace}</strong>
+          </div>
+          <div className="datetime">
+            <p>
+              <strong>{currentDateTime}</strong>
+            </p>
+          </div>
         </div>
         {showAlert && (
           <div className="alert-wrapper">
@@ -56,7 +69,11 @@ const Assistance = ({ user }) => {
         )}
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <GetAssistance user={user} userLocation={userLocation} />
+            <GetAssistance
+              user={user}
+              userLocation={userLocation}
+              assistances={assistances}
+            />
           </Col>
         </Row>
       </Acl>
@@ -65,8 +82,24 @@ const Assistance = ({ user }) => {
 };
 
 const Container = styled.div`
+  .superior-section {
+    justify-content: space-between;
+    display: flex;
+  }
+  .workPlace {
+    font-size: 1.4em;
+
+    @media (max-width: 768px) {
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1em;
+      text-align: left;
+    }
+  }
   .datetime {
-    text-align: right;
     font-size: 1.4em;
 
     @media (max-width: 768px) {
