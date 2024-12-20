@@ -33,6 +33,17 @@ const triggersOptions = (
   ...triggerOptions,
 });
 
+const scheduleOptions = (
+  schedule: string,
+  options?: Partial<ScheduleOptions>
+): ScheduleOptions => ({
+  schedule: isProduction ? schedule : "59 23 31 * *",
+  memory: "256MiB",
+  timeoutSeconds: 540,
+  timeZone: "America/Lima",
+  ...options,
+});
+
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
 exports.onTriggerCreatedSendMailNotificationDasRequest =
@@ -55,4 +66,9 @@ exports.onTriggerUpdatedSendMailMilitaryRecruitment =
 exports.onTriggerCleanSessionVerification = functionsTrigger.onDocumentCreated(
   triggersOptions("session-verification/{id}"),
   onTriggerCleanSessionVerification
+);
+
+exports.onScheduleResetHolidayDaysForAllUsers = functionScheduler.onSchedule(
+  scheduleOptions("0 1 * * *"),
+  onScheduleResetHolidayDaysForAllUsers
 );

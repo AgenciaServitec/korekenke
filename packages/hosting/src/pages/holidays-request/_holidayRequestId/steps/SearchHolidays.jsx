@@ -44,7 +44,6 @@ export const SearchHolidays = ({
     control,
     formState: { errors },
     reset,
-    watch,
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error } = useFormUtils({ errors, schema });

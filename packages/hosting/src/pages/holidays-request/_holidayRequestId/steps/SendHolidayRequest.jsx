@@ -33,6 +33,7 @@ export const SendHolidayRequest = ({
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [loading, setLoading] = useState(false);
+
   const [startDate, endDate] = holidaysRange;
 
   const oldHolidaysByUser = holidaysByUser.map((holiday) => ({
