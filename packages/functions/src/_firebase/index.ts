@@ -10,6 +10,11 @@ export const auth = admin.auth();
 
 const projectId = process.env.GCLOUD_PROJECT;
 
+const currentEnvironment =
+  projectId === "korekenke" ? "production" : "development";
+
+const isProduction = currentEnvironment === "production";
+
 export const bucketAtFunction = projectId + ".appspot.com";
 export const firestoreFieldValue = admin.firestore.FieldValue;
 export const firestoreTimestamp = admin.firestore.Timestamp;

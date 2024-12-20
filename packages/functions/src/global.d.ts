@@ -54,6 +54,7 @@ interface User extends DefaultFirestoreProps {
   familyMembers?: FamilyMember[];
   assignedTo: AssignedTo | null;
   updateBy: string;
+  vacationDays: number;
 }
 
 interface AssignedTo {
