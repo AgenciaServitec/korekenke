@@ -1,2 +1,2 @@
 export * from "./onScheduleCleanSessionVerification";
-export * from "./onScheduleResetVacationDaysForAllUsers";
+export * from "./onScheduleResetHolidayDaysForAllUsers";

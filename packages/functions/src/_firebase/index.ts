@@ -11,7 +11,7 @@ export const auth = admin.auth();
 const projectId = process.env.GCLOUD_PROJECT;
 
 const currentEnvironment =
-  projectId === "korekenke" ? "production" : "development";
+  projectId === "korekenke-prod" ? "production" : "development";
 
 const isProduction = currentEnvironment === "production";
 

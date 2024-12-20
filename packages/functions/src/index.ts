@@ -9,13 +9,13 @@ import {
 import functionScheduler = require("firebase-functions/v2/scheduler");
 import functionsHttps = require("firebase-functions/v2/https");
 import functionsTrigger = require("firebase-functions/v2/firestore");
-import { onScheduleResetVacationDaysForAllUsers } from "./schedules";
 import { isProduction } from "./config";
 
 type HttpsOptions = functionsHttps.HttpsOptions;
 type TriggersOptions = functionsTrigger.DocumentOptions;
 type ScheduleOptions = functionScheduler.ScheduleOptions;
 
+import { onScheduleResetHolidayDaysForAllUsers } from "./schedules";
 const httpsOptions = (httpsOptions?: Partial<HttpsOptions>): HttpsOptions => ({
   timeoutSeconds: 540,
   memory: "256MiB",
@@ -68,7 +68,7 @@ exports.onTriggerCleanSessionVerification = functionsTrigger.onDocumentCreated(
   onTriggerCleanSessionVerification
 );
 
-exports.onScheduleResetVacationDaysForAllUsers = functionScheduler.onSchedule(
+exports.onScheduleResetHolidayDaysForAllUsers = functionScheduler.onSchedule(
   scheduleOptions("59 23 31 * *"),
-  onScheduleResetVacationDaysForAllUsers
+  onScheduleResetHolidayDaysForAllUsers
 );

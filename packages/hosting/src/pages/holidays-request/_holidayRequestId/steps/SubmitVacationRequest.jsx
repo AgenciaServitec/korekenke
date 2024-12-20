@@ -36,8 +36,6 @@ export const SubmitVacationRequest = ({
 
   const [startDate, endDate] = holidaysRange;
 
-  console.log("holidayDays: ", holidayDays);
-
   const oldHolidaysByUser = holidaysByUser.map((holiday) => ({
     start: dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
     end: dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE),

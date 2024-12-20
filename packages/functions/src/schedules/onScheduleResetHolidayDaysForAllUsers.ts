@@ -4,15 +4,15 @@ import { fetchUsers, updateUser } from "../_firebase/collections";
 import assert from "assert";
 import moment from "moment";
 
-export const onScheduleResetVacationDaysForAllUsers: OnSchedule = async () => {
+export const onScheduleResetHolidayDaysForAllUsers: OnSchedule = async () => {
   try {
-    await onResetHolidaysDays();
+    await onResetHolidayDays();
   } catch (e) {
-    logger.error("Error onScheduleResetVacationDaysForAllUsers: ", e);
+    logger.error("Error onScheduleResetHolidayDaysForAllUsers: ", e);
   }
 };
 
-const onResetHolidaysDays = async (): Promise<void> => {
+const onResetHolidayDays = async (): Promise<void> => {
   const users = await fetchUsers();
   assert(users, "Missing users!");
 
