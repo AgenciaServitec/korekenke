@@ -1,10 +1,6 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
-import {
-  DATE_FORMAT_TO_FIRESTORE,
-  setDocument,
-  updateDocument,
-} from "../firestore";
+import { setDocument, updateDocument } from "../firestore";
 import dayjs from "dayjs";
 
 export const assistancesRef = firestore.collection("assistances");
@@ -18,7 +14,7 @@ export const fetchAssistances = async () =>
   fetchCollectionOnce(assistancesRef.where("isDeleted", "==", false));
 
 export const fetchTodayAssistancesByUserId = async (userId) => {
-  const today = dayjs().format(DATE_FORMAT_TO_FIRESTORE);
+  const today = dayjs().format("DD/MM/YYYY");
   return fetchCollectionOnce(
     assistancesRef
       .where("user.id", "==", userId)

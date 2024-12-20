@@ -52,7 +52,7 @@ export const FullCalendarComponent = ({
         : null;
 
       return {
-        title: activity.title,
+        title: activity?.title || "Sin Título",
         start: startDateTime.toISOString(),
         end: endDateTime ? endDateTime.toISOString() : null,
         allDay: activity.allDay,

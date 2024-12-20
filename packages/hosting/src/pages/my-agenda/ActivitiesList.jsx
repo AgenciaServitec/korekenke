@@ -37,7 +37,7 @@ export const ActivitiesList = ({
       <List
         dataSource={orderBy(filterActivities, "createAt", "desc")}
         itemTitle={(activity) => (
-          <div className="title-wrapper">{activity.title}</div>
+          <div className="title-wrapper">{activity?.title || "Sin Título"}</div>
         )}
         onEditItem={(activity) => {
           onEditActivity(activity.id);

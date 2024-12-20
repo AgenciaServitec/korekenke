@@ -5,7 +5,7 @@ import { WorkPlaces } from "../../data-list";
 
 const mapStyle = {
   width: "100%",
-  height: "400px",
+  height: "100%",
 };
 
 const getWorkPlaceById = (workPlaceId) => {
@@ -19,6 +19,8 @@ const geofenceOptions = {
   strokeOpacity: 0.6,
   strokeWeight: 2,
 };
+
+const libraries = ["geometry"];
 
 export const MapComponent = ({
   center = null,
@@ -65,12 +67,12 @@ export const MapComponent = ({
     if (userLocation) {
       userValidate();
     }
-  }, [userLocation]);
+  }, [userLocation, mapCenter]);
 
   return (
     <LoadScript
       googleMapsApiKey="AIzaSyAY2QCPZzFt0DzzRAxIhvY9JB8XkDbX3aU"
-      libraries={["geometry"]}
+      libraries={libraries}
     >
       <GoogleMap
         mapContainerStyle={mapStyle}

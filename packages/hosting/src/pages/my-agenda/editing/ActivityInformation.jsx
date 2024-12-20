@@ -15,7 +15,7 @@ export const ActivityInformation = ({
   return (
     <Container>
       <div className="title-wrapper">
-        <span>{activity.title}</span>
+        <span>{activity?.title || "Sin Titulo"}</span>
       </div>
       <div className="all-content">
         <div className="information">
@@ -24,12 +24,13 @@ export const ActivityInformation = ({
               Fecha: {activity.startDate} - {activity?.endDate}
             </p>
             <p>
-              Hora: {activity.startTime} - {activity?.endTime}
+              Hora: {activity?.startTime || "Es todo el dia"} -{" "}
+              {activity?.endTime}
             </p>
           </div>
           <div className="extra-data">
             <p>Todo el día: {allDay}</p>
-            <p>Descripción: {activity.description}</p>
+            <p>Descripción: {activity?.description || "Sin descripción"}</p>
             {activity.type === "event" ? (
               <p>Dirección: {activity.address}</p>
             ) : (
