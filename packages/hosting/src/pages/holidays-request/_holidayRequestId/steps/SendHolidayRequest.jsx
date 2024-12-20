@@ -21,7 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { updateUser } from "../../../../firebase/collections";
 
-export const SubmitVacationRequest = ({
+export const SendHolidayRequest = ({
   user,
   holidaysByUser,
   holidaysRange,
