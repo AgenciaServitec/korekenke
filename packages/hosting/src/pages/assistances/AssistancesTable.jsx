@@ -73,7 +73,7 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
   const totalPages = Math.ceil(filteredAssistancesByDate.length / itemsPerPage);
 
   const handleDateChange = (date, dateString) => {
-    setFilterDate(dateString); // Establecer la fecha en formato "YYYY-MM-DD"
+    setFilterDate(dateString);
   };
 
   const handlePreviousPage = () => {
