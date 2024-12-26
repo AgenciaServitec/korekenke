@@ -258,7 +258,7 @@ const Container = styled.div`
 
   .map-container {
     width: 100%;
-    height: calc(90vh - 20px);
+    height: calc(100vh - 20px);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -307,7 +307,7 @@ const Container = styled.div`
 
   @media (orientation: landscape) {
     .map-container {
-      height: 70vh;
+      height: 90vh;
     }
   }
   @media (orientation: portrait) {
