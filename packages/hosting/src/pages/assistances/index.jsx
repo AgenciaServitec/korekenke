@@ -14,8 +14,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { assistancesRef } from "../../firebase/collections/assistance";
 import styled from "styled-components";
 import { AssistancesTable } from "./AssistancesTable";
-import { fetchUsers } from "../../firebase/collections";
-import { userFullName } from "../../utils";
+import { fetchUsersByCip } from "../../firebase/collections";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,33 +25,46 @@ export const AssistancesIntegration = () => {
   const [assistances = [], assistancesLoading, assistancesError] =
     useCollectionData(assistancesRef.where("isDeleted", "==", false));
 
+  const [searchCIP, setSearchCIP] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [usersLoading, setUsersLoading] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(false);
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        const fetchedUsers = await fetchUsers();
-        const filteredUsers =
-          authUser.roleCode === "manager"
-            ? fetchedUsers.filter(
-                (user) => user.department === authUser.department,
-              )
-            : fetchedUsers;
+  const onSearchUser = async (cip) => {
+    if (cip.length !== 9 || isNaN(Number(cip))) {
+      notification({
+        type: "warning",
+        message: "Ingrese un CIP válido (9 dígitos)",
+      });
+      return;
+    }
 
-        setUsers(filteredUsers);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      } finally {
-        setUsersLoading(false);
+    setLoadingUser(true);
+
+    try {
+      const fetchedUsers = await fetchUsersByCip(cip);
+      if (fetchedUsers.length > 0) {
+        setUsers(fetchedUsers);
+        setSelectedUser(fetchedUsers[0]);
+      } else {
+        notification({
+          type: "warning",
+          message: "No se encontró un usuario con ese CIP",
+        });
       }
-    };
+    } catch (error) {
+      console.error("Error fetching user by CIP:", error);
+      notification({ type: "error", message: "Error buscando usuario" });
+    } finally {
+      setLoadingUser(false);
+    }
+  };
 
-    (async () => {
-      await loadUsers();
-    })();
-  }, [authUser.roleCode, authUser.department]);
+  const onResetView = () => {
+    setSelectedUser(null);
+    setSearchCIP("");
+    setUsers([]);
+  };
 
   useEffect(() => {
     assistancesError && notification({ type: "error" });
@@ -64,7 +76,8 @@ export const AssistancesIntegration = () => {
     ? assistances.filter((assistance) => assistance.user.id === selectedUser.id)
     : assistances;
 
-  if (usersLoading) return <Spinner />;
+  if (loadingUser) return <Spinner />;
+  if (assistancesLoading) return <Spinner />;
 
   return (
     <Assistances
@@ -72,9 +85,11 @@ export const AssistancesIntegration = () => {
       onNavigateGoTo={onNavigateGoTo}
       assistancesLoading={assistancesLoading}
       assistances={filteredAssistances}
-      users={users}
+      searchCIP={searchCIP}
+      setSearchCIP={setSearchCIP}
+      onSearchUser={onSearchUser}
+      onResetView={onResetView}
       selectedUser={selectedUser}
-      onSelectUser={setSelectedUser}
     />
   );
 };
@@ -84,9 +99,11 @@ const Assistances = ({
   onNavigateGoTo,
   assistances,
   assistancesLoading,
-  users,
+  searchCIP,
+  setSearchCIP,
+  onSearchUser,
+  onResetView,
   selectedUser,
-  onSelectUser,
 }) => {
   return (
     <Acl
@@ -109,22 +126,24 @@ const Assistances = ({
               <Title level={2}>LISTA DE ASISTENCIAS</Title>
             </div>
             {["super_admin", "manager"].includes(user.roleCode) && (
-              <div className="user-selector">
-                <label htmlFor="user-select">Ver asistencias de:</label>
-                <select
-                  id="user-select"
-                  value={selectedUser?.id || ""}
-                  onChange={(e) =>
-                    onSelectUser(users.find((u) => u.id === e.target.value))
+              <div className="user-search">
+                <label htmlFor="cip-search">Buscar por CIP:</label>
+                <input
+                  id="cip-search"
+                  type="text"
+                  placeholder="Ingrese CIP (9 dígitos)"
+                  value={searchCIP}
+                  onChange={(e) => setSearchCIP(e.target.value)}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" && onSearchUser(searchCIP)
                   }
-                >
-                  <option value="">Todos los usuarios</option>
-                  {users.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userFullName(u)}
-                    </option>
-                  ))}
-                </select>
+                />
+                <Button onClick={() => onSearchUser(searchCIP)}>Buscar</Button>
+                {selectedUser && (
+                  <Button onClick={onResetView} className="reset-button">
+                    Ver todas las asistencias
+                  </Button>
+                )}
               </div>
             )}
           </Col>
@@ -162,20 +181,10 @@ const Container = styled.div`
     }
   }
 
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1em;
-    overflow: hidden;
-  }
-
-  .user-selector {
+  .user-search {
     display: flex;
     align-items: center;
     gap: 0.5em;
-    flex-grow: 1;
-    justify-content: flex-start;
     margin-top: 1em;
 
     label {
@@ -183,12 +192,16 @@ const Container = styled.div`
       white-space: nowrap;
     }
 
-    select {
+    input {
       padding: 0.5em;
       border: 1px solid #ccc;
       border-radius: 4px;
-      min-width: 150px;
       flex-shrink: 1;
+      min-width: 200px;
+    }
+
+    button {
+      padding: 0.5em 1em;
     }
   }
 
@@ -197,10 +210,8 @@ const Container = styled.div`
       flex-direction: column;
       align-items: flex-start;
     }
-
-    .user-selector {
-      margin-top: 1em;
-      width: 100%;
+    .user-search {
+      flex-wrap: wrap;
     }
     .button {
       font-size: 14px;
