@@ -57,7 +57,6 @@ export const EditHolidayIntegration = ({ user }) => {
       };
 
       await updateHoliday(holidayRequest.id, assignUpdateProps(updatedData));
-
       notification({
         type: "success",
       });

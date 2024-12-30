@@ -4,9 +4,12 @@ import { userFullName } from "../../../../utils";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
+import { CustomStampSheet } from "../../../../components";
 
 export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
   const { current, old } = holiday.user.holidaysDetail;
+  const { secondSealData } = holiday.sealData;
+
   const position = `Jefe Dpto. Personal - ${holiday.gu}`;
 
   const totalHolidays = {
@@ -70,6 +73,12 @@ export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
                   value={`${window.location.href}`}
                   icon={LogoPrimary}
                   style={{ objectFit: "contain" }}
+                />
+              </span>
+              <span className="seal">
+                <CustomStampSheet
+                  topText={secondSealData.sealTopText}
+                  bottomText={secondSealData.sealBottomText}
                 />
               </span>
               <SignatureSheet2
@@ -152,11 +161,17 @@ const Container = styled.div`
           justify-content: space-between;
           display: flex;
           gap: 1em;
-          margin-top: 3em;
+          margin-top: 5em;
 
           .qr {
             display: flex;
-            align-items: center;
+            align-items: end;
+          }
+
+          .seal {
+            margin-left: 12rem;
+            display: flex;
+            align-items: end;
           }
 
           & > div {

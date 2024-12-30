@@ -6,11 +6,13 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
 import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
+import { CustomStampSheet } from "../../../../components";
 
 export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
   const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
 
   const { current } = holiday.user.holidaysDetail;
+  const { firstSealData } = holiday.sealData;
   return (
     <Container>
       <div className="sheet">
@@ -83,6 +85,12 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
                   style={{
                     objectFit: "contain",
                   }}
+                />
+              </span>
+              <span className="seal">
+                <CustomStampSheet
+                  topText={firstSealData.sealTopText}
+                  bottomText={firstSealData.sealBottomText}
                 />
               </span>
               <span className="date">
@@ -196,15 +204,20 @@ const Container = styled.div`
 
         &__footer {
           display: flex;
+          justify-content: space-between;
 
           .qr {
-            width: 50%;
             display: flex;
             align-items: end;
           }
 
+          .seal {
+            display: flex;
+            align-items: end;
+            margin-left: 12rem;
+          }
+
           .date {
-            width: 50%;
             display: flex;
             flex-direction: column;
             align-items: end;
@@ -221,7 +234,6 @@ const Container = styled.div`
           }
 
           .signature {
-            width: 50%;
             display: flex;
             flex-direction: column;
             text-align: center;

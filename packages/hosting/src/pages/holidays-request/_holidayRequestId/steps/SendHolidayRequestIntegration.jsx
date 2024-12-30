@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Col,
@@ -20,8 +20,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../../hooks";
 import { updateUser } from "../../../../firebase/collections";
+import { SignatureAndSealComponent } from "../SignatureAndSealComponent";
 
-export const SendHolidayRequest = ({
+export const SendHolidayRequestIntegration = ({
   user,
   holidaysByUser,
   holidaysRange,
@@ -31,11 +32,96 @@ export const SendHolidayRequest = ({
   holidayDays,
 }) => {
   const { assignCreateProps } = useDefaultFirestoreProps();
-
   const [loading, setLoading] = useState(false);
+  const [weekDays, setWeekDays] = useState([]);
+  const [oldHolidaysRequest, setOldHolidaysRequest] = useState([]);
+  const [seals, setSeals] = useState([]);
 
+  const onSetSeals = (sealText) => {
+    setSeals(sealText);
+  };
+
+  const onSetWeekDays = (weekDays) => setWeekDays(weekDays);
+  const onSetOldHolidaysRequest = (oldHolidaysRequest) =>
+    setOldHolidaysRequest(oldHolidaysRequest);
+
+  const _user = {
+    ...user,
+    holidaysDetail: {
+      current: {
+        ...weekDays,
+      },
+      old: {
+        ...oldHolidaysRequest,
+      },
+    },
+    holidayDays: holidayDays || 0,
+  };
+
+  const mapForm = (formData) => ({
+    ...holidayRequest,
+    user: omit(_user, "acls"),
+    startDate: dayjs(holidaysRange[0].toDate()).format(
+      DATE_FORMAT_TO_FIRESTORE,
+    ),
+    endDate: dayjs(holidaysRange[1].toDate()).format(DATE_FORMAT_TO_FIRESTORE),
+    gu: formData.gu,
+    uu: formData.uu,
+    reason: formData.reason,
+    status: "waiting",
+    seals: seals,
+    wasRead: false,
+  });
+
+  const onSubmit = async (formData) => {
+    try {
+      setLoading(true);
+
+      const holidayData = mapForm(formData);
+      await addHoliday(assignCreateProps(holidayData));
+
+      await updateUser(user.id, {
+        ...user,
+        holidayDays: holidayDays || 0,
+      });
+
+      notification({
+        type: "success",
+      });
+
+      onNavigateGoTo("/holidays-request");
+    } catch (e) {
+      console.log("Error:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <SendHolidayRequest
+      onSubmit={onSubmit}
+      holidaysByUser={holidaysByUser}
+      holidaysRange={holidaysRange}
+      onSetCurrentStep={onSetCurrentStep}
+      onSetWeekDays={onSetWeekDays}
+      onSetOldHolidaysRequest={onSetOldHolidaysRequest}
+      onSetSeals={onSetSeals}
+      loading={loading}
+    />
+  );
+};
+
+const SendHolidayRequest = ({
+  onSubmit,
+  holidaysByUser,
+  holidaysRange,
+  onSetCurrentStep,
+  onSetWeekDays,
+  onSetOldHolidaysRequest,
+  onSetSeals,
+  loading,
+}) => {
   const [startDate, endDate] = holidaysRange;
-
   const oldHolidaysByUser = holidaysByUser.map((holiday) => ({
     start: dayjs(holiday.startDate, DATE_FORMAT_TO_FIRESTORE),
     end: dayjs(holiday.endDate, DATE_FORMAT_TO_FIRESTORE),
@@ -126,56 +212,10 @@ export const SendHolidayRequest = ({
     };
   };
 
-  const _user = {
-    ...user,
-    holidaysDetail: {
-      current: {
-        ...weekDays(startDate, endDate),
-      },
-      old: {
-        ...oldHolidaysRequest(oldHolidaysByUser),
-      },
-    },
-    holidayDays: holidayDays || 0,
-  };
-
-  const mapForm = (formData) => ({
-    ...holidayRequest,
-    user: omit(_user, "acls"),
-    startDate: dayjs(holidaysRange[0].toDate()).format(
-      DATE_FORMAT_TO_FIRESTORE,
-    ),
-    endDate: dayjs(holidaysRange[1].toDate()).format(DATE_FORMAT_TO_FIRESTORE),
-    gu: formData.gu,
-    uu: formData.uu,
-    reason: formData.reason,
-    status: "waiting",
-    wasRead: false,
-  });
-
-  const onSubmit = async (formData) => {
-    try {
-      setLoading(true);
-
-      const holidayData = mapForm(formData);
-      await addHoliday(assignCreateProps(holidayData));
-
-      await updateUser(user.id, {
-        ...user,
-        holidayDays: holidayDays || 0,
-      });
-
-      notification({
-        type: "success",
-      });
-
-      onNavigateGoTo("/holidays-request");
-    } catch (e) {
-      console.log("Error:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    onSetWeekDays(weekDays(startDate, endDate));
+    onSetOldHolidaysRequest(oldHolidaysRequest(oldHolidaysByUser));
+  }, []);
 
   return (
     <Row gutter={[16, 16]}>
@@ -219,6 +259,13 @@ export const SendHolidayRequest = ({
             />
           </Col>
         </Row>
+        <Col span={24}>
+          <Title level={3} margin="1em 0 0 0">
+            Sellos y Firmas de Aprobación:
+          </Title>
+        </Col>
+        <SignatureAndSealComponent onSetSeals={onSetSeals} />
+
         <Col span={24}>
           <Title level={3}>Motivo y/o Asunto</Title>
         </Col>
