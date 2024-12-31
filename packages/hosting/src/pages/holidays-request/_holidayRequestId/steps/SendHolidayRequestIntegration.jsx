@@ -35,11 +35,6 @@ export const SendHolidayRequestIntegration = ({
   const [loading, setLoading] = useState(false);
   const [weekDays, setWeekDays] = useState([]);
   const [oldHolidaysRequest, setOldHolidaysRequest] = useState([]);
-  const [seals, setSeals] = useState([]);
-
-  const onSetSeals = (sealText) => {
-    setSeals(sealText);
-  };
 
   const onSetWeekDays = (weekDays) => setWeekDays(weekDays);
   const onSetOldHolidaysRequest = (oldHolidaysRequest) =>
@@ -69,15 +64,26 @@ export const SendHolidayRequestIntegration = ({
     uu: formData.uu,
     reason: formData.reason,
     status: "waiting",
-    seals: seals,
+    seals: { firstSeal: formData.firstSeal, secondSeal: formData.secondSeal },
     wasRead: false,
   });
 
-  const onSubmit = async (formData) => {
+  const emptyField = (sealData) =>
+    Object.values(sealData).some((value) => !value);
+
+  const onSaveHoliday = async (formData) => {
     try {
       setLoading(true);
 
+      if (emptyField(formData.firstSeal) || emptyField(formData.secondSeal)) {
+        return notification({
+          type: "warning",
+          title: "Por favor complete todos los campos",
+        });
+      }
+
       const holidayData = mapForm(formData);
+
       await addHoliday(assignCreateProps(holidayData));
 
       await updateUser(user.id, {
@@ -99,26 +105,24 @@ export const SendHolidayRequestIntegration = ({
 
   return (
     <SendHolidayRequest
-      onSubmit={onSubmit}
       holidaysByUser={holidaysByUser}
       holidaysRange={holidaysRange}
       onSetCurrentStep={onSetCurrentStep}
       onSetWeekDays={onSetWeekDays}
       onSetOldHolidaysRequest={onSetOldHolidaysRequest}
-      onSetSeals={onSetSeals}
       loading={loading}
+      onSaveHoliday={onSaveHoliday}
     />
   );
 };
 
 const SendHolidayRequest = ({
-  onSubmit,
+  onSaveHoliday,
   holidaysByUser,
   holidaysRange,
   onSetCurrentStep,
   onSetWeekDays,
   onSetOldHolidaysRequest,
-  onSetSeals,
   loading,
 }) => {
   const [startDate, endDate] = holidaysRange;
@@ -131,13 +135,36 @@ const SendHolidayRequest = ({
     gu: yup.string().required(),
     uu: yup.string().required(),
     reason: yup.string(),
+    firstSeal: yup
+      .object({
+        sealTopText: yup.string().required(),
+        sealBottomText: yup.string().required(),
+        supervisorName: yup.string().required(),
+        supervisorCip: yup.string().required(),
+        supervisorDegree: yup.string().required(),
+      })
+      .required(),
+    secondSeal: yup
+      .object({
+        sealTopText: yup.string().required(),
+        sealBottomText: yup.string().required(),
+        supervisorName: yup.string().required(),
+        supervisorCip: yup.string().required(),
+        supervisorDegree: yup.string().required(),
+      })
+      .required(),
   });
 
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      firstSeal: null,
+    },
+  });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
@@ -172,6 +199,7 @@ const SendHolidayRequest = ({
         };
       });
     }
+
     return {
       oldWorkingDays,
       oldSaturdays,
@@ -217,6 +245,8 @@ const SendHolidayRequest = ({
     onSetOldHolidaysRequest(oldHolidaysRequest(oldHolidaysByUser));
   }, []);
 
+  const onSubmit = (formData) => onSaveHoliday(formData);
+
   return (
     <Row gutter={[16, 16]}>
       <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
@@ -259,17 +289,47 @@ const SendHolidayRequest = ({
             />
           </Col>
         </Row>
-        <Col span={24}>
-          <Title level={3} margin="1em 0 0 0">
-            Sellos y Firmas de Aprobación:
-          </Title>
-        </Col>
-        <SignatureAndSealComponent onSetSeals={onSetSeals} />
-
-        <Col span={24}>
-          <Title level={3}>Motivo y/o Asunto</Title>
-        </Col>
         <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Title level={3} margin="1em 0 0 0">
+              Sellos y Firmas de Aprobación:
+            </Title>
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="firstSeal"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <SignatureAndSealComponent
+                  label="Encargado 1"
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="secondSeal"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <SignatureAndSealComponent
+                  label="Encargado 2"
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Title level={3}>Motivo y/o Asunto</Title>
+          </Col>
           <Col span={24}>
             <Controller
               name="reason"
