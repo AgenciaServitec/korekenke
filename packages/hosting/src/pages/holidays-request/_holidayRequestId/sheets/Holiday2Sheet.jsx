@@ -1,12 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { userFullName } from "../../../../utils";
-import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
 import { CustomStampSheet } from "../../../../components";
 
-export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
+export const Holiday2Sheet = ({ holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
   const { secondSeal } = holiday.seals;
 

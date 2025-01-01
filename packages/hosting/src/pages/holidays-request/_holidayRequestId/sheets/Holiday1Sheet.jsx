@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { findDegree, userFullName } from "../../../../utils";
+import { userFullName } from "../../../../utils";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
-import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
 import { CustomStampSheet } from "../../../../components";
 
-export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
+export const Holiday1Sheet = ({ user, holiday }) => {
   const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
 
   const { current } = holiday.user.holidaysDetail;
