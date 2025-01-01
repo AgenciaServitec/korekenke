@@ -84,13 +84,6 @@ export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
                   supervisorDegree={secondSeal.supervisorDegree}
                 />
               </span>
-              {/*<SignatureSheet2*/}
-              {/*  signaturethumbUrl={departmentBoss?.signaturePhoto?.thumbUrl}*/}
-              {/*  signatureUrl={departmentBoss?.signaturePhoto?.url}*/}
-              {/*  name={userFullName(departmentBoss)}*/}
-              {/*  cip={departmentBoss?.cip}*/}
-              {/*  position={position}*/}
-              {/*/>*/}
             </div>
           </div>
         </div>

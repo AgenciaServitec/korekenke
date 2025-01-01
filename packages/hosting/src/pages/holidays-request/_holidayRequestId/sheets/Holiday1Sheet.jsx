@@ -82,12 +82,6 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
                       "D [del] MMMM [del] YYYY",
                     )
                   : ""}
-                {/*<SignatureSheet2*/}
-                {/*  name={userFullName(entityManager)}*/}
-                {/*  cip={entityManager?.cip}*/}
-                {/*  degree={findDegree(entityManager?.degree)?.label}*/}
-                {/*  position={position}*/}
-                {/*/>*/}
               </p>
             </p>
 
