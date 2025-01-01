@@ -8,8 +8,6 @@ import { LogoPrimary } from "../../../../images";
 import { CustomStampSheet } from "../../../../components";
 
 export const Holiday1Sheet = ({ user, holiday }) => {
-  const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
-
   const { current } = holiday.user.holidaysDetail;
   const { firstSeal } = holiday.seals;
   return (

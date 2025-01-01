@@ -8,8 +8,6 @@ export const Holiday2Sheet = ({ holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
   const { secondSeal } = holiday.seals;
 
-  const position = `Jefe Dpto. Personal - ${holiday.gu}`;
-
   const totalHolidays = {
     totalWorkingDays: current.workingDays + old.oldWorkingDays,
     totalSaturdays: current.saturdays + old.oldSaturdays,
