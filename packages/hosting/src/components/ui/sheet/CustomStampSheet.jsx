@@ -112,7 +112,7 @@ const Container = styled.div`
   .signature {
     text-transform: capitalize;
     text-align: center;
-    padding: 0.5em 1em;
+    padding: 0.5em 1.5em;
     border-top: 3px dotted black;
     line-height: 1.3em;
 

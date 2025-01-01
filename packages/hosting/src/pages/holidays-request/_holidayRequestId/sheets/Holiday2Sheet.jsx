@@ -8,7 +8,7 @@ import { CustomStampSheet } from "../../../../components";
 
 export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
   const { current, old } = holiday.user.holidaysDetail;
-  const { secondSealData } = holiday.sealData;
+  const { secondSeal } = holiday.seals;
 
   const position = `Jefe Dpto. Personal - ${holiday.gu}`;
 
@@ -77,17 +77,20 @@ export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
               </span>
               <span className="seal">
                 <CustomStampSheet
-                  topText={secondSealData.sealTopText}
-                  bottomText={secondSealData.sealBottomText}
+                  topText={secondSeal.sealTopText}
+                  bottomText={secondSeal.sealBottomText}
+                  supervisorName={secondSeal.supervisorName}
+                  supervisorCip={secondSeal.supervisorCip}
+                  supervisorDegree={secondSeal.supervisorDegree}
                 />
               </span>
-              <SignatureSheet2
-                signaturethumbUrl={departmentBoss?.signaturePhoto?.thumbUrl}
-                signatureUrl={departmentBoss?.signaturePhoto?.url}
-                name={userFullName(departmentBoss)}
-                cip={departmentBoss?.cip}
-                position={position}
-              />
+              {/*<SignatureSheet2*/}
+              {/*  signaturethumbUrl={departmentBoss?.signaturePhoto?.thumbUrl}*/}
+              {/*  signatureUrl={departmentBoss?.signaturePhoto?.url}*/}
+              {/*  name={userFullName(departmentBoss)}*/}
+              {/*  cip={departmentBoss?.cip}*/}
+              {/*  position={position}*/}
+              {/*/>*/}
             </div>
           </div>
         </div>

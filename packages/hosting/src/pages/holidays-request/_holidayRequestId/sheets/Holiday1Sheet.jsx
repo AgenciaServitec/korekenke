@@ -12,7 +12,7 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
   const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
 
   const { current } = holiday.user.holidaysDetail;
-  const { firstSealData } = holiday.sealData;
+  const { firstSeal } = holiday.seals;
   return (
     <Container>
       <div className="sheet">
@@ -75,6 +75,20 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
                   <td>{user?.phone?.number}</td>
                 </tr>
               </table>
+              <p className="date">
+                San Borja,&nbsp;
+                {holiday
+                  ? dayjs(holiday?.createAt.toDate()).format(
+                      "D [del] MMMM [del] YYYY",
+                    )
+                  : ""}
+                {/*<SignatureSheet2*/}
+                {/*  name={userFullName(entityManager)}*/}
+                {/*  cip={entityManager?.cip}*/}
+                {/*  degree={findDegree(entityManager?.degree)?.label}*/}
+                {/*  position={position}*/}
+                {/*/>*/}
+              </p>
             </p>
 
             <div className="request-content__footer">
@@ -89,22 +103,11 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
               </span>
               <span className="seal">
                 <CustomStampSheet
-                  topText={firstSealData.sealTopText}
-                  bottomText={firstSealData.sealBottomText}
-                />
-              </span>
-              <span className="date">
-                San Borja,&nbsp;
-                {holiday
-                  ? dayjs(holiday?.createAt.toDate()).format(
-                      "D [del] MMMM [del] YYYY",
-                    )
-                  : ""}
-                <SignatureSheet2
-                  name={userFullName(entityManager)}
-                  cip={entityManager?.cip}
-                  degree={findDegree(entityManager?.degree)?.label}
-                  position={position}
+                  topText={firstSeal.sealTopText}
+                  bottomText={firstSeal.sealBottomText}
+                  supervisorName={firstSeal.supervisorName}
+                  supervisorCip={firstSeal.supervisorCip}
+                  supervisorDegree={firstSeal.supervisorDegree}
                 />
               </span>
             </div>
@@ -200,22 +203,6 @@ const Container = styled.div`
           span {
             font-weight: 500;
           }
-        }
-
-        &__footer {
-          display: flex;
-          justify-content: space-between;
-
-          .qr {
-            display: flex;
-            align-items: end;
-          }
-
-          .seal {
-            display: flex;
-            align-items: end;
-            margin-left: 12rem;
-          }
 
           .date {
             display: flex;
@@ -223,44 +210,27 @@ const Container = styled.div`
             align-items: end;
             text-align: end;
             font-size: 1.5em;
+          }
+        }
 
-            span {
-              font-weight: 500;
-            }
+        &__footer {
+          display: flex;
+          margin-top: 2em;
+
+          .qr {
+            width: 50%;
+            display: flex;
+            align-items: end;
+          }
+
+          .seal {
+            width: 50%;
+            display: flex;
+            align-items: end;
           }
 
           & > div {
             display: flex;
-          }
-
-          .signature {
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            gap: 0.3em;
-            font-size: 0.7em;
-
-            &__item {
-              font-weight: 500;
-
-              .img {
-                width: 100%;
-                height: 8em;
-                padding: 0.5em;
-                border-bottom: 2px solid black;
-                margin-bottom: 0.5em;
-
-                img {
-                  width: 100%;
-                  height: 100%;
-                  object-fit: contain;
-                }
-              }
-
-              p {
-                padding-top: 0.5em;
-              }
-            }
           }
 
           .cip {
