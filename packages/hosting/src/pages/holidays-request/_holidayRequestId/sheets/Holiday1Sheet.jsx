@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { findDegree, userFullName } from "../../../../utils";
+import { userFullName } from "../../../../utils";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../../../firebase/firestore";
-import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
+import { CustomStampSheet } from "../../../../components";
 
-export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
-  const position = `Jefe de Estado Mayor del ${holiday?.gu || ""}`;
-
+export const Holiday1Sheet = ({ user, holiday }) => {
   const { current } = holiday.user.holidaysDetail;
+  const { firstSeal } = holiday.seals;
   return (
     <Container>
       <div className="sheet">
@@ -73,6 +72,14 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
                   <td>{user?.phone?.number}</td>
                 </tr>
               </table>
+              <p className="date">
+                San Borja,&nbsp;
+                {holiday
+                  ? dayjs(holiday?.createAt.toDate()).format(
+                      "D [del] MMMM [del] YYYY",
+                    )
+                  : ""}
+              </p>
             </p>
 
             <div className="request-content__footer">
@@ -85,18 +92,13 @@ export const Holiday1Sheet = ({ user, holiday, entityManager }) => {
                   }}
                 />
               </span>
-              <span className="date">
-                San Borja,&nbsp;
-                {holiday
-                  ? dayjs(holiday?.createAt.toDate()).format(
-                      "D [del] MMMM [del] YYYY",
-                    )
-                  : ""}
-                <SignatureSheet2
-                  name={userFullName(entityManager)}
-                  cip={entityManager?.cip}
-                  degree={findDegree(entityManager?.degree)?.label}
-                  position={position}
+              <span className="seal">
+                <CustomStampSheet
+                  topText={firstSeal.sealTopText}
+                  bottomText={firstSeal.sealBottomText}
+                  supervisorName={firstSeal.supervisorName}
+                  supervisorCip={firstSeal.supervisorCip}
+                  supervisorDegree={firstSeal.supervisorDegree}
                 />
               </span>
             </div>
@@ -192,10 +194,19 @@ const Container = styled.div`
           span {
             font-weight: 500;
           }
+
+          .date {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            text-align: end;
+            font-size: 1.5em;
+          }
         }
 
         &__footer {
           display: flex;
+          margin-top: 2em;
 
           .qr {
             width: 50%;
@@ -203,52 +214,14 @@ const Container = styled.div`
             align-items: end;
           }
 
-          .date {
+          .seal {
             width: 50%;
             display: flex;
-            flex-direction: column;
             align-items: end;
-            text-align: end;
-            font-size: 1.5em;
-
-            span {
-              font-weight: 500;
-            }
           }
 
           & > div {
             display: flex;
-          }
-
-          .signature {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            gap: 0.3em;
-            font-size: 0.7em;
-
-            &__item {
-              font-weight: 500;
-
-              .img {
-                width: 100%;
-                height: 8em;
-                padding: 0.5em;
-                border-bottom: 2px solid black;
-                margin-bottom: 0.5em;
-
-                img {
-                  width: 100%;
-                  height: 100%;
-                  object-fit: contain;
-                }
-              }
-
-              p {
-                padding-top: 0.5em;
-              }
-            }
           }
 
           .cip {

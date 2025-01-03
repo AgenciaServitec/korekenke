@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { userFullName } from "../../../../utils";
-import { SignatureSheet2 } from "../../../../components/ui/sheet/SignatureSheet2";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
+import { CustomStampSheet } from "../../../../components";
 
-export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
+export const Holiday2Sheet = ({ holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
-  const position = `Jefe Dpto. Personal - ${holiday.gu}`;
+  const { secondSeal } = holiday.seals;
 
   const totalHolidays = {
     totalWorkingDays: current.workingDays + old.oldWorkingDays,
@@ -72,13 +71,15 @@ export const Holiday2Sheet = ({ holiday, departmentBoss }) => {
                   style={{ objectFit: "contain" }}
                 />
               </span>
-              <SignatureSheet2
-                signaturethumbUrl={departmentBoss?.signaturePhoto?.thumbUrl}
-                signatureUrl={departmentBoss?.signaturePhoto?.url}
-                name={userFullName(departmentBoss)}
-                cip={departmentBoss?.cip}
-                position={position}
-              />
+              <span className="seal">
+                <CustomStampSheet
+                  topText={secondSeal.sealTopText}
+                  bottomText={secondSeal.sealBottomText}
+                  supervisorName={secondSeal.supervisorName}
+                  supervisorCip={secondSeal.supervisorCip}
+                  supervisorDegree={secondSeal.supervisorDegree}
+                />
+              </span>
             </div>
           </div>
         </div>
@@ -152,11 +153,17 @@ const Container = styled.div`
           justify-content: space-between;
           display: flex;
           gap: 1em;
-          margin-top: 3em;
+          margin-top: 5em;
 
           .qr {
             display: flex;
-            align-items: center;
+            align-items: end;
+          }
+
+          .seal {
+            margin-left: 12rem;
+            display: flex;
+            align-items: end;
           }
 
           & > div {

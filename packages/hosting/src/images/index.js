@@ -35,3 +35,5 @@ export { default as CaninesPaws } from "./webp/canines-paws.webp";
 
 export { default as LogoServicioVeterinarioRemontaEjercito } from "./webp/logo-servicio-veterinario-remonta-ejercito.webp";
 export { default as ImgNoFound } from "./webp/img-no-found.webp";
+
+export { default as PeruShield } from "./webp/shield.webp";
