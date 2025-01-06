@@ -13,8 +13,7 @@ import {
   faEdit,
   faEye,
   faFilePdf,
-  faFilter,
-  faReply,
+  faFileUpload,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { userFullName } from "../../utils";
@@ -34,8 +33,7 @@ export const HolidaysTable = ({
   onEditHolidayRequest,
   onConfirmDeleteHolidayRequest,
   onShowCalendar,
-  onEvaluationHolidayRequest,
-  onAddReplyHolidayRequest,
+  onShowSubmitPDF,
   onShowHolidayRequestInformation,
 }) => {
   const navigate = useNavigate();
@@ -176,31 +174,15 @@ export const HolidaysTable = ({
             <Acl
               category="public"
               subCategory="holidaysRequest"
-              name="/holidays-request#proceeds"
+              name="/holidays-request#submit-pdf"
             >
-              {["waiting", "notProceeds"].includes(holiday.status) && (
-                <IconAction
-                  tooltipTitle="Evaluación de solicitud"
-                  icon={faFilter}
-                  onClick={() => onEvaluationHolidayRequest(holiday)}
-                />
-              )}
+              <IconAction
+                tooltipTitle="Subir PDF"
+                icon={faFileUpload}
+                styled={{ color: (theme) => theme.colors.error }}
+                onClick={() => onShowSubmitPDF(holiday)}
+              />
             </Acl>
-            {bossEntityGu?.id === user?.id &&
-              holiday?.status === "inProgress" && (
-                <Acl
-                  category="public"
-                  subCategory="holidaysRequest"
-                  name="/holidays-request#reply"
-                >
-                  <IconAction
-                    tooltipTitle="Responder solicitud"
-                    icon={faReply}
-                    styled={{ color: (theme) => theme.colors.primary }}
-                    onClick={() => onAddReplyHolidayRequest(holiday)}
-                  />
-                </Acl>
-              )}
             <Acl
               category="public"
               subCategory="holidaysRequest"
