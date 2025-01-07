@@ -223,7 +223,7 @@ export const HolidaysTable = ({
     {
       title: "Documento (PDF)",
       align: "center",
-      width: ["8rem", "100%"],
+      width: ["9rem", "100%"],
       render: (holiday) => {
         return (
           <Acl
