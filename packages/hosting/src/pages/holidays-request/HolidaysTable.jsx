@@ -12,8 +12,9 @@ import {
   faCalendar,
   faEdit,
   faEye,
+  faFileArrowDown,
+  faFileArrowUp,
   faFilePdf,
-  faFileUpload,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { userFullName } from "../../utils";
@@ -174,18 +175,6 @@ export const HolidaysTable = ({
             <Acl
               category="public"
               subCategory="holidaysRequest"
-              name="/holidays-request#submit-pdf"
-            >
-              <IconAction
-                tooltipTitle="Subir PDF"
-                icon={faFileUpload}
-                styled={{ color: (theme) => theme.colors.error }}
-                onClick={() => onShowSubmitPDF(holiday)}
-              />
-            </Acl>
-            <Acl
-              category="public"
-              subCategory="holidaysRequest"
               name="/holidays-request/:holidayRequestId/sheets/:userId"
             >
               <IconAction
@@ -228,6 +217,30 @@ export const HolidaysTable = ({
               </>
             )}
           </Space>
+        );
+      },
+    },
+    {
+      title: "Documento (PDF)",
+      align: "center",
+      width: ["8rem", "100%"],
+      render: (holiday) => {
+        return (
+          <Acl
+            category="public"
+            subCategory="holidaysRequest"
+            name="/holidays-request#submit-pdf"
+          >
+            <IconAction
+              tooltipTitle="Subir PDF"
+              icon={holiday.document ? faFileArrowUp : faFileArrowDown}
+              styled={{
+                color: (theme) =>
+                  holiday.document ? theme.colors.info : theme.colors.error,
+              }}
+              onClick={() => onShowSubmitPDF(holiday)}
+            />
+          </Acl>
         );
       },
     },
