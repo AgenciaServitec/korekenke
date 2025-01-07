@@ -130,9 +130,8 @@
       "/holidays-request/:holidayRequestId": "Editar solicitud",
       "/holidays-request#delete": "Eliminar solicitud",
       "/holidays-request#showCalendar": "Ver calendario",
-      "/holidays-request#proceeds": "Evaluación Solicitud",
-      "/holidays-request/:holidayRequestId/sheets/:userId": "Pdfs de la solicitud",
-      "/holidays-request#reply": "Responder solicitud"
+      "/holidays-request#submit-pdf": "Subir PDF",
+      "/holidays-request/:holidayRequestId/sheets/:userId": "Pdfs de la solicitud"
     }
   },
   "jefatura-de-bienestar-del-ejercito": {

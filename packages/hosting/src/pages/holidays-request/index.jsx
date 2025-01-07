@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { HolidaysTable } from "./holidaysTable";
+import { HolidaysTable } from "./HolidaysTable";
 import {
   Acl,
   AddButton,
@@ -23,9 +23,8 @@ import { useDefaultFirestoreProps, useDevice } from "../../hooks";
 import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import dayjs from "dayjs";
 import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
-import { HolidayRequestProceedsModal } from "./HolidayRequestProceeds";
-import { HolidayRequestReply } from "./HolidayRequestReply";
 import { HolidayRequestInformation } from "./HolidayRequestInformation";
+import { HolidaySubmitPdf } from "./HolidaySubmitPDF";
 
 const FORMAT_DATE_FULLCALENDAR = "YYYY-MM-DD";
 
@@ -102,40 +101,26 @@ const HolidayList = ({
     });
   };
 
-  const onEvaluationHolidayRequest = (holiday) => {
-    onShowModal({
-      title: "Evaluación de la solicitud",
-      width: `${isTablet ? "90%" : "50%"}`,
-      onRenderBody: () => (
-        <HolidayRequestProceedsModal
-          key={holiday.id}
-          holidayRequest={holiday}
-          onCloseModal={onCloseModal}
-        />
-      ),
-    });
-  };
-
-  const onAddReplyHolidayRequest = (holiday) => {
-    onShowModal({
-      title: "Responder solicitud",
-      width: `${isTablet ? "90%" : "50%"}`,
-      onRenderBody: () => (
-        <HolidayRequestReply
-          key={holiday.id}
-          holidayRequest={holiday}
-          onCloseModal={onCloseModal}
-        />
-      ),
-    });
-  };
-
   const onShowHolidayRequestInformation = (holiday) => {
     onShowModal({
       title: "Información de respuesta",
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
         <HolidayRequestInformation key={holiday.id} holidayRequest={holiday} />
+      ),
+    });
+  };
+
+  const onShowSubmitPDF = (holiday) => {
+    onShowModal({
+      title: "Subir Documento (PDF)",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <HolidaySubmitPdf
+          key={holiday.id}
+          holidayRequest={holiday}
+          onCloseModal={onCloseModal}
+        />
       ),
     });
   };
@@ -179,8 +164,7 @@ const HolidayList = ({
               onConfirmDeleteHolidayRequest={onConfirmDeleteHolidayRequest}
               onEditHolidayRequest={onEditHolidayRequest}
               onShowCalendar={onShowCalendar}
-              onEvaluationHolidayRequest={onEvaluationHolidayRequest}
-              onAddReplyHolidayRequest={onAddReplyHolidayRequest}
+              onShowSubmitPDF={onShowSubmitPDF}
               onShowHolidayRequestInformation={onShowHolidayRequestInformation}
             />
           </Col>
