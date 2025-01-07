@@ -154,6 +154,30 @@ export const HolidaysTable = ({
       },
     },
     {
+      title: "Documento (PDF)",
+      align: "center",
+      width: ["9rem", "100%"],
+      render: (holiday) => {
+        return (
+          <Acl
+            category="public"
+            subCategory="holidaysRequest"
+            name="/holidays-request#submit-pdf"
+          >
+            <IconAction
+              tooltipTitle="Subir PDF"
+              icon={holiday.document ? faFileArrowUp : faFileArrowDown}
+              styled={{
+                color: (theme) =>
+                  holiday.document ? theme.colors.info : theme.colors.error,
+              }}
+              onClick={() => onShowSubmitPDF(holiday)}
+            />
+          </Acl>
+        );
+      },
+    },
+    {
       title: "Opciones",
       align: "start",
       width: ["13rem", "100%"],
@@ -217,30 +241,6 @@ export const HolidaysTable = ({
               </>
             )}
           </Space>
-        );
-      },
-    },
-    {
-      title: "Documento (PDF)",
-      align: "center",
-      width: ["9rem", "100%"],
-      render: (holiday) => {
-        return (
-          <Acl
-            category="public"
-            subCategory="holidaysRequest"
-            name="/holidays-request#submit-pdf"
-          >
-            <IconAction
-              tooltipTitle="Subir PDF"
-              icon={holiday.document ? faFileArrowUp : faFileArrowDown}
-              styled={{
-                color: (theme) =>
-                  holiday.document ? theme.colors.info : theme.colors.error,
-              }}
-              onClick={() => onShowSubmitPDF(holiday)}
-            />
-          </Acl>
         );
       },
     },
