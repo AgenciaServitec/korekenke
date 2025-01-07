@@ -166,7 +166,7 @@ export const HolidaysTable = ({
           >
             <IconAction
               tooltipTitle="Subir PDF"
-              icon={holiday.document ? faFileArrowUp : faFileArrowDown}
+              icon={holiday.document ? faFileArrowDown : faFileArrowUp}
               styled={{
                 color: (theme) =>
                   holiday.document ? theme.colors.info : theme.colors.error,
