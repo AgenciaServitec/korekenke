@@ -44,6 +44,7 @@
     "antd": "^5.19.4",
     "assert": "^2.1.0",
     "dayjs": "^1.11.12",
+    "face-api.js": "^0.22.2",
     "firebase": "^10.12.4",
     "firebaseui": "^6.1.0",
     "lodash": "^4.17.21",

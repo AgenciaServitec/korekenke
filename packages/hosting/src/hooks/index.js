@@ -16,3 +16,5 @@ export * from "./useAnimalLogs";
 export * from "./useBosses";
 export * from "./useCountdown";
 export * from "./useUserLocation";
+export * from "./useWebcam";
+export * from "./useFaceDetections";

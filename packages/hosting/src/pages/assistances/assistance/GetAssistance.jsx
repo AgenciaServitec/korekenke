@@ -19,7 +19,7 @@ import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { omit } from "lodash";
 
-export const GetAssistance = ({ user, userLocation }) => {
+export const GetAssistance = ({ user, userLocation, onShowWebcam }) => {
   const { assistanceId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
@@ -119,6 +119,7 @@ export const GetAssistance = ({ user, userLocation }) => {
       userLocation={userLocation}
       isWithinGeofence={isWithinGeofence}
       onGeofenceValidate={setIsWithinGeofence}
+      onShowWebcam={onShowWebcam}
     />
   );
 };
@@ -132,6 +133,7 @@ const AssistanceButtons = ({
   isOutlet,
   isLoading,
   isProcessing,
+  onShowWebcam,
 }) => {
   const isEntryBtnDisabled =
     isLoading || isEntry || !isWithinGeofence || isOutlet || isProcessing;
@@ -141,6 +143,9 @@ const AssistanceButtons = ({
 
   return (
     <Container>
+      <button onClick={() => onShowWebcam()}>
+        Prueba de Reconocimiento Facial
+      </button>
       <Row gutter={[16, 16]}>
         <Col span={24} md={8}>
           <div className="buttons">
