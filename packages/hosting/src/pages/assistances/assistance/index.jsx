@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Acl, Col, Row } from "../../../components";
-import { useAuthentication } from "../../../providers";
-import { useUserLocation } from "../../../hooks";
+import { ModalProvider, useAuthentication, useModal } from "../../../providers";
+import { useDevice, useUserLocation } from "../../../hooks";
 import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { assistancesRef } from "../../../firebase/collections/assistance";
+import { GetFaceBiometrics } from "./GetFaceBiometrics";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
@@ -18,11 +19,17 @@ export const AssistanceIntegration = () => {
     assistancesRef.where("isDeleted", "==", false),
   );
 
-  return <Assistance user={authUser} assistances={assistances} />;
+  return (
+    <ModalProvider>
+      <Assistance user={authUser} assistances={assistances} />
+    </ModalProvider>
+  );
 };
 
 const Assistance = ({ user, assistances }) => {
   const { userLocation } = useUserLocation();
+  const { isTablet } = useDevice();
+  const { onShowModal, onCloseModal } = useModal();
 
   const showAlert = !user?.workPlace;
 
@@ -37,6 +44,14 @@ const Assistance = ({ user, assistances }) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const onShowWebcam = () => {
+    onShowModal({
+      title: "Reconocimiento Facial",
+      width: `${isTablet ? "60%" : "30%"}`,
+      onRenderBody: () => <GetFaceBiometrics onCloseModal={onCloseModal} />,
+    });
+  };
 
   return (
     <Container>
@@ -73,6 +88,7 @@ const Assistance = ({ user, assistances }) => {
               user={user}
               userLocation={userLocation}
               assistances={assistances}
+              onShowWebcam={onShowWebcam}
             />
           </Col>
         </Row>

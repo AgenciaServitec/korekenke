@@ -3,7 +3,8 @@ import { Acl, Tabs, Row, Col, Title } from "../../components";
 import { ProfileDataForm } from "./ProfileDataForm";
 import { ProfileImagesForm } from "./ProfileImagesForm";
 import { ProfileInformation } from "./ProfileInformation";
-import { useAuthentication } from "../../providers";
+import { ModalProvider, useAuthentication } from "../../providers";
+import { ProfileUserBiometrics } from "./ProfileUserBiometrics";
 
 const items = [
   {
@@ -15,6 +16,15 @@ const items = [
     key: "2",
     label: "Imagen DNI, CIP y firma",
     children: <ProfileImagesForm />,
+  },
+  {
+    key: "3",
+    label: "Datos Biométricos",
+    children: (
+      <ModalProvider>
+        <ProfileUserBiometrics />
+      </ModalProvider>
+    ),
   },
 ];
 export const Profile = () => {
