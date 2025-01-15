@@ -11,8 +11,9 @@ import {
   notification,
   Col,
   Row,
-  TextArea,
+  Card,
   Tag,
+  Paragraph,
 } from "../../components";
 import { useAuthentication, useModal } from "../../providers";
 import * as yup from "yup";
@@ -104,45 +105,76 @@ export const ProfileUserBiometrics = () => {
   };
 
   return (
-    <div>
-      {showAlert && <Tag color="red">Registra tus biometricos faciales</Tag>}
-      <Tag color="green">Biometricos faciales registrados</Tag>
-
-      <Button onClick={onShowWebcam}>
-        {authUser.biometricVectors ? "Cambiar Biometricos" : "Registrar Rostro"}
-      </Button>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row gutter={[16, 16]}>
-          <Col>
-            <Controller
-              control={control}
-              name="biometricVectors"
-              render={({ field: { onChange, value, name } }) => (
-                <TextArea
-                  label="Vectores Biométricos"
-                  value={biometricVectors.length ? "Vectores detectados" : ""}
-                  onChange={(e) => onChange(e.target.value)}
-                  name={name}
-                  disabled
-                />
-              )}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Button
-              type="primary"
-              size="large"
-              block
-              htmlType="submit"
-              loading={putUserLoading}
-              disabled={!isDetected}
-            >
-              Guardar
-            </Button>
-          </Col>
-        </Row>
-      </Form>
-    </div>
+    <Row
+      gutter={[16, 16]}
+      justify="center"
+      align="middle"
+      style={{ padding: 16 }}
+    >
+      <Col span={24} style={{ textAlign: "center" }}>
+        {showAlert ? (
+          <Tag color="red">Registra tus biométricos faciales</Tag>
+        ) : (
+          <Tag color="green">Biométricos faciales registrados</Tag>
+        )}
+      </Col>
+      <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
+        <Button type="primary" onClick={onShowWebcam} size="large">
+          {authUser.biometricVectors
+            ? "Cambiar Biométricos"
+            : "Registrar Rostro"}
+        </Button>
+      </Col>
+      <Col span={24}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Controller
+                control={control}
+                name="biometricVectors"
+                render={() => (
+                  <Card
+                    title="Vectores Biométricos"
+                    bordered
+                    style={{
+                      textAlign: "center",
+                      backgroundColor: biometricVectors.length
+                        ? "#78d225"
+                        : "#dc3122",
+                      borderColor: biometricVectors.length
+                        ? "#f6ffed"
+                        : "#f6ffed",
+                    }}
+                  >
+                    <Paragraph
+                      style={{
+                        color: "#f6ffed",
+                      }}
+                    >
+                      {biometricVectors.length
+                        ? "Vectores detectados correctamente."
+                        : "No se han detectado vectores biométricos para guardar."}
+                    </Paragraph>
+                  </Card>
+                )}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8} style={{ margin: "0 auto" }}>
+              <Button
+                type="primary"
+                size="large"
+                block
+                htmlType="submit"
+                loading={putUserLoading}
+                disabled={!isDetected}
+              >
+                Guardar
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Col>
+    </Row>
   );
 };
 
