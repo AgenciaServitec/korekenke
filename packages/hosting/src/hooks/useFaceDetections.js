@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import * as faceapi from "face-api.js";
+import * as faceapi from "face-api.js/";
 
 export const useFaceDetection = (videoRef) => {
   const [detections, setDetections] = useState([]);

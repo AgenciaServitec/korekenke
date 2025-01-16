@@ -3,12 +3,9 @@ import { useWebcam, useFaceDetection } from "../../../hooks";
 import styled from "styled-components";
 import { useAuthentication } from "../../../providers";
 import { notification } from "../../../components";
+import { isEmpty } from "lodash";
 
-export const GetFaceBiometrics = ({
-  onCloseModal,
-  isAuthenticated,
-  setIsAuthenticated,
-}) => {
+export const GetFaceBiometrics = ({ onCloseModal, setIsAuthenticated }) => {
   const { authUser } = useAuthentication();
   const { videoRef, hasPermission, error: webcamError } = useWebcam();
   const {
@@ -16,8 +13,7 @@ export const GetFaceBiometrics = ({
     loading,
     error: detectionError,
   } = useFaceDetection(videoRef);
-  const [detectionStopped, setDetectionStopped] = useState(false);
-  const [notificationShown, setNotificationShown] = useState(false);
+  const [hasVerified, setHasVerified] = useState(false);
 
   const calculateEuclideanDistance = (vector1, vector2) => {
     if (vector1.length !== vector2.length) {
@@ -38,6 +34,8 @@ export const GetFaceBiometrics = ({
   };
 
   useEffect(() => {
+    if (hasVerified) return;
+
     if (!authUser.biometricVectors) {
       notification({
         type: "warning",
@@ -47,15 +45,16 @@ export const GetFaceBiometrics = ({
       return;
     }
 
-    if (biometricVectors && biometricVectors.length > 0) {
+    if (!isEmpty(biometricVectors)) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
       const userVectors = Object.values(authUser.biometricVectors[0]);
 
-      const isSameUser = compareBiometricVectors(
+      const existsUser = compareBiometricVectors(
         userVectors,
         flatBiometricVectors,
       );
-      if (isSameUser) {
+
+      if (existsUser) {
         notification({
           type: "success",
           title: "Autenticación Correcta",
@@ -69,11 +68,10 @@ export const GetFaceBiometrics = ({
         setIsAuthenticated(false);
       }
 
-      setNotificationShown(true);
-      setDetectionStopped(true);
+      setHasVerified(true);
       onCloseModal();
     }
-  }, [biometricVectors, authUser.biometricVectors]);
+  }, [biometricVectors, hasVerified]);
 
   if (webcamError || detectionError) {
     const errorMessage = webcamError?.message || detectionError?.message;

@@ -5,7 +5,7 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
-  faClipboardList,
+  faClipboardList, faClipboardUser,
   faComputer,
   faCow,
   faDog,
@@ -17,10 +17,10 @@ import {
   faHorse,
   faHorseHead,
   faIdCard,
-  faList,
+  faList, faListCheck,
   faNetworkWired,
   faPoll,
-  faShield,
+  faShield, faSquareCheck,
   faUmbrellaBeach,
   faUsers,
   faUsersCog,
@@ -178,6 +178,40 @@ export const DrawerLayout = ({
           onClick: () => onClickMenu("/offices"),
         },
       ],
+    },
+    {
+      label: "Assistencia",
+      key : "assistance",
+      icon: <FontAwesomeIcon icon={faClipboardUser} size="lg"/>,
+      isVisible: existsAclsInAclsOfUser(
+          "default",
+          ["assistances"],
+          ["/assistances","/assistances/assistance"]
+      ),children: [
+        {
+          label: "Marcar asistencia",
+          key: "assistance",
+          icon: <FontAwesomeIcon icon={faSquareCheck} size="lg"/>,
+          isVisible: existsAclsInAclsOfUser(
+              "default",
+              ["assistances"],
+              ["/assistances/assistance"]
+          ),
+          onClick: () => onClickMenu("/assistances/assistance"),
+        },
+        {
+          label: "Lista de asistencias",
+          key: "assistances",
+          icon: <FontAwesomeIcon icon={faListCheck} size="lg"/>,
+          isVisible: existsAclsInAclsOfUser(
+              "default",
+              ["assistances"],
+              ["/assistances"]
+          ),
+          onClick: () => onClickMenu("/assistances"),
+        }
+      ]
+
     },
     {
       label: "Correspondencias",
