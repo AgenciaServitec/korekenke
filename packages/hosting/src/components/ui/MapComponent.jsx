@@ -35,7 +35,7 @@ export const MapComponent = ({
   const workPlace = getWorkPlaceById(authUser?.workPlace);
 
   const mapCenter = center ||
-    workPlace?.coordinates || { lat: -12.169445, lng: -77.021013 };
+    workPlace?.coordinates || { lat: -12.169543, lng: -77.021059 };
 
   const userValidate = () => {
     if (!userLocation || !mapCenter) return;
