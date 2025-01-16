@@ -3,24 +3,20 @@ import {
   Acl,
   Button,
   Col,
-  Row,
   notification,
-  Title,
+  Row,
   Spinner,
+  Title,
 } from "../../components";
-import { useNavigate } from "react-router";
 import { useAuthentication } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { assistancesRef } from "../../firebase/collections/assistance";
 import styled from "styled-components";
 import { AssistancesTable } from "./AssistancesTable";
 import { fetchUsersByCip } from "../../firebase/collections";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
 
 export const AssistancesIntegration = () => {
-  const navigate = useNavigate();
   const { authUser } = useAuthentication();
 
   const [assistances = [], assistancesLoading, assistancesError] =
@@ -65,8 +61,6 @@ export const AssistancesIntegration = () => {
     setSearchCIP("");
   };
 
-  const onNavigateGoTo = (pathname = "/") => navigate(pathname);
-
   const filteredAssistances = selectedUser
     ? assistances.filter((assistance) => assistance.user.id === selectedUser.id)
     : assistances;
@@ -76,7 +70,6 @@ export const AssistancesIntegration = () => {
   return (
     <Assistances
       user={authUser}
-      onNavigateGoTo={onNavigateGoTo}
       assistancesLoading={assistancesLoading}
       assistances={filteredAssistances}
       searchCIP={searchCIP}
@@ -90,7 +83,6 @@ export const AssistancesIntegration = () => {
 
 const Assistances = ({
   user,
-  onNavigateGoTo,
   assistances,
   assistancesLoading,
   searchCIP,
@@ -107,13 +99,6 @@ const Assistances = ({
       name="/assistances"
     >
       <Container>
-        <Button
-          onClick={() => onNavigateGoTo("/assistances/assistance")}
-          className="button"
-        >
-          <FontAwesomeIcon icon={faSignInAlt} />
-          Marcar mi asistencia
-        </Button>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <div className="header-content">
@@ -155,26 +140,6 @@ const Assistances = ({
 };
 
 const Container = styled.div`
-  .button {
-    background-color: #17b21e;
-    color: white;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    margin-bottom: 10px;
-
-    &:hover {
-      background-color: #ffffff;
-      transform: scale(1.05);
-    }
-  }
-
   .user-search {
     display: flex;
     align-items: center;
@@ -206,10 +171,6 @@ const Container = styled.div`
     }
     .user-search {
       flex-wrap: wrap;
-    }
-    .button {
-      font-size: 14px;
-      padding: 8px 16px;
     }
   }
 `;

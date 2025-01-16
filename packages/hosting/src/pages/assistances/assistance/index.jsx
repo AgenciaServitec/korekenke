@@ -5,15 +5,13 @@ import { useDevice, useUserLocation } from "../../../hooks";
 import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import dayjs from "dayjs";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { assistancesRef } from "../../../firebase/collections/assistance";
 import { GetFaceBiometrics } from "./GetFaceBiometrics";
+import { ClockRealTime } from "../../../components/ui/ClockRealTime";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
-
-  useEffect(() => {}, []);
 
   const [assistances = []] = useCollectionData(
     assistancesRef.where("isDeleted", "==", false),
@@ -32,20 +30,11 @@ const Assistance = ({ user, assistances }) => {
   const { onShowModal, onCloseModal } = useModal();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentDateTime, setCurrentDateTime] = useState(
-    dayjs().format("DD/MM/YYYY HH:mm:ss A"),
-  );
 
   const showAlert = !user?.workPlace;
   const showAlert2 = !user?.biometricVectors;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDateTime(dayjs().format("DD/MM/YYYY HH:mm:ss A"));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  console.log("isAuthenticated: ", isAuthenticated);
 
   const onShowWebcam = () => {
     onShowModal({
@@ -54,6 +43,8 @@ const Assistance = ({ user, assistances }) => {
       onRenderBody: () => (
         <GetFaceBiometrics
           onCloseModal={onCloseModal}
+          user={user}
+          assistances={assistances}
           isAuthenticated={isAuthenticated}
           setIsAuthenticated={setIsAuthenticated}
         />
@@ -75,7 +66,7 @@ const Assistance = ({ user, assistances }) => {
           </div>
           <div className="datetime">
             <p>
-              <strong>{currentDateTime}</strong>
+              <ClockRealTime />
             </p>
           </div>
         </div>
@@ -105,11 +96,11 @@ const Assistance = ({ user, assistances }) => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <GetAssistance
+              isAuthenticated={isAuthenticated}
               user={user}
               userLocation={userLocation}
               assistances={assistances}
               onShowWebcam={onShowWebcam}
-              isAuthenticated={isAuthenticated}
               setIsAuthenticated={setIsAuthenticated}
             />
           </Col>
