@@ -31,11 +31,13 @@ const Assistance = ({ user, assistances }) => {
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
-  const showAlert = !user?.workPlace;
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentDateTime, setCurrentDateTime] = useState(
     dayjs().format("DD/MM/YYYY HH:mm:ss A"),
   );
+
+  const showAlert = !user?.workPlace;
+  const showAlert2 = !user?.biometricVectors;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,7 +51,13 @@ const Assistance = ({ user, assistances }) => {
     onShowModal({
       title: "Reconocimiento Facial",
       width: `${isTablet ? "60%" : "30%"}`,
-      onRenderBody: () => <GetFaceBiometrics onCloseModal={onCloseModal} />,
+      onRenderBody: () => (
+        <GetFaceBiometrics
+          onCloseModal={onCloseModal}
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+        />
+      ),
     });
   };
 
@@ -82,6 +90,18 @@ const Assistance = ({ user, assistances }) => {
             </Link>
           </div>
         )}
+        {showAlert2 && (
+          <div className="alert-wrapper">
+            <p>
+              <strong>Atención:</strong> No tiene su rostro registrado para el
+              reconocimiento facial. Por favor, dirígete a tu perfil para
+              agregarlo.
+            </p>
+            <Link to="/profile" className="alert-link">
+              Ir a mi perfil
+            </Link>
+          </div>
+        )}
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <GetAssistance
@@ -89,6 +109,8 @@ const Assistance = ({ user, assistances }) => {
               userLocation={userLocation}
               assistances={assistances}
               onShowWebcam={onShowWebcam}
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
             />
           </Col>
         </Row>

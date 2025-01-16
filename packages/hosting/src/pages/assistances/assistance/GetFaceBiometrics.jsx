@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { useAuthentication } from "../../../providers";
 import { notification } from "../../../components";
 
-export const GetFaceBiometrics = ({ onCloseModal }) => {
+export const GetFaceBiometrics = ({
+  onCloseModal,
+  isAuthenticated,
+  setIsAuthenticated,
+}) => {
   const { authUser } = useAuthentication();
   const { videoRef, hasPermission, error: webcamError } = useWebcam();
   const {
@@ -12,7 +16,6 @@ export const GetFaceBiometrics = ({ onCloseModal }) => {
     loading,
     error: detectionError,
   } = useFaceDetection(videoRef);
-  const [comparisonResult, setComparisonResult] = useState(null);
   const [detectionStopped, setDetectionStopped] = useState(false);
   const [notificationShown, setNotificationShown] = useState(false);
 
@@ -35,6 +38,15 @@ export const GetFaceBiometrics = ({ onCloseModal }) => {
   };
 
   useEffect(() => {
+    if (!authUser.biometricVectors) {
+      notification({
+        type: "warning",
+        title: "Registre su rostro en su perfil",
+      });
+      onCloseModal();
+      return;
+    }
+
     if (biometricVectors && biometricVectors.length > 0) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
       const userVectors = Object.values(authUser.biometricVectors[0]);
@@ -48,11 +60,13 @@ export const GetFaceBiometrics = ({ onCloseModal }) => {
           type: "success",
           title: "Autenticación Correcta",
         });
+        setIsAuthenticated(true);
       } else {
         notification({
           type: "warning",
           title: "Autenticación Errónea",
         });
+        setIsAuthenticated(false);
       }
 
       setNotificationShown(true);

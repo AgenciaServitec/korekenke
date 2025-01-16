@@ -19,7 +19,12 @@ import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { omit } from "lodash";
 
-export const GetAssistance = ({ user, userLocation, onShowWebcam }) => {
+export const GetAssistance = ({
+  user,
+  userLocation,
+  onShowWebcam,
+  isAuthenticated,
+}) => {
   const { assistanceId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
@@ -27,11 +32,10 @@ export const GetAssistance = ({ user, userLocation, onShowWebcam }) => {
   const [isOutlet, setIsOutlet] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
   const handleMarkAssistance = async (type) => {
-    if (isProcessing) return;
+    if (isProcessing || !isAuthenticated) return;
     setIsProcessing(true);
 
     try {
@@ -67,10 +71,6 @@ export const GetAssistance = ({ user, userLocation, onShowWebcam }) => {
       };
 
       await addAssistance(assignCreateProps(assistanceData));
-      notification({
-        type: "success",
-        message: `${type === "entry" ? "Ingreso" : "Salida"} marcada con éxito`,
-      });
 
       type === "entry" ? setIsEntry(true) : setIsOutlet(true);
     } catch (error) {
@@ -143,14 +143,14 @@ const AssistanceButtons = ({
 
   return (
     <Container>
-      <button onClick={() => onShowWebcam()}>
-        Prueba de Reconocimiento Facial
-      </button>
       <Row gutter={[16, 16]}>
         <Col span={24} md={8}>
           <div className="buttons">
             <Button
-              onClick={() => handleMarkAssistance("entry")}
+              onClick={async () => {
+                await onShowWebcam();
+                handleMarkAssistance("entry");
+              }}
               disabled={isEntryBtnDisabled}
               className={`entry-btn ${isEntryBtnDisabled ? "disabled" : ""}`}
             >
@@ -158,7 +158,10 @@ const AssistanceButtons = ({
               Marcar Ingreso
             </Button>
             <Button
-              onClick={() => handleMarkAssistance("outlet")}
+              onClick={async () => {
+                await onShowWebcam();
+                handleMarkAssistance("outlet");
+              }}
               disabled={isOutletBtnDisabled}
               className={`outlet-btn ${isOutletBtnDisabled ? "disabled" : ""}`}
             >
