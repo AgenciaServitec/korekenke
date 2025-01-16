@@ -17,6 +17,7 @@ import { AssistancesTable } from "./AssistancesTable";
 import { fetchUsersByCip } from "../../firebase/collections";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { isEmpty } from "lodash";
 
 export const AssistancesIntegration = () => {
   const navigate = useNavigate();
@@ -26,35 +27,34 @@ export const AssistancesIntegration = () => {
     useCollectionData(assistancesRef.where("isDeleted", "==", false));
 
   const [searchCIP, setSearchCIP] = useState("");
-  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
 
+  useEffect(() => {
+    assistancesError && notification({ type: "error" });
+  }, [assistancesError]);
+
   const onSearchUser = async (cip) => {
-    if (cip.length !== 9 || isNaN(Number(cip))) {
-      notification({
-        type: "warning",
-        message: "Ingrese un CIP válido (9 dígitos)",
-      });
-      return;
-    }
-
-    setLoadingUser(true);
-
     try {
-      const fetchedUsers = await fetchUsersByCip(cip);
-      if (fetchedUsers.length > 0) {
-        setUsers(fetchedUsers);
-        setSelectedUser(fetchedUsers[0]);
-      } else {
-        notification({
+      setLoadingUser(true);
+
+      if (isEmpty(cip) && cip.length !== 9) {
+        return notification({
           type: "warning",
-          message: "No se encontró un usuario con ese CIP",
+          message: "Ingrese un CIP válido (9 dígitos)",
         });
       }
+
+      const fetchedUsers = await fetchUsersByCip(cip);
+      if (fetchedUsers.length > 0) return setSelectedUser(fetchedUsers[0]);
+
+      notification({
+        type: "warning",
+        message: "No se encontró un usuario con ese CIP",
+      });
     } catch (error) {
-      console.error("Error fetching user by CIP:", error);
-      notification({ type: "error", message: "Error buscando usuario" });
+      console.error("ErrorOnSearchUser:", error);
+      notification({ type: "error" });
     } finally {
       setLoadingUser(false);
     }
@@ -63,12 +63,7 @@ export const AssistancesIntegration = () => {
   const onResetView = () => {
     setSelectedUser(null);
     setSearchCIP("");
-    setUsers([]);
   };
-
-  useEffect(() => {
-    assistancesError && notification({ type: "error" });
-  }, [assistancesError]);
 
   const onNavigateGoTo = (pathname = "/") => navigate(pathname);
 
@@ -76,8 +71,7 @@ export const AssistancesIntegration = () => {
     ? assistances.filter((assistance) => assistance.user.id === selectedUser.id)
     : assistances;
 
-  if (loadingUser) return <Spinner />;
-  if (assistancesLoading) return <Spinner />;
+  if (loadingUser || assistancesLoading) return <Spinner fullscreen />;
 
   return (
     <Assistances
