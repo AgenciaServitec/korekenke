@@ -5,7 +5,8 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
-  faClipboardList, faClipboardUser,
+  faClipboardList,
+  faClipboardUser,
   faComputer,
   faCow,
   faDog,
@@ -17,10 +18,12 @@ import {
   faHorse,
   faHorseHead,
   faIdCard,
-  faList, faListCheck,
+  faList,
+  faListCheck,
   faNetworkWired,
   faPoll,
-  faShield, faSquareCheck,
+  faShield,
+  faSquareCheck,
   faUmbrellaBeach,
   faUsers,
   faUsersCog,
@@ -181,37 +184,37 @@ export const DrawerLayout = ({
     },
     {
       label: "Assistencia",
-      key : "assistance",
-      icon: <FontAwesomeIcon icon={faClipboardUser} size="lg"/>,
+      key: "assistance",
+      icon: <FontAwesomeIcon icon={faClipboardUser} size="lg" />,
       isVisible: existsAclsInAclsOfUser(
-          "default",
-          ["assistances"],
-          ["/assistances","/assistances/assistance"]
-      ),children: [
+        "default",
+        ["assistances"],
+        ["/assistances", "/assistances/assistance"],
+      ),
+      children: [
         {
           label: "Marcar asistencia",
           key: "assistance",
-          icon: <FontAwesomeIcon icon={faSquareCheck} size="lg"/>,
+          icon: <FontAwesomeIcon icon={faSquareCheck} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
-              "default",
-              ["assistances"],
-              ["/assistances/assistance"]
+            "default",
+            ["assistances"],
+            ["/assistances/assistance"],
           ),
           onClick: () => onClickMenu("/assistances/assistance"),
         },
         {
           label: "Lista de asistencias",
           key: "assistances",
-          icon: <FontAwesomeIcon icon={faListCheck} size="lg"/>,
+          icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
           isVisible: existsAclsInAclsOfUser(
-              "default",
-              ["assistances"],
-              ["/assistances"]
+            "default",
+            ["assistances"],
+            ["/assistances"],
           ),
           onClick: () => onClickMenu("/assistances"),
-        }
-      ]
-
+        },
+      ],
     },
     {
       label: "Correspondencias",

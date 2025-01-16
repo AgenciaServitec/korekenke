@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import { Circle, GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { useAuthentication } from "../../providers";
 import { WorkPlaces } from "../../data-list";
@@ -22,7 +22,8 @@ const geofenceOptions = {
 
 const libraries = ["geometry"];
 
-const isValidLocation = (location) => location && !isNaN(location.lat) && !isNaN(location.lng);
+const isValidLocation = (location) =>
+  location && !isNaN(location.lat) && !isNaN(location.lng);
 
 export const MapComponent = ({
   center = null,
@@ -39,10 +40,10 @@ export const MapComponent = ({
   const mapCenter = center ||
     workPlace?.coordinates || { lat: -12.169543, lng: -77.021059 };
 
-    const mapRef = useRef(null);
+  const mapRef = useRef(null);
 
-    const userValidate = () => {
-      if (!isValidLocation(userLocation) || !isValidLocation(mapCenter)) return;
+  const userValidate = () => {
+    if (!isValidLocation(userLocation) || !isValidLocation(mapCenter)) return;
 
     if (window.google && window.google.maps && window.google.maps.geometry) {
       // eslint-disable-next-line no-undef

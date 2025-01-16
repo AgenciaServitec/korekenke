@@ -61,7 +61,9 @@ export const HomeIntegration = () => {
                 <Link to={onNavigateGoTo("/my-agenda")}>2. Mi agenda</Link>
               </li>
               <li>
-                <Link to={onNavigateGoTo("/assistances/assistance")}>3. Asistencia</Link>
+                <Link to={onNavigateGoTo("/assistances/assistance")}>
+                  3. Asistencia
+                </Link>
               </li>
             </ul>
           </div>
