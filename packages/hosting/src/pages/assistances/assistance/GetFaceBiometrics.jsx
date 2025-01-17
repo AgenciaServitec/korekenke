@@ -9,6 +9,8 @@ export const GetFaceBiometrics = ({
   user,
   onSaveAssistance,
 }) => {
+  console.log("type: ", type);
+
   const { videoRef, hasPermission, error: webcamError } = useWebcam();
   const {
     biometricVectors,
@@ -35,6 +37,7 @@ export const GetFaceBiometrics = ({
   };
 
   const onBiometricValidated = async () => {
+    console.log("biometricVectors", biometricVectors);
     if (!isEmpty(biometricVectors)) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
       const userVectors = Object.values(user.biometricVectors[0]);
@@ -43,6 +46,8 @@ export const GetFaceBiometrics = ({
         userVectors,
         flatBiometricVectors,
       );
+
+      console.log("existsUser: ", existsUser);
 
       if (existsUser) {
         await onSaveAssistance(type);
