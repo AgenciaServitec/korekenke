@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useFaceDetection, useWebcam } from "../../../hooks";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
-import { notification } from "../../../components";
 
 export const GetFaceBiometrics = ({
   type,
@@ -47,12 +46,6 @@ export const GetFaceBiometrics = ({
 
       if (existsUser) {
         await onSaveAssistance(type);
-      } else {
-        notification({
-          type: "error",
-          title: "Autenticación Fallida",
-          description: "vuelve a intentarlo",
-        });
       }
 
       onCloseModal();

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, MapComponent, Row } from "../../../components";
+
 import styled from "styled-components";
 import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,16 +37,16 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={() => onShowWebcam("entry")}
-              disabled={!entryButtonActive}
-              className={`entry-btn ${!entryButtonActive ? "disabled" : ""}`}
+              disabled={entryButtonActive}
+              className={`entry-btn ${entryButtonActive ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
               onClick={() => onShowWebcam("outlet")}
-              disabled={!outletButtonActive}
-              className={`outlet-btn ${!outletButtonActive ? "disabled" : ""}`}
+              disabled={outletButtonActive}
+              className={`outlet-btn ${outletButtonActive ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
