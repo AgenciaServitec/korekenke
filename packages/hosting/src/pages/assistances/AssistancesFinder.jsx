@@ -8,14 +8,14 @@ export const AssistancesFinder = ({ searchFields, onSearch }) => {
   const onChangeFromDate = (value) =>
     onSearch({
       ...searchFields,
-      fromDate: value?.format("DD-MM-YYYY") || searchFields.fromDate,
-      toDate: value?.format("DD-MM-YYYY") || searchFields.fromDate,
+      fromDate: value?.format("DD-MM-YYYY HH:mm") || searchFields.fromDate,
+      toDate: value?.format("DD-MM-YYYY HH:mm") || searchFields.fromDate,
     });
 
   const onChangeToDate = (value) =>
     onSearch({
       ...searchFields,
-      toDate: value?.format("DD-MM-YYYY") || searchFields.toDate,
+      toDate: value?.format("DD-MM-YYYY HH:mm") || searchFields.toDate,
     });
 
   const onChangeSearchBy = (event) =>
@@ -36,12 +36,12 @@ export const AssistancesFinder = ({ searchFields, onSearch }) => {
         />
         <DatePicker
           label="Desde"
-          value={dayjs(searchFields.fromDate, "DD-MM-YYYY")}
+          value={dayjs(searchFields.fromDate, "DD-MM-YYYY HH:mm")}
           onChange={onChangeFromDate}
         />
         <DatePicker
           label="Hasta"
-          value={dayjs(searchFields.toDate, "DD-MM-YYYY")}
+          value={dayjs(searchFields.toDate, "DD-MM-YYYY HH:mm")}
           onChange={onChangeToDate}
         />
       </FormContent>

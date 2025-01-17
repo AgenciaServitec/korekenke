@@ -8,7 +8,9 @@ export const assistancesQuery = ({ cip, fromDate, toDate }) => {
   let query = assistancesRef.orderBy("createAt", "desc");
 
   if (fromDate && toDate) {
-    query = query.where("date", ">=", fromDate).where("date", "<=", toDate);
+    query = query
+      .where("createAtString", ">=", fromDate)
+      .where("createAtString", "<=", toDate);
   }
 
   if (cip) {

@@ -36,7 +36,7 @@ export const DatePicker = ({
     >
       <AntdDatePicker
         size="large"
-        format="DD/MM/YYYY"
+        format="DD/MM/YYYY HH:mm"
         value={value}
         disabled={disabled}
         name={name}

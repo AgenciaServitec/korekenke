@@ -19,7 +19,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "date",
+          "fieldPath": "createAtString",
           "order": "ASCENDING"
         },
         {
@@ -45,7 +45,7 @@
           "order": "DESCENDING"
         },
         {
-          "fieldPath": "date",
+          "fieldPath": "createAtString",
           "order": "DESCENDING"
         }
       ]
@@ -69,7 +69,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "date",
+          "fieldPath": "createAtString",
           "order": "DESCENDING"
         },
         {
@@ -87,7 +87,7 @@
           "order": "DESCENDING"
         },
         {
-          "fieldPath": "date",
+          "fieldPath": "createAtString",
           "order": "DESCENDING"
         }
       ]

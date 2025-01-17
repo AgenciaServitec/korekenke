@@ -2,35 +2,30 @@ import React from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { Select } from "../../components";
+import { WorkPlaces } from "../../data-list";
+import { concat } from "lodash";
 
 export const AssistancesFilter = ({ assistances, filterFields, onFilter }) => {
   const onChangeType = (value) =>
     onFilter({
       ...filterFields,
-      type: !value ? "all" : value,
+      workPlace: !value ? "all" : value,
     });
 
   return (
     <Container>
       <FormContent>
         <Select
-          label="Tipo"
-          value={filterFields.type}
+          label="Lugar de trabajo"
+          value={filterFields.workPlace}
           onChange={(value) => onChangeType(value)}
-          options={[
-            {
-              label: "Todos",
-              value: "all",
-            },
-            {
-              label: "Entrada",
-              value: "entry",
-            },
-            {
-              label: "Salida",
-              value: "outlet",
-            },
-          ]}
+          options={concat(
+            [{ label: "Todos", value: "all" }],
+            WorkPlaces.map((workPlace) => ({
+              label: workPlace.label,
+              value: workPlace.value,
+            })),
+          )}
         />
       </FormContent>
     </Container>

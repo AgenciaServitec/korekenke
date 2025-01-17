@@ -27,8 +27,8 @@ export const AssistancesIntegration = () => {
   const { authUser } = useAuthentication();
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
-    fromDate: dayjs().format("DD-MM-YYYY"),
-    toDate: dayjs().format("DD-MM-YYYY"),
+    fromDate: dayjs().format("DD-MM-YYYY HH:mm"),
+    toDate: dayjs().format("DD-MM-YYYY HH:mm"),
   });
 
   const debouncedSearchFields = useDebounce(searchFields, 750);
@@ -69,7 +69,7 @@ const Assistances = ({
   setSearchFields,
 }) => {
   const [filterFields, setFilterFields] = useQueriesState({
-    type: "all",
+    workPlace: "all",
   });
 
   const mapAssistancesView = (assistances) => {
@@ -154,7 +154,9 @@ const Assistances = ({
 
 const filteredAssistances = (assistances, filterFields) =>
   assistances.filter((assistance) =>
-    filterFields.type === "all" ? true : filterFields.type === assistance.type,
+    filterFields?.workPlace === "all"
+      ? true
+      : filterFields.workPlace === assistance.workPlace,
   );
 
 const Container = styled.div`

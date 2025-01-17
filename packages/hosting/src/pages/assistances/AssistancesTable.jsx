@@ -10,25 +10,14 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
     {
       title: "Fecha",
       align: "center",
-      width: ["7rem", "100%"],
+      width: ["3rem", "100%"],
       render: (assistance) =>
-        dayjs(assistance.date, "DD/MM/YYYY").format("DD/MM/YYYY"),
-    },
-    {
-      title: "Tipo",
-      align: "center",
-      width: ["5rem", "100%"],
-      render: (assistance) =>
-        assistance.type === "entry" ? (
-          <Tag color="green">Entrada</Tag>
-        ) : (
-          <Tag color="red">Salida</Tag>
-        ),
+        dayjs(assistance.createAt.toDate()).format("DD/MM/YYYY"),
     },
     {
       title: "Cip",
       align: "center",
-      width: ["7rem", "100%"],
+      width: ["3rem", "100%"],
       render: (assistance) => assistance.user.cip,
     },
     {
@@ -41,25 +30,39 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
       title: "Lugar de trabajo",
       align: "center",
       width: ["8rem", "100%"],
-      render: () => user.workPlace,
+      render: () => (
+        <span style={{ textTransform: "capitalize" }}>{user.workPlace}</span>
+      ),
     },
     {
       title: "Hora entrada",
       align: "center",
       width: ["7rem", "100%"],
       render: (assistance) =>
-        assistance.type === "entry"
-          ? dayjs(assistance.createAt.toDate()).format("HH:mm:ss a")
-          : "-",
+        assistance?.entry ? (
+          <Tag color="green">
+            {dayjs(assistance?.entry.date, "DD-MM-YYYY HH:mm").format(
+              "DD/MM/YYYY HH:mm A",
+            )}
+          </Tag>
+        ) : (
+          "-"
+        ),
     },
     {
       title: "Hora salida",
       align: "center",
       width: ["7rem", "100%"],
       render: (assistance) =>
-        assistance.type === "outlet"
-          ? dayjs(assistance.createAt.toDate()).format("HH:mm:ss a")
-          : "-",
+        assistance?.outlet ? (
+          <Tag color="red">
+            {dayjs(assistance?.outlet.date, "DD-MM-YYYY HH:mm").format(
+              "DD/MM/YYYY HH:mm A",
+            )}
+          </Tag>
+        ) : (
+          "-"
+        ),
     },
   ];
 
