@@ -1,8 +1,8 @@
 import React, { memo } from "react";
-import moment from "moment";
 import styled from "styled-components";
 import { DatePicker, Input } from "../../components";
 import { mediaQuery } from "../../styles";
+import dayjs from "dayjs";
 
 const CorrespondencesFinder = ({ searchFields, onSearch }) => {
   const onChangeTourDate = (value) =>
@@ -40,8 +40,8 @@ const CorrespondencesFinder = ({ searchFields, onSearch }) => {
 export default memo(CorrespondencesFinder);
 
 const dateStringToMoment = (dateString) =>
-  moment(dateString, "YYYY-MM-DD", true).isValid()
-    ? moment(dateString, "YYYY-MM-DD")
+  dayjs(dateString, "YYYY-MM-DD", true).isValid()
+    ? dayjs(dateString, "YYYY-MM-DD")
     : undefined;
 
 const momentToDateString = (date) => date?.format("YYYY-MM-DD") || undefined;

@@ -1,23 +1,28 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { VirtualizedList } from "../list";
+import { Spinner } from "../Spinner";
 
 export const TableVirtualized = ({
   dataSource,
   columns,
   rowHeaderHeight,
   rowBodyHeight,
+  loading = false,
 }) => {
   return (
     <Container>
       <VirtualizedList
         dataSource={[null, ...dataSource]}
         rowHeight={({ index }) =>
-          index === 0 ? rowHeaderHeight : rowBodyHeight
+          index === 0 ? (loading ? 120 : rowHeaderHeight) : rowBodyHeight
         }
         renderItem={(data, index) =>
           !data ? (
-            <RowHeader columns={columns} />
+            <div>
+              <RowHeader columns={columns} />
+              {loading && <Spinner size="3x" height="12vh" />}
+            </div>
           ) : (
             <RowBody data={data} columns={columns} index={index - 1} />
           )

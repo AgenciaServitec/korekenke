@@ -14,5 +14,8 @@
     "deploy:extensions": "firebase deploy --only extensions",
     "export:extensions": "firebase ext:export",
     "ext:export": "firebase ext:export"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
   }
 }

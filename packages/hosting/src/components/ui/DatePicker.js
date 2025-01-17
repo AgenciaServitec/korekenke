@@ -8,16 +8,16 @@ export const DatePicker = ({
   name,
   required = false,
   disabled = false,
-  hidden,
+  hidden = false,
   error = false,
-  helperText,
+  helperText = "",
   dataTestId,
   label,
   variant = "filled",
   allowClear = true,
   onChange,
   prefix = null,
-  disabledDate,
+  disabledDate = false,
 }) => {
   const Container = ComponentContainer[variant];
 

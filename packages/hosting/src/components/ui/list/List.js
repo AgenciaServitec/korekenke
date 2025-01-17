@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import ListAntd from "antd/lib/list";
+import { List as ListAntd } from "antd";
 import { IconAction } from "../IconAction";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { modalConfirm } from "../modalConfirm";

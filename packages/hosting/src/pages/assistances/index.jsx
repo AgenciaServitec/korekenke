@@ -3,28 +3,49 @@ import {
   Acl,
   Button,
   Col,
-  Row,
+  Legend,
   notification,
-  Title,
+  Row,
   Spinner,
+  Title,
 } from "../../components";
 import { useNavigate } from "react-router";
 import { useAuthentication } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { assistancesRef } from "../../firebase/collections/assistance";
 import styled from "styled-components";
 import { AssistancesTable } from "./AssistancesTable";
 import { fetchUsersByCip } from "../../firebase/collections";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
+import { useDebounce, useQueriesState } from "../../hooks";
+import { AssistancesFilter } from "./Assistances.Filter";
+import { AssistancesFinder } from "./AssistancesFinder";
+import dayjs from "dayjs";
+import { assistancesQuery } from "./_utils";
 
 export const AssistancesIntegration = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
+  const [searchFields, setSearchFields] = useQueriesState({
+    cip: undefined,
+    fromDate: dayjs().format("DD-MM-YYYY"),
+    toDate: dayjs().format("DD-MM-YYYY"),
+  });
 
+  const debouncedSearchFields = useDebounce(searchFields, 750);
+
+  // assistancesRef.where("isDeleted", "==", false)
   const [assistances = [], assistancesLoading, assistancesError] =
-    useCollectionData(assistancesRef.where("isDeleted", "==", false));
+    useCollectionData(
+      assistancesQuery({
+        cip: debouncedSearchFields.cip,
+        fromDate: debouncedSearchFields.fromDate,
+        toDate: debouncedSearchFields.toDate,
+      }),
+    );
+
+  console.log("assistancesError: ", assistancesError);
 
   const [searchCIP, setSearchCIP] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -67,7 +88,7 @@ export const AssistancesIntegration = () => {
 
   const onNavigateGoTo = (pathname = "/") => navigate(pathname);
 
-  const filteredAssistances = selectedUser
+  const assistancesView = selectedUser
     ? assistances.filter((assistance) => assistance.user.id === selectedUser.id)
     : assistances;
 
@@ -78,12 +99,14 @@ export const AssistancesIntegration = () => {
       user={authUser}
       onNavigateGoTo={onNavigateGoTo}
       assistancesLoading={assistancesLoading}
-      assistances={filteredAssistances}
+      assistances={assistancesView}
       searchCIP={searchCIP}
       setSearchCIP={setSearchCIP}
       onSearchUser={onSearchUser}
       onResetView={onResetView}
       selectedUser={selectedUser}
+      searchFields={searchFields}
+      setSearchFields={setSearchFields}
     />
   );
 };
@@ -98,7 +121,33 @@ const Assistances = ({
   onSearchUser,
   onResetView,
   selectedUser,
+  searchFields,
+  setSearchFields,
 }) => {
+  const [filterFields, setFilterFields] = useQueriesState({
+    date: "all",
+    type: "all",
+    cip: "all",
+  });
+
+  const mapAssistancesView = (assistances) => {
+    const mapView = {
+      assistances: assistances,
+      filter(filterFields) {
+        mapView.assistances = filteredAssistances(
+          mapView.assistances,
+          filterFields,
+        );
+        return mapView;
+      },
+    };
+
+    return mapView;
+  };
+
+  const assistancesView =
+    mapAssistancesView(assistances).filter(filterFields).assistances;
+
   return (
     <Acl
       redirect
@@ -119,6 +168,9 @@ const Assistances = ({
             <div className="header-content">
               <Title level={2}>LISTA DE ASISTENCIAS</Title>
             </div>
+            <Col span={24}>
+              <span>{assistancesView.length} Resultados</span>
+            </Col>
             {["super_admin", "manager"].includes(user.roleCode) && (
               <div className="user-search">
                 <label htmlFor="cip-search">Buscar por CIP:</label>
@@ -142,10 +194,27 @@ const Assistances = ({
             )}
           </Col>
           <Col span={24}>
+            <Legend title="Busqueda">
+              <AssistancesFinder
+                searchFields={searchFields}
+                onSearch={setSearchFields}
+              />
+            </Legend>
+          </Col>
+          <Col span={24}>
+            <Legend title="Filtros">
+              <AssistancesFilter
+                assistances={assistancesView}
+                filterFields={filterFields}
+                onFilter={setFilterFields}
+              />
+            </Legend>
+          </Col>
+          <Col span={24}>
             <AssistancesTable
+              assistances={assistancesView}
               user={user}
               loading={assistancesLoading}
-              assistances={assistances}
             />
           </Col>
         </Row>
@@ -153,6 +222,24 @@ const Assistances = ({
     </Acl>
   );
 };
+
+const filteredAssistances = (assistances, filterFields) =>
+  assistances
+    .filter((assistance) =>
+      filterFields.type === "all"
+        ? true
+        : filterFields.type === assistance.type,
+    )
+    .filter((assistance) =>
+      filterFields.date === "all"
+        ? true
+        : filterFields.date === assistance.date,
+    )
+    .filter((assistance) =>
+      filterFields.cip === "all"
+        ? true
+        : filterFields.cip === assistance.user.cip,
+    );
 
 const Container = styled.div`
   .button {
