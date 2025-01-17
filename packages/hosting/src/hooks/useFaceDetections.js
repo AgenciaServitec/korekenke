@@ -71,7 +71,7 @@ export const useFaceDetection = (videoRef) => {
     const loadAndDetect = async () => {
       try {
         await loadModels();
-        intervalRef.current = setInterval(detectFacesInVideo, 300);
+        intervalRef.current = setInterval(detectFacesInVideo, 2500);
       } catch (err) {
         console.error("Error al cargar modelos y comenzar detección:", err);
       }

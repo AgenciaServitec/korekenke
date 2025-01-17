@@ -1,52 +1,152 @@
 import React, { useEffect, useState } from "react";
-import { Acl, Col, Row } from "../../../components";
+import { Acl, Col, notification, Row } from "../../../components";
 import { ModalProvider, useAuthentication, useModal } from "../../../providers";
-import { useDevice, useUserLocation } from "../../../hooks";
+import {
+  useDefaultFirestoreProps,
+  useDevice,
+  useUserLocation,
+} from "../../../hooks";
 import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { assistancesRef } from "../../../firebase/collections/assistance";
+import {
+  addAssistance,
+  fetchTodayAssistancesByUserId,
+  getAssistancesId,
+} from "../../../firebase/collections/assistance";
 import { GetFaceBiometrics } from "./GetFaceBiometrics";
 import { ClockRealTime } from "../../../components/ui/ClockRealTime";
+import dayjs from "dayjs";
+import { omit } from "lodash";
+import { useParams } from "react-router";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
+  const { assistanceId } = useParams();
+  const { assignCreateProps } = useDefaultFirestoreProps();
 
-  const [assistances = []] = useCollectionData(
-    assistancesRef.where("isDeleted", "==", false),
-  );
+  const [entryButtonActive, setEntryButtonActive] = useState(false);
+  const [outletButtonActive, setOutletButtonActive] = useState(false);
+  const [isGeofenceValidate, setIsGeofenceValidate] = useState(false);
+  const [assistanceSaved, setAssistanceSaved] = useState(false);
+
+  const limitMarkedAssistance = async (type, currentDate) => {
+    const todayAssistancesUser = await fetchTodayAssistancesByUserId(
+      authUser.id,
+    );
+
+    return todayAssistancesUser.some(
+      (assistance) =>
+        assistance.type === type && assistance.date === currentDate,
+    );
+  };
+
+  const fetchTodayAssistance = async () => {
+    const currentDate = dayjs().format("DD/MM/YYYY");
+
+    const isMarkedEntry = await limitMarkedAssistance("entry", currentDate);
+
+    const isMarkedOutlet = await limitMarkedAssistance("outlet", currentDate);
+
+    setEntryButtonActive(!isMarkedEntry && isGeofenceValidate);
+    setOutletButtonActive(
+      !isMarkedOutlet && isMarkedEntry && isGeofenceValidate,
+    );
+  };
+
+  useEffect(() => {
+    if (assistanceSaved || isGeofenceValidate) {
+      (async () => {
+        await fetchTodayAssistance();
+      })();
+    }
+  }, [assistanceSaved, isGeofenceValidate]);
+
+  const onSaveAssistance = async (type, onComplete) => {
+    try {
+      const currentDate = dayjs().format("DD/MM/YYYY");
+
+      const isMarkedAssistant = await limitMarkedAssistance(type, currentDate);
+
+      if (isMarkedAssistant) {
+        notification({
+          type: "warning",
+          message: `Ya ha marcado su ${type === "entry" ? "ingreso" : "salida"} hoy`,
+        });
+        return;
+      } else if (!isGeofenceValidate) {
+        notification({
+          type: "warning",
+          message: "No estás dentro de tu lugar de trabajo",
+        });
+        return;
+      }
+
+      const assistanceData = {
+        userId: authUser.id,
+        id: assistanceId || getAssistancesId(),
+        type,
+        date: currentDate,
+        user: omit(authUser, "acls"),
+      };
+
+      await addAssistance(assignCreateProps(assistanceData));
+
+      notification({
+        type: "success",
+        title: `Ha marcado su ${type === "entry" ? "entrada" : "salida"} correctamente`,
+      });
+
+      await fetchTodayAssistance();
+
+      if (onComplete) onComplete();
+    } catch (error) {
+      console.error("AddAssistanceError:", error);
+      notification({
+        type: "error",
+      });
+    } finally {
+      setAssistanceSaved(true);
+    }
+  };
 
   return (
     <ModalProvider>
-      <Assistance user={authUser} assistances={assistances} />
+      <Assistance
+        user={authUser}
+        onSaveAssistance={onSaveAssistance}
+        entryButtonActive={entryButtonActive}
+        outletButtonActive={outletButtonActive}
+        onSetIsGeofenceValidate={setIsGeofenceValidate}
+      />
     </ModalProvider>
   );
 };
 
-const Assistance = ({ user, assistances }) => {
+const Assistance = ({
+  user,
+  onSaveAssistance,
+  outletButtonActive,
+  entryButtonActive,
+  onSetIsGeofenceValidate,
+}) => {
   const { userLocation } = useUserLocation();
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const showAlert = !user?.workPlace;
   const showAlert2 = !user?.biometricVectors;
 
-  console.log("isAuthenticated: ", isAuthenticated);
-
-  const onShowWebcam = () => {
+  const onShowWebcam = (type) => {
     onShowModal({
       title: "Reconocimiento Facial",
       width: `${isTablet ? "60%" : "30%"}`,
       onRenderBody: () => (
         <GetFaceBiometrics
+          type={type}
           onCloseModal={onCloseModal}
           user={user}
-          assistances={assistances}
-          isAuthenticated={isAuthenticated}
-          setIsAuthenticated={setIsAuthenticated}
+          onSaveAssistance={onSaveAssistance}
         />
       ),
     });
@@ -96,12 +196,12 @@ const Assistance = ({ user, assistances }) => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <GetAssistance
-              isAuthenticated={isAuthenticated}
               user={user}
               userLocation={userLocation}
-              assistances={assistances}
               onShowWebcam={onShowWebcam}
-              setIsAuthenticated={setIsAuthenticated}
+              entryButtonActive={entryButtonActive}
+              outletButtonActive={outletButtonActive}
+              onSetIsGeofenceValidate={onSetIsGeofenceValidate}
             />
           </Col>
         </Row>
