@@ -48,14 +48,18 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
       align: "center",
       width: ["7rem", "100%"],
       render: (assistance) =>
-        dayjs(assistance.createAt.toDate()).format("HH:mm:ss a"),
+        assistance.type === "entry"
+          ? dayjs(assistance.createAt.toDate()).format("HH:mm:ss a")
+          : "-",
     },
     {
       title: "Hora salida",
       align: "center",
       width: ["7rem", "100%"],
       render: (assistance) =>
-        dayjs(assistance.createAt.toDate()).format("HH:mm:ss a"),
+        assistance.type === "outlet"
+          ? dayjs(assistance.createAt.toDate()).format("HH:mm:ss a")
+          : "-",
     },
   ];
 

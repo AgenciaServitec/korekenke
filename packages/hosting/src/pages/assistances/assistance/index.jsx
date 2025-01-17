@@ -9,10 +9,8 @@ import {
 import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   addAssistance,
-  assistancesRef,
   fetchTodayAssistancesByUserId,
   getAssistancesId,
 } from "../../../firebase/collections/assistance";
@@ -29,12 +27,8 @@ export const AssistanceIntegration = () => {
 
   const [entryButtonActive, setEntryButtonActive] = useState(false);
   const [outletButtonActive, setOutletButtonActive] = useState(false);
-
   const [isGeofenceValidate, setIsGeofenceValidate] = useState(false);
-
-  const [assistances = []] = useCollectionData(
-    assistancesRef.where("isDeleted", "==", false),
-  );
+  const [assistanceSaved, setAssistanceSaved] = useState(false);
 
   const limitMarkedAssistance = async (type, currentDate) => {
     const todayAssistancesUser = await fetchTodayAssistancesByUserId(
@@ -54,21 +48,21 @@ export const AssistanceIntegration = () => {
 
     const isMarkedOutlet = await limitMarkedAssistance("outlet", currentDate);
 
-    setEntryButtonActive(
-      isMarkedEntry || isMarkedOutlet || !isGeofenceValidate,
-    );
+    setEntryButtonActive(!isMarkedEntry && isGeofenceValidate);
     setOutletButtonActive(
-      isMarkedOutlet || !isMarkedEntry || !isGeofenceValidate,
+      !isMarkedOutlet && isMarkedEntry && isGeofenceValidate,
     );
   };
 
   useEffect(() => {
-    (async () => {
-      await fetchTodayAssistance();
-    })();
-  }, [authUser.id, isGeofenceValidate]);
+    if (assistanceSaved || isGeofenceValidate) {
+      (async () => {
+        await fetchTodayAssistance();
+      })();
+    }
+  }, [assistanceSaved, isGeofenceValidate]);
 
-  const onSaveAssistance = async (type) => {
+  const onSaveAssistance = async (type, onComplete) => {
     try {
       const currentDate = dayjs().format("DD/MM/YYYY");
 
@@ -78,6 +72,12 @@ export const AssistanceIntegration = () => {
         notification({
           type: "warning",
           message: `Ya ha marcado su ${type === "entry" ? "ingreso" : "salida"} hoy`,
+        });
+        return;
+      } else if (!isGeofenceValidate) {
+        notification({
+          type: "warning",
+          message: "No estás dentro de tu lugar de trabajo",
         });
         return;
       }
@@ -96,11 +96,17 @@ export const AssistanceIntegration = () => {
         type: "success",
         title: `Ha marcado su ${type === "entry" ? "entrada" : "salida"} correctamente`,
       });
+
+      await fetchTodayAssistance();
+
+      if (onComplete) onComplete();
     } catch (error) {
       console.error("AddAssistanceError:", error);
       notification({
         type: "error",
       });
+    } finally {
+      setAssistanceSaved(true);
     }
   };
 
@@ -108,7 +114,6 @@ export const AssistanceIntegration = () => {
     <ModalProvider>
       <Assistance
         user={authUser}
-        assistances={assistances}
         onSaveAssistance={onSaveAssistance}
         entryButtonActive={entryButtonActive}
         outletButtonActive={outletButtonActive}
@@ -120,7 +125,6 @@ export const AssistanceIntegration = () => {
 
 const Assistance = ({
   user,
-  assistances,
   onSaveAssistance,
   outletButtonActive,
   entryButtonActive,
