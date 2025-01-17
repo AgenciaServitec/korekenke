@@ -1,166 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import {
-  Button,
-  Col,
-  MapComponent,
-  notification,
-  Row,
-} from "../../../components";
-import {
-  addAssistance,
-  fetchTodayAssistancesByUserId,
-  getAssistancesId,
-} from "../../../firebase/collections/assistance";
-import dayjs from "dayjs";
-import { useDefaultFirestoreProps } from "../../../hooks";
+import React, { useState } from "react";
+import { Button, Col, MapComponent, Row } from "../../../components";
+
 import styled from "styled-components";
 import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { omit } from "lodash";
 
 export const GetAssistance = ({
   user,
   userLocation,
   onShowWebcam,
-  isAuthenticated,
+  entryButtonActive,
+  outletButtonActive,
+  onSetIsGeofenceValidate,
 }) => {
-  const { assistanceId } = useParams();
-  const { assignCreateProps } = useDefaultFirestoreProps();
-
-  const [isEntry, setIsEntry] = useState(false);
-  const [isOutlet, setIsOutlet] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isWithinGeofence, setIsWithinGeofence] = useState(false);
-
-  const limitMarkedAssistance = async (type, currentDate) => {
-    const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
-
-    return todayAssistancesUser.some(
-      (assistance) =>
-        assistance.type === type && assistance.date === currentDate,
-    );
-  };
-
-  const onSaveAssistance = async (type) => {
-    if (isProcessing || !isAuthenticated) return;
-
-    try {
-      setIsProcessing(true);
-
-      const currentDate = dayjs().format("DD/MM/YYYY");
-
-      const isMarkedAssistant = await limitMarkedAssistance(type, currentDate);
-
-      if (isMarkedAssistant) {
-        return notification({
-          type: "warning",
-          message: `Ya ha marcado su ${type === "entry" ? "ingreso" : "salida"} hoy`,
-        });
-      }
-
-      const assistanceData = {
-        userId: user.id,
-        id: assistanceId || getAssistancesId(),
-        type,
-        date: currentDate,
-        user: omit(user, "acls"),
-      };
-
-      await addAssistance(assignCreateProps(assistanceData));
-
-      type === "entry" ? setIsEntry(true) : setIsOutlet(true);
-    } catch (error) {
-      console.error("AddAssistanceError:", error);
-      notification({
-        type: "error",
-      });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchTodayAssistance = async () => {
-      const currentDate = dayjs().format("DD/MM/YYYY");
-      const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
-
-      const isMarkedEntry = todayAssistancesUser.some(
-        (assistance) =>
-          assistance.type === "entry" && assistance.date === currentDate,
-      );
-
-      const isMarkedOutlet = todayAssistancesUser.some(
-        (assistance) =>
-          assistance.type === "outlet" && assistance.date === currentDate,
-      );
-
-      setIsEntry(isMarkedEntry);
-      setIsOutlet(isMarkedOutlet);
-      setIsLoading(false);
-    };
-
-    (async () => {
-      await fetchTodayAssistance();
-    })();
-  }, [user.id]);
-
   return (
     <AssistanceButtons
-      handleMarkAssistance={onSaveAssistance}
-      isEntry={isEntry}
-      isOutlet={isOutlet}
-      isLoading={isLoading}
-      isProcessing={isProcessing}
       userLocation={userLocation}
-      isWithinGeofence={isWithinGeofence}
-      onGeofenceValidate={setIsWithinGeofence}
       onShowWebcam={onShowWebcam}
+      entryButtonActive={entryButtonActive}
+      outletButtonActive={outletButtonActive}
+      onSetIsGeofenceValidate={onSetIsGeofenceValidate}
     />
   );
 };
 
 const AssistanceButtons = ({
-  handleMarkAssistance,
-  isEntry,
   userLocation,
-  isWithinGeofence,
-  onGeofenceValidate,
-  isOutlet,
-  isLoading,
-  isProcessing,
   onShowWebcam,
+  entryButtonActive,
+  outletButtonActive,
+  onSetIsGeofenceValidate,
 }) => {
-  const isEntryBtnDisabled =
-    isLoading || isEntry || !isWithinGeofence || isOutlet || isProcessing;
-
-  const isOutletBtnDisabled =
-    isLoading || isOutlet || !isWithinGeofence || !isEntry || isProcessing;
-
   return (
     <Container>
       <Row gutter={[16, 16]}>
         <Col span={24} md={8}>
           <div className="buttons">
             <Button
-              onClick={async () => {
-                await handleMarkAssistance("entry");
-                await onShowWebcam();
-              }}
-              disabled={isEntryBtnDisabled}
-              className={`entry-btn ${isEntryBtnDisabled ? "disabled" : ""}`}
+              onClick={() => onShowWebcam("entry")}
+              disabled={entryButtonActive}
+              className={`entry-btn ${entryButtonActive ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
-              onClick={async () => {
-                await onShowWebcam();
-                handleMarkAssistance("outlet");
-              }}
-              disabled={isOutletBtnDisabled}
-              className={`outlet-btn ${isOutletBtnDisabled ? "disabled" : ""}`}
+              onClick={() => onShowWebcam("outlet")}
+              disabled={outletButtonActive}
+              className={`outlet-btn ${outletButtonActive ? "disabled" : ""}`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida
@@ -172,7 +59,7 @@ const AssistanceButtons = ({
             <MapComponent
               geofence
               userLocation={userLocation}
-              onGeofenceValidate={onGeofenceValidate}
+              onGeofenceValidate={onSetIsGeofenceValidate}
               markers={
                 userLocation
                   ? [
