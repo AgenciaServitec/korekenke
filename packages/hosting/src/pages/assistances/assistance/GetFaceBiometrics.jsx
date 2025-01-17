@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useWebcam, useFaceDetection } from "../../../hooks";
+import React, { useEffect } from "react";
+import { useFaceDetection, useWebcam } from "../../../hooks";
 import styled from "styled-components";
-import { useAuthentication } from "../../../providers";
-import { notification } from "../../../components";
 import { isEmpty } from "lodash";
 
-export const GetFaceBiometrics = ({ onCloseModal, setIsAuthenticated }) => {
-  const { authUser } = useAuthentication();
+export const GetFaceBiometrics = ({
+  type,
+  onCloseModal,
+  user,
+  onSaveAssistance,
+}) => {
+  console.log("type: ", type);
+
   const { videoRef, hasPermission, error: webcamError } = useWebcam();
   const {
     biometricVectors,
     loading,
     error: detectionError,
   } = useFaceDetection(videoRef);
-  const [hasVerified, setHasVerified] = useState(false);
 
   const calculateEuclideanDistance = (vector1, vector2) => {
     if (vector1.length !== vector2.length) {
@@ -33,45 +36,30 @@ export const GetFaceBiometrics = ({ onCloseModal, setIsAuthenticated }) => {
     return distance < threshold;
   };
 
-  useEffect(() => {
-    if (hasVerified) return;
-
-    if (!authUser.biometricVectors) {
-      notification({
-        type: "warning",
-        title: "Registre su rostro en su perfil",
-      });
-      onCloseModal();
-      return;
-    }
-
+  const onBiometricValidated = async () => {
+    console.log("biometricVectors", biometricVectors);
     if (!isEmpty(biometricVectors)) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
-      const userVectors = Object.values(authUser.biometricVectors[0]);
+      const userVectors = Object.values(user.biometricVectors[0]);
 
       const existsUser = compareBiometricVectors(
         userVectors,
         flatBiometricVectors,
       );
 
+      console.log("existsUser: ", existsUser);
+
       if (existsUser) {
-        notification({
-          type: "success",
-          title: "Autenticación Correcta",
-        });
-        setIsAuthenticated(true);
-      } else {
-        notification({
-          type: "warning",
-          title: "Autenticación Errónea",
-        });
-        setIsAuthenticated(false);
+        await onSaveAssistance(type);
       }
 
-      setHasVerified(true);
       onCloseModal();
     }
-  }, [biometricVectors, hasVerified]);
+  };
+
+  useEffect(() => {
+    (async () => await onBiometricValidated())();
+  }, [biometricVectors]);
 
   if (webcamError || detectionError) {
     const errorMessage = webcamError?.message || detectionError?.message;
