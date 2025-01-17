@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { DatePicker, Select } from "../../components";
-import dayjs from "dayjs";
+import { Select } from "../../components";
 
 export const AssistancesFilter = ({ assistances, filterFields, onFilter }) => {
   const onChangeType = (value) =>
@@ -10,13 +9,6 @@ export const AssistancesFilter = ({ assistances, filterFields, onFilter }) => {
       ...filterFields,
       type: !value ? "all" : value,
     });
-
-  const onChangeDate = (value) => {
-    return onFilter({
-      ...filterFields,
-      date: !value ? "all" : value,
-    });
-  };
 
   return (
     <Container>
@@ -39,18 +31,6 @@ export const AssistancesFilter = ({ assistances, filterFields, onFilter }) => {
               value: "outlet",
             },
           ]}
-        />
-        <DatePicker
-          label="Fecha"
-          onChange={(value, valueString) => {
-            onChangeDate(valueString);
-          }}
-          value={
-            filterFields?.date === "all"
-              ? undefined
-              : dayjs(filterFields.date, "DD/MM/YYYY")
-          }
-          name="date"
         />
       </FormContent>
     </Container>

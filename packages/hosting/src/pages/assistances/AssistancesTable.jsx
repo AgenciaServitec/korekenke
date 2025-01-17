@@ -3,15 +3,33 @@ import dayjs from "dayjs";
 import styled from "styled-components";
 import { TableVirtualized } from "../../components";
 import { userFullName } from "../../utils";
+import { Tag } from "antd";
 
 export const AssistancesTable = ({ user, loading, assistances }) => {
   const columns = [
     {
       title: "Fecha",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (assistance) =>
         dayjs(assistance.date, "DD/MM/YYYY").format("DD/MM/YYYY"),
+    },
+    {
+      title: "Tipo",
+      align: "center",
+      width: ["5rem", "100%"],
+      render: (assistance) =>
+        assistance.type === "entry" ? (
+          <Tag color="green">Entrada</Tag>
+        ) : (
+          <Tag color="red">Salida</Tag>
+        ),
+    },
+    {
+      title: "Cip",
+      align: "center",
+      width: ["7rem", "100%"],
+      render: (assistance) => assistance.user.cip,
     },
     {
       title: "Apellidos y Nombres",
@@ -22,20 +40,20 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
     {
       title: "Lugar de trabajo",
       align: "center",
-      width: ["10rem", "100%"],
+      width: ["8rem", "100%"],
       render: () => user.workPlace,
     },
     {
-      title: "Hora de entrada",
+      title: "Hora entrada",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (assistance) =>
         dayjs(assistance.createAt.toDate()).format("HH:mm:ss a"),
     },
     {
-      title: "Hora de salida",
+      title: "Hora salida",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (assistance) =>
         dayjs(assistance.createAt.toDate()).format("HH:mm:ss a"),
     },

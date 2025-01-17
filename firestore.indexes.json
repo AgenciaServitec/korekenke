@@ -23,7 +23,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "cip",
+          "fieldPath": "user.cip",
           "order": "ASCENDING"
         },
         {
@@ -37,7 +37,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "cip",
+          "fieldPath": "user.cip",
           "order": "ASCENDING"
         },
         {
@@ -55,7 +55,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "cip",
+          "fieldPath": "user.cip",
           "order": "ASCENDING"
         },
         {

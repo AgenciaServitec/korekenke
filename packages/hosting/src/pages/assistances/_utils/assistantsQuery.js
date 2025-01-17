@@ -12,7 +12,7 @@ export const assistancesQuery = ({ cip, fromDate, toDate }) => {
   }
 
   if (cip) {
-    query = query.where("cip", "==", cip);
+    query = query.where("user.cip", "==", cip);
   }
 
   const [startDate, endDate] = dateRange(fromDate, toDate);
