@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export const useUserLocation = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [locationError, setLocationError] = useState(null);
+  const watchIdRef = useRef(null);
 
-  const getUserLocation = () => {
+  const startTracking = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      watchIdRef.current = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
@@ -31,18 +32,32 @@ export const useUserLocation = () => {
               );
           }
         },
+        { enableHighAccuracy: true, maximumAge: 0 },
       );
     } else {
       setLocationError("Geolocalización no soportada");
     }
   };
 
+  const stopTracking = () => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+  };
+
   useEffect(() => {
-    getUserLocation();
+    startTracking();
+
+    return () => {
+      stopTracking();
+    };
   }, []);
 
   return {
     userLocation,
     locationError,
+    startTracking,
+    stopTracking,
   };
 };

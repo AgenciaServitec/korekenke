@@ -34,28 +34,26 @@ export const GetAssistance = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isWithinGeofence, setIsWithinGeofence] = useState(false);
 
-  const handleMarkAssistance = async (type) => {
+  const limitMarkedAssistance = async (type, currentDate) => {
+    const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
+
+    return todayAssistancesUser.some(
+      (assistance) =>
+        assistance.type === type && assistance.date === currentDate,
+    );
+  };
+
+  const onSaveAssistance = async (type) => {
     if (isProcessing || !isAuthenticated) return;
-    setIsProcessing(true);
 
     try {
+      setIsProcessing(true);
+
       const currentDate = dayjs().format("DD/MM/YYYY");
-      const todayAssistancesUser = await fetchTodayAssistancesByUserId(user.id);
 
-      const isMarkedEntry = todayAssistancesUser.some(
-        (assistance) =>
-          assistance.type === "entry" && assistance.date === currentDate,
-      );
+      const isMarkedAssistant = await limitMarkedAssistance(type, currentDate);
 
-      const isMarkedOutlet = todayAssistancesUser.some(
-        (assistance) =>
-          assistance.type === "outlet" && assistance.date === currentDate,
-      );
-
-      if (
-        (type === "entry" && isMarkedEntry) ||
-        (type === "outlet" && isMarkedOutlet)
-      ) {
+      if (isMarkedAssistant) {
         return notification({
           type: "warning",
           message: `Ya ha marcado su ${type === "entry" ? "ingreso" : "salida"} hoy`,
@@ -74,10 +72,9 @@ export const GetAssistance = ({
 
       type === "entry" ? setIsEntry(true) : setIsOutlet(true);
     } catch (error) {
-      console.error("Error marcando asistencia:", error);
+      console.error("AddAssistanceError:", error);
       notification({
         type: "error",
-        message: "Ocurrió un error al marcar la asistencia",
       });
     } finally {
       setIsProcessing(false);
@@ -111,7 +108,7 @@ export const GetAssistance = ({
 
   return (
     <AssistanceButtons
-      handleMarkAssistance={handleMarkAssistance}
+      handleMarkAssistance={onSaveAssistance}
       isEntry={isEntry}
       isOutlet={isOutlet}
       isLoading={isLoading}
@@ -148,8 +145,8 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={async () => {
+                await handleMarkAssistance("entry");
                 await onShowWebcam();
-                handleMarkAssistance("entry");
               }}
               disabled={isEntryBtnDisabled}
               className={`entry-btn ${isEntryBtnDisabled ? "disabled" : ""}`}
