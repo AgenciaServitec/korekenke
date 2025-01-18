@@ -20,6 +20,7 @@ import { ClockRealTime } from "../../../components/ui/ClockRealTime";
 import dayjs from "dayjs";
 import { omit } from "lodash";
 import { useParams } from "react-router";
+import { Alert, Flex } from "antd";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
@@ -196,40 +197,61 @@ const Assistance = ({
         subCategory="assistances"
         name="/assistances/assistance"
       >
-        <div className="superior-section">
-          <div className="workPlace">
-            <strong>Lugar de trabajo: {user.workPlace}</strong>
-          </div>
-          <div className="datetime">
-            <p>
-              <ClockRealTime />
-            </p>
-          </div>
-        </div>
-        {showAlert && (
-          <div className="alert-wrapper">
-            <p>
-              <strong>Atención:</strong> No tienes un lugar de trabajo
-              configurado. Por favor, dirígete a tu perfil para agregarlo.
-            </p>
-            <Link to="/profile" className="alert-link">
-              Ir a mi perfil
-            </Link>
-          </div>
-        )}
-        {showAlert2 && (
-          <div className="alert-wrapper">
-            <p>
-              <strong>Atención:</strong> No tiene su rostro registrado para el
-              reconocimiento facial. Por favor, dirígete a tu perfil para
-              agregarlo.
-            </p>
-            <Link to="/profile" className="alert-link">
-              Ir a mi perfil
-            </Link>
-          </div>
-        )}
         <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <div className="superior-section">
+              <Flex wrap gap={6} justify={2}>
+                <div className="workPlace">
+                  <strong>Lugar de trabajo: {user?.workPlace}</strong>
+                </div>
+                <div className="datetime">
+                  <ClockRealTime />
+                </div>
+              </Flex>
+            </div>
+          </Col>
+          <Col span={24}>
+            <Flex gap={5} vertical wrap>
+              {showAlert && (
+                <Alert
+                  showIcon
+                  type="warning"
+                  className="alert-component"
+                  message={
+                    <div className="alert-items">
+                      <p>
+                        <strong>Atención:</strong> No tienes un lugar de trabajo
+                        configurado. Por favor, dirígete a tu perfil para
+                        agregarlo. &nbsp;
+                        <Link to="/profile" className="alert-link">
+                          Click aqui!
+                        </Link>
+                      </p>
+                    </div>
+                  }
+                />
+              )}
+              {showAlert2 && (
+                <Alert
+                  showIcon
+                  type="warning"
+                  className="alert-component"
+                  message={
+                    <div className="alert-items">
+                      <p>
+                        <strong>Atención:</strong> No tiene su rostro registrado
+                        para el reconocimiento facial. Por favor, dirígete a tu
+                        perfil para agregarlo. &nbsp;
+                        <Link to="/profile" className="alert-link">
+                          Click aqui!
+                        </Link>
+                      </p>
+                    </div>
+                  }
+                />
+              )}
+            </Flex>
+          </Col>
           <Col span={24}>
             <GetAssistance
               user={user}
@@ -251,57 +273,18 @@ const Container = styled.div`
     justify-content: space-between;
     display: flex;
   }
+
+  .alert-component {
+    .anticon {
+      font-size: 2em;
+    }
+  }
+
   .workPlace {
     font-size: 1.4em;
-
-    @media (max-width: 768px) {
-      font-size: 1.2em;
-      text-align: center;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 1em;
-      text-align: left;
-    }
   }
+
   .datetime {
     font-size: 1.4em;
-
-    @media (max-width: 768px) {
-      font-size: 1.2em;
-      text-align: center;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 1em;
-      text-align: left;
-    }
-  }
-
-  .alert-wrapper {
-    background-color: #f8d7da;
-    color: #842029;
-    padding: 1.5em;
-    margin-bottom: 1em;
-    border: 1px solid #f5c2c7;
-    border-radius: 8px;
-
-    p {
-      margin: 0 0 1em 0;
-    }
-
-    .alert-link {
-      display: inline-block;
-      padding: 0.5em 1em;
-      background-color: #842029;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    .alert-link:hover {
-      background-color: #6d1a22;
-    }
   }
 `;

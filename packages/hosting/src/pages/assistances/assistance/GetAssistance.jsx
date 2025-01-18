@@ -3,6 +3,7 @@ import { Button, Col, MapComponent, Row } from "../../../components";
 import styled from "styled-components";
 import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { mediaQuery } from "../../../styles";
 
 export const GetAssistance = ({
   userLocation,
@@ -78,9 +79,9 @@ const AssistanceButtons = ({
 };
 
 const Container = styled.div`
-  padding-top: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border-top: 1px solid #ddd;
+  padding: 1em;
+  border-radius: 1em;
+  border: 1px solid rgba(125, 152, 183, 0.47);
 
   .buttons {
     width: 100%;
@@ -113,6 +114,8 @@ const Container = styled.div`
   .entry-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background-color: #308132 !important;
+    color: #fff !important;
   }
 
   .entry-btn:active {
@@ -133,6 +136,8 @@ const Container = styled.div`
   .outlet-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background-color: #a85050 !important;
+    color: #fff !important;
   }
 
   .outlet-btn:active {
@@ -149,16 +154,19 @@ const Container = styled.div`
   .map-container {
     width: 100%;
     height: calc(100vh - 20px);
-    border-radius: 8px;
+    border-radius: 0.3em;
+    padding: 0.3em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    display: grid;
+    place-items: center;
   }
 
   .map-container .leaflet-container {
     border-radius: 8px;
   }
 
-  @media (max-width: 768px) {
+  ${mediaQuery.maxTablet} {
     .map-container {
       width: 100%;
       height: 100vh;
@@ -176,7 +184,7 @@ const Container = styled.div`
     }
   }
 
-  @media (max-width: 480px) {
+  ${mediaQuery.maxMobile} {
     .map-container {
       height: 100vh;
     }
@@ -184,25 +192,6 @@ const Container = styled.div`
     .entry-btn,
     .outlet-btn {
       width: 100%;
-    }
-  }
-
-  @media (max-width: 350px) {
-    .entry-btn,
-    .outlet-btn {
-      padding: 3em 1em;
-      font-size: 1rem;
-    }
-  }
-
-  @media (orientation: landscape) {
-    .map-container {
-      height: 90vh;
-    }
-  }
-  @media (orientation: portrait) {
-    .map-container {
-      height: 50vh;
     }
   }
 `;
