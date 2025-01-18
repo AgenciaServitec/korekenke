@@ -36,6 +36,15 @@ export const GetFaceBiometrics = ({
   };
 
   const onBiometricValidated = async () => {
+    if (!user.biometricVectors) {
+      notification({
+        type: "warning",
+        description: "registre su rostro en perfil",
+      });
+      onCloseModal();
+      return;
+    }
+
     if (!isEmpty(biometricVectors)) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
       const userVectors = Object.values(user.biometricVectors[0]);

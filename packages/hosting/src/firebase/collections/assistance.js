@@ -14,11 +14,9 @@ export const fetchAssistances = async () =>
   fetchCollectionOnce(assistancesRef.where("isDeleted", "==", false));
 
 export const fetchTodayAssistancesByUserId = async (userId) => {
-  const today = dayjs().format("DD/MM/YYYY");
   return fetchCollectionOnce(
     assistancesRef
       .where("user.id", "==", userId)
-      .where("date", "==", today)
       .where("isDeleted", "==", false),
   );
 };

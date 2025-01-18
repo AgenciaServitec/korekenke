@@ -13,6 +13,7 @@ import {
   addAssistance,
   fetchTodayAssistancesByUserId,
   getAssistancesId,
+  updateAssistance,
 } from "../../../firebase/collections/assistance";
 import { GetFaceBiometrics } from "./GetFaceBiometrics";
 import { ClockRealTime } from "../../../components/ui/ClockRealTime";
@@ -37,16 +38,20 @@ export const AssistanceIntegration = () => {
 
     return todayAssistancesUser.some(
       (assistance) =>
-        assistance.type === type && assistance.date === currentDate,
+        assistance?.[type] &&
+        dayjs(
+          dayjs(assistance?.[type]?.date, "DD-MM-YYYY HH:mm").toDate(),
+        ).isToday(),
     );
   };
 
   const fetchTodayAssistance = async () => {
     const currentDate = dayjs().format("DD/MM/YYYY");
 
-    const isMarkedEntry = await limitMarkedAssistance("entry", currentDate);
-
-    const isMarkedOutlet = await limitMarkedAssistance("outlet", currentDate);
+    const [isMarkedEntry, isMarkedOutlet] = await Promise.all([
+      limitMarkedAssistance("entry", currentDate),
+      limitMarkedAssistance("outlet", currentDate),
+    ]);
 
     setEntryButtonActive(!isMarkedEntry && isGeofenceValidate);
     setOutletButtonActive(
@@ -62,11 +67,41 @@ export const AssistanceIntegration = () => {
     }
   }, [assistanceSaved, isGeofenceValidate]);
 
+  const assistanceMap = (assistance = null, type, assistanceDate) => ({
+    ...assistance,
+    userId: authUser.id,
+    id: assistance?.id ? assistance?.id : getAssistancesId(),
+    createAtString: assistance?.createAtString || assistanceDate,
+    entry: assistance?.entry
+      ? assistance?.entry
+      : {
+          date: assistanceDate,
+        },
+    outlet:
+      type === "outlet" && assistance?.entry
+        ? {
+            date: assistanceDate,
+          }
+        : null,
+    user: omit(authUser, "acls"),
+    workPlace: authUser?.workPlace || null,
+  });
+
   const onSaveAssistance = async (type, onComplete) => {
     try {
-      const currentDate = dayjs().format("DD/MM/YYYY");
+      const currentDate = dayjs().format("DD-MM-YYYY");
+      const assistanceDate = dayjs().format("DD-MM-YYYY HH:mm");
 
-      const isMarkedAssistant = await limitMarkedAssistance(type, currentDate);
+      const [isMarkedAssistant, assistances = []] = await Promise.all([
+        limitMarkedAssistance(type, currentDate),
+        fetchTodayAssistancesByUserId(authUser.id),
+      ]);
+
+      const assistance = assistances.find((assistance) =>
+        dayjs(
+          dayjs(assistance?.createAtString, "DD-MM-YYYY HH:mm").toDate(),
+        ).isToday(),
+      );
 
       if (isMarkedAssistant) {
         notification({
@@ -74,7 +109,9 @@ export const AssistanceIntegration = () => {
           message: `Ya ha marcado su ${type === "entry" ? "ingreso" : "salida"} hoy`,
         });
         return;
-      } else if (!isGeofenceValidate) {
+      }
+
+      if (!isGeofenceValidate) {
         notification({
           type: "warning",
           message: "No estás dentro de tu lugar de trabajo",
@@ -82,15 +119,14 @@ export const AssistanceIntegration = () => {
         return;
       }
 
-      const assistanceData = {
-        userId: authUser.id,
-        id: assistanceId || getAssistancesId(),
-        type,
-        date: currentDate,
-        user: omit(authUser, "acls"),
-      };
-
-      await addAssistance(assignCreateProps(assistanceData));
+      type === "entry"
+        ? await addAssistance(
+            assignCreateProps(assistanceMap(null, type, assistanceDate)),
+          )
+        : await updateAssistance(
+            assistance.id,
+            assignCreateProps(assistanceMap(assistance, type, assistanceDate)),
+          );
 
       notification({
         type: "success",
