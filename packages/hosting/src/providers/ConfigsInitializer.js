@@ -16,6 +16,7 @@ import weekday from "dayjs/plugin/weekday";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isToday from "dayjs/plugin/isToday";
 
 export const ConfigsInitializer = ({ children }) => {
   const [locale] = useState(esES);
@@ -29,8 +30,8 @@ export const ConfigsInitializer = ({ children }) => {
   dayjs.extend(localeData);
   dayjs.extend(weekOfYear);
   dayjs.extend(weekYear);
-
   dayjs.extend(isSameOrBefore);
+  dayjs.extend(isToday);
 
   useEffect(() => {
     setLocale(yup["es"]);
