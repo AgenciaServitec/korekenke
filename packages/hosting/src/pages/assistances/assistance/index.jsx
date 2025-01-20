@@ -200,7 +200,12 @@ const Assistance = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <div className="superior-section">
-              <Flex wrap gap={6} justify={2}>
+              <Flex
+                wrap
+                gap={6}
+                justify="space-between"
+                style={{ width: "100%" }}
+              >
                 <div className="workPlace">
                   <strong>Lugar de trabajo: {user?.workPlace}</strong>
                 </div>
