@@ -19,12 +19,10 @@ import { GetFaceBiometrics } from "./GetFaceBiometrics";
 import { ClockRealTime } from "../../../components/ui/ClockRealTime";
 import dayjs from "dayjs";
 import { omit } from "lodash";
-import { useParams } from "react-router";
 import { Alert, Flex } from "antd";
 
 export const AssistanceIntegration = () => {
   const { authUser } = useAuthentication();
-  const { assistanceId } = useParams();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [entryButtonActive, setEntryButtonActive] = useState(false);
@@ -32,7 +30,7 @@ export const AssistanceIntegration = () => {
   const [isGeofenceValidate, setIsGeofenceValidate] = useState(false);
   const [assistanceSaved, setAssistanceSaved] = useState(false);
 
-  const limitMarkedAssistance = async (type, currentDate) => {
+  const limitMarkedAssistance = async (type) => {
     const todayAssistancesUser = await fetchTodayAssistancesByUserId(
       authUser.id,
     );
@@ -47,11 +45,9 @@ export const AssistanceIntegration = () => {
   };
 
   const fetchTodayAssistance = async () => {
-    const currentDate = dayjs().format("DD/MM/YYYY");
-
     const [isMarkedEntry, isMarkedOutlet] = await Promise.all([
-      limitMarkedAssistance("entry", currentDate),
-      limitMarkedAssistance("outlet", currentDate),
+      limitMarkedAssistance("entry"),
+      limitMarkedAssistance("outlet"),
     ]);
 
     setEntryButtonActive(!isMarkedEntry && isGeofenceValidate);
