@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+
 import * as faceapi from "face-api.js/";
 
 export const useFaceDetection = (videoRef) => {
@@ -71,7 +72,7 @@ export const useFaceDetection = (videoRef) => {
     const loadAndDetect = async () => {
       try {
         await loadModels();
-        intervalRef.current = setInterval(detectFacesInVideo, 2500);
+        intervalRef.current = setInterval(detectFacesInVideo, 3000);
       } catch (err) {
         console.error("Error al cargar modelos y comenzar detección:", err);
       }
