@@ -12,7 +12,10 @@ import {
   useApiVerifyEmailVerifyCodePost,
 } from "../../api";
 import { getLocalStorage } from "../../utils";
-import { fetchUsersByCip } from "../../firebase/collections";
+import {
+  deleteSessionVerification,
+  fetchUsersByCip,
+} from "../../firebase/collections";
 import { isEmpty } from "lodash";
 import { Spin } from "antd";
 import { isProduction } from "../../config";
@@ -57,6 +60,7 @@ export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
         return;
       }
 
+      await deleteSessionVerification(user.id);
       await postVerifyEmailSendCode(user.id);
       setExpiredVerifiedCode(false);
       start(60);
