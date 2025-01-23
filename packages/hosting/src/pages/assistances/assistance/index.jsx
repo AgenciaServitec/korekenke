@@ -87,9 +87,9 @@ export const AssistanceIntegration = () => {
       limitMarkedAssistance("outlet"),
     ]);
 
-    setEntryButtonActive(!isMarkedEntry && isGeofenceValidate);
+    setEntryButtonActive(!isMarkedEntry && isGeofenceValidate && user);
     setOutletButtonActive(
-      !isMarkedOutlet && isMarkedEntry && isGeofenceValidate,
+      !isMarkedOutlet && isMarkedEntry && isGeofenceValidate && user,
     );
   };
 
@@ -121,7 +121,7 @@ export const AssistanceIntegration = () => {
     workPlace: user?.workPlace || null,
   });
 
-  const onSaveAssistance = async (type, onComplete) => {
+  const onSaveAssistance = async (type) => {
     try {
       const currentDate = dayjs().format("DD-MM-YYYY");
       const assistanceDate = dayjs().format("DD-MM-YYYY HH:mm");
@@ -171,13 +171,14 @@ export const AssistanceIntegration = () => {
 
       await fetchTodayAssistance();
 
-      if (onComplete) onComplete();
+      return;
     } catch (error) {
       console.error("AddAssistanceError:", error);
       notification({
         type: "error",
       });
     } finally {
+      onResetUserData();
       setAssistanceSaved(true);
     }
   };
@@ -214,8 +215,8 @@ const Assistance = ({
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
-  const showAlert = !user?.workPlace;
-  const showAlert2 = !user?.biometricVectors;
+  const showAlert = user && !user?.workPlace;
+  const showAlert2 = user && !user?.biometricVectors;
 
   const onShowWebcam = (type) => {
     onShowModal({
