@@ -55,8 +55,6 @@ export const GetFaceBiometrics = ({
         flatBiometricVectors,
       );
 
-      console.log("existsUser: ", existsUser);
-
       if (existsUser) {
         await onSaveAssistance(type);
       } else {
