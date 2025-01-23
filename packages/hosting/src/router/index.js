@@ -204,9 +204,9 @@ export const Router = () => {
           exact
           path="assistances/assistance"
           element={
-            <AdminLayout>
+            <PublicLayout>
               <A.AssistanceIntegration />
-            </AdminLayout>
+            </PublicLayout>
           }
         />
         <Route
