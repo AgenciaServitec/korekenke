@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Acl, Col, notification, Row } from "../../../components";
-import { ModalProvider, useAuthentication, useModal } from "../../../providers";
+import {
+  Acl,
+  Col,
+  Input,
+  notification,
+  Row,
+  Alert,
+  Button,
+  Flex,
+} from "../../../components";
+import { ModalProvider, useModal } from "../../../providers";
 import {
   useDefaultFirestoreProps,
   useDevice,
@@ -18,24 +27,52 @@ import {
 import { GetFaceBiometrics } from "./GetFaceBiometrics";
 import { ClockRealTime } from "../../../components/ui/ClockRealTime";
 import dayjs from "dayjs";
-import { omit } from "lodash";
-import { Alert, Flex } from "antd";
+import { isEmpty, omit } from "lodash";
+import { fetchUsersByDni } from "../../../firebase/collections";
+import { userFullName } from "../../../utils/users/userFullName2";
 
 export const AssistanceIntegration = () => {
-  const { authUser } = useAuthentication();
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [entryButtonActive, setEntryButtonActive] = useState(false);
   const [outletButtonActive, setOutletButtonActive] = useState(false);
   const [isGeofenceValidate, setIsGeofenceValidate] = useState(false);
   const [assistanceSaved, setAssistanceSaved] = useState(false);
+  const [dni, setDni] = useState("");
+  const [user, setUser] = useState(null);
+
+  const searchUserByDni = async () => {
+    if (!dni) {
+      notification({ type: "warning", description: "Digite su DNI" });
+      return;
+    }
+    try {
+      const detectedUserByDni = await fetchUsersByDni(dni);
+      if (detectedUserByDni.length > 0) {
+        setUser(detectedUserByDni[0]);
+      } else {
+        setUser(null);
+        notification({ type: "warning", description: "usuario no encontrado" });
+      }
+    } catch (error) {
+      console.error("Error al buscar usuario por DNI:", error);
+      notification({
+        type: "error",
+        description: "Hubo un error al buscar el usuario. Intenta nuevamente.",
+      });
+    }
+  };
+
+  const onResetUserData = () => {
+    setDni("");
+    setUser(null);
+  };
 
   const limitMarkedAssistance = async (type) => {
-    const todayAssistancesUser = await fetchTodayAssistancesByUserId(
-      authUser.id,
-    );
+    const todayAssistancesUser =
+      !isEmpty(user) && (await fetchTodayAssistancesByUserId(user?.id));
 
-    return todayAssistancesUser.some(
+    return (todayAssistancesUser || []).some(
       (assistance) =>
         assistance?.[type] &&
         dayjs(
@@ -62,11 +99,11 @@ export const AssistanceIntegration = () => {
         await fetchTodayAssistance();
       })();
     }
-  }, [assistanceSaved, isGeofenceValidate]);
+  }, [assistanceSaved, isGeofenceValidate, user]);
 
-  const assistanceMap = (assistance = null, type, assistanceDate) => ({
+  const assistanceMap = (assistance = null, type, assistanceDate, user) => ({
     ...assistance,
-    userId: authUser.id,
+    userId: user?.id,
     id: assistance?.id ? assistance?.id : getAssistancesId(),
     createAtString: assistance?.createAtString || assistanceDate,
     entry: assistance?.entry
@@ -80,8 +117,8 @@ export const AssistanceIntegration = () => {
             date: assistanceDate,
           }
         : null,
-    user: omit(authUser, "acls"),
-    workPlace: authUser?.workPlace || null,
+    user: omit(user, "acls"),
+    workPlace: user?.workPlace || null,
   });
 
   const onSaveAssistance = async (type, onComplete) => {
@@ -91,7 +128,7 @@ export const AssistanceIntegration = () => {
 
       const [isMarkedAssistant, assistances = []] = await Promise.all([
         limitMarkedAssistance(type, currentDate),
-        fetchTodayAssistancesByUserId(authUser.id),
+        fetchTodayAssistancesByUserId(user.id),
       ]);
 
       const assistance = assistances.find((assistance) =>
@@ -118,11 +155,13 @@ export const AssistanceIntegration = () => {
 
       type === "entry"
         ? await addAssistance(
-            assignCreateProps(assistanceMap(null, type, assistanceDate)),
+            assignCreateProps(assistanceMap(null, type, assistanceDate, user)),
           )
         : await updateAssistance(
             assistance.id,
-            assignCreateProps(assistanceMap(assistance, type, assistanceDate)),
+            assignCreateProps(
+              assistanceMap(assistance, type, assistanceDate, user),
+            ),
           );
 
       notification({
@@ -146,11 +185,15 @@ export const AssistanceIntegration = () => {
   return (
     <ModalProvider>
       <Assistance
-        user={authUser}
         onSaveAssistance={onSaveAssistance}
         entryButtonActive={entryButtonActive}
         outletButtonActive={outletButtonActive}
         onSetIsGeofenceValidate={setIsGeofenceValidate}
+        searchUserByDni={searchUserByDni}
+        onResetUserData={onResetUserData}
+        user={user}
+        setDni={setDni}
+        dni={dni}
       />
     </ModalProvider>
   );
@@ -162,6 +205,10 @@ const Assistance = ({
   outletButtonActive,
   entryButtonActive,
   onSetIsGeofenceValidate,
+  searchUserByDni,
+  onResetUserData,
+  setDni,
+  dni,
 }) => {
   const { userLocation } = useUserLocation();
   const { isTablet } = useDevice();
@@ -178,7 +225,7 @@ const Assistance = ({
         <GetFaceBiometrics
           type={type}
           onCloseModal={onCloseModal}
-          user={user}
+          userBiometrics={user?.biometricVectors?.[0]}
           onSaveAssistance={onSaveAssistance}
         />
       ),
@@ -194,6 +241,38 @@ const Assistance = ({
         name="/assistances/assistance"
       >
         <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <div className="search-wrapper">
+              <Input
+                placeholder="ingrese su DNI"
+                value={dni}
+                onChange={(e) => setDni(e.target.value)}
+                className="input"
+              />
+              <Button
+                type="primary"
+                onClick={searchUserByDni}
+                className="search-button"
+              >
+                Buscar
+              </Button>
+              <Button
+                type="primary"
+                onClick={onResetUserData}
+                className="clear-button"
+              >
+                Limpiar
+              </Button>
+            </div>
+            {user && (
+              <div className="user-name">
+                <h2>
+                  👋 Bienvenido/a, <span>{userFullName(user)}!</span>
+                </h2>
+                <p>¡Esperamos que tengas un día productivo! 😊</p>
+              </div>
+            )}
+          </Col>
           <Col span={24}>
             <div className="superior-section">
               <Flex
@@ -270,6 +349,85 @@ const Assistance = ({
 };
 
 const Container = styled.div`
+  .search-wrapper {
+    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr)); /* Adaptable */
+    gap: 1em;
+
+    .input {
+      width: 100%;
+      padding: 0.5em;
+    }
+
+    .search-button,
+    .clear-button {
+      padding: 0.8em 1.5em;
+      margin: 0;
+      background-color: cadetblue;
+      text-align: center;
+      &:hover {
+        transition: ease 0.3s;
+        transform: scale(1.05);
+        background-color: darkslateblue;
+      }
+    }
+
+    .clear-button {
+      background-color: indianred;
+      &:hover {
+        background-color: red;
+      }
+    }
+  }
+
+  .user-name {
+    margin-top: 1.5em;
+    text-align: center;
+    color: #333;
+    animation: fadeIn 0.8s ease-in-out;
+
+    h2 {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #4caf50;
+      margin: 0;
+
+      span {
+        color: #2196f3;
+        font-style: italic;
+      }
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #757575;
+      margin-top: 0.5em;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (max-width: 768px) {
+    .search-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .search-button,
+    .clear-button {
+      padding: 0.5em 1em;
+      font-size: 0.9em;
+    }
+  }
+
   .superior-section {
     justify-content: space-between;
     display: flex;

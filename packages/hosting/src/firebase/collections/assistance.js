@@ -1,7 +1,6 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
-import dayjs from "dayjs";
 
 export const assistancesRef = firestore.collection("assistances");
 
@@ -16,7 +15,7 @@ export const fetchAssistances = async () =>
 export const fetchTodayAssistancesByUserId = async (userId) => {
   return fetchCollectionOnce(
     assistancesRef
-      .where("user.id", "==", userId)
+      .where("userId", "==", userId)
       .where("isDeleted", "==", false),
   );
 };
