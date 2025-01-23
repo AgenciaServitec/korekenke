@@ -5,9 +5,12 @@ export const useWebcam = () => {
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const maxRetries = 5;
+  const retryDelay = 0;
 
   useEffect(() => {
     let isMounted = true;
+    let retries = 0;
 
     const setupStream = (stream) => {
       streamRef.current = stream;
@@ -23,7 +26,7 @@ export const useWebcam = () => {
     };
 
     const startCamera = async () => {
-      if (streamRef.current) return;
+      if (streamRef.current || retries >= maxRetries) return;
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
@@ -34,7 +37,13 @@ export const useWebcam = () => {
           setError(null);
         }
       } catch (err) {
-        if (isMounted) handleError(err);
+        if (isMounted) {
+          handleError(err);
+          retries++;
+          if (retries < maxRetries) {
+            setTimeout(startCamera, retryDelay);
+          }
+        }
       }
     };
 

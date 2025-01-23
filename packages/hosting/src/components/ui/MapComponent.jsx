@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Circle, GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import {
+  Circle,
+  GoogleMap,
+  LoadScriptNext,
+  Marker,
+} from "@react-google-maps/api";
 import { useAuthentication } from "../../providers";
 import { WorkPlaces } from "../../data-list";
 
@@ -76,7 +81,7 @@ export const MapComponent = ({
   }, [userLocation]);
 
   return (
-    <LoadScript
+    <LoadScriptNext
       googleMapsApiKey="AIzaSyAY2QCPZzFt0DzzRAxIhvY9JB8XkDbX3aU"
       libraries={libraries}
     >
@@ -84,7 +89,12 @@ export const MapComponent = ({
         mapContainerStyle={mapStyle}
         center={userLocation ? userLocation : mapCenter}
         zoom={zoom}
-        onLoad={(map) => (mapRef.current = map)}
+        onLoad={(map) => {
+          mapRef.current = map;
+          if (userLocation) {
+            map.panTo(userLocation);
+          }
+        }}
       >
         {markers.map((marker, index) => (
           <Marker
@@ -101,6 +111,6 @@ export const MapComponent = ({
           <Circle center={mapCenter} radius={50} options={geofenceOptions} />
         )}
       </GoogleMap>
-    </LoadScript>
+    </LoadScriptNext>
   );
 };

@@ -1,10 +1,11 @@
 import React from "react";
-import { Acl, Tabs, Row, Col, Title } from "../../components";
+import { Acl, Col, Row, Tabs, Title } from "../../components";
 import { ProfileDataForm } from "./ProfileDataForm";
 import { ProfileImagesForm } from "./ProfileImagesForm";
 import { ProfileInformation } from "./ProfileInformation";
 import { ModalProvider, useAuthentication } from "../../providers";
 import { ProfileUserBiometrics } from "./ProfileUserBiometrics";
+import { useQueryString } from "../../hooks";
 
 const items = [
   {
@@ -30,6 +31,8 @@ const items = [
 export const Profile = () => {
   const { authUser } = useAuthentication();
 
+  const [dataEdit, setDataEdit] = useQueryString("dataEdit", "1");
+
   return (
     <Acl redirect category="default" subCategory="profile" name="/profile">
       <Row gutter={[16, 16]}>
@@ -45,7 +48,7 @@ export const Profile = () => {
             </Col>
             <Col span={24} md={12}>
               <Title level={4}>Editar Datos</Title>
-              <Tabs items={items} defaultActiveKey="1" />
+              <Tabs items={items} defaultActiveKey={dataEdit} />
             </Col>
           </Row>
         </Col>
