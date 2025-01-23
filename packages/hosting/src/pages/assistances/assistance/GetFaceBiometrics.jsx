@@ -60,7 +60,7 @@ export const GetFaceBiometrics = ({
       } else {
         notification({
           type: "error",
-          title: "Autenticación Fallida",
+          title: "No se pudo registrar de manera exitosa",
           description: "Vuelve a intentarlo",
         });
       }
