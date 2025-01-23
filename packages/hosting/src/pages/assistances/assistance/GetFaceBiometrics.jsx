@@ -7,8 +7,8 @@ import { notification } from "../../../components";
 export const GetFaceBiometrics = ({
   type,
   onCloseModal,
-  user,
   onSaveAssistance,
+  userBiometrics,
 }) => {
   const { videoRef, hasPermission, error: webcamError } = useWebcam();
   const {
@@ -31,12 +31,12 @@ export const GetFaceBiometrics = ({
 
   const compareBiometricVectors = (userVectors, detectedVectors) => {
     const distance = calculateEuclideanDistance(userVectors, detectedVectors);
-    const threshold = 0.6;
+    const threshold = 0.4;
     return distance < threshold;
   };
 
   const onBiometricValidated = async () => {
-    if (!user.biometricVectors) {
+    if (!userBiometrics) {
       notification({
         type: "warning",
         description: "registre su rostro en perfil",
@@ -47,10 +47,11 @@ export const GetFaceBiometrics = ({
 
     if (!isEmpty(biometricVectors)) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
-      const userVectors = Object.values(user.biometricVectors[0]);
+      const userBiometricVectors = Object.values(userBiometrics);
+      console.log("flatBiometricVectors: ", flatBiometricVectors);
 
       const existsUser = compareBiometricVectors(
-        userVectors,
+        userBiometricVectors,
         flatBiometricVectors,
       );
 
@@ -60,7 +61,7 @@ export const GetFaceBiometrics = ({
         notification({
           type: "error",
           title: "Autenticación Fallida",
-          description: "vuelve a intentarlo",
+          description: "Vuelve a intentarlo",
         });
       }
 
