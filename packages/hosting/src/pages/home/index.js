@@ -62,7 +62,7 @@ export const HomeIntegration = () => {
               </li>
               <li>
                 <Link to={onNavigateGoTo("/assistances/assistance")}>
-                  3. Asistencia
+                  3. Marcar Asistencia
                 </Link>
               </li>
             </ul>

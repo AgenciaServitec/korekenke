@@ -202,15 +202,6 @@ export const Router = () => {
         />
         <Route
           exact
-          path="assistances/assistance"
-          element={
-            <PublicLayout>
-              <A.AssistanceIntegration />
-            </PublicLayout>
-          }
-        />
-        <Route
-          exact
           path="inscriptions/cmsts"
           element={
             <AdminLayout>
@@ -300,6 +291,15 @@ export const Router = () => {
           }
         />
       </Route>
+      <Route
+        exact
+        path="assistances/assistance"
+        element={
+          <PublicLayout>
+            <A.AssistanceIntegration />
+          </PublicLayout>
+        }
+      />
       <Route
         exact
         path="surveys/organizational-climate-studies/:organizationalClimateStudyId"

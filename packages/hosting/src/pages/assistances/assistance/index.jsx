@@ -235,116 +235,109 @@ const Assistance = ({
 
   return (
     <Container>
-      <Acl
-        redirect
-        category="default"
-        subCategory="assistances"
-        name="/assistances/assistance"
-      >
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <div className="search-wrapper">
-              <Input
-                placeholder="ingrese su DNI"
-                value={dni}
-                onChange={(e) => setDni(e.target.value)}
-                className="input"
-              />
-              <Button
-                type="primary"
-                onClick={searchUserByDni}
-                className="search-button"
-              >
-                Buscar
-              </Button>
-              <Button
-                type="primary"
-                onClick={onResetUserData}
-                className="clear-button"
-              >
-                Limpiar
-              </Button>
-            </div>
-            {user && (
-              <div className="user-name">
-                <h2>
-                  👋 Bienvenido/a, <span>{userFullName(user)}!</span>
-                </h2>
-                <p>¡Esperamos que tengas un día productivo! 😊</p>
-              </div>
-            )}
-          </Col>
-          <Col span={24}>
-            <div className="superior-section">
-              <Flex
-                wrap
-                gap={6}
-                justify="space-between"
-                style={{ width: "100%" }}
-              >
-                <div className="workPlace">
-                  <strong>Lugar de trabajo: {user?.workPlace}</strong>
-                </div>
-                <div className="datetime">
-                  <ClockRealTime />
-                </div>
-              </Flex>
-            </div>
-          </Col>
-          <Col span={24}>
-            <Flex gap={5} vertical wrap>
-              {showAlert && (
-                <Alert
-                  showIcon
-                  type="warning"
-                  className="alert-component"
-                  message={
-                    <div className="alert-items">
-                      <p>
-                        <strong>Atención:</strong> No tienes un lugar de trabajo
-                        configurado. Por favor, dirígete a tu perfil para
-                        agregarlo. &nbsp;
-                        <Link to="/profile" className="alert-link">
-                          Click aqui!
-                        </Link>
-                      </p>
-                    </div>
-                  }
-                />
-              )}
-              {showAlert2 && (
-                <Alert
-                  showIcon
-                  type="warning"
-                  className="alert-component"
-                  message={
-                    <div className="alert-items">
-                      <p>
-                        <strong>Atención:</strong> No tiene su rostro registrado
-                        para el reconocimiento facial. Por favor, dirígete a tu
-                        perfil para agregarlo. &nbsp;
-                        <Link to="/profile" className="alert-link">
-                          Click aqui!
-                        </Link>
-                      </p>
-                    </div>
-                  }
-                />
-              )}
-            </Flex>
-          </Col>
-          <Col span={24}>
-            <GetAssistance
-              user={user}
-              userLocation={userLocation}
-              onShowWebcam={onShowWebcam}
-              entryButtonActive={entryButtonActive}
-              outletButtonActive={outletButtonActive}
-              onSetIsGeofenceValidate={onSetIsGeofenceValidate}
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <div className="search-wrapper">
+            <Input
+              placeholder="ingrese su DNI"
+              value={dni}
+              onChange={(e) => setDni(e.target.value)}
+              className="input"
             />
-          </Col>
-        </Row>
-      </Acl>
+            <Button
+              type="primary"
+              onClick={searchUserByDni}
+              className="search-button"
+            >
+              Buscar
+            </Button>
+            <Button
+              type="primary"
+              onClick={onResetUserData}
+              className="clear-button"
+            >
+              Limpiar
+            </Button>
+          </div>
+          {user && (
+            <div className="user-name">
+              <h2>
+                👋 Bienvenido/a, <span>{userFullName(user)}!</span>
+              </h2>
+              <p>¡Esperamos que tengas un día productivo! 😊</p>
+            </div>
+          )}
+        </Col>
+        <Col span={24}>
+          <div className="superior-section">
+            <Flex
+              wrap
+              gap={6}
+              justify="space-between"
+              style={{ width: "100%" }}
+            >
+              <div className="workPlace">
+                <strong>Lugar de trabajo: {user?.workPlace}</strong>
+              </div>
+              <div className="datetime">
+                <ClockRealTime />
+              </div>
+            </Flex>
+          </div>
+        </Col>
+        <Col span={24}>
+          <Flex gap={5} vertical wrap>
+            {showAlert && (
+              <Alert
+                showIcon
+                type="warning"
+                className="alert-component"
+                message={
+                  <div className="alert-items">
+                    <p>
+                      <strong>Atención:</strong> No tienes un lugar de trabajo
+                      configurado. Por favor, dirígete a tu perfil para
+                      agregarlo. &nbsp;
+                      <Link to="/profile" className="alert-link">
+                        Click aqui!
+                      </Link>
+                    </p>
+                  </div>
+                }
+              />
+            )}
+            {showAlert2 && (
+              <Alert
+                showIcon
+                type="warning"
+                className="alert-component"
+                message={
+                  <div className="alert-items">
+                    <p>
+                      <strong>Atención:</strong> No tiene su rostro registrado
+                      para el reconocimiento facial. Por favor, dirígete a tu
+                      perfil para agregarlo. &nbsp;
+                      <Link to="/profile" className="alert-link">
+                        Click aqui!
+                      </Link>
+                    </p>
+                  </div>
+                }
+              />
+            )}
+          </Flex>
+        </Col>
+        <Col span={24}>
+          <GetAssistance
+            user={user}
+            userLocation={userLocation}
+            onShowWebcam={onShowWebcam}
+            entryButtonActive={entryButtonActive}
+            outletButtonActive={outletButtonActive}
+            onSetIsGeofenceValidate={onSetIsGeofenceValidate}
+          />
+        </Col>
+      </Row>
     </Container>
   );
 };
