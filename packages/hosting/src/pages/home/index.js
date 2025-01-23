@@ -278,10 +278,7 @@ const Container = styled.section`
         display: flex;
         flex-direction: column;
         gap: 1em;
-
-        ${mediaQuery.minDesktop} {
-          font-size: 1.1rem;
-        }
+        font-size: 1.1rem;
       }
     }
   }
