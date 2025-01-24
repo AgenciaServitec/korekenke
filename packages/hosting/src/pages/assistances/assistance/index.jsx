@@ -291,7 +291,11 @@ const Assistance = ({
         </Col>
         <Col span={24}>
           {user && (
-            <div className="user-name" ref={getAssistanceRef}>
+            <div
+              className="user-name"
+              ref={getAssistanceRef}
+              style={{ padding: "1em 0" }}
+            >
               <h2>
                 👋 Bienvenido/a, <span>{userFullName(user)}!</span>
               </h2>
