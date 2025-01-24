@@ -220,7 +220,7 @@ const Assistance = ({
   setDni,
   dni,
 }) => {
-  const { userLocation } = useUserLocation();
+  const { userLocation } = useUserLocation({ user });
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
@@ -338,7 +338,7 @@ const Assistance = ({
             )}
           </Flex>
         </Col>
-        {dni.length === 8 && (
+        {!isEmpty(user?.biometricVectors) && (
           <Col span={24}>
             <GetAssistance
               user={user}

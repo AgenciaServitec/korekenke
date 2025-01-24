@@ -31,7 +31,7 @@ export const GetFaceBiometrics = ({
 
   const compareBiometricVectors = (userVectors, detectedVectors) => {
     const distance = calculateEuclideanDistance(userVectors, detectedVectors);
-    const threshold = 0.4;
+    const threshold = 0.6;
     return distance < threshold;
   };
 
