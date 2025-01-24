@@ -91,7 +91,7 @@ const Container = styled.div`
 
   .entry-btn,
   .outlet-btn {
-    padding: 4em 3em;
+    padding: 3em 3em;
     font-size: 2.1rem;
     font-weight: 600;
     border: none;
@@ -153,7 +153,7 @@ const Container = styled.div`
 
   .map-container {
     width: 100%;
-    height: calc(100vh - 20px);
+    height: calc(73svh - 20px);
     border-radius: 0.3em;
     padding: 0.3em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -168,7 +168,7 @@ const Container = styled.div`
   ${mediaQuery.maxTablet} {
     .map-container {
       width: 100%;
-      height: 100vh;
+      height: 73svh;
     }
 
     .entry-btn,

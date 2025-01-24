@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -30,6 +30,7 @@ import { isEmpty, omit } from "lodash";
 import { fetchUsersByDni } from "../../../firebase/collections";
 import { userFullName } from "../../../utils/users/userFullName2";
 import { CardMessage } from "./CardMessage";
+import { mediaQuery } from "../../../styles";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -43,6 +44,8 @@ export const AssistanceIntegration = () => {
   const [showCardMessage, setShowCardMessage] = useState(false);
   const [messageType, setMessageType] = useState("");
 
+  const getAssistanceRef = useRef(null);
+
   const searchUserByDni = async () => {
     if (!dni) {
       notification({ type: "warning", description: "Digite su DNI" });
@@ -50,12 +53,11 @@ export const AssistanceIntegration = () => {
     }
     try {
       const detectedUserByDni = await fetchUsersByDni(dni);
-      if (detectedUserByDni.length > 0) {
-        setUser(detectedUserByDni[0]);
-      } else {
-        setUser(null);
-        notification({ type: "warning", description: "usuario no encontrado" });
-      }
+      if (detectedUserByDni.length > 0) return setUser(detectedUserByDni[0]);
+
+      setUser(null);
+
+      notification({ type: "warning", description: "usuario no encontrado" });
     } catch (error) {
       console.error("Error al buscar usuario por DNI:", error);
       notification({
@@ -64,6 +66,14 @@ export const AssistanceIntegration = () => {
       });
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (getAssistanceRef?.current) {
+        getAssistanceRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 700);
+  }, [user]);
 
   const onResetUserData = () => {
     setDni("");
@@ -202,6 +212,7 @@ export const AssistanceIntegration = () => {
         user={user}
         setDni={setDni}
         dni={dni}
+        getAssistanceRef={getAssistanceRef}
       />
     </ModalProvider>
   );
@@ -219,6 +230,7 @@ const Assistance = ({
   onResetUserData,
   setDni,
   dni,
+  getAssistanceRef,
 }) => {
   const { userLocation } = useUserLocation({ user });
   const { isTablet } = useDevice();
@@ -244,10 +256,12 @@ const Assistance = ({
 
   return (
     <Container>
-      <div className="datetime">
-        <ClockRealTime />
-      </div>
       <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Flex justify="end">
+            <ClockRealTime />
+          </Flex>
+        </Col>
         <Col span={24}>
           <div className="search-wrapper">
             <Input
@@ -256,23 +270,15 @@ const Assistance = ({
               onChange={(e) => setDni(e.target.value)}
               className="input"
             />
-            <Button
-              type="primary"
-              onClick={searchUserByDni}
-              className="search-button"
-            >
+            <Button type="primary" onClick={searchUserByDni} size="large">
               Buscar
             </Button>
-            <Button
-              type="primary"
-              onClick={onResetUserData}
-              className="clear-button"
-            >
+            <Button type="default" onClick={onResetUserData} size="large">
               Limpiar
             </Button>
           </div>
           {user && (
-            <div className="user-name">
+            <div className="user-name" ref={getAssistanceRef}>
               <h2>
                 👋 Bienvenido/a, <span>{userFullName(user)}!</span>
               </h2>
@@ -367,26 +373,6 @@ const Container = styled.div`
       width: 100%;
       padding: 0.5em;
     }
-
-    .search-button,
-    .clear-button {
-      padding: 0.8em 1.5em;
-      margin: 0;
-      background-color: cadetblue;
-      text-align: center;
-      &:hover {
-        transition: ease 0.3s;
-        transform: scale(1.05);
-        background-color: darkslateblue;
-      }
-    }
-
-    .clear-button {
-      background-color: indianred;
-      &:hover {
-        background-color: red;
-      }
-    }
   }
 
   .user-name {
@@ -424,17 +410,6 @@ const Container = styled.div`
       transform: translateY(0);
     }
   }
-  @media (max-width: 768px) {
-    .search-wrapper {
-      grid-template-columns: 1fr;
-    }
-
-    .search-button,
-    .clear-button {
-      padding: 0.5em 1em;
-      font-size: 0.9em;
-    }
-  }
 
   .superior-section {
     justify-content: space-between;
@@ -449,10 +424,5 @@ const Container = styled.div`
 
   .workPlace {
     font-size: 1.4em;
-  }
-
-  .datetime {
-    text-align: right;
-    font-size: 1.1em;
   }
 `;

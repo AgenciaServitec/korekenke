@@ -2,6 +2,7 @@
   {
     "label": "Villa Militar Chorrillos Oeste",
     "value": "military-valley-west",
+    "workPlaceRadius": 50,
     "coordinates": {
       "lat": -12.160362,
       "lng": -77.019443
@@ -10,6 +11,7 @@
   {
     "label": "Servitec",
     "value": "servitec",
+    "workPlaceRadius": 30,
     "coordinates": {
       "lat": -12.169543,
       "lng": -77.021059
@@ -18,9 +20,19 @@
   {
     "label": "IESTP Gilda",
     "value": "iestp-gilda",
+    "workPlaceRadius": 50,
     "coordinates": {
       "lat": -12.165643,
       "lng": -76.974778
+    }
+  },
+  {
+    "label": "CGE San Borja",
+    "value": "cge-san-borja",
+    "workPlaceRadius": 230,
+    "coordinates": {
+      "lat": -12.100457236363098,
+      "lng": -76.9869191936327
     }
   }
 ]
