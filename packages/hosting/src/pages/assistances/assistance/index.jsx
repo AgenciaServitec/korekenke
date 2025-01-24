@@ -4,7 +4,7 @@ import {
   Button,
   Col,
   Flex,
-  Input,
+  InputNumber,
   notification,
   Row,
 } from "../../../components";
@@ -38,7 +38,7 @@ export const AssistanceIntegration = () => {
   const [outletButtonActive, setOutletButtonActive] = useState(false);
   const [isGeofenceValidate, setIsGeofenceValidate] = useState(false);
   const [assistanceSaved, setAssistanceSaved] = useState(false);
-  const [dni, setDni] = useState("");
+  const [dni, setDni] = useState(null);
   const [user, setUser] = useState(null);
   const [showCardMessage, setShowCardMessage] = useState(false);
   const [messageType, setMessageType] = useState("");
@@ -50,18 +50,18 @@ export const AssistanceIntegration = () => {
       notification({ type: "warning", description: "Digite su DNI" });
       return;
     }
+
     try {
-      const detectedUserByDni = await fetchUsersByDni(dni);
+      const detectedUserByDni = await fetchUsersByDni(dni.toString());
       if (detectedUserByDni.length > 0) return setUser(detectedUserByDni[0]);
 
       setUser(null);
 
       notification({ type: "warning", description: "usuario no encontrado" });
     } catch (error) {
-      console.error("Error al buscar usuario por DNI:", error);
+      console.error("ErrorSearchUserByDni:", error);
       notification({
         type: "error",
-        description: "Hubo un error al buscar el usuario. Intenta nuevamente.",
       });
     }
   };
@@ -184,8 +184,6 @@ export const AssistanceIntegration = () => {
       setTimeout(() => setShowCardMessage(false), 4000);
 
       await fetchTodayAssistance();
-
-      return;
     } catch (error) {
       console.error("AddAssistanceError:", error);
       notification({
@@ -262,10 +260,10 @@ const Assistance = ({
           </Flex>
         </Col>
         <Col span={24} md={14}>
-          <Input
+          <InputNumber
             placeholder="Ingrese su numero DNI"
             value={dni}
-            onChange={(e) => setDni(e.target.value)}
+            onChange={(value) => setDni(value)}
             style={{ width: "100%" }}
           />
         </Col>

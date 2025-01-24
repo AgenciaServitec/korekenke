@@ -1,16 +1,7 @@
 import React from "react";
-import InputNumberAntd from "antd/lib/input-number";
+import { InputNumber as InputNumberAntd } from "antd";
 import { ComponentContainer } from "./component-container";
 import { toNumber } from "lodash";
-
-// interface Props {
-//   value?: string | number;
-//   required?: boolean;
-//   error?: FormError;
-//   label?: string;
-//   variant?: "outlined" | "filled";
-//   disabled?: boolean;
-// }
 
 export const InputNumber = ({
   value,
@@ -39,7 +30,7 @@ export const InputNumber = ({
     >
       <InputNumberAntd
         type="number"
-        bordered={false}
+        variant="borderless"
         placeholder=""
         size="large"
         value={value}
