@@ -30,7 +30,6 @@ import { isEmpty, omit } from "lodash";
 import { fetchUsersByDni } from "../../../firebase/collections";
 import { userFullName } from "../../../utils/users/userFullName2";
 import { CardMessage } from "./CardMessage";
-import { mediaQuery } from "../../../styles";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
