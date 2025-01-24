@@ -48,7 +48,6 @@ export const GetFaceBiometrics = ({
     if (!isEmpty(biometricVectors)) {
       const flatBiometricVectors = Array.from(biometricVectors[0]);
       const userBiometricVectors = Object.values(userBiometrics);
-      console.log("flatBiometricVectors: ", flatBiometricVectors);
 
       const existsUser = compareBiometricVectors(
         userBiometricVectors,

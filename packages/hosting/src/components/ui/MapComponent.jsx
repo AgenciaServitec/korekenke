@@ -37,13 +37,16 @@ export const MapComponent = ({
   geofence,
   userLocation,
   onGeofenceValidate,
+  radius = 50,
 }) => {
   const { authUser } = useAuthentication();
 
   const workPlace = getWorkPlaceById(authUser?.workPlace);
 
-  const mapCenter = center ||
-    workPlace?.coordinates || { lat: -12.169543, lng: -77.021059 };
+  const mapCenter = workPlace?.coordinates ||
+    center || { lat: -12.169543, lng: -77.021059 };
+
+  const geofenceRadius = workPlace?.workPlaceRadius || radius;
 
   const mapRef = useRef(null);
 
@@ -102,13 +105,18 @@ export const MapComponent = ({
             position={{ lat: marker.lat, lng: marker.lng }}
             title={marker.title || ""}
             icon={{
-              url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+              url: "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23FF6F00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-map-pin'><path d='M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg>",
             }}
+            animation={window.google?.maps.Animation?.BOUNCE}
           />
         ))}
 
         {geofence && (
-          <Circle center={mapCenter} radius={50} options={geofenceOptions} />
+          <Circle
+            center={mapCenter}
+            radius={geofenceRadius}
+            options={geofenceOptions}
+          />
         )}
       </GoogleMap>
     </LoadScriptNext>
