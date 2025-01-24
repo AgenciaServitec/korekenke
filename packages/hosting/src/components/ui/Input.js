@@ -38,12 +38,13 @@ export const Input = ({
       animation={animation}
     >
       <InputAntd
-        bordered={false}
+        variant="borderless"
         size="large"
         placeholder=""
         value={value}
         disabled={disabled}
         allowClear={!disabled}
+        style={{ width: "100%" }}
         {...props}
       />
     </Container>

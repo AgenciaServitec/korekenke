@@ -178,11 +178,6 @@ const VerificationByEmail = ({
                 Soy super admin
               </p>
             )}
-            {!isProduction && user?.roleCode !== "super_admin" && (
-              <p className="link-color" onClick={() => next()}>
-                Omit en dev
-              </p>
-            )}
           </Col>
           <Col span={24}>
             <Controller

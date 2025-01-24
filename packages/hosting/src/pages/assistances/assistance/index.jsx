@@ -261,21 +261,35 @@ const Assistance = ({
             <ClockRealTime />
           </Flex>
         </Col>
+        <Col span={24} md={14}>
+          <Input
+            placeholder="Ingrese su numero DNI"
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            style={{ width: "100%" }}
+          />
+        </Col>
+        <Col span={24} md={5}>
+          <Button
+            type="primary"
+            onClick={searchUserByDni}
+            size="large"
+            style={{ width: "100%" }}
+          >
+            Buscar
+          </Button>
+        </Col>
+        <Col span={24} md={5}>
+          <Button
+            type="default"
+            onClick={onResetUserData}
+            size="large"
+            style={{ width: "100%" }}
+          >
+            Limpiar
+          </Button>
+        </Col>
         <Col span={24}>
-          <div className="search-wrapper">
-            <Input
-              placeholder="ingrese su DNI"
-              value={dni}
-              onChange={(e) => setDni(e.target.value)}
-              className="input"
-            />
-            <Button type="primary" onClick={searchUserByDni} size="large">
-              Buscar
-            </Button>
-            <Button type="default" onClick={onResetUserData} size="large">
-              Limpiar
-            </Button>
-          </div>
           {user && (
             <div className="user-name" ref={getAssistanceRef}>
               <h2>
@@ -362,18 +376,6 @@ const Assistance = ({
 };
 
 const Container = styled.div`
-  .search-wrapper {
-    align-items: center;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr)); /* Adaptable */
-    gap: 1em;
-
-    .input {
-      width: 100%;
-      padding: 0.5em;
-    }
-  }
-
   .user-name {
     margin-top: 1.5em;
     text-align: center;
