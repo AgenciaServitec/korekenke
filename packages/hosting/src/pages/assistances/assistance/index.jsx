@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  Acl,
+  Alert,
+  Button,
   Col,
+  Flex,
   Input,
   notification,
   Row,
-  Alert,
-  Button,
-  Flex,
 } from "../../../components";
 import { ModalProvider, useModal } from "../../../providers";
 import {
@@ -30,6 +29,7 @@ import dayjs from "dayjs";
 import { isEmpty, omit } from "lodash";
 import { fetchUsersByDni } from "../../../firebase/collections";
 import { userFullName } from "../../../utils/users/userFullName2";
+import { CardMessage } from "./CardMessage";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -40,6 +40,8 @@ export const AssistanceIntegration = () => {
   const [assistanceSaved, setAssistanceSaved] = useState(false);
   const [dni, setDni] = useState("");
   const [user, setUser] = useState(null);
+  const [showCardMessage, setShowCardMessage] = useState(false);
+  const [messageType, setMessageType] = useState("");
 
   const searchUserByDni = async () => {
     if (!dni) {
@@ -168,6 +170,9 @@ export const AssistanceIntegration = () => {
         type: "success",
         title: `Ha marcado su ${type === "entry" ? "entrada" : "salida"} correctamente`,
       });
+      setMessageType(type === "entry" ? "entry" : "outlet");
+      setShowCardMessage(true);
+      setTimeout(() => setShowCardMessage(false), 4000);
 
       await fetchTodayAssistance();
 
@@ -192,6 +197,8 @@ export const AssistanceIntegration = () => {
         onSetIsGeofenceValidate={setIsGeofenceValidate}
         searchUserByDni={searchUserByDni}
         onResetUserData={onResetUserData}
+        showCardMessage={showCardMessage}
+        messageType={messageType}
         user={user}
         setDni={setDni}
         dni={dni}
@@ -206,12 +213,14 @@ const Assistance = ({
   outletButtonActive,
   entryButtonActive,
   onSetIsGeofenceValidate,
+  showCardMessage,
+  messageType,
   searchUserByDni,
   onResetUserData,
   setDni,
   dni,
 }) => {
-  const { userLocation } = useUserLocation();
+  const { userLocation } = useUserLocation({ user });
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
@@ -235,6 +244,9 @@ const Assistance = ({
 
   return (
     <Container>
+      <div className="datetime">
+        <ClockRealTime />
+      </div>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <div className="search-wrapper">
@@ -276,12 +288,11 @@ const Assistance = ({
               justify="space-between"
               style={{ width: "100%" }}
             >
-              <div className="workPlace">
-                <strong>Lugar de trabajo: {user?.workPlace}</strong>
-              </div>
-              <div className="datetime">
-                <ClockRealTime />
-              </div>
+              {user && (
+                <div className="workPlace">
+                  <strong>Lugar de trabajo: {user?.workPlace}</strong>
+                </div>
+              )}
             </Flex>
           </div>
         </Col>
@@ -317,7 +328,7 @@ const Assistance = ({
                       <strong>Atención:</strong> No tiene su rostro registrado
                       para el reconocimiento facial. Por favor, dirígete a tu
                       perfil para agregarlo. &nbsp;
-                      <Link to="/profile" className="alert-link">
+                      <Link to="/profile?dataEdit=3" className="alert-link">
                         Click aqui!
                       </Link>
                     </p>
@@ -327,17 +338,20 @@ const Assistance = ({
             )}
           </Flex>
         </Col>
-        <Col span={24}>
-          <GetAssistance
-            user={user}
-            userLocation={userLocation}
-            onShowWebcam={onShowWebcam}
-            entryButtonActive={entryButtonActive}
-            outletButtonActive={outletButtonActive}
-            onSetIsGeofenceValidate={onSetIsGeofenceValidate}
-          />
-        </Col>
+        {!isEmpty(user?.biometricVectors) && (
+          <Col span={24}>
+            <GetAssistance
+              user={user}
+              userLocation={userLocation}
+              onShowWebcam={onShowWebcam}
+              entryButtonActive={entryButtonActive}
+              outletButtonActive={outletButtonActive}
+              onSetIsGeofenceValidate={onSetIsGeofenceValidate}
+            />
+          </Col>
+        )}
       </Row>
+      {showCardMessage && <CardMessage messageType={messageType} />}
     </Container>
   );
 };
@@ -438,6 +452,7 @@ const Container = styled.div`
   }
 
   .datetime {
-    font-size: 1.4em;
+    text-align: right;
+    font-size: 1.1em;
   }
 `;

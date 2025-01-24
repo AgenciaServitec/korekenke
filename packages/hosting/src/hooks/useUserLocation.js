@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-export const useUserLocation = () => {
+export const useUserLocation = ({ user }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [locationError, setLocationError] = useState(null);
   const watchIdRef = useRef(null);
@@ -52,7 +52,7 @@ export const useUserLocation = () => {
     return () => {
       stopTracking();
     };
-  }, []);
+  }, [user]);
 
   return {
     userLocation,
