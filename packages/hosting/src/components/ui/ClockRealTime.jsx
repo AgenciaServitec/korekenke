@@ -13,7 +13,7 @@ export const ClockRealTime = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div>
+    <div style={{ minWidth: "13em", textAlign: "right" }}>
       <strong>{currentDateTime}</strong>
     </div>
   );
