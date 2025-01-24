@@ -6,7 +6,7 @@ export const useWebcam = () => {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const maxRetries = 5;
-  const retryDelay = 0;
+  const retryDelay = 1000;
 
   useEffect(() => {
     let isMounted = true;
@@ -16,6 +16,7 @@ export const useWebcam = () => {
       streamRef.current = stream;
       if (videoRef.current instanceof HTMLVideoElement) {
         videoRef.current.srcObject = stream;
+        videoRef.current.playsInline = true;
       }
     };
 
