@@ -239,7 +239,10 @@ const Assistance = ({
   const onShowWebcam = (type) => {
     onShowModal({
       title: "Reconocimiento Facial",
-      width: `${isTablet ? "60%" : "30%"}`,
+      width: `${isTablet ? "100%" : "50%"}`,
+      centered: false,
+      top: 0,
+      padding: 0,
       onRenderBody: () => (
         <GetFaceBiometrics
           type={type}

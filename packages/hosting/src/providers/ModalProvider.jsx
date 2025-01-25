@@ -29,8 +29,15 @@ export const ModalProvider = ({ children, dataSource }) => {
         title={modalProps?.title}
         closable
         width={modalProps?.width}
-        centered={false}
+        height={modalProps?.height}
+        centered={modalProps?.centered || false}
         destroyOnClose
+        padding={modalProps?.padding || 10}
+        style={{
+          top: modalProps?.top || 20,
+          overflow: "hidden",
+          padding: modalProps?.padding || 10,
+        }}
       >
         {modalProps?.onRenderBody && modalProps.onRenderBody(dataSource)}
       </Modal>

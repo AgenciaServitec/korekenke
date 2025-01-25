@@ -88,7 +88,7 @@ export const GetFaceBiometrics = ({
   return (
     <Container>
       <div className="face-biometrics-container">
-        <video ref={videoRef} autoPlay muted width="100%" height="auto" />
+        <video ref={videoRef} autoPlay muted width="100%" height="100%" />
         <canvas id="overlay" className="overlay-canvas" />
       </div>
     </Container>
@@ -99,12 +99,12 @@ const Container = styled.div`
   .face-biometrics-container {
     position: relative;
     width: 100%;
+    height: 100%;
   }
 
   .overlay-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
   }
