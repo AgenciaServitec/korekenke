@@ -24,6 +24,7 @@ import {
   Switch,
   Collapse,
   Flex,
+  Tooltip,
 } from "antd";
 
 export * from "./component-container";
@@ -96,4 +97,5 @@ export {
   Switch,
   Collapse,
   Flex,
+  Tooltip,
 };

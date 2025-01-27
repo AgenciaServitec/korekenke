@@ -32,7 +32,6 @@ const isValidLocation = (location) =>
 
 export const MapComponent = ({
   center = null,
-  markers = [],
   zoom = 18,
   geofence,
   userLocation,
@@ -61,8 +60,8 @@ export const MapComponent = ({
       );
       // eslint-disable-next-line no-undef
       const userPosition = new google.maps.LatLng(
-        userLocation.lat,
-        userLocation.lng,
+        userLocation?.lat,
+        userLocation?.lng,
       );
 
       // eslint-disable-next-line no-undef
@@ -99,17 +98,16 @@ export const MapComponent = ({
           }
         }}
       >
-        {markers.map((marker, index) => (
+        {isValidLocation(userLocation) && (
           <Marker
-            key={index}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            title={marker.title || ""}
+            position={userLocation}
+            title={"Tu ubicación"}
             icon={{
-              url: "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='%23FF6F00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-map-pin'><path d='M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg>",
+              url: "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 24 24' fill='none' stroke='%23FF6F00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-map-pin'><path d='M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg>",
             }}
             animation={window.google?.maps.Animation?.BOUNCE}
           />
-        ))}
+        )}
 
         {geofence && (
           <Circle
