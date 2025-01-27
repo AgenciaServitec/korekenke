@@ -43,7 +43,7 @@ const Container = styled.div`
     border-radius: 20px;
     background: linear-gradient(145deg, #3e4c40, #4b5a50);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-    padding: 50px 40px;
+    padding: 20px 10px;
     border: 2px solid #2c3a33;
     transition:
       transform 0.4s ease,
@@ -67,7 +67,6 @@ const Container = styled.div`
     color: #e6f7ff;
     margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
   }
 
   .message {
