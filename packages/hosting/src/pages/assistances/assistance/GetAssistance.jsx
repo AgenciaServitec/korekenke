@@ -59,17 +59,7 @@ const AssistanceButtons = ({
               geofence
               userLocation={userLocation}
               onGeofenceValidate={onSetIsGeofenceValidate}
-              markers={
-                userLocation
-                  ? [
-                      {
-                        lat: userLocation.lat,
-                        lng: userLocation.lng,
-                        title: "Tu ubicación",
-                      },
-                    ]
-                  : []
-              }
+              markers={userLocation}
             />
           </div>
         </Col>
