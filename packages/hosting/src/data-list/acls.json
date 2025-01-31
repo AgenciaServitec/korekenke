@@ -12,6 +12,10 @@
     "myAgenda": {
       "label": "Mi agenda",
       "/my-agenda": "Menu: Mi agenda"
+    },
+    "assistances": {
+      "label": "Asistencias",
+      "/assistances": "Menu: Asistencias"
     }
   },
   "accessControl": {
