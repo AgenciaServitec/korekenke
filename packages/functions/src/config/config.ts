@@ -12,7 +12,7 @@ export const config: Config = {
     version: "0.0.1",
     hosting: {
       domain: "https://korekenke-dev.web.app/",
-      apiUrl: "https://korekenke-dev.web.app/api",
+      apiUrl: "https://api-korekenke-dev.web.app",
     },
     mailer: {
       sendMailNotifyKorekenkeError: {
@@ -34,7 +34,7 @@ export const config: Config = {
     version: "0.0.1",
     hosting: {
       domain: "https://korekenke.mil.pe/",
-      apiUrl: "https://korekenke.mil.pe/api",
+      apiUrl: "https://api-korekenke.web.app",
     },
     mailer: {
       sendMailNotifyKorekenkeError: {
