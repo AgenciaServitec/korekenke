@@ -33,7 +33,6 @@ import { userFullName } from "../../../utils/users/userFullName2";
 import { CardMessage } from "./CardMessage";
 import { WorkPlaces } from "../../../data-list";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
