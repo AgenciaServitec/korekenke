@@ -30,6 +30,7 @@ import { isEmpty, omit } from "lodash";
 import { fetchUsersByDni } from "../../../firebase/collections";
 import { userFullName } from "../../../utils/users/userFullName2";
 import { CardMessage } from "./CardMessage";
+import { WorkPlaces } from "../../../data-list";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -314,7 +315,14 @@ const Assistance = ({
             >
               {user && (
                 <div className="workPlace">
-                  <strong>Lugar de trabajo: {user?.workPlace}</strong>
+                  <strong>
+                    Lugar de trabajo:{" "}
+                    {
+                      WorkPlaces.find(
+                        (workPlace) => workPlace.value === user?.workPlace,
+                      )?.label
+                    }
+                  </strong>
                 </div>
               )}
             </Flex>

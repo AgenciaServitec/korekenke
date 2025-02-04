@@ -16,8 +16,11 @@ import { fetchCollectionOnce } from "../../firebase/utils";
 import { Link } from "react-router-dom";
 import { setLocalStorage } from "../../utils";
 import { LogoPrimary } from "../../images";
+import { useNavigate } from "react-router";
 
 export const AccessDataLogin = ({ next }) => {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
 
   const onSetLoading = (loading) => setLoading(loading);
@@ -70,6 +73,8 @@ export const AccessDataLogin = ({ next }) => {
     return response[0];
   };
 
+  const onGoToAssistance = () => navigate("/assistances/assistance");
+
   return (
     <Container>
       <div className="logo-login">
@@ -106,6 +111,11 @@ export const AccessDataLogin = ({ next }) => {
         <span>
           ¿No tienes una cuenta? <Link to="/register">Registrate</Link>
         </span>
+        <div>
+          <Button size="large" onClick={() => onGoToAssistance()}>
+            Marca asistencia
+          </Button>
+        </div>
       </Form>
     </Container>
   );

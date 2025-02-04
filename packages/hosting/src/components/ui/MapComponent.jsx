@@ -5,16 +5,13 @@ import {
   LoadScriptNext,
   Marker,
 } from "@react-google-maps/api";
-import { useAuthentication } from "../../providers";
 import { WorkPlaces } from "../../data-list";
+
+const libraries = ["geometry"];
 
 const mapStyle = {
   width: "100%",
   height: "100%",
-};
-
-const getWorkPlaceById = (workPlaceId) => {
-  return WorkPlaces.find((place) => place.value === workPlaceId) || null;
 };
 
 const geofenceOptions = {
@@ -25,12 +22,8 @@ const geofenceOptions = {
   strokeWeight: 2,
 };
 
-const libraries = ["geometry"];
-
-const isValidLocation = (location) =>
-  location && !isNaN(location.lat) && !isNaN(location.lng);
-
 export const MapComponent = ({
+  user,
   center = null,
   zoom = 18,
   geofence,
@@ -38,9 +31,7 @@ export const MapComponent = ({
   onGeofenceValidate,
   radius = 50,
 }) => {
-  const { authUser } = useAuthentication();
-
-  const workPlace = getWorkPlaceById(authUser?.workPlace);
+  const workPlace = getWorkPlaceById(user?.workPlace);
 
   const mapCenter = workPlace?.coordinates ||
     center || { lat: -12.169543, lng: -77.021059 };
@@ -89,7 +80,6 @@ export const MapComponent = ({
     >
       <GoogleMap
         mapContainerStyle={mapStyle}
-        center={userLocation ? userLocation : mapCenter}
         zoom={zoom}
         onLoad={(map) => {
           mapRef.current = map;
@@ -105,7 +95,6 @@ export const MapComponent = ({
             icon={{
               url: "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 24 24' fill='none' stroke='%23FF6F00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-map-pin'><path d='M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg>",
             }}
-            animation={window.google?.maps.Animation?.BOUNCE}
           />
         )}
 
@@ -120,3 +109,10 @@ export const MapComponent = ({
     </LoadScriptNext>
   );
 };
+
+const getWorkPlaceById = (workPlaceId) => {
+  return WorkPlaces.find((place) => place.value === workPlaceId) || null;
+};
+
+const isValidLocation = (location) =>
+  location && !isNaN(location.lat) && !isNaN(location.lng);

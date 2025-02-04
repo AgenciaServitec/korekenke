@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../../styles";
 
 export const GetAssistance = ({
+  user,
   userLocation,
   onShowWebcam,
   entryButtonActive,
@@ -14,6 +15,7 @@ export const GetAssistance = ({
 }) => {
   return (
     <AssistanceButtons
+      user={user}
       userLocation={userLocation}
       onShowWebcam={onShowWebcam}
       entryButtonActive={entryButtonActive}
@@ -24,6 +26,7 @@ export const GetAssistance = ({
 };
 
 const AssistanceButtons = ({
+  user,
   userLocation,
   onShowWebcam,
   entryButtonActive,
@@ -56,6 +59,7 @@ const AssistanceButtons = ({
         <Col span={24} md={16}>
           <div className="map-container">
             <MapComponent
+              user={user}
               geofence
               userLocation={userLocation}
               onGeofenceValidate={onSetIsGeofenceValidate}
@@ -101,13 +105,6 @@ const Container = styled.div`
     background-color: #4caf50;
   }
 
-  .entry-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    background-color: #308132 !important;
-    color: #fff !important;
-  }
-
   .entry-btn:active {
     transform: translateY(1px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
@@ -121,13 +118,6 @@ const Container = styled.div`
 
   .outlet-btn {
     background-color: #e57373;
-  }
-
-  .outlet-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    background-color: #a85050 !important;
-    color: #fff !important;
   }
 
   .outlet-btn:active {
