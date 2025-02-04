@@ -23,6 +23,7 @@ import {
 import { assign } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { WorkPlaces } from "../../data-list";
+import { isProduction } from "../../config";
 
 export const ProfileDataForm = () => {
   const { authUser } = useAuthentication();
@@ -104,6 +105,10 @@ export const ProfileDataForm = () => {
   const onSubmit = async (formData) => {
     await updateProfile(formData);
   };
+
+  const filteredWorkPlaces = WorkPlaces.filter(
+    (place) => !(isProduction && place.value === "batan-restaurant"),
+  );
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -283,7 +288,7 @@ export const ProfileDataForm = () => {
                 name={name}
                 error={error(name)}
                 helperText={errorMessage(name)}
-                options={WorkPlaces}
+                options={filteredWorkPlaces}
               />
             )}
           />
