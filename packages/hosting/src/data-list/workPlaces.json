@@ -34,5 +34,14 @@
       "lat": -12.100457236363098,
       "lng": -76.9869191936327
     }
+  },
+  {
+    "label": "Batán",
+    "value": "batan-restaurant",
+    "workPlaceRadius": 50,
+    "coordinates": {
+      "lat": -12.168697531854244,
+      "lng": -77.01961452870694
+    }
   }
 ]
