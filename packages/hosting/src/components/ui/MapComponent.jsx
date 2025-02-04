@@ -6,19 +6,21 @@ import {
   Marker,
 } from "@react-google-maps/api";
 import { WorkPlaces } from "../../data-list";
+import { isProduction } from "../../config";
 
 const libraries = ["geometry"];
 
 const mapStyle = {
   width: "100%",
   height: "100%",
+  disableDefaultUI: true,
 };
 
 const geofenceOptions = {
-  fillColor: "#2699e3",
+  fillColor: "rgb(0,132,185)",
   fillOpacity: 0.2,
-  strokeColor: "rgba(0,81,255,0.5)",
-  strokeOpacity: 0.6,
+  strokeColor: "rgb(1,48,79)",
+  strokeOpacity: 0.9,
   strokeWeight: 2,
 };
 
@@ -75,12 +77,19 @@ export const MapComponent = ({
 
   return (
     <LoadScriptNext
-      googleMapsApiKey="AIzaSyAY2QCPZzFt0DzzRAxIhvY9JB8XkDbX3aU"
+      googleMapsApiKey={
+        isProduction
+          ? "AIzaSyByCFwQC2QWJIFXGK0nTlUZ_l4PsqmpJ4U"
+          : "AIzaSyAY2QCPZzFt0DzzRAxIhvY9JB8XkDbX3aU"
+      }
       libraries={libraries}
     >
       <GoogleMap
         mapContainerStyle={mapStyle}
         zoom={zoom}
+        options={{
+          disableDefaultUI: true,
+        }}
         onLoad={(map) => {
           mapRef.current = map;
           if (userLocation) {
@@ -92,9 +101,7 @@ export const MapComponent = ({
           <Marker
             position={userLocation}
             title={"Tu ubicación"}
-            icon={{
-              url: "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 24 24' fill='none' stroke='%23FF6F00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-map-pin'><path d='M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg>",
-            }}
+            animation={window.google?.maps.Animation?.BOUNCE}
           />
         )}
 
