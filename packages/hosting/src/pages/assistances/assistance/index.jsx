@@ -4,6 +4,7 @@ import {
   Button,
   Col,
   Flex,
+  Form,
   InputNumber,
   notification,
   Row,
@@ -31,6 +32,8 @@ import { fetchUsersByDni } from "../../../firebase/collections";
 import { userFullName } from "../../../utils/users/userFullName2";
 import { CardMessage } from "./CardMessage";
 import { WorkPlaces } from "../../../data-list";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -254,6 +257,11 @@ const Assistance = ({
     });
   };
 
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   return (
     <Container>
       <Row gutter={[16, 16]}>
@@ -262,34 +270,41 @@ const Assistance = ({
             <ClockRealTime />
           </Flex>
         </Col>
-        <Col span={24} md={14}>
-          <InputNumber
-            placeholder="Ingrese su numero DNI"
-            value={dni}
-            onChange={(value) => setDni(value)}
-            style={{ width: "100%" }}
-          />
-        </Col>
-        <Col span={24} md={5}>
-          <Button
-            type="primary"
-            onClick={searchUserByDni}
-            size="large"
-            style={{ width: "100%" }}
-          >
-            Buscar
-          </Button>
-        </Col>
-        <Col span={24} md={5}>
-          <Button
-            type="default"
-            onClick={onResetUserData}
-            size="large"
-            style={{ width: "100%" }}
-          >
-            Limpiar
-          </Button>
-        </Col>
+        <Form
+          onSubmit={handleSubmit(searchUserByDni)}
+          style={{ width: "100%" }}
+        >
+          <Row gutter={[16, 16]}>
+            <Col span={24} md={14}>
+              <InputNumber
+                placeholder="Ingrese su numero DNI"
+                value={dni}
+                onChange={(value) => setDni(value)}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={24} md={5}>
+              <Button
+                type="primary"
+                onClick={searchUserByDni}
+                size="large"
+                style={{ width: "100%" }}
+              >
+                Buscar
+              </Button>
+            </Col>
+            <Col span={24} md={5}>
+              <Button
+                type="default"
+                onClick={onResetUserData}
+                size="large"
+                style={{ width: "100%" }}
+              >
+                Limpiar
+              </Button>
+            </Col>
+          </Row>
+        </Form>
         <Col span={24}>
           {user && (
             <div
