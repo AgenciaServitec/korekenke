@@ -135,11 +135,10 @@ export const AssistanceIntegration = () => {
 
   const onSaveAssistance = async (type) => {
     try {
-      const currentDate = dayjs().format("DD-MM-YYYY");
       const assistanceDate = dayjs().format("DD-MM-YYYY HH:mm");
 
       const [isMarkedAssistant, assistances = []] = await Promise.all([
-        limitMarkedAssistance(type, currentDate),
+        limitMarkedAssistance(type),
         fetchTodayAssistancesByUserId(user.id),
       ]);
 
@@ -313,13 +312,13 @@ const Assistance = ({
               justify="space-between"
               style={{ width: "100%" }}
             >
-              {user && (
+              {user?.workPlace && (
                 <div className="workPlace">
                   <strong>
                     Lugar de trabajo:{" "}
                     {
                       WorkPlaces.find(
-                        (workPlace) => workPlace.value === user?.workPlace,
+                        (workPlace) => workPlace.value === user.workPlace,
                       )?.label
                     }
                   </strong>

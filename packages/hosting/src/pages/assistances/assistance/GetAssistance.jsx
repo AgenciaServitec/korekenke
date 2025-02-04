@@ -40,16 +40,14 @@ const AssistanceButtons = ({
           <div className="buttons">
             <Button
               onClick={() => onShowWebcam("entry")}
-              disabled={!entryButtonActive}
-              className={`entry-btn ${!entryButtonActive ? "disabled" : ""}`}
+              className={`entry-btn`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
               onClick={() => onShowWebcam("outlet")}
-              disabled={!outletButtonActive}
-              className={`outlet-btn ${!outletButtonActive ? "disabled" : ""}`}
+              className={`outlet-btn`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
               Marcar Salida

@@ -30,7 +30,11 @@
       "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social-dev",
       "militaryServiceRecruitment": "gs://military-service-recruitment-dev"
     },
-    "apiUrl": "https://api-korekenke-dev.web.app"
+    "apiUrl": "https://api-korekenke-dev.web.app",
+    "apiMaps": {
+      "url": "https://maps.googleapis.com/maps/api/js",
+      "apiKey": "AIzaSyAY2QCPZzFt0DzzRAxIhvY9JB8XkDbX3aU"
+    }
   },
   "production": {
     "version": "0.0.1",
@@ -52,6 +56,10 @@
       "departamentoDeApoyoSocial": "gs://departamento-apoyo-social",
       "militaryServiceRecruitment": "gs://military-service-recruitment"
     },
-    "apiUrl": "https://api-korekenke.web.app"
+    "apiUrl": "https://api-korekenke.web.app",
+    "apiMaps": {
+      "url": "https://maps.googleapis.com/maps/api/js",
+      "apiKey": "AIzaSyByCFwQC2QWJIFXGK0nTlUZ_l4PsqmpJ4U"
+    }
   }
 }

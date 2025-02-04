@@ -29,7 +29,7 @@
   {
     "label": "CGE San Borja",
     "value": "cge-san-borja",
-    "workPlaceRadius": 230,
+    "workPlaceRadius": 330,
     "coordinates": {
       "lat": -12.100457236363098,
       "lng": -76.9869191936327

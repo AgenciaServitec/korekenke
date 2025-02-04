@@ -6,14 +6,13 @@ import {
   Marker,
 } from "@react-google-maps/api";
 import { WorkPlaces } from "../../data-list";
-import { isProduction } from "../../config";
+import { currentConfig } from "../../config";
 
 const libraries = ["geometry"];
 
 const mapStyle = {
   width: "100%",
   height: "100%",
-  disableDefaultUI: true,
 };
 
 const geofenceOptions = {
@@ -63,8 +62,7 @@ export const MapComponent = ({
         userPosition,
       );
 
-      const isWithinGeofence = distance <= 50;
-      onGeofenceValidate(isWithinGeofence);
+      onGeofenceValidate(distance <= geofenceRadius);
     }
   };
 
@@ -77,11 +75,7 @@ export const MapComponent = ({
 
   return (
     <LoadScriptNext
-      googleMapsApiKey={
-        isProduction
-          ? "AIzaSyByCFwQC2QWJIFXGK0nTlUZ_l4PsqmpJ4U"
-          : "AIzaSyAY2QCPZzFt0DzzRAxIhvY9JB8XkDbX3aU"
-      }
+      googleMapsApiKey={currentConfig?.apiMaps?.apiKey}
       libraries={libraries}
     >
       <GoogleMap
