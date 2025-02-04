@@ -237,6 +237,7 @@ const Assistance = ({
 
   const showAlert = user && !user?.workPlace;
   const showAlert2 = user && !user?.biometricVectors;
+  const existsUser = !!user;
 
   const onShowWebcam = (type) => {
     onShowModal({
@@ -265,135 +266,159 @@ const Assistance = ({
     <Container>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Flex justify="end">
+          <h1 className="title">Registro de asistencias</h1>
+        </Col>
+        <Col span={24}>
+          <Flex justify="center">
             <ClockRealTime />
           </Flex>
         </Col>
-        <Form
-          onSubmit={handleSubmit(searchUserByDni)}
-          style={{ width: "100%" }}
-        >
-          <Row gutter={[16, 16]}>
-            <Col span={24} md={14}>
-              <InputNumber
-                placeholder="Ingrese su numero DNI"
-                value={dni}
-                onChange={(value) => setDni(value)}
-                style={{ width: "100%" }}
-              />
-            </Col>
-            <Col span={24} md={5}>
-              <Button
-                type="primary"
-                onClick={searchUserByDni}
-                size="large"
-                style={{ width: "100%" }}
-              >
-                Buscar
-              </Button>
-            </Col>
-            <Col span={24} md={5}>
-              <Button
-                type="default"
-                onClick={onResetUserData}
-                size="large"
-                style={{ width: "100%" }}
-              >
-                Limpiar
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-        <Col span={24}>
-          {user && (
-            <div
-              className="user-name"
-              ref={getAssistanceRef}
-              style={{ padding: "1em 0" }}
-            >
-              <h2>
-                👋 Bienvenido/a, <span>{userFullName(user)}!</span>
-              </h2>
-              <p>¡Esperamos que tengas un día productivo! 😊</p>
-            </div>
-          )}
-        </Col>
-        <Col span={24}>
-          <div className="superior-section">
-            <Flex
-              wrap
-              gap={6}
-              justify="space-between"
+        {!existsUser && (
+          <div className="form-wrapper">
+            <Form
+              onSubmit={handleSubmit(searchUserByDni)}
               style={{ width: "100%" }}
             >
-              {user?.workPlace && (
-                <div className="workPlace">
-                  <strong>
-                    Lugar de trabajo:{" "}
-                    {
-                      WorkPlaces.find(
-                        (workPlace) => workPlace.value === user.workPlace,
-                      )?.label
-                    }
-                  </strong>
-                </div>
-              )}
-            </Flex>
+              <Row gutter={[16, 16]}>
+                <Col span={24}>
+                  <h3>Número DNI</h3>
+                  <InputNumber
+                    placeholder="Ingrese número de DNI"
+                    value={dni}
+                    onChange={(value) => setDni(value)}
+                    style={{ width: "100%" }}
+                  />
+                </Col>
+                <Col span={24}>
+                  <Button
+                    type="primary"
+                    onClick={searchUserByDni}
+                    size="large"
+                    style={{ width: "100%" }}
+                  >
+                    Buscar
+                  </Button>
+                </Col>
+                <Col span={24}>
+                  <Button
+                    type="default"
+                    onClick={onResetUserData}
+                    size="large"
+                    style={{ width: "100%" }}
+                  >
+                    Limpiar
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
           </div>
-        </Col>
-        <Col span={24}>
-          <Flex gap={5} vertical wrap>
-            {showAlert && (
-              <Alert
-                showIcon
-                type="warning"
-                className="alert-component"
-                message={
-                  <div className="alert-items">
-                    <p>
-                      <strong>Atención:</strong> No tienes un lugar de trabajo
-                      configurado. Por favor, dirígete a tu perfil para
-                      agregarlo. &nbsp;
-                      <Link to="/profile" className="alert-link">
-                        Click aqui!
-                      </Link>
-                    </p>
-                  </div>
-                }
-              />
+        )}
+
+        {existsUser && (
+          <>
+            <Col span={24}>
+              <div
+                className="user-name"
+                ref={getAssistanceRef}
+                style={{ padding: "1em 0" }}
+              >
+                <h2>
+                  👋 Bienvenido/a, <span>{userFullName(user)}!</span>
+                </h2>
+                <p>¡Esperamos que tengas un buen día! 😊</p>
+              </div>
+            </Col>
+            <Col span={24}>
+              <div className="btn-cancel">
+                <Button
+                  type="primary"
+                  danger
+                  onClick={onResetUserData}
+                  size="large"
+                  block
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </Col>
+            <Col span={24}>
+              <div className="superior-section">
+                <Flex
+                  wrap
+                  gap={6}
+                  justify="space-between"
+                  style={{ width: "100%" }}
+                >
+                  {user?.workPlace && (
+                    <div className="workPlace">
+                      <strong>
+                        Lugar de trabajo:{" "}
+                        {
+                          WorkPlaces.find(
+                            (workPlace) => workPlace.value === user.workPlace,
+                          )?.label
+                        }
+                      </strong>
+                    </div>
+                  )}
+                </Flex>
+              </div>
+            </Col>
+            <Col span={24}>
+              <Flex gap={5} vertical wrap>
+                {showAlert && (
+                  <Alert
+                    showIcon
+                    type="warning"
+                    className="alert-component"
+                    message={
+                      <div className="alert-items">
+                        <p>
+                          <strong>Atención:</strong> No tienes un lugar de
+                          trabajo configurado. Por favor, dirígete a tu perfil
+                          para agregarlo. &nbsp;
+                          <Link to="/profile" className="alert-link">
+                            Click aqui!
+                          </Link>
+                        </p>
+                      </div>
+                    }
+                  />
+                )}
+                {showAlert2 && (
+                  <Alert
+                    showIcon
+                    type="warning"
+                    className="alert-component"
+                    message={
+                      <div className="alert-items">
+                        <p>
+                          <strong>Atención:</strong> No tiene su rostro
+                          registrado para el reconocimiento facial. Por favor,
+                          dirígete a tu perfil para agregarlo. &nbsp;
+                          <Link to="/profile?dataEdit=3" className="alert-link">
+                            Click aqui!
+                          </Link>
+                        </p>
+                      </div>
+                    }
+                  />
+                )}
+              </Flex>
+            </Col>
+            {!isEmpty(user?.biometricVectors) && (
+              <Col span={24}>
+                <GetAssistance
+                  user={user}
+                  userLocation={userLocation}
+                  onShowWebcam={onShowWebcam}
+                  entryButtonActive={entryButtonActive}
+                  outletButtonActive={outletButtonActive}
+                  onSetIsGeofenceValidate={onSetIsGeofenceValidate}
+                />
+              </Col>
             )}
-            {showAlert2 && (
-              <Alert
-                showIcon
-                type="warning"
-                className="alert-component"
-                message={
-                  <div className="alert-items">
-                    <p>
-                      <strong>Atención:</strong> No tiene su rostro registrado
-                      para el reconocimiento facial. Por favor, dirígete a tu
-                      perfil para agregarlo. &nbsp;
-                      <Link to="/profile?dataEdit=3" className="alert-link">
-                        Click aqui!
-                      </Link>
-                    </p>
-                  </div>
-                }
-              />
-            )}
-          </Flex>
-        </Col>
-        {!isEmpty(user?.biometricVectors) && (
-          <Col span={24}>
-            <GetAssistance
-              user={user}
-              userLocation={userLocation}
-              onShowWebcam={onShowWebcam}
-              entryButtonActive={entryButtonActive}
-              outletButtonActive={outletButtonActive}
-              onSetIsGeofenceValidate={onSetIsGeofenceValidate}
-            />
-          </Col>
+          </>
         )}
       </Row>
       {showCardMessage && <CardMessage messageType={messageType} />}
@@ -402,6 +427,14 @@ const Assistance = ({
 };
 
 const Container = styled.div`
+  .title {
+    line-height: 1em;
+    text-align: center;
+  }
+  .form-wrapper {
+    max-width: 30em;
+    margin: 2em auto auto auto;
+  }
   .user-name {
     margin-top: 1.5em;
     text-align: center;
@@ -425,6 +458,11 @@ const Container = styled.div`
       color: #757575;
       margin-top: 0.5em;
     }
+  }
+
+  .btn-cancel {
+    max-width: 30em;
+    margin: auto;
   }
 
   @keyframes fadeIn {

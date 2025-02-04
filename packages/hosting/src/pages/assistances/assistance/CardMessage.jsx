@@ -41,10 +41,10 @@ const Container = styled.div`
     width: 100%;
     text-align: center;
     border-radius: 20px;
-    background: linear-gradient(145deg, #3e4c40, #4b5a50);
+    background: linear-gradient(145deg, #174218, #027e35);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     padding: 20px 10px;
-    border: 2px solid #2c3a33;
+    border: 2px solid #0a261a;
     transition:
       transform 0.4s ease,
       box-shadow 0.4s ease;
