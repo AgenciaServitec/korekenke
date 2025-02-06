@@ -33,6 +33,7 @@ import { userFullName } from "../../../utils/users/userFullName2";
 import { CardMessage } from "./CardMessage";
 import { WorkPlaces } from "../../../data-list";
 import { useForm } from "react-hook-form";
+import { ChooseBiometricVerification } from "./ChooseBiometricVerification";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -239,15 +240,15 @@ const Assistance = ({
   const showAlert2 = user && !user?.biometricVectors;
   const existsUser = !!user;
 
-  const onShowWebcam = (type) => {
+  const onShowSelectVerification = (type) => {
     onShowModal({
-      title: "Reconocimiento Facial",
+      title: "¿Cómo desea Identificarse?",
       width: `${isTablet ? "100%" : "50%"}`,
       centered: false,
       top: 0,
       padding: 0,
       onRenderBody: () => (
-        <GetFaceBiometrics
+        <ChooseBiometricVerification
           type={type}
           onCloseModal={onCloseModal}
           userBiometrics={user?.biometricVectors?.[0]}
@@ -411,7 +412,7 @@ const Assistance = ({
                 <GetAssistance
                   user={user}
                   userLocation={userLocation}
-                  onShowWebcam={onShowWebcam}
+                  onShowSelectVerification={onShowSelectVerification}
                   entryButtonActive={entryButtonActive}
                   outletButtonActive={outletButtonActive}
                   onSetIsGeofenceValidate={onSetIsGeofenceValidate}

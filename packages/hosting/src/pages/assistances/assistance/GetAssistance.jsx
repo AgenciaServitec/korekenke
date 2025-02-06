@@ -8,7 +8,7 @@ import { mediaQuery } from "../../../styles";
 export const GetAssistance = ({
   user,
   userLocation,
-  onShowWebcam,
+  onShowSelectVerification,
   entryButtonActive,
   outletButtonActive,
   onSetIsGeofenceValidate,
@@ -17,7 +17,7 @@ export const GetAssistance = ({
     <AssistanceButtons
       user={user}
       userLocation={userLocation}
-      onShowWebcam={onShowWebcam}
+      onShowSelectVerification={onShowSelectVerification}
       entryButtonActive={entryButtonActive}
       outletButtonActive={outletButtonActive}
       onSetIsGeofenceValidate={onSetIsGeofenceValidate}
@@ -28,7 +28,7 @@ export const GetAssistance = ({
 const AssistanceButtons = ({
   user,
   userLocation,
-  onShowWebcam,
+  onShowSelectVerification,
   entryButtonActive,
   outletButtonActive,
   onSetIsGeofenceValidate,
@@ -39,14 +39,14 @@ const AssistanceButtons = ({
         <Col span={24} md={8}>
           <div className="buttons">
             <Button
-              onClick={() => onShowWebcam("entry")}
+              onClick={() => onShowSelectVerification("entry")}
               className={`entry-btn`}
             >
               <FontAwesomeIcon icon={faSignInAlt} />
               Marcar Ingreso
             </Button>
             <Button
-              onClick={() => onShowWebcam("outlet")}
+              onClick={() => onShowSelectVerification("outlet")}
               className={`outlet-btn`}
             >
               <FontAwesomeIcon icon={faSignOutAlt} />
