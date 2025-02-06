@@ -24,7 +24,6 @@ import {
   getAssistancesId,
   updateAssistance,
 } from "../../../firebase/collections/assistance";
-import { GetFaceBiometrics } from "./GetFaceBiometrics";
 import { ClockRealTime } from "../../../components/ui/ClockRealTime";
 import dayjs from "dayjs";
 import { isEmpty, omit } from "lodash";
