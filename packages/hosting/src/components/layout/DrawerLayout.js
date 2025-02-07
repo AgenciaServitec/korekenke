@@ -189,18 +189,13 @@ export const DrawerLayout = ({
       isVisible: existsAclsInAclsOfUser(
         "default",
         ["assistances"],
-        ["/assistances", "/assistances/assistance"],
+        ["/assistances"],
       ),
       children: [
         {
           label: "Marcar asistencia",
           key: "assistance",
           icon: <FontAwesomeIcon icon={faSquareCheck} size="lg" />,
-          isVisible: existsAclsInAclsOfUser(
-            "default",
-            ["assistances"],
-            ["/assistances/assistance"],
-          ),
           onClick: () => onClickMenu("/assistances/assistance"),
         },
         {

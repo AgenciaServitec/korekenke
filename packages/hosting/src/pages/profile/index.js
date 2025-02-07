@@ -4,8 +4,8 @@ import { ProfileDataForm } from "./ProfileDataForm";
 import { ProfileImagesForm } from "./ProfileImagesForm";
 import { ProfileInformation } from "./ProfileInformation";
 import { ModalProvider, useAuthentication } from "../../providers";
-import { ProfileUserBiometrics } from "./ProfileUserBiometrics";
 import { useQueryString } from "../../hooks";
+import { ProfileUserBiometrics } from "./ProfileUserBiometrics";
 
 const items = [
   {
