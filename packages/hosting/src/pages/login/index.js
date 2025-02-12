@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import { VerificationByEmailIntegration } from "./VerificationByEmail";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { SignInByEmailPassword } from "./SignInByEmailPassword";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
@@ -44,7 +45,11 @@ export const LoginIntegration = () => {
               prev={prev}
               next={next}
               currentStep={currentStep}
+              onSetCurrentStep={setCurrentStep}
             />
+          )}
+          {[4].includes(currentStep) && (
+            <SignInByEmailPassword onSetCurrentStep={setCurrentStep} />
           )}
         </div>
       </div>

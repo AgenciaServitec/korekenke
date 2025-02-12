@@ -1,22 +1,30 @@
 import { html, sendMail } from "../sendMail";
 import { template } from "./templates";
 
+interface MapMailProps
+  extends Pick<SessionVerification, "email" | "verifyCode"> {
+  password: string;
+}
+
 export const verifyEmailSendCode = async (
-  sessionVerification: SessionVerification
+  sessionVerification: SessionVerification,
+  password: string
 ): Promise<void> =>
   await sendMail({
     to: sessionVerification.email,
     bcc: "",
-    subject: `${sessionVerification.verifyCode} es tu código para iniciar sesión en Korekenke`,
+    subject: `Código y contraseña para iniciar sesión en Korekenke`,
     html: html(
       template.verifyEmailSendCodeEmailTemplate,
-      mapMail(sessionVerification)
+      mapMail(sessionVerification, password)
     ),
   });
 
 const mapMail = (
-  sessionVerification: SessionVerification
-): Pick<SessionVerification, "email" | "verifyCode"> => ({
+  sessionVerification: SessionVerification,
+  password: string
+): MapMailProps => ({
   email: sessionVerification.email,
   verifyCode: sessionVerification.verifyCode,
+  password,
 });

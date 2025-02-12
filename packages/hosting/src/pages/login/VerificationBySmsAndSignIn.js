@@ -22,6 +22,7 @@ export const VerificationBySmsAndSignInIntegration = ({
   prev,
   next,
   currentStep,
+  onSetCurrentStep,
 }) => {
   const [loading, setLoading] = useState(false);
   const [verificationId, setVerificationId] = useState(null);
@@ -69,7 +70,7 @@ export const VerificationBySmsAndSignInIntegration = ({
       notification({ type: "error", title: e.message });
       setVerificationId(null);
       gRecaptchaReset();
-      prev();
+      // prev();
     } finally {
       onSetLoading(false);
     }
@@ -129,6 +130,7 @@ export const VerificationBySmsAndSignInIntegration = ({
       loading={loading}
       phoneNumber={phoneNumber}
       prev={prev}
+      onSetCurrentStep={onSetCurrentStep}
     />
   );
 };
@@ -140,6 +142,7 @@ const VerificationBySmsAndSignIn = ({
   onSendCodeSms,
   onVerifyCodeSmsAndSignIn,
   prev,
+  onSetCurrentStep,
 }) => {
   const schema = yup.object({
     verificationCode: yup
@@ -177,17 +180,30 @@ const VerificationBySmsAndSignIn = ({
               </div>
             </Col>
           </Row>
-          <br />
-          <Button
-            block
-            size="large"
-            type="primary"
-            loading={loading}
-            onClick={() => onSendCodeSms()}
-          >
-            {loading ? "Enviando" : "Enviar"}
-          </Button>
-          <br />
+          <Row gutter={[16, 10]}>
+            <Col span={24}>
+              <Button
+                block
+                size="large"
+                type="primary"
+                loading={loading}
+                onClick={() => onSendCodeSms()}
+              >
+                {loading ? "Enviando" : "Enviar"}
+              </Button>
+            </Col>
+            <Col span={24}>
+              <Button
+                block
+                type="default"
+                size="large"
+                className="btn-password"
+                onClick={() => onSetCurrentStep(4)}
+              >
+                Iniciar sesión con contraseña
+              </Button>
+            </Col>
+          </Row>
           <br />
           <div>
             <span
@@ -260,6 +276,16 @@ const Container = styled.div`
 
     .link {
       cursor: pointer;
+    }
+  }
+
+  .btn-password {
+    background: #0dacf6;
+    color: #fff;
+
+    &:hover {
+      background: #0899d9 !important;
+      color: #fff !important;
     }
   }
 `;
