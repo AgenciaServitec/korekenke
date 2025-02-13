@@ -2,21 +2,21 @@ import { html, sendMail } from "../sendMail";
 import { template } from "./templates";
 
 export const verifyEmailSendCode = async (
-    sessionVerification: SessionVerification
+  sessionVerification: SessionVerification
 ): Promise<void> =>
-    await sendMail({
-        to: sessionVerification.email,
-        bcc: "",
-        subject: `${sessionVerification.verifyCode} es tu código para verificar tu email en Korekenke`,
-        html: html(
-            template.verifyEmailSendCodeEmailTemplate,
-            mapMail(sessionVerification)
-        ),
-    });
+  await sendMail({
+    to: sessionVerification.email,
+    bcc: "",
+    subject: `${sessionVerification.verifyCode} es tu código para verificar tu email en Korekenke`,
+    html: html(
+      template.verifyEmailSendCodeEmailTemplate,
+      mapMail(sessionVerification)
+    ),
+  });
 
 const mapMail = (
-    sessionVerification: SessionVerification
+  sessionVerification: SessionVerification
 ): Pick<SessionVerification, "email" | "verifyCode"> => ({
-    email: sessionVerification.email,
-    verifyCode: sessionVerification.verifyCode,
+  email: sessionVerification.email,
+  verifyCode: sessionVerification.verifyCode,
 });
