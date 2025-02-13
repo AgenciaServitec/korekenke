@@ -19,7 +19,7 @@ import { useAuthentication } from "../../providers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-export const SignInByEmailPassword = ({ onSetCurrentStep }) => {
+export const SignInByEmailPassword = ({ user, onSetCurrentStep }) => {
   const { loginWithEmailAndPassword } = useAuthentication();
 
   const [loading, setLoading] = useState(false);
@@ -84,7 +84,9 @@ export const SignInByEmailPassword = ({ onSetCurrentStep }) => {
         <h3>Iniciar sesión con contraseña</h3>
       </Col>
       <Col span={24}>
-        <p>Usar la contraseña enviada a su correo:</p>
+        <p>
+          Usar la contraseña enviada a su correo: <strong>{user.email}</strong>
+        </p>
       </Col>
       <Form onSubmit={handleSubmit(onSubmitLogin)}>
         <Controller

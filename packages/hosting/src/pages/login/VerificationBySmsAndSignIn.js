@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -18,10 +18,9 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase/compat/app";
 import { Row } from "antd";
 import { useApiVerifyEmailSendPasswordPost } from "../../api";
-import { fetchUsersByCip } from "../../firebase/collections";
-import { isEmpty } from "lodash";
 
 export const VerificationBySmsAndSignInIntegration = ({
+  user,
   prev,
   next,
   currentStep,
@@ -30,27 +29,12 @@ export const VerificationBySmsAndSignInIntegration = ({
   const [loading, setLoading] = useState(false);
   const [loadingSendPassword, setLoadingSendPassword] = useState(false);
   const [verificationId, setVerificationId] = useState(null);
-  const [user, setUser] = useState(null);
 
   const {
     postVerifyEmailSendPassword,
     postVerifyEmailSendPasswordResponse,
     postVerifyEmailSendPasswordLoading,
   } = useApiVerifyEmailSendPasswordPost();
-
-  useEffect(() => {
-    (async () => {
-      const { cip } = getLocalStorage("login");
-      const users = await fetchUsersByCip(cip);
-      const user = users?.[0];
-
-      if (isEmpty(user) || isEmpty(cip)) {
-        return prev();
-      }
-
-      setUser(user);
-    })();
-  }, []);
 
   const phoneNumber = getLocalStorage("login")?.phoneNumber;
 
@@ -215,7 +199,7 @@ const VerificationBySmsAndSignIn = ({
         <div className="send-phone-code-wrapper">
           <Row gutter={[16, 10]}>
             <Col span={24}>
-              <h3>Iniciar Sesión por SMS o Contraseña</h3>
+              <h3>Iniciar Sesión con:</h3>
             </Col>
             <Col span={24}>
               <Button
@@ -224,7 +208,7 @@ const VerificationBySmsAndSignIn = ({
                 type="primary"
                 onClick={() => onSetCurrentStep(3)}
               >
-                SMS
+                Código SMS
               </Button>
             </Col>
             <Col span={24}>
@@ -236,7 +220,7 @@ const VerificationBySmsAndSignIn = ({
                 loading={loadingSendPassword}
                 onClick={onSendPasswordEmail}
               >
-                Contraseña
+                Email contraseña
               </Button>
             </Col>
           </Row>
