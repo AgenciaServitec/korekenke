@@ -9,16 +9,37 @@ import { VerificationByEmailIntegration } from "./VerificationByEmail";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { SignInByEmailPassword } from "./SignInByEmailPassword";
+import { getLocalStorage } from "../../utils";
+import { fetchUsersByCip } from "../../firebase/collections";
+import { isEmpty } from "lodash";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
   const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(0);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     authUser && navigate("/home");
   }, [authUser]);
+
+  const { cip } = getLocalStorage("login");
+
+  useEffect(() => {
+    (async () => {
+      if (cip) {
+        const users = await fetchUsersByCip(cip);
+        const user = users?.[0];
+
+        if (isEmpty(user) || isEmpty(cip)) {
+          return prev();
+        }
+
+        setUser(user);
+      }
+    })();
+  }, [cip]);
 
   const next = () => {
     setCurrentStep(currentStep + 1);
@@ -40,16 +61,20 @@ export const LoginIntegration = () => {
               currentStep={currentStep}
             />
           )}
-          {[2, 3].includes(currentStep) && (
+          {[2, 3, 4].includes(currentStep) && (
             <VerificationBySmsAndSignInIntegration
+              user={user}
               prev={prev}
               next={next}
               currentStep={currentStep}
               onSetCurrentStep={setCurrentStep}
             />
           )}
-          {[4].includes(currentStep) && (
-            <SignInByEmailPassword onSetCurrentStep={setCurrentStep} />
+          {[5].includes(currentStep) && (
+            <SignInByEmailPassword
+              user={user}
+              onSetCurrentStep={setCurrentStep}
+            />
           )}
         </div>
       </div>

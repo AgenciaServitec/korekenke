@@ -1,11 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { generatePassword, logger } from "../../utils";
-import {
-  auth,
-  fetchDocument,
-  firestore,
-  firestoreTimestamp,
-} from "../../_firebase";
+import { logger } from "../../utils";
+import { fetchDocument, firestore, firestoreTimestamp } from "../../_firebase";
 import assert from "assert";
 import { verifyEmailSendCode } from "../../mailer/korekenke/VerifyEmail.SendCode";
 import { isEmpty } from "lodash";
@@ -56,14 +51,10 @@ export const postSendCode = async (
       verifyCode: generateUniqueRandomNumber(),
     });
 
-    const emailPassword = generatePassword();
-
-    const p0 = verifyEmailSendCode(sessionVerification, emailPassword);
+    const p0 = verifyEmailSendCode(sessionVerification);
     const p1 = addSessionVerification(sessionVerification);
-    const p2 = updateUserAuth({ ...user, password: emailPassword });
-    const p3 = updateUser({ ...user, password: emailPassword });
 
-    await Promise.all([p0, p1, p2, p3]);
+    await Promise.all([p0, p1]);
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -109,18 +100,4 @@ const generateUniqueRandomNumber = () => {
 
   generatedNumbers.add(randomNumber);
   return randomNumber.toString();
-};
-
-const updateUserAuth = async (user: User): Promise<void> => {
-  await auth.updateUser(user.id, {
-    email: user.email as string,
-    password: user.password as string,
-  });
-};
-
-const updateUser = async (user: User): Promise<void> => {
-  await firestore
-    .collection("users")
-    .doc(user.id)
-    .update({ ...user });
 };
