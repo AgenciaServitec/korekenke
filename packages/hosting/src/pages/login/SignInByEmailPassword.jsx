@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  notification,
-  Title,
-} from "../../components";
+import { Button, Col, Form, Input, notification } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
