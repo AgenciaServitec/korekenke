@@ -24,11 +24,12 @@ export const LoginIntegration = () => {
     authUser && navigate("/home");
   }, [authUser]);
 
-  const { cip } = getLocalStorage("login");
-
   useEffect(() => {
     (async () => {
-      if (cip) {
+      if (getLocalStorage("login")) {
+        const { cip = "" } = getLocalStorage("login");
+        if (isEmpty(cip)) return;
+
         const users = await fetchUsersByCip(cip);
         const user = users?.[0];
 
@@ -39,7 +40,7 @@ export const LoginIntegration = () => {
         setUser(user);
       }
     })();
-  }, [cip]);
+  }, [getLocalStorage("login")]);
 
   const next = () => {
     setCurrentStep(currentStep + 1);
