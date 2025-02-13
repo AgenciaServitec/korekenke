@@ -40,7 +40,7 @@ export const LoginIntegration = () => {
               currentStep={currentStep}
             />
           )}
-          {[2, 3].includes(currentStep) && (
+          {[2, 3, 4].includes(currentStep) && (
             <VerificationBySmsAndSignInIntegration
               prev={prev}
               next={next}
@@ -48,7 +48,7 @@ export const LoginIntegration = () => {
               onSetCurrentStep={setCurrentStep}
             />
           )}
-          {[4].includes(currentStep) && (
+          {[5].includes(currentStep) && (
             <SignInByEmailPassword onSetCurrentStep={setCurrentStep} />
           )}
         </div>

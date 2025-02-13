@@ -8,4 +8,5 @@ export * from "./useApiCorrespondencePost";
 export * from "./useApiPersonDataByDniGet";
 export * from "./useAPiSendMailNotificationDasRequestPost";
 export * from "./useApiVerifyEmailSendCodePost";
+export * from "./useApiVerifyEmailSendPasswordPost";
 export * from "./useApiVerifyEmailVerifyCodePost";

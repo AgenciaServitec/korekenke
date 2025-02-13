@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Col,
@@ -17,6 +17,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase/compat/app";
 import { Row } from "antd";
+import { useApiVerifyEmailSendPasswordPost } from "../../api";
+import { fetchUsersByCip } from "../../firebase/collections";
+import { isEmpty } from "lodash";
 
 export const VerificationBySmsAndSignInIntegration = ({
   prev,
@@ -25,7 +28,29 @@ export const VerificationBySmsAndSignInIntegration = ({
   onSetCurrentStep,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [loadingSendPassword, setLoadingSendPassword] = useState(false);
   const [verificationId, setVerificationId] = useState(null);
+  const [user, setUser] = useState(null);
+
+  const {
+    postVerifyEmailSendPassword,
+    postVerifyEmailSendPasswordResponse,
+    postVerifyEmailSendPasswordLoading,
+  } = useApiVerifyEmailSendPasswordPost();
+
+  useEffect(() => {
+    (async () => {
+      const { cip } = getLocalStorage("login");
+      const users = await fetchUsersByCip(cip);
+      const user = users?.[0];
+
+      if (isEmpty(user) || isEmpty(cip)) {
+        return prev();
+      }
+
+      setUser(user);
+    })();
+  }, []);
 
   const phoneNumber = getLocalStorage("login")?.phoneNumber;
 
@@ -73,6 +98,23 @@ export const VerificationBySmsAndSignInIntegration = ({
       // prev();
     } finally {
       onSetLoading(false);
+    }
+  };
+
+  const onSendPasswordEmail = async () => {
+    try {
+      setLoadingSendPassword(true);
+
+      await postVerifyEmailSendPassword(user.id);
+
+      onSetCurrentStep(5);
+    } catch (e) {
+      console.error("onSendPasswordEmail:", e);
+      notification({ type: "error", title: e.message });
+      setVerificationId(null);
+      gRecaptchaReset();
+    } finally {
+      setLoadingSendPassword(false);
     }
   };
 
@@ -125,9 +167,11 @@ export const VerificationBySmsAndSignInIntegration = ({
   return (
     <VerificationBySmsAndSignIn
       currentStep={currentStep}
+      onSendPasswordEmail={onSendPasswordEmail}
       onSendCodeSms={onSendCodeSms}
       onVerifyCodeSmsAndSignIn={onVerifyCodeSmsAndSignIn}
       loading={loading}
+      loadingSendPassword={loadingSendPassword}
       phoneNumber={phoneNumber}
       prev={prev}
       onSetCurrentStep={onSetCurrentStep}
@@ -138,7 +182,9 @@ export const VerificationBySmsAndSignInIntegration = ({
 const VerificationBySmsAndSignIn = ({
   currentStep,
   loading,
+  loadingSendPassword,
   phoneNumber,
+  onSendPasswordEmail,
   onSendCodeSms,
   onVerifyCodeSmsAndSignIn,
   prev,
@@ -167,29 +213,18 @@ const VerificationBySmsAndSignIn = ({
     <Container>
       {currentStep === 2 && (
         <div className="send-phone-code-wrapper">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <h3>Verificación por Teléfono</h3>
-            </Col>
-            <Col span={24}>
-              <p>Envía el código de 6 dígitos al siguiente teléfono:</p>
-            </Col>
-            <Col span={24}>
-              <div className="title-login">
-                <Title level={3}>+51 {phoneNumber}</Title>
-              </div>
-            </Col>
-          </Row>
           <Row gutter={[16, 10]}>
+            <Col span={24}>
+              <h3>Iniciar Sesión por SMS o Contraseña</h3>
+            </Col>
             <Col span={24}>
               <Button
                 block
                 size="large"
                 type="primary"
-                loading={loading}
-                onClick={() => onSendCodeSms()}
+                onClick={() => onSetCurrentStep(3)}
               >
-                {loading ? "Enviando" : "Enviar"}
+                SMS
               </Button>
             </Col>
             <Col span={24}>
@@ -198,9 +233,10 @@ const VerificationBySmsAndSignIn = ({
                 type="default"
                 size="large"
                 className="btn-password"
-                onClick={() => onSetCurrentStep(4)}
+                loading={loadingSendPassword}
+                onClick={onSendPasswordEmail}
               >
-                Iniciar sesión con contraseña
+                Contraseña
               </Button>
             </Col>
           </Row>
@@ -220,7 +256,44 @@ const VerificationBySmsAndSignIn = ({
         </div>
       )}
       <div id="recaptcha-container"></div>
+
       {currentStep === 3 && (
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <h3>Verificación por Teléfono</h3>
+          </Col>
+          <Col span={24}>
+            <p>Envía el código de 6 dígitos al siguiente teléfono:</p>
+          </Col>
+          <Col span={24}>
+            <div className="title-login">
+              <Title level={3}>+51 {phoneNumber}</Title>
+            </div>
+          </Col>
+          <Col span={24}>
+            <Button
+              block
+              size="large"
+              type="primary"
+              loading={loading}
+              onClick={() => onSendCodeSms()}
+            >
+              {loading ? "Enviando" : "Enviar"}
+            </Button>
+          </Col>
+          <Col span={24}>
+            <span
+              className="link link-color"
+              style={{ cursor: "pointer" }}
+              onClick={() => prev()}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+            </span>
+          </Col>
+        </Row>
+      )}
+
+      {currentStep === 4 && (
         <Form onSubmit={handleSubmit(onSubmitSignIn)}>
           <div className="title-login">
             <Title level={3}>Ingresa el código e inicia sesión</Title>
