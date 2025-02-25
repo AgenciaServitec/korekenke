@@ -80,12 +80,9 @@ export const MediaBecaUniversidadSheet = ({
                 <span>{createdDate.format("YYYY")}</span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={
-                  user?.signaturePhoto?.thumbUrl ||
-                  headline?.signaturePhoto?.thumbUrl
-                }
                 signatureUrl={
-                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                  user?.signaturePhoto?.url ||
+                  dasRequest.applicant.documents.signaturePhoto?.url
                 }
                 name={userFullName(headline)}
                 cip={headline?.cip}
