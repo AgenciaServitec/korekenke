@@ -1,22 +1,11 @@
 import React from "react";
 
-export const SignatureSheet = ({
-  signaturethumbUrl,
-  signatureUrl,
-  name,
-  cip,
-  degree,
-}) => {
+export const SignatureSheet = ({ signatureUrl, name, cip, degree }) => {
   return (
     <div className="signature">
       <div className="signature__item">
         <div>
-          {signaturethumbUrl && (
-            <img
-              src={signaturethumbUrl || signatureUrl}
-              alt="signature photo"
-            />
-          )}
+          {signatureUrl && <img src={signatureUrl} alt="signature photo" />}
         </div>
         <p>{name}</p>
       </div>

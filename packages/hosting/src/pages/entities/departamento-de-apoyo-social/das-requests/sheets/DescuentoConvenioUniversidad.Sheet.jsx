@@ -32,7 +32,6 @@ export const DescuentoConvenioUniversidadSheet = ({
               <p>
                 {requestType && findDasRequest(requestType).name}
                 <br />
-                {/* <span>{institution?.id || emptyContent}</span> */}
                 <span>{institution?.id || emptyContent}</span>
               </p>
             </div>
@@ -59,7 +58,6 @@ export const DescuentoConvenioUniversidadSheet = ({
             <p className="request-content__body">
               Que teniendo conocimiento del convenio de cooperación
               interinstitucional con la Universidad
-              {/* <span> {institution?.id || emptyContent} </span> */}
               <span> {institution?.id || emptyContent} </span>
               respetuosamente solicito a Ud. se digne disponer a quien
               corresponda dar las facilidades para obtener el descuento por
@@ -81,12 +79,9 @@ export const DescuentoConvenioUniversidadSheet = ({
                 <span> {createdDate.format("YYYY")} </span>
               </p>
               <SignatureSheet
-                signaturethumbUrl={
-                  user?.signaturePhoto?.thumbUrl ||
-                  headline?.signaturePhoto?.thumbUrl
-                }
                 signatureUrl={
-                  user?.signaturePhoto?.url || headline?.signaturePhoto?.url
+                  user?.signaturePhoto?.url ||
+                  dasRequest.applicant.documents.signaturePhoto?.url
                 }
                 name={userFullName(headline)}
                 cip={headline?.cip}
