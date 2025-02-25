@@ -7,7 +7,7 @@ const hostName = window.location.hostname;
 
 const hostsProduction = ["korekenke.mil.pe", "tramites.cobiene.com"];
 
-export const currentEnvironment = !includes(hostsProduction, hostName)
+export const currentEnvironment = includes(hostsProduction, hostName)
   ? "production"
   : "development";
 
