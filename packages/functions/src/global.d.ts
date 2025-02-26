@@ -216,3 +216,20 @@ interface SessionVerification {
   isVerified: false;
   createAt: FirebaseFirestore.Timestamp;
 }
+
+interface Assistance {
+  createAt: string;
+  createAtString: string;
+  entry: {
+    date: string;
+  };
+  id: string;
+  isDeleted: boolean;
+  outlet: {
+    date: string;
+  };
+  updateAt: string;
+  user: User;
+  userId: string;
+  workPlace: string;
+}

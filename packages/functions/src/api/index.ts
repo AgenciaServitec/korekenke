@@ -56,6 +56,12 @@ app.post("/verify-email/send-password", postSendPassword);
 
 app.post("/verify-email/verify-code", postVerificationCode);
 
+app.get("/assistances");
+
+app.post("/assistances/create");
+
+app.get("/assistances/:assistancesId");
+
 app.use(errorHandler);
 
 export { app };
