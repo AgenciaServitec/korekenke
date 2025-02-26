@@ -81,8 +81,8 @@ export const BecaEstudiosUniversidadSheet = ({
               </p>
               <SignatureSheet
                 signatureUrl={
-                  user?.signaturePhoto?.url ||
-                  dasRequest.applicant.documents.signaturePhoto?.url
+                  dasRequest.applicant.documents.signaturePhoto?.url ||
+                  user?.signaturePhoto?.url
                 }
                 name={userFullName(headline)}
                 cip={headline?.cip}
