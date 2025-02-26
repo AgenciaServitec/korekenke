@@ -3,11 +3,7 @@ import styled from "styled-components";
 import { LogoCobiene, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import {
-  findDasRequest,
-  findDegree,
-  findInstitution,
-} from "../../../../../utils";
+import { findDasRequest, findDegree } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {

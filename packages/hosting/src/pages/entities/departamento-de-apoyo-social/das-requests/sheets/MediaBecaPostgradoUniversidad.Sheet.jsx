@@ -1,13 +1,8 @@
 import React from "react";
-import { LogoPrimary, LogoCobiene } from "../../../../../images";
+import { LogoCobiene, LogoPrimary } from "../../../../../images";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import {
-  findDasRequest,
-  findDegree,
-  findInstitution,
-  userFullName,
-} from "../../../../../utils";
+import { findDasRequest, findDegree, userFullName } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const MediaBecaPostgradoUniversidadSheet = ({

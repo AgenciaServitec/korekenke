@@ -1,13 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { LogoPrimary, LogoCobiene } from "../../../../../images";
+import { LogoCobiene, LogoPrimary } from "../../../../../images";
 import dayjs from "dayjs";
 import { userFullName } from "../../../../../utils/users/userFullName2";
-import {
-  findDasRequest,
-  findDegree,
-  findInstitution,
-} from "../../../../../utils";
+import { findDasRequest, findDegree } from "../../../../../utils";
 import { QRCode, SignatureSheet } from "../../../../../components";
 
 export const BecaEstudioPostgradoUniversidadSheet = ({
