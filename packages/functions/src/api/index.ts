@@ -13,6 +13,12 @@ import {
   postSendPassword,
   postVerificationCode,
 } from "./sign-in";
+import {
+  getAssistance,
+  getAssistances,
+  postAssistance,
+  putAssistance,
+} from "./assistances";
 
 const app: express.Application = express();
 
@@ -56,11 +62,13 @@ app.post("/verify-email/send-password", postSendPassword);
 
 app.post("/verify-email/verify-code", postVerificationCode);
 
-app.get("/assistances");
+app.get("/assistances", getAssistances);
 
-app.post("/assistances/create");
+app.post("/assistances/create", postAssistance);
 
-app.get("/assistances/:assistancesId");
+app.post("/assistances/update", putAssistance);
+
+app.get("/assistances/:assistanceId", getAssistance);
 
 app.use(errorHandler);
 

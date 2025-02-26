@@ -10,3 +10,7 @@ export * from "./useAPiSendMailNotificationDasRequestPost";
 export * from "./useApiVerifyEmailSendCodePost";
 export * from "./useApiVerifyEmailSendPasswordPost";
 export * from "./useApiVerifyEmailVerifyCodePost";
+export * from "./useApiCreateAssistancePost";
+export * from "./useApiUpdateAssistancePut";
+export * from "./useApiFetchAssistancesGet";
+export * from "./useApiFetchAssistanceGet";

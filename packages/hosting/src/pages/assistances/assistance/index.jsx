@@ -19,7 +19,6 @@ import { GetAssistance } from "./GetAssistance";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
-  addAssistance,
   fetchTodayAssistancesByUserId,
   getAssistancesId,
   updateAssistance,
@@ -33,6 +32,8 @@ import { CardMessage } from "./CardMessage";
 import { WorkPlaces } from "../../../data-list";
 import { useForm } from "react-hook-form";
 import { ChooseBiometricVerification } from "./ChooseBiometricVerification";
+import { useApiCreateAssistancePost } from "../../../api/useApiCreateAssistancePost";
+import { useApiUpdateAssistancePut } from "../../../api";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -47,6 +48,18 @@ export const AssistanceIntegration = () => {
   const [messageType, setMessageType] = useState("");
 
   const getAssistanceRef = useRef(null);
+
+  const {
+    postCreateAssistance,
+    postCreateAssistanceLoading,
+    postCreateAssistanceResponse,
+  } = useApiCreateAssistancePost();
+
+  const {
+    putUpdateAssistance,
+    putUpdateAssistanceLoading,
+    putUpdateAssistanceResponse,
+  } = useApiUpdateAssistancePut();
 
   const searchUserByDni = async () => {
     if (!dni) {
@@ -167,14 +180,11 @@ export const AssistanceIntegration = () => {
       }
 
       type === "entry"
-        ? await addAssistance(
-            assignCreateProps(assistanceMap(null, type, assistanceDate, user)),
+        ? await postCreateAssistance(
+            assistanceMap(null, type, assistanceDate, user),
           )
-        : await updateAssistance(
-            assistance.id,
-            assignCreateProps(
-              assistanceMap(assistance, type, assistanceDate, user),
-            ),
+        : await putUpdateAssistance(
+            assistanceMap(assistance, type, assistanceDate, user),
           );
 
       notification({

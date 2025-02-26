@@ -1,18 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { addAssistance } from "../../_firebase/collections";
+import { updateAssistance } from "../../_firebase/collections";
 import { defaultFirestoreProps } from "../../utils";
 
-export const postAssistance = async (
+export const putAssistance = async (
   req: Request<unknown, unknown, Assistance, unknown>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   const { body: assistance } = req;
 
-  const { assignCreateProps } = defaultFirestoreProps();
+  const { assignUpdateProps } = defaultFirestoreProps();
 
   try {
-    await addAssistance(assignCreateProps(assistance));
+    await updateAssistance(assistance.id, assignUpdateProps(assistance));
 
     res.status(200).end();
   } catch (e) {
