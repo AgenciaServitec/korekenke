@@ -19,7 +19,7 @@ export const GetFingerprintBiometrics = ({
 
   return (
     <Container>
-      <Button onClick={onFingerprintValidate}>Detectar huella</Button>
+      <Button onClick={onFingerprintValidate}>Autenticar Huella</Button>
     </Container>
   );
 };
