@@ -18,7 +18,7 @@ export const SignatureAndSealComponent = ({
   const [sealTopText, setSealTopText] = useState("");
   const [sealBottomText, setSealBottomText] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
-  const [supervisorCip, setSupervisorCip] = useState("");
+  const [supervisorNs, setSupervisorNs] = useState("");
   const [supervisorDegree, setSupervisorDegree] = useState("");
 
   useEffect(() => {
@@ -26,14 +26,14 @@ export const SignatureAndSealComponent = ({
       sealTopText,
       sealBottomText,
       supervisorName,
-      supervisorCip,
+      supervisorNs: supervisorNs,
       supervisorDegree,
     });
   }, [
     sealTopText,
     sealBottomText,
     supervisorName,
-    supervisorCip,
+    supervisorNs,
     supervisorDegree,
   ]);
 
@@ -53,9 +53,10 @@ export const SignatureAndSealComponent = ({
               animation={false}
             />
             <Input
-              label="CIP:"
-              onChange={(e) => setSupervisorCip(e.target.value)}
+              label="NS:"
+              onChange={(e) => setSupervisorNs(e.target.value)}
               animation={false}
+              placeholder="Número de Serie"
             />
             <Input
               label="Cargo:"
@@ -78,7 +79,7 @@ export const SignatureAndSealComponent = ({
         <Col span={12}>
           <CustomStampSheet
             supervisorName={supervisorName}
-            supervisorCip={supervisorCip}
+            supervisorNs={supervisorNs}
             supervisorDegree={supervisorDegree}
             topText={sealTopText}
             bottomText={sealBottomText}
