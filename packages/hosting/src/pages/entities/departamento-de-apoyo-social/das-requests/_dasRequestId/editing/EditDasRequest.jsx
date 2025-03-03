@@ -433,7 +433,7 @@ const EditDasRequest = ({
           </Col>
           <Col xs={24} sm={12} md={6}>
             <Button size="large" block onClick={() => onGoBack()}>
-              Cancelar
+              Atras
             </Button>
           </Col>
           <Acl
