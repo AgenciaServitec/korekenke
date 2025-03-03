@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
 import { CustomStampSheet } from "../../../../components";
-import { useAuthentication } from "../../../../providers";
 
 export const Holiday2Sheet = ({ holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
