@@ -43,7 +43,7 @@ export const DescuentoConvenioPostgradoUniversidadSheet = ({
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(dasRequest?.headline)} </span>, Grado
+              <span> {userFullName(dasRequest?.headline)} </span>, Grado{" "}
               <span>
                 {" "}
                 {findDegree(headline?.degree).label || emptyContent}{" "}

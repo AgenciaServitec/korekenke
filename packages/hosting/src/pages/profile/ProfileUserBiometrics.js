@@ -1,6 +1,6 @@
 import React from "react";
 import { FacialBiometrics } from "./BiometricDataComponents/FacialBiometrics";
-import { FingerPrintIntegration } from "./BiometricDataComponents/FingerPrintIntegration";
+import { FingerprintIntegration } from "./BiometricDataComponents/FingerprintIntegration";
 import { Tabs } from "../../components";
 
 export const ProfileUserBiometrics = () => {
@@ -13,7 +13,7 @@ export const ProfileUserBiometrics = () => {
     {
       key: "2",
       label: "Huella Digital",
-      children: <FingerPrintIntegration />,
+      children: <FingerprintIntegration />,
     },
   ];
 

@@ -4,7 +4,7 @@ import { PeruShield } from "../../../images";
 
 export const CustomStampSheet = ({
   supervisorName,
-  supervisorCip,
+  supervisorNs,
   supervisorDegree,
   topText,
   bottomText,
@@ -93,7 +93,7 @@ export const CustomStampSheet = ({
       </svg>
       <div className="signature">
         <p>{supervisorName || "-"}</p>
-        <p>CIP: {supervisorCip || "-"}</p>
+        <p>NS: {supervisorNs || "-"}</p>
         <p>{supervisorDegree || "-"}</p>
       </div>
     </Container>

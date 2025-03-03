@@ -39,7 +39,7 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
             </h2>
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
-              <span> {userFullName(headline)}</span>, Grado
+              <span> {userFullName(headline)}</span>, Grado{" "}
               <span>{findDegree(headline?.degree).label || emptyContent}</span>
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio

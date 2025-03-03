@@ -86,6 +86,7 @@ export const MapComponent = ({
         }}
         onLoad={(map) => {
           mapRef.current = map;
+
           if (userLocation) {
             map.panTo(userLocation);
           }

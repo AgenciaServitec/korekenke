@@ -18,7 +18,6 @@ import {
   useDefaultFirestoreProps,
   useUpdateAssignToAndAclsOfUser,
 } from "../../../../hooks";
-import { lowerCase } from "lodash";
 import {
   addEntity,
   entitiesRef,

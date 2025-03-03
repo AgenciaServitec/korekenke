@@ -140,7 +140,7 @@ const SendHolidayRequest = ({
         sealTopText: yup.string().required(),
         sealBottomText: yup.string().required(),
         supervisorName: yup.string().required(),
-        supervisorCip: yup.string().required(),
+        supervisorNs: yup.string().required(),
         supervisorDegree: yup.string().required(),
       })
       .required(),
@@ -149,7 +149,7 @@ const SendHolidayRequest = ({
         sealTopText: yup.string().required(),
         sealBottomText: yup.string().required(),
         supervisorName: yup.string().required(),
-        supervisorCip: yup.string().required(),
+        supervisorNs: yup.string().required(),
         supervisorDegree: yup.string().required(),
       })
       .required(),
