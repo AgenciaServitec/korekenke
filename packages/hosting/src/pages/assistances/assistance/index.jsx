@@ -251,6 +251,7 @@ const Assistance = ({
           type={type}
           onCloseModal={onCloseModal}
           userBiometrics={user?.biometricVectors?.[0]}
+          userFingerprint={user?.fingerprintTemplate}
           onSaveAssistance={onSaveAssistance}
         />
       ),
