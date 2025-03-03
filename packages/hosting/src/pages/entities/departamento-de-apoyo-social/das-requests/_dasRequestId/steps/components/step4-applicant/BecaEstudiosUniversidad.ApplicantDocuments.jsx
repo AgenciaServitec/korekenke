@@ -51,9 +51,7 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
         copyDniHeadline: dasRequest?.isHeadline
           ? yup.mixed().required()
           : yup.mixed().notRequired().nullable(),
-        signaturePhoto: dasRequest?.isHeadline
-          ? yup.mixed().required()
-          : yup.mixed().notRequired().nullable(),
+        signaturePhoto: yup.mixed().required(),
         copyCifFamiliar: dasRequest?.isHeadline
           ? yup.mixed().notRequired().nullable()
           : yup.mixed().required(),
@@ -365,50 +363,6 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
                   )}
                 />
               </Col>
-              <Col sm={24} md={12}>
-                <Controller
-                  name="applicant.documents.signaturePhoto"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Upload
-                      isImage
-                      label="Foto de firma del titular"
-                      accept="image/*"
-                      name={name}
-                      value={value}
-                      withThumbImage={false}
-                      bucket="departamentoDeApoyoSocial"
-                      fileName={`signature-photo-${uuidv4()}`}
-                      filePath={`das-applicants/${dasRequest.id}/files`}
-                      additionalFields={{
-                        numberCopies: 2,
-                        label: "Foto de firma del titular",
-                      }}
-                      copyFilesTo={
-                        user?.signaturePhoto
-                          ? null
-                          : {
-                              withThumbImage: true,
-                              isImage: true,
-                              bucket: "default",
-                              resize: "423x304",
-                              fileName: `signature-photo-${uuidv4()}`,
-                              filePath: `users/${user?.id}/documents`,
-                            }
-                      }
-                      buttonText="Subir archivo"
-                      error={error(name)}
-                      helperText={errorMessage(name)}
-                      required={required(name)}
-                      onChange={(file) => onChange(file)}
-                      onChangeCopy={(file) =>
-                        onSetSignaturePhotoCopy && onSetSignaturePhotoCopy(file)
-                      }
-                      onUploading={setUploadingImage}
-                    />
-                  )}
-                />
-              </Col>
             </>
           )}
           {!isHeadline && (
@@ -473,6 +427,50 @@ export const BecaEstudiosUniversidadApplicantDocuments = ({
               </Col>
             </>
           )}
+          <Col sm={24} md={12}>
+            <Controller
+              name="applicant.documents.signaturePhoto"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <Upload
+                  isImage
+                  label="Foto de firma del titular"
+                  accept="image/*"
+                  name={name}
+                  value={value}
+                  withThumbImage={false}
+                  bucket="departamentoDeApoyoSocial"
+                  fileName={`signature-photo-${uuidv4()}`}
+                  filePath={`das-applicants/${dasRequest.id}/files`}
+                  additionalFields={{
+                    numberCopies: 2,
+                    label: "Foto de firma del titular",
+                  }}
+                  copyFilesTo={
+                    user?.signaturePhoto
+                      ? null
+                      : {
+                          withThumbImage: true,
+                          isImage: true,
+                          bucket: "default",
+                          resize: "423x304",
+                          fileName: `signature-photo-${uuidv4()}`,
+                          filePath: `users/${user?.id}/documents`,
+                        }
+                  }
+                  buttonText="Subir archivo"
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                  onChange={(file) => onChange(file)}
+                  onChangeCopy={(file) =>
+                    onSetSignaturePhotoCopy && onSetSignaturePhotoCopy(file)
+                  }
+                  onUploading={setUploadingImage}
+                />
+              )}
+            />
+          </Col>
         </Row>
         <Row gutter={[16, 16]} align="end">
           <Col xs={24} sm={12} md={6}>
