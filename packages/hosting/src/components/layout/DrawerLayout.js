@@ -196,6 +196,7 @@ export const DrawerLayout = ({
           label: "Marcar asistencia",
           key: "assistance",
           icon: <FontAwesomeIcon icon={faSquareCheck} size="lg" />,
+          isVisible: true,
           onClick: () => onClickMenu("/assistances/assistance"),
         },
         {

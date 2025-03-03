@@ -3,15 +3,20 @@ import styled from "styled-components";
 import { GetFaceBiometrics } from "./GetFaceBiometrics";
 import { useDevice } from "../../../hooks";
 import { useModal } from "../../../providers";
-import { notification, Button } from "../../../components";
+import { Button } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import { mediaQuery } from "../../../styles";
+import {
+  GetFingerprint,
+  GetFingerprintBiometrics,
+} from "./GetFingerprintBiometrics";
 
 export const ChooseBiometricVerification = ({
   type,
   onCloseModal,
   userBiometrics,
+  userFingerprint,
   onSaveAssistance,
 }) => {
   const { isTablet } = useDevice();
@@ -35,16 +40,34 @@ export const ChooseBiometricVerification = ({
     });
   };
 
-  const onClickBeta = () => {
-    notification({ type: "warning", description: "Aún no implementado" });
+  const onShowFingerprintValidate = () => {
+    onShowModal({
+      title: "Reconocimiento con huella Digital",
+      width: `${isTablet ? "100%" : "50%"}`,
+      centered: false,
+      top: 0,
+      padding: 0,
+      onRenderBody: () => (
+        <GetFingerprintBiometrics
+          type={type}
+          onCloseModal={onCloseModal}
+          userFingerprint={userFingerprint}
+          onSaveAssistance={onSaveAssistance}
+        />
+      ),
+    });
   };
+
   return (
     <Container>
       <Button className="styled-button" onClick={() => onShowWebcam(type)}>
         RECONOCIMIENTO FACIAL
         <FontAwesomeIcon icon={faFaceSmile} size="4x" />
       </Button>
-      <Button className="styled-button" onClick={() => onClickBeta()}>
+      <Button
+        className="styled-button"
+        onClick={() => onShowFingerprintValidate(type)}
+      >
         HUELLA DACTILAR
         <FontAwesomeIcon icon={faFingerprint} size="4x" />
       </Button>
