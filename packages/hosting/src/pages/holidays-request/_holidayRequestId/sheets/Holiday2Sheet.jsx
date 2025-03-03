@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { QRCode } from "antd";
 import { LogoPrimary } from "../../../../images";
 import { CustomStampSheet } from "../../../../components";
+import { useAuthentication } from "../../../../providers";
 
 export const Holiday2Sheet = ({ holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
@@ -76,7 +77,7 @@ export const Holiday2Sheet = ({ holiday }) => {
                   topText={secondSeal.sealTopText}
                   bottomText={secondSeal.sealBottomText}
                   supervisorName={secondSeal.supervisorName}
-                  supervisorCip={secondSeal.supervisorCip}
+                  supervisorNs={secondSeal.supervisorNs}
                   supervisorDegree={secondSeal.supervisorDegree}
                 />
               </span>
