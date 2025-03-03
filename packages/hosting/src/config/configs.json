@@ -12,7 +12,7 @@
     }
   },
   "development": {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "firebaseApp": {
       "apiKey": "AIzaSyCONyjhvxeb-E2rS35YXmnF7NPMr60e7oU",
       "authDomain": "korekenke-dev.firebaseapp.com",
@@ -37,7 +37,7 @@
     }
   },
   "production": {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "firebaseApp": {
       "apiKey": "AIzaSyAYSl6EJNTHThN4MyQOVblXttK9nKnBf9Y",
       "authDomain": "korekenke-prod.firebaseapp.com",
