@@ -59,7 +59,7 @@ export const GetFaceBiometrics = ({
       } else {
         notification({
           type: "error",
-          title: "No se pudo registrar de manera exitosa",
+          title: "No se pudo reconocer",
           description: "Vuelve a intentarlo",
         });
       }

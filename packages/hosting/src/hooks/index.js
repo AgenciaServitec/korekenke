@@ -18,3 +18,4 @@ export * from "./useCountdown";
 export * from "./useUserLocation";
 export * from "./useWebcam";
 export * from "./useFaceDetections";
+export * from "./useFingerprint";
