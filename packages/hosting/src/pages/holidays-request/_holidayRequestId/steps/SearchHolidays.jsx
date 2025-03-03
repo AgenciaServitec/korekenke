@@ -28,7 +28,7 @@ export const SearchHolidays = ({
   const [loading, setLoading] = useState(false);
 
   const disabledDate = (current) => {
-    return current && current < dayjs().endOf("day");
+    return current && current < dayjs().startOf("day");
   };
 
   const validateDateRange = (countHolidays) => {
