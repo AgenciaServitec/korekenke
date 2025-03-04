@@ -1,6 +1,6 @@
 import { firestoreTimestamp } from "../../../../../firebase/firestore";
+import { dasRequestsRef } from "../../../../../firebase/collections";
 import dayjs from "dayjs";
-import { dasRequestsRef } from "../../../../../firebase/collections/dasApplications";
 
 const DATE_FORMAT = "DD-MM-YYYY";
 
@@ -14,7 +14,7 @@ export const dasRequestsQuery = ({ cip, fromDate, toDate }) => {
   }
 
   if (cip) {
-    query = query.where("user.cip", "==", cip);
+    query = query.where("headline.cip", "==", cip);
   }
 
   const [startDate, endDate] = dateRange(fromDate, toDate);

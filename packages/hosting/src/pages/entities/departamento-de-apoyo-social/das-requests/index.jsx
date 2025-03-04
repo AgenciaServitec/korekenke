@@ -17,7 +17,7 @@ import {
   useDevice,
   useQueriesState,
 } from "../../../../hooks";
-import { updateDasRequest } from "../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../firebase/collections";
 import {
   ModalProvider,
   useAuthentication,

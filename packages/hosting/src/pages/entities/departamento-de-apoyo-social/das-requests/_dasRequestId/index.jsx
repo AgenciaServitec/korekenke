@@ -7,7 +7,7 @@ import {
   addDasRequest,
   getDasRequestId,
   updateDasRequest,
-} from "../../../../../firebase/collections/dasApplications";
+} from "../../../../../firebase/collections";
 import styled from "styled-components";
 import { Steps } from "antd";
 import { Step1TypeRequest } from "./steps/Step1TypeRequest";
