@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../../../../hooks";
@@ -11,31 +11,29 @@ import {
   Row,
   TextArea,
 } from "../../../../../../../components";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { orderBy } from "lodash";
-import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
-import { v1 as uuidv1 } from "uuid";
 
 export const ObservationForApplicantDocumentsModal = ({
   dasRequest,
+  observation = "new",
   onCloseDasRequestModal,
+  onAddOrEditObservation,
 }) => {
   const [loading, setLoading] = useState(false);
 
+  const isNew = observation === "new";
+
   const observationsMap = (formData) => ({
     applicant: {
-      ...dasRequest.applicant,
+      ...dasRequest?.applicant,
       observations: orderBy(
-        [
-          ...(dasRequest?.applicant?.observations || []),
-          {
-            id: uuidv1(),
-            message: formData.message,
-            status: "pending",
-            isDeleted: false,
-            createAt: firestoreTimestamp.now(),
-          },
-        ],
+        onAddOrEditObservation(
+          observation,
+          dasRequest?.applicant?.observations || [],
+          formData,
+          isNew,
+        ),
         ["createAt"],
         "desc",
       ),
@@ -61,6 +59,7 @@ export const ObservationForApplicantDocumentsModal = ({
 
   return (
     <ObservationForApplicantDocuments
+      observation={observation}
       onAddObservationForApplicantDocuments={
         addObservationForApplicantDocuments
       }
@@ -70,6 +69,7 @@ export const ObservationForApplicantDocumentsModal = ({
 };
 
 const ObservationForApplicantDocuments = ({
+  observation,
   onAddObservationForApplicantDocuments,
   loading,
 }) => {
@@ -81,6 +81,7 @@ const ObservationForApplicantDocuments = ({
     formState: { errors },
     handleSubmit,
     control,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -90,6 +91,16 @@ const ObservationForApplicantDocuments = ({
   const onSubmit = (formData) => {
     onAddObservationForApplicantDocuments(formData);
   };
+
+  const resetForm = () => {
+    reset({
+      message: observation?.message,
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, [observation]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Col,
@@ -11,47 +11,54 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
-import { v1 as uuidv1 } from "uuid";
-import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { orderBy } from "lodash";
 
 export const ObservationPersonalInformationModal = ({
   dasRequest,
+  observation = "new",
   onCloseDasRequestModal,
+  onAddOrEditObservation,
 }) => {
   const [loading, setLoading] = useState(false);
   const schema = yup.object({
-    observation: yup.object({
-      message: yup.string().required(),
-    }),
+    message: yup.string().required(),
   });
 
   const {
     formState: { errors },
     handleSubmit,
     control,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const resetForm = () => {
+    reset({
+      message: observation?.message,
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, [observation]);
+
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
+  const isNew = observation === "new";
 
   const observationsMap = (formData) => {
     return {
       headline: {
         ...dasRequest.headline,
         observations: orderBy(
-          [
-            ...(dasRequest?.headline?.observations || []),
-            {
-              id: uuidv1(),
-              message: formData.observation.message,
-              status: "pending",
-              isDeleted: false,
-              createAt: firestoreTimestamp.now(),
-            },
-          ],
+          onAddOrEditObservation(
+            observation,
+            dasRequest?.headline?.observations || [],
+            formData,
+            isNew,
+          ),
           ["createAt"],
           "desc",
         ),
@@ -83,7 +90,7 @@ export const ObservationPersonalInformationModal = ({
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Controller
-            name="observation.message"
+            name="message"
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <TextArea

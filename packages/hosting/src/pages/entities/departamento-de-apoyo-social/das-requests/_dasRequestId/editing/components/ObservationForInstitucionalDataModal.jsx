@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../../../../hooks";
@@ -11,31 +11,29 @@ import {
   Row,
   TextArea,
 } from "../../../../../../../components";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { orderBy } from "lodash";
-import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
-import { v1 as uuidv1 } from "uuid";
 
 export const ObservationForInstitucionalDataModal = ({
   dasRequest,
+  observation = "new",
   onCloseDasRequestModal,
+  onAddOrEditObservation,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  const isNew = observation === "new";
 
   const observationsMap = (formData) => ({
     institution: {
       ...dasRequest.institution,
       observations: orderBy(
-        [
-          ...(dasRequest?.institution?.observations || []),
-          {
-            id: uuidv1(),
-            message: formData.observation.message,
-            status: "pending",
-            isDeleted: false,
-            createAt: firestoreTimestamp.now(),
-          },
-        ],
+        onAddOrEditObservation(
+          observation,
+          dasRequest?.institution?.observations || [],
+          formData,
+          isNew,
+        ),
         ["createAt"],
         "desc",
       ),
@@ -61,6 +59,7 @@ export const ObservationForInstitucionalDataModal = ({
 
   return (
     <ObservationForInstitucionalData
+      observation={observation}
       onAddObservationForInstitucionalData={addObservationForInstitucionalData}
       loading={loading}
     />
@@ -68,22 +67,32 @@ export const ObservationForInstitucionalDataModal = ({
 };
 
 const ObservationForInstitucionalData = ({
+  observation,
   onAddObservationForInstitucionalData,
   loading,
 }) => {
   const schema = yup.object({
-    observation: yup.object({
-      message: yup.string().required(),
-    }),
+    message: yup.string().required(),
   });
 
   const {
     formState: { errors },
     handleSubmit,
     control,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const resetForm = () => {
+    reset({
+      message: observation?.message,
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, [observation]);
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
@@ -96,7 +105,7 @@ const ObservationForInstitucionalData = ({
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Controller
-            name="observation.message"
+            name="message"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value, name } }) => (

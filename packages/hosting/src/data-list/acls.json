@@ -108,6 +108,7 @@
       "/das-requests#delete": "Eliminar solicitud",
       "/das-requests/:dasRequestId/sheets": "Pdfs de la solicitud",
       "/das-requests/:dasRequestId#addObservation": "Solicitud: Agregar observación",
+      "/das-requests/:dasRequestId#editObservation": "Solicitud: Editar observación",
       "/das-requests/:dasRequestId#resolverObservation": "Solicitud: Resolver observación",
       "/das-requests/:dasRequestId#closeObservation": "Solicitud: Cerrar observación",
       "/das-requests/:dasRequestId#reply": "Responder solicitud",
