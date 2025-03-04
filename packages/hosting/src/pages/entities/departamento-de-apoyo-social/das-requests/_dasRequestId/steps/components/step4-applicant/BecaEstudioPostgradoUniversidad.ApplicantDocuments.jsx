@@ -172,7 +172,7 @@ export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      label="Foto de CIP del Titular"
+                      label="Foto de CIP doble cara del Titular"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -216,7 +216,7 @@ export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      label="Foto de DNI del Titular"
+                      label="Foto de DNI doble cara del Titular"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -264,7 +264,7 @@ export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      label="Foto de CIF del Familiar"
+                      label="Foto de CIF doble cara del Familiar"
                       accept="image/*"
                       name={name}
                       value={value}
@@ -293,7 +293,7 @@ export const BecaEstudioPostgradoUniversidadApplicantDocuments = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Upload
                       isImage
-                      label="Foto de DNI del Familiar"
+                      label="Foto de DNI doble cara del Familiar"
                       accept="image/*"
                       name={name}
                       value={value}
