@@ -201,6 +201,9 @@ const DasRequestsList = ({
           </Legend>
         </Col>
         <Col span={24}>
+          Resultados <strong>{dasRequestsView.length}</strong>
+        </Col>
+        <Col span={24}>
           <DasRequestsTable
             dasRequests={dasRequestsView}
             onEditDasRequest={onEditDasRequest}
