@@ -70,26 +70,26 @@ export const DasRequestsTable = ({
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
   const isProceeds = (dasRequest) => dasRequest?.status === "finalized";
 
-  const dasApplicationsViewBy = dasRequests.filter((dasApplication) => {
+  const dasRequestsView = dasRequests.filter((dasRequest) => {
     // Das requests for super-admin
-    if (["super_admin"].includes(authUser.roleCode)) return dasApplication;
+    if (["super_admin"].includes(authUser.roleCode)) return dasRequest;
 
     // Das requests for user
-    if (dasApplication.userId === authUser.id) return dasApplication;
+    if (dasRequest.userId === authUser.id) return dasRequest;
 
     // Das requests for Boss - mesa de partes
     if (
-      ["waiting", "notProceeds", "proceeds"].includes(dasApplication.status) &&
+      ["waiting", "notProceeds", "proceeds"].includes(dasRequest.status) &&
       isBossMDP
     )
-      return dasApplication;
+      return dasRequest;
 
     // Das requests for manager
     if (
-      !["waiting", "notProceeds"].includes(dasApplication.status) &&
+      !["waiting", "notProceeds"].includes(dasRequest.status) &&
       isManagerEntityGu
     )
-      return dasApplication;
+      return dasRequest;
   });
 
   const columns = [
@@ -278,7 +278,7 @@ export const DasRequestsTable = ({
   return (
     <Container>
       <TableVirtualized
-        dataSource={orderBy(dasApplicationsViewBy, "createAt", "desc")}
+        dataSource={orderBy(dasRequestsView, "createAt", "desc")}
         columns={columns}
         rowHeaderHeight={50}
         rowBodyHeight={150}
