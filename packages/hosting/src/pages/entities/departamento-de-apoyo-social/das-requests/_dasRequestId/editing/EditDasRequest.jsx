@@ -35,9 +35,11 @@ import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
-import { updateDasRequest } from "../../../../../../firebase/collections/dasApplications";
+import {
+  fetchUser,
+  updateDasRequest,
+} from "../../../../../../firebase/collections";
 import { DasRequestStatus } from "../../../../../../data-list";
-import { fetchUser } from "../../../../../../firebase/collections";
 import { useAuthentication } from "../../../../../../providers";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";

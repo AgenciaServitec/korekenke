@@ -212,21 +212,20 @@ export const DasRequestsTable = ({
               />
             )}
           </Acl>
-          {bossEntityGu?.id === user?.id &&
-            dasRequest?.status === "inProgress" && (
-              <Acl
-                category="public"
-                subCategory="dasRequests"
-                name="/das-requests/:dasRequestId#reply"
-              >
-                <IconAction
-                  tooltipTitle="Responder solicitud"
-                  icon={faReply}
-                  styled={{ color: (theme) => theme.colors.primary }}
-                  onClick={() => onShowReplyDasRequestModal(dasRequest)}
-                />
-              </Acl>
-            )}
+          {isManagerEntityGu && dasRequest?.status === "inProgress" && (
+            <Acl
+              category="public"
+              subCategory="dasRequests"
+              name="/das-requests/:dasRequestId#reply"
+            >
+              <IconAction
+                tooltipTitle="Responder solicitud"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.primary }}
+                onClick={() => onShowReplyDasRequestModal(dasRequest)}
+              />
+            </Acl>
+          )}
           <Acl
             category="public"
             subCategory="dasRequests"
