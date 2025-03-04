@@ -18,24 +18,24 @@ import { v1 as uuidv1 } from "uuid";
 
 export const ObservationForInstitucionalDataModal = ({
   dasRequest,
+  observation = "new",
   onCloseDasRequestModal,
+  onAddOrEditObservation,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  const isNew = observation === "new";
 
   const observationsMap = (formData) => ({
     institution: {
       ...dasRequest.institution,
       observations: orderBy(
-        [
-          ...(dasRequest?.institution?.observations || []),
-          {
-            id: uuidv1(),
-            message: formData.observation.message,
-            status: "pending",
-            isDeleted: false,
-            createAt: firestoreTimestamp.now(),
-          },
-        ],
+        onAddOrEditObservation(
+          observation,
+          dasRequest?.applicant?.observations || [],
+          formData,
+          isNew,
+        ),
         ["createAt"],
         "desc",
       ),

@@ -23,6 +23,7 @@ import {
   ApplicantDocumentsModal,
   DasRequestModalProvider,
   InstitutionDataModal,
+  ObservationForApplicantDocumentsModal,
   ObservationForInstitucionalDataModal,
   ObservationPersonalInformationModal,
   PersonalInformationModal,
@@ -30,7 +31,6 @@ import {
 } from "./components";
 import { ObservationsList } from "./components/ObservationsList";
 import { useBosses, useDevice } from "../../../../../../hooks";
-import { ObservationForApplicantDocumentsModal } from "./components/ObservationForApplicantDocumentsModal";
 import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";

@@ -4,6 +4,7 @@ import {
   Alert,
   Button,
   Divider,
+  IconAction,
   modalConfirm,
   Space,
 } from "../../../../../../../components";
@@ -11,12 +12,23 @@ import dayjs from "dayjs";
 import styled from "styled-components";
 import { orderBy } from "lodash";
 import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { ObservationForApplicantDocumentsModal } from "./ObservationForApplicantDocumentsModal";
+import { useDasRequestModal } from "./DasRequest.ModalProvider";
+import { useDevice } from "../../../../../../../hooks";
+import { v1 as uuidv1 } from "uuid";
+import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
+import { ObservationForInstitucionalDataModal } from "./ObservationForInstitucionalDataModal";
 
 export const ObservationsList = ({
   section,
   observations = [],
   dasRequest,
 }) => {
+  const { onShowDasRequestModal, onCloseDasRequestModal } =
+    useDasRequestModal();
+  const { isTablet } = useDevice();
+
   const observationsView = orderBy(observations, ["createAt"], ["desc"]).filter(
     (observation) => observation.isDeleted === false,
   );
@@ -37,6 +49,61 @@ export const ObservationsList = ({
         ...dasRequest[section],
         observations: observations,
       },
+    });
+  };
+
+  const onAddOrEditObservation = (
+    observation,
+    observations,
+    formData,
+    isNew,
+  ) => {
+    const otherObservations = excludeObservation(observation.id);
+
+    const newObservation = {
+      id: uuidv1(),
+      message: formData.message,
+      status: "pending",
+      isDeleted: false,
+      createAt: firestoreTimestamp.now(),
+    };
+
+    const observationToEdit = { ...observation, message: formData?.message };
+
+    return isNew
+      ? [...observations, newObservation]
+      : [...otherObservations, observationToEdit];
+  };
+
+  const onEditObservationInstitutionData = (dasRequest, observation) => {
+    onShowDasRequestModal({
+      title:
+        observation.id === "new" ? "Agregar Observación" : "Editar Observación",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <ObservationForInstitucionalDataModal
+          dasRequest={dasRequest}
+          observation={observation}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+          onAddOrEditObservation={onAddOrEditObservation}
+        />
+      ),
+    });
+  };
+
+  const onEditObservationApplicantDocuments = (dasRequest, observation) => {
+    onShowDasRequestModal({
+      title:
+        observation.id === "new" ? "Agregar Observación" : "Editar Observación",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <ObservationForApplicantDocumentsModal
+          dasRequest={dasRequest}
+          observation={observation}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+          onAddOrEditObservation={onAddOrEditObservation}
+        />
+      ),
     });
   };
 
@@ -95,22 +162,34 @@ export const ObservationsList = ({
             showIcon
             action={
               <Space direction="vertical">
-                <Acl
-                  category="public"
-                  subCategory="dasRequests"
-                  name="/das-requests/:dasRequestId#resolverObservation"
-                  redirect
-                >
-                  {observation.status === "pending" && (
-                    <Button
-                      size="small"
-                      type="primary"
-                      onClick={() => onResolverObservation(observation.id)}
-                    >
-                      Resolver
-                    </Button>
-                  )}
-                </Acl>
+                <Space>
+                  <IconAction
+                    tooltipTitle="Editar"
+                    icon={faEdit}
+                    onClick={() =>
+                      onEditObservationApplicantDocuments(
+                        dasRequest,
+                        observation,
+                      )
+                    }
+                  />
+                  <Acl
+                    category="public"
+                    subCategory="dasRequests"
+                    name="/das-requests/:dasRequestId#resolverObservation"
+                    redirect
+                  >
+                    {observation.status === "pending" && (
+                      <Button
+                        size="small"
+                        type="primary"
+                        onClick={() => onResolverObservation(observation.id)}
+                      >
+                        Resolver
+                      </Button>
+                    )}
+                  </Acl>
+                </Space>
                 <Acl
                   category="public"
                   subCategory="dasRequests"
