@@ -38,7 +38,7 @@ export const DasRequestsListIntegration = () => {
   const { authUser } = useAuthentication();
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
-    fromDate: dayjs().format("DD-MM-YYYY"),
+    fromDate: dayjs().subtract(30, "days").format("DD-MM-YYYY"),
     toDate: dayjs().format("DD-MM-YYYY"),
   });
 
