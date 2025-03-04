@@ -55,7 +55,8 @@ export const DasRequestsTable = ({
     })();
   }, []);
 
-  const isBossMDP = authUser.id === bossMDP?.id;
+  const isManagerEntityGu = user.id === bossEntityGu?.id;
+  const isBossMDP = user.id === bossMDP?.id;
 
   const navigateTo = (pathname) => navigate(pathname);
 
@@ -64,19 +65,28 @@ export const DasRequestsTable = ({
     dasRequest?.status === "inProgress" ||
     dasRequest?.response?.type === "positive";
 
+  const isWaiting = (dasRequest) => dasRequest?.status === "waiting";
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
+  const isProceeds = (dasRequest) => dasRequest?.status === "finalized";
 
   const dasApplicationsViewBy = dasApplications.filter((dasApplication) => {
+    // Das applications for super-admin
     if (["super_admin"].includes(authUser.roleCode)) return dasApplication;
 
+    // Das applications for user
     if (dasApplication.userId === authUser.id) return dasApplication;
 
-    if (["waiting", "notProceeds"].includes(dasApplication.status) && isBossMDP)
+    // Das applications for Boss - mesa de partes
+    if (
+      ["waiting", "notProceeds", "proceeds"].includes(dasApplication.status) &&
+      isBossMDP
+    )
       return dasApplication;
 
+    // Das applications for manager
     if (
       !["waiting", "notProceeds"].includes(dasApplication.status) &&
-      ["manager"].includes(authUser.roleCode)
+      isManagerEntityGu
     )
       return dasApplication;
   });
@@ -228,7 +238,7 @@ export const DasRequestsTable = ({
               }
             />
           </Acl>
-          {!isFinalized(dasRequest) && (
+          {isWaiting(dasRequest) && (
             <Acl
               category="public"
               subCategory="dasRequests"
