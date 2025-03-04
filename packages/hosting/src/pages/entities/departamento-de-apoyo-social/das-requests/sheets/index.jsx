@@ -7,7 +7,7 @@ import { ApplicantDocumentsSheet } from "./common/ApplicantDocumentsSheet";
 import { userFullName } from "../../../../../utils/users/userFullName2";
 import { findRelationShip } from "../../../../../utils";
 import { useAuthentication, useGlobalData } from "../../../../../providers";
-import { updateDasApplication } from "../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../firebase/collections/dasApplications";
 import { fetchEntities, fetchUser } from "../../../../../firebase/collections";
 import { DescuentoConvenioUniversidadSheet } from "./DescuentoConvenioUniversidad.Sheet";
 import { BecaEstudioPostgradoUniversidadSheet } from "./BecaEstudioPostgradoUniversidad.Sheet";
@@ -42,7 +42,7 @@ export const DasRequestSheets = () => {
         dasRequest?.status === "proceeds" &&
         dasEntityManager?.id === authUser.id
       ) {
-        await updateDasApplication(dasRequestId, {
+        await updateDasRequest(dasRequestId, {
           status: "inProgress",
           wasRead: true,
         });

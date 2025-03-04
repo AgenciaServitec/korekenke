@@ -11,7 +11,7 @@ import {
   Row,
   TextArea,
 } from "../../../../../../../components";
-import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
 import { orderBy } from "lodash";
 import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
 import { v1 as uuidv1 } from "uuid";
@@ -46,7 +46,7 @@ export const ObservationForInstitucionalDataModal = ({
     try {
       setLoading(true);
 
-      await updateDasApplication(dasRequest.id, observationsMap(formData));
+      await updateDasRequest(dasRequest.id, observationsMap(formData));
 
       onCloseDasRequestModal();
 

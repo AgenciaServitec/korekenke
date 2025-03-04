@@ -35,7 +35,7 @@ import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
-import { updateDasApplication } from "../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../firebase/collections/dasApplications";
 import { DasRequestStatus } from "../../../../../../data-list";
 import { fetchUser } from "../../../../../../firebase/collections";
 import { useAuthentication } from "../../../../../../providers";
@@ -74,7 +74,7 @@ export const EditDasRequestIntegration = ({
         dasRequest?.status === "proceeds" &&
         dasEntityManager?.id === authUser?.id
       ) {
-        await updateDasApplication(dasRequest.id, {
+        await updateDasRequest(dasRequest.id, {
           status: "inProgress",
           wasRead: true,
         });
@@ -135,7 +135,7 @@ const EditDasRequest = ({
   const { isTablet } = useDevice();
 
   const onUpdateHeadlineEmail = async (headline) => {
-    await updateDasApplication(dasRequest.id, {
+    await updateDasRequest(dasRequest.id, {
       ...dasRequest,
       headline: {
         ...headline,

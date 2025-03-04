@@ -33,7 +33,7 @@ export const DasRequestsTable = ({
   onDeleteDasRequest,
   onAddReplyDasRequest,
   onShowReplyDasRequestInformation,
-  onDasRequestProceeds,
+  onShowDasRequestProceedsModal,
   user,
 }) => {
   const navigate = useNavigate();
@@ -205,7 +205,7 @@ export const DasRequestsTable = ({
               <IconAction
                 tooltipTitle="Evaluación de solicitud"
                 icon={faFilter}
-                onClick={() => onDasRequestProceeds(dasRequest)}
+                onClick={() => onShowDasRequestProceedsModal()}
               />
             )}
           </Acl>

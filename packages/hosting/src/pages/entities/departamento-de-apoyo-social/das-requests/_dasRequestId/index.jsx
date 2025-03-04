@@ -4,9 +4,9 @@ import { useDefaultFirestoreProps } from "../../../../../hooks";
 import { useAuthentication } from "../../../../../providers";
 import { useNavigate, useParams } from "react-router";
 import {
-  addDasApplication,
-  getDasApplicationId,
-  updateDasApplication,
+  addDasRequest,
+  getDasRequestId,
+  updateDasRequest,
 } from "../../../../../firebase/collections/dasApplications";
 import styled from "styled-components";
 import { Steps } from "antd";
@@ -52,7 +52,7 @@ export const DasRequestIntegration = () => {
 
   useEffect(() => {
     if (isNew) {
-      const dasApplicationId = getDasApplicationId();
+      const dasApplicationId = getDasRequestId();
 
       setLocalStorage("dasRequest", { id: dasApplicationId });
       setDasRequest({ id: dasApplicationId });
@@ -94,11 +94,8 @@ export const DasRequestIntegration = () => {
       setLoading(true);
 
       isNew
-        ? await addDasApplication(assignCreateProps(mapForm(formData)))
-        : await updateDasApplication(
-            dasRequest.id,
-            assignUpdateProps(formData),
-          );
+        ? await addDasRequest(assignCreateProps(mapForm(formData)))
+        : await updateDasRequest(dasRequest.id, assignUpdateProps(formData));
 
       notification({ type: "success" });
     } catch (e) {

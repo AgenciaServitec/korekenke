@@ -15,7 +15,7 @@ import { Relationships } from "../../../../../../../data-list";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
 
 export const PersonalInformationModal = ({
   dasRequest,
@@ -101,7 +101,7 @@ export const PersonalInformationModal = ({
 
       const headlineAndFamiliarInformation = headlineAndFamiliarMap(formData);
 
-      await updateDasApplication(dasRequest.id, headlineAndFamiliarInformation);
+      await updateDasRequest(dasRequest.id, headlineAndFamiliarInformation);
       onCloseDasRequestModal();
 
       notification({ type: "success" });

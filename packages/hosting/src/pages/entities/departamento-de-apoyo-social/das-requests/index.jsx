@@ -10,12 +10,16 @@ import {
 import { DasRequestsTable } from "./DasRequestsTable";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useNavigate } from "react-router";
-import { useDefaultFirestoreProps } from "../../../../hooks";
+import { useDefaultFirestoreProps, useDevice } from "../../../../hooks";
 import {
-  dasApplicationsRef,
-  updateDasApplication,
+  dasRequestsRef,
+  updateDasRequest,
 } from "../../../../firebase/collections/dasApplications";
-import { useAuthentication } from "../../../../providers";
+import {
+  ModalProvider,
+  useAuthentication,
+  useModal,
+} from "../../../../providers";
 import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
 import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
@@ -28,12 +32,10 @@ export const DasRequestsListIntegration = () => {
   const [visibleReplyModal, setVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
-  const [visibledDasRequestProceeds, setVisibledDasRequestProceeds] =
-    useState(false);
   const [dasRequest, setDasRequest] = useState(null);
 
   const [dasApplications = [], dasApplicationsLoading, dasApplicationsError] =
-    useCollectionData(dasApplicationsRef.where("isDeleted", "==", false));
+    useCollectionData(dasRequestsRef.where("isDeleted", "==", false));
 
   useEffect(() => {
     dasApplicationsError && notification({ type: "error" });
@@ -45,7 +47,7 @@ export const DasRequestsListIntegration = () => {
     modalConfirm({
       title: "¿Estás seguro que quieres eliminar la solicitud?",
       onOk: async () => {
-        await updateDasApplication(
+        await updateDasRequest(
           dasRequest.id,
           assignDeleteProps({ isDeleted: true }),
         );
@@ -63,29 +65,23 @@ export const DasRequestsListIntegration = () => {
     setVisibleReplyInformationModal(true);
   };
 
-  const onDasRequestProceeds = (dasRequest) => {
-    setDasRequest(dasRequest);
-    setVisibledDasRequestProceeds(true);
-  };
-
   return (
-    <DasRequestsList
-      dasApplications={dasApplications}
-      onEditDasRequest={onEditDasRequest}
-      onDeleteDasRequest={onConfirmDeleteDasRequest}
-      dasApplicationsLoading={dasApplicationsLoading}
-      dasRequest={dasRequest}
-      visibleReplyModal={visibleReplyModal}
-      onSetVisibleReplyModal={setVisibleReplyModal}
-      visibleReplyInformationModal={visibleReplyInformationModal}
-      visibledDasRequestProceeds={visibledDasRequestProceeds}
-      onSetVisibledDasRequestProceeds={setVisibledDasRequestProceeds}
-      onDasRequestProceeds={onDasRequestProceeds}
-      user={authUser}
-      onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
-      onAddReplyDasRequest={onAddReplyDasRequest}
-      onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
-    />
+    <ModalProvider>
+      <DasRequestsList
+        dasApplications={dasApplications}
+        onEditDasRequest={onEditDasRequest}
+        onDeleteDasRequest={onConfirmDeleteDasRequest}
+        dasApplicationsLoading={dasApplicationsLoading}
+        dasRequest={dasRequest}
+        visibleReplyModal={visibleReplyModal}
+        onSetVisibleReplyModal={setVisibleReplyModal}
+        visibleReplyInformationModal={visibleReplyInformationModal}
+        user={authUser}
+        onSetVisibleReplyInformationModal={setVisibleReplyInformationModal}
+        onAddReplyDasRequest={onAddReplyDasRequest}
+        onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
+      />
+    </ModalProvider>
   );
 };
 
@@ -99,13 +95,29 @@ const DasRequestsList = ({
   visibleReplyModal,
   onSetVisibleReplyModal,
   visibleReplyInformationModal,
-  visibledDasRequestProceeds,
-  onSetVisibledDasRequestProceeds,
-  onDasRequestProceeds,
   user,
   onSetVisibleReplyInformationModal,
   onShowReplyDasRequestInformation,
 }) => {
+  const { isTablet } = useDevice();
+  const { onShowModal, onCloseModal } = useModal();
+
+  const onShowDasRequestProceedsModal = () => {
+    onShowModal({
+      title: "Evaluación de la solicitud",
+      width: `${isTablet ? "100%" : "50%"}`,
+      centered: false,
+      top: 0,
+      padding: 0,
+      onRenderBody: () => (
+        <DasRequestProceedsModal
+          onCloseModal={onCloseModal}
+          dasRequest={dasRequest}
+        />
+      ),
+    });
+  };
+
   return (
     <Acl
       category="public"
@@ -125,7 +137,7 @@ const DasRequestsList = ({
             dasApplicationsLoading={dasApplicationsLoading}
             onAddReplyDasRequest={onAddReplyDasRequest}
             onShowReplyDasRequestInformation={onShowReplyDasRequestInformation}
-            onDasRequestProceeds={onDasRequestProceeds}
+            onShowDasRequestProceedsModal={onShowDasRequestProceedsModal}
             user={user}
           />
         </Col>
@@ -137,11 +149,6 @@ const DasRequestsList = ({
         <ReplyDasRequestModal
           visibleModal={visibleReplyModal}
           onSetVisibleModal={onSetVisibleReplyModal}
-          dasRequest={dasRequest}
-        />
-        <DasRequestProceedsModal
-          visibleModal={visibledDasRequestProceeds}
-          onSetVisibleModal={onSetVisibledDasRequestProceeds}
           dasRequest={dasRequest}
         />
       </Row>

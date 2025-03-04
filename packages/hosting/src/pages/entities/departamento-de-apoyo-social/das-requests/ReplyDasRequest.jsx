@@ -14,7 +14,7 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
-import { updateDasApplication } from "../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../firebase/collections/dasApplications";
 
 export const ReplyDasRequestModal = ({
   visibleModal,
@@ -59,7 +59,7 @@ export const ReplyDasRequestModal = ({
     try {
       setSavingData(true);
 
-      await updateDasApplication(dasRequest.id, {
+      await updateDasRequest(dasRequest.id, {
         response: { ...formData },
         status: "finalized",
       });
