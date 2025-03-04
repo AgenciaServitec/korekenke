@@ -15,3 +15,4 @@ export * from "./cmstsEnrollments";
 export * from "./animal-logs";
 export * from "./militaryRecruitment";
 export * from "./sessionVerification";
+export * from "./dasApplications";

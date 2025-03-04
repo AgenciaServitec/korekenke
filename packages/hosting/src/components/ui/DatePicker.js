@@ -18,6 +18,7 @@ export const DatePicker = ({
   onChange,
   prefix = null,
   disabledDate = false,
+  format = "DD/MM/YYYY HH:mm",
 }) => {
   const Container = ComponentContainer[variant];
 
@@ -36,7 +37,7 @@ export const DatePicker = ({
     >
       <AntdDatePicker
         size="large"
-        format="DD/MM/YYYY HH:mm"
+        format={format}
         value={value}
         disabled={disabled}
         name={name}

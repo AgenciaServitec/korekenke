@@ -11,7 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
 import { v1 as uuidv1 } from "uuid";
 import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
 import { orderBy } from "lodash";
@@ -63,7 +63,7 @@ export const ObservationPersonalInformationModal = ({
     try {
       setLoading(true);
 
-      await updateDasApplication(dasRequest.id, observationsMap(formData));
+      await updateDasRequest(dasRequest.id, observationsMap(formData));
       onCloseDasRequestModal();
 
       notification({

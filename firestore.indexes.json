@@ -91,6 +91,84 @@
           "order": "DESCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "das-applications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "createAtString",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "headline.cip",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "das-applications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "headline.cip",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "createAtString",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "das-applications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "headline.cip",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "das-applications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "createAtString",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "das-applications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "createAtString",
+          "order": "DESCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []

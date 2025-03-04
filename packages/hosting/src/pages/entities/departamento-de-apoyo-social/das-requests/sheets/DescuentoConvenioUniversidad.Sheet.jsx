@@ -185,7 +185,6 @@ const Container = styled.div`
         &__body {
           line-height: 1.5;
           margin-bottom: 1em;
-          text-indent: 3em;
           text-align: justify;
 
           span {

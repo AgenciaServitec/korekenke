@@ -10,7 +10,7 @@ import {
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { orderBy } from "lodash";
-import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
 
 export const ObservationsList = ({
   section,
@@ -32,7 +32,7 @@ export const ObservationsList = ({
     );
 
   const updatedObservations = async (observations) => {
-    await updateDasApplication(dasRequest.id, {
+    await updateDasRequest(dasRequest.id, {
       [section]: {
         ...dasRequest[section],
         observations: observations,

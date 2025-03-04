@@ -2,18 +2,20 @@ import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
 
-export const dasApplicationsRef = firestore.collection("das-applications");
+// das-requests === das-applications in Firestore
 
-export const getDasApplicationId = () => dasApplicationsRef.doc().id;
+export const dasRequestsRef = firestore.collection("das-applications");
 
-export const fetchDasApplication = async (id) =>
-  fetchDocumentOnce(dasApplicationsRef.doc(id));
+export const getDasRequestId = () => dasRequestsRef.doc().id;
 
-export const fetchDasApplications = async () =>
-  fetchCollectionOnce(dasApplicationsRef.where("isDeleted", "==", false));
+export const fetchDasRequest = async (id) =>
+  fetchDocumentOnce(dasRequestsRef.doc(id));
 
-export const addDasApplication = async (dasApplicant) =>
-  setDocument(dasApplicationsRef.doc(dasApplicant.id), dasApplicant);
+export const fetchDasRequests = async () =>
+  fetchCollectionOnce(dasRequestsRef.where("isDeleted", "==", false));
 
-export const updateDasApplication = async (dasApplicantId, dasApplicant) =>
-  updateDocument(dasApplicationsRef.doc(dasApplicantId), dasApplicant);
+export const addDasRequest = async (dasRequest) =>
+  setDocument(dasRequestsRef.doc(dasRequest.id), dasRequest);
+
+export const updateDasRequest = async (dasRequestId, dasRequest) =>
+  updateDocument(dasRequestsRef.doc(dasRequestId), dasRequest);

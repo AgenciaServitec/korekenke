@@ -13,7 +13,7 @@ import {
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
 
 export const InstitutionDataModal = ({
   dasRequest,
@@ -42,7 +42,7 @@ export const InstitutionDataModal = ({
     try {
       setLoading(true);
 
-      await updateDasApplication(dasRequest.id, mapForm(formData));
+      await updateDasRequest(dasRequest.id, mapForm(formData));
 
       dasRequest.institution.processType === formData.institution.processType &&
         notification({ type: "success" });

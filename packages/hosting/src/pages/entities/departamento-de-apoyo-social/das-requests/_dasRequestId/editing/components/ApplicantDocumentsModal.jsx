@@ -12,7 +12,7 @@ import {
   MediaBecaUniversidadApplicantDocuments,
   NoDocuments,
 } from "../../steps/components";
-import { updateDasApplication } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
 import { updateUser } from "../../../../../../../firebase/collections";
 import { useDefaultFirestoreProps } from "../../../../../../../hooks";
 
@@ -42,7 +42,7 @@ export const ApplicantDocumentsModal = ({
         }),
       );
 
-      await updateDasApplication(dasRequest.id, {
+      await updateDasRequest(dasRequest.id, {
         applicant: {
           ...dasRequest.applicant,
           documents: {

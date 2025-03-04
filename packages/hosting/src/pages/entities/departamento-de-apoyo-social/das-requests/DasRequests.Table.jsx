@@ -28,13 +28,14 @@ const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
 const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const DasRequestsTable = ({
-  dasApplications,
+  dasRequests,
   onEditDasRequest,
   onDeleteDasRequest,
-  onAddReplyDasRequest,
-  onShowReplyDasRequestInformation,
-  onDasRequestProceeds,
+  onShowDasRequestProceedsModal,
+  onShowReplyDasRequestModal,
+  onShowReplyDasRequestInformationModal,
   user,
+  dasRequestsLoading,
 }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
@@ -55,7 +56,8 @@ export const DasRequestsTable = ({
     })();
   }, []);
 
-  const isBossMDP = authUser.id === bossMDP?.id;
+  const isManagerEntityGu = user.id === bossEntityGu?.id;
+  const isBossMDP = user.id === bossMDP?.id;
 
   const navigateTo = (pathname) => navigate(pathname);
 
@@ -64,28 +66,37 @@ export const DasRequestsTable = ({
     dasRequest?.status === "inProgress" ||
     dasRequest?.response?.type === "positive";
 
+  const isWaiting = (dasRequest) => dasRequest?.status === "waiting";
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
+  const isProceeds = (dasRequest) => dasRequest?.status === "finalized";
 
-  const dasApplicationsViewBy = dasApplications.filter((dasApplication) => {
-    if (["super_admin"].includes(authUser.roleCode)) return dasApplication;
+  const dasRequestsView = dasRequests.filter((dasRequest) => {
+    // Das requests for super-admin
+    if (["super_admin"].includes(authUser.roleCode)) return dasRequest;
 
-    if (dasApplication.userId === authUser.id) return dasApplication;
+    // Das requests for user
+    if (dasRequest.userId === authUser.id) return dasRequest;
 
-    if (["waiting", "notProceeds"].includes(dasApplication.status) && isBossMDP)
-      return dasApplication;
-
+    // Das requests for Boss - mesa de partes
     if (
-      !["waiting", "notProceeds"].includes(dasApplication.status) &&
-      ["manager"].includes(authUser.roleCode)
+      ["waiting", "notProceeds", "proceeds"].includes(dasRequest.status) &&
+      isBossMDP
     )
-      return dasApplication;
+      return dasRequest;
+
+    // Das requests for manager
+    if (
+      !["waiting", "notProceeds"].includes(dasRequest.status) &&
+      isManagerEntityGu
+    )
+      return dasRequest;
   });
 
   const columns = [
     {
       title: "F. Creación",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (dasRequest) =>
         dayjs(dasRequest.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
@@ -93,7 +104,14 @@ export const DasRequestsTable = ({
       title: "Titular",
       align: "center",
       width: ["15rem", "100%"],
-      render: (dasRequest) => userFullName(dasRequest.headline),
+      render: (dasRequest) => (
+        <Space align="center" direction="vertical">
+          <div>{userFullName(dasRequest.headline)}</div>
+          <div>
+            CIP: <strong>{dasRequest.headline.cip}</strong>
+          </div>
+        </Space>
+      ),
     },
     {
       title: "Solicitud / Institución",
@@ -101,19 +119,20 @@ export const DasRequestsTable = ({
       width: ["20rem", "100%"],
       render: (dasRequest) => {
         return (
-          <div className="capitalize">
+          <Space align="center" direction="vertical" className="capitalize">
             <div>{findDasRequest(dasRequest?.requestType)?.name}</div>
             <div>
               <strong>{dasRequest?.institution?.id}</strong>
             </div>
-          </div>
+            <div>Para: {dasRequest?.isHeadline ? "Titular" : "Familiar"}</div>
+          </Space>
         );
       },
     },
     {
       title: "Contácto",
       align: "center",
-      width: ["12rem", "100%"],
+      width: ["14rem", "100%"],
       render: (dasRequest) => (
         <div className="contact">
           <div className="contact__item">
@@ -147,7 +166,7 @@ export const DasRequestsTable = ({
     {
       title: "Estado",
       align: "center",
-      width: ["8rem", "100%"],
+      width: ["5rem", "100%"],
       render: (dasRequest) => {
         const requestStatus = DasRequestStatus[dasRequest.status];
 
@@ -157,7 +176,7 @@ export const DasRequestsTable = ({
     {
       title: "Respuesta",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (dasRequest) => {
         const status = dasRequest?.response?.type === "positive";
         return (
@@ -173,7 +192,9 @@ export const DasRequestsTable = ({
                 icon={faEye}
                 size={30}
                 styled={{ color: (theme) => theme.colors.info }}
-                onClick={() => onShowReplyDasRequestInformation(dasRequest)}
+                onClick={() =>
+                  onShowReplyDasRequestInformationModal(dasRequest)
+                }
               />
             </Space>
           )
@@ -195,25 +216,24 @@ export const DasRequestsTable = ({
               <IconAction
                 tooltipTitle="Evaluación de solicitud"
                 icon={faFilter}
-                onClick={() => onDasRequestProceeds(dasRequest)}
+                onClick={() => onShowDasRequestProceedsModal(dasRequest)}
               />
             )}
           </Acl>
-          {bossEntityGu?.id === user?.id &&
-            dasRequest?.status === "inProgress" && (
-              <Acl
-                category="public"
-                subCategory="dasRequests"
-                name="/das-requests/:dasRequestId#reply"
-              >
-                <IconAction
-                  tooltipTitle="Responder solicitud"
-                  icon={faReply}
-                  styled={{ color: (theme) => theme.colors.primary }}
-                  onClick={() => onAddReplyDasRequest(dasRequest)}
-                />
-              </Acl>
-            )}
+          {isManagerEntityGu && dasRequest?.status === "inProgress" && (
+            <Acl
+              category="public"
+              subCategory="dasRequests"
+              name="/das-requests/:dasRequestId#reply"
+            >
+              <IconAction
+                tooltipTitle="Responder solicitud"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.primary }}
+                onClick={() => onShowReplyDasRequestModal(dasRequest)}
+              />
+            </Acl>
+          )}
           <Acl
             category="public"
             subCategory="dasRequests"
@@ -228,7 +248,7 @@ export const DasRequestsTable = ({
               }
             />
           </Acl>
-          {!isFinalized(dasRequest) && (
+          {isWaiting(dasRequest) && (
             <Acl
               category="public"
               subCategory="dasRequests"
@@ -265,10 +285,11 @@ export const DasRequestsTable = ({
   return (
     <Container>
       <TableVirtualized
-        dataSource={orderBy(dasApplicationsViewBy, "createAt", "desc")}
+        dataSource={orderBy(dasRequestsView, "createAt", "desc")}
         columns={columns}
         rowHeaderHeight={50}
         rowBodyHeight={150}
+        loading={dasRequestsLoading}
       />
     </Container>
   );

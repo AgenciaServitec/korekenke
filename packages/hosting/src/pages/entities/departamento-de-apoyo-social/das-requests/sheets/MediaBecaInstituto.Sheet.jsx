@@ -40,7 +40,7 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)}</span>, Grado{" "}
-              <span>{findDegree(headline?.degree).label || emptyContent}</span>
+              <span>{findDegree(headline?.degree).label || emptyContent}</span>{" "}
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -49,12 +49,12 @@ export const MediaBecaInstitutoSheet = ({ user, dasRequest, dataFamiliar }) => {
               con el debido respeto me presento y expongo:
             </p>
             <p className="request-content__body">
-              Que teniendo conocimiento que el instituto
-              <span>{institution?.id || emptyContent}</span>
-              por intermedio de COBIENE-DAS está otorgando BECA DE ESTUDIO por
-              convenio al personal militar y civil del Ejército, solicito a Ud.,
-              Mi General disponer a quien corresponda se me inscriba a fin de
-              obtener este beneficio de mi
+              Que teniendo conocimiento que el instituto{" "}
+              <span>{institution?.id || emptyContent}</span> por intermedio de
+              COBIENE-DAS está otorgando BECA DE ESTUDIO por convenio al
+              personal militar y civil del Ejército, solicito a Ud., Mi General
+              disponer a quien corresponda se me inscriba a fin de obtener este
+              beneficio de mi
               <span> {dataFamiliar(familiar)} </span> en la especialidad o
               carrera de
               <span> {institution.specialty || emptyContent} </span>.
@@ -178,7 +178,6 @@ const Container = styled.div`
         &__body {
           line-height: 1.5;
           margin-bottom: 1em;
-          text-indent: 3em;
           text-align: justify;
 
           span {
