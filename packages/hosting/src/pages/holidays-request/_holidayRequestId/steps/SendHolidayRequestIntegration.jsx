@@ -292,7 +292,7 @@ const SendHolidayRequest = ({
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Title level={3} margin="1em 0 0 0">
-              Sellos y Firmas de Aprobación:
+              Sello y Firma de Aprobación: Papeleta de Permiso
             </Title>
           </Col>
           <Col span={24}>
@@ -309,6 +309,11 @@ const SendHolidayRequest = ({
                 />
               )}
             />
+          </Col>
+          <Col span={24}>
+            <Title level={3} margin="1em 0 0 0">
+              Sello y Firma de Aprobación: Resumen de Solicitud
+            </Title>
           </Col>
           <Col span={24}>
             <Controller

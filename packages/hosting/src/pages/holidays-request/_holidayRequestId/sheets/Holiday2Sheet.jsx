@@ -76,7 +76,7 @@ export const Holiday2Sheet = ({ holiday }) => {
                   topText={secondSeal.sealTopText}
                   bottomText={secondSeal.sealBottomText}
                   supervisorName={secondSeal.supervisorName}
-                  supervisorCip={secondSeal.supervisorCip}
+                  supervisorNs={secondSeal.supervisorNs}
                   supervisorDegree={secondSeal.supervisorDegree}
                 />
               </span>
