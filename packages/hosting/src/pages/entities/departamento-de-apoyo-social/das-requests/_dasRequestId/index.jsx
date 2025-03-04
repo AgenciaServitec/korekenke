@@ -20,6 +20,7 @@ import { EditDasRequestIntegration } from "./editing/EditDasRequest";
 import { omit } from "lodash";
 import { firestore } from "../../../../../firebase";
 import { setLocalStorage } from "../../../../../utils";
+import dayjs from "dayjs";
 
 export const DasRequestIntegration = () => {
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ export const DasRequestIntegration = () => {
       to: formData?.isHeadline ? "headline" : "familiar",
     },
     userId: authUser.id,
+    createAtString: dayjs().format("DD-MM-YYYY"),
   });
 
   const saveDasApplication = async (formData) => {

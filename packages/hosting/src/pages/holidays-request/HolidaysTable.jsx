@@ -24,7 +24,7 @@ import { DATE_FORMAT_TO_FIRESTORE } from "../../firebase/firestore";
 import { useNavigate } from "react-router";
 import { useBosses } from "../../hooks";
 
-const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
+const ENTITY_GU_NAME_ID = "departamento-de-personal";
 const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const HolidaysTable = ({
@@ -65,9 +65,7 @@ export const HolidaysTable = ({
       DATE_FORMAT_TO_FIRESTORE,
     ).subtract(1, "day");
 
-    return (
-      dayjs().isBefore(startDate) && holidayRequest?.status !== "finalized"
-    );
+    return holidayRequest?.status === "waiting";
   };
 
   const isPositiveOrApproved = (holidayRequest) =>

@@ -182,12 +182,14 @@ const EditHoliday = ({
     } catch (e) {
       console.log("Error: ", e);
     }
+  };
 
-    return (
-      <Row>
-        <Col span={24}>
-          <Title level={3}>Editar solicitud</Title>
-        </Col>
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Title level={3}>Editar solicitud</Title>
+      </Col>
+      <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
@@ -251,7 +253,7 @@ const EditHoliday = ({
             </Col>
           </Row>
         </Form>
-      </Row>
-    );
-  };
+      </Col>
+    </Row>
+  );
 };
