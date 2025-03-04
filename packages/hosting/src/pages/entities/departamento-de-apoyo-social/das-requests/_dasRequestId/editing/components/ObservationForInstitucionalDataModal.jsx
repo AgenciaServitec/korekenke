@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useFormUtils } from "../../../../../../../hooks";
@@ -30,7 +30,7 @@ export const ObservationForInstitucionalDataModal = ({
       observations: orderBy(
         onAddOrEditObservation(
           observation,
-          dasRequest?.applicant?.observations || [],
+          dasRequest?.institution?.observations || [],
           formData,
           isNew,
         ),
@@ -59,6 +59,7 @@ export const ObservationForInstitucionalDataModal = ({
 
   return (
     <ObservationForInstitucionalData
+      observation={observation}
       onAddObservationForInstitucionalData={addObservationForInstitucionalData}
       loading={loading}
     />
@@ -66,22 +67,32 @@ export const ObservationForInstitucionalDataModal = ({
 };
 
 const ObservationForInstitucionalData = ({
+  observation,
   onAddObservationForInstitucionalData,
   loading,
 }) => {
   const schema = yup.object({
-    observation: yup.object({
-      message: yup.string().required(),
-    }),
+    message: yup.string().required(),
   });
 
   const {
     formState: { errors },
     handleSubmit,
     control,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const resetForm = () => {
+    reset({
+      message: observation?.message,
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, [observation]);
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
@@ -94,7 +105,7 @@ const ObservationForInstitucionalData = ({
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Controller
-            name="observation.message"
+            name="message"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value, name } }) => (

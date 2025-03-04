@@ -16,8 +16,6 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { ObservationForApplicantDocumentsModal } from "./ObservationForApplicantDocumentsModal";
 import { useDasRequestModal } from "./DasRequest.ModalProvider";
 import { useDevice } from "../../../../../../../hooks";
-import { v1 as uuidv1 } from "uuid";
-import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
 import { ObservationForInstitucionalDataModal } from "./ObservationForInstitucionalDataModal";
 import { ObservationPersonalInformationModal } from "./ObservationPersonalInformationModal";
 
@@ -25,6 +23,7 @@ export const ObservationsList = ({
   section,
   observations = [],
   dasRequest,
+  onAddOrEditObservation,
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
@@ -51,29 +50,6 @@ export const ObservationsList = ({
         observations: observations,
       },
     });
-  };
-
-  const onAddOrEditObservation = (
-    observation,
-    observations,
-    formData,
-    isNew,
-  ) => {
-    const otherObservations = excludeObservation(observation.id);
-
-    const newObservation = {
-      id: uuidv1(),
-      message: formData.message,
-      status: "pending",
-      isDeleted: false,
-      createAt: firestoreTimestamp.now(),
-    };
-
-    const observationToEdit = { ...observation, message: formData?.message };
-
-    return isNew
-      ? [...observations, newObservation]
-      : [...otherObservations, observationToEdit];
   };
 
   const onEditObservationPersonalInformation = (dasRequest, observation) => {
@@ -186,13 +162,22 @@ export const ObservationsList = ({
             action={
               <Space direction="vertical">
                 <Space>
-                  <IconAction
-                    tooltipTitle="Editar"
-                    icon={faEdit}
-                    onClick={() =>
-                      informationSection?.[section](dasRequest, observation)
-                    }
-                  />
+                  <Acl
+                    category="public"
+                    subCategory="dasRequests"
+                    name="/das-requests/:dasRequestId#editObservation"
+                    redirect
+                  >
+                    {observation.status === "pending" && (
+                      <IconAction
+                        tooltipTitle="Editar"
+                        icon={faEdit}
+                        onClick={() =>
+                          informationSection?.[section](dasRequest, observation)
+                        }
+                      />
+                    )}
+                  </Acl>
                   <Acl
                     category="public"
                     subCategory="dasRequests"

@@ -12,7 +12,7 @@ import {
   MediaBecaUniversidadApplicantDocuments,
   NoDocuments,
 } from "../../steps/components";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { updateUser } from "../../../../../../../firebase/collections";
 import { useDefaultFirestoreProps } from "../../../../../../../hooks";
 

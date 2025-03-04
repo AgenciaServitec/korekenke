@@ -33,14 +33,15 @@ import { ObservationsList } from "./components/ObservationsList";
 import { useBosses, useDevice } from "../../../../../../hooks";
 import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
-import { ReplyDasRequestModal } from "../../ReplyDasRequest";
-import { ReplyDasRequestInformationModal } from "../../ReplyDasRequestInformation";
 import {
   fetchUser,
   updateDasRequest,
 } from "../../../../../../firebase/collections";
 import { DasRequestStatus } from "../../../../../../data-list";
 import { useAuthentication } from "../../../../../../providers";
+import { ReplyDasRequestModal } from "../../ReplyDasRequest";
+import { v1 as uuidv1 } from "uuid";
+import { firestoreTimestamp } from "../../../../../../firebase/firestore";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
 const DEPARTMENT_NAME_ID = "mesa-de-partes";
@@ -125,9 +126,6 @@ const EditDasRequest = ({
   dasRequest,
   onGoBack,
   onNavigateTo,
-  visibleReplyModal,
-  onSetVisibleReplyModal,
-  visibleReplyInformationModal,
   setVisibleReplyInformationModal,
   headlineCurrentData,
   isHeadlineCurrentData,
@@ -135,6 +133,31 @@ const EditDasRequest = ({
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
   const { isTablet } = useDevice();
+
+  const onAddOrEditObservation = (
+    observation,
+    observations,
+    formData,
+    isNew,
+  ) => {
+    const otherObservations = observations.filter(
+      (_observation) => _observation.id !== observation.id,
+    );
+
+    const newObservation = {
+      id: uuidv1(),
+      message: formData.message,
+      status: "pending",
+      isDeleted: false,
+      createAt: firestoreTimestamp.now(),
+    };
+
+    const observationToEdit = { ...observation, message: formData?.message };
+
+    return isNew
+      ? [...observations, newObservation]
+      : [...otherObservations, observationToEdit];
+  };
 
   const onUpdateHeadlineEmail = async (headline) => {
     await updateDasRequest(dasRequest.id, {
@@ -167,6 +190,7 @@ const EditDasRequest = ({
         <ObservationPersonalInformationModal
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
+          onAddOrEditObservation={onAddOrEditObservation}
         />
       ),
     });
@@ -193,6 +217,7 @@ const EditDasRequest = ({
         <ObservationForInstitucionalDataModal
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
+          onAddOrEditObservation={onAddOrEditObservation}
         />
       ),
     });
@@ -221,6 +246,24 @@ const EditDasRequest = ({
         <ObservationForApplicantDocumentsModal
           dasRequest={dasRequest}
           onCloseDasRequestModal={onCloseDasRequestModal}
+          onAddOrEditObservation={onAddOrEditObservation}
+        />
+      ),
+    });
+  };
+
+  const onShowReplyDasRequestModal = (dasRequest) => {
+    onShowDasRequestModal({
+      title: "Responder solicitud",
+      width: `${isTablet ? "100%" : "50%"}`,
+      centered: false,
+      top: 0,
+      padding: 0,
+      clearOnDestroy: true,
+      onRenderBody: () => (
+        <ReplyDasRequestModal
+          onCloseModal={onCloseDasRequestModal}
+          dasRequest={dasRequest}
         />
       ),
     });
@@ -258,6 +301,7 @@ const EditDasRequest = ({
             section="headline"
             observations={dasRequest?.headline?.observations}
             dasRequest={dasRequest}
+            onAddOrEditObservation={onAddOrEditObservation}
           />
         </>
       ),
@@ -300,6 +344,7 @@ const EditDasRequest = ({
             section="institution"
             observations={dasRequest?.institution?.observations}
             dasRequest={dasRequest}
+            onAddOrEditObservation={onAddOrEditObservation}
           />
         </>
       ),
@@ -342,6 +387,7 @@ const EditDasRequest = ({
             section="applicant"
             observations={dasRequest?.applicant?.observations}
             dasRequest={dasRequest}
+            onAddOrEditObservation={onAddOrEditObservation}
           />
         </>
       ),
@@ -450,23 +496,13 @@ const EditDasRequest = ({
                   size="large"
                   block
                   disabled={dasRequest.status === "approved"}
-                  onClick={() => onSetVisibleReplyModal(dasRequest)}
+                  onClick={() => onShowReplyDasRequestModal(dasRequest)}
                 >
                   Responder solicitud
                 </Button>
               </Col>
             )}
           </Acl>
-          <ReplyDasRequestInformationModal
-            visibleModal={visibleReplyInformationModal}
-            onSetVisibleModal={setVisibleReplyInformationModal}
-            response={dasRequest?.response}
-          />
-          <ReplyDasRequestModal
-            visibleModal={visibleReplyModal}
-            onSetVisibleModal={onSetVisibleReplyModal}
-            dasRequest={dasRequest}
-          />
         </Row>
       </div>
     </Container>

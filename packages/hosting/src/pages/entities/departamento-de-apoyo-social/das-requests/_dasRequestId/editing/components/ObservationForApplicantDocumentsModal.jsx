@@ -15,7 +15,6 @@ import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { orderBy } from "lodash";
 
 export const ObservationForApplicantDocumentsModal = ({
-  section,
   dasRequest,
   observation = "new",
   onCloseDasRequestModal,
@@ -27,7 +26,7 @@ export const ObservationForApplicantDocumentsModal = ({
 
   const observationsMap = (formData) => ({
     applicant: {
-      ...dasRequest?.[section],
+      ...dasRequest?.applicant,
       observations: orderBy(
         onAddOrEditObservation(
           observation,
