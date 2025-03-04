@@ -88,7 +88,7 @@ export const DasRequestIntegration = () => {
       to: formData?.isHeadline ? "headline" : "familiar",
     },
     userId: authUser.id,
-    createAtString: dayjs().format("DD-MM-YYYY HH:mm"),
+    createAtString: dayjs().format("DD-MM-YYYY"),
   });
 
   const saveDasApplication = async (formData) => {
