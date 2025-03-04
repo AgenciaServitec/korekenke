@@ -127,7 +127,7 @@ const Container = styled.div`
       place-items: center;
 
       h2 {
-        font-size: 1.7em;
+        font-size: 1.6em;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         text-transform: uppercase;
@@ -185,7 +185,6 @@ const Container = styled.div`
         &__body {
           line-height: 1.5;
           margin-bottom: 1em;
-          text-indent: 3em;
           text-align: justify;
 
           span {

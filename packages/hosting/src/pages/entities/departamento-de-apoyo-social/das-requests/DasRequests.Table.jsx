@@ -96,7 +96,7 @@ export const DasRequestsTable = ({
     {
       title: "F. Creación",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (dasRequest) =>
         dayjs(dasRequest.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
     },
@@ -104,7 +104,14 @@ export const DasRequestsTable = ({
       title: "Titular",
       align: "center",
       width: ["15rem", "100%"],
-      render: (dasRequest) => userFullName(dasRequest.headline),
+      render: (dasRequest) => (
+        <Space align="center" direction="vertical">
+          <div>{userFullName(dasRequest.headline)}</div>
+          <div>
+            CIP: <strong>{dasRequest.headline.cip}</strong>
+          </div>
+        </Space>
+      ),
     },
     {
       title: "Solicitud / Institución",
@@ -112,19 +119,20 @@ export const DasRequestsTable = ({
       width: ["20rem", "100%"],
       render: (dasRequest) => {
         return (
-          <div className="capitalize">
+          <Space align="center" direction="vertical" className="capitalize">
             <div>{findDasRequest(dasRequest?.requestType)?.name}</div>
             <div>
               <strong>{dasRequest?.institution?.id}</strong>
             </div>
-          </div>
+            <div>Para: {dasRequest?.isHeadline ? "Titular" : "Familiar"}</div>
+          </Space>
         );
       },
     },
     {
       title: "Contácto",
       align: "center",
-      width: ["12rem", "100%"],
+      width: ["14rem", "100%"],
       render: (dasRequest) => (
         <div className="contact">
           <div className="contact__item">
@@ -158,7 +166,7 @@ export const DasRequestsTable = ({
     {
       title: "Estado",
       align: "center",
-      width: ["8rem", "100%"],
+      width: ["5rem", "100%"],
       render: (dasRequest) => {
         const requestStatus = DasRequestStatus[dasRequest.status];
 
@@ -168,7 +176,7 @@ export const DasRequestsTable = ({
     {
       title: "Respuesta",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (dasRequest) => {
         const status = dasRequest?.response?.type === "positive";
         return (

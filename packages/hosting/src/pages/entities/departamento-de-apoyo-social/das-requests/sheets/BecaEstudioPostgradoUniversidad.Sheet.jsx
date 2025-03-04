@@ -44,7 +44,7 @@ export const BecaEstudioPostgradoUniversidadSheet = ({
             <p className="request-content__introduction">
               <span className="first-word">S.G.</span>
               <span> {userFullName(headline)} </span>, Grado{" "}
-              <span>{findDegree(headline?.degree).label || emptyContent}</span>
+              <span>{findDegree(headline?.degree).label || emptyContent}</span>{" "}
               CIP
               <span> {headline?.cip || emptyContent} </span> en actual servicio
               <span> {headline?.currentService || emptyContent} </span> con
@@ -182,7 +182,6 @@ const Container = styled.div`
         &__body {
           line-height: 1.5;
           margin-bottom: 1em;
-          text-indent: 3em;
           text-align: justify;
 
           span {
