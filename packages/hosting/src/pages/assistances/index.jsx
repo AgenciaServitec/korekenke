@@ -6,19 +6,19 @@ import {
   Legend,
   notification,
   Row,
-  Title,
   Spin,
+  Title,
 } from "../../components";
 import { useNavigate } from "react-router";
 import { useAuthentication } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
-import { AssistancesTable } from "./AssistancesTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce, useQueriesState } from "../../hooks";
 import { AssistancesFilter } from "./Assistances.Filter";
-import { AssistancesFinder } from "./AssistancesFinder";
+import { AssistancesFinder } from "./Assistances.Finder";
+import { AssistancesTable } from "./Assistances.Table";
 import dayjs from "dayjs";
 import { assistancesQuery } from "./_utils";
 

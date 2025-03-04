@@ -2,19 +2,22 @@ import React, { useEffect } from "react";
 import {
   Acl,
   Col,
+  Legend,
   modalConfirm,
   notification,
   Row,
   Title,
 } from "../../../../components";
-import { DasRequestsTable } from "./DasRequestsTable";
+import { DasRequestsTable } from "./DasRequests.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useNavigate } from "react-router";
-import { useDefaultFirestoreProps, useDevice } from "../../../../hooks";
 import {
-  dasRequestsRef,
-  updateDasRequest,
-} from "../../../../firebase/collections/dasApplications";
+  useDebounce,
+  useDefaultFirestoreProps,
+  useDevice,
+  useQueriesState,
+} from "../../../../hooks";
+import { updateDasRequest } from "../../../../firebase/collections/dasApplications";
 import {
   ModalProvider,
   useAuthentication,
@@ -23,17 +26,38 @@ import {
 import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
 import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
+import { DasRequestsFinder } from "./DasRequests.Finder";
+import dayjs from "dayjs";
+import { DasRequestsFilter } from "./DasRequests.Filter";
+import { dasRequestsQuery } from "./_utils";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
-  const { authUser } = useAuthentication();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
+  const { authUser } = useAuthentication();
+  const [searchFields, setSearchFields] = useQueriesState({
+    cip: undefined,
+    fromDate: dayjs().format("DD-MM-YYYY"),
+    toDate: dayjs().format("DD-MM-YYYY"),
+  });
+
+  const debouncedSearchFields = useDebounce(searchFields, 750);
+
   const [dasRequests = [], dasRequestsLoading, dasRequestsError] =
-    useCollectionData(dasRequestsRef.where("isDeleted", "==", false));
+    useCollectionData(
+      dasRequestsQuery({
+        cip: debouncedSearchFields.cip,
+        fromDate: debouncedSearchFields.fromDate,
+        toDate: debouncedSearchFields.toDate,
+      }),
+    );
 
   useEffect(() => {
-    dasRequestsError && notification({ type: "error" });
+    if (dasRequestsError) {
+      console.error("dasRequestsError: ", dasRequestsError);
+      notification({ type: "error" });
+    }
   }, [dasRequestsError]);
 
   const navigateTo = (pathname = "new") => navigate(pathname);
@@ -59,6 +83,8 @@ export const DasRequestsListIntegration = () => {
         onEditDasRequest={onEditDasRequest}
         onDeleteDasRequest={onConfirmDeleteDasRequest}
         user={authUser}
+        searchFields={searchFields}
+        setSearchFields={setSearchFields}
       />
     </ModalProvider>
   );
@@ -70,9 +96,35 @@ const DasRequestsList = ({
   onEditDasRequest,
   onDeleteDasRequest,
   user,
+  searchFields,
+  setSearchFields,
 }) => {
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
+
+  const [filterFields, setFilterFields] = useQueriesState({
+    status: "all",
+  });
+
+  const mapDasRequestsView = (dasRequests) => {
+    const mapView = {
+      dasRequests: dasRequests,
+      filter(filterFields) {
+        mapView.dasRequests = filteredDasRequests(
+          mapView.dasRequests,
+          filterFields,
+        );
+        return mapView;
+      },
+    };
+
+    return mapView;
+  };
+
+  const dasRequestsView =
+    mapDasRequestsView(dasRequests).filter(filterFields)?.dasRequests || [];
+
+  console.log("dasRequestsView: ", dasRequestsView);
 
   const onShowDasRequestProceedsModal = (dasRequest) => {
     onShowModal({
@@ -134,8 +186,25 @@ const DasRequestsList = ({
           <Title level={3}>Lista de Solicitudes</Title>
         </Col>
         <Col span={24}>
+          <Legend title="Busqueda">
+            <DasRequestsFinder
+              searchFields={searchFields}
+              onSearch={setSearchFields}
+            />
+          </Legend>
+        </Col>
+        <Col span={24}>
+          <Legend title="Filtros">
+            <DasRequestsFilter
+              dasRequests={dasRequestsView}
+              filterFields={filterFields}
+              onFilter={setFilterFields}
+            />
+          </Legend>
+        </Col>
+        <Col span={24}>
           <DasRequestsTable
-            dasRequests={dasRequests}
+            dasRequests={dasRequestsView}
             onEditDasRequest={onEditDasRequest}
             onDeleteDasRequest={onDeleteDasRequest}
             onShowDasRequestProceedsModal={onShowDasRequestProceedsModal}
@@ -151,3 +220,10 @@ const DasRequestsList = ({
     </Acl>
   );
 };
+
+const filteredDasRequests = (dasRequests, filterFields) =>
+  dasRequests.filter((dasRequest) =>
+    filterFields?.status === "all"
+      ? true
+      : filterFields.status === dasRequest.status,
+  );
