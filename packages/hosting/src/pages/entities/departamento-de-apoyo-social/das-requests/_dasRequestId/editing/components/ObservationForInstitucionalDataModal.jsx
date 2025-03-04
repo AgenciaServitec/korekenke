@@ -11,10 +11,8 @@ import {
   Row,
   TextArea,
 } from "../../../../../../../components";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { orderBy } from "lodash";
-import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
-import { v1 as uuidv1 } from "uuid";
 
 export const ObservationForInstitucionalDataModal = ({
   dasRequest,

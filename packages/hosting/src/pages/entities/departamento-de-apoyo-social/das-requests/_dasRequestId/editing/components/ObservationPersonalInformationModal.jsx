@@ -11,7 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../../../../hooks";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { v1 as uuidv1 } from "uuid";
 import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
 import { orderBy } from "lodash";

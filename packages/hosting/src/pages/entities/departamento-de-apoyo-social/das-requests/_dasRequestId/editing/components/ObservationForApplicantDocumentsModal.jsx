@@ -11,12 +11,11 @@ import {
   Row,
   TextArea,
 } from "../../../../../../../components";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { orderBy } from "lodash";
-import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
-import { v1 as uuidv1 } from "uuid";
 
 export const ObservationForApplicantDocumentsModal = ({
+  section,
   dasRequest,
   observation = "new",
   onCloseDasRequestModal,
@@ -28,7 +27,7 @@ export const ObservationForApplicantDocumentsModal = ({
 
   const observationsMap = (formData) => ({
     applicant: {
-      ...dasRequest.applicant,
+      ...dasRequest?.[section],
       observations: orderBy(
         onAddOrEditObservation(
           observation,

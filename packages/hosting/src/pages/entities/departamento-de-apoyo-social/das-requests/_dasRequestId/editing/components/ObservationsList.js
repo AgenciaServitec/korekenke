@@ -11,7 +11,7 @@ import {
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { orderBy } from "lodash";
-import { updateDasRequest } from "../../../../../../../firebase/collections/dasApplications";
+import { updateDasRequest } from "../../../../../../../firebase/collections";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { ObservationForApplicantDocumentsModal } from "./ObservationForApplicantDocumentsModal";
 import { useDasRequestModal } from "./DasRequest.ModalProvider";
@@ -19,6 +19,7 @@ import { useDevice } from "../../../../../../../hooks";
 import { v1 as uuidv1 } from "uuid";
 import { firestoreTimestamp } from "../../../../../../../firebase/firestore";
 import { ObservationForInstitucionalDataModal } from "./ObservationForInstitucionalDataModal";
+import { ObservationPersonalInformationModal } from "./ObservationPersonalInformationModal";
 
 export const ObservationsList = ({
   section,
@@ -75,6 +76,22 @@ export const ObservationsList = ({
       : [...otherObservations, observationToEdit];
   };
 
+  const onEditObservationPersonalInformation = (dasRequest, observation) => {
+    onShowDasRequestModal({
+      title:
+        observation.id === "new" ? "Agregar Observación" : "Editar Observación",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <ObservationPersonalInformationModal
+          dasRequest={dasRequest}
+          observation={observation}
+          onCloseDasRequestModal={onCloseDasRequestModal}
+          onAddOrEditObservation={onAddOrEditObservation}
+        />
+      ),
+    });
+  };
+
   const onEditObservationInstitutionData = (dasRequest, observation) => {
     onShowDasRequestModal({
       title:
@@ -105,6 +122,12 @@ export const ObservationsList = ({
         />
       ),
     });
+  };
+
+  const informationSection = {
+    headline: onEditObservationPersonalInformation,
+    institution: onEditObservationInstitutionData,
+    applicant: onEditObservationApplicantDocuments,
   };
 
   const onCloseObservation = (observationId) => {
@@ -167,10 +190,7 @@ export const ObservationsList = ({
                     tooltipTitle="Editar"
                     icon={faEdit}
                     onClick={() =>
-                      onEditObservationApplicantDocuments(
-                        dasRequest,
-                        observation,
-                      )
+                      informationSection?.[section](dasRequest, observation)
                     }
                   />
                   <Acl
