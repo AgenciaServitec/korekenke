@@ -33,10 +33,7 @@ import { ObservationsList } from "./components/ObservationsList";
 import { useBosses, useDevice } from "../../../../../../hooks";
 import { findDasRequest } from "../../../../../../utils";
 import { isEmpty } from "lodash";
-import {
-  fetchUser,
-  updateDasRequest,
-} from "../../../../../../firebase/collections";
+import { updateDasRequest } from "../../../../../../firebase/collections";
 import { DasRequestStatus } from "../../../../../../data-list";
 import { useAuthentication } from "../../../../../../providers";
 import { ReplyDasRequestModal } from "../../ReplyDasRequest";
@@ -56,17 +53,12 @@ export const EditDasRequestIntegration = ({
   const [visibleReplyModal, onSetVisibleReplyModal] = useState(false);
   const [visibleReplyInformationModal, setVisibleReplyInformationModal] =
     useState(false);
-  const [headlineCurrentData, setHeadlineCurrentData] = useState(null);
-  const [isHeadlineCurrentData, setIsHeadlineCurrentData] = useState(true);
 
   const { fetchEntityManager } = useBosses();
 
   useEffect(() => {
     (async () => {
       if (!dasRequest) return;
-
-      const _headlineCurrentData = await fetchUser(dasRequest?.headline?.id);
-      setHeadlineCurrentData(_headlineCurrentData);
 
       if (dasRequest?.status === "inProgress") return;
 
@@ -85,20 +77,6 @@ export const EditDasRequestIntegration = ({
     })();
   }, [dasRequest]);
 
-  useEffect(() => {
-    (async () => {
-      if (!headlineCurrentData) return;
-
-      const headlineData = dasRequest?.headline;
-
-      if (headlineCurrentData?.email !== headlineData?.email) {
-        setIsHeadlineCurrentData(false);
-      } else {
-        setIsHeadlineCurrentData(true);
-      }
-    })();
-  }, [headlineCurrentData]);
-
   if (isEmpty(dasRequest)) return <Spinner height="80vh" />;
 
   return (
@@ -113,8 +91,6 @@ export const EditDasRequestIntegration = ({
         onSetVisibleReplyModal={onSetVisibleReplyModal}
         visibleReplyInformationModal={visibleReplyInformationModal}
         setVisibleReplyInformationModal={setVisibleReplyInformationModal}
-        headlineCurrentData={headlineCurrentData}
-        isHeadlineCurrentData={isHeadlineCurrentData}
       />
     </DasRequestModalProvider>
   );
@@ -127,8 +103,6 @@ const EditDasRequest = ({
   onGoBack,
   onNavigateTo,
   setVisibleReplyInformationModal,
-  headlineCurrentData,
-  isHeadlineCurrentData,
 }) => {
   const { onShowDasRequestModal, onCloseDasRequestModal } =
     useDasRequestModal();
@@ -157,16 +131,6 @@ const EditDasRequest = ({
     return isNew
       ? [...observations, newObservation]
       : [...otherObservations, observationToEdit];
-  };
-
-  const onUpdateHeadlineEmail = async (headline) => {
-    await updateDasRequest(dasRequest.id, {
-      ...dasRequest,
-      headline: {
-        ...headline,
-        email: headlineCurrentData?.email,
-      },
-    });
   };
 
   const onEditPersonalInformation = (dasRequest) => {
@@ -292,11 +256,7 @@ const EditDasRequest = ({
       ),
       children: (
         <>
-          <PersonalInformation
-            dasRequest={dasRequest}
-            isHeadlineCurrentData={isHeadlineCurrentData}
-            onUpdateHeadlineEmail={onUpdateHeadlineEmail}
-          />
+          <PersonalInformation dasRequest={dasRequest} />
           <ObservationsList
             section="headline"
             observations={dasRequest?.headline?.observations}
