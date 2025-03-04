@@ -124,8 +124,6 @@ const DasRequestsList = ({
   const dasRequestsView =
     mapDasRequestsView(dasRequests).filter(filterFields)?.dasRequests || [];
 
-  console.log("dasRequestsView: ", dasRequestsView);
-
   const onShowDasRequestProceedsModal = (dasRequest) => {
     onShowModal({
       title: "Evaluación de la solicitud",

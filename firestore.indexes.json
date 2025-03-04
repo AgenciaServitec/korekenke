@@ -97,6 +97,10 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "createAtString",
           "order": "ASCENDING"
         },
@@ -115,6 +119,10 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "headline.cip",
           "order": "ASCENDING"
         },
@@ -133,6 +141,10 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "headline.cip",
           "order": "ASCENDING"
         },
@@ -147,6 +159,10 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "createAtString",
           "order": "DESCENDING"
         },
@@ -160,6 +176,10 @@
       "collectionGroup": "das-applications",
       "queryScope": "COLLECTION",
       "fields": [
+        {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
         {
           "fieldPath": "createAt",
           "order": "DESCENDING"

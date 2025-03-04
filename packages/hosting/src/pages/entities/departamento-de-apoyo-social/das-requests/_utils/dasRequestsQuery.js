@@ -5,7 +5,9 @@ import dayjs from "dayjs";
 const DATE_FORMAT = "DD-MM-YYYY";
 
 export const dasRequestsQuery = ({ cip, fromDate, toDate }) => {
-  let query = dasRequestsRef.orderBy("createAt", "desc");
+  let query = dasRequestsRef
+    .orderBy("createAt", "desc")
+    .where("isDeleted", "==", false);
 
   if (fromDate && toDate) {
     query = query
