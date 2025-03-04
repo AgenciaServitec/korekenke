@@ -97,7 +97,7 @@ export const Holiday1Sheet = ({ user, holiday }) => {
                   topText={firstSeal.sealTopText}
                   bottomText={firstSeal.sealBottomText}
                   supervisorName={firstSeal.supervisorName}
-                  supervisorCip={firstSeal.supervisorCip}
+                  supervisorNs={firstSeal.supervisorNs}
                   supervisorDegree={firstSeal.supervisorDegree}
                 />
               </span>
