@@ -1,23 +1,12 @@
 import React from "react";
-import {
-  Col,
-  Divider,
-  IconAction,
-  Row,
-  Title,
-} from "../../../../../../../../components";
+import { Col, Divider, Row, Title } from "../../../../../../../../components";
 import { findDegree } from "../../../../../../../../utils";
 import styled from "styled-components";
 import { FamiliarInformation } from "./FamiliarInformation";
 import { isEmpty } from "lodash";
-import { Space, Tag } from "antd";
-import { faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { Space } from "antd";
 
-export const PersonalInformation = ({
-  dasRequest,
-  isHeadlineCurrentData,
-  onUpdateHeadlineEmail,
-}) => {
+export const PersonalInformation = ({ dasRequest }) => {
   const { headline, familiar } = dasRequest;
 
   return (
@@ -78,23 +67,7 @@ export const PersonalInformation = ({
         <Col span={24} sm={8}>
           <div className="wrapper-item">
             <span className="label">
-              <Space>
-                Email
-                {!isHeadlineCurrentData && (
-                  <>
-                    <Tag color="red">El usuario actualizó su correo</Tag>{" "}
-                    <IconAction
-                      tooltipTitle="Actualizar"
-                      icon={faRefresh}
-                      size={33}
-                      onClick={() => onUpdateHeadlineEmail(headline)}
-                      styled={{
-                        color: () => "blue",
-                      }}
-                    />
-                  </>
-                )}
-              </Space>
+              <Space>Email</Space>
             </span>
             <span className="value">{headline?.email || ""}</span>
           </div>
