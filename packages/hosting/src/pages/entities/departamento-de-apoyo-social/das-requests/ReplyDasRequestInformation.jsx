@@ -1,90 +1,76 @@
 import React from "react";
-import { Col, Modal, Row, Tag, Image } from "../../../../components";
+import { Col, Image, Row, Tag } from "../../../../components";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
 
-export const ReplyDasRequestInformationModal = ({
-  visibleModal,
-  onSetVisibleModal,
-  response,
-}) => {
+export const ReplyDasRequestInformationModal = ({ response }) => {
   return (
-    <Modal
-      open={visibleModal}
-      onCancel={() => onSetVisibleModal(false)}
-      title="Detalle de respuesta"
-      closable
-      width="50%"
-      centered={false}
-      destroyOnClose
-    >
-      <Container>
-        <Row gutter={[16, 16]}>
+    <Container>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <div className="wrapper-item">
+            <span className="label">Mensaje:</span>
+            <div className="message" style={{ whiteSpace: "pre-line" }}>
+              {response?.message}
+            </div>
+          </div>
+        </Col>
+        <Col span={24}>
+          <div className="wrapper-item">
+            <span className="label">Tipo de respuesta:</span>
+            <div>
+              <Tag color={response?.type === "positive" ? "green" : "red"}>
+                {response?.type === "positive" ? "Positivo" : "Negativo"}
+              </Tag>
+            </div>
+          </div>
+        </Col>
+        {!isEmpty(response?.images) && (
           <Col span={24}>
             <div className="wrapper-item">
-              <span className="label">Mensaje:</span>
-              <div className="message" style={{ whiteSpace: "pre-line" }}>
-                {response?.message}
+              <span className="label">Imagenes adjuntos:</span>
+              <div className="images-wrapper">
+                {(response?.images || []).map((image, index) => {
+                  return (
+                    <div key={index} className="item-card">
+                      <div className="body">
+                        <Image src={image.url} width={70} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </Col>
+        )}
+        {!isEmpty(response?.documents) && (
           <Col span={24}>
             <div className="wrapper-item">
-              <span className="label">Tipo de respuesta:</span>
-              <div>
-                <Tag color={response?.type === "positive" ? "green" : "red"}>
-                  {response?.type === "positive" ? "Positivo" : "Negativo"}
-                </Tag>
+              <span className="label">Documentos adjuntos:</span>
+              <div className="images-wrapper">
+                {(response?.documents || []).map((document, index) => {
+                  return (
+                    <div key={index} className="item-card">
+                      <div className="body">
+                        <a
+                          href={document.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FontAwesomeIcon icon={faFilePdf} size="2x" />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </Col>
-          {!isEmpty(response?.images) && (
-            <Col span={24}>
-              <div className="wrapper-item">
-                <span className="label">Imagenes adjuntos:</span>
-                <div className="images-wrapper">
-                  {(response?.images || []).map((image, index) => {
-                    return (
-                      <div key={index} className="item-card">
-                        <div className="body">
-                          <Image src={image.url} width={70} />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </Col>
-          )}
-          {!isEmpty(response?.documents) && (
-            <Col span={24}>
-              <div className="wrapper-item">
-                <span className="label">Documentos adjuntos:</span>
-                <div className="images-wrapper">
-                  {(response?.documents || []).map((document, index) => {
-                    return (
-                      <div key={index} className="item-card">
-                        <div className="body">
-                          <a
-                            href={document.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FontAwesomeIcon icon={faFilePdf} size="2x" />
-                          </a>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </Col>
-          )}
-        </Row>
-      </Container>
-    </Modal>
+        )}
+      </Row>
+    </Container>
   );
 };
 

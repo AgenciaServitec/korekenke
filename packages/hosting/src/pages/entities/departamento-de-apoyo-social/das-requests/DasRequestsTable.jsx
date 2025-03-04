@@ -28,13 +28,14 @@ const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
 const DEPARTMENT_NAME_ID = "mesa-de-partes";
 
 export const DasRequestsTable = ({
-  dasApplications,
+  dasRequests,
   onEditDasRequest,
   onDeleteDasRequest,
-  onAddReplyDasRequest,
-  onShowReplyDasRequestInformation,
   onShowDasRequestProceedsModal,
+  onShowReplyDasRequestModal,
+  onShowReplyDasRequestInformationModal,
   user,
+  dasRequestsLoading,
 }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
@@ -69,21 +70,21 @@ export const DasRequestsTable = ({
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
   const isProceeds = (dasRequest) => dasRequest?.status === "finalized";
 
-  const dasApplicationsViewBy = dasApplications.filter((dasApplication) => {
-    // Das applications for super-admin
+  const dasApplicationsViewBy = dasRequests.filter((dasApplication) => {
+    // Das requests for super-admin
     if (["super_admin"].includes(authUser.roleCode)) return dasApplication;
 
-    // Das applications for user
+    // Das requests for user
     if (dasApplication.userId === authUser.id) return dasApplication;
 
-    // Das applications for Boss - mesa de partes
+    // Das requests for Boss - mesa de partes
     if (
       ["waiting", "notProceeds", "proceeds"].includes(dasApplication.status) &&
       isBossMDP
     )
       return dasApplication;
 
-    // Das applications for manager
+    // Das requests for manager
     if (
       !["waiting", "notProceeds"].includes(dasApplication.status) &&
       isManagerEntityGu
@@ -183,7 +184,9 @@ export const DasRequestsTable = ({
                 icon={faEye}
                 size={30}
                 styled={{ color: (theme) => theme.colors.info }}
-                onClick={() => onShowReplyDasRequestInformation(dasRequest)}
+                onClick={() =>
+                  onShowReplyDasRequestInformationModal(dasRequest)
+                }
               />
             </Space>
           )
@@ -205,7 +208,7 @@ export const DasRequestsTable = ({
               <IconAction
                 tooltipTitle="Evaluación de solicitud"
                 icon={faFilter}
-                onClick={() => onShowDasRequestProceedsModal()}
+                onClick={() => onShowDasRequestProceedsModal(dasRequest)}
               />
             )}
           </Acl>
@@ -220,7 +223,7 @@ export const DasRequestsTable = ({
                   tooltipTitle="Responder solicitud"
                   icon={faReply}
                   styled={{ color: (theme) => theme.colors.primary }}
-                  onClick={() => onAddReplyDasRequest(dasRequest)}
+                  onClick={() => onShowReplyDasRequestModal(dasRequest)}
                 />
               </Acl>
             )}
@@ -279,6 +282,7 @@ export const DasRequestsTable = ({
         columns={columns}
         rowHeaderHeight={50}
         rowBodyHeight={150}
+        loading={dasRequestsLoading}
       />
     </Container>
   );

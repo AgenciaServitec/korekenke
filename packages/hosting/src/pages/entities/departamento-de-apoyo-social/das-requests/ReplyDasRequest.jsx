@@ -3,7 +3,6 @@ import {
   Button,
   Col,
   Form,
-  Modal,
   notification,
   RadioGroup,
   Row,
@@ -16,11 +15,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../../hooks";
 import { updateDasRequest } from "../../../../firebase/collections/dasApplications";
 
-export const ReplyDasRequestModal = ({
-  visibleModal,
-  onSetVisibleModal,
-  dasRequest,
-}) => {
+export const ReplyDasRequestModal = ({ onCloseModal, dasRequest }) => {
   const [savingData, setSavingData] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
@@ -64,7 +59,7 @@ export const ReplyDasRequestModal = ({
         status: "finalized",
       });
       notification({ type: "success" });
-      onSetVisibleModal(false);
+      onCloseModal();
     } catch (e) {
       console.error(e);
       notification({ type: "error" });
@@ -74,135 +69,125 @@ export const ReplyDasRequestModal = ({
   };
 
   return (
-    <Modal
-      open={visibleModal}
-      onCancel={() => onSetVisibleModal(false)}
-      title="Responder solicitud"
-      closable
-      width="70%"
-      centered={false}
-      destroyOnClose
-    >
-      <Form onSubmit={handleSubmit(onSubmitDasRequestReply)}>
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Controller
-              name="message"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <TextArea
-                  label="Mensaje"
-                  name={name}
-                  value={value}
-                  rows={5}
-                  onChange={onChange}
-                  error={error(name)}
-                  helperText={errorMessage(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={12}>
-            <Controller
-              name="images"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <UploadMultiple
-                  label="Imagenes (Jpg)"
-                  withThumbImage={false}
-                  isImage={true}
-                  accept="image/*"
-                  name={name}
-                  value={value}
-                  bucket="departamentoDeApoyoSocial"
-                  filePath={`das-applicants/${dasRequest.id}/images`}
-                  buttonText="Subir imagen"
-                  error={error(name)}
-                  required={required(name)}
-                  onChange={(file) => onChange(file)}
-                  onUploading={setUploadingImage}
-                />
-              )}
-            />
-          </Col>
-          <Col sm={12}>
-            <Controller
-              name="documents"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <UploadMultiple
-                  label="Documentos (Pdf)"
-                  isImage={false}
-                  accept="application/pdf"
-                  name={name}
-                  value={value}
-                  bucket="departamentoDeApoyoSocial"
-                  filePath={`das-applicants/${dasRequest.id}/files`}
-                  buttonText="Subir archivo"
-                  error={error(name)}
-                  helperText={errorMessage(name)}
-                  required={required(name)}
-                  onChange={(file) => onChange(file)}
-                  onUploading={setUploadingImage}
-                />
-              )}
-            />
-          </Col>
-          <Col sm={24}>
-            <Controller
-              name="type"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <RadioGroup
-                  label="Tipo de respuesta"
-                  animation={false}
-                  onChange={onChange}
-                  value={value}
-                  name={name}
-                  error={error(name)}
-                  required={required(name)}
-                  options={[
-                    {
-                      label: "Positiva",
-                      value: "positive",
-                    },
-                    {
-                      label: "Negativa",
-                      value: "negative",
-                    },
-                  ]}
-                />
-              )}
-            />
-          </Col>
-        </Row>
-        <Row justify="end" gutter={[16, 16]}>
-          <Col xs={24} sm={8}>
-            <Button
-              type="default"
-              size="large"
-              block
-              onClick={() => onSetVisibleModal(false)}
-              disabled={savingData || uploadingImage}
-            >
-              Cancelar
-            </Button>
-          </Col>
-          <Col xs={24} sm={8}>
-            <Button
-              type="primary"
-              size="large"
-              block
-              htmlType="submit"
-              disabled={uploadingImage}
-              loading={savingData}
-            >
-              Guardar
-            </Button>
-          </Col>
-        </Row>
-      </Form>
-    </Modal>
+    <Form onSubmit={handleSubmit(onSubmitDasRequestReply)}>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Controller
+            name="message"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <TextArea
+                label="Mensaje"
+                name={name}
+                value={value}
+                rows={5}
+                onChange={onChange}
+                error={error(name)}
+                helperText={errorMessage(name)}
+                required={required(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={12}>
+          <Controller
+            name="images"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <UploadMultiple
+                label="Imagenes (Jpg)"
+                withThumbImage={false}
+                isImage={true}
+                accept="image/*"
+                name={name}
+                value={value}
+                bucket="departamentoDeApoyoSocial"
+                filePath={`das-applicants/${dasRequest.id}/images`}
+                buttonText="Subir imagen"
+                error={error(name)}
+                required={required(name)}
+                onChange={(file) => onChange(file)}
+                onUploading={setUploadingImage}
+              />
+            )}
+          />
+        </Col>
+        <Col sm={12}>
+          <Controller
+            name="documents"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <UploadMultiple
+                label="Documentos (Pdf)"
+                isImage={false}
+                accept="application/pdf"
+                name={name}
+                value={value}
+                bucket="departamentoDeApoyoSocial"
+                filePath={`das-applicants/${dasRequest.id}/files`}
+                buttonText="Subir archivo"
+                error={error(name)}
+                helperText={errorMessage(name)}
+                required={required(name)}
+                onChange={(file) => onChange(file)}
+                onUploading={setUploadingImage}
+              />
+            )}
+          />
+        </Col>
+        <Col sm={24}>
+          <Controller
+            name="type"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <RadioGroup
+                label="Tipo de respuesta"
+                animation={false}
+                onChange={onChange}
+                value={value}
+                name={name}
+                error={error(name)}
+                required={required(name)}
+                options={[
+                  {
+                    label: "Positiva",
+                    value: "positive",
+                  },
+                  {
+                    label: "Negativa",
+                    value: "negative",
+                  },
+                ]}
+              />
+            )}
+          />
+        </Col>
+      </Row>
+      <Row justify="end" gutter={[16, 16]}>
+        <Col xs={24} sm={8}>
+          <Button
+            type="default"
+            size="large"
+            block
+            onClick={() => onCloseModal()}
+            disabled={savingData || uploadingImage}
+          >
+            Cancelar
+          </Button>
+        </Col>
+        <Col xs={24} sm={8}>
+          <Button
+            type="primary"
+            size="large"
+            block
+            htmlType="submit"
+            disabled={uploadingImage}
+            loading={savingData}
+          >
+            Guardar
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   );
 };
