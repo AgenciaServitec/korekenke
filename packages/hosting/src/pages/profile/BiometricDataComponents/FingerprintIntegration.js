@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
-  Col,
   Card,
+  Col,
   Form,
   notification,
   Paragraph,
@@ -21,12 +21,11 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { assign } from "lodash";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CheckCircleFilled,
-  CheckCircleOutlined,
-  ExclamationCircleFilled,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
+  faCircleCheck,
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const FingerprintIntegration = () => {
   const { authUser } = useAuthentication();
@@ -98,126 +97,99 @@ export const FingerprintIntegration = () => {
   };
 
   return (
-    <Row
-      gutter={[16, 16]}
-      justify="center"
-      align="middle"
-      style={{ padding: 16 }}
-    >
-      <Col span={24} style={{ textAlign: "center" }}>
-        {showAlert ? (
-          <Tag
-            icon={<ExclamationCircleOutlined />}
-            color="#fff1f0"
-            style={{
-              color: "#cf1322",
-              border: "1px solid #ffccc7",
-              borderRadius: 20,
-              padding: "8px 16px",
-              fontSize: "0.9rem",
-              fontWeight: 500,
-              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-            }}
-          >
-            Registre su Huella Dactilar
-          </Tag>
-        ) : (
-          <Tag
-            icon={<CheckCircleOutlined />}
-            color="#f6ffed"
-            style={{
-              color: "#389e0d",
-              border: "1px solid #b7eb8f",
-              borderRadius: 20,
-              padding: "8px 16px",
-              fontSize: "0.9rem",
-              fontWeight: 500,
-              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-            }}
-          >
-            Huella Dactilar Registrado
-          </Tag>
-        )}
-      </Col>
-      <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
-        <Button type="primary" onClick={onShowFingerprintModal} size="large">
-          {authUser.fingerprintTemplate
-            ? "Actualizar Huella"
-            : "Registrar Huella"}
-        </Button>
-      </Col>
-      <Col span={24}>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <Controller
-                control={control}
-                name="fingerprintTemplate"
-                render={() => (
-                  <Card
-                    style={{
-                      textAlign: "center",
-                      backgroundColor: fingerprintTemplate
-                        ? "rgba(120, 210, 37, 0.1)"
-                        : "rgb(200,211,47,0.1)",
-                      border: `2px solid ${fingerprintTemplate ? "#78d225" : "#c8d32f"}`,
-                      maxWidth: 400,
-                      margin: "0 auto",
-                      padding: 16,
-                      borderRadius: 12,
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        justifyContent: "center",
-                      }}
+    <FingerprintContainer>
+      <Row
+        gutter={[16, 16]}
+        justify="center"
+        align="middle"
+        style={{ padding: 16 }}
+      >
+        <Col span={24} style={{ textAlign: "center" }}>
+          {showAlert ? (
+            <Tag
+              className="alert-tag"
+              icon={
+                <FontAwesomeIcon
+                  icon={faCircleExclamation}
+                  style={{ marginRight: 4 }}
+                />
+              }
+            >
+              Registre su Huella Dactilar
+            </Tag>
+          ) : (
+            <Tag
+              className="success-tag"
+              icon={
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  style={{ marginRight: 4 }}
+                />
+              }
+            >
+              Huella Dactilar Registrada
+            </Tag>
+          )}
+        </Col>
+        <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
+          <Button type="primary" onClick={onShowFingerprintModal} size="large">
+            {authUser.fingerprintTemplate
+              ? "Actualizar Huella"
+              : "Registrar Huella"}
+          </Button>
+        </Col>
+        <Col span={24}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <Controller
+                  control={control}
+                  name="fingerprintTemplate"
+                  render={() => (
+                    <Card
+                      className={`status-card ${fingerprintTemplate ? `has-template` : ""}`}
                     >
-                      {fingerprintTemplate ? (
-                        <CheckCircleFilled
-                          style={{ color: "#78d225", fontSize: 20 }}
-                        />
-                      ) : (
-                        <ExclamationCircleFilled
-                          style={{ color: "#c8d32f", fontSize: 20 }}
-                        />
-                      )}
-                      <Paragraph
-                        style={{
-                          color: fingerprintTemplate ? "#78d225" : "#c8d32f",
-                          fontWeight: 500,
-                          margin: 0,
-                          fontSize: 14,
-                        }}
-                      >
-                        {fingerprintTemplate
-                          ? "Huella Lista para Guardar"
-                          : "Se habilitará el botón al detectar su huella"}
-                      </Paragraph>
-                    </div>
-                  </Card>
-                )}
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8} style={{ margin: "0 auto" }}>
-              <Button
-                type="primary"
-                size="large"
-                block
-                htmlType="submit"
-                loading={putUserLoading}
-                disabled={!isDetected}
-              >
-                Guardar
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </Col>
-    </Row>
+                      <div>
+                        {fingerprintTemplate ? (
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            style={{ color: "#78d225", fontSize: 20 }}
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCircleExclamation}
+                            style={{ color: "#c8d32f", fontSize: 20 }}
+                          />
+                        )}
+                        <Paragraph
+                          className={`status-paragraph ${fingerprintTemplate ? `has-template-paragraph` : ""}`}
+                        >
+                          {fingerprintTemplate
+                            ? "Huella Lista para Guardar"
+                            : "Se habilitará el botón al detectar su huella"}
+                        </Paragraph>
+                      </div>
+                    </Card>
+                  )}
+                />
+              </Col>
+              <Col xs={24} sm={12} md={8} style={{ margin: "0 auto" }}>
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  htmlType="submit"
+                  loading={putUserLoading}
+                  disabled={!isDetected}
+                >
+                  Guardar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+    </FingerprintContainer>
   );
 };
 
@@ -243,10 +215,7 @@ const UserFingerprint = ({ onFingerprintCaptured }) => {
   return (
     <Container>
       <p>Presiona capturar huella para registrar</p>
-      <Button
-        onClick={handleCapture}
-        disabled={!isReady || isCapturing} // Deshabilitar si no está listo
-      >
+      <Button onClick={handleCapture} disabled={!isReady || isCapturing}>
         {isCapturing
           ? "Capturando..."
           : isReady
@@ -266,4 +235,64 @@ const Container = styled.div`
   background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
+`;
+
+const FingerprintContainer = styled.div`
+  .alert-tag {
+    color: #cf1322;
+    background-color: #fff1f0;
+    border: 1px solid #ffccc7;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .success-tag {
+    color: #389e0d;
+    background-color: #f6ffed;
+    border: 1px solid #b7eb8f;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .status-card {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgba(200, 211, 47, 0.1);
+    border: 2px solid #c8d32f;
+
+    svg {
+      font-size: 20px;
+      color: #c8d32f;
+    }
+
+    &.has-template {
+      background-color: rgba(120, 210, 37, 0.1);
+      border-color: #78d225;
+
+      svg {
+        color: #78d225;
+      }
+    }
+  }
+
+  .status-paragraph {
+    color: #c8d32f;
+    font-weight: 500;
+    margin: 0;
+    font-size: 14px;
+
+    &.has-template-paragraph {
+      color: #78d225;
+    }
+  }
 `;
