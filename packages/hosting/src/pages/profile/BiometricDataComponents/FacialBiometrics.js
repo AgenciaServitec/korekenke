@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import {
-  useWebcam,
-  useFaceDetection,
   useDevice,
+  useFaceDetection,
   useFormUtils,
+  useWebcam,
 } from "../../../hooks";
 import {
   Button,
+  Card,
+  Col,
   Form,
   notification,
-  Col,
-  Row,
-  Card,
-  Tag,
   Paragraph,
+  Row,
+  Tag,
 } from "../../../components";
 import { useAuthentication, useModal } from "../../../providers";
 import * as yup from "yup";
@@ -26,12 +26,6 @@ import {
   getApiErrorResponse,
   useApiUserPut,
 } from "../../../api";
-import {
-  CheckCircleFilled,
-  CheckCircleOutlined,
-  ExclamationCircleFilled,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
