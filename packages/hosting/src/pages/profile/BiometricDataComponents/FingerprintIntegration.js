@@ -21,6 +21,12 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { assign } from "lodash";
 import styled from "styled-components";
+import {
+  CheckCircleFilled,
+  CheckCircleOutlined,
+  ExclamationCircleFilled,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 
 export const FingerprintIntegration = () => {
   const { authUser } = useAuthentication();
@@ -100,9 +106,37 @@ export const FingerprintIntegration = () => {
     >
       <Col span={24} style={{ textAlign: "center" }}>
         {showAlert ? (
-          <Tag color="red">Registra tu huella digital</Tag>
+          <Tag
+            icon={<ExclamationCircleOutlined />}
+            color="#fff1f0"
+            style={{
+              color: "#cf1322",
+              border: "1px solid #ffccc7",
+              borderRadius: 20,
+              padding: "8px 16px",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+            }}
+          >
+            Registre su Huella Dactilar
+          </Tag>
         ) : (
-          <Tag color="green">Huella digital registrada</Tag>
+          <Tag
+            icon={<CheckCircleOutlined />}
+            color="#f6ffed"
+            style={{
+              color: "#389e0d",
+              border: "1px solid #b7eb8f",
+              borderRadius: 20,
+              padding: "8px 16px",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+            }}
+          >
+            Huella Dactilar Registrado
+          </Tag>
         )}
       </Col>
       <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
@@ -121,21 +155,49 @@ export const FingerprintIntegration = () => {
                 name="fingerprintTemplate"
                 render={() => (
                   <Card
-                    title="Huella Digital"
-                    bordered
                     style={{
                       textAlign: "center",
                       backgroundColor: fingerprintTemplate
-                        ? "#78d225"
-                        : "#dc3122",
-                      borderColor: fingerprintTemplate ? "#f6ffed" : "#f6ffed",
+                        ? "rgba(120, 210, 37, 0.1)"
+                        : "rgb(200,211,47,0.1)",
+                      border: `2px solid ${fingerprintTemplate ? "#78d225" : "#c8d32f"}`,
+                      maxWidth: 400,
+                      margin: "0 auto",
+                      padding: 16,
+                      borderRadius: 12,
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
                   >
-                    <Paragraph style={{ color: "#f6ffed" }}>
-                      {fingerprintTemplate
-                        ? "Huella capturada correctamente."
-                        : "No se ha detectado una huella para guardar."}
-                    </Paragraph>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        justifyContent: "center",
+                      }}
+                    >
+                      {fingerprintTemplate ? (
+                        <CheckCircleFilled
+                          style={{ color: "#78d225", fontSize: 20 }}
+                        />
+                      ) : (
+                        <ExclamationCircleFilled
+                          style={{ color: "#c8d32f", fontSize: 20 }}
+                        />
+                      )}
+                      <Paragraph
+                        style={{
+                          color: fingerprintTemplate ? "#78d225" : "#c8d32f",
+                          fontWeight: 500,
+                          margin: 0,
+                          fontSize: 14,
+                        }}
+                      >
+                        {fingerprintTemplate
+                          ? "Huella Lista para Guardar"
+                          : "Se habilitará el botón al detectar su huella"}
+                      </Paragraph>
+                    </div>
                   </Card>
                 )}
               />

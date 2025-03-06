@@ -26,6 +26,12 @@ import {
   getApiErrorResponse,
   useApiUserPut,
 } from "../../../api";
+import {
+  CheckCircleFilled,
+  CheckCircleOutlined,
+  ExclamationCircleFilled,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 
 export const FacialBiometrics = () => {
   const { authUser } = useAuthentication();
@@ -113,9 +119,37 @@ export const FacialBiometrics = () => {
     >
       <Col span={24} style={{ textAlign: "center" }}>
         {showAlert ? (
-          <Tag color="red">Registra tus biométricos faciales</Tag>
+          <Tag
+            icon={<ExclamationCircleOutlined />}
+            color="#fff1f0"
+            style={{
+              color: "#cf1322",
+              border: "1px solid #ffccc7",
+              borderRadius: 20,
+              padding: "8px 16px",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+            }}
+          >
+            Registre su Rostro
+          </Tag>
         ) : (
-          <Tag color="green">Biométricos faciales registrados</Tag>
+          <Tag
+            icon={<CheckCircleOutlined />}
+            color="#f6ffed"
+            style={{
+              color: "#389e0d",
+              border: "1px solid #b7eb8f",
+              borderRadius: 20,
+              padding: "8px 16px",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+            }}
+          >
+            Rostro Registrado
+          </Tag>
         )}
       </Col>
       <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
@@ -134,27 +168,51 @@ export const FacialBiometrics = () => {
                 name="biometricVectors"
                 render={() => (
                   <Card
-                    title="Vectores Biométricos"
-                    bordered
                     style={{
                       textAlign: "center",
                       backgroundColor: biometricVectors.length
-                        ? "#78d225"
-                        : "#dc3122",
-                      borderColor: biometricVectors.length
-                        ? "#f6ffed"
-                        : "#f6ffed",
+                        ? "rgba(120, 210, 37, 0.1)"
+                        : "rgb(200,211,47,0.1)",
+                      border: `2px solid ${biometricVectors.length ? "#78d225" : "#c8d32f"}`,
+                      maxWidth: 400,
+                      margin: "0 auto",
+                      padding: 16,
+                      borderRadius: 12,
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
                   >
-                    <Paragraph
+                    <div
                       style={{
-                        color: "#f6ffed",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        justifyContent: "center",
                       }}
                     >
-                      {biometricVectors.length
-                        ? "Vectores detectados correctamente."
-                        : "No se han detectado vectores biométricos para guardar."}
-                    </Paragraph>
+                      {biometricVectors.length ? (
+                        <CheckCircleFilled
+                          style={{ color: "#78d225", fontSize: 20 }}
+                        />
+                      ) : (
+                        <ExclamationCircleFilled
+                          style={{ color: "#c8d32f", fontSize: 20 }}
+                        />
+                      )}
+                      <Paragraph
+                        style={{
+                          color: biometricVectors.length
+                            ? "#78d225"
+                            : "#c8d32f",
+                          fontWeight: 500,
+                          margin: 0,
+                          fontSize: 14,
+                        }}
+                      >
+                        {biometricVectors.length
+                          ? "Biométricos listos para guardar"
+                          : "Se habilitará el botón al detectar su rostro"}
+                      </Paragraph>
+                    </div>
                   </Card>
                 )}
               />
