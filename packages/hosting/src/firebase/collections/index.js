@@ -16,3 +16,4 @@ export * from "./animal-logs";
 export * from "./militaryRecruitment";
 export * from "./sessionVerification";
 export * from "./dasApplications";
+export * from "./elections";

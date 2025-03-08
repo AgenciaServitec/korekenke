@@ -132,8 +132,15 @@
       "/holidays-request#showCalendar": "Ver calendario",
       "/holidays-request#submit-pdf": "Subir PDF",
       "/holidays-request/:holidayRequestId/sheets/:userId": "Pdfs de la solicitud"
+    },
+    "elections": {
+      "label": "Elecciones",
+      "/elections": "Menu: Elecciones",
+      "/elections/new": "Crear Elección",
+      "/elections/:electionId": "Editar Elección"
     }
   },
+
   "jefatura-de-bienestar-del-ejercito": {
     "command": "cobiene",
     "label": "Jefatura de bienestar del ejército",

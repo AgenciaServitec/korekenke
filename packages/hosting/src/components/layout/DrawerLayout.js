@@ -5,6 +5,7 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
+  faCheckToSlot,
   faClipboardList,
   faClipboardUser,
   faComputer,
@@ -27,6 +28,7 @@ import {
   faUmbrellaBeach,
   faUsers,
   faUsersCog,
+  faVoteYea,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { includes, isEmpty } from "lodash";
@@ -209,6 +211,40 @@ export const DrawerLayout = ({
             ["/assistances"],
           ),
           onClick: () => onClickMenu("/assistances"),
+        },
+      ],
+    },
+    {
+      label: "Elecciones",
+      key: "election",
+      icon: <FontAwesomeIcon icon={faVoteYea} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+        "public",
+        ["elections"],
+        ["/elections", "/elections/new"],
+      ),
+      children: [
+        {
+          label: "Crear Eleccion",
+          key: "election",
+          icon: <FontAwesomeIcon icon={faVoteYea} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["elections"],
+            ["/elections/new"],
+          ),
+          onClick: () => onClickMenu("/elections/new"),
+        },
+        {
+          label: "Lista de Elecciones",
+          key: "elections-list",
+          icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["elections"],
+            ["/elections"],
+          ),
+          onClick: () => onClickMenu("/elections"),
         },
       ],
     },

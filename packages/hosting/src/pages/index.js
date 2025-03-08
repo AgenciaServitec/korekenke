@@ -74,3 +74,7 @@ export * from "./my-agenda";
 //ASSISTANCE
 export * from "./assistances";
 export * from "./assistances/assistance";
+
+//ELECTIONS
+export * from "./elections";
+export * from "./elections/_elections";
