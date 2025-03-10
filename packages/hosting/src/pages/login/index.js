@@ -81,7 +81,7 @@ export const LoginIntegration = () => {
       </div>
       <div className="btn-whatsapp">
         <a
-          href="https://api.whatsapp.com/send?phone=941801827"
+          href="https://api.whatsapp.com/send?phone=51929054672"
           target="_blank"
           rel="noreferrer"
         >
