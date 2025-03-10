@@ -51,8 +51,8 @@ export const ElectionsIntegration = () => {
 
       setElection({
         ...election_,
-        startDate: election_.startDate?.toDate(),
-        endDate: election_.endDate?.toDate(),
+        startDate: election_.startDate,
+        endDate: election_.endDate,
       });
     })();
   }, []);
@@ -85,8 +85,8 @@ export const ElectionsIntegration = () => {
         status: electionStatus(formData.startDate, formData.endDate),
         title: formData.title,
         description: formData?.description,
-        startDate: dayjs(formData.startDate).toDate(),
-        endDate: dayjs(formData.endDate).toDate(),
+        startDate: dayjs(formData.startDate).format("DD-MM-YYYY"),
+        endDate: dayjs(formData.endDate).format("DD-MM-YYYY"),
         allowedVoters: formData.allowedVoters,
       },
     );
@@ -145,8 +145,12 @@ const ElectionForm = ({
     reset({
       title: election?.title || "",
       description: election?.description || "",
-      startDate: election?.startDate ? dayjs(election.startDate) : undefined,
-      endDate: election?.endDate ? dayjs(election.endDate) : undefined,
+      startDate: election?.startDate
+        ? dayjs(election.startDate, "DD-MM-YYYY")
+        : undefined,
+      endDate: election?.endDate
+        ? dayjs(election.endDate, "DD-MM-YYYY")
+        : undefined,
       allowedVoters: election?.allowedVoters || [],
     });
   };
@@ -257,6 +261,8 @@ const ElectionForm = ({
                   )}
                 />
               </Col>
+            </Row>
+            <Row justify="end" gutter={[16, 16]}>
               <Col xs={24} sm={6} md={4}>
                 <Button
                   type="default"

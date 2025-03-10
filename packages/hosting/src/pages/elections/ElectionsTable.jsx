@@ -11,6 +11,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row } from "../../components";
 import { updateElectionStatus } from "../../firebase/collections";
 import { orderBy } from "lodash";
+import { ElectionsStatus } from "../../data-list";
 
 export const ElectionsTable = ({
   onClickDeleteElection,
@@ -19,21 +20,12 @@ export const ElectionsTable = ({
 }) => {
   const calculateStatus = (startDate, endDate) => {
     const now = dayjs();
-    const start = dayjs(startDate.toDate());
-    const end = dayjs(endDate.toDate());
+    const start = dayjs(startDate, "DD-MM-YYYY");
+    const end = dayjs(endDate, "DD-MM-YYYY");
 
     if (now.isBefore(start)) return "planned";
     if (now.isAfter(end)) return "closed";
     return "active";
-  };
-
-  const getStatusConfig = (status) => {
-    const config = {
-      planned: { name: "Programada", color: "blue" },
-      active: { name: "En curso", color: "green" },
-      closed: { name: "Finalizada", color: "red" },
-    };
-    return config[status] || { name: "Desconocido", color: "gray" };
   };
 
   const columns = [
@@ -61,7 +53,7 @@ export const ElectionsTable = ({
           election.startDate,
           election.endDate,
         );
-        const statusConfig = getStatusConfig(currentStatus);
+        const statusConfig = ElectionsStatus[currentStatus];
 
         if (election.status !== currentStatus) {
           updateElectionStatus(election.id, currentStatus);
@@ -74,15 +66,13 @@ export const ElectionsTable = ({
       title: "Fecha de Inicio",
       align: "center",
       width: ["11rem", "100%"],
-      render: (election) =>
-        dayjs(election.startDate.toDate()).format("DD/MM/YYYY") || "",
+      render: (election) => election.startDate || "",
     },
     {
       title: "Fecha de Finalización",
       align: "center",
       width: ["15rem", "100%"],
-      render: (election) =>
-        dayjs(election.endDate.toDate()).format("DD/MM/YYYY") || "",
+      render: (election) => election.endDate || "",
     },
     {
       title: "Opciones",
@@ -98,7 +88,7 @@ export const ElectionsTable = ({
             <IconAction
               tooltipTitle="Editar"
               onClick={() => onClickEditElection(election.id)}
-              styled={{ color: (theme) => theme.colors.primary }}
+              styled={{ color: (theme) => theme.colors.tertiary }}
               icon={faEdit}
             />
           </Acl>

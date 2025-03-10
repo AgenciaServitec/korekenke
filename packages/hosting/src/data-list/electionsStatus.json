@@ -1,0 +1,14 @@
+{
+  "planned": {
+    "name": "Programada",
+    "color": "blue"
+  },
+  "active": {
+    "name": "En curso",
+    "color": "green"
+  },
+  "closed": {
+    "name": "Finalizada",
+    "color": "red"
+  }
+}
