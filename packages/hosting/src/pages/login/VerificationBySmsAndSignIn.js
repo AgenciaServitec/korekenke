@@ -14,7 +14,11 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { useFormUtils } from "../../hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faEnvelope,
+  faPhone,
+} from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase/compat/app";
 import { Row } from "antd";
 import { useApiVerifyEmailSendPasswordPost } from "../../api";
@@ -197,9 +201,12 @@ const VerificationBySmsAndSignIn = ({
     <Container>
       {currentStep === 2 && (
         <div className="send-phone-code-wrapper">
-          <Row gutter={[16, 10]}>
+          <Row gutter={[16, 13]}>
             <Col span={24}>
               <h3>Iniciar Sesión con:</h3>
+              <small>
+                Recomendado iniciar sesión con email si el teléfono falla
+              </small>
             </Col>
             <Col span={24}>
               <Button
@@ -207,8 +214,9 @@ const VerificationBySmsAndSignIn = ({
                 size="large"
                 type="primary"
                 onClick={() => onSetCurrentStep(3)}
+                icon={<FontAwesomeIcon icon={faPhone} />}
               >
-                Código SMS
+                Teléfono
               </Button>
             </Col>
             <Col span={24}>
@@ -219,8 +227,9 @@ const VerificationBySmsAndSignIn = ({
                 className="btn-password"
                 loading={loadingSendPassword}
                 onClick={onSendPasswordEmail}
+                icon={<FontAwesomeIcon icon={faEnvelope} />}
               >
-                Email contraseña
+                Email
               </Button>
             </Col>
           </Row>
@@ -276,7 +285,6 @@ const VerificationBySmsAndSignIn = ({
           </Col>
         </Row>
       )}
-
       {currentStep === 4 && (
         <Form onSubmit={handleSubmit(onSubmitSignIn)}>
           <div className="title-login">

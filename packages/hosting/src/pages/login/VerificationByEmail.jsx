@@ -18,7 +18,6 @@ import {
 } from "../../firebase/collections";
 import { isEmpty } from "lodash";
 import { Spin } from "antd";
-import { isProduction } from "../../config";
 
 export const VerificationByEmailIntegration = ({ prev, next, currentStep }) => {
   const { secondsLeft, start } = useCountdown();
@@ -168,10 +167,11 @@ const VerificationByEmail = ({
           <Col span={24}>
             <p>
               Ingresa el código de verificación de 6 dígitos enviado a{" "}
-              <strong>{user?.email}</strong>.
+              <strong>{user?.email}</strong>
             </p>
             <p>
-              Si no le llego el código vuelva a reenviarlo e intentelo de nuevo.
+              Si no visualiza el correo en su bandeja de entrada. Revisar su
+              bandeja de correos no deseados o spam
             </p>
             {user?.roleCode === "super_admin" && (
               <p className="link-color" onClick={() => next()}>
