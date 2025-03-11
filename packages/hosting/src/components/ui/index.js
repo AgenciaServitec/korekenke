@@ -24,7 +24,9 @@ import {
   Switch,
   Collapse,
   Flex,
+  Avatar,
   Tooltip,
+  Progress,
 } from "antd";
 
 export * from "./component-container";
@@ -97,5 +99,7 @@ export {
   Switch,
   Collapse,
   Flex,
+  Avatar,
   Tooltip,
+  Progress,
 };
