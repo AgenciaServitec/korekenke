@@ -12,6 +12,7 @@ import { SignInByEmailPassword } from "./SignInByEmailPassword";
 import { getLocalStorage } from "../../utils";
 import { fetchUsersByCip } from "../../firebase/collections";
 import { isEmpty } from "lodash";
+import { Link } from "react-router-dom";
 
 export const LoginIntegration = () => {
   const { authUser } = useAuthentication();
@@ -79,6 +80,9 @@ export const LoginIntegration = () => {
           )}
         </div>
       </div>
+
+      <Link to="/support">Centro de ayuda</Link>
+
       <div className="btn-whatsapp">
         <a
           href="https://api.whatsapp.com/send?phone=941801827"

@@ -10,6 +10,7 @@ export const Tutorials = () => {
         <Col span={24}>
           <Title level={1}>Tutoriales</Title>
         </Col>
+
         {TutorialsData.map((tutorial, index) => (
           <Col span={24} key={index}>
             <Row gutter={[16, 16]}>

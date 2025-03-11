@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faContactCard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { Contact } from "./Contact";
 import { Tutorials } from "./Tutorials";
+import { darken } from "polished";
 
 export const Support = () => {
   const [open, setOpen] = useState("contact");
@@ -28,8 +29,10 @@ export const Support = () => {
 
   return (
     <Container>
+      <Row className="contact-list"> Centro de ayuda </Row>
+
       <Row gutter={[16, 16]}>
-        <Col span={24} sm={6}>
+        <Col span={24} sm={6} className="sidebar">
           <Menu defaultSelectedKeys={["1"]} mode="inline" items={itemsMenu} />
         </Col>
         <Col span={24} sm={18}>
@@ -48,7 +51,20 @@ const Container = styled.div`
   height: auto;
   min-height: 100svh;
 
+  .sidebar {
+    background: ${({ theme }) => darken(0.1, theme.colors.secondary)};
+  }
+
   .content-wrapper {
     padding: 1em;
+  }
+
+  .contact-list {
+    background: ${({ theme }) => darken(0.1, theme.colors.secondary)};
+    height: 5vw;
+    font-size: 20px;
+    color: white;
+    align-items: center;
+    padding-left: 25px;
   }
 `;
