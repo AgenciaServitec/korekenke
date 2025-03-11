@@ -13,7 +13,6 @@ import {
 import { notification, Card, Button, Tag, Spin } from "../../../../components";
 import styled from "styled-components";
 import { useDevice } from "../../../../hooks";
-import { HolidayRequestInformation } from "../../../holidays-request/HolidayRequestInformation";
 import { ConfirmVoteSubmit } from "./ConfirmVoteSubmit";
 
 export const VotingBooth = () => {
