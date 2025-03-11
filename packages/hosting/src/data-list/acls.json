@@ -137,7 +137,11 @@
       "label": "Elecciones",
       "/elections": "Menu: Elecciones",
       "/elections/new": "Crear Elección",
-      "/elections/:electionId": "Editar Elección"
+      "/elections/:electionId": "Editar Elección",
+      "/elections#delete": "Eliminar Elección",
+      "/elections/add-candidate/:electionId": "Añadir Candidato",
+      "/elections/submit-vote/:electionId": "Votar",
+      "/elections/:electionId#electionStatistics": "Ver Estadísticas"
     }
   },
 

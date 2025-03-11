@@ -437,6 +437,24 @@ export const Router = () => {
       />
       <Route
         exact
+        path="/elections/add-candidate/:electionId"
+        element={
+          <AdminLayout>
+            <A.AddCandidates />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/elections/submit-vote/:electionId"
+        element={
+          <AdminLayout>
+            <A.VotingBooth />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
         path="/entities/:entityId/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
       />

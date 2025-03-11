@@ -7,15 +7,24 @@ import {
   TableVirtualized,
   Tag,
 } from "../../components/ui";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartSimple,
+  faEdit,
+  faTrash,
+  faUserPlus,
+  faVoteYea,
+} from "@fortawesome/free-solid-svg-icons";
 import { Col, Row } from "../../components";
 import { updateElectionStatus } from "../../firebase/collections";
 import { orderBy } from "lodash";
 import { ElectionsStatus } from "../../data-list";
 
 export const ElectionsTable = ({
+  onShowElectionStatistics,
+  onClickAddElection,
   onClickDeleteElection,
   onClickEditElection,
+  onClickSubmitVote,
   elections,
 }) => {
   const calculateStatus = (startDate, endDate) => {
@@ -77,9 +86,66 @@ export const ElectionsTable = ({
     {
       title: "Opciones",
       align: "center",
+      width: ["12rem", "100%"],
+      render: (election) => {
+        const currentStatus = calculateStatus(
+          election.startDate,
+          election.endDate,
+        );
+
+        return (
+          <Space>
+            <Acl
+              category="public"
+              subCategory="elections"
+              name="/elections/submit-vote/:electionId"
+            >
+              <IconAction
+                tooltipTitle="Votar"
+                onClick={() => {
+                  if (currentStatus === "active") {
+                    onClickSubmitVote(election.id);
+                  }
+                }}
+                disabled={currentStatus !== "active"}
+                styled={{ color: (theme) => theme.colors.success }}
+                icon={faVoteYea}
+              />
+            </Acl>
+            <Acl
+              category="public"
+              subCategory="elections"
+              name="/elections/:electionId#electionStatistics"
+            >
+              <IconAction
+                tooltipTitle="Ver estadísticas"
+                icon={faChartSimple}
+                styled={{ color: (theme) => theme.colors.info }}
+                onClick={() => onShowElectionStatistics(election)}
+              />
+            </Acl>
+          </Space>
+        );
+      },
+    },
+    {
+      title: "Opciones de Administrador",
+      align: "center",
       width: ["14rem", "100%"],
       render: (election) => (
         <Space>
+          <Acl
+            category="public"
+            subCategory="elections"
+            name="/elections/add-candidate/:electionId"
+          >
+            <IconAction
+              tooltipTitle="Agregar Candidato"
+              onClick={() => onClickAddElection(election.id)}
+              styled={{ color: (theme) => theme.colors.secondary }}
+              icon={faUserPlus}
+            />
+          </Acl>
           <Acl
             category="public"
             subCategory="elections"
@@ -92,12 +158,18 @@ export const ElectionsTable = ({
               icon={faEdit}
             />
           </Acl>
-          <IconAction
-            tooltipTitle="Eliminar"
-            onClick={() => onClickDeleteElection(election.id)}
-            styled={{ color: (theme) => theme.colors.error }}
-            icon={faTrash}
-          />
+          <Acl
+            category="public"
+            subCategory="elections"
+            name="/elections#delete"
+          >
+            <IconAction
+              tooltipTitle="Eliminar"
+              onClick={() => onClickDeleteElection(election.id)}
+              styled={{ color: (theme) => theme.colors.error }}
+              icon={faTrash}
+            />
+          </Acl>
         </Space>
       ),
     },
