@@ -2,6 +2,7 @@ import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
 import { increment, serverTimestamp } from "firebase/firestore";
+import { isBlankVote } from "../../pages/elections/_utils";
 
 export const electionsRef = firestore.collection("elections");
 
@@ -11,13 +12,73 @@ const getElectionCandidatesRef = (electionId) =>
 const getElectionVotersRef = (electionId) =>
   electionsRef.doc(electionId).collection("voters");
 
-const getElectionVoteValueRef = (electionId) =>
+const getElectionVoteRef = (electionId) =>
   electionsRef.doc(electionId).collection("voteValue");
 
-const getElectionResultsRef = (electionId) =>
-  electionsRef.doc(electionId).collection("results").doc("summary");
+const getElectionResultsRef = (electionId) => electionsRef.doc(electionId);
 
 export const getElectionId = () => electionsRef.doc().id;
+
+const recordVote = (batch, electionId, voteData) => {
+  const voteRef = getElectionVoteRef(electionId).doc();
+  batch.set(voteRef, {
+    ...voteData,
+    timestamp: serverTimestamp(),
+  });
+};
+
+const updateVoterStatus = (batch, electionId, userId) => {
+  const voterRef = getElectionVotersRef(electionId).doc(userId);
+  batch.update(voterRef, {
+    hasVoted: true,
+    votedAt: serverTimestamp(),
+  });
+};
+
+const updateResults = (batch, electionId, voteData) => {
+  const electionRef = getElectionResultsRef(electionId);
+  const updateData = {
+    "results.totalVotes": increment(1),
+    "results.lastUpdated": serverTimestamp(),
+  };
+
+  if (isBlankVote(voteData.candidateId)) {
+    updateData["results.blankVotes"] = increment(1);
+  } else {
+    updateData[`results.candidates.${voteData.candidateId}.votes`] =
+      increment(1);
+  }
+
+  batch.update(electionRef, updateData);
+};
+
+const updateCandidateVotes = (batch, electionId, candidateId) => {
+  if (!isBlankVote(candidateId)) {
+    const candidateRef = getElectionCandidatesRef(electionId).doc(candidateId);
+    batch.update(candidateRef, {
+      votes: increment(1),
+      percentage: increment(1),
+    });
+  }
+};
+
+const recalculatePercentages = async (electionId) => {
+  const updatedResults = await fetchResults(electionId);
+  const candidates = await fetchCandidates(electionId);
+
+  const updatePercentageBatch = firestore.batch();
+
+  candidates.forEach((candidate) => {
+    const candidateRef = getElectionCandidatesRef(electionId).doc(candidate.id);
+    const percentage = (candidate.votes / updatedResults.totalVotes) * 100;
+
+    updatePercentageBatch.update(candidateRef, {
+      percentage: percentage || 0,
+    });
+  });
+
+  await updatePercentageBatch.commit();
+};
 
 export const fetchElection = async (electionId) =>
   fetchDocumentOnce(electionsRef.doc(electionId));
@@ -29,7 +90,17 @@ export const addElection = async (election) => {
   const batch = firestore.batch();
   const electionRef = electionsRef.doc(election.id);
 
-  batch.set(electionRef, election);
+  const electionWithResults = {
+    ...election,
+    results: {
+      totalVotes: 0,
+      blankVotes: 0,
+      candidates: {},
+      lastUpdated: null,
+    },
+  };
+
+  batch.set(electionRef, electionWithResults);
 
   election.allowedVoters.forEach((userId) => {
     const voterRef = getElectionVotersRef(election.id).doc(userId);
@@ -40,14 +111,7 @@ export const addElection = async (election) => {
     });
   });
 
-  const resultsRef = getElectionResultsRef(election.id);
-  batch.set(resultsRef, {
-    totalVotes: 0,
-    blankVotes: 0,
-    candidates: {},
-  });
   await batch.commit();
-  return election;
 };
 
 export const updateElection = async (electionId, election) => {
@@ -61,7 +125,6 @@ export const updateElection = async (electionId, election) => {
   }
 
   await batch.commit();
-  return election;
 };
 
 const syncVoters = async (electionId, newAllowedVoters, batch) => {
@@ -89,58 +152,13 @@ const syncVoters = async (electionId, newAllowedVoters, batch) => {
 export const submitVote = async (electionId, voteData) => {
   const batch = firestore.batch();
 
-  const voteRef = getElectionVoteValueRef(electionId).doc();
-  batch.set(voteRef, {
-    ...voteData,
-    timestamp: serverTimestamp(),
-  });
+  recordVote(batch, electionId, voteData);
+  updateVoterStatus(batch, electionId, voteData.userId);
+  updateResults(batch, electionId, voteData);
+  updateCandidateVotes(batch, electionId, voteData.candidateId);
 
-  const voterRef = getElectionVotersRef(electionId).doc(voteData.userId);
-  batch.update(voterRef, {
-    hasVoted: true,
-    votedAt: serverTimestamp(),
-  });
-
-  const resultsRef = getElectionResultsRef(electionId);
-
-  const updateData = {
-    totalVotes: increment(1),
-    lastUpdated: serverTimestamp(),
-  };
-
-  if (isBlankVote(voteData.candidateId)) {
-    updateData.blankVotes = increment(1);
-  } else {
-    const candidateRef = getElectionCandidatesRef(electionId).doc(
-      voteData.candidateId,
-    );
-
-    batch.update(candidateRef, {
-      votes: increment(1),
-      percentage: increment(1),
-    });
-
-    updateData[`candidates.${voteData.candidateId}.votes`] = increment(1);
-  }
-
-  batch.update(resultsRef, updateData);
   await batch.commit();
-
-  const updatedResults = await fetchResults(electionId);
-  const candidates = await fetchCandidates(electionId);
-
-  const updatePercentageBatch = firestore.batch();
-
-  candidates.forEach((candidate) => {
-    const candidateRef = getElectionCandidatesRef(electionId).doc(candidate.id);
-    const percentage = (candidate.votes / updatedResults.totalVotes) * 100;
-
-    updatePercentageBatch.update(candidateRef, {
-      percentage: percentage || 0,
-    });
-  });
-
-  await updatePercentageBatch.commit();
+  await recalculatePercentages(electionId);
 };
 
 export const addCandidate = async (electionId, userId, candidate) => {
@@ -157,7 +175,6 @@ export const addCandidate = async (electionId, userId, candidate) => {
   };
 
   await setDocument(candidateRef, candidateWithData);
-  return candidateWithData;
 };
 
 export const fetchCandidates = async (electionId) =>
@@ -168,26 +185,21 @@ export const checkVoterEligibility = async (electionId, userId) => {
   return voterDoc.exists && !voterDoc.data().hasVoted;
 };
 
-export const getVoterStatus = async (electionId, userId) => {
-  const voterDoc = await getElectionVotersRef(electionId).doc(userId).get();
-  return voterDoc.exists ? voterDoc.data() : null;
-};
-
 export const fetchResults = async (electionId) => {
-  const results = await fetchDocumentOnce(getElectionResultsRef(electionId));
+  const electionDoc = await fetchDocumentOnce(electionsRef.doc(electionId));
   const candidates = await fetchCandidates(electionId);
 
   return {
-    ...results,
+    ...electionDoc.results,
     candidates: candidates.map((candidate) => ({
       ...candidate,
-      percentage: (candidate.votes / results.totalVotes) * 100 || 0,
+      percentage: (candidate.votes / electionDoc.results.totalVotes) * 100 || 0,
     })),
-    blankPercentage: (results.blankVotes / results.totalVotes) * 100 || 0,
+    blankPercentage:
+      (electionDoc.results.blankVotes / electionDoc.results.totalVotes) * 100 ||
+      0,
   };
 };
-
-export const isBlankVote = (candidateId) => candidateId === "blank";
 
 export const updateElectionStatus = async (electionId, status) => {
   return updateDocument(electionsRef.doc(electionId), { status });
