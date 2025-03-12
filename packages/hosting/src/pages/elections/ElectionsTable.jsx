@@ -93,6 +93,8 @@ export const ElectionsTable = ({
           election.endDate,
         );
 
+        const enabled = currentStatus === "active";
+
         return (
           <Space>
             <Acl
@@ -101,14 +103,18 @@ export const ElectionsTable = ({
               name="/elections/submit-vote/:electionId"
             >
               <IconAction
-                tooltipTitle="Votar"
+                tooltipTitle={enabled ? "Votar" : "No disponible"}
                 onClick={() => {
-                  if (currentStatus === "active") {
+                  if (enabled) {
                     onClickSubmitVote(election.id);
                   }
                 }}
                 disabled={currentStatus !== "active"}
-                styled={{ color: (theme) => theme.colors.success }}
+                styled={{
+                  color: enabled
+                    ? (theme) => theme.colors.success
+                    : (theme) => theme.colors.gray,
+                }}
                 icon={faVoteYea}
               />
             </Acl>

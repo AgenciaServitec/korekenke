@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Progress, Spin, Tag } from "../../components";
-import { fetchElection, fetchResults } from "../../firebase/collections";
+import { fetchResults } from "../../firebase/collections";
 import styled from "styled-components";
 
 export const ElectionStatistics = ({ election }) => {
@@ -14,7 +14,7 @@ export const ElectionStatistics = ({ election }) => {
     const loadData = async () => {
       try {
         const [electionData, resultsData] = await Promise.all([
-          fetchElection(electionId),
+          election,
           fetchResults(electionId),
         ]);
 
