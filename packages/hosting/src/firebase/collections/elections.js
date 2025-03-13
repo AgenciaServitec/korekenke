@@ -1,6 +1,10 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
-import { setDocument, updateDocument } from "../firestore";
+import {
+  querySnapshotToArray,
+  setDocument,
+  updateDocument,
+} from "../firestore";
 import { increment, serverTimestamp } from "firebase/firestore";
 import { isBlankVote } from "../../pages/elections/_utils";
 
@@ -127,16 +131,20 @@ export const updateElection = async (electionId, election) => {
 
 const syncVoters = async (electionId, newAllowedVoters, batch) => {
   const votersRef = getElectionVotersRef(electionId);
-  const currentVoters = await votersRef.get();
+  const queryVoters = await votersRef.get();
 
-  currentVoters.docs.forEach((doc) => {
-    if (!newAllowedVoters.includes(doc.id) && !doc.data().hasVoted) {
-      batch.delete(doc.ref);
+  const voters = querySnapshotToArray(queryVoters);
+
+  voters.forEach((voter) => {
+    if (!newAllowedVoters.includes(voter.id) && !voter.hasVoted) {
+      batch.delete();
     }
   });
 
   newAllowedVoters.forEach((userId) => {
-    if (!currentVoters.docs.some((doc) => doc.id === userId)) {
+    const isUserAVoter = voters.some((voter) => voter.id === userId);
+
+    if (!isUserAVoter) {
       const voterRef = votersRef.doc(userId);
       batch.set(voterRef, {
         userId,
