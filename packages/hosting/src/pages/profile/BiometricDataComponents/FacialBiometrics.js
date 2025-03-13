@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import {
-  useWebcam,
-  useFaceDetection,
   useDevice,
+  useFaceDetection,
   useFormUtils,
+  useWebcam,
 } from "../../../hooks";
 import {
   Button,
+  Card,
+  Col,
   Form,
   notification,
-  Col,
-  Row,
-  Card,
-  Tag,
   Paragraph,
+  Row,
+  Tag,
 } from "../../../components";
 import { useAuthentication, useModal } from "../../../providers";
 import * as yup from "yup";
@@ -26,6 +26,11 @@ import {
   getApiErrorResponse,
   useApiUserPut,
 } from "../../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleCheck,
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const FacialBiometrics = () => {
   const { authUser } = useAuthentication();
@@ -105,76 +110,99 @@ export const FacialBiometrics = () => {
   };
 
   return (
-    <Row
-      gutter={[16, 16]}
-      justify="center"
-      align="middle"
-      style={{ padding: 16 }}
-    >
-      <Col span={24} style={{ textAlign: "center" }}>
-        {showAlert ? (
-          <Tag color="red">Registra tus biométricos faciales</Tag>
-        ) : (
-          <Tag color="green">Biométricos faciales registrados</Tag>
-        )}
-      </Col>
-      <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
-        <Button type="primary" onClick={onShowWebcam} size="large">
-          {authUser.biometricVectors
-            ? "Cambiar Biométricos"
-            : "Registrar Rostro"}
-        </Button>
-      </Col>
-      <Col span={24}>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <Controller
-                control={control}
-                name="biometricVectors"
-                render={() => (
-                  <Card
-                    title="Vectores Biométricos"
-                    bordered
-                    style={{
-                      textAlign: "center",
-                      backgroundColor: biometricVectors.length
-                        ? "#78d225"
-                        : "#dc3122",
-                      borderColor: biometricVectors.length
-                        ? "#f6ffed"
-                        : "#f6ffed",
-                    }}
-                  >
-                    <Paragraph
-                      style={{
-                        color: "#f6ffed",
-                      }}
+    <FacialContainer>
+      <Row
+        gutter={[16, 16]}
+        justify="center"
+        align="middle"
+        style={{ padding: 16 }}
+      >
+        <Col span={24} style={{ textAlign: "center" }}>
+          {showAlert ? (
+            <Tag
+              className="alert-tag"
+              icon={
+                <FontAwesomeIcon
+                  icon={faCircleExclamation}
+                  style={{ marginRight: 4 }}
+                />
+              }
+            >
+              Registre su Rostro
+            </Tag>
+          ) : (
+            <Tag
+              className="success-tag"
+              icon={
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  style={{ marginRight: 4 }}
+                />
+              }
+            >
+              Rostro Registrado
+            </Tag>
+          )}
+        </Col>
+        <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
+          <Button type="primary" onClick={onShowWebcam} size="large">
+            {authUser.biometricVectors
+              ? "Cambiar Biométricos"
+              : "Registrar Rostro"}
+          </Button>
+        </Col>
+        <Col span={24}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <Controller
+                  control={control}
+                  name="biometricVectors"
+                  render={() => (
+                    <Card
+                      className={`status-card ${biometricVectors.length ? `has-template` : ""}`}
                     >
-                      {biometricVectors.length
-                        ? "Vectores detectados correctamente."
-                        : "No se han detectado vectores biométricos para guardar."}
-                    </Paragraph>
-                  </Card>
-                )}
-              />
-            </Col>
-            <Col xs={24} sm={12} md={8} style={{ margin: "0 auto" }}>
-              <Button
-                type="primary"
-                size="large"
-                block
-                htmlType="submit"
-                loading={putUserLoading}
-                disabled={!isDetected}
-              >
-                Guardar
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </Col>
-    </Row>
+                      <div>
+                        {biometricVectors.length ? (
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            style={{ color: "#78d225", fontSize: 20 }}
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCircleExclamation}
+                            style={{ color: "#c8d32f", fontSize: 20 }}
+                          />
+                        )}
+                        <Paragraph
+                          className={`status-paragraph ${biometricVectors.length ? `has-template-paragraph` : ""}`}
+                        >
+                          {biometricVectors.length
+                            ? "Rostro detectado"
+                            : "Se habilitará el botón al detectar su rostro"}
+                        </Paragraph>
+                      </div>
+                    </Card>
+                  )}
+                />
+              </Col>
+              <Col xs={24} sm={12} md={8} style={{ margin: "0 auto" }}>
+                <Button
+                  type="primary"
+                  size="large"
+                  block
+                  htmlType="submit"
+                  loading={putUserLoading}
+                  disabled={!isDetected}
+                >
+                  Guardar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+    </FacialContainer>
   );
 };
 
@@ -227,5 +255,65 @@ const Container = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+  }
+`;
+
+const FacialContainer = styled.div`
+  .alert-tag {
+    color: #cf1322;
+    background-color: #fff1f0;
+    border: 1px solid #ffccc7;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .success-tag {
+    color: #389e0d;
+    background-color: #f6ffed;
+    border: 1px solid #b7eb8f;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .status-card {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgba(200, 211, 47, 0.1);
+    border: 2px solid #c8d32f;
+
+    svg {
+      font-size: 20px;
+      color: #c8d32f;
+    }
+
+    &.has-template {
+      background-color: rgba(120, 210, 37, 0.1);
+      border-color: #78d225;
+
+      svg {
+        color: #78d225;
+      }
+    }
+  }
+
+  .status-paragraph {
+    color: #c8d32f;
+    font-weight: 500;
+    margin: 0;
+    font-size: 14px;
+
+    &.has-template-paragraph {
+      color: #78d225;
+    }
   }
 `;

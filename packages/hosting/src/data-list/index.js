@@ -25,5 +25,6 @@ export { default as MilitaryRecruitmentStatus } from "./militaryRecruitmentStatu
 export { default as HolidaysRequestStatus } from "./holidaysRequestStatus.json";
 export { default as HolidaysTemps } from "./holidaysTemp.json";
 export { default as WorkPlaces } from "./workPlaces.json";
+export { default as ElectionsStatus } from "./electionsStatus.json";
 export * from "./animalParentsDefaultData";
 export { default as TutorialsData } from "./tutorialsData.json";

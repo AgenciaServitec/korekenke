@@ -27,7 +27,6 @@ import { ReplyDasRequestModal } from "./ReplyDasRequest";
 import { ReplyDasRequestInformationModal } from "./ReplyDasRequestInformation";
 import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
 import { DasRequestsFinder } from "./DasRequests.Finder";
-import dayjs from "dayjs";
 import { DasRequestsFilter } from "./DasRequests.Filter";
 import { dasRequestsQuery } from "./_utils";
 
@@ -38,8 +37,6 @@ export const DasRequestsListIntegration = () => {
   const { authUser } = useAuthentication();
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
-    fromDate: dayjs().subtract(30, "days").format("DD-MM-YYYY"),
-    toDate: dayjs().format("DD-MM-YYYY"),
   });
 
   const debouncedSearchFields = useDebounce(searchFields, 750);
@@ -48,8 +45,6 @@ export const DasRequestsListIntegration = () => {
     useCollectionData(
       dasRequestsQuery({
         cip: debouncedSearchFields.cip,
-        fromDate: debouncedSearchFields.fromDate,
-        toDate: debouncedSearchFields.toDate,
       }),
     );
 

@@ -1,23 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { DatePicker, Input } from "../../../../components";
+import { Input } from "../../../../components";
 import { mediaQuery } from "../../../../styles";
-import dayjs from "dayjs";
 
 export const DasRequestsFinder = ({ searchFields, onSearch }) => {
-  const onChangeFromDate = (value) =>
-    onSearch({
-      ...searchFields,
-      fromDate: value?.format("DD-MM-YYYY") || searchFields.fromDate,
-      toDate: value?.format("DD-MM-YYYY") || searchFields.fromDate,
-    });
-
-  const onChangeToDate = (value) =>
-    onSearch({
-      ...searchFields,
-      toDate: value?.format("DD-MM-YYYY") || searchFields.toDate,
-    });
-
   const onChangeSearchBy = (event) =>
     onSearch({
       ...searchFields,
@@ -33,18 +19,6 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
           value={searchFields.cip}
           onChange={onChangeSearchBy}
           allowClear
-        />
-        <DatePicker
-          label="Desde"
-          value={dayjs(searchFields.fromDate, "DD-MM-YYYY")}
-          format="DD/MM/YYYY"
-          onChange={onChangeFromDate}
-        />
-        <DatePicker
-          label="Hasta"
-          value={dayjs(searchFields.toDate, "DD-MM-YYYY")}
-          format="DD/MM/YYYY"
-          onChange={onChangeToDate}
         />
       </FormContent>
     </Container>

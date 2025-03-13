@@ -20,8 +20,8 @@ export const sendMailNotificationDasRequest = async (
   dasApplication: DasApplication
 ): Promise<void> =>
   await sendMail({
-    to: environmentConfig.mailer.sendMailerNotifyDasApplicant.to,
-    bcc: environmentConfig.mailer.sendMailerNotifyDasApplicant.bcc,
+    to: environmentConfig.mailer.sendMailerNotifyDasRequest.to,
+    bcc: environmentConfig.mailer.sendMailerNotifyDasRequest.bcc,
     subject: `Nueva solicitud recibida a revisar`,
     html: html(
       template.newDasApplicationEmailTemplate,

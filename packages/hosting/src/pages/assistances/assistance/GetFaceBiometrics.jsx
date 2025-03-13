@@ -55,7 +55,9 @@ export const GetFaceBiometrics = ({
       );
 
       if (existsUser) {
-        await onSaveAssistance(type);
+        await onCloseModal();
+        onSaveAssistance(type);
+        return;
       } else {
         notification({
           type: "error",

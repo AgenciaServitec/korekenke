@@ -75,5 +75,11 @@ export * from "./my-agenda";
 export * from "./assistances";
 export * from "./assistances/assistance";
 
+//ELECTIONS
+export * from "./elections";
+export * from "./elections/_election";
+export * from "./elections/_election/addCandidates";
+export * from "./elections/_election/submitVote";
+
 //SUPPORT
 export * from "./support";
