@@ -8,6 +8,7 @@ import { faContactCard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { Contact } from "./Contact";
 import { Tutorials } from "./Tutorials";
 import { darken } from "polished";
+import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
 export const Support = () => {
   const [open, setOpen] = useState("contact");
@@ -29,13 +30,12 @@ export const Support = () => {
 
   return (
     <Container>
-      <Row className="contact-list"> Centro de ayuda </Row>
-
+      <Row className="support-header"> Centro de ayuda </Row>
       <Row gutter={[16, 16]}>
-        <Col span={24} sm={6} className="sidebar">
+        <Col span={24} sm={4} className="sidebar">
           <Menu defaultSelectedKeys={["1"]} mode="inline" items={itemsMenu} />
         </Col>
-        <Col span={24} sm={18}>
+        <Col span={24} sm={20}>
           <div className="content-wrapper">
             {open === "contact" && <Contact />}
             {open === "tutorials" && <Tutorials />}
@@ -47,7 +47,7 @@ export const Support = () => {
 };
 
 const Container = styled.div`
-  width: 100vw;
+  width: 100%;
   height: auto;
   min-height: 100svh;
 
@@ -56,12 +56,12 @@ const Container = styled.div`
   }
 
   .content-wrapper {
-    padding: 1em;
+    padding: 0 1em;
   }
 
-  .contact-list {
-    background: ${({ theme }) => darken(0.1, theme.colors.secondary)};
-    height: 5vw;
+  .support-header {
+    background: ${({ theme }) => darken(0.1, theme.colors.black)};
+    height: 8vh;
     font-size: 20px;
     color: white;
     align-items: center;

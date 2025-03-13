@@ -2,41 +2,44 @@ import React from "react";
 import { Col, Row, Title, Divider } from "../../components";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 export const Contact = () => {
   return (
     <Container>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title>CONTÁCTANOS</Title>
+          <Title>Contacto</Title>
         </Col>
       </Row>
       <Divider />
       <Row gutter={[16, 16]}>
         <Col span={24} sm={16}>
-          <Title level={3} margin={0} className="contact-text">
-            Korekenke ha servido con orgullo a clientes que buscan asesoría en
-            Intercambios 1031 como Intermediarios Calificados, brindando un
-            servicio de precisión y excelencia durante más de 18 años. A menudo,
-            nos reunimos personalmente con los clientes y participamos como
-            ponentes en eventos educativos sobre Intercambios Diferidos de
-            Impuestos.{"\n"}
-            {"\n"}
-            Emain: info@atlas1033.com{"\n"}
-            {"\n"}
-            Phone: 1-800-227-1031{"\n"}
-            {"\n"}
-            Fax: 1-850-201-6911{"\n"}
-            {"\n"}
-            Korekenke Office{"\n"} 1816 Bimini Drive, Orlando, FL 32806 (View
-            Naples)
-          </Title>
+          <p>
+            Korekenke, el ecosistema que gestión diversos módulos de trámites de
+            documentos
+          </p>
+          <p>
+            <strong>Horario de atencion:</strong> <br />
+            Lunes - viernes: 9:00am - 6:00pm <br />
+            Sábados - domingos: Fuera de atención
+          </p>
+          <p>
+            Correo: <strong>info@atlas1033.com</strong>
+          </p>
+          <p>
+            Teléfono: <strong>929 054 672</strong>
+          </p>
         </Col>
         <Col span={24} sm={8}>
-          <Title level={3} margin={0} className="contact-title-box">
-            Contactanos 958 742 157
-          </Title>
-          {/*<FontAwesomeIcon icon={faEnvelope} size="3x" />*/}
+          <a
+            className="contact-title-box"
+            href="https://api.whatsapp.com/send?phone=51929054672"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FontAwesomeIcon icon={faWhatsapp} /> 929 054 672
+          </a>
         </Col>
       </Row>
       <Col span={24}>
@@ -48,11 +51,8 @@ export const Contact = () => {
 
 const Container = styled.div`
   width: 100%;
-  //.contact-list {
-  //  list-style: none;
-  //  padding: 0;
-  //  margin: 0;
-  //}
+  min-height: 100svh;
+
   .contact-text {
     font-size: 14px;
     white-space: pre-line;
@@ -64,6 +64,9 @@ const Container = styled.div`
     border-radius: 5px;
     display: inline-block;
     text-align: center;
-    padding: 20px;
+    padding: 0.7em 1em;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #000;
   }
 `;
