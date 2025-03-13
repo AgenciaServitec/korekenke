@@ -12,15 +12,13 @@ const getElectionCandidatesRef = (electionId) =>
 const getElectionVotersRef = (electionId) =>
   electionsRef.doc(electionId).collection("voters");
 
-const getElectionVoteRef = (electionId) =>
-  electionsRef.doc(electionId).collection("voteValue");
-
-const getElectionResultsRef = (electionId) => electionsRef.doc(electionId);
+const getElectionVotesRef = (electionId) =>
+  electionsRef.doc(electionId).collection("votes");
 
 export const getElectionId = () => electionsRef.doc().id;
 
 const recordVote = (batch, electionId, voteData) => {
-  const voteRef = getElectionVoteRef(electionId).doc();
+  const voteRef = getElectionVotesRef(electionId).doc();
   batch.set(voteRef, {
     ...voteData,
     timestamp: serverTimestamp(),
@@ -36,7 +34,7 @@ const updateVoterStatus = (batch, electionId, userId) => {
 };
 
 const updateResults = (batch, electionId, voteData) => {
-  const electionRef = getElectionResultsRef(electionId);
+  const electionRef = electionsRef.doc(electionId);
   const updateData = {
     "results.totalVotes": increment(1),
     "results.lastUpdated": serverTimestamp(),
