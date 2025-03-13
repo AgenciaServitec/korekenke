@@ -33,7 +33,7 @@ interface MailerConfig {
     to: string;
     bcc: string;
   };
-  sendMailerNotifyDasApplicant: {
+  sendMailerNotifyDasRequest: {
     to: string;
     bcc: string;
   };

@@ -19,7 +19,7 @@ export const config: Config = {
         to: "nmoriano26@gmail.com",
         bcc: "galafloresangelemilio@gmail.com",
       },
-      sendMailerNotifyDasApplicant: {
+      sendMailerNotifyDasRequest: {
         to: "nmoriano26@gmail.com",
         bcc: "galafloresangelemilio@gmail.com",
       },
@@ -41,9 +41,9 @@ export const config: Config = {
         to: "nmoriano26@gmail.com",
         bcc: "galafloresangelemilio@gmail.com",
       },
-      sendMailerNotifyDasApplicant: {
+      sendMailerNotifyDasRequest: {
         to: "sanchesjasmin024@gmail.com",
-        bcc: "beto1perk@gmail.com,nmoriano26@gmail.com",
+        bcc: "gcunya1@gmail.com,beto1perk@gmail.com,nmoriano26@gmail.com",
       },
     },
     "api-peru-devs": {
