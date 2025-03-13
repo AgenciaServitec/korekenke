@@ -77,4 +77,6 @@ export * from "./assistances/assistance";
 
 //ELECTIONS
 export * from "./elections";
-export * from "./elections/_elections";
+export * from "./elections/_election";
+export * from "./elections/_election/addCandidates";
+export * from "./elections/_election/submitVote";

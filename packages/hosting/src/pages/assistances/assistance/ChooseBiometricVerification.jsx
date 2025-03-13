@@ -7,10 +7,7 @@ import { Button } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import { mediaQuery } from "../../../styles";
-import {
-  GetFingerprint,
-  GetFingerprintBiometrics,
-} from "./GetFingerprintBiometrics";
+import { GetFingerprintBiometrics } from "./GetFingerprintBiometrics";
 
 export const ChooseBiometricVerification = ({
   type,

@@ -171,6 +171,7 @@ const ElectionForm = ({
             {isNew ? "Nueva Elección" : "Editar Elección"}
           </Title>
         </Col>
+
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSaveElection)}>
             <Row gutter={[16, 16]}>
@@ -180,7 +181,7 @@ const ElectionForm = ({
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Titulo"
+                      label="Título de la elección"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -190,29 +191,31 @@ const ElectionForm = ({
                   )}
                 />
               </Col>
+
               <Col span={24}>
                 <Controller
                   name="description"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <TextArea
-                      label="Descripción"
+                      label="Descripción y objetivos"
                       name={name}
                       value={value}
                       onChange={onChange}
                       error={error(name)}
                       required={required(name)}
+                      rows={3}
                     />
                   )}
                 />
               </Col>
-              <Col span={24}>
+              <Col xs={24} md={12}>
                 <Controller
                   name="startDate"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <DatePicker
-                      label="Fecha de inicio"
+                      label="Fecha y hora de inicio"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -223,13 +226,14 @@ const ElectionForm = ({
                   )}
                 />
               </Col>
-              <Col span={24}>
+
+              <Col xs={24} md={12}>
                 <Controller
                   name="endDate"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <DatePicker
-                      label="Fecha de finalización"
+                      label="Fecha y hora de cierre"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -247,7 +251,7 @@ const ElectionForm = ({
                   render={({ field: { onChange, value, name } }) => (
                     <Select
                       mode="multiple"
-                      label="Votantes Autorizados"
+                      label="Participantes autorizados"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -257,33 +261,52 @@ const ElectionForm = ({
                         value: user.id,
                         label: userFullName(user),
                       }))}
+                      placeholder="Selecciona los usuarios que podrán votar"
                     />
                   )}
                 />
               </Col>
-            </Row>
-            <Row justify="end" gutter={[16, 16]}>
-              <Col xs={24} sm={6} md={4}>
-                <Button
-                  type="default"
-                  size="large"
-                  block
-                  onClick={() => onGoBack()}
-                  disabled={savingElection}
-                >
-                  Cancelar
-                </Button>
+              <Col span={24}>
+                <div style={{ margin: "24px 0 16px 0" }}>
+                  <p style={{ color: "#666", fontStyle: "italic" }}>
+                    🚀 Después de guardar la elección, podrás agregar candidatos
+                    desde la lista de elecciones.
+                  </p>
+                </div>
               </Col>
-              <Col xs={24} sm={6} md={4}>
-                <Button
-                  type="primary"
-                  size="large"
-                  block
-                  htmlType="submit"
-                  loading={savingElection}
+              <Col span={24}>
+                <Row
+                  justify="end"
+                  gutter={[16, 16]}
+                  style={{
+                    marginTop: 24,
+                    borderTop: "1px solid #f0f0f0",
+                    paddingTop: 24,
+                  }}
                 >
-                  Guardar
-                </Button>
+                  <Col xs={24} sm={6} md={4}>
+                    <Button
+                      type="default"
+                      size="large"
+                      block
+                      onClick={onGoBack}
+                      disabled={savingElection}
+                    >
+                      Cancelar
+                    </Button>
+                  </Col>
+                  <Col xs={24} sm={6} md={4}>
+                    <Button
+                      type="primary"
+                      size="large"
+                      block
+                      htmlType="submit"
+                      loading={savingElection}
+                    >
+                      {isNew ? "Crear Elección" : "Guardar Cambios"}
+                    </Button>
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Form>
