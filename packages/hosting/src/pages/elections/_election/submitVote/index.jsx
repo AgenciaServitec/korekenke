@@ -89,6 +89,9 @@ export const VotingBooth = () => {
   };
 
   const onSubmitBlankVote = async () => {
+    if (submitLoading) return;
+
+    setSubmitLoading(true);
     try {
       await submitVote(electionId, {
         userId: authUser.id,
