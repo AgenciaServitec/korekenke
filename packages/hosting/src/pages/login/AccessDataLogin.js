@@ -83,6 +83,7 @@ export const AccessDataLogin = ({ next }) => {
           control={control}
           render={({ field: { onChange, value, name } }) => (
             <Input
+              type="number"
               label="Ingrese CIP"
               onChange={onChange}
               value={value}
