@@ -196,15 +196,12 @@ const Voting = ({
           {candidates.map((candidate) => (
             <Col key={candidate.id} xs={24} sm={12} md={12} lg={8}>
               <Card
-                role="button"
                 tabIndex="0"
                 className={`candidate-card ${
                   selectedCandidate?.id === candidate.id ? "selected" : ""
                 }`}
                 onClick={() => setSelectedCandidate(candidate)}
-                onKeyPress={(e) =>
-                  e.key === "Enter" && setSelectedCandidate(candidate)
-                }
+                key={candidate.id}
               >
                 <div className="candidate-profile">
                   <div className="avatar">
