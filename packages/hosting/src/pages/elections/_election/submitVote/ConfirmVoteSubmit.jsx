@@ -1,12 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import { Button } from "../../../../components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheckCircle,
+  faTimes,
+  faVoteYea,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const ConfirmVoteSubmit = ({
   onSubmitVote,
   onSubmitBlankVote,
   onCloseModal,
   type,
+  candidate,
 }) => {
   const onVote = async () => {
     if (type === "vote") {
@@ -20,11 +27,32 @@ export const ConfirmVoteSubmit = ({
 
   return (
     <Container>
+      <div className="modal-header">
+        <FontAwesomeIcon icon={faCheckCircle} className="header-icon" />
+        <h3 className="modal-title">Confirmar Voto</h3>
+      </div>
+
+      <p className="confirmation-text">
+        {type === "vote"
+          ? `¿Estás seguro de que deseas confirmar tu voto por ${candidate.name}?`
+          : "¿Deseas registrar un voto en blanco para esta elección?"}
+      </p>
+
       <div className="button-group">
-        <Button className="confirm-button" type="primary" onClick={onVote}>
-          Votar
+        <Button
+          className="confirm-button"
+          type="primary"
+          onClick={onVote}
+          icon={<FontAwesomeIcon icon={faVoteYea} />}
+        >
+          {type === "vote" ? "Confirmar Voto" : "Votar en Blanco"}
         </Button>
-        <Button className="cancel-button" type="default" onClick={onCloseModal}>
+        <Button
+          className="cancel-button"
+          type="secondary"
+          onClick={onCloseModal}
+          icon={<FontAwesomeIcon icon={faTimes} />}
+        >
           Cancelar
         </Button>
       </div>
@@ -33,20 +61,84 @@ export const ConfirmVoteSubmit = ({
 };
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .header-icon {
+      color: #637a3a;
+      font-size: 1.8rem;
+    }
+
+    .modal-title {
+      color: #637a3a;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+  }
+
+  .confirmation-text {
+    color: #616161;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
 
   .button-group {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
-    margin-top: 1.5rem;
+    flex-wrap: wrap;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 
   .confirm-button {
-    min-width: 120px;
+    background: #637a3a;
+    border: none;
+    padding: 0.8rem 2rem;
+    min-width: 200px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
   }
 
   .cancel-button {
-    min-width: 120px;
+    color: #637a3a;
+    border: 2px solid #637a3a;
+    background: white;
+    padding: 0.8rem 2rem;
+    min-width: 200px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #f8f9ff;
+      border-color: #637a3a;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+
+    .button-group {
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
   }
 `;

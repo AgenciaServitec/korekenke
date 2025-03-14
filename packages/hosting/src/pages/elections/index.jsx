@@ -14,7 +14,7 @@ import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { electionsRef, updateElection } from "../../firebase/collections";
 import { useDefaultFirestoreProps, useDevice } from "../../hooks";
-import { ElectionsTable } from "./ElectionsTable";
+import { ElectionsCards } from "./ElectionsCards";
 import { ElectionStatistics } from "./ElectionStadistics";
 
 export const Election = () => {
@@ -89,7 +89,6 @@ const Elections = ({
 
   const onShowElectionStatistics = (election) => {
     onShowModal({
-      title: `Estadíticas de ${election.title}`,
       width: `${isTablet ? "100%" : "70%"}`,
       onRenderBody: () => <ElectionStatistics election={election} />,
     });
@@ -109,7 +108,7 @@ const Elections = ({
             </Col>
           )}
           <Col span={24}>
-            <ElectionsTable
+            <ElectionsCards
               user={user}
               elections={elections}
               onClickAddElection={onAddCandidate}
