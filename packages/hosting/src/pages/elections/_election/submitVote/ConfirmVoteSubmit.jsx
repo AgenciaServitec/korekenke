@@ -74,12 +74,12 @@ const Container = styled.div`
     margin-bottom: 1.5rem;
 
     .header-icon {
-      color: #1a237e;
+      color: #637a3a;
       font-size: 1.8rem;
     }
 
     .modal-title {
-      color: #1a237e;
+      color: #637a3a;
       margin: 0;
       font-size: 1.5rem;
     }
@@ -105,21 +105,20 @@ const Container = styled.div`
   }
 
   .confirm-button {
-    background: #1a237e;
+    background: #637a3a;
     border: none;
     padding: 0.8rem 2rem;
     min-width: 200px;
     transition: all 0.3s ease;
 
     &:hover {
-      background: #303f9f;
       transform: translateY(-1px);
     }
   }
 
   .cancel-button {
-    color: #1a237e;
-    border: 2px solid #1a237e;
+    color: #637a3a;
+    border: 2px solid #637a3a;
     background: white;
     padding: 0.8rem 2rem;
     min-width: 200px;
@@ -127,8 +126,7 @@ const Container = styled.div`
 
     &:hover {
       background: #f8f9ff;
-      color: #303f9f;
-      border-color: #303f9f;
+      border-color: #637a3a;
     }
   }
 
