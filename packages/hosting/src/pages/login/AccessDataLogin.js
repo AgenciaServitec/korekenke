@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  InputNumber,
-  notification,
-  Title,
-} from "../../components";
+import { Button, Form, Input, notification, Title } from "../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -88,7 +82,8 @@ export const AccessDataLogin = ({ next }) => {
           name="cip"
           control={control}
           render={({ field: { onChange, value, name } }) => (
-            <InputNumber
+            <Input
+              type="number"
               label="Ingrese CIP"
               onChange={onChange}
               value={value}
