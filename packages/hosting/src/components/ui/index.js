@@ -102,4 +102,5 @@ export {
   Avatar,
   Tooltip,
   Progress,
+  Typography,
 };

@@ -10,10 +10,26 @@ import {
   fetchCandidates,
   submitVote,
 } from "../../../../firebase/collections";
-import { notification, Card, Button, Tag, Spin } from "../../../../components";
+import {
+  notification,
+  Card,
+  Button,
+  Tag,
+  Spin,
+  Row,
+  Col,
+  Title,
+} from "../../../../components";
 import styled from "styled-components";
 import { useDevice } from "../../../../hooks";
 import { ConfirmVoteSubmit } from "./ConfirmVoteSubmit";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheckCircle,
+  faFileAlt,
+  faUserTie,
+  faVoteYea,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const VotingBooth = () => {
   const navigate = useNavigate();
@@ -146,8 +162,7 @@ const Voting = ({
 
   const onShowConfirmVoteSubmit = (type) => {
     onShowModal({
-      title: `¿Seguro(a) de Votar ${type === "vote" ? `por ${selectedCandidate.name}` : "en blanco"}?`,
-      width: `${isTablet ? "40%" : "40%"}`,
+      width: `${isTablet ? "100%" : "40%"}`,
       centered: false,
       onRenderBody: () => (
         <ConfirmVoteSubmit
@@ -162,112 +177,198 @@ const Voting = ({
   };
 
   return (
-    <Spin size="large" spinning={loading || submitLoading}>
+    <Spin
+      size="large"
+      spinning={loading || submitLoading}
+      tip="Procesando tu voto..."
+      indicator={<FontAwesomeIcon icon={faVoteYea} spin />}
+    >
       <Container>
-        <div className="voting-title">
-          <h2>Candidatos</h2>
+        <div className="voting-header">
+          <Title level={1} align="center" className="election-title">
+            <FontAwesomeIcon icon={faVoteYea} /> Elecciones 2024
+          </Title>
+          <p className="instructions">
+            Selecciona un candidato o vota en blanco
+          </p>
         </div>
-        <div className="candidates-list">
+        <Row gutter={[16, 24]} className="candidates-row">
           {candidates.map((candidate) => (
-            <Card
-              key={candidate.id}
-              className={`candidate-card ${
-                selectedCandidate?.id === candidate.id ? "selected" : ""
-              }`}
-              onClick={() => setSelectedCandidate(candidate)}
-            >
-              <h3 className="candidate-name">{candidate.name}</h3>
-              <p className="candidate-slogan">{candidate.slogan}</p>
-            </Card>
+            <Col key={candidate.id} xs={24} sm={12} md={12} lg={8}>
+              <Card
+                role="button"
+                tabIndex="0"
+                className={`candidate-card ${
+                  selectedCandidate?.id === candidate.id ? "selected" : ""
+                }`}
+                onClick={() => setSelectedCandidate(candidate)}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && setSelectedCandidate(candidate)
+                }
+              >
+                <div className="candidate-profile">
+                  <div className="avatar">
+                    <FontAwesomeIcon icon={faUserTie} size="3x" />
+                  </div>
+                  <div className="candidate-info">
+                    <h3 className="name">{candidate.name}</h3>
+                  </div>
+                </div>
+                {selectedCandidate?.id === candidate.id && (
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className="selected-icon"
+                  />
+                )}
+              </Card>
+            </Col>
           ))}
-
-          <Button
-            className="vote-button primary"
-            onClick={() => onShowConfirmVoteSubmit("vote")}
-            disabled={!selectedCandidate}
-          >
-            Votar
-          </Button>
-          <Button
-            className="blank-vote-button"
-            onClick={() => onShowConfirmVoteSubmit("blank")}
-            type="default"
-          >
-            Votar en Blanco
-          </Button>
-        </div>
+        </Row>
+        <Row className="actions-row" justify="space-around">
+          <Col xs={24} md={12} lg={8}>
+            <Button
+              className="vote-button"
+              type="primary"
+              onClick={() => onShowConfirmVoteSubmit("vote")}
+              disabled={!selectedCandidate}
+              icon={<FontAwesomeIcon icon={faCheckCircle} />}
+              block
+            >
+              Confirmar Voto
+            </Button>
+          </Col>
+          <Col xs={24} md={12} lg={8}>
+            <Button
+              className="blank-vote-button"
+              type="secondary"
+              onClick={() => onShowConfirmVoteSubmit("blank")}
+              icon={<FontAwesomeIcon icon={faFileAlt} />}
+              block
+            >
+              Votar en Blanco
+            </Button>
+          </Col>
+        </Row>
       </Container>
     </Spin>
   );
 };
 
 const Container = styled.div`
-  text-align: center;
-  padding: 20px;
-  max-width: 800px;
+  padding: 2rem 1rem;
+  max-width: 1200px;
   margin: 0 auto;
 
-  .voting-title {
+  .voting-header {
+    text-align: center;
     margin-bottom: 2rem;
-    color: #2c3e50;
-  }
 
-  .candidates-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+    .election-title {
+      color: #1a237e;
+      margin-bottom: 1rem;
+    }
 
-  .candidate-card {
-    padding: 1.5rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .candidate-card.selected {
-    border-color: #1890ff;
-    background-color: #e6f7ff;
-    transform: scale(1.02);
-  }
-
-  .candidate-card:hover:not(.selected) {
-    background-color: #f5f5f5;
-  }
-
-  .candidate-name {
-    color: #1a1a1a;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-  }
-
-  .candidate-slogan {
-    color: #666;
-    font-size: 0.9rem;
-  }
-
-  .vote-button.primary {
-    border: black solid 0.1em;
-    background-color: #56e756;
-    margin-top: 2rem;
-    width: 100%;
-    max-width: 30em;
-    margin-left: auto;
-    margin-right: auto;
-
-    &:hover {
-      background-color: #25cb25;
+    .instructions {
+      color: #616161;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
     }
   }
 
-  .blank-vote-button {
-    border: black solid 0.1em;
-    background-color: white;
-    margin-top: 2rem;
-    width: 100%;
-    max-width: 30em;
-    margin-left: auto;
-    margin-right: auto;
+  .candidates-row {
+    margin-bottom: 2rem;
+
+    .candidate-card {
+      position: relative;
+      height: 100%;
+      padding: 1.5rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      &.selected {
+        border-color: #1a237e;
+        background: #f8f9ff;
+        box-shadow: 0 6px 16px rgba(26, 35, 126, 0.15);
+
+        .avatar {
+          border-color: #1a237e;
+        }
+      }
+
+      .candidate-profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0f2f5;
+        border: 2px solid #e0e0e0;
+        color: #1a237e;
+      }
+
+      .candidate-info {
+        flex: 1;
+        .name {
+          color: #1a1a1a;
+          margin-bottom: 0.25rem;
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+      }
+
+      .selected-icon {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        color: #1a237e;
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .actions-row {
+    .vote-button {
+      background: #1a237e;
+      color: white;
+      height: 50px;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+
+      &:hover {
+        background: #303f9f;
+      }
+
+      &:disabled {
+        background: #bdbdbd;
+        cursor: not-allowed;
+      }
+    }
+
+    .blank-vote-button {
+      height: 50px;
+      font-size: 1.1rem;
+      border: 2px solid #1a237e;
+      color: #1a237e;
+
+      &:hover {
+        background: #f8f9ff;
+      }
+    }
   }
 `;
