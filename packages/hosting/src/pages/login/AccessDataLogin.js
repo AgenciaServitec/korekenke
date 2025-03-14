@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Button,
   Form,
+  Input,
   InputNumber,
   notification,
   Title,
@@ -88,7 +89,7 @@ export const AccessDataLogin = ({ next }) => {
           name="cip"
           control={control}
           render={({ field: { onChange, value, name } }) => (
-            <InputNumber
+            <Input
               label="Ingrese CIP"
               onChange={onChange}
               value={value}
