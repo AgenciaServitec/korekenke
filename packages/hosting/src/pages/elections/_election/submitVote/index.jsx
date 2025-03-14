@@ -30,6 +30,7 @@ import {
   faUserTie,
   faVoteYea,
 } from "@fortawesome/free-solid-svg-icons";
+import { mediaQuery } from "../../../../styles";
 
 export const VotingBooth = () => {
   const navigate = useNavigate();
@@ -192,9 +193,9 @@ const Voting = ({
             Selecciona un candidato o vota en blanco
           </p>
         </div>
-        <Row gutter={[16, 24]} className="candidates-row">
+        <Row gutter={[16, 24]} className="candidates-row" justify="center">
           {candidates.map((candidate) => (
-            <Col key={candidate.id} xs={24} sm={12} md={12} lg={8}>
+            <Col key={candidate.id} xs={12} sm={12} md={12} lg={8}>
               <Card
                 tabIndex="0"
                 className={`candidate-card ${
@@ -252,16 +253,12 @@ const Voting = ({
 };
 
 const Container = styled.div`
-  padding: 2rem 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-
   .voting-header {
     text-align: center;
     margin-bottom: 2rem;
 
     .election-title {
-      color: #1a237e;
+      color: #637a3a;
       margin-bottom: 1rem;
     }
 
@@ -286,18 +283,42 @@ const Container = styled.div`
       transition: all 0.3s ease;
       background: white;
 
+      ${mediaQuery.maxMobile} {
+        .candidate-profile {
+          flex-direction: column;
+          text-align: center;
+          gap: 0.5rem;
+
+          .avatar {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 0.5rem;
+
+            svg {
+              font-size: 2.5rem;
+            }
+          }
+        }
+
+        .selected-icon {
+          top: 0.3rem;
+          right: 0.3rem;
+          font-size: 1rem;
+        }
+      }
+
       &:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       &.selected {
-        border-color: #1a237e;
+        border-color: #637a3a;
         background: #f8f9ff;
         box-shadow: 0 6px 16px rgba(26, 35, 126, 0.15);
 
         .avatar {
-          border-color: #1a237e;
+          border-color: #637a3a;
         }
       }
 
@@ -316,7 +337,7 @@ const Container = styled.div`
         justify-content: center;
         background: #f0f2f5;
         border: 2px solid #e0e0e0;
-        color: #1a237e;
+        color: #637a3a;
       }
 
       .candidate-info {
@@ -333,7 +354,7 @@ const Container = styled.div`
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
-        color: #1a237e;
+        color: #637a3a;
         font-size: 1.2rem;
       }
     }
@@ -341,16 +362,11 @@ const Container = styled.div`
 
   .actions-row {
     .vote-button {
-      background: #1a237e;
+      background: #637a3a;
       color: white;
       height: 50px;
       font-size: 1.1rem;
       margin-bottom: 1rem;
-
-      &:hover {
-        background: #303f9f;
-      }
-
       &:disabled {
         background: #bdbdbd;
         cursor: not-allowed;
@@ -360,8 +376,8 @@ const Container = styled.div`
     .blank-vote-button {
       height: 50px;
       font-size: 1.1rem;
-      border: 2px solid #1a237e;
-      color: #1a237e;
+      border: 2px solid #637a3a;
+      color: #637a3a;
 
       &:hover {
         background: #f8f9ff;
