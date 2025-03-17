@@ -4,22 +4,18 @@ export const useFingerprint = (onSamplesReceived) => {
   const [sdk, setSdk] = useState(null);
   const [device, setDevice] = useState(null);
   const [isReady, setIsReady] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   const retryIntervalRef = useRef(null);
 
   const checkDevices = useCallback(async (sdkInstance) => {
     try {
-      const devices = await sdkInstance.onDeviceConnected();
-      if (devices && devices.length > 0) {
+      const devices = await sdkInstance.enumerateDevices();
+      if (devices?.length > 0) {
         setDevice(devices[0]);
         setIsReady(true);
         clearInterval(retryIntervalRef.current);
-      } else {
-        setRetryCount((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Error checking devices:", error);
-      setRetryCount((prev) => prev + 1);
     }
   }, []);
 
