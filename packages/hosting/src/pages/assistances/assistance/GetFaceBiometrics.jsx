@@ -3,6 +3,7 @@ import { useFaceDetection, useWebcam } from "../../../hooks";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
 import { notification } from "../../../components";
+import { compareBiometricVectors } from "../_utils";
 
 export const GetFaceBiometrics = ({
   type,
@@ -16,24 +17,6 @@ export const GetFaceBiometrics = ({
     loading,
     error: detectionError,
   } = useFaceDetection(videoRef);
-
-  const calculateEuclideanDistance = (vector1, vector2) => {
-    if (vector1.length !== vector2.length) {
-      throw new Error("Los vectores deben tener la misma longitud");
-    }
-
-    let sum = 0;
-    for (let i = 0; i < vector1.length; i++) {
-      sum += Math.pow(vector1[i] - vector2[i], 2);
-    }
-    return Math.sqrt(sum);
-  };
-
-  const compareBiometricVectors = (userVectors, detectedVectors) => {
-    const distance = calculateEuclideanDistance(userVectors, detectedVectors);
-    const threshold = 0.6;
-    return distance < threshold;
-  };
 
   const onBiometricValidated = async () => {
     if (!userBiometrics) {
