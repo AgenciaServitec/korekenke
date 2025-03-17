@@ -55,6 +55,7 @@ const Container = styled.div`
   .tutorial-section {
     margin-bottom: 2em;
   }
+
   .videos-wrapper {
     display: flex;
     flex-wrap: wrap;

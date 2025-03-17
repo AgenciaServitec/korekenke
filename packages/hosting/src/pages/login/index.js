@@ -80,9 +80,9 @@ export const LoginIntegration = () => {
           )}
         </div>
       </div>
-
-      <Link to="/support">Centro de ayuda</Link>
-
+      <Link to="/support" className="support-link">
+        Centro de ayuda
+      </Link>
       <div className="btn-whatsapp">
         <a
           href="https://api.whatsapp.com/send?phone=51929054672"
@@ -130,6 +130,13 @@ const Container = styled.div`
     border-radius: 1em;
     background: ${({ theme }) => theme.colors.white};
     margin-top: 3em;
+  }
+
+  .support-link {
+    position: absolute;
+    left: 2%;
+    bottom: 2%;
+    display: inline-block;
   }
 
   .btn-whatsapp {
