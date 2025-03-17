@@ -464,6 +464,7 @@ export const Router = () => {
         element={<A.OrganizationalClimateStudiesSheets />}
       />
       <Route exact path="/privacy-policies" element={<A.PrivacyPolicies />} />
+      <Route exact path="/support" element={<A.Support />} />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );

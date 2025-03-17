@@ -80,3 +80,6 @@ export * from "./elections";
 export * from "./elections/_election";
 export * from "./elections/_election/addCandidates";
 export * from "./elections/_election/submitVote";
+
+//SUPPORT
+export * from "./support";
