@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Title, Divider } from "../../components";
+import { Col, Divider, Row, Title } from "../../components";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
@@ -24,9 +24,9 @@ export const Contact = () => {
             Lunes - viernes: 9:00am - 6:00pm <br />
             Sábados - domingos: Fuera de atención
           </p>
-          <p>
+          {/*          <p>
             Correo: <strong>info@atlas1033.com</strong>
-          </p>
+          </p>*/}
           <p>
             Teléfono: <strong>929 054 672</strong>
           </p>

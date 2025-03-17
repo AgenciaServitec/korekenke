@@ -4,14 +4,22 @@ import { Row } from ".././.././components";
 import { Col } from "antd";
 import { Menu } from "../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faContactCard, faVideo } from "@fortawesome/free-solid-svg-icons";
+import {
+  faContactCard,
+  faSignIn,
+  faVideo,
+} from "@fortawesome/free-solid-svg-icons";
 import { Contact } from "./Contact";
 import { Tutorials } from "./Tutorials";
 import { darken } from "polished";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+import { useNavigate } from "react-router";
 
 export const Support = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState("contact");
+
+  const onBackToLogin = () => navigate("/login");
 
   const itemsMenu = [
     {
@@ -25,6 +33,12 @@ export const Support = () => {
       key: "tutorials",
       icon: <FontAwesomeIcon icon={faVideo} size="lg" />,
       onClick: () => setOpen("tutorials"),
+    },
+    {
+      label: "Regresar a login",
+      key: "back-to-login",
+      icon: <FontAwesomeIcon icon={faSignIn} size="lg" />,
+      onClick: () => onBackToLogin(),
     },
   ];
 
