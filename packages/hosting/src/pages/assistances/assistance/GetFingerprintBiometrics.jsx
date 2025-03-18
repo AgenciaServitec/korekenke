@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, notification } from "../../../components";
 import { useFingerprint } from "../../../hooks";
-import { compareFingerprint } from "../_utils";
 import { isEmpty } from "lodash";
 
 export const GetFingerprintBiometrics = ({
@@ -20,17 +19,14 @@ export const GetFingerprintBiometrics = ({
     }
     if (!isEmpty(template)) {
       setIsCapturing(false);
-      const existsUser = compareFingerprint(userFingerprint, template);
-      if (existsUser) {
-        await onCloseModal();
-        onSaveAssistance(type);
-      } else {
-        notification({
-          type: "error",
-          title: "No se pudo reconocer",
-          description: "Vuelve a intentarlo",
-        });
-      }
+      await onCloseModal();
+      onSaveAssistance(type);
+    } else {
+      notification({
+        type: "error",
+        title: "No se pudo reconocer",
+        description: "Vuelve a intentarlo",
+      });
     }
   };
 
