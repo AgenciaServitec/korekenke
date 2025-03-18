@@ -79,7 +79,9 @@ export const DasRequestsTable = ({
 
     // Das requests for Boss - mesa de partes
     if (
-      ["waiting", "notProceeds", "proceeds"].includes(dasRequest.status) &&
+      ["waiting", "notProceeds", "proceeds", "finalized"].includes(
+        dasRequest.status,
+      ) &&
       isBossMDP
     )
       return dasRequest;
