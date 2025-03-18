@@ -10,6 +10,12 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
       cip: event.target.value,
     });
 
+  const onChangeSearchName = (event) =>
+    onSearch({
+      ...searchFields,
+      firstName: event.target.value,
+    });
+
   return (
     <Container>
       <FormContent>
@@ -18,6 +24,13 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
           placeholder="Buscar por cip"
           value={searchFields.cip}
           onChange={onChangeSearchBy}
+          allowClear
+        />
+        <Input
+          label=""
+          placeholder="Buscar por nombre"
+          value={searchFields.firstName}
+          onChange={onChangeSearchName}
           allowClear
         />
       </FormContent>

@@ -37,6 +37,7 @@ export const DasRequestsListIntegration = () => {
   const { authUser } = useAuthentication();
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
+    firstName: undefined,
   });
 
   const debouncedSearchFields = useDebounce(searchFields, 750);
@@ -45,6 +46,7 @@ export const DasRequestsListIntegration = () => {
     useCollectionData(
       dasRequestsQuery({
         cip: debouncedSearchFields.cip,
+        firstName: debouncedSearchFields.firstName,
       }),
     );
 
