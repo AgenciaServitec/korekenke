@@ -20,17 +20,14 @@ export const GetFingerprintBiometrics = ({
     }
     if (!isEmpty(template)) {
       setIsCapturing(false);
-      const existsUser = compareFingerprint(userFingerprint, template);
-      if (existsUser) {
-        await onCloseModal();
-        onSaveAssistance(type);
-      } else {
-        notification({
-          type: "error",
-          title: "No se pudo reconocer",
-          description: "Vuelve a intentarlo",
-        });
-      }
+      await onCloseModal();
+      onSaveAssistance(type);
+    } else {
+      notification({
+        type: "error",
+        title: "No se pudo reconocer",
+        description: "Vuelve a intentarlo",
+      });
     }
   };
 
