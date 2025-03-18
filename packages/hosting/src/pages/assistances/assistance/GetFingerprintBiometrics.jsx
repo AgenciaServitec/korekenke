@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, notification } from "../../../components";
 import { useFingerprint } from "../../../hooks";
-import { compareFingerprint } from "../_utils";
 import { isEmpty } from "lodash";
 
 export const GetFingerprintBiometrics = ({
