@@ -16,6 +16,12 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
       firstName: event.target.value,
     });
 
+  const onChangeSearchPaternalSurname = (event) =>
+    onSearch({
+      ...searchFields,
+      paternalSurname: event.target.value,
+    });
+
   return (
     <Container>
       <FormContent>
@@ -31,6 +37,13 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
           placeholder="Buscar por nombre"
           value={searchFields.firstName}
           onChange={onChangeSearchName}
+          allowClear
+        />
+        <Input
+          label=""
+          placeholder="Buscar por apellido paterno"
+          value={searchFields.paternalSurname}
+          onChange={onChangeSearchPaternalSurname}
           allowClear
         />
       </FormContent>

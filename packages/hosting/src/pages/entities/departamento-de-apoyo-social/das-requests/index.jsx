@@ -38,6 +38,7 @@ export const DasRequestsListIntegration = () => {
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
     firstName: undefined,
+    paternalSurname: undefined,
   });
 
   const debouncedSearchFields = useDebounce(searchFields, 750);
@@ -47,6 +48,7 @@ export const DasRequestsListIntegration = () => {
       dasRequestsQuery({
         cip: debouncedSearchFields.cip,
         firstName: debouncedSearchFields.firstName,
+        paternalSurname: debouncedSearchFields.paternalSurname,
       }),
     );
 
