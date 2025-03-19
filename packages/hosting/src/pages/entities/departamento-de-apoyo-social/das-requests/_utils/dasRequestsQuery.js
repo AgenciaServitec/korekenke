@@ -10,7 +10,11 @@ export const dasRequestsQuery = ({
     .where("isDeleted", "==", false);
 
   if (dasRequestInformation) {
-    query = query.where("searchData", "array-contains", dasRequestInformation);
+    query = query.where(
+      "searchData",
+      "array-contains-any",
+      dasRequestInformation.split(" ").filter((string) => string.trim()),
+    );
   }
 
   return query.limit(3000);

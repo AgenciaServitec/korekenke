@@ -19,7 +19,10 @@ import { Step6DasRequestSuccess } from "./steps/Step6DasRequestSuccess";
 import { EditDasRequestIntegration } from "./editing/EditDasRequest";
 import { omit } from "lodash";
 import { firestore } from "../../../../../firebase";
-import { setLocalStorage } from "../../../../../utils";
+import {
+  getSearchDataToDasRequest,
+  setLocalStorage,
+} from "../../../../../utils";
 import dayjs from "dayjs";
 
 export const DasRequestIntegration = () => {
@@ -88,14 +91,18 @@ export const DasRequestIntegration = () => {
       to: formData?.isHeadline ? "headline" : "familiar",
     },
     userId: authUser.id,
-    searchData: dasRequest?.searchData || [
-      formData.headline.phone.number,
-      formData.headline.cip,
-      formData.headline.email,
-      formData.headline.firstName,
-      formData.headline.paternalSurname,
-      formData.headline.maternalSurname,
-    ],
+    searchData:
+      dasRequest?.searchData ||
+      getSearchDataToDasRequest(
+        [
+          formData.headline.phone.number,
+          formData.headline.cip,
+          formData.headline.email,
+          formData.headline.paternalSurname,
+          formData.headline.maternalSurname,
+        ],
+        formData.headline.firstName,
+      ),
     createAtString: dayjs().format("DD-MM-YYYY"),
   });
 

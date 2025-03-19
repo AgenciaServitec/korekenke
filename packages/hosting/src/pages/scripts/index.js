@@ -1,4 +1,11 @@
-import React from "react";
+import React, { useTransition } from "react";
+import { dasRequestsRef } from "../../firebase/collections";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { assign, chunk } from "lodash";
+import { firestore } from "../../firebase";
+import { notification } from "../../components";
+import { Button } from "antd";
+import { getSearchDataToDasRequest } from "../../utils";
 
 export const Scripts = () => {
   // const [isPending, startTransition] = useTransition();
@@ -45,14 +52,16 @@ export const Scripts = () => {
 //
 //   const mapDasRequests = (dasRequest) =>
 //     assign({}, dasRequest, {
-//       searchData: [
-//         dasRequest.headline.phone.number,
-//         dasRequest.headline.cip,
-//         dasRequest.headline.email,
+//       searchData: getSearchDataToDasRequest(
+//         [
+//           dasRequest.headline.phone.number,
+//           dasRequest.headline.cip,
+//           dasRequest.headline.email,
+//           dasRequest.headline.paternalSurname,
+//           dasRequest.headline.maternalSurname,
+//         ],
 //         dasRequest.headline.firstName,
-//         dasRequest.headline.paternalSurname,
-//         dasRequest.headline.maternalSurname,
-//       ],
+//       ),
 //     });
 //
 //   return (

@@ -15,7 +15,7 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
       <FormContent>
         <Input
           label=""
-          placeholder="Buscar por cip, nombres, correo y celular"
+          placeholder="Buscar por cip, nombres, apellidos, email y celular"
           value={searchFields.dasRequestInformation}
           onChange={onChangeSearchBy}
           allowClear
