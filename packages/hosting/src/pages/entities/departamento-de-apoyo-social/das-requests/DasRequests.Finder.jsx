@@ -7,19 +7,7 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
   const onChangeSearchBy = (event) =>
     onSearch({
       ...searchFields,
-      cip: event.target.value,
-    });
-
-  const onChangeSearchName = (event) =>
-    onSearch({
-      ...searchFields,
-      firstName: event.target.value,
-    });
-
-  const onChangeSearchPaternalSurname = (event) =>
-    onSearch({
-      ...searchFields,
-      paternalSurname: event.target.value,
+      dasRequestInformation: event.target.value,
     });
 
   return (
@@ -27,23 +15,9 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
       <FormContent>
         <Input
           label=""
-          placeholder="Buscar por cip"
-          value={searchFields.cip}
+          placeholder="Buscar por cip, nombres, correo y celular"
+          value={searchFields.dasRequestInformation}
           onChange={onChangeSearchBy}
-          allowClear
-        />
-        <Input
-          label=""
-          placeholder="Buscar por nombre"
-          value={searchFields.firstName}
-          onChange={onChangeSearchName}
-          allowClear
-        />
-        <Input
-          label=""
-          placeholder="Buscar por apellido paterno"
-          value={searchFields.paternalSurname}
-          onChange={onChangeSearchPaternalSurname}
           allowClear
         />
       </FormContent>

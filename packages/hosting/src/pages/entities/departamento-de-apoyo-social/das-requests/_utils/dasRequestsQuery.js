@@ -1,9 +1,7 @@
 import { dasRequestsRef } from "../../../../../firebase/collections";
 
 export const dasRequestsQuery = ({
-  cip,
-  firstName,
-  paternalSurname,
+  dasRequestInformation,
   fromDate,
   toDate,
 }) => {
@@ -11,16 +9,8 @@ export const dasRequestsQuery = ({
     .orderBy("createAt", "desc")
     .where("isDeleted", "==", false);
 
-  if (cip) {
-    query = query.where("headline.cip", "==", cip);
-  }
-
-  if (firstName) {
-    query = query.where("headline.firstName", "==", firstName);
-  }
-
-  if (paternalSurname) {
-    query = query.where("headline.paternalSurname", "==", paternalSurname);
+  if (dasRequestInformation) {
+    query = query.where("searchData", "array-contains", dasRequestInformation);
   }
 
   return query.limit(3000);
