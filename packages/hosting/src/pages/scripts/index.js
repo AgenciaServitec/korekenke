@@ -1,58 +1,63 @@
 import React from "react";
 
 export const Scripts = () => {
+  // const [isPending, startTransition] = useTransition();
+  //
+  // const [dasRequests, dasRequestsLoading, dasRequestError] = useCollectionData(
+  //   dasRequestsRef.where("isDeleted", "==", false),
+  // );
+
   return <></>;
 };
 
-// const RunAddSearchDataScript = () => {
+// const RunAddSearchDataScript = ({
+//   dasRequests,
+//   isPending,
+//   startTransition,
+// }) => {
 //   // SCRIPT PARA searchData in all products
-//   const { products } = useGlobalData();
-//
-//   const [loading, setLoading] = useState(false);
 //
 //   const runScript = async () => {
-//     try {
-//       setLoading(true);
+//     startTransition(async () => {
+//       try {
+//         const batches = chunk(dasRequests, 490).map((dasRequests) => {
+//           const batch = firestore.batch();
 //
-//       const batches = chunk(products, 490).map((products) => {
-//         const batch = firestore.batch();
+//           dasRequests.forEach((dasRequest) => {
+//             batch.update(
+//               dasRequestsRef.doc(dasRequest.id),
+//               mapDasRequests(dasRequest),
+//             );
+//           });
 //
-//         products.forEach((product) => {
-//           batch.update(
-//             firestore.collection("products").doc(product.id),
-//             mapProducts(product)
-//           );
+//           return batch.commit();
 //         });
 //
-//         return batch.commit();
-//       });
+//         await Promise.all(batches);
 //
-//       await Promise.all(batches);
-//
-//       console.log("COMPLETE SUCCESSFULL!");
-//     } catch (e) {
-//       notification({ type: "error" });
-//       console.log("setDataToFirestore: ", e);
-//     } finally {
-//       setLoading(false);
-//     }
+//         console.log("COMPLETE SUCCESSFULL!");
+//       } catch (e) {
+//         notification({ type: "error" });
+//         console.log("setDataToFirestore: ", e);
+//       }
+//     });
 //   };
 //
-//   const mapProducts = (product) =>
-//     assign({}, product, {
-//       ...(product.productContent?.productSetup && {
-//         searchData: [
-//           product.productContent.productSetup.principalCategoryId,
-//           product.productContent.productSetup.categoryId,
-//           product.productContent.productSetup.subCategoryId,
-//           product.productContent.productSetup.brandId,
-//         ],
-//       }),
+//   const mapDasRequests = (dasRequest) =>
+//     assign({}, dasRequest, {
+//       searchData: [
+//         dasRequest.headline.phone.number,
+//         dasRequest.headline.cip,
+//         dasRequest.headline.email,
+//         dasRequest.headline.firstName,
+//         dasRequest.headline.paternalSurname,
+//         dasRequest.headline.maternalSurname,
+//       ],
 //     });
 //
 //   return (
 //     <div>
-//       <Button type="primary" loading={loading} onClick={() => runScript()}>
+//       <Button type="primary" loading={isPending} onClick={() => runScript()}>
 //         RUN ADD SEARCH DATA - SCRIPT
 //       </Button>
 //     </div>
