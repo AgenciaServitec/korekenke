@@ -7,7 +7,7 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
   const onChangeSearchBy = (event) =>
     onSearch({
       ...searchFields,
-      cip: event.target.value,
+      dasRequestInformation: event.target.value,
     });
 
   return (
@@ -15,8 +15,8 @@ export const DasRequestsFinder = ({ searchFields, onSearch }) => {
       <FormContent>
         <Input
           label=""
-          placeholder="Buscar por cip"
-          value={searchFields.cip}
+          placeholder="Buscar por cip, nombres, apellidos, email y celular"
+          value={searchFields.dasRequestInformation}
           onChange={onChangeSearchBy}
           allowClear
         />

@@ -115,70 +115,8 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "headline.cip",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "das-applications",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isDeleted",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createAtString",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "headline.cip",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "das-applications",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isDeleted",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "headline.cip",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createAt",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "createAtString",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "das-applications",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isDeleted",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "headline.cip",
-          "order": "ASCENDING"
+          "fieldPath": "searchData",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "createAt",
