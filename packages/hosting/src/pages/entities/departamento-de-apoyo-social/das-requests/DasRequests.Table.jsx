@@ -36,6 +36,9 @@ export const DasRequestsTable = ({
   onShowReplyDasRequestInformationModal,
   user,
   dasRequestsLoading,
+  setFilterCount,
+  setFilterStates,
+  filterCount,
 }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
@@ -70,29 +73,46 @@ export const DasRequestsTable = ({
   const isFinalized = (dasRequest) => dasRequest?.status === "finalized";
   const isProceeds = (dasRequest) => dasRequest?.status === "finalized";
 
-  const dasRequestsView = dasRequests.filter((dasRequest) => {
-    // Das requests for super-admin
-    if (["super_admin"].includes(authUser.roleCode)) return dasRequest;
+  const dasRequestsView = (() => {
+    const filteredRequests = dasRequests.filter((dasRequest) => {
+      // Das requests for super-admin
+      if (["super_admin"].includes(authUser.roleCode)) return true;
 
-    // Das requests for user
-    if (dasRequest.userId === authUser.id) return dasRequest;
+      // Das requests for user
+      if (dasRequest.userId === authUser.id) return true;
 
-    // Das requests for Boss - mesa de partes
-    if (
-      ["waiting", "notProceeds", "proceeds", "finalized"].includes(
-        dasRequest.status,
-      ) &&
-      isBossMDP
-    )
-      return dasRequest;
+      // Das requests for Boss - mesa de partes
+      if (
+        ["waiting", "notProceeds", "proceeds", "finalized"].includes(
+          dasRequest.status,
+        ) &&
+        isBossMDP
+      )
+        return true;
 
-    // Das requests for manager
-    if (
-      !["waiting", "notProceeds"].includes(dasRequest.status) &&
-      isManagerEntityGu
-    )
-      return dasRequest;
-  });
+      // Das requests for manager
+      if (
+        !["waiting", "notProceeds"].includes(dasRequest.status) &&
+        isManagerEntityGu
+      )
+        return true;
+
+      return false;
+    });
+
+    setFilterCount(filteredRequests.length);
+    return filteredRequests;
+  })();
+
+  useEffect(() => {
+    const statusCounts = dasRequestsView.reduce((acc, request) => {
+      if (request?.status) {
+        acc[request.status] = (acc[request.status] || 0) + 1;
+      }
+      return acc;
+    }, {});
+    setFilterStates(statusCounts);
+  }, [filterCount]);
 
   const columns = [
     {
