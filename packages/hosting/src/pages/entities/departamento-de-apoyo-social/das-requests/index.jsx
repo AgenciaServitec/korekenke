@@ -208,15 +208,26 @@ const DasRequestsList = ({
         <Col span={24}>
           {filterStates && (
             <div>
-              {Object.entries(filterStates).map(([status, count]) => {
-                const statusConfig = DasRequestStatus[status];
+              {[
+                "waiting",
+                "proceeds",
+                "notProceeds",
+                "pending",
+                "inProgress",
+                "finalized",
+              ].map((statusKey) => {
+                const statusConfig = DasRequestStatus[statusKey];
+                const count = filterStates[statusKey] || 0;
+
+                if (filterFields.status !== "all" && count <= 0) return null;
+
                 return (
                   <Tag
-                    key={status}
-                    color={statusConfig?.color || "default"}
+                    key={statusKey}
+                    color={statusConfig?.color}
                     style={{ marginRight: 8, marginBottom: 4 }}
                   >
-                    {statusConfig?.name || status}: {count}
+                    {statusConfig?.name}: {count}
                   </Tag>
                 );
               })}
