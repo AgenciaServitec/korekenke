@@ -1,7 +1,16 @@
 import { concat } from "lodash";
 
-export const getSearchDataToDasRequest = (searchData, firstName) =>
+export const getSearchDataToDasRequest = (dasRequest, firstName) =>
   concat(
-    searchData,
-    firstName.split(" ").filter((name) => name.trim()),
+    [
+      dasRequest.phone.number,
+      dasRequest.cip,
+      dasRequest.email.toLowerCase(),
+      dasRequest.paternalSurname.toLowerCase(),
+      dasRequest.maternalSurname.toLowerCase(),
+    ],
+    firstName
+      .toLowerCase()
+      .split(" ")
+      .filter((name) => name.trim()),
   );

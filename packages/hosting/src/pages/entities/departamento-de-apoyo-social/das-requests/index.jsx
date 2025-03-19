@@ -44,7 +44,8 @@ export const DasRequestsListIntegration = () => {
   const [dasRequests = [], dasRequestsLoading, dasRequestsError] =
     useCollectionData(
       dasRequestsQuery({
-        dasRequestInformation: debouncedSearchFields.dasRequestInformation,
+        dasRequestInformation:
+          debouncedSearchFields.dasRequestInformation?.toLowerCase(),
       }),
     );
 

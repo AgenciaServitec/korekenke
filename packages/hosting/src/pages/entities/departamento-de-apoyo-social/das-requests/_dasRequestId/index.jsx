@@ -93,16 +93,7 @@ export const DasRequestIntegration = () => {
     userId: authUser.id,
     searchData:
       dasRequest?.searchData ||
-      getSearchDataToDasRequest(
-        [
-          formData.headline.phone.number,
-          formData.headline.cip,
-          formData.headline.email,
-          formData.headline.paternalSurname,
-          formData.headline.maternalSurname,
-        ],
-        formData.headline.firstName,
-      ),
+      getSearchDataToDasRequest(formData.headline, formData.headline.firstName),
     createAtString: dayjs().format("DD-MM-YYYY"),
   });
 
