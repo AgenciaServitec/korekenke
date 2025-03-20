@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   Col,
@@ -7,6 +7,7 @@ import {
   notification,
   Row,
   Title,
+  Tag,
 } from "../../../../components";
 import { DasRequestsTable } from "./DasRequests.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -29,6 +30,7 @@ import { DasRequestProceedsModal } from "./DasRequestProceedsModal";
 import { DasRequestsFinder } from "./DasRequests.Finder";
 import { DasRequestsFilter } from "./DasRequests.Filter";
 import { dasRequestsQuery } from "./_utils";
+import { DasRequestStatus } from "../../../../data-list";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
@@ -98,6 +100,8 @@ const DasRequestsList = ({
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
+  const [filterCount, setFilterCount] = useState([]);
+  const [filterStates, setFilterStates] = useState({});
   const [filterFields, setFilterFields] = useQueriesState({
     status: "all",
   });
@@ -196,11 +200,44 @@ const DasRequestsList = ({
             />
           </Legend>
         </Col>
+        {filterFields.status === "all" && (
+          <Col span={24}>
+            <strong>Total resultados: {filterCount}</strong>
+          </Col>
+        )}
         <Col span={24}>
-          Resultados <strong>{dasRequestsView.length}</strong>
+          {filterStates && (
+            <div>
+              {[
+                "waiting",
+                "proceeds",
+                "notProceeds",
+                "pending",
+                "inProgress",
+                "finalized",
+              ].map((statusKey) => {
+                const statusConfig = DasRequestStatus[statusKey];
+                const count = filterStates[statusKey] || 0;
+
+                if (filterFields.status !== "all" && count <= 0) return null;
+
+                return (
+                  <Tag
+                    key={statusKey}
+                    color={statusConfig?.color}
+                    style={{ marginRight: 8, marginBottom: 4 }}
+                  >
+                    {statusConfig?.name}: {count}
+                  </Tag>
+                );
+              })}
+            </div>
+          )}
         </Col>
         <Col span={24}>
           <DasRequestsTable
+            filterCount={filterCount}
+            setFilterCount={setFilterCount}
             dasRequests={dasRequestsView}
             onEditDasRequest={onEditDasRequest}
             onDeleteDasRequest={onDeleteDasRequest}
@@ -209,6 +246,7 @@ const DasRequestsList = ({
             onShowReplyDasRequestInformationModal={
               onShowReplyDasRequestInformationModal
             }
+            setFilterStates={setFilterStates}
             dasRequestsLoading={dasRequestsLoading}
             user={user}
           />
