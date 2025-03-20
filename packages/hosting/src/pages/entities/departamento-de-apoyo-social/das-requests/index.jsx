@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
   Acl,
+  Button,
   Col,
+  Flex,
   Legend,
   modalConfirm,
   notification,
   Row,
-  Title,
+  Space,
   Tag,
+  Title,
 } from "../../../../components";
 import { DasRequestsTable } from "./DasRequests.Table";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -106,6 +109,15 @@ const DasRequestsList = ({
     status: "all",
   });
 
+  const onResetFilters = () => {
+    setSearchFields({
+      dasRequestInformation: undefined,
+    });
+    setFilterFields({
+      status: "all",
+    });
+  };
+
   const mapDasRequestsView = (dasRequests) => {
     const mapView = {
       dasRequests: dasRequests,
@@ -200,39 +212,39 @@ const DasRequestsList = ({
             />
           </Legend>
         </Col>
-        {filterFields.status === "all" && (
-          <Col span={24}>
-            <strong>Total resultados: {filterCount}</strong>
-          </Col>
-        )}
-        <Col span={24}>
-          {filterStates && (
+        <Col span={24} sm={18}>
+          <Space direction="vertical" size={12}>
             <div>
-              {[
-                "waiting",
-                "proceeds",
-                "notProceeds",
-                "pending",
-                "inProgress",
-                "finalized",
-              ].map((statusKey) => {
-                const statusConfig = DasRequestStatus[statusKey];
-                const count = filterStates[statusKey] || 0;
-
-                if (filterFields.status !== "all" && count <= 0) return null;
-
-                return (
-                  <Tag
-                    key={statusKey}
-                    color={statusConfig?.color}
-                    style={{ marginRight: 8, marginBottom: 4 }}
-                  >
-                    {statusConfig?.name}: {count}
-                  </Tag>
-                );
-              })}
+              <strong>{filterCount} </strong>Resultados
             </div>
-          )}
+            {filterStates && (
+              <div>
+                {Object.entries(DasRequestStatus).map(([statusKey, _]) => {
+                  const statusConfig = DasRequestStatus[statusKey];
+                  const count = filterStates[statusKey] || 0;
+
+                  if (filterFields.status !== "all" && count <= 0) return null;
+
+                  return (
+                    <Tag
+                      key={statusKey}
+                      color={statusConfig?.color}
+                      style={{ marginRight: 8, marginBottom: 4 }}
+                    >
+                      {statusConfig?.name}: {count}
+                    </Tag>
+                  );
+                })}
+              </div>
+            )}
+          </Space>
+        </Col>
+        <Col span={24} sm={6}>
+          <Flex align="center" justify="end">
+            <Button type="default" onClick={onResetFilters}>
+              Limpiar filtros
+            </Button>
+          </Flex>
         </Col>
         <Col span={24}>
           <DasRequestsTable
