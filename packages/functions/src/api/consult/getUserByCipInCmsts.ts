@@ -6,7 +6,7 @@ interface Params {
   cip: string;
 }
 
-export const getUserByCip = async (
+export const getUserByCipInCmsts = async (
   req: Request<Params, unknown, unknown, unknown>,
   res: Response,
   next: NextFunction
@@ -20,25 +20,23 @@ export const getUserByCip = async (
   });
 
   try {
-    const users = await fecthUserByCip(cip);
+    const isUserBelongInCmsts = await fecthUserByCipInCmsts(cip);
 
-    if (isEmpty(users)) res.status(412).send("user_not_found_in_cmsts").end();
+    if (isEmpty(isUserBelongInCmsts))
+      res.status(412).send("user_not_found_in_cmsts").end();
 
-    res.send(users[0]).end();
+    res.send(isUserBelongInCmsts[0]).end();
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
 
-const fecthUserByCip = async (cip: string | null): Promise<User[]> => {
-  const users = await fetchCollection<User>(
+const fecthUserByCipInCmsts = async (cip: string | null): Promise<User[]> =>
+  await fetchCollection<User>(
     firestore
-      .collection("users")
+      .collection("cmsts-enrollments")
       .where("isDeleted", "==", false)
-      .where("cip", "==", cip)
+      .where("userCip", "==", cip)
       .limit(1)
   );
-
-  return users;
-};
