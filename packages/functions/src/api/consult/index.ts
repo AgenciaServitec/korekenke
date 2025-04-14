@@ -1,1 +1,1 @@
-export * from "./getUserByCip";
+export * from "./getUserByCipInCmsts";

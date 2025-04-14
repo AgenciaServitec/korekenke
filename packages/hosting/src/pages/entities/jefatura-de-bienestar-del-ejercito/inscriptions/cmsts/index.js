@@ -62,6 +62,7 @@ export const CmstsIntegration = () => {
             assignCreateProps({
               id: getCmstsEnrollmentId(),
               userId: authUser.id,
+              userCip: authUser.cip,
               familyMembers,
               status: "pending",
             }),

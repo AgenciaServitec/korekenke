@@ -5,7 +5,7 @@ import { body } from "express-validator";
 import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
 import { getEntityDataByDni } from "./entities";
-import { getUserByCip } from "./consult";
+import { getUserByCipInCmsts } from "./consult";
 import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
 import { getIp } from "./consult/getIp";
 import {
@@ -41,7 +41,7 @@ app.post("/correspondence", postCorrespondence);
 
 app.get("/entities/dni/:dni", getEntityDataByDni);
 
-app.get("/consult/cmsts/:cip", getUserByCip);
+app.get("/consult/cmsts/:cip", getUserByCipInCmsts);
 
 app.post(
   "/emails/notification-das-request/:dasRequestId",
