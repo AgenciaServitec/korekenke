@@ -73,6 +73,15 @@ interface FamilyMember {
   relationship: string;
 }
 
+interface CmstsEnrollments extends DefaultFirestoreProps {
+  id: string;
+  status: string;
+  userCip: string;
+  userId: string;
+  createBy: string;
+  updateBy: string;
+}
+
 interface Image {
   name: string;
   status?: string;
