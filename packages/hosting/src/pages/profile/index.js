@@ -6,6 +6,7 @@ import { ProfileInformation } from "./ProfileInformation";
 import { ModalProvider, useAuthentication } from "../../providers";
 import { useQueryString } from "../../hooks";
 import { ProfileUserBiometrics } from "./ProfileUserBiometrics";
+import { ProfileDocumentsLpt } from "./ProfileDocumentsLpt";
 
 const items = [
   {
@@ -26,6 +27,11 @@ const items = [
         <ProfileUserBiometrics />
       </ModalProvider>
     ),
+  },
+  {
+    key: "4",
+    label: "Formatos",
+    children: <ProfileDocumentsLpt />,
   },
 ];
 export const Profile = () => {

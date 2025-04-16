@@ -3,6 +3,9 @@ export * from "./register";
 export * from "./home";
 export * from "./profile";
 
+// PROFILE
+export * from "./profile/documents/lpt/sheets";
+
 //ADMINISTRATION
 export * from "./administration/users";
 export * from "./administration/users/_userId";

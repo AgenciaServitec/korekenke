@@ -291,6 +291,7 @@ export const Router = () => {
           }
         />
       </Route>
+      <Route exact path="profile/documents/lpt" element={<A.PdfLptSheets />} />
       <Route
         exact
         path="assistances/assistance"
