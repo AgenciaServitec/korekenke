@@ -1,5 +1,6 @@
 export { default as LogoPrimary } from "./webp/logo.webp";
 export { default as LogoCobiene } from "./webp/logo-cobiene.webp";
+export { default as LogoOfficeEconomy } from "./webp/logo-economy-office.webp";
 
 export { default as PhotoNoFound } from "./webp/photo-no-found.webp";
 export { default as DecorativeLine } from "./webp/decorative-line.webp";
