@@ -5,7 +5,7 @@ import { body } from "express-validator";
 import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
 import { getEntityDataByDni } from "./entities";
-import { getUserByCipInCmsts } from "./consult";
+import { getUserByCipInCmsts, getUserByFingerprintTemplate } from "./consult";
 import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
 import { getIp } from "./consult/getIp";
 import {
@@ -55,6 +55,10 @@ app.post("/verify-email/send-code", postSendCode);
 app.post("/verify-email/send-password", postSendPassword);
 
 app.post("/verify-email/verify-code", postVerificationCode);
+
+app.get("/verify-fingerprint-template/", getUserByFingerprintTemplate);
+
+app.put("/save-fingerprint-template/", putUserFingerprintTemplate);
 
 app.use(errorHandler);
 
