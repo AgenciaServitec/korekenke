@@ -1,20 +1,18 @@
-import { NextFunction, Request, Response } from "express";
-import { logger } from "../../utils";
+import { Request, Response } from "express";
 import { fetchUsers } from "../../_firebase/collections";
+import { isEmpty } from "lodash";
 
-export const getUserByFingerprintTemplate = async (
+export const getUsersWithFingerprintTemplate = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ): Promise<void> => {
   try {
     const users = await fetchUsers();
 
-    logger.log("users: ", users);
-
     const userWithFingerprintTemplate = users?.filter(
       (user) =>
-        user.fingerprintTemplate && {
+        !isEmpty(user.fingerprintTemplate) && {
+          id: user.id,
           cip: user.cip,
           firstName: user.firstName,
           paternalSurname: user.paternalSurname,
@@ -23,14 +21,11 @@ export const getUserByFingerprintTemplate = async (
         }
     );
 
-    logger.log("userWithFingerprintTemplate: ", userWithFingerprintTemplate);
-
     res.json({
       userWithFingerprintTemplate,
       message: "user_exists",
     });
   } catch (error) {
     console.error(error);
-    next(error);
   }
 };
