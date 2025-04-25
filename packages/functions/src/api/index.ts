@@ -5,7 +5,7 @@ import { body } from "express-validator";
 import { patchUser, postUser, putUser } from "./users";
 import { postCorrespondence } from "./correspondences";
 import { getEntityDataByDni } from "./entities";
-import { getUserByCipInCmsts, getUserByFingerprintTemplate } from "./consult";
+import { getUserByCipInCmsts } from "./consult";
 import { onResendMailNotificationDasRequest } from "./onResendMailNotificationDasRequest";
 import { getIp } from "./consult/getIp";
 import {
@@ -13,6 +13,10 @@ import {
   postSendPassword,
   postVerificationCode,
 } from "./sign-in";
+import {
+  getUsersWithFingerprintTemplate,
+  putUserFingerprintTemplate,
+} from "./fingerprint";
 
 const app: express.Application = express();
 
@@ -34,6 +38,7 @@ app.post(
   ],
   postUser
 );
+app.put("/users/:cip/fingerprint", putUserFingerprintTemplate);
 app.put("/users/:userId", putUser);
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 
@@ -56,9 +61,7 @@ app.post("/verify-email/send-password", postSendPassword);
 
 app.post("/verify-email/verify-code", postVerificationCode);
 
-app.get("/verify-fingerprint-template/", getUserByFingerprintTemplate);
-
-app.put("/save-fingerprint-template/", putUserFingerprintTemplate);
+app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
 
 app.use(errorHandler);
 
