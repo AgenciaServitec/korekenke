@@ -10,15 +10,7 @@ export const getUsersWithFingerprintTemplate = async (
     const users = await fetchUsers();
 
     const userWithFingerprintTemplate = users?.filter(
-      (user) =>
-        !isEmpty(user.fingerprintTemplate) && {
-          id: user.id,
-          cip: user.cip,
-          firstName: user.firstName,
-          paternalSurname: user.paternalSurname,
-          maternalSurname: user.maternalSurname,
-          fingerprintTemplate: user.fingerprintTemplate,
-        }
+      (user) => !isEmpty(user?.fingerprintTemplate)
     );
 
     res.json({
