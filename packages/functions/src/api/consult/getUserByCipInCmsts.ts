@@ -20,12 +20,12 @@ export const getUserByCipInCmsts = async (
   });
 
   try {
-    const isUserBelongInCmsts = await fecthUserByCipInCmsts(cip);
+    const isUserRegisteredInCmsts = await fecthUserByCipInCmsts(cip);
 
-    if (isEmpty(isUserBelongInCmsts))
+    if (isEmpty(isUserRegisteredInCmsts))
       res.status(412).send("user_not_found_in_cmsts").end();
 
-    res.send(isUserBelongInCmsts[0]).end();
+    res.send(isUserRegisteredInCmsts[0]).end();
   } catch (error) {
     console.error(error);
     next(error);
