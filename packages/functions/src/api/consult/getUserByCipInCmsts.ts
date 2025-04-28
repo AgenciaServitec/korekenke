@@ -20,12 +20,12 @@ export const getUserByCipInCmsts = async (
   });
 
   try {
-    const userInCmsts = await fecthUserByCipInCmsts(cip);
+    const isUserRegisteredInCmsts = await fecthUserByCipInCmsts(cip);
 
-    if (isEmpty(userInCmsts))
+    if (isEmpty(isUserRegisteredInCmsts))
       res.status(404).json({ message: "user_not_found_in_cmsts" });
 
-    const user = await fetchUserByCip(userInCmsts[0]?.userCip);
+    const user = await fetchUserByCip(isUserRegisteredInCmsts[0]?.userCip);
 
     const { firstName, paternalSurname, maternalSurname } = await user[0];
 
