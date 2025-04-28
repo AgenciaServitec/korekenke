@@ -8,18 +8,18 @@ export const FSCECDeclarationLetterSheet = () => {
       <div className="sheet">
         <div className="header">
           <img
-            src={LogoOfficeEconomy}
-            alt="Logo de la oficina de economía del ejército"
-            className="icon-header"
+              src={LogoPrimary}
+              alt="Logo de la oficina de economía del ejército"
+              className="icon-header"
           />
           <div className="title-header">
             <h5>MINISTERIO DE DEFENSA - EJERCITO DEL PERÚ</h5>
             <h1>CARTA DECLARATORIA FSCEC</h1>
           </div>
           <img
-            src={LogoPrimary}
-            alt="Logo de la oficina de economía del ejército"
-            className="icon-header"
+              src={LogoOfficeEconomy}
+              alt="Logo de la oficina de economía del ejército"
+              className="icon-header"
           />
         </div>
         <div className="info-box">

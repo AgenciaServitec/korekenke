@@ -48,18 +48,20 @@ export const DomiciliarySketchOwnerSheet = () => {
         </section>
         <div className="sketch-box"></div>
         <section className="footer">
-          <p>
-            <strong>Lugar y Fecha:</strong>{" "}
-            ..........................................................
-          </p>
-          <p className="firma">
-            <strong>FIRMA:</strong>{" "}
-            ....................................................................................
-          </p>
-          <p>
-            POST FIRMA:
-            ..........................................................
-          </p>
+          <div>
+            <p>
+              <strong>Lugar y Fecha:</strong>{" "}
+              ..........................................................
+            </p>
+            <p className="firma">
+              <strong>FIRMA:</strong>{" "}
+              ....................................................................................
+            </p>
+            <p>
+              POST FIRMA:
+              ..........................................................
+            </p>
+          </div>
         </section>
       </div>
     </Container>
@@ -106,6 +108,9 @@ const Container = styled.div`
   }
 
   .footer {
+    display: flex;
+    justify-content: right;
+    
     margin-top: 20px;
 
     .firma {
