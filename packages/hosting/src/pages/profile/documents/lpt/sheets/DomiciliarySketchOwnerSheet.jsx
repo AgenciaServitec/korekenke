@@ -110,7 +110,7 @@ const Container = styled.div`
   .footer {
     display: flex;
     justify-content: right;
-    
+
     margin-top: 20px;
 
     .firma {
