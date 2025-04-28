@@ -23,20 +23,40 @@ export const getUserByCipInCmsts = async (
     const isUserRegisteredInCmsts = await fecthUserByCipInCmsts(cip);
 
     if (isEmpty(isUserRegisteredInCmsts))
-      res.status(412).send("user_not_found_in_cmsts").end();
+      res.status(404).json({ message: "user_not_found_in_cmsts" });
 
-    res.send(isUserRegisteredInCmsts[0]).end();
+    const user = await fetchUserByCip(isUserRegisteredInCmsts[0]?.userCip);
+
+    const { firstName, paternalSurname, maternalSurname } = await user[0];
+
+    res.json({
+      firstName,
+      paternalSurname,
+      maternalSurname,
+      message: "user_registered_in_cmsts",
+    });
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
 
-const fecthUserByCipInCmsts = async (cip: string | null): Promise<User[]> =>
-  await fetchCollection<User>(
+const fecthUserByCipInCmsts = async (
+  cip: string | null
+): Promise<CmstsEnrollments[]> =>
+  await fetchCollection<CmstsEnrollments>(
     firestore
       .collection("cmsts-enrollments")
       .where("isDeleted", "==", false)
       .where("userCip", "==", cip)
+      .limit(1)
+  );
+
+const fetchUserByCip = async (cip: string | null): Promise<User[]> =>
+  await fetchCollection<User>(
+    firestore
+      .collection("users")
+      .where("isDeleted", "==", false)
+      .where("cip", "==", cip)
       .limit(1)
   );
