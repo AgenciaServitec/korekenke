@@ -13,6 +13,10 @@ import {
   postSendPassword,
   postVerificationCode,
 } from "./sign-in";
+import {
+  getUsersWithFingerprintTemplate,
+  putUserFingerprintTemplate,
+} from "./fingerprint";
 
 const app: express.Application = express();
 
@@ -34,6 +38,7 @@ app.post(
   ],
   postUser
 );
+app.put("/users/:cip/fingerprint", putUserFingerprintTemplate);
 app.put("/users/:userId", putUser);
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 
@@ -55,6 +60,8 @@ app.post("/verify-email/send-code", postSendCode);
 app.post("/verify-email/send-password", postSendPassword);
 
 app.post("/verify-email/verify-code", postVerificationCode);
+
+app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
 
 app.use(errorHandler);
 

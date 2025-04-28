@@ -55,6 +55,7 @@ interface User extends DefaultFirestoreProps {
   assignedTo: AssignedTo | null;
   updateBy: string;
   holidayDays: number;
+  fingerprintTemplate: string | null;
 }
 
 interface AssignedTo {
