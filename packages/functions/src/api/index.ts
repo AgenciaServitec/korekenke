@@ -15,6 +15,7 @@ import {
 } from "./sign-in";
 import {
   getUsersWithFingerprintTemplate,
+  putBiometricAssistanceByCip,
   putUserFingerprintTemplate,
 } from "./fingerprint";
 
@@ -39,6 +40,7 @@ app.post(
   postUser
 );
 app.put("/users/:cip/fingerprint", putUserFingerprintTemplate);
+app.put("/fingerprint/assistances/:cip", putBiometricAssistanceByCip);
 app.put("/users/:userId", putUser);
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 
