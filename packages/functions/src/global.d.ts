@@ -226,3 +226,15 @@ interface SessionVerification {
   isVerified: false;
   createAt: FirebaseFirestore.Timestamp;
 }
+
+interface Assistance extends DefaultFirestoreProps {
+  id: string;
+  createAtString: string;
+  createBy: string;
+  entry: { date: string };
+  outlet: { date: string };
+  updateBy: string;
+  userId: string;
+  user: User;
+  workPlace: string;
+}
