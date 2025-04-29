@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { defaultFirestoreProps } from "../../utils";
 import { firestoreTimestamp } from "../../_firebase";
-import moment from "moment";
+import moment from "moment-timezone";
 import {
   assistancesRef,
   fetchUserByCip,
   getAssistanceId,
+  fetchTodayAssistancesByUserId,
+  updateAssistance,
 } from "../../_firebase/collections";
 
 interface Params {
@@ -22,36 +24,48 @@ export const putBiometricAssistanceByCip = async (
 
   try {
     const users = await fetchUserByCip(cip);
+    const user = users?.[0];
 
-    if (!users?.length) {
+    if (!user) {
       res.status(404).json({ error: "Usuario no encontrado" });
       return;
     }
 
-    const user = users[0];
+    const nowTimestamp = firestoreTimestamp.now();
+    const nowFormatted = moment(nowTimestamp.toDate())
+      .tz("America/Lima")
+      .format("DD-MM-YYYY HH:mm");
 
-    const now = moment.tz(
-      moment(firestoreTimestamp.now()).format("DD-MM-YYYY h:mm a"),
-      "America/Lima"
-    );
+    const todayAssistances = await fetchTodayAssistancesByUserId(user.id);
+    const existingAssistance = todayAssistances?.[0];
 
-    const assistanceData = {
-      userId: user.id,
-      id: getAssistanceId(),
-      createAtString: now,
-      entry: {
-        date: now,
-      },
-      outlet: null,
-      user: user,
-      workPlace: user.workPlace || null,
-    };
+    let assistanceResult;
 
-    await assistancesRef
-      .doc(assistanceData.id)
-      .set(assignCreateProps(assistanceData));
+    if (existingAssistance) {
+      assistanceResult = {
+        ...existingAssistance,
+        outlet: { date: nowFormatted },
+      };
 
-    res.json(cip);
+      await updateAssistance(existingAssistance.id, {
+        outlet: { date: nowFormatted },
+      });
+    } else {
+      const assistanceData = assignCreateProps({
+        userId: user.id,
+        id: getAssistanceId(),
+        createAtString: nowFormatted,
+        entry: { date: nowFormatted },
+        outlet: null,
+        user: user,
+        workPlace: user.workPlace || null,
+      });
+
+      await assistancesRef.doc(assistanceData.id).set(assistanceData);
+      assistanceResult = assistanceData;
+    }
+
+    res.json(assistanceResult);
   } catch (error) {
     console.error("Error al registrar asistencia:", error);
     res.status(500).json({ error: "Error interno del servidor" });

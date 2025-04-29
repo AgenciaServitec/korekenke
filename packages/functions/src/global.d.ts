@@ -232,10 +232,10 @@ interface Assistance extends DefaultFirestoreProps {
   id: string;
   createAtString: string;
   createBy: string;
-  entry: { date: string };
-  outlet: { date: string };
+  entry: { date: string } | null;
+  outlet: { date: string } | null;
   updateBy: string;
   userId: string;
   user: User;
-  workPlace: string;
+  workPlace: string | null;
 }
