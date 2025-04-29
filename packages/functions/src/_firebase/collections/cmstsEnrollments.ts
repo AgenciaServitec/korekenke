@@ -1,29 +1,32 @@
 import { firestore } from "../index";
 import { fetchCollection, fetchDocument } from "../firestore";
 
-export const assistancesRef = firestore.collection("assistances");
+export const cmstsEnrollmentsRef = firestore.collection("cmsts-enrollments");
 
-export const getAssistanceId = (): string => assistancesRef.doc().id;
+export const getCmstsEnrollmentId = (): string => cmstsEnrollmentsRef.doc().id;
 
-export const fetchAssistance = async (
+export const fetchCmstsEnrollment = async (
   id: string
-): Promise<Assistance | undefined> =>
-  fetchDocument<Assistance>(assistancesRef.doc(id));
+): Promise<CmstsEnrollments | undefined> =>
+  fetchDocument<CmstsEnrollments>(cmstsEnrollmentsRef.doc(id));
 
-export const fetchAssistances = async (): Promise<Assistance[] | undefined> =>
-  fetchCollection(assistancesRef.where("isDeleted", "==", false));
+export const fetchCmstsEnrollments = async (): Promise<
+  CmstsEnrollments[] | undefined
+> => fetchCollection(cmstsEnrollmentsRef.where("isDeleted", "==", false));
 
-export const fetchTodayAssistancesByUserId = async (
+export const fetchTodayCmstsEnrollmentsByUserId = async (
   userId: string
-): Promise<Assistance[] | undefined> =>
-  fetchCollection<Assistance>(
-    assistancesRef.where("userId", "==", userId).where("isDeleted", "==", false)
+): Promise<CmstsEnrollments[] | undefined> =>
+  fetchCollection<CmstsEnrollments>(
+    cmstsEnrollmentsRef
+      .where("userId", "==", userId)
+      .where("isDeleted", "==", false)
   );
 
-export const addAssistance = async (assistance: Assistance) =>
-  assistancesRef.doc(assistance.id).set(assistance);
+export const addCmstsEnrollment = async (assistance: CmstsEnrollments) =>
+  cmstsEnrollmentsRef.doc(assistance.id).set(assistance);
 
-export const updateAssistance = async (
+export const updateCmstsEnrollment = async (
   assistanceId: string,
-  assistance: Partial<Assistance>
-) => assistancesRef.doc(assistanceId).update(assistance);
+  assistance: Partial<CmstsEnrollments>
+) => cmstsEnrollmentsRef.doc(assistanceId).update(assistance);
