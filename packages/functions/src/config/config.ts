@@ -11,7 +11,7 @@ export const config: Config = {
   development: {
     version: "0.0.1",
     hosting: {
-      domain: "https://korekenke-dev.web.app/",
+      domain: "https://korekenke-dev.web.app",
       apiUrl: "https://api-korekenke-dev.web.app",
     },
     mailer: {
@@ -33,7 +33,7 @@ export const config: Config = {
   production: {
     version: "0.0.1",
     hosting: {
-      domain: "https://korekenke.mil.pe/",
+      domain: "https://korekenke.mil.pe",
       apiUrl: "https://api-korekenke.web.app",
     },
     mailer: {
