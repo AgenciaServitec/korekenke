@@ -8,6 +8,13 @@ export const getUserId = (): string => usersRef.doc().id;
 export const fetchUser = async (userId: string): Promise<User | undefined> =>
   fetchDocument<User>(usersRef.doc(userId));
 
+export const fetchUserByCip = async (
+  userCip: string
+): Promise<User[] | undefined> =>
+  fetchCollection<User>(
+    usersRef.where("isDeleted", "==", false).where("userCip", "==", userCip)
+  );
+
 export const fetchUsers = async (): Promise<User[] | undefined> =>
   fetchCollection(usersRef.where("isDeleted", "==", false));
 
