@@ -33,6 +33,7 @@ import { CardMessage } from "./CardMessage";
 import { WorkPlaces } from "../../../data-list";
 import { useForm } from "react-hook-form";
 import { ChooseBiometricVerification } from "./ChooseBiometricVerification";
+import { firestoreTimestamp } from "../../../firebase/firestore";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -124,6 +125,7 @@ export const AssistanceIntegration = () => {
       ? assistance?.entry
       : {
           date: assistanceDate,
+          dateTimestamp: firestoreTimestamp.now(),
         },
     outlet:
       type === "outlet" && assistance?.entry
