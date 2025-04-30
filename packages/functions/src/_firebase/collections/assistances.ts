@@ -24,9 +24,14 @@ export const fetchTodayAssistancesByUserId = async (
   return fetchCollection<Assistance>(
     assistancesRef
       .where("userId", "==", userId)
-      .where("entry.date", ">=", firestoreTimestamp.fromDate(todayStart))
-      .where("entry.date", "<=", firestoreTimestamp.fromDate(todayEnd))
+      .where(
+        "entry.dateTimestamp",
+        ">=",
+        firestoreTimestamp.fromDate(todayStart)
+      )
+      .where("entry.dateTimestamp", "<=", firestoreTimestamp.fromDate(todayEnd))
       .where("isDeleted", "==", false)
+      .limit(1)
   );
 };
 

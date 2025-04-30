@@ -31,7 +31,8 @@ export const putBiometricAssistanceByCip = async (
       return;
     }
 
-    const nowFormatted = moment(firestoreTimestamp.now().toDate())
+    const nowTimestamp = firestoreTimestamp.now();
+    const nowFormatted = moment(nowTimestamp.toDate())
       .tz("America/Lima")
       .format("DD-MM-YYYY HH:mm");
 
@@ -54,7 +55,7 @@ export const putBiometricAssistanceByCip = async (
         userId: user.id,
         id: getAssistanceId(),
         createAtString: nowFormatted,
-        entry: { date: nowFormatted },
+        entry: { date: nowFormatted, dateTimestamp: nowTimestamp },
         outlet: null,
         user: user,
         workPlace: user.workPlace || null,

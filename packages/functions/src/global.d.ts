@@ -232,7 +232,7 @@ interface Assistance extends DefaultFirestoreProps {
   id: string;
   createAtString: string;
   createBy: string;
-  entry: { date: string } | null;
+  entry: { date: string; dateTimestamp: FirebaseFirestore.Timestamp } | null;
   outlet: { date: string } | null;
   updateBy: string;
   userId: string;
