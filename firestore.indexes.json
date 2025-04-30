@@ -93,6 +93,28 @@
       ]
     },
     {
+      "collectionGroup": "assistances",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "entry.dateTimestamp",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "entry.dateTimestamp",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "das-applications",
       "queryScope": "COLLECTION",
       "fields": [
