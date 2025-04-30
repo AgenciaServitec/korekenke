@@ -56,6 +56,7 @@ interface User extends DefaultFirestoreProps {
   updateBy: string;
   holidayDays: number;
   fingerprintTemplate: string | null;
+  workPlace: string | null;
 }
 
 interface AssignedTo {
@@ -231,10 +232,10 @@ interface Assistance extends DefaultFirestoreProps {
   id: string;
   createAtString: string;
   createBy: string;
-  entry: { date: string };
-  outlet: { date: string };
+  entry: { date: string; dateTimestamp: FirebaseFirestore.Timestamp } | null;
+  outlet: { date: string } | null;
   updateBy: string;
   userId: string;
   user: User;
-  workPlace: string;
+  workPlace: string | null;
 }

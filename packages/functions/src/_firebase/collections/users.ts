@@ -12,7 +12,10 @@ export const fetchUserByCip = async (
   userCip: string
 ): Promise<User[] | undefined> =>
   fetchCollection<User>(
-    usersRef.where("isDeleted", "==", false).where("userCip", "==", userCip)
+    usersRef
+      .where("isDeleted", "==", false)
+      .where("cip", "==", userCip)
+      .limit(1)
   );
 
 export const fetchUsers = async (): Promise<User[] | undefined> =>
