@@ -107,10 +107,6 @@
         {
           "fieldPath": "entry.dateTimestamp",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "entry.dateTimestamp",
-          "order": "ASCENDING"
         }
       ]
     },
