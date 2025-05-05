@@ -15,7 +15,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
-import { DegreesArmy } from "../../data-list";
+import { DegreesArmy, BloodGroup } from "../../data-list";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
@@ -37,6 +37,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string().required(),
+    bloodGroup: yup.string().required(),
     cgi: yup.boolean(),
   });
 
@@ -65,6 +66,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       email: step1Data?.email || "",
       phoneNumber: step1Data?.phone?.number || "",
       degree: step1Data?.degree || "",
+      bloodGroup: step1Data?.bloodGroup || "",
       cgi: step1Data?.cgi || false,
     });
   }, [currentStep]);
@@ -86,6 +88,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       number: formData.phoneNumber,
     },
     degree: formData.degree,
+    bloodGroup: formData.bloodGroup,
     cgi: formData.cgi,
   });
 
@@ -106,7 +109,6 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       const user = mapUser({ ...step1Data, ...formData });
 
       setLocalStorage("register", user);
-
       next();
     } catch (e) {
       console.error("Error savePersonalData: ", e);
@@ -236,6 +238,22 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
               helperText={errorMessage(name)}
               required={required(name)}
               options={DegreesArmy}
+            />
+          )}
+        />
+        <Controller
+          name="bloodGroup"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <Select
+              label="Seleccione su tipo de sangre"
+              onChange={onChange}
+              value={value}
+              name={name}
+              error={error(name)}
+              helperText={errorMessage(name)}
+              required={required(name)}
+              options={BloodGroup}
             />
           )}
         />

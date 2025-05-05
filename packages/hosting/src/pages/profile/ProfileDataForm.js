@@ -22,7 +22,7 @@ import {
 } from "../../api";
 import { assign } from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { WorkPlaces } from "../../data-list";
+import { BloodGroup, WorkPlaces } from "../../data-list";
 import { isProduction } from "../../config";
 
 export const ProfileDataForm = () => {
@@ -30,11 +30,12 @@ export const ProfileDataForm = () => {
   const { putUser, putUserLoading, putUserResponse } = useApiUserPut();
 
   const schema = yup.object({
-    profilePhoto: yup.mixed(),
+    profilePhoto: yup.mixed().notRequired(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
     email: yup.string().email().required(),
+    bloodGroup: yup.string().notRequired(),
     phoneNumber: yup.string().min(9).max(9).required(),
     cip: yup
       .string()
@@ -90,6 +91,7 @@ export const ProfileDataForm = () => {
       maternalSurname: authUser?.maternalSurname || "",
       paternalSurname: authUser?.paternalSurname || "",
       email: authUser?.email || "",
+      bloodGroup: authUser?.bloodGroup || "",
       phoneNumber: authUser?.phone?.number || "",
       cip: authUser?.cip || "",
       dni: authUser?.dni || "",
@@ -199,7 +201,7 @@ export const ProfileDataForm = () => {
             )}
           />
         </Col>
-        <Col span={24}>
+        <Col span={24} md={12}>
           <Controller
             name="email"
             control={control}
@@ -211,6 +213,24 @@ export const ProfileDataForm = () => {
                 value={value}
                 error={error(name)}
                 helperText={errorMessage(name)}
+              />
+            )}
+          />
+        </Col>
+        <Col span={24} md={12}>
+          <Controller
+            name="bloodGroup"
+            control={control}
+            render={({ field: { onChange, value, name } }) => (
+              <Select
+                label="Grupo Sanguíneo"
+                onChange={onChange}
+                value={value}
+                name={name}
+                error={error(name)}
+                helperText={errorMessage(name)}
+                required={required(name)}
+                options={BloodGroup}
               />
             )}
           />

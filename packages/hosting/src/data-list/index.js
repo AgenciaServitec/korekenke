@@ -28,3 +28,4 @@ export { default as WorkPlaces } from "./workPlaces.json";
 export { default as ElectionsStatus } from "./electionsStatus.json";
 export * from "./animalParentsDefaultData";
 export { default as TutorialsData } from "./tutorialsData.json";
+export { default as BloodGroup } from "./bloodGroup.json";
