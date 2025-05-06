@@ -273,6 +273,11 @@ export const Users = () => {
             label: "Comando De Personal Del Ejército (COPERE)",
             value: "copere",
           },
+          {
+            label:
+              "Departamento de Inteligencia y Contrainteligencia del Ejército (DEICI)",
+            value: "deici",
+          },
         ]
       : [
           {
