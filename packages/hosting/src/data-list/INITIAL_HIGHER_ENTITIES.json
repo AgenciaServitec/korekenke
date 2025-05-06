@@ -18,20 +18,26 @@
           {
             "id": "cobiene",
             "code": "cobiene",
-            "name": "Comando de bienestar del ejercito",
+            "name": "Comando de bienestar del Ejército",
             "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cobiene.webp"
           },
           {
             "id": "copere",
             "code": "copere",
-            "name": "Comando De Personal Del Ejército",
+            "name": "Comando de Personal del Ejército",
             "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/copere.webp"
           },
           {
             "id": "cologe",
             "code": "cologe",
-            "name": "Comando Logístico Del Ejército",
+            "name": "Comando Logístico del Ejército",
             "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/cologe.webp"
+          },
+          {
+            "id": "deici",
+            "code": "deici",
+            "name": "Departamento de Inteligencia y Contrainteligencia del Ejército",
+            "logoImgUrl": "https://storage.googleapis.com/korekenke-prod.appspot.com/resources/command-default.webp"
           }
         ]
       },
