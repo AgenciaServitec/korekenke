@@ -37,7 +37,7 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
       .required()
       .transform((value) => (value === null ? "" : value)),
     degree: yup.string().required(),
-    bloodGroup: yup.string().required(),
+    bloodGroup: yup.string().notRequired(),
     cgi: yup.boolean(),
   });
 
