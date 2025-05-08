@@ -84,5 +84,9 @@ export * from "./elections/_election";
 export * from "./elections/_election/addCandidates";
 export * from "./elections/_election/submitVote";
 
+//VISITS
+export * from "./visits";
+export * from "./visits/_visit";
+
 //SUPPORT
 export * from "./support";
