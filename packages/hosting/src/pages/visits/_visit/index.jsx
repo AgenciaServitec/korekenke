@@ -1,0 +1,311 @@
+import React, { useEffect, useState } from "react";
+import {
+  Acl,
+  notification,
+  Row,
+  Col,
+  Title,
+  Input,
+  Form,
+  Button,
+} from "../../../components";
+import { useNavigate, useParams } from "react-router";
+import { useAuthentication } from "../../../providers";
+import { assign } from "lodash";
+import * as yup from "yup";
+import {
+  addVisit,
+  fetchVisit,
+  getVisitsId,
+  updateVisit,
+} from "../../../firebase/collections";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useApiPersonDataByDniGet } from "../../../api";
+import dayjs from "dayjs";
+
+export const VisitsIntegration = () => {
+  const navigate = useNavigate();
+
+  const { authUser } = useAuthentication();
+  const { visitId } = useParams();
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+
+  const [visit, setVisit] = useState({});
+  const [savingVisit, setSavingVisit] = useState(false);
+
+  const isNew = visitId === "new";
+
+  const onGoBack = () => navigate(-1);
+
+  useEffect(() => {
+    (async () => {
+      const visit_ = isNew ? { id: getVisitsId() } : await fetchVisit(visitId);
+
+      if (!visit_) return onGoBack();
+
+      setVisit(visit_);
+    })();
+  }, []);
+
+  const onSaveVisit = async (formData) => {
+    try {
+      setSavingVisit(true);
+
+      isNew
+        ? await addVisit(assignCreateProps(mapVisit(visit, formData)))
+        : await updateVisit(
+            visit.id,
+            assignUpdateProps(mapVisit(visit, formData)),
+          );
+      notification({ type: "success" });
+      onGoBack();
+    } catch (error) {
+      console.error("Error: ", error);
+      notification({ type: "error" });
+    }
+  };
+
+  const mapVisit = (visit, formData) =>
+    assign(
+      {},
+      {
+        id: visit.id,
+        fullName: formData.fullName,
+        dni: formData.dni,
+        cip: formData.cip,
+        dependency: formData.dependency,
+        personVisited: formData.personVisited,
+        contactOfficer: formData.contactOfficer,
+        status: visit?.status || "pending",
+      },
+    );
+
+  return (
+    <VisitsForm
+      isNew={isNew}
+      visit={visit}
+      onGoBack={onGoBack}
+      savingVisit={savingVisit}
+      onSaveVisit={onSaveVisit}
+    />
+  );
+};
+
+const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
+  const schema = yup.object({
+    fullName: yup.string().required(),
+    dni: yup.string().required(),
+    cip: yup.string().required(),
+    dependency: yup.string().required(),
+    personVisited: yup.string().required(),
+    contactOfficer: yup.string().required(),
+  });
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    setValue,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const { required, error } = useFormUtils({ errors, schema });
+
+  const dniValue = watch("dni");
+
+  const { getPersonDataByDni } = useApiPersonDataByDniGet();
+
+  useEffect(() => {
+    resetForm();
+  }, [visit]);
+
+  const resetForm = () => {
+    reset({
+      dni: visit?.dni || "",
+      fullName: visit?.fullName || "",
+      cip: visit?.cip || "",
+      dependency: visit?.dependency || "",
+      personVisited: visit?.personVisited || "",
+      contactOfficer: visit?.contactOfficer || "",
+    });
+  };
+
+  useEffect(() => {
+    const fetchPerson = async () => {
+      if (dniValue?.length === 8) {
+        try {
+          const data = await getPersonDataByDni(dniValue);
+          if (data?.fullName) {
+            setValue("fullName", data.fullName);
+          }
+        } catch (error) {
+          console.error("Error al obtener datos de persona:", error);
+        }
+      } else {
+        setValue("fullName", "");
+      }
+    };
+
+    fetchPerson();
+  }, [dniValue, getPersonDataByDni, setValue]);
+
+  return (
+    <Acl
+      category="public"
+      subCategory="visits"
+      name={isNew ? "/visits/new" : "/visits/:visitId"}
+      redirect
+    >
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Title level={2}>{isNew ? "Nueva Visita" : "Editar Visita"}</Title>
+        </Col>
+        <Col span={24}>
+          <Form onSubmit={handleSubmit(onSaveVisit)}>
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <Controller
+                  name="dni"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      type="number"
+                      label="DNI"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="fullName"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Nombres y Apellidos"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      disabled
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="cip"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      type="number"
+                      label="CIP"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="dependency"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Dependencia"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="personVisited"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="A quien Visita"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="contactOfficer"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      type="number"
+                      label="N° contacto de OO/TCO/SO"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Row
+                  justify="end"
+                  gutter={[16, 16]}
+                  style={{
+                    marginTop: 24,
+                    borderTop: "1px solid #f0f0f0",
+                    paddingTop: 24,
+                  }}
+                >
+                  <Col xs={24} sm={6} md={4}>
+                    <Button
+                      type="default"
+                      size="large"
+                      block
+                      onClick={onGoBack}
+                      disabled={savingVisit}
+                    >
+                      Cancelar
+                    </Button>
+                  </Col>
+                  <Col xs={24} sm={6} md={4}>
+                    <Button
+                      type="primary"
+                      size="large"
+                      block
+                      htmlType="submit"
+                      loading={savingVisit}
+                    >
+                      {isNew ? "Crear Visita" : "Guardar Cambios"}
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+    </Acl>
+  );
+};
