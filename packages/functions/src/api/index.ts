@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import { errorHandler, hostingToApi } from "./_middlewares";
 import { body } from "express-validator";
@@ -18,12 +18,21 @@ import {
   putBiometricAssistanceByCip,
   putUserFingerprintTemplate,
 } from "./fingerprint";
+import XLSX from "xlsx";
+import multer from "multer";
+import { logger } from "../utils";
 
 const app: express.Application = express();
 
 app.use(cors({ origin: "*" }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 app.use(hostingToApi);
 
@@ -64,6 +73,37 @@ app.post("/verify-email/send-password", postSendPassword);
 app.post("/verify-email/verify-code", postVerificationCode);
 
 app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
+
+app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
+  if (!req.file) {
+    res.status(400).json({ message: "No se envió ningún archivo" });
+    return;
+  }
+
+  try {
+    const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json<ParticipanteExcel>(sheet);
+
+    // Ejemplo de mapeo de datos con campos como CIP y DNI
+    const participantes = data.map((row) => ({
+      nombre: row.nombre || "",
+      numero: row.numero || "",
+      grupo: row.grupo || "",
+      cip: String(row.cip || ""),
+      dni: String(row.dni || ""),
+    }));
+
+    logger.log("Participantes:", participantes);
+
+    // Aquí puedes guardar en Firestore si ya está configurado
+
+    res.status(200).json({ message: "Archivo procesado", data: participantes });
+  } catch (error) {
+    logger.error("Error al procesar el Excel:", error);
+    res.status(500).json({ message: "Error al procesar el archivo" });
+  }
+});
 
 app.use(errorHandler);
 
