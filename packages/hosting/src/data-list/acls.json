@@ -142,6 +142,13 @@
       "/elections/add-candidate/:electionId": "Añadir Candidato",
       "/elections/submit-vote/:electionId": "Votar",
       "/elections/:electionId#electionStatistics": "Ver Estadísticas"
+    },
+    "raffles": {
+      "label": "Sorteos",
+      "/raffles": "Menu: Sorteos",
+      "/raffles/new": "Crear Sorteo",
+      "/raffles/:electionId": "Editar Sorteo",
+      "/raffles#delete": "Eliminar Sorteo"
     }
   },
 

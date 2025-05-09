@@ -191,7 +191,6 @@ const ElectionForm = ({
                   )}
                 />
               </Col>
-
               <Col span={24}>
                 <Controller
                   name="description"
@@ -303,7 +302,7 @@ const ElectionForm = ({
                       htmlType="submit"
                       loading={savingElection}
                     >
-                      {isNew ? "Crear Elección" : "Guardar Cambios"}
+                      {isNew ? "Crear Sorteo" : "Guardar Cambios"}
                     </Button>
                   </Col>
                 </Row>

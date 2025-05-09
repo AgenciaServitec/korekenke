@@ -5,7 +5,6 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
-  faCheckToSlot,
   faClipboardList,
   faClipboardUser,
   faComputer,
@@ -25,6 +24,7 @@ import {
   faPoll,
   faShield,
   faSquareCheck,
+  faTicket,
   faUmbrellaBeach,
   faUsers,
   faUsersCog,
@@ -245,6 +245,40 @@ export const DrawerLayout = ({
             ["/elections"],
           ),
           onClick: () => onClickMenu("/elections"),
+        },
+      ],
+    },
+    {
+      label: "Sorteos",
+      key: "raffles",
+      icon: <FontAwesomeIcon icon={faTicket} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+        "public",
+        ["raffles"],
+        ["/raffles", "/raffles/new"],
+      ),
+      children: [
+        {
+          label: "Crear Sorteo",
+          key: "raffle",
+          icon: <FontAwesomeIcon icon={faTicket} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["raffles"],
+            ["/raffles/new"],
+          ),
+          onClick: () => onClickMenu("/raffles/new"),
+        },
+        {
+          label: "Lista de Sorteos",
+          key: "raffles-list",
+          icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["raffles"],
+            ["/raffles"],
+          ),
+          onClick: () => onClickMenu("/raffles"),
         },
       ],
     },

@@ -69,6 +69,7 @@ export * from "./RolesByGroup";
 export * from "./FullCalendar";
 export * from "./DateRange";
 export * from "./MapComponent";
+export * from "./UploadExcel";
 
 const { Link, Paragraph } = Typography;
 
