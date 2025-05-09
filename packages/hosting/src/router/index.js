@@ -290,6 +290,24 @@ export const Router = () => {
             </AdminLayout>
           }
         />
+        <Route
+          exact
+          path="raffles/:raffleId"
+          element={
+            <AdminLayout>
+              <A.RaffleIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="raffles"
+          element={
+            <AdminLayout>
+              <A.RafflesIntegration />
+            </AdminLayout>
+          }
+        />
       </Route>
       <Route exact path="profile/documents/lpt" element={<A.PdfLptSheets />} />
       <Route
