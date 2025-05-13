@@ -1,29 +1,60 @@
 import React, { useEffect, useState } from "react";
-import { useGlobalData } from "../../../providers";
 import * as yup from "yup";
-import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import {
+  Acl,
   Button,
   Col,
   Form,
+  IconAction,
   Input,
+  notification,
   Row,
+  Space,
+  TableVirtualized,
+  Tag,
   TextArea,
   Title,
-  UploadExcel,
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
-import { addRaffle, getRaffleId } from "../../../firebase/collections/raffles";
-import { fetchElection } from "../../../firebase/collections";
+import {
+  addParticipant,
+  addRaffle,
+  fetchRaffle,
+  getRaffleId,
+  raffleParticipantsRef,
+  updateRaffle,
+} from "../../../firebase/collections/raffles";
+import { useAuthentication } from "../../../providers";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { isEmpty, orderBy } from "lodash";
+import dayjs from "dayjs";
+import { findDasRequest, userFullName } from "../../../utils";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { DasRequestStatus } from "../../../data-list";
+import {
+  faEdit,
+  faEye,
+  faFilePdf,
+  faFilter,
+  faReply,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const RaffleIntegration = () => {
+  const { authUser } = useAuthentication();
   const navigate = useNavigate();
   const { raffleId } = useParams();
-
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+
+  const [participants = [], participantsLoading, participantsError] =
+    useCollectionData(
+      raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
+    );
+
+  console.log("participants: ", participants);
 
   const [raffle, setRaffle] = useState({});
   const [loading, setLoading] = useState(false);
@@ -35,7 +66,7 @@ export const RaffleIntegration = () => {
     (async () => {
       const _raffle = isNew
         ? { id: getRaffleId() }
-        : await fetchElection(raffleId);
+        : await fetchRaffle(raffleId);
 
       if (!_raffle) return onGoBack();
 
@@ -47,37 +78,123 @@ export const RaffleIntegration = () => {
     ...raffle,
     title: formData.title,
     group: formData.group,
-    description: formData.description,
+    quantityParticipants: formData.participants.split("\n").length,
+    userId: authUser?.id,
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (formData) => {
     try {
-      await addRaffle(assignCreateProps());
+      setLoading(true);
+
+      const participants = formData.participants.split("\n").map((par) => ({
+        nombres: par.split(":")[0],
+        dni: par.split(":")[1],
+        celular: par.split(":")[2],
+      }));
+
+      console.log("participants: ", participants);
+
+      isNew
+        ? await addRaffle(assignCreateProps(mapRaffle(formData)))
+        : await updateRaffle(raffle.id, assignUpdateProps(mapRaffle(formData)));
+
+      await participants.forEach(
+        async (participant) =>
+          await addParticipant(raffle.id, assignCreateProps(participant)),
+      );
+
+      notification({ type: "success", message: "Se guardó correctamente." });
+      onGoBack();
     } catch (e) {
       console.error(e);
+      notification({ type: "error", message: "No se guardó correctamente." });
+    } finally {
+      setLoading(false);
     }
   };
 
+  const columns = [
+    {
+      title: "F. Creación",
+      align: "center",
+      width: ["7rem", "100%"],
+      render: (participant) =>
+        dayjs(participant.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+    },
+    {
+      title: "Nombres",
+      align: "center",
+      width: ["15rem", "100%"],
+      render: (participant) => <div>{participant.nombres}</div>,
+    },
+    {
+      title: "DNI",
+      align: "center",
+      width: ["20rem", "100%"],
+      render: (participant) => {
+        return <div>{participant?.dni}</div>;
+      },
+    },
+    {
+      title: "Contácto",
+      align: "center",
+      width: ["14rem", "100%"],
+      render: (participant) => (
+        <div className="contact">
+          <div className="contact__item">
+            <IconAction
+              tooltipTitle="Whatsapp"
+              icon={faWhatsapp}
+              size={27}
+              styled={{ color: (theme) => theme.colors.success }}
+              onClick={() =>
+                window.open(
+                  `https://api.whatsapp.com/send?phone=51${participant.celular}`,
+                )
+              }
+            />
+            {participant.celular}
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <>
+    <Acl
+      category="public"
+      subCategory="raffles"
+      name={isNew ? "/raffles/new" : "/raffles/:raffleId"}
+      redirect
+    >
       <RaffleForm
         isNew={isNew}
         raffle={raffle}
+        columns={columns}
+        participants={participants}
+        participantsLoading={participantsLoading}
         loading={loading}
+        onSubmit={onSubmit}
         onGoBack={onGoBack}
       />
-      <UploadExcel />
-    </>
+    </Acl>
   );
 };
 
-const RaffleForm = ({ isNew, raffle, loading, onGoBack }) => {
-  const { users } = useGlobalData();
-
+const RaffleForm = ({
+  isNew,
+  raffle,
+  columns,
+  participants,
+  participantsLoading,
+  loading,
+  onSubmit,
+  onGoBack,
+}) => {
   const schema = yup.object({
-    title: yup.string().required(),
+    title: yup.string(),
     group: yup.string(),
-    description: yup.string(),
+    participants: yup.string(),
   });
 
   const {
@@ -99,12 +216,8 @@ const RaffleForm = ({ isNew, raffle, loading, onGoBack }) => {
     reset({
       title: raffle?.title || "",
       group: raffle?.group || "",
-      description: raffle?.description || "",
     });
   };
-
-  const disabledDate = (current) =>
-    current && current <= dayjs().startOf("day");
 
   return (
     <Row gutter={[16, 16]}>
@@ -113,7 +226,7 @@ const RaffleForm = ({ isNew, raffle, loading, onGoBack }) => {
       </Col>
 
       <Col span={24}>
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Controller
@@ -149,23 +262,63 @@ const RaffleForm = ({ isNew, raffle, loading, onGoBack }) => {
             </Col>
             <Col span={24}>
               <Controller
-                name="description"
+                name="winners"
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
-                  <TextArea
-                    label="Descripción"
+                  <Input
+                    label="Ganadores"
                     name={name}
                     value={value}
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    rows={3}
                   />
                 )}
               />
             </Col>
             <Col span={24}>
-              <UploadExcel />
+              <Controller
+                name="durationSeconds"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Duración en segundos"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              {isEmpty(participants) ? (
+                <Controller
+                  name="participants"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <TextArea
+                      label="Participantes"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      rows={10}
+                      placeholder="nombres:dni:celular"
+                    />
+                  )}
+                />
+              ) : (
+                <TableVirtualized
+                  dataSource={orderBy(participants, "createAt", "desc")}
+                  columns={columns}
+                  rowHeaderHeight={50}
+                  rowBodyHeight={150}
+                  loading={participantsLoading}
+                />
+              )}
             </Col>
             <Col span={24}>
               <div style={{ margin: "24px 0 16px 0" }}>
@@ -196,7 +349,7 @@ const RaffleForm = ({ isNew, raffle, loading, onGoBack }) => {
                     htmlType="submit"
                     loading={loading}
                   >
-                    {isNew ? "Crear Elección" : "Guardar Cambios"}
+                    {isNew ? "Crear Sorteo" : "Guardar Cambios"}
                   </Button>
                 </Col>
               </Row>
