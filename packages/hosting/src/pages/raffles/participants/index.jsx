@@ -13,7 +13,8 @@ import { isEmpty } from "lodash";
 
 export const RafflesParticipants = () => {
   const { raffleId } = useParams();
-  const { assignDeleteProps } = useDefaultFirestoreProps();
+  const { assignCreateProps, assignUpdateProps, assignDeleteProps } =
+    useDefaultFirestoreProps();
 
   const [participants = [], participantsLoading, participantsError] =
     useCollectionData(
