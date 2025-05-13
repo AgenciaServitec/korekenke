@@ -18,9 +18,9 @@ import {
   putBiometricAssistanceByCip,
   putUserFingerprintTemplate,
 } from "./fingerprint";
+import Busboy from "busboy";
 import XLSX from "xlsx";
-import multer from "multer";
-import { logger } from "../utils";
+import { Readable } from "stream";
 
 const app: express.Application = express();
 
@@ -28,11 +28,6 @@ app.use(cors({ origin: "*" }));
 
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
 
 app.use(hostingToApi);
 
@@ -74,35 +69,55 @@ app.post("/verify-email/verify-code", postVerificationCode);
 
 app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
 
-app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
-  if (!req.file) {
-    res.status(400).json({ message: "No se envió ningún archivo" });
-    return;
-  }
+app.post("/upload", (req: Request, res: Response) => {
+  const busboy = Busboy({ headers: req.headers });
 
-  try {
-    const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const data = XLSX.utils.sheet_to_json<ParticipanteExcel>(sheet);
+  const fileBuffer: Buffer[] = [];
+  let fileFound = false;
 
-    // Ejemplo de mapeo de datos con campos como CIP y DNI
-    const participantes = data.map((row) => ({
-      nombre: row.nombre || "",
-      numero: row.numero || "",
-      grupo: row.grupo || "",
-      cip: String(row.cip || ""),
-      dni: String(row.dni || ""),
-    }));
+  busboy.on(
+    "file",
+    (
+      fieldname: string,
+      file: Readable,
+      filename: string,
+      encoding: string,
+      mimetype: string
+    ) => {
+      console.log("Archivo recibido:", fieldname);
+      console.log("Archivo recibido:", filename);
+      console.log("Archivo recibido:", encoding);
+      console.log("Archivo recibido:", mimetype);
 
-    logger.log("Participantes:", participantes);
+      fileFound = true;
 
-    // Aquí puedes guardar en Firestore si ya está configurado
+      file.on("data", (data: Buffer) => {
+        fileBuffer.push(data);
+      });
 
-    res.status(200).json({ message: "Archivo procesado", data: participantes });
-  } catch (error) {
-    logger.error("Error al procesar el Excel:", error);
-    res.status(500).json({ message: "Error al procesar el archivo" });
-  }
+      file.on("end", () => {
+        const fullBuffer = Buffer.concat(fileBuffer);
+        try {
+          const workbook = XLSX.read(fullBuffer, { type: "buffer" });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          const data = XLSX.utils.sheet_to_json(sheet);
+
+          res.status(200).json({ message: "Archivo procesado", data });
+        } catch (err) {
+          console.error("Error procesando el archivo:", err);
+          res.status(500).json({ error: "Error procesando el archivo" });
+        }
+      });
+    }
+  );
+
+  busboy.on("finish", () => {
+    if (!fileFound) {
+      res.status(400).json({ message: "No se envió ningún archivo" });
+    }
+  });
+
+  req.pipe(busboy);
 });
 
 app.use(errorHandler);

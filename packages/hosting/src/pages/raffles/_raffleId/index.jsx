@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useGlobalData } from "../../../providers";
 import * as yup from "yup";
-import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
@@ -17,7 +15,6 @@ import {
   Space,
   TextArea,
   Title,
-  UploadExcel,
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
 import {
@@ -30,6 +27,7 @@ import {
 } from "../../../firebase/collections/raffles";
 import { useAuthentication } from "../../../providers";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { isEmpty } from "lodash";
 
@@ -37,7 +35,6 @@ export const RaffleIntegration = () => {
   const { authUser } = useAuthentication();
   const navigate = useNavigate();
   const { raffleId } = useParams();
-
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [participants = [], participantsLoading, participantsError] =
@@ -100,6 +97,53 @@ export const RaffleIntegration = () => {
     }
   };
 
+  const columns = [
+    {
+      title: "F. Creación",
+      align: "center",
+      width: ["7rem", "100%"],
+      render: (participant) =>
+        dayjs(participant.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+    },
+    {
+      title: "Nombres",
+      align: "center",
+      width: ["15rem", "100%"],
+      render: (participant) => <div>{participant.nombres}</div>,
+    },
+    {
+      title: "DNI",
+      align: "center",
+      width: ["20rem", "100%"],
+      render: (participant) => {
+        return <div>{participant?.dni}</div>;
+      },
+    },
+    {
+      title: "Contácto",
+      align: "center",
+      width: ["14rem", "100%"],
+      render: (participant) => (
+        <div className="contact">
+          <div className="contact__item">
+            <IconAction
+              tooltipTitle="Whatsapp"
+              icon={faWhatsapp}
+              size={27}
+              styled={{ color: (theme) => theme.colors.success }}
+              onClick={() =>
+                window.open(
+                  `https://api.whatsapp.com/send?phone=51${participant.celular}`,
+                )
+              }
+            />
+            {participant.celular}
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <Acl
       category="public"
@@ -111,6 +155,8 @@ export const RaffleIntegration = () => {
         isNew={isNew}
         raffle={raffle}
         participants={participants}
+        columns={columns}
+        participantsLoading={participantsLoading}
         loading={loading}
         onSubmit={onSubmit}
         onGoBack={onGoBack}
