@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import dayjs from "dayjs";
-import {
-  Button,
-  Card,
-  Col,
-  IconAction,
-  modalConfirm,
-  Row,
-  Space,
-  Tag,
-  Title,
-  Typography,
-} from "../../components";
-import { isEmpty, orderBy } from "lodash";
+import { Card, IconAction, Typography } from "../../components/ui";
+import { Col, Row } from "../../components";
+import { orderBy } from "lodash";
 import styled from "styled-components";
 import {
   faEdit,
