@@ -97,53 +97,6 @@ export const RaffleIntegration = () => {
     }
   };
 
-  const columns = [
-    {
-      title: "F. Creación",
-      align: "center",
-      width: ["7rem", "100%"],
-      render: (participant) =>
-        dayjs(participant.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
-    },
-    {
-      title: "Nombres",
-      align: "center",
-      width: ["15rem", "100%"],
-      render: (participant) => <div>{participant.nombres}</div>,
-    },
-    {
-      title: "DNI",
-      align: "center",
-      width: ["20rem", "100%"],
-      render: (participant) => {
-        return <div>{participant?.dni}</div>;
-      },
-    },
-    {
-      title: "Contácto",
-      align: "center",
-      width: ["14rem", "100%"],
-      render: (participant) => (
-        <div className="contact">
-          <div className="contact__item">
-            <IconAction
-              tooltipTitle="Whatsapp"
-              icon={faWhatsapp}
-              size={27}
-              styled={{ color: (theme) => theme.colors.success }}
-              onClick={() =>
-                window.open(
-                  `https://api.whatsapp.com/send?phone=51${participant.celular}`,
-                )
-              }
-            />
-            {participant.celular}
-          </div>
-        </div>
-      ),
-    },
-  ];
-
   return (
     <Acl
       category="public"
