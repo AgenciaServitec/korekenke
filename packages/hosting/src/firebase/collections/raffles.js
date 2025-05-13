@@ -4,7 +4,7 @@ import { setDocument, updateDocument } from "../firestore";
 
 export const rafflesRef = firestore.collection("raffles");
 
-const raffleParticipantsRef = (raffleId) =>
+export const raffleParticipantsRef = (raffleId) =>
   rafflesRef.doc(raffleId).collection("participants");
 
 export const getRaffleId = () => rafflesRef.doc().id;
