@@ -13,8 +13,6 @@ import {
   notification,
   Row,
   Space,
-  TableVirtualized,
-  Tag,
   TextArea,
   Title,
 } from "../../../components";
@@ -28,20 +26,9 @@ import {
   updateRaffle,
 } from "../../../firebase/collections/raffles";
 import { useAuthentication } from "../../../providers";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { isEmpty, orderBy } from "lodash";
-import dayjs from "dayjs";
-import { findDasRequest, userFullName } from "../../../utils";
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { DasRequestStatus } from "../../../data-list";
-import {
-  faEdit,
-  faEye,
-  faFilePdf,
-  faFilter,
-  faReply,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { isEmpty } from "lodash";
 
 export const RaffleIntegration = () => {
   const { authUser } = useAuthentication();
@@ -53,8 +40,6 @@ export const RaffleIntegration = () => {
     useCollectionData(
       raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
     );
-
-  console.log("participants: ", participants);
 
   const [raffle, setRaffle] = useState({});
   const [loading, setLoading] = useState(false);
@@ -92,8 +77,6 @@ export const RaffleIntegration = () => {
         celular: par.split(":")[2],
       }));
 
-      console.log("participants: ", participants);
-
       isNew
         ? await addRaffle(assignCreateProps(mapRaffle(formData)))
         : await updateRaffle(raffle.id, assignUpdateProps(mapRaffle(formData)));
@@ -113,53 +96,6 @@ export const RaffleIntegration = () => {
     }
   };
 
-  const columns = [
-    {
-      title: "F. Creación",
-      align: "center",
-      width: ["7rem", "100%"],
-      render: (participant) =>
-        dayjs(participant.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
-    },
-    {
-      title: "Nombres",
-      align: "center",
-      width: ["15rem", "100%"],
-      render: (participant) => <div>{participant.nombres}</div>,
-    },
-    {
-      title: "DNI",
-      align: "center",
-      width: ["20rem", "100%"],
-      render: (participant) => {
-        return <div>{participant?.dni}</div>;
-      },
-    },
-    {
-      title: "Contácto",
-      align: "center",
-      width: ["14rem", "100%"],
-      render: (participant) => (
-        <div className="contact">
-          <div className="contact__item">
-            <IconAction
-              tooltipTitle="Whatsapp"
-              icon={faWhatsapp}
-              size={27}
-              styled={{ color: (theme) => theme.colors.success }}
-              onClick={() =>
-                window.open(
-                  `https://api.whatsapp.com/send?phone=51${participant.celular}`,
-                )
-              }
-            />
-            {participant.celular}
-          </div>
-        </div>
-      ),
-    },
-  ];
-
   return (
     <Acl
       category="public"
@@ -170,9 +106,7 @@ export const RaffleIntegration = () => {
       <RaffleForm
         isNew={isNew}
         raffle={raffle}
-        columns={columns}
         participants={participants}
-        participantsLoading={participantsLoading}
         loading={loading}
         onSubmit={onSubmit}
         onGoBack={onGoBack}
@@ -184,9 +118,7 @@ export const RaffleIntegration = () => {
 const RaffleForm = ({
   isNew,
   raffle,
-  columns,
   participants,
-  participantsLoading,
   loading,
   onSubmit,
   onGoBack,
@@ -224,7 +156,6 @@ const RaffleForm = ({
       <Col span={24}>
         <Title level={2}>{isNew ? "Nuevo Sorteo" : "Editar Sorteo"}</Title>
       </Col>
-
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
@@ -311,13 +242,9 @@ const RaffleForm = ({
                   )}
                 />
               ) : (
-                <TableVirtualized
-                  dataSource={orderBy(participants, "createAt", "desc")}
-                  columns={columns}
-                  rowHeaderHeight={50}
-                  rowBodyHeight={150}
-                  loading={participantsLoading}
-                />
+                <Button danger type="primary" onClick={() => ""}>
+                  Participantes ({participants.length})
+                </Button>
               )}
             </Col>
             <Col span={24}>
