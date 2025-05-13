@@ -157,7 +157,12 @@
       "/raffles": "Menu: Sorteos",
       "/raffles/new": "Crear Sorteo",
       "/raffles/:raffleId": "Editar Sorteo",
-      "/raffles#delete": "Eliminar Sorteo"
+      "/raffles#delete": "Eliminar Sorteo",
+      "/raffles/:raffleId/play": "Vista del Sorteo",
+      "/raffles/:raffleId/participants": "Participantes",
+      "/raffles/:raffleId/participants#new": "Agregar participante",
+      "/raffles/:raffleId/participants#:participantId": "Editar participante",
+      "/raffles/:raffleId/participants#delete": "Eliminar participante"
     }
   },
 

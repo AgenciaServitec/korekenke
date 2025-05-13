@@ -6,14 +6,19 @@ import { orderBy } from "lodash";
 import styled from "styled-components";
 import {
   faEdit,
+  faGift,
   faPeopleGroup,
   faPlay,
   faTrash,
+  faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Space } from "antd";
+import { useNavigate } from "react-router";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Card className="card-wrapper">
@@ -30,21 +35,33 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
               Participantes: {raffle?.participants}
             </Typography.Text>
             <Typography.Text type="secondary" style={{ fontSize: "0.85rem" }}>
-              Creada:{" "}
+              Creada:
               {raffle.createAt
                 ? dayjs(raffle.createAt.toDate()).format("DD/MM/YYYY HH:mm")
                 : "N/A"}
             </Typography.Text>
             <Space>
-              <Button>
+              <Button onClick={() => navigate(`${raffle.id}/play`)}>
                 <FontAwesomeIcon icon={faPlay} />
                 <span>Comenzar</span>
               </Button>
               <IconAction
+                tooltipTitle="Premios"
+                icon={faGift}
+                size={33}
+                onClick={() => ""}
+              />
+              <IconAction
+                tooltipTitle="Ganadores"
+                icon={faTrophy}
+                size={33}
+                onClick={() => ""}
+              />
+              <IconAction
                 tooltipTitle="Participantes"
                 icon={faPeopleGroup}
                 size={33}
-                onClick={() => ""}
+                onClick={() => navigate(`${raffle.id}/participants`)}
               />
               <IconAction
                 tooltipTitle="Editar"
