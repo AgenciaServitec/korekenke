@@ -66,6 +66,8 @@ export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestI
 // RAFFLES
 export * from "./raffles";
 export * from "./raffles/_raffleId";
+export * from "./raffles/participants";
+export * from "./raffles/play";
 
 //PRIVACY POLICIES
 export * from "./privacy-policies";
