@@ -41,7 +41,6 @@ export const ParticipantsTable = ({
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
-  console.log(participants);
 
   const onShowUpdateParticipant = (participant) => {
     onShowModal({
