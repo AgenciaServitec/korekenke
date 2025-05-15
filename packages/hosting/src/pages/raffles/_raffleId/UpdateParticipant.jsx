@@ -1,31 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Input, Row } from "../../../components";
+import { Button, Col, Form, Input, Row, Title } from "../../../components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../hooks";
-import { useNavigate } from "react-router";
+import { isEmpty } from "lodash";
 
-export const UpdateParticipant = ({ participant, onCloseModal }) => {
-  const navigate = useNavigate();
+export const UpdateParticipant = ({ participant = null, onCloseModal }) => {
   const [loading, setLoading] = useState(false);
 
-  const onGoBack = () => navigate(-1);
+  const isNew = isEmpty(participant);
 
   return (
-    <AddParticipantForm
+    <UpdateParticipantForm
+      isNew={isNew}
       participant={participant}
       loading={loading}
-      onGoBack={onGoBack}
       onCloseModal={onCloseModal}
     />
   );
 };
 
-const AddParticipantForm = ({
+const UpdateParticipantForm = ({
+  isNew,
   participant,
   loading,
-  onGoBack,
   onCloseModal,
 }) => {
   const schema = yup.object({
@@ -51,15 +50,20 @@ const AddParticipantForm = ({
 
   const resetForm = () => {
     reset({
-      fullName: participant?.nombres || "",
+      fullName: participant?.fullName || "",
       dni: participant?.dni || "",
-      phone: participant?.celular || "",
+      phone: participant?.phone.number || "",
     });
   };
 
   return (
     <Form>
       <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Title level={4}>
+            {isNew ? "Agregar participante" : "Editar participante"}
+          </Title>
+        </Col>
         <Col span={24}>
           <Controller
             name="fullName"
@@ -82,7 +86,7 @@ const AddParticipantForm = ({
             control={control}
             render={({ field: { onChange, value, name } }) => (
               <Input
-                label="dni"
+                label="DNI"
                 name={name}
                 value={value}
                 onChange={onChange}
@@ -129,7 +133,7 @@ const AddParticipantForm = ({
                 htmlType="submit"
                 loading={loading}
               >
-                Guardar Cambios
+                {isNew ? "Guardar" : "Actualizar"}
               </Button>
             </Col>
           </Row>
