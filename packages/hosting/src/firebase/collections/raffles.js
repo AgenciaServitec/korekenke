@@ -21,13 +21,25 @@ export const addRaffle = async (raffle) =>
 export const updateRaffle = async (raffleId, raffle) =>
   updateDocument(rafflesRef.doc(raffleId), raffle);
 
-export const addParticipant = async (raffleId, participant) =>
+export const getRaffleParticipantId = () => raffleParticipantsRef().doc().id;
+
+export const addRaffleParticipant = async (raffleId, participant) =>
   await setDocument(
     raffleParticipantsRef(raffleId).doc(participant.id),
     participant,
   );
 
-export const fetchParticipants = async (raffleId) =>
+export const updateRaffleParticipant = async (
+  raffleId,
+  participantId,
+  participant,
+) =>
+  await updateDocument(
+    raffleParticipantsRef(raffleId).doc(participantId),
+    participant,
+  );
+
+export const fetchRaffleParticipants = async (raffleId) =>
   fetchCollectionOnce(
     raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
   );

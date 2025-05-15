@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { orderBy } from "lodash";
 import {
   Acl,
+  Button,
+  Checkbox,
   Col,
   IconAction,
   Row,
@@ -9,37 +11,35 @@ import {
   TableVirtualized,
   Title,
 } from "../../../components";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { raffleParticipantsRef } from "../../../firebase/collections/raffles";
 import dayjs from "dayjs";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faArrowLeft,
-  faArrowsSpin,
   faEdit,
   faPeopleGroup,
   faTrash,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useDevice } from "../../../hooks";
 import { useModal } from "../../../providers";
 import { UpdateParticipant } from "../_raffleId/UpdateParticipant";
+import { AddParticipants } from "../AddParticipants";
 
-export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
-  const { raffleId } = useParams();
+export const ParticipantsTable = ({
+  participants,
+  participantsLoading,
+  onConfirmDeleteParticipant,
+  onConfirmDeleteParticipants,
+}) => {
   const navigate = useNavigate();
+  const [removeParticipants, setRemoveParticipants] = useState([]);
 
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
-  const [participants = [], participantsLoading, participantsError] =
-    useCollectionData(
-      raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
-    );
-
-  const onShowAddParticipant = (participant) => {
+  const onShowUpdateParticipant = (participant) => {
     onShowModal({
       width: `${isTablet ? "100%" : "70%"}`,
       onRenderBody: () => (
@@ -51,16 +51,25 @@ export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
     });
   };
 
-  const onShowEditParticipant = (participant) => {
+  const onIsremoveParticipants = (participantId) =>
+    removeParticipants.some((id) => id === participantId);
+
+  const onShowAddParticipants = () => {
     onShowModal({
       width: `${isTablet ? "100%" : "70%"}`,
-      onRenderBody: () => (
-        <UpdateParticipant
-          participant={participant}
-          onCloseModal={onCloseModal}
-        />
-      ),
+      onRenderBody: () => <AddParticipants onCloseModal={onCloseModal} />,
     });
+  };
+
+  const onAddRemoveParticipants = (participantId, checked) => {
+    if (!checked) {
+      const newCheckedList = removeParticipants.filter(
+        (id) => id !== participantId,
+      );
+      setRemoveParticipants(newCheckedList);
+    } else {
+      setRemoveParticipants((prev) => [...prev, participantId]);
+    }
   };
 
   const columns = [
@@ -68,14 +77,25 @@ export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
       title: "F. Creación",
       align: "center",
       width: ["7rem", "100%"],
-      render: (participant) =>
-        dayjs(participant.createAt.toDate()).format("DD/MM/YYYY HH:mm"),
+      render: (participant) => (
+        <Space>
+          <Checkbox
+            onChange={(e) =>
+              onAddRemoveParticipants(participant.id, e.target.checked)
+            }
+            checked={onIsremoveParticipants(participant.id)}
+          />
+          <span>
+            {dayjs(participant.createAt.toDate()).format("DD/MM/YYYY HH:mm")}
+          </span>
+        </Space>
+      ),
     },
     {
-      title: "Nombres",
+      title: "Apellidos y Nombres",
       align: "center",
       width: ["15rem", "100%"],
-      render: (participant) => <div>{participant.nombres}</div>,
+      render: (participant) => <div>{participant.fullName}</div>,
     },
     {
       title: "DNI",
@@ -98,11 +118,14 @@ export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
             styled={{ color: (theme) => theme.colors.success }}
             onClick={() =>
               window.open(
-                `https://api.whatsapp.com/send?phone=51${participant.celular}`,
+                `https://api.whatsapp.com/send?phone=${participant.phone.prefix.replace(
+                  "+",
+                  "",
+                )}${participant.phone.number}`,
               )
             }
           />
-          <span>{participant.celular}</span>
+          <span>{participant.phone.number}</span>
         </div>
       ),
     },
@@ -120,7 +143,7 @@ export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
             <IconAction
               tooltipTitle="Editar"
               icon={faEdit}
-              onClick={() => onShowEditParticipant(participant)}
+              onClick={() => onShowUpdateParticipant(participant)}
             />
           </Acl>
           <Acl
@@ -141,38 +164,45 @@ export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
   ];
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Space>
-            <IconAction icon={faArrowLeft} onClick={() => navigate(-1)} />
-            <Col span={24}>
-              <Title level={2} style={{ margin: "0" }}>
-                Participantes
-              </Title>
-            </Col>
-          </Space>
-          <Space>
-            <IconAction
-              tooltipTitle="Agregar participante"
-              icon={faUserPlus}
-              onClick={() => onShowAddParticipant()}
-            />
-            <IconAction
-              tooltipTitle="Agregar participantes"
-              icon={faPeopleGroup}
-              onClick={() => ""}
-            />
-            <IconAction
-              tooltipTitle="Chocolatear participantes"
-              icon={faArrowsSpin}
-              onClick={() => ""}
-            />
-          </Space>
-        </div>
-      </Col>
-      <Col span={24}>
-        <Container>
+    <Container>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <div className="header">
+            <Space>
+              <IconAction icon={faArrowLeft} onClick={() => navigate(-1)} />
+              <Col span={24}>
+                <Title level={2} style={{ margin: "0" }}>
+                  Participantes
+                </Title>
+              </Col>
+            </Space>
+            <Space>
+              <IconAction
+                tooltipTitle="Agregar participante"
+                icon={faUserPlus}
+                onClick={() => onShowUpdateParticipant()}
+              />
+              <IconAction
+                tooltipTitle="Agregar participantes"
+                icon={faPeopleGroup}
+                onClick={() => onShowAddParticipants()}
+              />
+              <Button
+                danger
+                type="primary"
+                onClick={() =>
+                  onConfirmDeleteParticipants(
+                    removeParticipants,
+                    setRemoveParticipants,
+                  )
+                }
+              >
+                Eliminar participantes ({removeParticipants.length})
+              </Button>
+            </Space>
+          </div>
+        </Col>
+        <Col span={24}>
           <TableVirtualized
             dataSource={orderBy(participants, "createAt", "desc")}
             columns={columns}
@@ -180,13 +210,19 @@ export const ParticipantsTable = ({ onConfirmDeleteParticipant }) => {
             rowBodyHeight={150}
             loading={participantsLoading}
           />
-        </Container>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
 const Container = styled.div`
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
   .contact {
     display: flex;
     align-items: center;

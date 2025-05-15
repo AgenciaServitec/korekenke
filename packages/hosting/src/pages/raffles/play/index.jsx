@@ -59,8 +59,8 @@ export const RafflePlay = () => {
                   <p>Total: {participants.length}</p>
                 </div>
                 <ul className="list">
-                  {participants.map(({ nombres, id }) => (
-                    <li key={id}>{nombres}</li>
+                  {participants.map(({ fullName, id }) => (
+                    <li key={id}>{fullName}</li>
                   ))}
                 </ul>
               </div>
