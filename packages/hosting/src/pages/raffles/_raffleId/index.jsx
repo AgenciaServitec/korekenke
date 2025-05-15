@@ -18,7 +18,7 @@ import {
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
 import {
-  addParticipant,
+  addRaffleParticipant,
   addRaffle,
   fetchRaffle,
   getRaffleId,
@@ -83,7 +83,7 @@ export const RaffleIntegration = () => {
 
       await participants.forEach(
         async (participant) =>
-          await addParticipant(raffle.id, assignCreateProps(participant)),
+          await addRaffleParticipant(raffle.id, assignCreateProps(participant)),
       );
 
       notification({ type: "success", message: "Se guardó correctamente." });
