@@ -1,12 +1,12 @@
 import React from "react";
 import {
-  Col,
-  Row,
-  TableVirtualized,
-  Space,
-  Tag,
   Acl,
+  Col,
   IconAction,
+  Row,
+  Space,
+  TableVirtualized,
+  Tag,
 } from "../../components/ui";
 import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
@@ -18,15 +18,18 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { orderBy } from "lodash";
+import { userFullName } from "../../utils/users/userFullName2";
+
 export const VisitsTable = ({
-  user,
   visits,
-  onClickAddVisit,
   onClickDeleteVisit,
   onClickEditVisit,
   onConfirmIOChecker,
   onShowVisitReplyModal,
 }) => {
+  const messageWhatsapp = (visit) =>
+    `https://api.whatsapp.com/send/?phone=${visit.personVisited.phone.prefix.replace("+", "")}${visit.personVisited.phone.number}&text=Hola ${userFullName(visit.personVisited)} 👋,te viene a visitar ${userFullName(visit)} ‍💼.%0A%0APor favor, ingresa al módulo de visitas en Korekenke 📲 para que puedas aprobar la visita ✅.%0A%0AGracias.&app_absent=0`;
   const columns = [
     {
       title: "F. Creación",
@@ -39,7 +42,7 @@ export const VisitsTable = ({
       title: "Apellidos Y Nombres",
       align: "center",
       width: ["9rem", "100%"],
-      render: (visit) => visit.fullName,
+      render: (visit) => userFullName(visit),
     },
     {
       title: "DNI",
@@ -60,33 +63,27 @@ export const VisitsTable = ({
       render: (visit) => visit.dependency,
     },
     {
-      title: "A quien visita",
-      align: "center",
-      width: ["9rem", "100%"],
-      render: (visit) => visit?.personVisited,
-    },
-    {
-      title: "N° contacto de OO/TCO/SO",
+      title: "¿A quién visita?",
       align: "center",
       width: ["9rem", "100%"],
       render: (visit) => (
-        <Space>
-          <IconAction
-            tooltipTitle="Whatsapp"
-            icon={faWhatsapp}
-            size={27}
-            styled={{ color: (theme) => theme.colors.success }}
-            onClick={() =>
-              window.open(
-                `https://api.whatsapp.com/send/?phone=+51${visit.contactOfficer}&text=Te viene a visitar ${visit.fullName}&app_absent=0`,
-              )
-            }
-          />
-          <span>
-            +51 &nbsp;
-            {visit.contactOfficer}
-          </span>
-        </Space>
+        <div>
+          <span>{userFullName(visit?.personVisited)}</span>
+          <Space>
+            <IconAction
+              tooltipTitle="Whatsapp"
+              icon={faWhatsapp}
+              size={27}
+              styled={{ color: (theme) => theme.colors.success }}
+              onClick={() =>
+                window.open(
+                  `https://api.whatsapp.com/send/?phone=${visit.personVisited.phone.prefix.replace("+", "")}${visit.personVisited.phone.number}&text=${messageWhatsapp(visit)}&app_absent=0`,
+                )
+              }
+            />
+            <span>{visit.personVisited.phone.number}</span>
+          </Space>
+        </div>
       ),
     },
     {
@@ -194,7 +191,7 @@ export const VisitsTable = ({
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <TableVirtualized
-          dataSource={visits}
+          dataSource={orderBy(visits, "createAt", "desc")}
           columns={columns}
           rowHeaderHeight={50}
           rowBodyHeight={150}

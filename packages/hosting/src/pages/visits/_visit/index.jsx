@@ -8,10 +8,11 @@ import {
   Input,
   Form,
   Button,
+  Legend,
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
 import { useAuthentication } from "../../../providers";
-import { assign } from "lodash";
+import { assign, isEmpty } from "lodash";
 import * as yup from "yup";
 import {
   addVisit,
@@ -23,7 +24,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useApiPersonDataByDniGet } from "../../../api";
-import dayjs from "dayjs";
+import { userFullName } from "../../../utils/users/userFullName2";
 
 export const VisitsIntegration = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export const VisitsIntegration = () => {
   const isNew = visitId === "new";
 
   const onGoBack = () => navigate(-1);
+  const onGoToVisits = () => navigate("/visits");
 
   useEffect(() => {
     (async () => {
@@ -60,7 +62,7 @@ export const VisitsIntegration = () => {
             assignUpdateProps(mapVisit(visit, formData)),
           );
       notification({ type: "success" });
-      onGoBack();
+      onGoToVisits();
     } catch (error) {
       console.error("Error: ", error);
       notification({ type: "error" });
@@ -72,12 +74,21 @@ export const VisitsIntegration = () => {
       {},
       {
         id: visit.id,
-        fullName: formData.fullName,
+        firstName: formData.firstName,
+        paternalSurname: formData.paternalSurname,
+        maternalSurname: formData.maternalSurname,
         dni: formData.dni,
         cip: formData.cip,
         dependency: formData.dependency,
-        personVisited: formData.personVisited,
-        contactOfficer: formData.contactOfficer,
+        personVisited: {
+          firstName: formData.personVisited.firstName,
+          paternalSurname: formData.personVisited.paternalSurname,
+          maternalSurname: formData.personVisited.maternalSurname,
+          phone: {
+            number: formData.personVisited.phoneNumber,
+            prefix: "+51",
+          },
+        },
         status: visit?.status || "pending",
       },
     );
@@ -95,12 +106,18 @@ export const VisitsIntegration = () => {
 
 const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
   const schema = yup.object({
-    fullName: yup.string().required(),
     dni: yup.string().required(),
     cip: yup.string().required(),
+    firstName: yup.string().required(),
+    paternalSurname: yup.string().required(),
+    maternalSurname: yup.string().required(),
     dependency: yup.string().required(),
-    personVisited: yup.string().required(),
-    contactOfficer: yup.string().required(),
+    personVisited: yup.object({
+      firstName: yup.string().required(),
+      paternalSurname: yup.string().required(),
+      maternalSurname: yup.string().required(),
+      phoneNumber: yup.number().required(),
+    }),
   });
 
   const {
@@ -127,11 +144,17 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
   const resetForm = () => {
     reset({
       dni: visit?.dni || "",
-      fullName: visit?.fullName || "",
+      firstName: visit?.firstName || "",
+      paternalSurname: visit?.paternalSurname || "",
+      maternalSurname: visit?.maternalSurname || "",
       cip: visit?.cip || "",
       dependency: visit?.dependency || "",
-      personVisited: visit?.personVisited || "",
-      contactOfficer: visit?.contactOfficer || "",
+      personVisited: {
+        firstName: visit?.personVisited?.firstName || "",
+        paternalSurname: visit?.personVisited?.paternalSurname || "",
+        maternalSurname: visit?.personVisited?.maternalSurname || "",
+        phoneNumber: visit?.personVisited?.phone?.number || "",
+      },
     });
   };
 
@@ -140,14 +163,18 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
       if (dniValue?.length === 8) {
         try {
           const data = await getPersonDataByDni(dniValue);
-          if (data?.fullName) {
-            setValue("fullName", data.fullName);
+          if (!isEmpty(data)) {
+            setValue("firstName", data.firstName);
+            setValue("paternalSurname", data.paternalSurname);
+            setValue("maternalSurname", data.maternalSurname);
           }
         } catch (error) {
           console.error("Error al obtener datos de persona:", error);
         }
       } else {
-        setValue("fullName", "");
+        setValue("firstName", "");
+        setValue("paternalSurname", "");
+        setValue("maternalSurname", "");
       }
     };
 
@@ -187,11 +214,45 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
               </Col>
               <Col span={24}>
                 <Controller
-                  name="fullName"
+                  name="firstName"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
                     <Input
-                      label="Nombres y Apellidos"
+                      label="Nombres"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      disabled
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="paternalSurname"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Apellido paterno"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                      disabled
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
+                  name="maternalSurname"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Apellido materno"
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -236,37 +297,75 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
                 />
               </Col>
               <Col span={24}>
-                <Controller
-                  name="personVisited"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      label="A quien Visita"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="contactOfficer"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      type="number"
-                      label="N° contacto de OO/TCO/SO"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                    />
-                  )}
-                />
+                <Legend title="¿A quién visita?">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24} md={6}>
+                      <Controller
+                        name="personVisited.firstName"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Nombres"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24} md={6}>
+                      <Controller
+                        name="personVisited.paternalSurname"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Apellido paterno"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24} md={6}>
+                      <Controller
+                        name="personVisited.maternalSurname"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Apellido materno"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24} md={6}>
+                      <Controller
+                        name="personVisited.phoneNumber"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            type="number"
+                            label="N° celular"
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </Legend>
               </Col>
               <Col span={24}>
                 <Row
