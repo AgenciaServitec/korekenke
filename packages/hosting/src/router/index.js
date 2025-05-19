@@ -456,6 +456,24 @@ export const Router = () => {
       />
       <Route
         exact
+        path="/visits"
+        element={
+          <AdminLayout>
+            <A.Visits />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
+        path="/visits/:visitId"
+        element={
+          <AdminLayout>
+            <A.VisitsIntegration />
+          </AdminLayout>
+        }
+      />
+      <Route
+        exact
         path="/entities/:entityId/das-requests/:dasRequestId/:requestType/sheets"
         element={<A.DasRequestSheets />}
       />
