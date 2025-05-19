@@ -17,3 +17,4 @@ export * from "./militaryRecruitment";
 export * from "./sessionVerification";
 export * from "./dasApplications";
 export * from "./elections";
+export * from "./visits";

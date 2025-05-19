@@ -142,6 +142,15 @@
       "/elections/add-candidate/:electionId": "Añadir Candidato",
       "/elections/submit-vote/:electionId": "Votar",
       "/elections/:electionId#electionStatistics": "Ver Estadísticas"
+    },
+    "visits": {
+      "label": "Visitas",
+      "/visits": "Menu: Visitas",
+      "/visits/new": "Crear Visita",
+      "/visits/:visitId": "Editar Visita",
+      "/visits#delete": "Eliminar Visita",
+      "/visits#check-out": "Registrar Entradas y Salidas de Visita",
+      "/visits/:visitId#reply": "Responder Solicitud de Visita"
     }
   },
 
