@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
   Acl,
+  Button,
+  Col,
+  Form,
+  Input,
+  Legend,
   notification,
   Row,
-  Col,
   Title,
-  Input,
-  Form,
-  Button,
-  Legend,
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
 import { useAuthentication } from "../../../providers";
@@ -24,7 +24,6 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useApiPersonDataByDniGet } from "../../../api";
-import { userFullName } from "../../../utils/users/userFullName2";
 
 export const VisitsIntegration = () => {
   const navigate = useNavigate();
@@ -78,7 +77,6 @@ export const VisitsIntegration = () => {
         paternalSurname: formData.paternalSurname,
         maternalSurname: formData.maternalSurname,
         dni: formData.dni,
-        cip: formData.cip,
         dependency: formData.dependency,
         personVisited: {
           firstName: formData.personVisited.firstName,
@@ -90,6 +88,7 @@ export const VisitsIntegration = () => {
           },
         },
         status: visit?.status || "pending",
+        userId: authUser.id,
       },
     );
 
@@ -107,7 +106,6 @@ export const VisitsIntegration = () => {
 const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
   const schema = yup.object({
     dni: yup.string().required(),
-    cip: yup.string().required(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
@@ -147,7 +145,6 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
       firstName: visit?.firstName || "",
       paternalSurname: visit?.paternalSurname || "",
       maternalSurname: visit?.maternalSurname || "",
-      cip: visit?.cip || "",
       dependency: visit?.dependency || "",
       personVisited: {
         firstName: visit?.personVisited?.firstName || "",
@@ -259,23 +256,6 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
                       error={error(name)}
                       required={required(name)}
                       disabled
-                    />
-                  )}
-                />
-              </Col>
-              <Col span={24}>
-                <Controller
-                  name="cip"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <Input
-                      type="number"
-                      label="CIP"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
                     />
                   )}
                 />
