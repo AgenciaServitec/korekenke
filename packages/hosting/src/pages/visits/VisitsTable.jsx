@@ -60,7 +60,12 @@ export const VisitsTable = ({
       title: "Apellidos Y Nombres",
       align: "center",
       width: ["9rem", "100%"],
-      render: (visit) => userFullName(visit),
+      render: (visit) => (
+        <Space direction="vertical">
+          <span>{userFullName(visit)}</span>
+          <span>{visit?.phone?.number}</span>
+        </Space>
+      ),
     },
     {
       title: "DNI",
