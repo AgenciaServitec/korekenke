@@ -6,7 +6,7 @@ import {
   Spin,
   Row,
   Col,
-  AddButton,
+  AddButton, Title,
 } from "../../components";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps, useDevice } from "../../hooks";
@@ -101,6 +101,9 @@ const VisitsList = ({
   return (
     <Acl category="public" subCategory="visits" name="/visits" redirect>
       <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Title level={3}>Lista de Visitas</Title>
+        </Col>
         <Col span={24}>
           <AddButton onClick={onAddVisit} type="primary" title="Visita" />
         </Col>
