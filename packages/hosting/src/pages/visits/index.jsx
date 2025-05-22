@@ -14,7 +14,7 @@ import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { updateVisit, visitsRef } from "../../firebase/collections";
 import { VisitsTable } from "./VisitsTable";
-import { IOChecker } from "./IOChecker";
+import { ExitChecker } from "./ExitChecker";
 import { DasRequestProceedsModal } from "../entities/departamento-de-apoyo-social/das-requests/DasRequestProceedsModal";
 import { VisitReply } from "./VisitReply";
 
@@ -45,6 +45,7 @@ export const Visits = () => {
       title: "¿Estás seguro de eliminar esta visita?",
       onOk: async () => {
         await updateVisit(visitId, assignDeleteProps({ isDeleted: true }));
+        notification({ type: "success" });
       },
     });
 
@@ -79,7 +80,7 @@ const VisitsList = ({
       textAlign: "center",
       width: "50%",
       onRenderBody: () => (
-        <IOChecker visit={visit} onCloseModal={onCloseModal} type={type} />
+        <ExitChecker visit={visit} onCloseModal={onCloseModal} type={type} />
       ),
     });
   };

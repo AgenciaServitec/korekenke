@@ -60,7 +60,27 @@ export const VisitsTable = ({
       title: "Apellidos Y Nombres",
       align: "center",
       width: ["9rem", "100%"],
-      render: (visit) => userFullName(visit),
+      render: (visit) => (
+        <div>
+          <span>{userFullName(visit)}</span>
+          {visit.phone && (
+            <Space>
+              <IconAction
+                tooltipTitle="Whatsapp"
+                icon={faWhatsapp}
+                size={27}
+                styled={{ color: (theme) => theme.colors.success }}
+                onClick={() =>
+                  window.open(
+                    `https://api.whatsapp.com/send/?phone=${visit.phone.prefix.replace("+", "")}${visit.phone.number}&text=${messageWhatsapp(visit)}&app_absent=0`,
+                  )
+                }
+              />
+              <span>{visit.phone.number}</span>
+            </Space>
+          )}
+        </div>
+      ),
     },
     {
       title: "DNI",
@@ -111,27 +131,7 @@ export const VisitsTable = ({
       title: "F/H - INGRESO",
       align: "center",
       width: ["9rem", "100%"],
-      render: (visit) =>
-        visit.entryDateTime ? (
-          visit.entryDateTime
-        ) : (
-          <Acl category="public" subCategory="visits" name="/visits#check-out">
-            <IconAction
-              tooltipTitle="Registrar Entrada"
-              icon={faDoorOpen}
-              styled={{
-                color:
-                  visit.status === "approved"
-                    ? (theme) => theme.colors.success
-                    : (theme) => theme.colors.gray,
-              }}
-              onClick={() =>
-                visit.status === "approved" &&
-                onConfirmIOChecker(visit, "entry")
-              }
-            />
-          </Acl>
-        ),
+      render: (visit) => visit?.entryDateTime,
     },
     {
       title: "F/H - SALIDA",
@@ -152,7 +152,7 @@ export const VisitsTable = ({
               }}
               icon={faRightFromBracket}
               onClick={() =>
-                visit.status === "approved" && onConfirmIOChecker(visit, "exit")
+                visit.status === "approved" && onConfirmIOChecker(visit)
               }
             />
           </Acl>

@@ -5,18 +5,16 @@ import { useForm } from "react-hook-form";
 import { Form, notification, Row, Col, Button } from "../../components";
 import { updateVisit } from "../../firebase/collections";
 
-export const IOChecker = ({ visit, onCloseModal, type }) => {
+export const ExitChecker = ({ visit, onCloseModal }) => {
   const { assignUpdateProps } = useDefaultFirestoreProps();
   const dateTime = dayjs().format("DD-MM-YYYY HH:mm");
-
-  const isEntry = type === "entry";
 
   const { handleSubmit } = useForm();
 
   const onSubmit = async () => {
     const updatedVisit = {
       ...visit,
-      [isEntry ? "entryDateTime" : "exitDateTime"]: dateTime || "",
+      exitDateTime: dateTime || "",
     };
 
     try {
