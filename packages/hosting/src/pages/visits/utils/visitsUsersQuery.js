@@ -1,6 +1,6 @@
 import { usersRef } from "../../../firebase/collections";
 
-export const visitsQuery = ({ userInformation }) => {
+export const visitsUsersQuery = ({ userInformation }) => {
   let query = usersRef
     .orderBy("createAt", "desc")
     .where("isDeleted", "==", false);

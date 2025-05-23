@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Acl,
   Col,
@@ -11,7 +11,6 @@ import {
 import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
 import {
-  faDoorOpen,
   faEdit,
   faReply,
   faRightFromBracket,
@@ -28,6 +27,9 @@ export const VisitsTable = ({
   onClickEditVisit,
   onConfirmIOChecker,
   onShowVisitReplyModal,
+  setFilterCount,
+  setFilterStates,
+  filterCount,
 }) => {
   const { authUser } = useAuthentication();
 
@@ -45,8 +47,19 @@ export const VisitsTable = ({
       return false;
     });
 
+    setFilterCount(filteredVisits.length);
     return filteredVisits;
   })();
+
+  useEffect(() => {
+    const statusCounts = visitsView.reduce((acc, visit) => {
+      if (visit?.status) {
+        acc[visit.status] = (acc[visit.status] || 0) + 1;
+      }
+      return acc;
+    }, {});
+    setFilterStates(statusCounts);
+  }, [filterCount]);
 
   const columns = [
     {
