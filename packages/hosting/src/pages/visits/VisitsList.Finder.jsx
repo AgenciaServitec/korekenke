@@ -15,7 +15,7 @@ export const VisitsListFinder = ({ searchFields, onSearch }) => {
       <FormContent>
         <Input
           label=""
-          placeholder="Buscar por cip, nombres, apellidos, dni y cip"
+          placeholder="Buscar por nombres, apellidos, dni y telefono"
           value={searchFields.visitInformation}
           onChange={onChangeSearchBy}
           allowClear
