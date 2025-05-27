@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   modalConfirm,
@@ -7,31 +7,54 @@ import {
   Row,
   Col,
   AddButton,
+  Legend,
+  Space,
+  Tag,
+  Flex,
+  Button,
 } from "../../components";
 import { useNavigate } from "react-router";
-import { useDefaultFirestoreProps, useDevice } from "../../hooks";
+import {
+  useDebounce,
+  useDefaultFirestoreProps,
+  useDevice,
+  useQueriesState,
+} from "../../hooks";
 import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { updateVisit, visitsRef } from "../../firebase/collections";
+import { updateVisit } from "../../firebase/collections";
 import { VisitsTable } from "./VisitsTable";
 import { ExitChecker } from "./ExitChecker";
-import { DasRequestProceedsModal } from "../entities/departamento-de-apoyo-social/das-requests/DasRequestProceedsModal";
 import { VisitReply } from "./VisitReply";
+import { VisitsFilter } from "./Visits.Filter";
+import { VisitsListFinder } from "./VisitsList.Finder";
+import { VisitsStatus } from "../../data-list";
+import { visitsListQuery } from "./utils";
 
 export const Visits = () => {
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { authUser } = useAuthentication();
 
+  const [searchFields, setSearchFields] = useQueriesState({
+    visitInformation: undefined,
+  });
+
+  const debouncedSearchFields = useDebounce(searchFields, 750);
+
   const [visits = [], visitsLoading, visitsError] = useCollectionData(
-    visitsRef.where("isDeleted", "==", false),
+    visitsListQuery({
+      visitInformation: debouncedSearchFields.visitInformation?.toLowerCase(),
+    }),
   );
 
   useEffect(() => {
-    visitsError &&
+    if (visitsError) {
+      console.error("visitsError: ", visitsError);
       notification({
         type: "error",
       });
+    }
   }, [visitsError]);
 
   const onNavigateTo = (visitId) => navigate(visitId);
@@ -58,6 +81,8 @@ export const Visits = () => {
           onAddVisit={onAddVisit}
           onEditVisit={onEditVisit}
           onConfirmDeleteVisit={onConfirmDeleteVisit}
+          searchFields={searchFields}
+          setSearchFields={setSearchFields}
         />
       </ModalProvider>
     </Spin>
@@ -70,9 +95,40 @@ const VisitsList = ({
   onEditVisit,
   onConfirmDeleteVisit,
   visits,
+  searchFields,
+  setSearchFields,
 }) => {
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
+
+  const [filterCount, setFilterCount] = useState([]);
+  const [filterStates, setFilterStates] = useState({});
+  const [filterFields, setFilterFields] = useQueriesState({
+    status: "all",
+  });
+
+  const onResetFilters = () => {
+    setSearchFields({
+      visitInformation: undefined,
+    });
+    setFilterFields({
+      status: "all",
+    });
+  };
+
+  const mapVisitsView = (visits) => {
+    const mapView = {
+      visits: visits,
+      filter(filterFields) {
+        mapView.visits = filteredVisits(mapView.visits, filterFields);
+        return mapView;
+      },
+    };
+
+    return mapView;
+  };
+
+  const visitsView = mapVisitsView(visits).filter(filterFields)?.visits || [];
 
   const onConfirmIOChecker = (visit, type) => {
     onShowModal({
@@ -106,17 +162,78 @@ const VisitsList = ({
           <AddButton onClick={onAddVisit} type="primary" title="Visita" />
         </Col>
         <Col span={24}>
+          <Legend title="Busqueda">
+            <VisitsListFinder
+              searchFields={searchFields}
+              onSearch={setSearchFields}
+            />
+          </Legend>
+        </Col>
+        <Col span={24}>
+          <Legend title="Filtros">
+            <VisitsFilter
+              visits={visitsView}
+              filterFields={filterFields}
+              onFilter={setFilterFields}
+            />
+          </Legend>
+        </Col>
+        <Col span={24} sm={18}>
+          <Space direction="vertical" size={12}>
+            <div>
+              <strong>{filterCount} </strong>Resultados
+            </div>
+            {filterStates && (
+              <div>
+                {Object.entries(VisitsStatus).map(([statusKey, _]) => {
+                  const statusConfig = VisitsStatus[statusKey];
+                  const count = filterStates[statusKey] || 0;
+
+                  if (filterFields.status !== "all" && count <= 0) return null;
+
+                  return (
+                    <Tag
+                      key={statusKey}
+                      color={statusConfig?.color}
+                      style={{ marginRight: 8, marginBottom: 4 }}
+                    >
+                      {statusConfig?.name}: {count}
+                    </Tag>
+                  );
+                })}
+              </div>
+            )}
+          </Space>
+        </Col>
+        <Col span={24} sm={6}>
+          <Flex align="center" justify="end">
+            <Button type="default" onClick={onResetFilters}>
+              Limpiar filtros
+            </Button>
+          </Flex>
+        </Col>
+        <Col span={24}>
           <VisitsTable
             user={user}
-            visits={visits}
+            visits={visitsView}
             onClickAddVisit={onAddVisit}
             onClickEditVisit={onEditVisit}
             onConfirmIOChecker={onConfirmIOChecker}
             onShowVisitReplyModal={onShowVisitReplyModal}
             onClickDeleteVisit={onConfirmDeleteVisit}
+            filterCount={filterCount}
+            setFilterCount={setFilterCount}
+            setFilterStates={setFilterStates}
           />
         </Col>
       </Row>
     </Acl>
   );
 };
+
+const filteredVisits = (visits, filterFields) =>
+  visits.filter((visit) =>
+    filterFields?.status === "all"
+      ? true
+      : visit?.status === filterFields.status,
+  );
