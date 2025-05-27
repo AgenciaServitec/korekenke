@@ -20,10 +20,19 @@ import {
   getVisitsId,
   updateVisit,
 } from "../../../firebase/collections";
-import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
+import {
+  useDebounce,
+  useDefaultFirestoreProps,
+  useFormUtils,
+  useQueriesState,
+} from "../../../hooks";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useApiPersonDataByDniGet } from "../../../api";
+import dayjs from "dayjs";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { visitsQuery } from "../utils";
+import { VisitsFinder } from "../Visits.Finder";
 
 export const VisitsIntegration = () => {
   const navigate = useNavigate();
@@ -32,10 +41,30 @@ export const VisitsIntegration = () => {
   const { visitId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
+  const [searchFields, setSearchFields] = useQueriesState({
+    userInformation: undefined,
+  });
   const [visit, setVisit] = useState({});
   const [savingVisit, setSavingVisit] = useState(false);
 
+  const debouncedSearchFields = useDebounce(searchFields, 750);
+
+  const [users = [], usersLoading, usersError] = useCollectionData(
+    visitsQuery({
+      userInformation: debouncedSearchFields.userInformation?.toLowerCase(),
+    }),
+  );
+
+  useEffect(() => {
+    if (usersError) {
+      console.error("usersError: ", usersError);
+      notification({ type: "error" });
+    }
+  }, [usersError]);
+
   const isNew = visitId === "new";
+
+  const dateTime = dayjs().format("DD-MM-YYYY HH:mm");
 
   const onGoBack = () => navigate(-1);
   const onGoToVisits = () => navigate("/visits");
@@ -77,6 +106,10 @@ export const VisitsIntegration = () => {
         paternalSurname: formData.paternalSurname,
         maternalSurname: formData.maternalSurname,
         dni: formData.dni,
+        phone: {
+          number: formData.visitorNumber,
+          prefix: "+51",
+        },
         dependency: formData.dependency,
         personVisited: {
           firstName: formData.personVisited.firstName,
@@ -88,7 +121,8 @@ export const VisitsIntegration = () => {
           },
         },
         status: visit?.status || "pending",
-        userId: authUser.id,
+        userId: formData.personVisited?.id || "",
+        entryDateTime: dateTime,
       },
     );
 
@@ -99,16 +133,31 @@ export const VisitsIntegration = () => {
       onGoBack={onGoBack}
       savingVisit={savingVisit}
       onSaveVisit={onSaveVisit}
+      users={users}
+      usersLoading={usersLoading}
+      searchFields={searchFields}
+      setSearchFields={setSearchFields}
     />
   );
 };
 
-const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
+const VisitsForm = ({
+  isNew,
+  onGoBack,
+  onSaveVisit,
+  savingVisit,
+  visit,
+  users,
+  usersLoading,
+  searchFields,
+  setSearchFields,
+}) => {
   const schema = yup.object({
     dni: yup.string().required(),
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
+    visitorNumber: yup.number().notRequired(),
     dependency: yup.string().required(),
     personVisited: yup.object({
       firstName: yup.string().required(),
@@ -145,6 +194,7 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
       firstName: visit?.firstName || "",
       paternalSurname: visit?.paternalSurname || "",
       maternalSurname: visit?.maternalSurname || "",
+      visitorNumber: visit?.phone?.number,
       dependency: visit?.dependency || "",
       personVisited: {
         firstName: visit?.personVisited?.firstName || "",
@@ -262,6 +312,23 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
               </Col>
               <Col span={24}>
                 <Controller
+                  name="visitorNumber"
+                  control={control}
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      type="number"
+                      label="N° celular del visitante (opcional)"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
+                />
+              </Col>
+              <Col span={24}>
+                <Controller
                   name="dependency"
                   control={control}
                   render={({ field: { onChange, value, name } }) => (
@@ -279,6 +346,35 @@ const VisitsForm = ({ isNew, onGoBack, onSaveVisit, savingVisit, visit }) => {
               <Col span={24}>
                 <Legend title="¿A quién visita?">
                   <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Legend title="Busqueda">
+                        <VisitsFinder
+                          searchFields={searchFields}
+                          onSearch={setSearchFields}
+                          users={users}
+                          loading={usersLoading}
+                          onSelectUser={(selectedUser) => {
+                            setValue(
+                              "personVisited.firstName",
+                              selectedUser.firstName,
+                            );
+                            setValue(
+                              "personVisited.paternalSurname",
+                              selectedUser.paternalSurname,
+                            );
+                            setValue(
+                              "personVisited.maternalSurname",
+                              selectedUser.maternalSurname,
+                            );
+                            setValue(
+                              "personVisited.phoneNumber",
+                              selectedUser.phoneNumber,
+                            );
+                            setValue("personVisited.id", selectedUser.id);
+                          }}
+                        />
+                      </Legend>
+                    </Col>
                     <Col span={24} md={6}>
                       <Controller
                         name="personVisited.firstName"

@@ -27,6 +27,7 @@ import {
   Avatar,
   Tooltip,
   Progress,
+  AutoComplete,
 } from "antd";
 
 export * from "./component-container";
@@ -103,4 +104,5 @@ export {
   Tooltip,
   Progress,
   Typography,
+  AutoComplete,
 };
