@@ -31,7 +31,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useApiPersonDataByDniGet } from "../../../api";
 import dayjs from "dayjs";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { visitsQuery } from "../utils";
+import { getSearchDataToVisit, visitsUsersQuery } from "../utils";
 import { VisitsFinder } from "../Visits.Finder";
 
 export const VisitsIntegration = () => {
@@ -50,7 +50,7 @@ export const VisitsIntegration = () => {
   const debouncedSearchFields = useDebounce(searchFields, 750);
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    visitsQuery({
+    visitsUsersQuery({
       userInformation: debouncedSearchFields.userInformation?.toLowerCase(),
     }),
   );
@@ -82,7 +82,6 @@ export const VisitsIntegration = () => {
   const onSaveVisit = async (formData) => {
     try {
       setSavingVisit(true);
-
       isNew
         ? await addVisit(assignCreateProps(mapVisit(visit, formData)))
         : await updateVisit(
@@ -97,12 +96,15 @@ export const VisitsIntegration = () => {
     }
   };
 
-  const mapVisit = (visit, formData) =>
-    assign(
+  const mapVisit = (visit, formData) => {
+    const [firstName, middleName = ""] = formData.firstName.split(" ");
+
+    return assign(
       {},
       {
         id: visit.id,
-        firstName: formData.firstName,
+        firstName: firstName,
+        middleName: middleName || "",
         paternalSurname: formData.paternalSurname,
         maternalSurname: formData.maternalSurname,
         dni: formData.dni,
@@ -123,8 +125,17 @@ export const VisitsIntegration = () => {
         status: visit?.status || "pending",
         userId: formData.personVisited?.id || "",
         entryDateTime: dateTime,
+        searchData: getSearchDataToVisit({
+          phone: { number: formData.visitorNumber },
+          dni: formData.dni,
+          paternalSurname: formData.paternalSurname,
+          maternalSurname: formData.maternalSurname,
+          firstName,
+          middleName,
+        }),
       },
     );
+  };
 
   return (
     <VisitsForm
