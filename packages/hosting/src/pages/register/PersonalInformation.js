@@ -16,7 +16,11 @@ import { useFormUtils } from "../../hooks";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { DegreesArmy, BloodGroup } from "../../data-list";
-import { getLocalStorage, setLocalStorage } from "../../utils";
+import {
+  getLocalStorage,
+  getSearchDataToUser,
+  setLocalStorage,
+} from "../../utils";
 import { fetchCollectionOnce } from "../../firebase/utils";
 import { usersRef } from "../../firebase/collections";
 import { LogoPrimary } from "../../images";
@@ -90,26 +94,29 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
     degree: formData.degree,
     bloodGroup: formData.bloodGroup,
     cgi: formData.cgi,
+    searchData: getSearchDataToUser(formData, formData.firstName),
   });
 
   const onSubmitLogin = async (formData) => {
     try {
       setSavingData(true);
-      const userWithEmail = await userByEmail(formData.email);
-      const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
-
-      if (userWithEmail || userWithPhoneNumber)
-        return notification({
-          type: "warning",
-          title: `El ${
-            userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
-          } ya se encuentra registrado.`,
-        });
+      // const userWithEmail = await userByEmail(formData.email);
+      // const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
+      //
+      // if (userWithEmail || userWithPhoneNumber)
+      //   return notification({
+      //     type: "warning",
+      //     title: `El ${
+      //       userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
+      //     } ya se encuentra registrado.`,
+      //   });
 
       const user = mapUser({ ...step1Data, ...formData });
 
+      console.log("user: ", user);
+
       setLocalStorage("register", user);
-      next();
+      // next();
     } catch (e) {
       console.error("Error savePersonalData: ", e);
       notification({ type: "error" });
