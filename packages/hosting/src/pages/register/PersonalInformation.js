@@ -100,23 +100,21 @@ export const PersonalInformation = ({ prev, next, currentStep }) => {
   const onSubmitLogin = async (formData) => {
     try {
       setSavingData(true);
-      // const userWithEmail = await userByEmail(formData.email);
-      // const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
-      //
-      // if (userWithEmail || userWithPhoneNumber)
-      //   return notification({
-      //     type: "warning",
-      //     title: `El ${
-      //       userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
-      //     } ya se encuentra registrado.`,
-      //   });
+      const userWithEmail = await userByEmail(formData.email);
+      const userWithPhoneNumber = await userByPhoneNumber(formData.phoneNumber);
+
+      if (userWithEmail || userWithPhoneNumber)
+        return notification({
+          type: "warning",
+          title: `El ${
+            userWithEmail ? "email" : userWithPhoneNumber ? "teléfono" : ""
+          } ya se encuentra registrado.`,
+        });
 
       const user = mapUser({ ...step1Data, ...formData });
 
-      console.log("user: ", user);
-
       setLocalStorage("register", user);
-      // next();
+      next();
     } catch (e) {
       console.error("Error savePersonalData: ", e);
       notification({ type: "error" });
