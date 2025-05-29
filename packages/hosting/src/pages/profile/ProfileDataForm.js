@@ -24,6 +24,7 @@ import { assign } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { BloodGroup, WorkPlaces } from "../../data-list";
 import { isProduction } from "../../config";
+import { getSearchDataToUser } from "../../utils";
 
 export const ProfileDataForm = () => {
   const { authUser } = useAuthentication();
@@ -70,6 +71,7 @@ export const ProfileDataForm = () => {
           id: authUser.id,
           profilePhoto: formData?.profilePhoto || null,
           phone: { prefix: "+51", number: formData.phoneNumber },
+          searchData: getSearchDataToUser(formData, formData.firstName),
         }),
       );
 
