@@ -11,7 +11,6 @@ import {
   Title,
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
-import { useAuthentication } from "../../../providers";
 import { assign, isEmpty } from "lodash";
 import * as yup from "yup";
 import {
@@ -37,7 +36,6 @@ import { VisitsFinder } from "../Visits.Finder";
 export const VisitsIntegration = () => {
   const navigate = useNavigate();
 
-  const { authUser } = useAuthentication();
   const { visitId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
@@ -125,14 +123,7 @@ export const VisitsIntegration = () => {
         status: visit?.status || "pending",
         userId: formData.personVisited?.id || "",
         entryDateTime: dateTime,
-        searchData: getSearchDataToVisit({
-          phone: { number: formData.visitorNumber },
-          dni: formData.dni,
-          paternalSurname: formData.paternalSurname,
-          maternalSurname: formData.maternalSurname,
-          firstName,
-          middleName,
-        }),
+        searchData: getSearchDataToVisit(formData, firstName, middleName),
       },
     );
   };
@@ -168,13 +159,13 @@ const VisitsForm = ({
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
-    visitorNumber: yup.number().notRequired(),
+    visitorNumber: yup.string().min(9).notRequired(),
     dependency: yup.string().required(),
     personVisited: yup.object({
       firstName: yup.string().required(),
       paternalSurname: yup.string().required(),
       maternalSurname: yup.string().required(),
-      phoneNumber: yup.number().required(),
+      phoneNumber: yup.string().min(9).required(),
     }),
   });
 
@@ -205,7 +196,7 @@ const VisitsForm = ({
       firstName: visit?.firstName || "",
       paternalSurname: visit?.paternalSurname || "",
       maternalSurname: visit?.maternalSurname || "",
-      visitorNumber: visit?.phone?.number,
+      visitorNumber: visit?.phone?.number || "",
       dependency: visit?.dependency || "",
       personVisited: {
         firstName: visit?.personVisited?.firstName || "",
@@ -217,7 +208,7 @@ const VisitsForm = ({
   };
 
   useEffect(() => {
-    const fetchPerson = async () => {
+    (async () => {
       if (dniValue?.length === 8) {
         try {
           const data = await getPersonDataByDni(dniValue);
@@ -234,9 +225,7 @@ const VisitsForm = ({
         setValue("paternalSurname", "");
         setValue("maternalSurname", "");
       }
-    };
-
-    fetchPerson();
+    })();
   }, [dniValue, getPersonDataByDni, setValue]);
 
   return (
@@ -358,33 +347,31 @@ const VisitsForm = ({
                 <Legend title="¿A quién visita?">
                   <Row gutter={[16, 16]}>
                     <Col span={24}>
-                      <Legend title="Busqueda">
-                        <VisitsFinder
-                          searchFields={searchFields}
-                          onSearch={setSearchFields}
-                          users={users}
-                          loading={usersLoading}
-                          onSelectUser={(selectedUser) => {
-                            setValue(
-                              "personVisited.firstName",
-                              selectedUser.firstName,
-                            );
-                            setValue(
-                              "personVisited.paternalSurname",
-                              selectedUser.paternalSurname,
-                            );
-                            setValue(
-                              "personVisited.maternalSurname",
-                              selectedUser.maternalSurname,
-                            );
-                            setValue(
-                              "personVisited.phoneNumber",
-                              selectedUser.phoneNumber,
-                            );
-                            setValue("personVisited.id", selectedUser.id);
-                          }}
-                        />
-                      </Legend>
+                      <VisitsFinder
+                        searchFields={searchFields}
+                        onSearch={setSearchFields}
+                        users={users}
+                        loading={usersLoading}
+                        onSelectUser={(selectedUser) => {
+                          setValue(
+                            "personVisited.firstName",
+                            selectedUser.firstName,
+                          );
+                          setValue(
+                            "personVisited.paternalSurname",
+                            selectedUser.paternalSurname,
+                          );
+                          setValue(
+                            "personVisited.maternalSurname",
+                            selectedUser.maternalSurname,
+                          );
+                          setValue(
+                            "personVisited.phoneNumber",
+                            selectedUser.phone.number,
+                          );
+                          setValue("personVisited.id", selectedUser.id);
+                        }}
+                      />
                     </Col>
                     <Col span={24} md={6}>
                       <Controller

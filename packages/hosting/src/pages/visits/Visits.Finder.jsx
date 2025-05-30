@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mediaQuery } from "../../styles";
 import { AutoComplete, Spin } from "../../components";
@@ -18,10 +18,6 @@ export const VisitsFinder = ({
     setInputValue(searchFields.userInformation || "");
   }, [searchFields.userInformation]);
 
-  const handleSearch = (value) => {
-    onSearch({ ...searchFields, userInformation: value });
-  };
-
   const handleSelect = (value, option) => {
     const user = users.find((u) => u.id === value);
     if (user && onSelectUser) {
@@ -29,26 +25,6 @@ export const VisitsFinder = ({
     }
     setInputValue(option.label);
   };
-
-  const options = users.map((user) => {
-    const searchableText = [
-      user.dni,
-      user.cip,
-      user.email,
-      user.firstName,
-      user.paternalSurname,
-      user.maternalSurname,
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-    return {
-      label: userFullName(user),
-      value: user.id,
-      searchableText,
-    };
-  });
 
   useEffect(() => {
     if (!inputValue) {
@@ -88,7 +64,7 @@ export const VisitsFinder = ({
 
   return (
     <Container>
-      <FormContent>
+      <div>
         <AutoComplete
           options={filteredOptions}
           onSelect={handleSelect}
@@ -98,21 +74,31 @@ export const VisitsFinder = ({
           notFoundContent={
             loading ? <Spin size="small" /> : "No se encontraron resultados"
           }
-          style={{ width: "100%" }}
+          size="large"
+          style={{
+            border: "1px solid gray",
+            borderRadius: "4px",
+          }}
+          bordered={false}
         />
-      </FormContent>
+      </div>
     </Container>
   );
 };
 
-const Container = styled.section``;
-const FormContent = styled.div`
-  display: grid;
-  align-items: center;
-  grid-gap: 1rem;
-  grid-template-columns: 1fr;
-
-  ${mediaQuery.minDesktop} {
+const Container = styled.section`
+  input {
+    border: 1px solid gray;
+    border-radius: 4px;
+  }
+  div {
+    display: grid;
+    align-items: center;
+    grid-gap: 1rem;
     grid-template-columns: 1fr;
+
+    ${mediaQuery.minDesktop} {
+      grid-template-columns: 1fr;
+    }
   }
 `;

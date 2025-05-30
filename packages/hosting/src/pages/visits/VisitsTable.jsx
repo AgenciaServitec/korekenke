@@ -74,9 +74,9 @@ export const VisitsTable = ({
       align: "center",
       width: ["9rem", "100%"],
       render: (visit) => (
-        <div>
+        <Space direction="vertical">
           <span>{userFullName(visit)}</span>
-          {visit.phone && (
+          {visit.phone.number && (
             <Space>
               <IconAction
                 tooltipTitle="Whatsapp"
@@ -92,7 +92,7 @@ export const VisitsTable = ({
               <span>{visit.phone.number}</span>
             </Space>
           )}
-        </div>
+        </Space>
       ),
     },
     {
