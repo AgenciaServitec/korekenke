@@ -1,11 +1,11 @@
 import { concat } from "lodash";
 
-export const getSearchDataToVisit = (visit) =>
+export const getSearchDataToVisit = (visit, firstName, middleName) =>
   concat([
-    visit.phone.number,
+    visit.visitorNumber,
     visit.dni,
     visit.paternalSurname.toLowerCase(),
     visit.maternalSurname.toLowerCase(),
-    visit.firstName.toLowerCase(),
-    visit.middleName.toLowerCase(),
+    firstName.toLowerCase(),
+    middleName.toLowerCase(),
   ]);
