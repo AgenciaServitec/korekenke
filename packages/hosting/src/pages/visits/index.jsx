@@ -30,6 +30,8 @@ import { VisitsFilter } from "./Visits.Filter";
 import { VisitsListFinder } from "./VisitsList.Finder";
 import { VisitsStatus } from "../../data-list";
 import { visitsListQuery } from "./utils";
+import { VisitedObservation } from "./VisitedObservation";
+import { VisitedObservationView } from "./VisitedObservationView";
 
 export const Visits = () => {
   const navigate = useNavigate();
@@ -155,6 +157,30 @@ const VisitsList = ({
     });
   };
 
+  const onShowVisitedObservation = (visit) => {
+    onShowModal({
+      centered: true,
+      top: 0,
+      padding: 0,
+      title: "Agregar Observation",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <VisitedObservation visit={visit} onCloseModal={onCloseModal} />
+      ),
+    });
+  };
+
+  const onShowVisitedObservationView = (visit) => {
+    onShowModal({
+      centered: true,
+      top: 0,
+      padding: 0,
+      title: `Observacion de ${visit.personVisited.firstName}`,
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => <VisitedObservationView visit={visit} />,
+    });
+  };
+
   return (
     <Acl category="public" subCategory="visits" name="/visits" redirect>
       <Row gutter={[16, 16]}>
@@ -224,6 +250,8 @@ const VisitsList = ({
             filterCount={filterCount}
             setFilterCount={setFilterCount}
             setFilterStates={setFilterStates}
+            onShowVisitedObservation={onShowVisitedObservation}
+            onShowVisitedObservationView={onShowVisitedObservationView}
           />
         </Col>
       </Row>

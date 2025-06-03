@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
 import {
   faEdit,
+  faEye,
   faReply,
   faRightFromBracket,
   faTrash,
@@ -30,6 +31,8 @@ export const VisitsTable = ({
   setFilterCount,
   setFilterStates,
   filterCount,
+  onShowVisitedObservation,
+  onShowVisitedObservationView,
 }) => {
   const { authUser } = useAuthentication();
 
@@ -177,6 +180,27 @@ export const VisitsTable = ({
       width: ["14rem", "100%"],
       render: (visit) => (
         <Space>
+          {visit.userId === authUser.id ? (
+            <IconAction
+              tooltipTitle="Observacion"
+              icon={faEye}
+              styled={{ color: (theme) => theme.colors.info }}
+              onClick={() => onShowVisitedObservation(visit)}
+            />
+          ) : (
+            <IconAction
+              tooltipTitle="Ver Observacion"
+              icon={faEye}
+              styled={{
+                color: visit.visitedObservation
+                  ? (theme) => theme.colors.info
+                  : (theme) => theme.colors.gray,
+              }}
+              onClick={() =>
+                visit.visitedObservation && onShowVisitedObservationView(visit)
+              }
+            />
+          )}
           <Acl
             category="public"
             subCategory="visits"
