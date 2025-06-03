@@ -4,8 +4,14 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { updateVisit } from "../../firebase/collections";
-import { Button, Form, notification, TextArea } from "../../components";
-import { Col, Row } from "antd";
+import {
+  Button,
+  Form,
+  notification,
+  TextArea,
+  Col,
+  Row,
+} from "../../components";
 
 export const VisitedObservation = ({ visit, onCloseModal }) => {
   const { assignUpdateProps } = useDefaultFirestoreProps();
