@@ -11,8 +11,10 @@ import {
 import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
 import {
+  faBuildingCircleXmark,
   faEdit,
   faEye,
+  faHourglassStart,
   faReply,
   faRightFromBracket,
   faTrash,
@@ -158,19 +160,28 @@ export const VisitsTable = ({
           visit.exitDateTime
         ) : (
           <Acl category="public" subCategory="visits" name="/visits#check-out">
-            <IconAction
-              tooltipTitle="Registrar Salida"
-              styled={{
-                color:
-                  visit.status === "approved"
-                    ? (theme) => theme.colors.error
-                    : (theme) => theme.colors.gray,
-              }}
-              icon={faRightFromBracket}
-              onClick={() =>
-                visit.status === "approved" && onConfirmIOChecker(visit)
-              }
-            />
+            {visit.status === "approved" ? (
+              <IconAction
+                tooltipTitle="Registrar Salida"
+                styled={{ color: (theme) => theme.colors.info }}
+                icon={faRightFromBracket}
+                onClick={() => onConfirmIOChecker(visit)}
+              />
+            ) : visit.status === "pending" ? (
+              <IconAction
+                tooltipTitle="Esperando aprobación"
+                styled={{ color: (theme) => theme.colors.warning }}
+                icon={faHourglassStart}
+                onClick={() => {}}
+              />
+            ) : (
+              <IconAction
+                tooltipTitle="Visita Desaprobada"
+                styled={{ color: (theme) => theme.colors.error }}
+                icon={faBuildingCircleXmark}
+                onClick={() => {}}
+              />
+            )}
           </Acl>
         ),
     },
