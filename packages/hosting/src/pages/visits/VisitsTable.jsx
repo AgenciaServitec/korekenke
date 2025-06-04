@@ -96,16 +96,19 @@ export const VisitsTable = ({
       )
         return true;
 
+      if (visit.userId === authUser.id) return true;
+
       if (
-        isManagerEntityGu ||
-        isBossPI ||
-        isBossSecondPI ||
-        isBossSeguridad1 ||
-        isBossSecondSeguridad1
+        visit.dependency.toLowerCase() === authUser?.initialCommand.id &&
+        visit.userId === authUser.id &&
+        (["pending", "approved", "disapproved"].includes(visit.status) ||
+          isManagerEntityGu ||
+          isBossPI ||
+          isBossSecondPI ||
+          isBossSeguridad1 ||
+          isBossSecondSeguridad1)
       )
         return true;
-
-      if (visit.userId === authUser.id) return true;
 
       return false;
     });
