@@ -21,6 +21,14 @@ export const fetchDepartmentByNameId = async (nameId) =>
       .limit(1),
   );
 
+export const fetchDepartmentByMemberId = async (userId) =>
+  fetchCollectionOnce(
+    departmentsRef
+      .where("membersIds", "array-contains", userId)
+      .where("isDeleted", "==", false)
+      .limit(1),
+  );
+
 export const addDepartment = async (department) =>
   setDocument(departmentsRef.doc(department.id), department);
 
