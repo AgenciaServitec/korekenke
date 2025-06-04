@@ -24,10 +24,13 @@ import { orderBy } from "lodash";
 import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
 import { useBosses } from "../../hooks";
+import {
+  fetchDepartments,
+  fetchEntityByNameId,
+} from "../../firebase/collections";
 
 export const VisitsTable = ({
   visits,
-  departments,
   onClickDeleteVisit,
   onClickEditVisit,
   onConfirmIOChecker,
@@ -65,6 +68,22 @@ export const VisitsTable = ({
       const _bossDepartment = await fetchDepartmentBoss("puerta-de-ingreso");
       const _bossSecondDepartment =
         await fetchDepartmentBossSecond("puerta-de-ingreso");
+
+      const _entities = await fetchEntityByNameId("seguridad");
+      const entityId = _entities[0]?.id;
+
+      const fetchAllDepartments = await fetchDepartments();
+
+      const allDepartments = fetchAllDepartments.filter((department) =>
+        department.name.toLowerCase().includes("puerta de ingreso"),
+      );
+      console.log("ALL DEPARTMENTS:", allDepartments);
+
+      const filteredDepartments = allDepartments.filter(
+        (department) => department.entityId === entityId,
+      );
+
+      console.log("FILTERED BY ENTITY:", filteredDepartments);
 
       setManagerEntityGuSeguridad(_managerEntityGuSeguridad);
       setBossDepartment1(_bossDepartmentSeguridad1);
