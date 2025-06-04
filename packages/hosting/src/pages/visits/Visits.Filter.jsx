@@ -33,15 +33,17 @@ export const VisitsFilter = ({ visits, filterFields, onFilter }) => {
   );
 };
 
-const Container = styled.section``;
+const Container = styled.section`
+  width: 100%;
+`;
 
 const FormContent = styled.div`
   display: grid;
   align-items: center;
   grid-gap: 1rem;
-  grid-template-columns: 1fr;
+  width: 100%;
 
   ${mediaQuery.minDesktop} {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 `;

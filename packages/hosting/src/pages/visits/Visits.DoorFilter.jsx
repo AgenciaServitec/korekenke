@@ -22,13 +22,9 @@ export const VisitsDoorFilter = ({ filterFields, onFilter }) => {
         department.name.toLowerCase().includes("puerta de ingreso"),
       );
 
-      console.log("ALL DEPARTMENTS:", allDepartments);
-
       const filteredDepartments = allDepartments.filter(
         (department) => department.entityId === entityId,
       );
-
-      console.log("FILTERED BY ENTITY:", filteredDepartments);
 
       setDepartments(filteredDepartments);
     })();
@@ -61,15 +57,17 @@ export const VisitsDoorFilter = ({ filterFields, onFilter }) => {
   );
 };
 
-const Container = styled.section``;
+const Container = styled.section`
+  width: 100%;
+`;
 
 const FormContent = styled.div`
   display: grid;
   align-items: center;
   grid-gap: 1rem;
-  grid-template-columns: 1fr;
+  width: 100%;
 
   ${mediaQuery.minDesktop} {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 `;

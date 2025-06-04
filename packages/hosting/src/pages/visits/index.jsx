@@ -122,6 +122,7 @@ const VisitsList = ({
     });
     setFilterFields({
       status: "all",
+      door: "all",
     });
   };
 
@@ -204,15 +205,21 @@ const VisitsList = ({
         </Col>
         <Col span={24}>
           <Legend title="Filtros">
-            <VisitsFilter
-              visits={visitsView}
-              filterFields={filterFields}
-              onFilter={setFilterFields}
-            />
-            <VisitsDoorFilter
-              filterFields={filterFields}
-              onFilter={setFilterFields}
-            />
+            <Row gutter={[16, 16]}>
+              <Col span={24} md={8}>
+                <VisitsFilter
+                  visits={visitsView}
+                  filterFields={filterFields}
+                  onFilter={setFilterFields}
+                />
+              </Col>
+              <Col span={24} md={8}>
+                <VisitsDoorFilter
+                  filterFields={filterFields}
+                  onFilter={setFilterFields}
+                />
+              </Col>
+            </Row>
           </Legend>
         </Col>
         <Col span={24} sm={18}>
