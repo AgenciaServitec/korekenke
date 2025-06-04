@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Acl,
   Col,
@@ -23,9 +23,11 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { orderBy } from "lodash";
 import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
+import { useBosses } from "../../hooks";
 
 export const VisitsTable = ({
   visits,
+  departments,
   onClickDeleteVisit,
   onClickEditVisit,
   onConfirmIOChecker,
@@ -37,16 +39,74 @@ export const VisitsTable = ({
   onShowVisitedObservationView,
 }) => {
   const { authUser } = useAuthentication();
+  const { fetchEntityManager, fetchDepartmentBoss, fetchDepartmentBossSecond } =
+    useBosses();
+
+  const [managerEntityGu, setManagerEntityGu] = useState(null);
+  const [managerEntityGuSeguridad, setManagerEntityGuSeguridad] =
+    useState(null);
+  const [bossDepartment, setBossDepartment] = useState(null);
+  const [bossSecondDepartment, setBossSecondDepartment] = useState(null);
+  const [bossDepartment1, setBossDepartment1] = useState(null);
+  const [bossSecondDepartment1, setBossSecondDepartment1] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const _managerEntityGuSeguridad = await fetchEntityManager("seguridad");
+      const _bossDepartmentSeguridad1 = await fetchDepartmentBoss(
+        "puerta-de-ingreso-1",
+      );
+      const _bossSecondDepartmentSeguridad1 = await fetchDepartmentBossSecond(
+        "puerta-de-ingreso-1",
+      );
+      const _managerEntityGu = await fetchEntityManager(
+        "departamento-de-inteligencia-y-contrainteligencia-del-ejercito",
+      );
+      const _bossDepartment = await fetchDepartmentBoss("puerta-de-ingreso");
+      const _bossSecondDepartment =
+        await fetchDepartmentBossSecond("puerta-de-ingreso");
+
+      setManagerEntityGuSeguridad(_managerEntityGuSeguridad);
+      setBossDepartment1(_bossDepartmentSeguridad1);
+      setBossSecondDepartment1(_bossSecondDepartmentSeguridad1);
+
+      setManagerEntityGu(_managerEntityGu);
+      setBossDepartment(_bossDepartment);
+      setBossSecondDepartment(_bossSecondDepartment);
+    })();
+  }, []);
 
   const messageWhatsapp = (visit) =>
     `https://api.whatsapp.com/send/?phone=${visit.personVisited.phone.prefix.replace("+", "")}${visit.personVisited.phone.number}&text=Hola ${userFullName(visit.personVisited)} 👋,te viene a visitar ${userFullName(visit)} ‍💼.%0A%0APor favor, ingresa al módulo de visitas en Korekenke 📲 para que puedas aprobar la visita ✅.%0A%0AGracias.&app_absent=0`;
 
+  const isManagerEntityGuSeguridad =
+    authUser.id === managerEntityGuSeguridad?.id;
+  const isBossSeguridad1 = authUser.id === bossDepartment1?.id;
+  const isBossSecondSeguridad1 = authUser.id === bossSecondDepartment1?.id;
+
+  const isManagerEntityGu = authUser.id === managerEntityGu?.id;
+  const isBossPI = authUser.id === bossDepartment?.id;
+  const isBossSecondPI = authUser.id === bossSecondDepartment?.id;
+
   const visitsView = (() => {
     const filteredVisits = visits.filter((visit) => {
-      // Visits for super-admin
-      if (["super_admin"].includes(authUser.roleCode)) return true;
+      if (
+        ["super_admin"].includes(authUser.roleCode) ||
+        isManagerEntityGuSeguridad ||
+        isBossSeguridad1 ||
+        isBossSecondSeguridad1
+      )
+        return true;
 
-      // Visits for user
+      if (
+        visit.dependency.toLowerCase() === authUser?.initialCommand.id &&
+        (["pending", "approved", "disapproved"].includes(visit.status) ||
+          isManagerEntityGu ||
+          isBossPI ||
+          isBossSecondPI)
+      )
+        return true;
+
       if (visit.userId === authUser.id) return true;
 
       return false;
