@@ -92,23 +92,22 @@ export const VisitsTable = ({
     const filteredVisits = visits.filter((visit) => {
       if (
         ["super_admin"].includes(authUser.roleCode) ||
-        isManagerEntityGuSeguridad
+        isManagerEntityGuSeguridad ||
+        isBossSeguridad1 ||
+        isBossSecondSeguridad1
+      )
+        return true;
+
+      if (
+        visit.dependency.toLowerCase() === authUser?.initialCommand.id &&
+        (["pending", "approved", "disapproved"].includes(visit.status) ||
+          isManagerEntityGu ||
+          isBossPI ||
+          isBossSecondPI)
       )
         return true;
 
       if (visit.userId === authUser.id) return true;
-
-      if (
-        visit.dependency.toLowerCase() === authUser?.initialCommand.id &&
-        visit.userId === authUser.id &&
-        (["pending", "approved", "disapproved"].includes(visit.status) ||
-          isManagerEntityGu ||
-          isBossPI ||
-          isBossSecondPI ||
-          isBossSeguridad1 ||
-          isBossSecondSeguridad1)
-      )
-        return true;
 
       return false;
     });

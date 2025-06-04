@@ -42,7 +42,6 @@ export const Visits = () => {
   const navigate = useNavigate();
   const { assignDeleteProps } = useDefaultFirestoreProps();
   const { authUser } = useAuthentication();
-  const { departments } = useGlobalData();
 
   const [searchFields, setSearchFields] = useQueriesState({
     visitInformation: undefined,
@@ -86,7 +85,6 @@ export const Visits = () => {
         <VisitsList
           user={authUser}
           visits={visits}
-          departments={departments}
           onAddVisit={onAddVisit}
           onEditVisit={onEditVisit}
           onConfirmDeleteVisit={onConfirmDeleteVisit}
@@ -100,7 +98,6 @@ export const Visits = () => {
 
 const VisitsList = ({
   user,
-  departments,
   onAddVisit,
   onEditVisit,
   onConfirmDeleteVisit,
@@ -250,7 +247,6 @@ const VisitsList = ({
           <VisitsTable
             user={user}
             visits={visitsView}
-            departments={departments}
             onClickAddVisit={onAddVisit}
             onClickEditVisit={onEditVisit}
             onConfirmIOChecker={onConfirmIOChecker}
