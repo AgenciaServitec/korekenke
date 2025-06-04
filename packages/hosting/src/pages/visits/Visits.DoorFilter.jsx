@@ -22,13 +22,13 @@ export const VisitsDoorFilter = ({ filterFields, onFilter }) => {
         department.name.toLowerCase().includes("puerta de ingreso"),
       );
 
-      console.log("ALL DEPARTMENTS:", allDepartments); // 👈
+      console.log("ALL DEPARTMENTS:", allDepartments);
 
       const filteredDepartments = allDepartments.filter(
         (department) => department.entityId === entityId,
       );
 
-      console.log("FILTERED BY ENTITY:", filteredDepartments); // 👈
+      console.log("FILTERED BY ENTITY:", filteredDepartments);
 
       setDepartments(filteredDepartments);
     })();

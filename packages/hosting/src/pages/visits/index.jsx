@@ -37,6 +37,7 @@ import { VisitsStatus } from "../../data-list";
 import { visitsListQuery } from "./utils";
 import { VisitedObservation } from "./VisitedObservation";
 import { VisitedObservationView } from "./VisitedObservationView";
+import { VisitsDoorFilter } from "./Visits.DoorFilter";
 
 export const Visits = () => {
   const navigate = useNavigate();
@@ -112,6 +113,7 @@ const VisitsList = ({
   const [filterStates, setFilterStates] = useState({});
   const [filterFields, setFilterFields] = useQueriesState({
     status: "all",
+    door: "all",
   });
 
   const onResetFilters = () => {
@@ -207,6 +209,10 @@ const VisitsList = ({
               filterFields={filterFields}
               onFilter={setFilterFields}
             />
+            <VisitsDoorFilter
+              filterFields={filterFields}
+              onFilter={setFilterFields}
+            />
           </Legend>
         </Col>
         <Col span={24} sm={18}>
@@ -265,8 +271,12 @@ const VisitsList = ({
 };
 
 const filteredVisits = (visits, filterFields) =>
-  visits.filter((visit) =>
-    filterFields?.status === "all"
-      ? true
-      : visit?.status === filterFields.status,
-  );
+  visits.filter((visit) => {
+    const matchesStatus =
+      filterFields?.status === "all" || visit?.status === filterFields.status;
+
+    const matchesDoor =
+      filterFields?.door === "all" || visit?.door === filterFields.door;
+
+    return matchesStatus && matchesDoor;
+  });
