@@ -49,8 +49,30 @@ export const useBosses = () => {
     return _departmentBoss;
   };
 
+  const fetchDepartmentBossSecond = async (nameId) => {
+    const departments = await fetchCollectionOnce(
+      departmentsRef
+        .where("nameId", "==", nameId)
+        .where("commandId", "==", currentCommand?.id)
+        .where("isDeleted", "==", false),
+    );
+
+    const department = departments.find(
+      (_department) =>
+        _department?.nameId.toUpperCase() === nameId.toUpperCase() &&
+        _department.commandId === currentCommand.id,
+    );
+
+    const _departmentBossSecond = department?.secondBossId
+      ? await fetchUser(department.secondBossId)
+      : {};
+
+    return _departmentBossSecond;
+  };
+
   return {
     fetchEntityManager,
     fetchDepartmentBoss,
+    fetchDepartmentBossSecond,
   };
 };
