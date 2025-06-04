@@ -15,6 +15,7 @@ import { assign, isEmpty } from "lodash";
 import * as yup from "yup";
 import {
   addVisit,
+  fetchDepartmentByMemberId,
   fetchVisit,
   getVisitsId,
   updateVisit,
@@ -32,9 +33,21 @@ import dayjs from "dayjs";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { getSearchDataToVisit, visitsUsersQuery } from "../utils";
 import { VisitsFinder } from "../Visits.Finder";
+import { useAuthentication } from "../../../providers";
 
 export const VisitsIntegration = () => {
   const navigate = useNavigate();
+
+  const { authUser } = useAuthentication();
+
+  const [departmentId, setDepartmentId] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const department = await fetchDepartmentByMemberId(authUser.id);
+      setDepartmentId(department[0]?.id || "");
+    })();
+  }, [authUser.id]);
 
   const { visitId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
@@ -81,10 +94,12 @@ export const VisitsIntegration = () => {
     try {
       setSavingVisit(true);
       isNew
-        ? await addVisit(assignCreateProps(mapVisit(visit, formData)))
+        ? await addVisit(
+            assignCreateProps(mapVisit(visit, formData, departmentId)),
+          )
         : await updateVisit(
             visit.id,
-            assignUpdateProps(mapVisit(visit, formData)),
+            assignUpdateProps(mapVisit(visit, formData, departmentId)),
           );
       notification({ type: "success" });
       onGoToVisits();
@@ -94,7 +109,7 @@ export const VisitsIntegration = () => {
     }
   };
 
-  const mapVisit = (visit, formData) => {
+  const mapVisit = (visit, formData, departmentId) => {
     const [firstName, middleName = ""] = formData.firstName.split(" ");
 
     return assign(
@@ -124,6 +139,7 @@ export const VisitsIntegration = () => {
         userId: formData.personVisited?.id || "",
         entryDateTime: dateTime,
         searchData: getSearchDataToVisit(formData, firstName, middleName),
+        door: departmentId,
       },
     );
   };
@@ -159,7 +175,7 @@ const VisitsForm = ({
     firstName: yup.string().required(),
     paternalSurname: yup.string().required(),
     maternalSurname: yup.string().required(),
-    visitorNumber: yup.string().min(9).notRequired(),
+    visitorNumber: yup.string().notRequired(),
     dependency: yup.string().required(),
     personVisited: yup.object({
       firstName: yup.string().required(),
