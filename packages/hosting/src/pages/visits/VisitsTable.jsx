@@ -23,7 +23,10 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { orderBy } from "lodash";
 import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
-import { useBosses } from "../../hooks";
+import { useBosses, useOrganizationData } from "../../hooks";
+import { firestore } from "../../firebase";
+import { fetchDocumentOnce } from "../../firebase/utils";
+import { entitiesRef } from "../../firebase/collections";
 
 export const VisitsTable = ({
   visits,
@@ -40,6 +43,7 @@ export const VisitsTable = ({
   const { authUser } = useAuthentication();
   const { fetchEntityManager, fetchDepartmentBoss, fetchDepartmentBossSecond } =
     useBosses();
+  const { fecthOrganization } = useOrganizationData();
 
   const [managerEntityGu, setManagerEntityGu] = useState(null);
   const [managerEntityGuSeguridad, setManagerEntityGuSeguridad] =
@@ -48,6 +52,8 @@ export const VisitsTable = ({
   const [bossSecondDepartment, setBossSecondDepartment] = useState(null);
   const [bossDepartment1, setBossDepartment1] = useState(null);
   const [bossSecondDepartment1, setBossSecondDepartment1] = useState(null);
+
+  const { id, type } = authUser.assignedTo;
 
   useEffect(() => {
     (async () => {

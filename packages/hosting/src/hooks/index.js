@@ -19,3 +19,4 @@ export * from "./useUserLocation";
 export * from "./useWebcam";
 export * from "./useFaceDetections";
 export * from "./useFingerprint";
+export * from "./useOrganizationData";
