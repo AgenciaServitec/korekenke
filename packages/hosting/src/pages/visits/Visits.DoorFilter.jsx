@@ -26,7 +26,13 @@ export const VisitsDoorFilter = ({ filterFields, onFilter }) => {
         (department) => department.entityId === entityId,
       );
 
-      setDepartments(filteredDepartments);
+      const sortedDepartments = filteredDepartments.sort((a, b) => {
+        const numA = parseInt(a.name.match(/\d+/)?.[0] || 0);
+        const numB = parseInt(b.name.match(/\d+/)?.[0] || 0);
+        return numA - numB;
+      });
+
+      setDepartments(sortedDepartments);
     })();
   }, []);
 
