@@ -20,12 +20,7 @@ import {
   useDevice,
   useQueriesState,
 } from "../../hooks";
-import {
-  ModalProvider,
-  useAuthentication,
-  useGlobalData,
-  useModal,
-} from "../../providers";
+import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { updateVisit } from "../../firebase/collections";
 import { VisitsTable } from "./VisitsTable";
