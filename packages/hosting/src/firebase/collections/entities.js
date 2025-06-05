@@ -7,6 +7,7 @@ export const entitiesRef = firestore.collection("entities");
 export const getEntityId = () => entitiesRef.doc().id;
 
 export const fetchEntity = async (id) => fetchDocumentOnce(entitiesRef.doc(id));
+
 export const fetchEntityByNameId = async (nameId) =>
   fetchCollectionOnce(
     entitiesRef

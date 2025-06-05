@@ -20,12 +20,7 @@ import {
   useDevice,
   useQueriesState,
 } from "../../hooks";
-import {
-  ModalProvider,
-  useAuthentication,
-  useGlobalData,
-  useModal,
-} from "../../providers";
+import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { updateVisit } from "../../firebase/collections";
 import { VisitsTable } from "./VisitsTable";
@@ -37,6 +32,7 @@ import { VisitsStatus } from "../../data-list";
 import { visitsListQuery } from "./utils";
 import { VisitedObservation } from "./VisitedObservation";
 import { VisitedObservationView } from "./VisitedObservationView";
+import { VisitsDoorFilter } from "./Visits.DoorFilter";
 
 export const Visits = () => {
   const navigate = useNavigate();
@@ -112,6 +108,7 @@ const VisitsList = ({
   const [filterStates, setFilterStates] = useState({});
   const [filterFields, setFilterFields] = useQueriesState({
     status: "all",
+    door: "all",
   });
 
   const onResetFilters = () => {
@@ -120,6 +117,7 @@ const VisitsList = ({
     });
     setFilterFields({
       status: "all",
+      door: "all",
     });
   };
 
@@ -202,11 +200,21 @@ const VisitsList = ({
         </Col>
         <Col span={24}>
           <Legend title="Filtros">
-            <VisitsFilter
-              visits={visitsView}
-              filterFields={filterFields}
-              onFilter={setFilterFields}
-            />
+            <Row gutter={[16, 16]}>
+              <Col span={24} md={8}>
+                <VisitsFilter
+                  visits={visitsView}
+                  filterFields={filterFields}
+                  onFilter={setFilterFields}
+                />
+              </Col>
+              <Col span={24} md={8}>
+                <VisitsDoorFilter
+                  filterFields={filterFields}
+                  onFilter={setFilterFields}
+                />
+              </Col>
+            </Row>
           </Legend>
         </Col>
         <Col span={24} sm={18}>
@@ -265,8 +273,12 @@ const VisitsList = ({
 };
 
 const filteredVisits = (visits, filterFields) =>
-  visits.filter((visit) =>
-    filterFields?.status === "all"
-      ? true
-      : visit?.status === filterFields.status,
-  );
+  visits.filter((visit) => {
+    const matchesStatus =
+      filterFields?.status === "all" || visit?.status === filterFields.status;
+
+    const matchesDoor =
+      filterFields?.door === "all" || visit?.door === filterFields.door;
+
+    return matchesStatus && matchesDoor;
+  });
