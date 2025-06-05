@@ -27,7 +27,6 @@ import { useBosses } from "../../hooks";
 
 export const VisitsTable = ({
   visits,
-  departments,
   onClickDeleteVisit,
   onClickEditVisit,
   onConfirmIOChecker,
