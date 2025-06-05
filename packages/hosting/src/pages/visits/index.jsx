@@ -33,6 +33,7 @@ import { visitsListQuery } from "./utils";
 import { VisitedObservation } from "./VisitedObservation";
 import { VisitedObservationView } from "./VisitedObservationView";
 import { VisitsDoorFilter } from "./Visits.DoorFilter";
+import { VisitsDependencyFilter } from "./Visits.DependencyFilter";
 
 export const Visits = () => {
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ const VisitsList = ({
   const [filterFields, setFilterFields] = useQueriesState({
     status: "all",
     door: "all",
+    dependency: "all",
   });
 
   const onResetFilters = () => {
@@ -118,6 +120,7 @@ const VisitsList = ({
     setFilterFields({
       status: "all",
       door: "all",
+      dependency: "all",
     });
   };
 
@@ -214,6 +217,12 @@ const VisitsList = ({
                   onFilter={setFilterFields}
                 />
               </Col>
+              <Col span={24} md={8}>
+                <VisitsDependencyFilter
+                  filterFields={filterFields}
+                  onFilter={setFilterFields}
+                />
+              </Col>
             </Row>
           </Legend>
         </Col>
@@ -280,5 +289,9 @@ const filteredVisits = (visits, filterFields) =>
     const matchesDoor =
       filterFields?.door === "all" || visit?.door === filterFields.door;
 
-    return matchesStatus && matchesDoor;
+    const matchesDependency =
+      filterFields?.dependency === "all" ||
+      visit?.dependency.toLocaleLowerCase() === filterFields.dependency;
+
+    return matchesStatus && matchesDoor && matchesDependency;
   });
