@@ -20,13 +20,10 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { orderBy } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
 import { useBosses, useOrganizationData } from "../../hooks";
-import { firestore } from "../../firebase";
-import { fetchDocumentOnce } from "../../firebase/utils";
-import { entitiesRef } from "../../firebase/collections";
 
 export const VisitsTable = ({
   visits,
@@ -43,7 +40,7 @@ export const VisitsTable = ({
   const { authUser } = useAuthentication();
   const { fetchEntityManager, fetchDepartmentBoss, fetchDepartmentBossSecond } =
     useBosses();
-  const { fecthOrganization } = useOrganizationData();
+  const { fetchOrganizationalStructure } = useOrganizationData();
 
   const [managerEntityGu, setManagerEntityGu] = useState(null);
   const [managerEntityGuSeguridad, setManagerEntityGuSeguridad] =
@@ -57,6 +54,13 @@ export const VisitsTable = ({
 
   useEffect(() => {
     (async () => {
+      const organizationalData =
+        authUser.assignedTo.id &&
+        (await fetchOrganizationalStructure(id, type));
+      console.log(organizationalData);
+
+      if (!organizationalData) return;
+
       const _managerEntityGuSeguridad = await fetchEntityManager("seguridad");
       const _bossDepartmentSeguridad1 = await fetchDepartmentBoss(
         "puerta-de-ingreso-1",
