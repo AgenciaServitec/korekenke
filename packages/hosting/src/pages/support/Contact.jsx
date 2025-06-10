@@ -22,6 +22,9 @@ export const Contact = () => {
               Korekenke, el ecosistema que gestiona diversos módulos de trámites
               de documentos.
             </p>
+            {/*<p>
+            Correo: <strong>info@atlas1033.com</strong>
+          </p>*/}
             <p>
               <strong>Horario de atención:</strong> <br />
               Lunes a viernes: 9:00am - 6:00pm <br />
