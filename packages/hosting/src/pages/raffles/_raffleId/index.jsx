@@ -7,6 +7,7 @@ import {
   Acl,
   Button,
   Col,
+  DatePicker,
   Form,
   Input,
   Legend,
@@ -31,6 +32,7 @@ import { faFileImport } from "@fortawesome/free-solid-svg-icons";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as XLSX from "xlsx";
+import dayjs from "dayjs";
 
 export const RaffleIntegration = () => {
   const { authUser } = useAuthentication();
@@ -38,14 +40,10 @@ export const RaffleIntegration = () => {
   const { raffleId } = useParams();
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
-  const [participants = [], participantsLoading, participantsError] =
-    useCollectionData(
-      raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
-    );
-
   const [raffle, setRaffle] = useState({});
   const [loading, setLoading] = useState(false);
   const [participantsImport, setParticipantsImport] = useState("");
+  const [quantityParticipants, setQuantityParticipants] = useState("");
   const [fileExcel, setFileExcel] = useState(null);
   const [uploadLoading, setUploadLoading] = useState(false);
 
@@ -60,7 +58,11 @@ export const RaffleIntegration = () => {
 
       if (!_raffle) return onGoBack();
 
-      setRaffle(_raffle);
+      setRaffle({
+        ..._raffle,
+        startDate: _raffle.startDate,
+        endDate: _raffle.endDate,
+      });
     })();
   }, []);
 
@@ -70,7 +72,13 @@ export const RaffleIntegration = () => {
     group: formData.group,
     winningNumbers: formData.winningNumbers,
     durationSeconds: formData.durationSeconds,
-    quantityParticipants: participants?.length,
+    startDate: formData.startDate
+      ? dayjs(formData.startDate).format("DD-MM-YYYY")
+      : undefined,
+    endDate: formData.endDate
+      ? dayjs(formData.endDate).format("DD-MM-YYYY")
+      : undefined,
+    quantityParticipants: quantityParticipants,
     userId: authUser?.id,
   });
 
@@ -135,6 +143,7 @@ export const RaffleIntegration = () => {
       });
 
       setParticipantsImport(lineas.join("\n"));
+      setQuantityParticipants(json.length);
 
       setUploadLoading(false);
     };
@@ -157,8 +166,6 @@ export const RaffleIntegration = () => {
       <RaffleForm
         isNew={isNew}
         raffle={raffle}
-        participants={participants}
-        participantsLoading={participantsLoading}
         loading={loading}
         fileExcel={fileExcel}
         onSetFileExcel={setFileExcel}
@@ -188,6 +195,8 @@ const RaffleForm = ({
     group: yup.string(),
     winningNumbers: yup.number(),
     durationSeconds: yup.number(),
+    startDate: yup.date().min(dayjs()),
+    endDate: yup.date().min(yup.ref("startDate")),
     participants: yup.string(),
   });
 
@@ -217,8 +226,15 @@ const RaffleForm = ({
       group: raffle?.group || "",
       winningNumbers: raffle?.winningNumbers || "",
       durationSeconds: raffle?.durationSeconds || "",
+      startDate: raffle.startDate
+        ? dayjs(raffle.startDate, "DD-MM-YYYY")
+        : undefined,
+      endDate: raffle.endDate ? dayjs(raffle.endDate, "DD-MM-YYYY") : undefined,
     });
   };
+
+  const disabledDate = (current) =>
+    current && current <= dayjs().startOf("day");
 
   return (
     <Row gutter={[16, 16]}>
@@ -256,6 +272,40 @@ const RaffleForm = ({
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col xs={24} md={12}>
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <DatePicker
+                    label="Fecha y hora de inicio"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    disabledDate={disabledDate}
+                  />
+                )}
+              />
+            </Col>
+            <Col xs={24} md={12}>
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <DatePicker
+                    label="Fecha y hora de cierre"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    disabledDate={disabledDate}
                   />
                 )}
               />
