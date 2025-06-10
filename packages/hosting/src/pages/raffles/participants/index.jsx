@@ -25,12 +25,10 @@ export const RafflesParticipants = () => {
     removeParticipants,
     setRemoveParticipants,
   ) => {
-    if (isEmpty(removeParticipants)) {
-      setRemoveParticipants();
-    }
+    if (isEmpty(removeParticipants)) return;
 
     try {
-      for (const participantId of participants) {
+      for (const participantId of removeParticipants) {
         await updateRaffleParticipant(
           raffleId,
           participantId,

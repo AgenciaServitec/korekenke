@@ -8,28 +8,29 @@ import {
   Button,
   Col,
   Form,
-  IconAction,
   Input,
+  Legend,
   notification,
   Row,
-  Space,
   TextArea,
   Title,
 } from "../../../components";
+import { Space, Upload } from "antd";
 import { useNavigate, useParams } from "react-router";
 import {
-  addRaffleParticipant,
   addRaffle,
+  addRaffleParticipant,
   fetchRaffle,
   getRaffleId,
+  getRaffleParticipantId,
   raffleParticipantsRef,
   updateRaffle,
 } from "../../../firebase/collections/raffles";
 import { useAuthentication } from "../../../providers";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { faFileImport } from "@fortawesome/free-solid-svg-icons";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { isEmpty } from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as XLSX from "xlsx";
 
 export const RaffleIntegration = () => {
   const { authUser } = useAuthentication();
@@ -44,6 +45,9 @@ export const RaffleIntegration = () => {
 
   const [raffle, setRaffle] = useState({});
   const [loading, setLoading] = useState(false);
+  const [participantsImport, setParticipantsImport] = useState("");
+  const [fileExcel, setFileExcel] = useState(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const isNew = raffleId === "new";
   const onGoBack = () => navigate(-1);
@@ -64,7 +68,9 @@ export const RaffleIntegration = () => {
     ...raffle,
     title: formData.title,
     group: formData.group,
-    quantityParticipants: formData.participants.split("\n").length,
+    winningNumbers: formData.winningNumbers,
+    durationSeconds: formData.durationSeconds,
+    quantityParticipants: participants?.length,
     userId: authUser?.id,
   });
 
@@ -72,20 +78,28 @@ export const RaffleIntegration = () => {
     try {
       setLoading(true);
 
-      const participants = formData.participants.split("\n").map((par) => ({
-        nombres: par.split(":")[0],
+      const participants = formData.participants?.split("\n").map((par) => ({
+        id: getRaffleParticipantId(),
+        fullName: par.split(":")[0],
         dni: par.split(":")[1],
-        celular: par.split(":")[2],
+        phone: {
+          prefix: "+51",
+          number: par.split(":")[2],
+        },
       }));
 
       isNew
         ? await addRaffle(assignCreateProps(mapRaffle(formData)))
         : await updateRaffle(raffle.id, assignUpdateProps(mapRaffle(formData)));
 
-      await participants.forEach(
-        async (participant) =>
-          await addRaffleParticipant(raffle.id, assignCreateProps(participant)),
-      );
+      isNew &&
+        participants.map(
+          async (participant) =>
+            await addRaffleParticipant(
+              raffle.id,
+              assignCreateProps(participant),
+            ),
+        );
 
       notification({ type: "success", message: "Se guardó correctamente." });
       onGoBack();
@@ -95,6 +109,42 @@ export const RaffleIntegration = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const onImportParticipants = () => {
+    const file = fileExcel;
+
+    if (!file) return;
+
+    setUploadLoading(true);
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheet];
+      const json = XLSX.utils.sheet_to_json(worksheet);
+
+      const lineas = json.map((row) => {
+        const nombre = row.nombres || row.Nombre || "";
+        const dni = row.dni || row.DNI || "";
+        const celular = row.celular || row.Celular || "";
+        return `${nombre}:${dni}:${celular}`;
+      });
+
+      setParticipantsImport(lineas.join("\n"));
+
+      setUploadLoading(false);
+    };
+
+    reader.onerror = () => {
+      notification({ type: "error", message: "Error al leer el archivo" });
+      setUploadLoading(false);
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
   return (
@@ -108,9 +158,13 @@ export const RaffleIntegration = () => {
         isNew={isNew}
         raffle={raffle}
         participants={participants}
-        columns={columns}
         participantsLoading={participantsLoading}
         loading={loading}
+        fileExcel={fileExcel}
+        onSetFileExcel={setFileExcel}
+        uploadLoading={uploadLoading}
+        onImportParticipants={onImportParticipants}
+        participantsImport={participantsImport}
         onSubmit={onSubmit}
         onGoBack={onGoBack}
       />
@@ -121,14 +175,19 @@ export const RaffleIntegration = () => {
 const RaffleForm = ({
   isNew,
   raffle,
-  participants,
   loading,
+  fileExcel,
+  onSetFileExcel,
+  onImportParticipants,
+  participantsImport,
   onSubmit,
   onGoBack,
 }) => {
   const schema = yup.object({
     title: yup.string(),
     group: yup.string(),
+    winningNumbers: yup.number(),
+    durationSeconds: yup.number(),
     participants: yup.string(),
   });
 
@@ -137,6 +196,7 @@ const RaffleForm = ({
     handleSubmit,
     control,
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -147,10 +207,16 @@ const RaffleForm = ({
     resetForm();
   }, [raffle]);
 
+  useEffect(() => {
+    setValue("participants", participantsImport);
+  }, [participantsImport]);
+
   const resetForm = () => {
     reset({
       title: raffle?.title || "",
       group: raffle?.group || "",
+      winningNumbers: raffle?.winningNumbers || "",
+      durationSeconds: raffle?.durationSeconds || "",
     });
   };
 
@@ -195,69 +261,89 @@ const RaffleForm = ({
               />
             </Col>
             <Col span={24}>
-              <Controller
-                name="winners"
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Ganadores"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24}>
-              <Controller
-                name="durationSeconds"
-                control={control}
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Duración en segundos"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-            <Col span={24}>
-              {isEmpty(participants) ? (
-                <Controller
-                  name="participants"
-                  control={control}
-                  render={({ field: { onChange, value, name } }) => (
-                    <TextArea
-                      label="Participantes"
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      error={error(name)}
-                      required={required(name)}
-                      rows={10}
-                      placeholder="nombres:dni:celular"
+              <Legend title="Animación de Ganador">
+                <Row gutter={[16, 16]}>
+                  <Col span={24}>
+                    <Controller
+                      name="winningNumbers"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          type="number"
+                          label="N° Ganadores"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
                     />
-                  )}
-                />
-              ) : (
-                <Button danger type="primary" onClick={() => ""}>
-                  Participantes ({participants.length})
-                </Button>
-              )}
+                  </Col>
+                  <Col span={24}>
+                    <Controller
+                      name="durationSeconds"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <Input
+                          type="number"
+                          label="Duración en segundos"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                        />
+                      )}
+                    />
+                  </Col>
+                </Row>
+              </Legend>
             </Col>
-            <Col span={24}>
-              <div style={{ margin: "24px 0 16px 0" }}>
-                <p style={{ color: "#666", fontStyle: "italic" }}>
-                  🚀 Después de guardar el sorteo, podrás agregar candidatos
-                  desde la lista de elecciones.
-                </p>
-              </div>
-            </Col>
+            {isNew && (
+              <Col span={24}>
+                <Row gutter={[16, 16]}>
+                  <Col span={24}>
+                    <Controller
+                      name="participants"
+                      control={control}
+                      render={({ field: { onChange, value, name } }) => (
+                        <TextArea
+                          label="Participantes"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                          rows={10}
+                          placeholder="nombres:dni:celular"
+                          disabled={participantsImport}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <Space align="start">
+                      <Upload
+                        name="file"
+                        onRemove={() => onSetFileExcel(null)}
+                        beforeUpload={(file) => {
+                          onSetFileExcel(file);
+                          return false;
+                        }}
+                      >
+                        <Button icon={<FontAwesomeIcon icon={faFileImport} />}>
+                          Importar desde archivo
+                        </Button>
+                      </Upload>
+                      {fileExcel && (
+                        <Button onClick={onImportParticipants}>Importar</Button>
+                      )}
+                    </Space>
+                  </Col>
+                </Row>
+              </Col>
+            )}
             <Col span={24}>
               <Row justify="end" gutter={[16, 16]}>
                 <Col xs={24} sm={6} md={4}>

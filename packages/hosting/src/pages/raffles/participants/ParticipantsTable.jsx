@@ -80,8 +80,8 @@ export const ParticipantsTable = ({
       render: (participant) => (
         <Space>
           <Checkbox
-            onChange={(e) =>
-              onAddRemoveParticipants(participant.id, e.target.checked)
+            onChange={(checked) =>
+              onAddRemoveParticipants(participant.id, checked)
             }
             checked={onIsremoveParticipants(participant.id)}
           />
