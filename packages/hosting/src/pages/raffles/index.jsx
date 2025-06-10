@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, modalConfirm, Row } from "../../components";
+import { Col, modalConfirm, Row, Spinner } from "../../components";
 import { RafflesCards } from "./RafflesCards";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { rafflesRef, updateRaffle } from "../../firebase/collections/raffles";
@@ -23,6 +23,8 @@ export const RafflesIntegration = () => {
         await updateRaffle(raffleId, assignDeleteProps({ isDeleted: true }));
       },
     });
+
+  if (rafflesLoading) return <Spinner />;
 
   return (
     <Raffles

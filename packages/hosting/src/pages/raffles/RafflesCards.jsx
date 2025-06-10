@@ -1,7 +1,14 @@
 import React from "react";
 import dayjs from "dayjs";
-import { Card, IconAction, Typography } from "../../components/ui";
-import { Col, Row } from "../../components";
+import {
+  Button,
+  Card,
+  Col,
+  IconAction,
+  Row,
+  Space,
+  Typography,
+} from "../../components";
 import { orderBy } from "lodash";
 import styled from "styled-components";
 import {
@@ -13,7 +20,6 @@ import {
   faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Space } from "antd";
 import { useNavigate } from "react-router";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
@@ -24,27 +30,25 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
       <Card className="card-wrapper">
         <div className="card-bar" />
         <div className="card-header">
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Typography.Title className="title" level={4}>
-              {raffle.title}
-            </Typography.Title>
-            <Typography.Title className="title" level={4}>
-              {raffle.group}
-            </Typography.Title>
-            <Typography.Text style={{ fontSize: "0.85rem" }}>
-              Participantes: {raffle?.participants}
-            </Typography.Text>
-            <Typography.Text type="secondary" style={{ fontSize: "0.85rem" }}>
-              Creada:
-              {raffle.createAt
-                ? dayjs(raffle.createAt.toDate()).format("DD/MM/YYYY HH:mm")
-                : "N/A"}
-            </Typography.Text>
-            <Space>
-              <Button onClick={() => navigate(`${raffle.id}/play`)}>
-                <FontAwesomeIcon icon={faPlay} />
-                <span>Comenzar</span>
-              </Button>
+          <Typography.Title className="title" level={4}>
+            {raffle.title}
+          </Typography.Title>
+          <Typography.Title className="title" level={5}>
+            {raffle.group}
+          </Typography.Title>
+          <span>Participantes: {raffle?.quantityParticipants}</span>
+          <span>
+            Creada:
+            {raffle.createAt
+              ? dayjs(raffle.createAt.toDate()).format("DD/MM/YYYY HH:mm")
+              : "N/A"}
+          </span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={() => navigate(`${raffle.id}/play`)}>
+              <FontAwesomeIcon icon={faPlay} />
+              <span>Comenzar</span>
+            </Button>
+            <div style={{ display: "flex", gap: "1rem" }}>
               <IconAction
                 tooltipTitle="Premios"
                 icon={faGift}
@@ -74,8 +78,11 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
                 icon={faTrash}
                 size={33}
                 onClick={() => onConfirmDeleteRaffle(raffle.id)}
+                styled={{
+                  color: (theme) => theme.colors.error,
+                }}
               />
-            </Space>
+            </div>
           </div>
         </div>
       </Card>
@@ -115,14 +122,9 @@ const Container = styled.div`
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
     .card-header {
-      flex-shrink: 0;
-      align-items: flex-start;
-      gap: 1em;
       .title {
-        padding-top: 0.3em;
         margin: 0;
-        font-size: 1.1rem;
-        font-weight: 600;
+        text-transform: capitalize;
       }
     }
     .status {

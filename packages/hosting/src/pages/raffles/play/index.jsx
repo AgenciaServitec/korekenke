@@ -1,39 +1,69 @@
-import React, { useState } from "react";
-import { Acl, Button, Col, IconAction, Row } from "../../../components";
+import React, { useEffect, useState } from "react";
+import {
+  Acl,
+  Button,
+  Col,
+  IconAction,
+  Row,
+  Spinner,
+} from "../../../components";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { raffleParticipantsRef } from "../../../firebase/collections/raffles";
+import {
+  fetchRaffle,
+  raffleParticipantsRef,
+  rafflesRef,
+} from "../../../firebase/collections/raffles";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { faAngleRight, faArrowsSpin } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsSpin } from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
-import ReactConfetti from "react-confetti";
-import { useWindowSize } from "react-use";
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RaffleWinner } from "./RaffleWinner";
 
 export const RafflePlay = () => {
   const { raffleId } = useParams();
-  const { width, height } = useWindowSize();
 
+  const [raffle, setRaffle] = useState(null);
   const [winner, setWinner] = useState(null);
+  const [shuffledParticipants, setShuffledParticipants] = useState([]);
 
   const [participants = [], participantsLoading, participantsError] =
     useCollectionData(
       raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
     );
 
+  useEffect(() => {
+    setShuffledParticipants(participants);
+  }, [participants]);
+
+  useEffect(() => {
+    (async () => {
+      const _raffle = await fetchRaffle(raffleId);
+      setRaffle(_raffle);
+    })();
+  }, []);
+
   const onRafflePlay = () => {
     const selectWinner = (participants) => {
       if (participants.length === 0) return null;
 
       const indexWinner = Math.floor(Math.random() * participants.length);
-      console.log(indexWinner, participants[indexWinner]);
       return participants[indexWinner];
     };
 
     const _winner = selectWinner(participants);
     setWinner(_winner);
   };
+
+  const onShuffleParticipants = () => {
+    const nuevoArray = [...participants];
+    for (let i = nuevoArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [nuevoArray[i], nuevoArray[j]] = [nuevoArray[j], nuevoArray[i]];
+    }
+    setShuffledParticipants(nuevoArray);
+  };
+
+  if (participantsLoading) return <Spinner />;
 
   return (
     <Acl
@@ -53,13 +83,13 @@ export const RafflePlay = () => {
                     <IconAction
                       tooltipTitle="Chocolatear"
                       icon={faArrowsSpin}
-                      onClick={() => ""}
+                      onClick={() => onShuffleParticipants()}
                     />
                   </div>
-                  <p>Total: {participants.length}</p>
+                  <strong>Total: {participants.length}</strong>
                 </div>
                 <ul className="list">
-                  {participants.map(({ fullName, id }) => (
+                  {shuffledParticipants.map(({ fullName, id }) => (
                     <li key={id}>{fullName}</li>
                   ))}
                 </ul>
@@ -76,16 +106,7 @@ export const RafflePlay = () => {
             </Container>
           </Col>
         ) : (
-          <Container>
-            <ReactConfetti width={width} height={height} />
-            <h2>Ganadores</h2>
-            <div className="winners">
-              <div>
-                <p>{winner?.nombres}</p>
-                <FontAwesomeIcon icon={faAngleRight} size="xl" />
-              </div>
-            </div>
-          </Container>
+          <RaffleWinner raffle={raffle} winner={winner} />
         )}
       </Row>
     </Acl>
@@ -146,20 +167,6 @@ const Container = styled.div`
       text-align: center;
       border-top: 1px solid #b1b1b1;
       font-weight: bold;
-    }
-  }
-
-  .winners {
-    div {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 0.625rem;
-      padding: 1rem;
-      box-shadow: 0 0 8px #b1b1b1;
-    }
-    p {
-      margin: 0;
     }
   }
 `;
