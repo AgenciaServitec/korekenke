@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { Row, Col, Title, notification } from "../../components";
 import styled from "styled-components";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { getYouTubeId } from "../../utils";
 import { tutorialsRef } from "../../firebase/collections";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { Title, notification } from "../../components";
 
 export const Tutorials = () => {
   const [tutorials = [], tutorialsLoading, tutorialsError] = useCollectionData(
@@ -13,49 +13,35 @@ export const Tutorials = () => {
 
   useEffect(() => {
     if (tutorialsError) {
-      notification({
-        type: "error",
-      });
+      notification({ type: "error" });
     }
   }, [tutorialsError]);
 
   return (
     <Container>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Title level={1}>Tutoriales</Title>
-        </Col>
+      <Title level={1}>Tutoriales</Title>
 
+      <TutorialGrid>
         {tutorials.map((tutorial) => (
-          <Col span={24} key={tutorial.id} className="tutorial-section">
-            <Row gutter={[16, 16]}>
-              <Col span={24}>
-                <Title level={3} margin={0}>
-                  {tutorial.title}
-                </Title>
-              </Col>
-              <div className="videos-wrapper">
-                <div className="video-card">
-                  <div className="video-content">
-                    <LiteYouTubeEmbed
-                      id={getYouTubeId(tutorial.videoUrl)}
-                      adNetwork={true}
-                      title={tutorial.title}
-                      iframeClass="video-item"
-                      poster="maxresdefault"
-                      width="100%"
-                      height="100%"
-                    />
-                  </div>
-                  <div className="title">
-                    <h5>{tutorial.description}</h5>
-                  </div>
-                </div>
-              </div>
-            </Row>
-          </Col>
+          <TutorialCard key={tutorial.id}>
+            <Title level={3} margin={0}>
+              {tutorial.title}
+            </Title>
+            <div className="video-content">
+              <LiteYouTubeEmbed
+                id={getYouTubeId(tutorial.videoUrl)}
+                adNetwork={true}
+                title={tutorial.title}
+                iframeClass="video-item"
+                poster="maxresdefault"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            <p className="description">{tutorial.description}</p>
+          </TutorialCard>
         ))}
-      </Row>
+      </TutorialGrid>
     </Container>
   );
 };
@@ -63,39 +49,36 @@ export const Tutorials = () => {
 const Container = styled.div`
   width: 100%;
   min-height: 100svh;
+`;
 
-  .tutorial-section {
-    margin-bottom: 2em;
+const TutorialGrid = styled.div`
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+`;
+
+const TutorialCard = styled.div`
+  background: #c5d1db;
+  border-radius: 1em;
+  overflow: hidden;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .video-content {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    margin-top: 1rem;
+
+    .video-item {
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  .videos-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 1em;
-
-    .video-card {
-      background: #c5d1db;
-      border-radius: 1em;
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: 1fr 5em;
-      width: 100%;
-      max-width: 30em;
-      min-height: 20em;
-
-      .video-content {
-        position: relative;
-
-        .video-item {
-          width: 100%;
-          height: 100%;
-        }
-      }
-
-      .title {
-        padding: 1em;
-      }
-    }
+  .description {
+    padding-top: 1rem;
+    font-size: 0.95rem;
   }
 `;
