@@ -7,20 +7,27 @@ import {
   IconAction,
   Row,
   Space,
+  Tag,
+  Title,
   Typography,
 } from "../../components";
 import { orderBy } from "lodash";
 import styled from "styled-components";
 import {
   faEdit,
+  faFlagCheckered,
   faGift,
+  faHand,
+  faInbox,
   faPeopleGroup,
   faPlay,
+  faPlayCircle,
   faTrash,
   faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
+import { mediaQuery } from "../../styles";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
   const navigate = useNavigate();
@@ -29,43 +36,92 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
     <Container>
       <Card className="card-wrapper">
         <div className="card-bar" />
-        <div className="card-header">
-          <Typography.Title className="title" level={4}>
-            {raffle.title}
-          </Typography.Title>
-          <Typography.Title className="title" level={5}>
-            {raffle.group}
-          </Typography.Title>
-          <span>Participantes: {raffle?.quantityParticipants}</span>
-          <span>
-            Creada:
-            {raffle.createAt
-              ? dayjs(raffle.createAt.toDate()).format("DD/MM/YYYY HH:mm")
-              : "N/A"}
-          </span>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button onClick={() => navigate(`${raffle.id}/play`)}>
-              <FontAwesomeIcon icon={faPlay} />
-              <span>Comenzar</span>
-            </Button>
-            <div style={{ display: "flex", gap: "1rem" }}>
+        <Tag className="status">Abierto</Tag>
+        <Space direction="vertical" className="card-header">
+          <div>
+            <Title level={4}>{raffle.title}</Title>
+            <Title level={5}>{raffle.group}</Title>
+          </div>
+          <div>
+            <p>Participantes: {raffle?.quantityParticipants}</p>
+            <p>
+              Creada:{" "}
+              {raffle.createAt
+                ? dayjs(raffle.createAt.toDate()).format("DD/MM/YYYY HH:mm")
+                : "N/A"}
+            </p>
+          </div>
+
+          <div className="dates-section">
+            {raffle.startDate && (
+              <div className="dates-wrapper">
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
+                >
+                  <FontAwesomeIcon icon={faPlayCircle} size="1x" />
+
+                  <Typography.Text strong style={{ fontSize: "0.9rem" }}>
+                    {raffle.startDate}
+                  </Typography.Text>
+                </div>
+
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
+                >
+                  <FontAwesomeIcon icon={faFlagCheckered} size="1x" />
+
+                  <Typography.Text strong style={{ fontSize: "0.9rem" }}>
+                    {raffle.endDate}
+                  </Typography.Text>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="options">
+            <Space direction="vertical">
+              <Button onClick={() => navigate(`${raffle.id}/play`)}>
+                <FontAwesomeIcon icon={faPlay} />
+                <span>Comenzar</span>
+              </Button>
+              <Button onClick={() => navigate(`${raffle.id}/play`)}>
+                <FontAwesomeIcon icon={faHand} />
+                <span>Solicitar unirse</span>
+              </Button>
+            </Space>
+            <Space>
               <IconAction
                 tooltipTitle="Premios"
                 icon={faGift}
                 size={33}
                 onClick={() => ""}
+                styled={{
+                  color: (theme) => theme.colors.info,
+                }}
               />
               <IconAction
                 tooltipTitle="Ganadores"
                 icon={faTrophy}
                 size={33}
                 onClick={() => ""}
+                styled={{
+                  color: (theme) => theme.colors.warning,
+                }}
               />
               <IconAction
                 tooltipTitle="Participantes"
                 icon={faPeopleGroup}
                 size={33}
                 onClick={() => navigate(`${raffle.id}/participants`)}
+              />
+              <IconAction
+                tooltipTitle="Solicitudes"
+                icon={faInbox}
+                size={33}
+                onClick={() => ""}
+                styled={{
+                  color: (theme) => theme.colors.success,
+                }}
               />
               <IconAction
                 tooltipTitle="Editar"
@@ -82,9 +138,9 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
                   color: (theme) => theme.colors.error,
                 }}
               />
-            </div>
+            </Space>
           </div>
-        </div>
+        </Space>
       </Card>
     </Container>
   );
@@ -117,16 +173,61 @@ const Container = styled.div`
     transition:
       transform 0.2s,
       box-shadow 0.2s;
+
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
+
     .card-header {
-      .title {
+      width: 100%;
+
+      * {
         margin: 0;
-        text-transform: capitalize;
+      }
+
+      & > div:nth-child(2) {
+        margin-bottom: 1rem;
+
+        p:last-child {
+          color: #8c8c8c;
+        }
+      }
+
+      .dates-section {
+        border-radius: 0.5em;
+        padding: 0.8em;
+
+        .dates-wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 4px;
+        }
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        button {
+          width: 100%;
+
+          ${mediaQuery.minDesktop} {
+            max-width: 15rem;
+          }
+        }
+
+        ${mediaQuery.minDesktop} {
+          flex-direction: row;
+          justify-content: space-between;
+        }
       }
     }
+
     .status {
       border-radius: 20px;
       padding: 4px 12px;
@@ -134,26 +235,15 @@ const Container = styled.div`
       text-transform: uppercase;
       font-size: 0.75rem;
     }
-  }
 
-  .card-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 0.25em;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .dates-section {
-    border-radius: 0.5em;
-    padding: 0.8em;
-    .dates-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
+    .card-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0.25em;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
     }
   }
 
