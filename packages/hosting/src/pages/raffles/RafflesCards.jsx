@@ -1,7 +1,14 @@
 import React from "react";
 import dayjs from "dayjs";
-import { Card, IconAction, Typography } from "../../components/ui";
-import { Col, Row } from "../../components";
+import {
+  Button,
+  Card,
+  Col,
+  IconAction,
+  Row,
+  Space,
+  Typography,
+} from "../../components";
 import { orderBy } from "lodash";
 import styled from "styled-components";
 import {
