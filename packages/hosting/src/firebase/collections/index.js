@@ -18,3 +18,4 @@ export * from "./sessionVerification";
 export * from "./dasApplications";
 export * from "./elections";
 export * from "./visits";
+export * from "./tutorials";

@@ -1,19 +1,33 @@
-import React from "react";
-import { Row, Col, Title, Divider } from "../../components";
+import React, { useEffect } from "react";
+import { Row, Col, Title, notification } from "../../components";
 import styled from "styled-components";
-import { TutorialsData } from "../../data-list";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { getYouTubeId } from "../../utils";
+import { tutorialsRef } from "../../firebase/collections";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
 export const Tutorials = () => {
+  const [tutorials = [], tutorialsLoading, tutorialsError] = useCollectionData(
+    tutorialsRef.where("isDeleted", "==", false),
+  );
+
+  useEffect(() => {
+    if (tutorialsError) {
+      notification({
+        type: "error",
+      });
+    }
+  }, [tutorialsError]);
+
   return (
     <Container>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={1}>Tutoriales</Title>
         </Col>
-        {TutorialsData.map((tutorial, index) => (
-          <Col span={24} key={index} className="tutorial-section">
+
+        {tutorials.map((tutorial) => (
+          <Col span={24} key={tutorial.id} className="tutorial-section">
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Title level={3} margin={0}>
@@ -21,24 +35,22 @@ export const Tutorials = () => {
                 </Title>
               </Col>
               <div className="videos-wrapper">
-                {tutorial.videos.map((video, index) => (
-                  <div className="video-card" key={index}>
-                    <div className="video-content">
-                      <LiteYouTubeEmbed
-                        id={video?.src ? getYouTubeId(video.src) : ""}
-                        adNetwork={true}
-                        title="korekenke tutoriales"
-                        iframeClass="video-item"
-                        poster="maxresdefault"
-                        width="100%"
-                        height="100%"
-                      />
-                    </div>
-                    <div className="title">
-                      <h5>{video.title}</h5>
-                    </div>
+                <div className="video-card">
+                  <div className="video-content">
+                    <LiteYouTubeEmbed
+                      id={getYouTubeId(tutorial.videoUrl)}
+                      adNetwork={true}
+                      title={tutorial.title}
+                      iframeClass="video-item"
+                      poster="maxresdefault"
+                      width="100%"
+                      height="100%"
+                    />
                   </div>
-                ))}
+                  <div className="title">
+                    <h5>{tutorial.description}</h5>
+                  </div>
+                </div>
               </div>
             </Row>
           </Col>
@@ -61,6 +73,7 @@ const Container = styled.div`
     flex-wrap: wrap;
     width: 100%;
     gap: 1em;
+
     .video-card {
       background: #c5d1db;
       border-radius: 1em;

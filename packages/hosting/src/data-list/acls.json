@@ -151,6 +151,13 @@
       "/visits#delete": "Eliminar Visita",
       "/visits#check-out": "Registrar Entradas y Salidas de Visita",
       "/visits/:visitId#reply": "Responder Solicitud de Visita"
+    },
+    "tutorials": {
+      "label": "Tutoriales",
+      "/tutorials": "Menu: Tutoriales",
+      "/tutorials/new": "Crear Tutorial",
+      "/tutorials/:tutorialId": "Editar Tutorial",
+      "/tutorials#delete": "Eliminar Tutorial"
     }
   },
 
