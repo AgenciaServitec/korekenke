@@ -5,7 +5,6 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
-  faCheckToSlot,
   faClipboardList,
   faClipboardUser,
   faComputer,

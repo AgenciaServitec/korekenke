@@ -8,7 +8,6 @@ import {
   Col,
   Form,
   Input,
-  Legend,
   notification,
   Row,
   Title,
@@ -115,6 +114,10 @@ const TutorialForm = ({
     resolver: yupResolver(schema),
   });
   const { required, error } = useFormUtils({ errors, schema });
+
+  useEffect(() => {
+    resetForm();
+  }, [tutorial]);
 
   const resetForm = () => {
     reset({
