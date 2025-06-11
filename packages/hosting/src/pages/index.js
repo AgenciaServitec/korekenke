@@ -90,3 +90,6 @@ export * from "./visits/_visit";
 
 //SUPPORT
 export * from "./support";
+
+//TUTORIALS
+export * from "./tutorials/_tutorialId";
