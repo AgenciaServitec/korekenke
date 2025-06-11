@@ -5,6 +5,19 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },{
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "searchData",
           "arrayConfig": "CONTAINS"
         },
