@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
   Button,
   Card,
   Col,
   IconAction,
+  modalConfirm,
   Row,
   Space,
   Tag,
   Title,
   Typography,
 } from "../../components";
-import { orderBy } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import styled from "styled-components";
 import {
   faEdit,
@@ -28,9 +29,54 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
 import { mediaQuery } from "../../styles";
+import {
+  addRaffleRequest,
+  fetchRaffleRequestByUserId,
+  getRaffleRequestId,
+} from "../../firebase/collections/raffles";
+import { useDefaultFirestoreProps } from "../../hooks";
+import { userFullName } from "../../utils/users/userFullName2";
 
-const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
+const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
+  const { assignCreateProps } = useDefaultFirestoreProps();
+  const [raffleRequest, setRaffleRequest] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const _raffleRequest = await fetchRaffleRequestByUserId(
+        raffle.id,
+        user.id,
+      );
+
+      if (!_raffleRequest) return;
+
+      setRaffleRequest(_raffleRequest);
+    })();
+  }, []);
+
+  console.log(raffleRequest);
+
+  const mapRaffleRequest = {
+    id: getRaffleRequestId(),
+    fullName: userFullName(user),
+    dni: user.dni,
+    phone: user.phone,
+    userId: user.id,
+  };
+
+  const onSendParticipationRequest = async (raffle) => {
+    await addRaffleRequest(raffle.id, assignCreateProps(mapRaffleRequest));
+  };
+
+  const onConfirmSendParticipationRequest = (raffle) =>
+    modalConfirm({
+      title: "¿Está seguro que desea unirse al sorteo?",
+      content: "Tu solicitud será revisada",
+      onOk: async () => {
+        await onSendParticipationRequest(raffle);
+      },
+    });
 
   return (
     <Container>
@@ -80,14 +126,21 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle }) => {
 
           <div className="options">
             <Space direction="vertical">
-              <Button onClick={() => navigate(`${raffle.id}/play`)}>
-                <FontAwesomeIcon icon={faPlay} />
-                <span>Comenzar</span>
-              </Button>
-              <Button onClick={() => navigate(`${raffle.id}/play`)}>
-                <FontAwesomeIcon icon={faHand} />
-                <span>Solicitar unirse</span>
-              </Button>
+              {raffle.userId === user.id ? (
+                <Button onClick={() => navigate(`${raffle.id}/play`)}>
+                  <FontAwesomeIcon icon={faPlay} />
+                  <span>Comenzar</span>
+                </Button>
+              ) : !isEmpty(raffleRequest) ? (
+                <div></div>
+              ) : (
+                <Button
+                  onClick={() => onConfirmSendParticipationRequest(raffle)}
+                >
+                  <FontAwesomeIcon icon={faHand} />
+                  <span>Solicitar unirse</span>
+                </Button>
+              )}
             </Space>
             <Space>
               <IconAction
@@ -150,6 +203,7 @@ export const RafflesCards = ({
   raffles,
   onEditRaffle,
   onConfirmDeleteRaffle,
+  user,
 }) => {
   return (
     <Row gutter={[16, 16]} wrap>
@@ -159,6 +213,7 @@ export const RafflesCards = ({
             raffle={raffle}
             onEditRaffle={onEditRaffle}
             onConfirmDeleteRaffle={onConfirmDeleteRaffle}
+            user={user}
           />
         </Col>
       ))}

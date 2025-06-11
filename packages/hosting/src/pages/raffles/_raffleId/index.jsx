@@ -94,6 +94,7 @@ export const RaffleIntegration = () => {
           prefix: "+51",
           number: par.split(":")[2],
         },
+        status: "approved",
       }));
 
       isNew

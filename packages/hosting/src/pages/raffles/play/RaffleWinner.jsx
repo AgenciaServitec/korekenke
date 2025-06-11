@@ -5,138 +5,71 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import ReactConfetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import { CountdownTimerWinner } from "../CountdownTimerWinner";
+import { Title } from "../../../components";
+import { ModalProvider } from "../../../providers";
+import { Winner } from "./Winner";
 
 export const RaffleWinner = ({ raffle, winner }) => {
   const [showWinner, setShowWinner] = useState(false);
   const { width, height } = useWindowSize();
 
   return (
-    <>
-      {showWinner ? (
-        <Container3>
-          <ReactConfetti width={width} height={height} />
-          <h2>Ganadores</h2>
+    <ModalProvider>
+      <Container>
+        {showWinner ? (
           <div className="winners">
-            <div>
-              <p>{winner?.fullName}</p>
-              <FontAwesomeIcon icon={faAngleRight} size="xl" />
+            {/*<ReactConfetti width={width} height={height} />*/}
+            <div className="winners__module">
+              <Title level={3} align="center">
+                Ganadores
+              </Title>
+              <div className="winners__list">
+                <Winner winner={winner} raffle={raffle} />
+              </div>
             </div>
           </div>
-        </Container3>
-      ) : (
-        <Container2>
-          <div className="timer-wrapper">
-            <CountdownCircleTimer
-              isPlaying
-              duration={raffle?.durationSeconds}
-              colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-              colorsTime={[7, 5, 2, 0]}
-              onComplete={() => setShowWinner(true)}
-            >
-              {renderTime}
-            </CountdownCircleTimer>
-          </div>
-        </Container2>
-      )}
-    </>
+        ) : (
+          <CountdownTimerWinner
+            raffle={raffle}
+            onSetShowWinner={setShowWinner}
+          />
+        )}
+      </Container>
+    </ModalProvider>
   );
 };
 
-const renderTime = ({ remainingTime }) => {
-  const currentTime = useRef(remainingTime);
-  const prevTime = useRef(null);
-  const isNewTimeFirstTick = useRef(false);
-  const [, setOneLastRerender] = useState(0);
-
-  if (currentTime.current !== remainingTime) {
-    isNewTimeFirstTick.current = true;
-    prevTime.current = currentTime.current;
-    currentTime.current = remainingTime;
-  } else {
-    isNewTimeFirstTick.current = false;
-  }
-
-  if (remainingTime === 0) {
-    setTimeout(() => {
-      setOneLastRerender((val) => val + 1);
-    }, 20);
-  }
-
-  const isTimeUp = isNewTimeFirstTick.current;
-
-  return (
-    <div className="time-wrapper">
-      <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
-        {remainingTime}
-      </div>
-      {prevTime.current !== null && (
-        <div
-          key={prevTime.current}
-          className={`time ${!isTimeUp ? "down" : ""}`}
-        >
-          {prevTime.current}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Container2 = styled.div`
+const Container = styled.div`
   width: 100%;
-  height: 70vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 80vh;
 
-  .timer-wrapper {
-    display: flex;
-    justify-content: center;
-  }
-
-  .time-wrapper {
-    position: relative;
-    width: 80px;
-    height: 60px;
-    font-size: 48px;
-  }
-
-  .time-wrapper .time {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(0);
-    opacity: 1;
-    transition: all 0.2s;
-  }
-
-  .time-wrapper .time.up {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-
-  .time-wrapper .time.down {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-`;
-
-const Container3 = styled.div`
   .winners {
-    div {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 0.625rem;
-      padding: 1rem;
-      box-shadow: 0 0 8px #b1b1b1;
+    &__module {
+      max-width: 25rem;
+      margin: 0 auto;
     }
-    p {
-      margin: 0;
+
+    &__list {
+      > div {
+        height: 4rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 0.625rem;
+        padding: 1rem;
+        border: 2px solid #eaeaea;
+        box-shadow: 1px 2px 0 1px #eaeaea;
+
+        &:hover {
+          background-color: rgba(241, 241, 241, 0.35);
+        }
+
+        p {
+          margin: 0;
+          font-weight: bold;
+        }
+      }
     }
   }
 `;

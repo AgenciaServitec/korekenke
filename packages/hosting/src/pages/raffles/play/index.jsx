@@ -83,7 +83,9 @@ export const RafflePlay = () => {
                     <IconAction
                       tooltipTitle="Chocolatear"
                       icon={faArrowsSpin}
+                      size={50}
                       onClick={() => onShuffleParticipants()}
+                      styled={{ color: (theme) => theme.colors.black }}
                     />
                   </div>
                   <strong>Total: {participants.length}</strong>
@@ -98,7 +100,9 @@ export const RafflePlay = () => {
                 type="primary"
                 block
                 size="large"
-                style={{ backgroundColor: "#85bf31" }}
+                style={{
+                  background: "linear-gradient(135deg, #4da6ff, #70cfff)",
+                }}
                 onClick={() => onRafflePlay(participants)}
               >
                 Comenzar
@@ -128,23 +132,8 @@ const Container = styled.div`
 
   .header {
     padding: 1rem;
-    background: #1d8511;
-    background: -webkit-linear-gradient(
-      90deg,
-      rgba(29, 133, 17, 1) 0%,
-      rgba(72, 255, 0, 1) 100%
-    );
-    background: -moz-linear-gradient(
-      90deg,
-      rgba(29, 133, 17, 1) 0%,
-      rgba(72, 255, 0, 1) 100%
-    );
-    background: linear-gradient(
-      90deg,
-      rgba(29, 133, 17, 1) 0%,
-      rgba(72, 255, 0, 1) 100%
-    );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1D8511", endColorstr="#48FF00", GradientType=1);
+    background: linear-gradient(135deg, #4da6ff, #70cfff);
+
     color: white;
     .title {
       display: flex;

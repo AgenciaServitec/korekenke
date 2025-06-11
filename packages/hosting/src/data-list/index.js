@@ -30,3 +30,4 @@ export * from "./animalParentsDefaultData";
 export { default as TutorialsData } from "./tutorialsData.json";
 export { default as BloodGroup } from "./bloodGroup.json";
 export { default as VisitsStatus } from "./visitsStatus.json";
+export { default as RaffleParticipantStatus } from "./raffleParticipantStatus.json";
