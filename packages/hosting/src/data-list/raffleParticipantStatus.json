@@ -1,0 +1,14 @@
+{
+  "approved": {
+    "name": "Aprobado",
+    "color": "green"
+  },
+  "disapproved": {
+    "name": "Desaprobado",
+    "color": "red"
+  },
+  "pending": {
+    "name": "Pendiente",
+    "color": "orange"
+  }
+}

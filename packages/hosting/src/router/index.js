@@ -320,6 +320,15 @@ export const Router = () => {
         />
         <Route
           exact
+          path="raffles/:raffleId/requests"
+          element={
+            <AdminLayout>
+              <A.RafflesParticipants />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
           path="raffles/:raffleId/play"
           element={
             <AdminLayout>

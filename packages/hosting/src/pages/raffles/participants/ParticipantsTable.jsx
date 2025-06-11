@@ -9,6 +9,7 @@ import {
   Row,
   Space,
   TableVirtualized,
+  Tag,
   Title,
 } from "../../../components";
 import dayjs from "dayjs";
@@ -26,6 +27,7 @@ import { useDevice } from "../../../hooks";
 import { useModal } from "../../../providers";
 import { UpdateParticipant } from "../_raffleId/UpdateParticipant";
 import { AddParticipants } from "../AddParticipants";
+import { RaffleParticipantStatus } from "../../../data-list";
 
 export const ParticipantsTable = ({
   participants,
@@ -38,6 +40,8 @@ export const ParticipantsTable = ({
 
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
+
+  console.log(participants);
 
   const onShowUpdateParticipant = (participant) => {
     onShowModal({
@@ -128,6 +132,16 @@ export const ParticipantsTable = ({
           <span>{participant.phone.number}</span>
         </div>
       ),
+    },
+    {
+      title: "Estado",
+      align: "center",
+      width: ["5rem", "100%"],
+      render: (participant) => {
+        const requestStatus = RaffleParticipantStatus[participant.status];
+
+        return <Tag color={requestStatus?.color}>{requestStatus?.name}</Tag>;
+      },
     },
     {
       title: "Opciones",

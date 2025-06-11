@@ -5,9 +5,11 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { rafflesRef, updateRaffle } from "../../firebase/collections/raffles";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps } from "../../hooks";
+import { useAuthentication } from "../../providers";
 
 export const RafflesIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const { assignDeleteProps } = useDefaultFirestoreProps();
 
   const [raffles = [], rafflesLoading, rafflesError] = useCollectionData(
@@ -31,11 +33,12 @@ export const RafflesIntegration = () => {
       raffles={raffles}
       onEditRaffle={onEditRaffle}
       onConfirmDeleteRaffle={onConfirmDeleteRaffle}
+      user={authUser}
     />
   );
 };
 
-const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle }) => {
+const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -43,6 +46,7 @@ const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle }) => {
           raffles={raffles}
           onEditRaffle={onEditRaffle}
           onConfirmDeleteRaffle={onConfirmDeleteRaffle}
+          user={user}
         />
       </Col>
     </Row>
