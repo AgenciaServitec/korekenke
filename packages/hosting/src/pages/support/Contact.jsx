@@ -12,39 +12,42 @@ export const Contact = () => {
           <Title>Contacto</Title>
         </Col>
       </Row>
+
       <Divider />
+
       <Row gutter={[16, 16]}>
         <Col span={24} sm={16}>
-          <p>
-            Korekenke, el ecosistema que gestión diversos módulos de trámites de
-            documentos
-          </p>
-          <p>
-            <strong>Horario de atencion:</strong> <br />
-            Lunes - viernes: 9:00am - 6:00pm <br />
-            Sábados - domingos: Fuera de atención
-          </p>
-          {/*          <p>
+          <div className="contact-info">
+            <p>
+              Korekenke, el ecosistema que gestiona diversos módulos de trámites
+              de documentos.
+            </p>
+            {/*<p>
             Correo: <strong>info@atlas1033.com</strong>
           </p>*/}
-          <p>
-            Teléfono: <strong>929 054 672</strong>
-          </p>
+            <p>
+              <strong>Horario de atención:</strong> <br />
+              Lunes a viernes: 9:00am - 6:00pm <br />
+              Sábados y domingos: Fuera de atención
+            </p>
+            <p>
+              Teléfono: <strong>929 054 672</strong>
+            </p>
+          </div>
         </Col>
         <Col span={24} sm={8}>
-          <a
-            className="contact-title-box"
-            href="https://api.whatsapp.com/send?phone=51929054672"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FontAwesomeIcon icon={faWhatsapp} /> 929 054 672
-          </a>
+          <div className="contact-actions">
+            <a
+              className="contact-whatsapp"
+              href="https://api.whatsapp.com/send?phone=51929054672"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <FontAwesomeIcon icon={faWhatsapp} /> 929 054 672
+            </a>
+          </div>
         </Col>
       </Row>
-      <Col span={24}>
-        <Title></Title>
-      </Col>
     </Container>
   );
 };
@@ -52,21 +55,51 @@ export const Contact = () => {
 const Container = styled.div`
   width: 100%;
   min-height: 100svh;
+  padding: 2rem 1rem;
 
-  .contact-text {
-    font-size: 14px;
-    white-space: pre-line;
+  .contact-info {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
   }
 
-  .contact-title-box {
-    border: 2px solid rgba(0, 128, 0, 0.5);
-    background-color: rgba(0, 128, 0, 0.1);
-    border-radius: 5px;
+  .contact-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .contact-whatsapp {
     display: inline-block;
-    text-align: center;
-    padding: 0.7em 1em;
-    font-size: 1.2em;
+    background-color: #25d3661a;
+    border: 2px solid #25d366;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 1.1rem;
+    color: #075e54;
     font-weight: 600;
-    color: #000;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+
+    svg {
+      margin-right: 0.5rem;
+    }
+
+    &:hover {
+      background-color: #25d36633;
+      transform: scale(1.03);
+    }
+  }
+
+  @media (max-width: 576px) {
+    .contact-info {
+      font-size: 0.95rem;
+    }
+
+    .contact-whatsapp {
+      width: 100%;
+      text-align: center;
+    }
   }
 `;

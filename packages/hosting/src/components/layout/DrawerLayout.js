@@ -5,7 +5,6 @@ import { version } from "../../firebase";
 import {
   faBriefcase,
   faBuildingUser,
-  faCheckToSlot,
   faClipboardList,
   faClipboardUser,
   faComputer,
@@ -24,6 +23,7 @@ import {
   faListCheck,
   faNetworkWired,
   faPoll,
+  faShapes,
   faShield,
   faSquareCheck,
   faUmbrellaBeach,
@@ -276,6 +276,40 @@ export const DrawerLayout = ({
           icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
           isVisible: existsAclsInAclsOfUser("public", ["visits"], ["/visits"]),
           onClick: () => onClickMenu("/visits"),
+        },
+      ],
+    },
+    {
+      label: "Tutoriales",
+      key: "tutorials",
+      icon: <FontAwesomeIcon icon={faShapes} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+        "public",
+        ["tutorials"],
+        ["/tutorials", "/tutorials/new"],
+      ),
+      children: [
+        {
+          label: "Crear Tutorial",
+          key: "tutorial",
+          icon: <FontAwesomeIcon icon={faShapes} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["tutorials"],
+            ["/tutorials/new"],
+          ),
+          onClick: () => onClickMenu("/tutorials/new"),
+        },
+        {
+          label: "Lista de Tutoriales",
+          key: "tutorial-list",
+          icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["tutorials"],
+            ["/tutorials"],
+          ),
+          onClick: () => onClickMenu("/tutorials"),
         },
       ],
     },
