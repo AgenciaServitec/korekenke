@@ -41,7 +41,6 @@ export const ParticipantsTable = ({
   const { isTablet } = useDevice();
   const { onShowModal, onCloseModal } = useModal();
 
-
   const onShowUpdateParticipant = (participant) => {
     onShowModal({
       width: `${isTablet ? "100%" : "70%"}`,

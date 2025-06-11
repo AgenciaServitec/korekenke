@@ -1,6 +1,7 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
+import { clinicHistoriesRef } from "./clinicHistories";
 
 export const rafflesRef = firestore.collection("raffles");
 
