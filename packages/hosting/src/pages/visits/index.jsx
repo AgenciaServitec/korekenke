@@ -34,6 +34,7 @@ import { VisitedObservation } from "./VisitedObservation";
 import { VisitedObservationView } from "./VisitedObservationView";
 import { VisitsDoorFilter } from "./Visits.DoorFilter";
 import { VisitsDependencyFilter } from "./Visits.DependencyFilter";
+import { VisitsFilterByDate } from "./Visits.FilterByDate";
 
 export const Visits = () => {
   const navigate = useNavigate();
@@ -42,6 +43,8 @@ export const Visits = () => {
 
   const [searchFields, setSearchFields] = useQueriesState({
     visitInformation: undefined,
+    fromDate: undefined,
+    toDate: undefined,
   });
 
   const debouncedSearchFields = useDebounce(searchFields, 750);
@@ -49,6 +52,8 @@ export const Visits = () => {
   const [visits = [], visitsLoading, visitsError] = useCollectionData(
     visitsListQuery({
       visitInformation: debouncedSearchFields.visitInformation?.toLowerCase(),
+      fromDate: debouncedSearchFields.fromDate,
+      toDate: debouncedSearchFields.toDate,
     }),
   );
 
@@ -116,6 +121,8 @@ const VisitsList = ({
   const onResetFilters = () => {
     setSearchFields({
       visitInformation: undefined,
+      fromDate: undefined,
+      toDate: undefined,
     });
     setFilterFields({
       status: "all",
@@ -195,10 +202,20 @@ const VisitsList = ({
         </Col>
         <Col span={24}>
           <Legend title="Busqueda">
-            <VisitsListFinder
-              searchFields={searchFields}
-              onSearch={setSearchFields}
-            />
+            <Row gutter={[16, 16]}>
+              <Col span={24} md={8}>
+                <VisitsListFinder
+                  searchFields={searchFields}
+                  onSearch={setSearchFields}
+                />
+              </Col>
+              <Col span={24} md={16}>
+                <VisitsFilterByDate
+                  searchFields={searchFields}
+                  onSearch={setSearchFields}
+                />
+              </Col>
+            </Row>
           </Legend>
         </Col>
         <Col span={24}>

@@ -24,6 +24,7 @@ import { orderBy } from "lodash";
 import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
 import { useBosses } from "../../hooks";
+import { ExportVisitToExcel } from "./utils";
 
 export const VisitsTable = ({
   visits,
@@ -308,6 +309,9 @@ export const VisitsTable = ({
 
   return (
     <Row gutter={[16, 16]}>
+      <div style={{ marginBottom: 16, textAlign: "right" }}>
+        <ExportVisitToExcel data={visitsView} />
+      </div>
       <Col span={24}>
         <TableVirtualized
           dataSource={orderBy(visitsView, "createAt", "desc")}
