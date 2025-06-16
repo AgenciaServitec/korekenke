@@ -1,4 +1,8 @@
 {
+  "waiting": {
+    "name": "En Espera",
+    "color": "yellow"
+  },
   "pending": {
     "name": "Pendiente",
     "color": "orange"
