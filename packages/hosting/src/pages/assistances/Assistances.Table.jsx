@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { TableVirtualized } from "../../components";
 import { userFullName } from "../../utils";
 import { Tag } from "antd";
+import { ExportToExcelButton } from "./_utils";
 
 export const AssistancesTable = ({ user, loading, assistances }) => {
   const columns = [
@@ -68,6 +69,9 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
 
   return (
     <Container>
+      <div style={{ marginBottom: 16, textAlign: "right" }}>
+        <ExportToExcelButton data={assistances} user={user} loading={loading} />
+      </div>
       <TableVirtualized
         loading={loading}
         dataSource={assistances}
