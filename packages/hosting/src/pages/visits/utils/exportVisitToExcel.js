@@ -10,6 +10,7 @@ const statusInSpanish = {
   pending: "Pendiente",
   approved: "Aprobado",
   disapproved: "Completado",
+  waiting: "En espera",
 };
 
 export const ExportVisitToExcel = ({ data, loading }) => {
