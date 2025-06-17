@@ -115,7 +115,7 @@ export const useUpdateAssignToAndAclsOfUser = () => {
       ? updateUser(
           formData.bossId,
           assignUpdateProps({
-            roleCode: "user",
+            roleCode: "boss",
             acls: merge(
               findUser(formData.bossId)?.acls,
               findModuleRole("boss")?.acls,
@@ -129,7 +129,7 @@ export const useUpdateAssignToAndAclsOfUser = () => {
       ? updateUser(
           formData?.secondBossId,
           assignUpdateProps({
-            roleCode: "user",
+            roleCode: "second_boss",
             acls: merge(
               findUser(formData.secondBossId)?.acls,
               findModuleRole("second_boss")?.acls,
