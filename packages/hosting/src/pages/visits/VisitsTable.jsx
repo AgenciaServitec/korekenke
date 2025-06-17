@@ -7,6 +7,7 @@ import {
   Space,
   TableVirtualized,
   Tag,
+  notification,
 } from "../../components/ui";
 import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
@@ -25,6 +26,7 @@ import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
 import { useBosses } from "../../hooks";
 import { ExportVisitToExcel } from "./utils";
+import { updateVisit } from "../../firebase/collections";
 
 export const VisitsTable = ({
   visits,
@@ -87,6 +89,8 @@ export const VisitsTable = ({
   const isManagerEntityGu = authUser.id === managerEntityGu?.id;
   const isBossPI = authUser.id === bossDepartment?.id;
   const isBossSecondPI = authUser.id === bossSecondDepartment?.id;
+
+  console.log("response: ", isBossSecondPI);
 
   const visitsView = (() => {
     const filteredVisits = visits.filter((visit) => {
@@ -220,28 +224,42 @@ export const VisitsTable = ({
           visit.exitDateTime
         ) : (
           <Acl category="public" subCategory="visits" name="/visits#check-out">
-            {visit.status === "approved" ? (
-              <IconAction
-                tooltipTitle="Registrar Salida"
-                styled={{ color: (theme) => theme.colors.info }}
-                icon={faRightFromBracket}
-                onClick={() => onConfirmIOChecker(visit)}
-              />
-            ) : visit.status === "pending" ? (
-              <IconAction
-                tooltipTitle="Esperando aprobación"
-                styled={{ color: (theme) => theme.colors.warning }}
-                icon={faHourglassStart}
-                onClick={() => {}}
-              />
-            ) : (
-              <IconAction
-                tooltipTitle="Visita Desaprobada"
-                styled={{ color: (theme) => theme.colors.error }}
-                icon={faBuildingCircleXmark}
-                onClick={() => {}}
-              />
-            )}
+            {
+              {
+                waiting: (
+                  <IconAction
+                    tooltipTitle="En Espera de Solicitud"
+                    styled={{ color: (theme) => theme.colors.warning }}
+                    icon={faHourglassStart}
+                    onClick={() => {}}
+                  />
+                ),
+                pending: (
+                  <IconAction
+                    tooltipTitle="Pendiente de Aprobación"
+                    styled={{ color: (theme) => theme.colors.info }}
+                    icon={faHourglassStart}
+                    onClick={() => {}}
+                  />
+                ),
+                approved: (
+                  <IconAction
+                    tooltipTitle="Registrar Salida"
+                    styled={{ color: (theme) => theme.colors.success }}
+                    icon={faRightFromBracket}
+                    onClick={() => onConfirmIOChecker(visit)}
+                  />
+                ),
+                disapproved: (
+                  <IconAction
+                    tooltipTitle="Visita Desaprobada"
+                    styled={{ color: (theme) => theme.colors.error }}
+                    icon={faBuildingCircleXmark}
+                    onClick={() => {}}
+                  />
+                ),
+              }[visit.status]
+            }
           </Acl>
         ),
     },
@@ -249,61 +267,83 @@ export const VisitsTable = ({
       title: "Opciones",
       align: "center",
       width: ["14rem", "100%"],
-      render: (visit) => (
-        <Space>
-          {visit.userId === authUser.id ? (
-            <IconAction
-              tooltipTitle="Observacion"
-              icon={faEye}
-              styled={{ color: (theme) => theme.colors.info }}
-              onClick={() => onShowVisitedObservation(visit)}
-            />
-          ) : (
-            <IconAction
-              tooltipTitle="Ver Observacion"
-              icon={faEye}
-              styled={{
-                color: visit.visitedObservation
-                  ? (theme) => theme.colors.info
-                  : (theme) => theme.colors.gray,
-              }}
-              onClick={() =>
-                visit.visitedObservation && onShowVisitedObservationView(visit)
-              }
-            />
-          )}
-          <Acl
-            category="public"
-            subCategory="visits"
-            name="/visits/:visitId#reply"
-          >
-            <IconAction
-              tooltipTitle="Responder solicitud"
-              icon={faReply}
-              styled={{ color: (theme) => theme.colors.primary }}
-              onClick={() => onShowVisitReplyModal(visit)}
-            />
-          </Acl>
-          <Acl category="public" subCategory="visits" name="/visits/:visitId">
-            <IconAction
-              tooltipTitle="Editar"
-              onClick={() => onClickEditVisit(visit.id)}
-              styled={{ color: (theme) => theme.colors.tertiary }}
-              icon={faEdit}
-            />
-          </Acl>
-          <Acl category="public" subCategory="visits" name="/visits#delete">
-            <IconAction
-              tooltipTitle="Eliminar"
-              onClick={() => onClickDeleteVisit(visit.id)}
-              icon={faTrash}
-              styled={{
-                color: (theme) => theme.colors.error,
-              }}
-            />
-          </Acl>
-        </Space>
-      ),
+      render: (visit) => {
+        const canRequestReview = isBossPI || isBossSecondPI;
+        return (
+          <Space>
+            {visit.userId === authUser.id ? (
+              <IconAction
+                tooltipTitle="Observacion"
+                icon={faEye}
+                styled={{ color: (theme) => theme.colors.info }}
+                onClick={() => onShowVisitedObservation(visit)}
+              />
+            ) : (
+              <IconAction
+                tooltipTitle="Ver Observacion"
+                icon={faEye}
+                styled={{
+                  color: visit.visitedObservation
+                    ? (theme) => theme.colors.info
+                    : (theme) => theme.colors.gray,
+                }}
+                onClick={() =>
+                  visit.visitedObservation &&
+                  onShowVisitedObservationView(visit)
+                }
+              />
+            )}
+            {visit.status === "waiting" && canRequestReview && (
+              <IconAction
+                tooltipTitle="Solicitar revisión"
+                icon={faReply}
+                styled={{ color: (theme) => theme.colors.warning }}
+                onClick={async () => {
+                  await updateVisit(visit.id, { status: "pending" });
+                  notification({
+                    type: "success",
+                  });
+                }}
+              />
+            )}
+            <Acl
+              category="public"
+              subCategory="visits"
+              name="/visits/:visitId#reply"
+            >
+              {visit.status === "pending" && isManagerEntityGuSeguridad && (
+                <IconAction
+                  tooltipTitle="Responder solicitud"
+                  icon={faReply}
+                  styled={{ color: (theme) => theme.colors.primary }}
+                  onClick={() => onShowVisitReplyModal(visit)}
+                />
+              )}
+              {visit.status === "approved" || visit.status === "disapproved"
+                ? null
+                : null}
+            </Acl>
+            <Acl category="public" subCategory="visits" name="/visits/:visitId">
+              <IconAction
+                tooltipTitle="Editar"
+                onClick={() => onClickEditVisit(visit.id)}
+                styled={{ color: (theme) => theme.colors.tertiary }}
+                icon={faEdit}
+              />
+            </Acl>
+            <Acl category="public" subCategory="visits" name="/visits#delete">
+              <IconAction
+                tooltipTitle="Eliminar"
+                onClick={() => onClickDeleteVisit(visit.id)}
+                icon={faTrash}
+                styled={{
+                  color: (theme) => theme.colors.error,
+                }}
+              />
+            </Acl>
+          </Space>
+        );
+      },
     },
   ];
 

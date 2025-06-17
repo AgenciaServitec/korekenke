@@ -135,7 +135,7 @@ export const VisitsIntegration = () => {
             prefix: "+51",
           },
         },
-        status: visit?.status || "pending",
+        status: visit?.status || "waiting",
         userId: formData.personVisited?.id || "",
         entryDateTime: dateTime,
         searchData: getSearchDataToVisit(formData, firstName, middleName),
