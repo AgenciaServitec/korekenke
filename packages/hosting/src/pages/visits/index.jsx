@@ -31,7 +31,6 @@ import { VisitsListFinder } from "./VisitsList.Finder";
 import { VisitsStatus } from "../../data-list";
 import { visitsListQuery } from "./utils";
 import { VisitedObservation } from "./VisitedObservation";
-import { VisitedObservationView } from "./VisitedObservationView";
 import { VisitsDoorFilter } from "./Visits.DoorFilter";
 import { VisitsDependencyFilter } from "./Visits.DependencyFilter";
 import { VisitsFilterByDate } from "./Visits.FilterByDate";
@@ -183,17 +182,6 @@ const VisitsList = ({
     });
   };
 
-  const onShowVisitedObservationView = (visit) => {
-    onShowModal({
-      centered: true,
-      top: 0,
-      padding: 0,
-      title: `Observacion de ${visit.personVisited.firstName}`,
-      width: `${isTablet ? "90%" : "50%"}`,
-      onRenderBody: () => <VisitedObservationView visit={visit} />,
-    });
-  };
-
   return (
     <Acl category="public" subCategory="visits" name="/visits" redirect>
       <Row gutter={[16, 16]}>
@@ -290,7 +278,6 @@ const VisitsList = ({
             setFilterCount={setFilterCount}
             setFilterStates={setFilterStates}
             onShowVisitedObservation={onShowVisitedObservation}
-            onShowVisitedObservationView={onShowVisitedObservationView}
           />
         </Col>
       </Row>
