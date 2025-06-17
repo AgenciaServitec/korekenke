@@ -157,7 +157,7 @@ const ObservationsContainer = styled.div`
 `;
 
 const MessageBubble = styled.div`
-  max-width: 90%;
+  max-width: 100%;
   background-color: ${({ visited }) => (visited ? "#e6fffb" : "#fafafa")};
   border: 1px solid #d9d9d9;
   padding: 12px;
