@@ -38,7 +38,6 @@ export const VisitsTable = ({
   setFilterStates,
   filterCount,
   onShowVisitedObservation,
-  onShowVisitedObservationView,
 }) => {
   const { authUser } = useAuthentication();
   const { fetchEntityManager, fetchDepartmentBoss, fetchDepartmentBossSecond } =
@@ -89,8 +88,6 @@ export const VisitsTable = ({
   const isManagerEntityGu = authUser.id === managerEntityGu?.id;
   const isBossPI = authUser.id === bossDepartment?.id;
   const isBossSecondPI = authUser.id === bossSecondDepartment?.id;
-
-  console.log("response: ", isBossSecondPI);
 
   const visitsView = (() => {
     const filteredVisits = visits.filter((visit) => {
@@ -271,28 +268,12 @@ export const VisitsTable = ({
         const canRequestReview = isBossPI || isBossSecondPI;
         return (
           <Space>
-            {visit.userId === authUser.id ? (
-              <IconAction
-                tooltipTitle="Observacion"
-                icon={faEye}
-                styled={{ color: (theme) => theme.colors.info }}
-                onClick={() => onShowVisitedObservation(visit)}
-              />
-            ) : (
-              <IconAction
-                tooltipTitle="Ver Observacion"
-                icon={faEye}
-                styled={{
-                  color: visit.visitedObservation
-                    ? (theme) => theme.colors.info
-                    : (theme) => theme.colors.gray,
-                }}
-                onClick={() =>
-                  visit.visitedObservation &&
-                  onShowVisitedObservationView(visit)
-                }
-              />
-            )}
+            <IconAction
+              tooltipTitle="Observacion"
+              icon={faEye}
+              styled={{ color: (theme) => theme.colors.info }}
+              onClick={() => onShowVisitedObservation(visit)}
+            />
             {visit.status === "waiting" && canRequestReview && (
               <IconAction
                 tooltipTitle="Solicitar revisión"
