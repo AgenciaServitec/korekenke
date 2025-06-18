@@ -17,5 +17,14 @@ export const dasRequestsQuery = ({
     );
   }
 
+  if (fromDate) {
+    query = query.where("createAt", ">=", fromDate);
+  }
+  if (toDate) {
+    const endOfDay = new Date(toDate);
+    endOfDay.setHours(23, 59, 59, 999);
+    query = query.where("createAt", "<=", endOfDay);
+  }
+
   return query.limit(3000);
 };
