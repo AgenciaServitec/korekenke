@@ -23,6 +23,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import styled from "styled-components";
 import { useAuthentication } from "../../../../providers";
 import { useBosses } from "../../../../hooks";
+import { ExportDasRequestsToExcel } from "./_utils";
 
 const ENTITY_GU_NAME_ID = "departamento-de-apoyo-social";
 const DEPARTMENT_NAME_ID = "mesa-de-partes";
@@ -306,6 +307,9 @@ export const DasRequestsTable = ({
 
   return (
     <Container>
+      <div style={{ marginBottom: 16, textAlign: "right" }}>
+        <ExportDasRequestsToExcel data={dasRequestsView} />
+      </div>
       <TableVirtualized
         dataSource={orderBy(dasRequestsView, "createAt", "desc")}
         columns={columns}

@@ -34,6 +34,7 @@ import { DasRequestsFinder } from "./DasRequests.Finder";
 import { DasRequestsFilter } from "./DasRequests.Filter";
 import { dasRequestsQuery } from "./_utils";
 import { DasRequestStatus } from "../../../../data-list";
+import { DasRequestFilterByDate } from "./DasRequest.FilterByDate";
 
 export const DasRequestsListIntegration = () => {
   const navigate = useNavigate();
@@ -51,6 +52,8 @@ export const DasRequestsListIntegration = () => {
       dasRequestsQuery({
         dasRequestInformation:
           debouncedSearchFields.dasRequestInformation?.toLowerCase(),
+        fromDate: debouncedSearchFields.fromDate,
+        toDate: debouncedSearchFields.toDate,
       }),
     );
 
@@ -112,6 +115,8 @@ const DasRequestsList = ({
   const onResetFilters = () => {
     setSearchFields({
       dasRequestInformation: undefined,
+      fromDate: undefined,
+      toDate: undefined,
     });
     setFilterFields({
       status: "all",
@@ -197,10 +202,20 @@ const DasRequestsList = ({
         </Col>
         <Col span={24}>
           <Legend title="Busqueda">
-            <DasRequestsFinder
-              searchFields={searchFields}
-              onSearch={setSearchFields}
-            />
+            <Row gutter={[16, 16]}>
+              <Col span={24} md={8}>
+                <DasRequestsFinder
+                  searchFields={searchFields}
+                  onSearch={setSearchFields}
+                />
+              </Col>
+              <Col span={24} md={16}>
+                <DasRequestFilterByDate
+                  searchFields={searchFields}
+                  onSearch={setSearchFields}
+                />
+              </Col>
+            </Row>
           </Legend>
         </Col>
         <Col span={24}>
