@@ -8,6 +8,7 @@ import {
   modalConfirm,
   Row,
   Space,
+  Title,
   Typography,
 } from "../../components";
 import { isEmpty, orderBy } from "lodash";
@@ -34,6 +35,7 @@ import {
 } from "../../firebase/collections/raffles";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { userFullName } from "../../utils/users/userFullName2";
+import { Tag } from "antd";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
@@ -52,8 +54,6 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
       setRaffleRequest(_raffleRequest);
     })();
   }, []);
-
-  console.log(raffleRequest);
 
   const mapRaffleRequest = {
     id: getRaffleRequestId(),
@@ -305,8 +305,7 @@ const Container = styled.div`
     align-items: center;
     display: flex;
 
-    .user-icons,
-    .admin-icons {
+    .user-icons {
       display: flex;
     }
   }
