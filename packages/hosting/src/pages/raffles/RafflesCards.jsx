@@ -8,6 +8,7 @@ import {
   modalConfirm,
   Row,
   Space,
+  Tag,
   Title,
   Typography,
 } from "../../components";
@@ -35,7 +36,6 @@ import {
 } from "../../firebase/collections/raffles";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { userFullName } from "../../utils/users/userFullName2";
-import { Tag } from "antd";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
