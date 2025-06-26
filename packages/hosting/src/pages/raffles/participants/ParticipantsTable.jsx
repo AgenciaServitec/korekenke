@@ -18,6 +18,7 @@ import {
   faArrowLeft,
   faEdit,
   faPeopleGroup,
+  faReply,
   faTrash,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,7 @@ export const ParticipantsTable = ({
   participantsLoading,
   onConfirmDeleteParticipant,
   onConfirmDeleteParticipants,
+  onShowReplyRaffleParticipantModal,
 }) => {
   const navigate = useNavigate();
   const [removeParticipants, setRemoveParticipants] = useState([]);
@@ -147,6 +149,14 @@ export const ParticipantsTable = ({
       width: ["14rem", "100%"],
       render: (participant) => (
         <Space>
+          {participant.status === "pending" && (
+            <IconAction
+              tooltipTitle="Responder solicitud"
+              icon={faReply}
+              styled={{ color: (theme) => theme.colors.primary }}
+              onClick={() => onShowReplyRaffleParticipantModal(participant)}
+            />
+          )}
           <Acl
             category="public"
             subCategory="raffles"
