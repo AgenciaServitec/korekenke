@@ -19,7 +19,6 @@ import {
   faFlagCheckered,
   faGift,
   faHand,
-  faInbox,
   faPeopleGroup,
   faPlay,
   faPlayCircle,
@@ -29,42 +28,48 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
 import { mediaQuery } from "../../styles";
-import {
-  addRaffleRequest,
-  fetchRaffleRequestByUserId,
-  getRaffleRequestId,
-} from "../../firebase/collections/raffles";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { userFullName } from "../../utils/users/userFullName2";
+import {
+  addRaffleParticipant,
+  fetchRaffleParticipantByUserId,
+  getRaffleParticipantId,
+} from "../../firebase/collections/raffles";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
   const { assignCreateProps } = useDefaultFirestoreProps();
-  const [raffleRequest, setRaffleRequest] = useState(null);
+  const [raffleParticipant, setRaffleParticipant] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const _raffleRequest = await fetchRaffleRequestByUserId(
+      const _raffleParticipant = await fetchRaffleParticipantByUserId(
         raffle.id,
         user.id,
       );
 
-      if (!_raffleRequest) return;
+      if (!_raffleParticipant) return;
 
-      setRaffleRequest(_raffleRequest);
+      setRaffleParticipant(_raffleParticipant);
     })();
   }, []);
 
-  const mapRaffleRequest = {
-    id: getRaffleRequestId(),
+  const isOrganizer = raffle.organizerId === user.id;
+
+  const mapRaffleParticipant = {
+    id: getRaffleParticipantId(),
     fullName: userFullName(user),
     dni: user.dni,
     phone: user.phone,
     userId: user.id,
+    status: "pending",
   };
 
   const onSendParticipationRequest = async (raffle) => {
-    await addRaffleRequest(raffle.id, assignCreateProps(mapRaffleRequest));
+    await addRaffleParticipant(
+      raffle.id,
+      assignCreateProps(mapRaffleParticipant),
+    );
   };
 
   const onConfirmSendParticipationRequest = (raffle) =>
@@ -123,21 +128,23 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
           </div>
 
           <div className="options">
-            <Space direction="vertical">
-              {raffle.userId === user.id ? (
+            <Space>
+              {isOrganizer ? (
                 <Button onClick={() => navigate(`${raffle.id}/play`)}>
                   <FontAwesomeIcon icon={faPlay} />
                   <span>Comenzar</span>
                 </Button>
-              ) : !isEmpty(raffleRequest) ? (
-                <div></div>
-              ) : (
+              ) : isEmpty(raffleParticipant) ? (
                 <Button
                   onClick={() => onConfirmSendParticipationRequest(raffle)}
                 >
                   <FontAwesomeIcon icon={faHand} />
                   <span>Solicitar unirse</span>
                 </Button>
+              ) : raffleParticipant?.status === "approved" ? (
+                <span>Ya forma parte del sorteo</span>
+              ) : (
+                <span>A la espera de la aprobación</span>
               )}
             </Space>
             <Space>
@@ -159,36 +166,31 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
                   color: (theme) => theme.colors.warning,
                 }}
               />
-              <IconAction
-                tooltipTitle="Participantes"
-                icon={faPeopleGroup}
-                size={33}
-                onClick={() => navigate(`${raffle.id}/participants`)}
-              />
-              <IconAction
-                tooltipTitle="Solicitudes"
-                icon={faInbox}
-                size={33}
-                onClick={() => ""}
-                styled={{
-                  color: (theme) => theme.colors.success,
-                }}
-              />
-              <IconAction
-                tooltipTitle="Editar"
-                icon={faEdit}
-                size={33}
-                onClick={() => onEditRaffle(raffle.id)}
-              />
-              <IconAction
-                tooltipTitle="Eliminar"
-                icon={faTrash}
-                size={33}
-                onClick={() => onConfirmDeleteRaffle(raffle.id)}
-                styled={{
-                  color: (theme) => theme.colors.error,
-                }}
-              />
+              {isOrganizer && (
+                <>
+                  <IconAction
+                    tooltipTitle="Participantes"
+                    icon={faPeopleGroup}
+                    size={33}
+                    onClick={() => navigate(`${raffle.id}/participants`)}
+                  />
+                  <IconAction
+                    tooltipTitle="Editar"
+                    icon={faEdit}
+                    size={33}
+                    onClick={() => onEditRaffle(raffle.id)}
+                  />
+                  <IconAction
+                    tooltipTitle="Eliminar"
+                    icon={faTrash}
+                    size={33}
+                    onClick={() => onConfirmDeleteRaffle(raffle.id)}
+                    styled={{
+                      color: (theme) => theme.colors.error,
+                    }}
+                  />
+                </>
+              )}
             </Space>
           </div>
         </Space>
