@@ -24,12 +24,10 @@ import {
   fetchRaffle,
   getRaffleId,
   getRaffleParticipantId,
-  raffleParticipantsRef,
   updateRaffle,
 } from "../../../firebase/collections/raffles";
 import { useAuthentication } from "../../../providers";
 import { faFileImport } from "@fortawesome/free-solid-svg-icons";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
