@@ -10,11 +10,11 @@ import { ParticipantsTable } from "./ParticipantsTable";
 import { useParams } from "react-router";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { isEmpty } from "lodash";
+import { ReplyDasRequestModal } from "../../entities/departamento-de-apoyo-social/das-requests/ReplyDasRequest";
 
 export const RafflesParticipants = () => {
   const { raffleId } = useParams();
-  const { assignCreateProps, assignUpdateProps, assignDeleteProps } =
-    useDefaultFirestoreProps();
+  const { assignUpdateProps, assignDeleteProps } = useDefaultFirestoreProps();
 
   const [participants = [], participantsLoading, participantsError] =
     useCollectionData(
@@ -73,6 +73,17 @@ export const RafflesParticipants = () => {
         onDeletedParticipants(removeParticipants, setRemoveParticipants),
     });
 
+  const onShowReplyRaffleParticipantModal = (participant) =>
+    modalConfirm({
+      title: `¿Estás seguro de aceptar la solicitud de ${participant.fullName}?`,
+      onOk: async () =>
+        await updateRaffleParticipant(
+          raffleId,
+          participant.id,
+          assignUpdateProps({ status: "approved" }),
+        ),
+    });
+
   return (
     <ModalProvider>
       <ParticipantsTable
@@ -80,6 +91,7 @@ export const RafflesParticipants = () => {
         participantsLoading={participantsLoading}
         onConfirmDeleteParticipant={onConfirmDeleteParticipant}
         onConfirmDeleteParticipants={onConfirmDeleteParticipants}
+        onShowReplyRaffleParticipantModal={onShowReplyRaffleParticipantModal}
       />
     </ModalProvider>
   );
