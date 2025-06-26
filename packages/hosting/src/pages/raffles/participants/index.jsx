@@ -10,7 +10,6 @@ import { ParticipantsTable } from "./ParticipantsTable";
 import { useParams } from "react-router";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { isEmpty } from "lodash";
-import { ReplyDasRequestModal } from "../../entities/departamento-de-apoyo-social/das-requests/ReplyDasRequest";
 
 export const RafflesParticipants = () => {
   const { raffleId } = useParams();
