@@ -79,7 +79,7 @@ export const RaffleIntegration = () => {
       ? dayjs(formData.endDate).format("DD-MM-YYYY")
       : undefined,
     quantityParticipants: quantityParticipants,
-    userId: authUser?.id,
+    organizerId: authUser?.id,
   });
 
   const onSubmit = async (formData) => {
