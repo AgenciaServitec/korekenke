@@ -1,15 +1,11 @@
 import { firestore } from "../index";
 import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 import { setDocument, updateDocument } from "../firestore";
-import { clinicHistoriesRef } from "./clinicHistories";
 
 export const rafflesRef = firestore.collection("raffles");
 
 export const raffleParticipantsRef = (raffleId) =>
   rafflesRef.doc(raffleId).collection("participants");
-
-export const raffleRequestsRef = (raffleId) =>
-  rafflesRef.doc(raffleId).collection("requests");
 
 export const getRaffleId = () => rafflesRef.doc().id;
 
@@ -43,23 +39,15 @@ export const updateRaffleParticipant = async (
     participant,
   );
 
+export const fetchRaffleParticipantByUserId = async (raffleId, userId) =>
+  fetchCollectionOnce(
+    raffleParticipantsRef(raffleId)
+      .where("isDeleted", "==", false)
+      .where("userId", "==", userId)
+      .limit(1),
+  );
+
 export const fetchRaffleParticipants = async (raffleId) =>
   fetchCollectionOnce(
     raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
-  );
-
-export const getRaffleRequestId = () => raffleRequestsRef().doc().id;
-
-export const addRaffleRequest = async (raffleId, request) =>
-  await setDocument(raffleRequestsRef(raffleId).doc(request.id), request);
-
-export const updateRaffleRequest = async (raffleId, requestId, request) =>
-  await updateDocument(raffleRequestsRef(raffleId).doc(requestId), request);
-
-export const fetchRaffleRequestByUserId = async (raffleId, userId) =>
-  fetchCollectionOnce(
-    raffleRequestsRef(raffleId)
-      .where("userId", "==", userId)
-      .where("isDeleted", "==", false)
-      .limit(1),
   );
