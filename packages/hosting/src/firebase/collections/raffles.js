@@ -39,13 +39,16 @@ export const updateRaffleParticipant = async (
     participant,
   );
 
-export const fetchRaffleParticipantByUserId = async (raffleId, userId) =>
-  fetchCollectionOnce(
+export const fetchRaffleParticipantByUserId = async (raffleId, userId) => {
+  const raffleParticipant = await fetchCollectionOnce(
     raffleParticipantsRef(raffleId)
       .where("isDeleted", "==", false)
       .where("userId", "==", userId)
       .limit(1),
   );
+
+  return raffleParticipant[0];
+};
 
 export const fetchRaffleParticipants = async (raffleId) =>
   fetchCollectionOnce(
