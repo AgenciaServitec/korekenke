@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import { errorHandler, hostingToApi } from "./_middlewares";
 import { body } from "express-validator";
@@ -18,16 +18,13 @@ import {
   putBiometricAssistanceByCip,
   putUserFingerprintTemplate,
 } from "./fingerprint";
-import Busboy from "busboy";
-import XLSX from "xlsx";
-import { Readable } from "stream";
 
 const app: express.Application = express();
 
 app.use(cors({ origin: "*" }));
 
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(hostingToApi);
 
@@ -68,57 +65,6 @@ app.post("/verify-email/send-password", postSendPassword);
 app.post("/verify-email/verify-code", postVerificationCode);
 
 app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
-
-app.post("/upload", (req: Request, res: Response) => {
-  const busboy = Busboy({ headers: req.headers });
-
-  const fileBuffer: Buffer[] = [];
-  let fileFound = false;
-
-  busboy.on(
-    "file",
-    (
-      fieldname: string,
-      file: Readable,
-      filename: string,
-      encoding: string,
-      mimetype: string
-    ) => {
-      console.log("Archivo recibido:", fieldname);
-      console.log("Archivo recibido:", filename);
-      console.log("Archivo recibido:", encoding);
-      console.log("Archivo recibido:", mimetype);
-
-      fileFound = true;
-
-      file.on("data", (data: Buffer) => {
-        fileBuffer.push(data);
-      });
-
-      file.on("end", () => {
-        const fullBuffer = Buffer.concat(fileBuffer);
-        try {
-          const workbook = XLSX.read(fullBuffer, { type: "buffer" });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const data = XLSX.utils.sheet_to_json(sheet);
-
-          res.status(200).json({ message: "Archivo procesado", data });
-        } catch (err) {
-          console.error("Error procesando el archivo:", err);
-          res.status(500).json({ error: "Error procesando el archivo" });
-        }
-      });
-    }
-  );
-
-  busboy.on("finish", () => {
-    if (!fileFound) {
-      res.status(400).json({ message: "No se envió ningún archivo" });
-    }
-  });
-
-  req.pipe(busboy);
-});
 
 app.use(errorHandler);
 
