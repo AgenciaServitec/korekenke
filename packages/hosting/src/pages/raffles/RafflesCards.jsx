@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import dayjs from "dayjs";
 import {
   Button,
@@ -32,27 +32,26 @@ import { useDefaultFirestoreProps } from "../../hooks";
 import { userFullName } from "../../utils/users/userFullName2";
 import {
   addRaffleParticipant,
-  fetchRaffleParticipantByUserId,
   getRaffleParticipantId,
+  raffleParticipantsRef,
 } from "../../firebase/collections/raffles";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
   const { assignCreateProps } = useDefaultFirestoreProps();
-  const [raffleParticipant, setRaffleParticipant] = useState(null);
+  const [
+    raffleParticipant = [],
+    raffleParticipantLoading,
+    raffleParticipantError,
+  ] = useCollectionData(
+    raffleParticipantsRef(raffle.id)
+      .where("isDeleted", "==", false)
+      .where("userId", "==", user.id)
+      .limit(1),
+  );
 
-  useEffect(() => {
-    (async () => {
-      const _raffleParticipant = await fetchRaffleParticipantByUserId(
-        raffle.id,
-        user.id,
-      );
-
-      if (!_raffleParticipant) return;
-
-      setRaffleParticipant(_raffleParticipant);
-    })();
-  }, []);
+  const participant = raffleParticipant[0];
 
   const isOrganizer = raffle.organizerId === user.id;
 
@@ -65,12 +64,11 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
     status: "pending",
   };
 
-  const onSendParticipationRequest = async (raffle) => {
+  const onSendParticipationRequest = async (raffle) =>
     await addRaffleParticipant(
       raffle.id,
       assignCreateProps(mapRaffleParticipant),
     );
-  };
 
   const onConfirmSendParticipationRequest = (raffle) =>
     modalConfirm({
@@ -84,7 +82,6 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   return (
     <Container>
       <Card className="card-wrapper">
-        <div className="card-bar" />
         <Tag className="status">Abierto</Tag>
         <Space direction="vertical" className="card-header">
           <div>
@@ -128,26 +125,27 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
           </div>
 
           <div className="options">
-            <Space>
+            <div>
               {isOrganizer ? (
-                <Button onClick={() => navigate(`${raffle.id}/play`)}>
+                <Button block onClick={() => navigate(`${raffle.id}/play`)}>
                   <FontAwesomeIcon icon={faPlay} />
                   <span>Comenzar</span>
                 </Button>
-              ) : isEmpty(raffleParticipant) ? (
+              ) : isEmpty(participant) ? (
                 <Button
+                  block
                   onClick={() => onConfirmSendParticipationRequest(raffle)}
                 >
                   <FontAwesomeIcon icon={faHand} />
                   <span>Solicitar unirse</span>
                 </Button>
-              ) : raffleParticipant?.status === "approved" ? (
-                <span>Ya forma parte del sorteo</span>
-              ) : (
+              ) : participant?.status === "pending" ? (
                 <span>A la espera de la aprobación</span>
+              ) : (
+                <span>Ya forma parte del sorteo</span>
               )}
-            </Space>
-            <Space>
+            </div>
+            <div>
               <IconAction
                 tooltipTitle="Premios"
                 icon={faGift}
@@ -191,7 +189,7 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
                   />
                 </>
               )}
-            </Space>
+            </div>
           </div>
         </Space>
       </Card>
@@ -265,15 +263,18 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
         gap: 1rem;
 
-        button {
-          width: 100%;
-
+        & > div:first-child {
           ${mediaQuery.minDesktop} {
             max-width: 15rem;
           }
+        }
+
+        & > div:last-child {
+          align-self: center;
+          display: flex;
+          gap: 0.3125rem;
         }
 
         ${mediaQuery.minDesktop} {
@@ -289,16 +290,6 @@ const Container = styled.div`
       font-weight: 500;
       text-transform: uppercase;
       font-size: 0.75rem;
-    }
-
-    .card-bar {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 0.25em;
-      border-top-left-radius: 12px;
-      border-bottom-left-radius: 12px;
     }
   }
 
