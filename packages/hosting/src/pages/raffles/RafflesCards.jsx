@@ -36,6 +36,7 @@ import {
   raffleParticipantsRef,
 } from "../../firebase/collections/raffles";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { lighten } from "polished";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
     });
 
   return (
-    <Container>
+    <Container mainColor={raffle?.mainColor || "#f44336"}>
       <Card className="card-wrapper">
         <Tag className="status">Abierto</Tag>
         <Space direction="vertical" className="card-header">
@@ -226,6 +227,8 @@ const Container = styled.div`
     transition:
       transform 0.2s,
       box-shadow 0.2s;
+    background: ${({ mainColor }) =>
+      `linear-gradient(135deg, ${mainColor} 0%, ${lighten(0.2, mainColor)} 100%)`};
 
     &:hover {
       transform: translateY(-2px);
