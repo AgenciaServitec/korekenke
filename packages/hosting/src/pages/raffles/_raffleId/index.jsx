@@ -7,6 +7,7 @@ import {
   Acl,
   Button,
   Col,
+  ColorPicker,
   DatePicker,
   Form,
   Input,
@@ -78,6 +79,7 @@ export const RaffleIntegration = () => {
       : undefined,
     quantityParticipants: quantityParticipants,
     organizerId: authUser?.id,
+    mainColor: formData.mainColor,
   });
 
   const onSubmit = async (formData) => {
@@ -197,6 +199,7 @@ const RaffleForm = ({
     startDate: yup.date().min(dayjs()),
     endDate: yup.date().min(yup.ref("startDate")),
     participants: yup.string(),
+    mainColor: yup.string(),
   });
 
   const {
@@ -229,6 +232,7 @@ const RaffleForm = ({
         ? dayjs(raffle.startDate, "DD-MM-YYYY")
         : undefined,
       endDate: raffle.endDate ? dayjs(raffle.endDate, "DD-MM-YYYY") : undefined,
+      mainColor: raffle?.mainColor || "#f44336",
     });
   };
 
@@ -348,6 +352,26 @@ const RaffleForm = ({
                   </Col>
                 </Row>
               </Legend>
+            </Col>
+            <Col span={24}>
+              <Row gutter={[16, 16]}>
+                <Col span={24}>
+                  <Controller
+                    name="mainColor"
+                    control={control}
+                    render={({ field: { onChange, value, name } }) => (
+                      <ColorPicker
+                        label="Color Principal"
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        error={error(name)}
+                        required={required(name)}
+                      />
+                    )}
+                  />
+                </Col>
+              </Row>
             </Col>
             {isNew && (
               <Col span={24}>
