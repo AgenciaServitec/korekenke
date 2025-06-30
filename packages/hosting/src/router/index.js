@@ -4,6 +4,7 @@ import { AdminLayout, PublicLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
 import * as A from "../pages";
 import { Page404 } from "../pages/404";
+import { RafflePlay } from "../pages";
 
 export const Router = () => {
   return (
@@ -287,6 +288,51 @@ export const Router = () => {
           element={
             <AdminLayout>
               <A.OrganizationalClimateStudiesIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="raffles"
+          element={
+            <AdminLayout>
+              <A.RafflesIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="raffles/:raffleId"
+          element={
+            <AdminLayout>
+              <A.RaffleIntegration />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="raffles/:raffleId/participants"
+          element={
+            <AdminLayout>
+              <A.RafflesParticipants />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="raffles/:raffleId/requests"
+          element={
+            <AdminLayout>
+              <A.RafflesParticipants />
+            </AdminLayout>
+          }
+        />
+        <Route
+          exact
+          path="raffles/:raffleId/play"
+          element={
+            <AdminLayout>
+              <A.RafflePlay />
             </AdminLayout>
           }
         />

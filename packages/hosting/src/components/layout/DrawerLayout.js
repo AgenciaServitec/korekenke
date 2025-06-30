@@ -26,6 +26,7 @@ import {
   faShapes,
   faShield,
   faSquareCheck,
+  faTicket,
   faUmbrellaBeach,
   faUsers,
   faUsersCog,
@@ -276,6 +277,40 @@ export const DrawerLayout = ({
           icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
           isVisible: existsAclsInAclsOfUser("public", ["visits"], ["/visits"]),
           onClick: () => onClickMenu("/visits"),
+        },
+      ],
+    },
+    {
+      label: "Sorteos",
+      key: "raffles",
+      icon: <FontAwesomeIcon icon={faTicket} size="lg" />,
+      isVisible: existsAclsInAclsOfUser(
+        "public",
+        ["raffles"],
+        ["/raffles", "/raffles/new"],
+      ),
+      children: [
+        {
+          label: "Crear Sorteo",
+          key: "raffle",
+          icon: <FontAwesomeIcon icon={faTicket} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["raffles"],
+            ["/raffles/new"],
+          ),
+          onClick: () => onClickMenu("/raffles/new"),
+        },
+        {
+          label: "Lista de Sorteos",
+          key: "raffles-list",
+          icon: <FontAwesomeIcon icon={faListCheck} size="lg" />,
+          isVisible: existsAclsInAclsOfUser(
+            "public",
+            ["raffles"],
+            ["/raffles"],
+          ),
+          onClick: () => onClickMenu("/raffles"),
         },
       ],
     },
