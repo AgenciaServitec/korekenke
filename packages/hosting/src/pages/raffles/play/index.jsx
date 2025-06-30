@@ -11,7 +11,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   fetchRaffle,
   raffleParticipantsRef,
-  rafflesRef,
 } from "../../../firebase/collections/raffles";
 import { useParams } from "react-router";
 import styled from "styled-components";

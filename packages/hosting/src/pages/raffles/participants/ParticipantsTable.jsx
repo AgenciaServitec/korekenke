@@ -191,7 +191,10 @@ export const ParticipantsTable = ({
         <Col span={24}>
           <div className="header">
             <Space>
-              <IconAction icon={faArrowLeft} onClick={() => navigate(-1)} />
+              <IconAction
+                icon={faArrowLeft}
+                onClick={() => navigate("/raffles")}
+              />
               <Col span={24}>
                 <Title level={2} style={{ margin: "0" }}>
                   Participantes
