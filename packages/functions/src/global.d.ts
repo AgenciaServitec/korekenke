@@ -239,3 +239,11 @@ interface Assistance extends DefaultFirestoreProps {
   user: User;
   workPlace: string | null;
 }
+
+interface ParticipanteExcel {
+  nombre?: string;
+  numero?: string;
+  grupo?: string;
+  cip?: string | number;
+  dni?: string | number;
+}

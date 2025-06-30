@@ -63,6 +63,12 @@ export * from "./entities/servicio-de-veterinaria-y-remonta-del-ejercito/animals
 export * from "./entities/departamento-de-apoyo-social/das-requests";
 export * from "./entities/departamento-de-apoyo-social/das-requests/_dasRequestId";
 
+// RAFFLES
+export * from "./raffles";
+export * from "./raffles/_raffleId";
+export * from "./raffles/participants";
+export * from "./raffles/play";
+
 //PRIVACY POLICIES
 export * from "./privacy-policies";
 
