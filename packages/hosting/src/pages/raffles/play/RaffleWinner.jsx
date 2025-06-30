@@ -1,8 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import ReactConfetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { CountdownTimerWinner } from "../CountdownTimerWinner";
@@ -19,7 +16,7 @@ export const RaffleWinner = ({ raffle, winner }) => {
       <Container>
         {showWinner ? (
           <div className="winners">
-            {/*<ReactConfetti width={width} height={height} />*/}
+            <ReactConfetti width={width} height={height} />
             <div className="winners__module">
               <Title level={3} align="center">
                 Ganadores
