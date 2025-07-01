@@ -36,7 +36,7 @@ import {
   raffleParticipantsRef,
 } from "../../firebase/collections/raffles";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { lighten, darken, readableColor, rgba } from "polished";
+import { lighten } from "polished";
 import { RafflesStatus } from "../../data-list";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
