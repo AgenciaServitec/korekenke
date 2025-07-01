@@ -31,3 +31,4 @@ export { default as TutorialsData } from "./tutorialsData.json";
 export { default as BloodGroup } from "./bloodGroup.json";
 export { default as VisitsStatus } from "./visitsStatus.json";
 export { default as RaffleParticipantStatus } from "./raffleParticipantStatus.json";
+export { default as RafflesStatus } from "./rafflesStatus.json";
