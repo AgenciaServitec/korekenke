@@ -22,6 +22,7 @@ export const buckets = {
   militaryServiceRecruitment: firebase
     .app()
     .storage(currentConfig.buckets.militaryServiceRecruitment),
+  raffles: firebase.app().storage(currentConfig.buckets.raffles),
 };
 
 export const imageResizes = ["423x304", "313x370"];
