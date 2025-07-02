@@ -36,6 +36,8 @@ import {
   raffleParticipantsRef,
 } from "../../firebase/collections/raffles";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { lighten } from "polished";
+import { RafflesStatus } from "../../data-list";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   const navigate = useNavigate();
@@ -50,6 +52,19 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
       .where("userId", "==", user.id)
       .limit(1),
   );
+
+  const calculateStatus = (startDate, endDate) => {
+    const now = dayjs();
+    const start = dayjs(startDate, "DD-MM-YYYY");
+    const end = dayjs(endDate, "DD-MM-YYYY");
+
+    if (now.isBefore(start)) return "planned";
+    if (now.isAfter(end)) return "closed";
+    return "active";
+  };
+
+  const currentStatus = calculateStatus(raffle.startDate, raffle.endDate);
+  const statusConfig = RafflesStatus[currentStatus];
 
   const participant = raffleParticipant[0];
 
@@ -80,9 +95,11 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
     });
 
   return (
-    <Container>
+    <Container mainColor={raffle?.mainColor || "#f44336"}>
       <Card className="card-wrapper">
-        <Tag className="status">Abierto</Tag>
+        <Tag className="status" color={statusConfig.color}>
+          {statusConfig.name}
+        </Tag>
         <Space direction="vertical" className="card-header">
           <div>
             <Title level={4}>{raffle.title}</Title>
@@ -226,6 +243,8 @@ const Container = styled.div`
     transition:
       transform 0.2s,
       box-shadow 0.2s;
+    background: ${({ mainColor }) =>
+      `linear-gradient(135deg, ${mainColor} 0%, ${lighten(0.2, mainColor)} 100%)`};
 
     &:hover {
       transform: translateY(-2px);

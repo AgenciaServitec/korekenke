@@ -17,6 +17,7 @@ import styled from "styled-components";
 import { faArrowsSpin } from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
 import { RaffleWinner } from "./RaffleWinner";
+import { lighten } from "polished";
 
 export const RafflePlay = () => {
   const { raffleId } = useParams();
@@ -74,7 +75,7 @@ export const RafflePlay = () => {
       <Row gutter={[16, 16]}>
         {isEmpty(winner) ? (
           <Col span={24}>
-            <Container>
+            <Container mainColor={raffle?.mainColor}>
               <div className="sorteo">
                 <div className="header">
                   <div className="title">
@@ -99,9 +100,7 @@ export const RafflePlay = () => {
                 type="primary"
                 block
                 size="large"
-                style={{
-                  background: "linear-gradient(135deg, #4da6ff, #70cfff)",
-                }}
+                className="raffles-play-button"
                 onClick={() => onRafflePlay(participants)}
               >
                 Comenzar
@@ -131,7 +130,8 @@ const Container = styled.div`
 
   .header {
     padding: 1rem;
-    background: linear-gradient(135deg, #4da6ff, #70cfff);
+    background: ${({ mainColor }) =>
+      `linear-gradient(135deg, ${mainColor} 0%, ${lighten(0.2, mainColor)} 100%)`};
 
     color: white;
     .title {
@@ -156,5 +156,9 @@ const Container = styled.div`
       border-top: 1px solid #b1b1b1;
       font-weight: bold;
     }
+  }
+  .raffles-play-button {
+    background: ${({ mainColor }) =>
+      `linear-gradient(135deg, ${mainColor} 0%, ${lighten(0.2, mainColor)} 100%)`};
   }
 `;
