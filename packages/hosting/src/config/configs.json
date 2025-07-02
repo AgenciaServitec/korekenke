@@ -28,7 +28,8 @@
       "documents": "gs://korekenke-documents-dev",
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito-dev",
       "departamentoDeApoyoSocial": "gs://departamento-de-apoyo-social-dev",
-      "militaryServiceRecruitment": "gs://military-service-recruitment-dev"
+      "militaryServiceRecruitment": "gs://military-service-recruitment-dev",
+      "raffles": "gs://korekenke-raffles-dev"
     },
     "apiUrl": "https://api-korekenke-dev.web.app",
     "apiMaps": {
@@ -54,7 +55,8 @@
       "documents": "gs://korekenke-documents",
       "servicioDeVeterinariaYRemontaDelEjercito": "gs://servicio-de-veterinaria-y-remonta-del-ejercito",
       "departamentoDeApoyoSocial": "gs://departamento-apoyo-social",
-      "militaryServiceRecruitment": "gs://military-service-recruitment"
+      "militaryServiceRecruitment": "gs://military-service-recruitment",
+      "raffles": "gs://korekenke-raffles"
     },
     "apiUrl": "https://api-korekenke.web.app",
     "apiMaps": {
