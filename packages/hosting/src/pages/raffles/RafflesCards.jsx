@@ -7,7 +7,6 @@ import {
   IconAction,
   modalConfirm,
   Row,
-  Space,
   Tag,
   Title,
   Typography,
@@ -36,7 +35,7 @@ import {
   raffleParticipantsRef,
 } from "../../firebase/collections/raffles";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { lighten } from "polished";
+import { darken, lighten, readableColor } from "polished";
 import { RafflesStatus } from "../../data-list";
 
 const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
@@ -97,15 +96,21 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
   return (
     <Container mainColor={raffle?.mainColor || "#f44336"}>
       <Card className="card-wrapper">
+        <div
+          className="card-bar"
+          style={{ backgroundColor: statusConfig.color }}
+        />
         <Tag className="status" color={statusConfig.color}>
           {statusConfig.name}
         </Tag>
-        <Space direction="vertical" className="card-header">
+        <div className="card-header">
           <div>
             <Title level={4}>{raffle.title}</Title>
             <Title level={5}>{raffle.group}</Title>
           </div>
-          <div>
+        </div>
+        <div className="card-body">
+          <div className="card-info">
             <p>Participantes: {raffle?.quantityParticipants}</p>
             <p>
               Creada:{" "}
@@ -115,100 +120,85 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
             </p>
           </div>
 
-          <div className="dates-section">
-            {raffle.startDate && (
+          {raffle.startDate && (
+            <div className="dates-section">
               <div className="dates-wrapper">
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
-                >
-                  <FontAwesomeIcon icon={faPlayCircle} size="1x" />
-
-                  <Typography.Text strong style={{ fontSize: "0.9rem" }}>
-                    {raffle.startDate}
-                  </Typography.Text>
+                <div className="date-item">
+                  <FontAwesomeIcon icon={faPlayCircle} />
+                  <Typography.Text strong>{raffle.startDate}</Typography.Text>
                 </div>
-
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
-                >
-                  <FontAwesomeIcon icon={faFlagCheckered} size="1x" />
-
-                  <Typography.Text strong style={{ fontSize: "0.9rem" }}>
-                    {raffle.endDate}
-                  </Typography.Text>
+                <div className="date-item">
+                  <FontAwesomeIcon icon={faFlagCheckered} />
+                  <Typography.Text strong>{raffle.endDate}</Typography.Text>
                 </div>
               </div>
+            </div>
+          )}
+        </div>
+        <div className="card-footer">
+          <div className="footer-actions">
+            {isOrganizer ? (
+              <Button block onClick={() => navigate(`${raffle.id}/play`)}>
+                <FontAwesomeIcon icon={faPlay} />
+                <span>Comenzar</span>
+              </Button>
+            ) : isEmpty(participant) ? (
+              <Button
+                block
+                onClick={() => onConfirmSendParticipationRequest(raffle)}
+              >
+                <FontAwesomeIcon icon={faHand} />
+                <span>Solicitar unirse</span>
+              </Button>
+            ) : participant?.status === "pending" ? (
+              <span>A la espera de la aprobación</span>
+            ) : (
+              <span>Ya forma parte del sorteo</span>
             )}
           </div>
 
-          <div className="options">
-            <div>
-              {isOrganizer ? (
-                <Button block onClick={() => navigate(`${raffle.id}/play`)}>
-                  <FontAwesomeIcon icon={faPlay} />
-                  <span>Comenzar</span>
-                </Button>
-              ) : isEmpty(participant) ? (
-                <Button
-                  block
-                  onClick={() => onConfirmSendParticipationRequest(raffle)}
-                >
-                  <FontAwesomeIcon icon={faHand} />
-                  <span>Solicitar unirse</span>
-                </Button>
-              ) : participant?.status === "pending" ? (
-                <span>A la espera de la aprobación</span>
-              ) : (
-                <span>Ya forma parte del sorteo</span>
-              )}
-            </div>
-            <div>
-              <IconAction
-                tooltipTitle="Premios"
-                icon={faGift}
-                size={33}
-                onClick={() => ""}
-                styled={{
-                  color: (theme) => theme.colors.info,
-                }}
-              />
-              <IconAction
-                tooltipTitle="Ganadores"
-                icon={faTrophy}
-                size={33}
-                onClick={() => ""}
-                styled={{
-                  color: (theme) => theme.colors.warning,
-                }}
-              />
-              {isOrganizer && (
-                <>
-                  <IconAction
-                    tooltipTitle="Participantes"
-                    icon={faPeopleGroup}
-                    size={33}
-                    onClick={() => navigate(`${raffle.id}/participants`)}
-                  />
-                  <IconAction
-                    tooltipTitle="Editar"
-                    icon={faEdit}
-                    size={33}
-                    onClick={() => onEditRaffle(raffle.id)}
-                  />
-                  <IconAction
-                    tooltipTitle="Eliminar"
-                    icon={faTrash}
-                    size={33}
-                    onClick={() => onConfirmDeleteRaffle(raffle.id)}
-                    styled={{
-                      color: (theme) => theme.colors.error,
-                    }}
-                  />
-                </>
-              )}
-            </div>
+          <div className="footer-icons">
+            <IconAction
+              className="icon-action"
+              tooltipTitle="Premios"
+              icon={faGift}
+              size={33}
+              onClick={() => {}}
+            />
+            <IconAction
+              className="icon-action"
+              tooltipTitle="Ganadores"
+              icon={faTrophy}
+              size={33}
+              onClick={() => {}}
+            />
+            {isOrganizer && (
+              <>
+                <IconAction
+                  className="icon-action"
+                  tooltipTitle="Participantes"
+                  icon={faPeopleGroup}
+                  size={33}
+                  onClick={() => navigate(`${raffle.id}/participants`)}
+                />
+                <IconAction
+                  className="icon-action"
+                  tooltipTitle="Editar"
+                  icon={faEdit}
+                  size={33}
+                  onClick={() => onEditRaffle(raffle.id)}
+                />
+                <IconAction
+                  className="icon-action"
+                  tooltipTitle="Eliminar"
+                  icon={faTrash}
+                  size={33}
+                  onClick={() => onConfirmDeleteRaffle(raffle.id)}
+                />
+              </>
+            )}
           </div>
-        </Space>
+        </div>
       </Card>
     </Container>
   );
@@ -238,87 +228,127 @@ export const RafflesCards = ({
 
 const Container = styled.div`
   .card-wrapper {
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition:
-      transform 0.2s,
-      box-shadow 0.2s;
+    border-radius: 20px;
     background: ${({ mainColor }) =>
-      `linear-gradient(135deg, ${mainColor} 0%, ${lighten(0.2, mainColor)} 100%)`};
+      `linear-gradient(135deg, ${lighten(0.1, mainColor)} 0%, ${darken(0.1, mainColor)} 100%)`};
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    padding: 1.5rem;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    position: relative;
+    color: white;
+    overflow: hidden;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-header {
-      width: 100%;
-
-      * {
-        margin: 0;
-      }
-
-      & > div:nth-child(2) {
-        margin-bottom: 1rem;
-
-        p:last-child {
-          color: #8c8c8c;
-        }
-      }
-
-      .dates-section {
-        border-radius: 0.5em;
-        padding: 0.8em;
-
-        .dates-wrapper {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 4px;
-        }
-      }
-
-      .options {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 1rem;
-
-        & > div:first-child {
-          ${mediaQuery.minDesktop} {
-            max-width: 15rem;
-          }
-        }
-
-        & > div:last-child {
-          align-self: center;
-          display: flex;
-          gap: 0.3125rem;
-        }
-
-        ${mediaQuery.minDesktop} {
-          flex-direction: row;
-          justify-content: space-between;
-        }
-      }
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
     }
 
     .status {
+      background-color: ${({ color }) => `${color}`};
+      color: black;
+      font-weight: bold;
       border-radius: 20px;
       padding: 4px 12px;
-      font-weight: 500;
-      text-transform: uppercase;
       font-size: 0.75rem;
+      display: inline-block;
+      margin-bottom: 0.5rem;
     }
-  }
 
-  .icons-section {
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
+    .card-header {
+      h4,
+      h5 {
+        color: ${({ mainColor }) => `${readableColor(mainColor)}`};
+        margin: 0.4em 0;
+      }
+    }
 
-    .user-icons {
+    .card-body {
+      .card-info p {
+        font-size: 0.95rem;
+        margin: 0.4em 0;
+        color: ${({ mainColor }) => `${readableColor(mainColor)}`};
+      }
+
+      .dates-section {
+        .dates-wrapper {
+          display: flex;
+          justify-content: space-between;
+          gap: 1rem;
+
+          .date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            svg {
+              color: ${({ mainColor }) => `${readableColor(mainColor)}`};
+              transition: transform 0.2s;
+            }
+            strong {
+              color: ${({ mainColor }) => `${readableColor(mainColor)}`};
+            }
+
+            &:hover svg {
+              transform: scale(1.1);
+              color: lightblue;
+            }
+          }
+        }
+
+        ${mediaQuery.maxTablet} {
+          .dates-wrapper {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+      }
+    }
+
+    .card-footer {
       display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      ${mediaQuery.minDesktop} {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-actions {
+        button {
+          background: rgba(255, 255, 255, 0.1);
+          color: ${({ mainColor }) => `${readableColor(mainColor)}`};
+          border: 1px solid black;
+          font-weight: bold;
+          &:hover {
+            background: white;
+            color: black;
+          }
+        }
+      }
+
+      .footer-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-start;
+
+        ${mediaQuery.minDesktop} {
+          justify-content: flex-end;
+        }
+
+        .icon-action {
+          transition: transform 0.2s ease;
+          color: ${({ mainColor }) => `${readableColor(mainColor)}`};
+          &:hover {
+            transform: scale(1.2);
+            color: black;
+          }
+        }
+      }
     }
   }
 `;
