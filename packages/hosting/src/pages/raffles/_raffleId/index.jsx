@@ -16,8 +16,10 @@ import {
   Row,
   TextArea,
   Title,
+  Space,
+  Upload,
+  UploadMultiple,
 } from "../../../components";
-import { Space, Upload } from "antd";
 import { useNavigate, useParams } from "react-router";
 import {
   addRaffle,
@@ -32,6 +34,7 @@ import { faFileImport } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
+import { v4 as uuidv4 } from "uuid";
 
 export const RaffleIntegration = () => {
   const { authUser } = useAuthentication();
@@ -77,6 +80,7 @@ export const RaffleIntegration = () => {
     endDate: formData.endDate
       ? dayjs(formData.endDate).format("DD-MM-YYYY")
       : undefined,
+    awardsPhoto: formData?.awardsPhoto || null,
     quantityParticipants: quantityParticipants,
     organizerId: authUser?.id,
     mainColor: formData.mainColor,
@@ -191,6 +195,8 @@ const RaffleForm = ({
   onSubmit,
   onGoBack,
 }) => {
+  const [onLoad, setLoad] = useState(false);
+
   const schema = yup.object({
     title: yup.string(),
     group: yup.string(),
@@ -198,6 +204,7 @@ const RaffleForm = ({
     durationSeconds: yup.number(),
     startDate: yup.date().min(dayjs()),
     endDate: yup.date().min(yup.ref("startDate")),
+    awardsPhoto: yup.mixed(),
     participants: yup.string(),
     mainColor: yup.string(),
   });
@@ -232,6 +239,7 @@ const RaffleForm = ({
         ? dayjs(raffle.startDate, "DD-MM-YYYY")
         : undefined,
       endDate: raffle.endDate ? dayjs(raffle.endDate, "DD-MM-YYYY") : undefined,
+      awardsPhoto: raffle?.awardsPhoto || null,
       mainColor: raffle?.mainColor || "#f44336",
     });
   };
@@ -309,6 +317,28 @@ const RaffleForm = ({
                     error={error(name)}
                     required={required(name)}
                     disabledDate={disabledDate}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                control={control}
+                name="awardsPhoto"
+                render={({ field: { onChange, value, onBlur, name } }) => (
+                  <UploadMultiple
+                    withThumbImage={false}
+                    label="Foto de Premio"
+                    buttonText="Subir foto"
+                    value={value}
+                    name={name}
+                    bucket="raffles"
+                    fileName={`awards-foto-${uuidv4()}`}
+                    filePath={`awards/${raffle.id}`}
+                    onChange={(file) => onChange(file)}
+                    required={required(name)}
+                    error={error(name)}
+                    onUploading={setLoad}
                   />
                 )}
               />
@@ -395,25 +425,25 @@ const RaffleForm = ({
                       )}
                     />
                   </Col>
-                  <Col span={24}>
-                    <Space align="start">
-                      <Upload
-                        name="file"
-                        onRemove={() => onSetFileExcel(null)}
-                        beforeUpload={(file) => {
-                          onSetFileExcel(file);
-                          return false;
-                        }}
-                      >
-                        <Button icon={<FontAwesomeIcon icon={faFileImport} />}>
-                          Importar desde archivo
-                        </Button>
-                      </Upload>
-                      {fileExcel && (
-                        <Button onClick={onImportParticipants}>Importar</Button>
-                      )}
-                    </Space>
-                  </Col>
+                  {/*<Col span={24}>*/}
+                  {/*  <Space align="start">*/}
+                  {/*    <Upload*/}
+                  {/*      name="file"*/}
+                  {/*      onRemove={() => onSetFileExcel(null)}*/}
+                  {/*      beforeUpload={(file) => {*/}
+                  {/*        onSetFileExcel(file);*/}
+                  {/*        return false;*/}
+                  {/*      }}*/}
+                  {/*    >*/}
+                  {/*      <Button icon={<FontAwesomeIcon icon={faFileImport} />}>*/}
+                  {/*        Importar desde archivo*/}
+                  {/*      </Button>*/}
+                  {/*    </Upload>*/}
+                  {/*    {fileExcel && (*/}
+                  {/*      <Button onClick={onImportParticipants}>Importar</Button>*/}
+                  {/*    )}*/}
+                  {/*  </Space>*/}
+                  {/*</Col>*/}
                 </Row>
               </Col>
             )}
@@ -436,7 +466,7 @@ const RaffleForm = ({
                     size="large"
                     block
                     htmlType="submit"
-                    loading={loading}
+                    loading={loading || onLoad}
                   >
                     {isNew ? "Crear Sorteo" : "Guardar Cambios"}
                   </Button>

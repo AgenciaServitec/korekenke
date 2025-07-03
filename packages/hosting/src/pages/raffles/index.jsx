@@ -4,8 +4,10 @@ import { RafflesCards } from "./RafflesCards";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { rafflesRef, updateRaffle } from "../../firebase/collections/raffles";
 import { useNavigate } from "react-router";
-import { useDefaultFirestoreProps } from "../../hooks";
-import { useAuthentication } from "../../providers";
+import { useDefaultFirestoreProps, useDevice } from "../../hooks";
+import { ModalProvider, useAuthentication, useModal } from "../../providers";
+import { ElectionStatistics } from "../elections/ElectionStadistics";
+import { AwardsModal } from "./AwardsModal";
 
 export const RafflesIntegration = () => {
   const navigate = useNavigate();
@@ -29,16 +31,27 @@ export const RafflesIntegration = () => {
   if (rafflesLoading) return <Spinner />;
 
   return (
-    <Raffles
-      raffles={raffles}
-      onEditRaffle={onEditRaffle}
-      onConfirmDeleteRaffle={onConfirmDeleteRaffle}
-      user={authUser}
-    />
+    <ModalProvider>
+      <Raffles
+        raffles={raffles}
+        onEditRaffle={onEditRaffle}
+        onConfirmDeleteRaffle={onConfirmDeleteRaffle}
+        user={authUser}
+      />
+    </ModalProvider>
   );
 };
 
 const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle, user }) => {
+  const { isTablet } = useDevice();
+  const { onShowModal, onCloseModal } = useModal();
+
+  const onShowAwardsModal = (raffle) => {
+    onShowModal({
+      width: `${isTablet ? "100%" : "70%"}`,
+      onRenderBody: () => <AwardsModal raffle={raffle} />,
+    });
+  };
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -47,6 +60,7 @@ const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle, user }) => {
           onEditRaffle={onEditRaffle}
           onConfirmDeleteRaffle={onConfirmDeleteRaffle}
           user={user}
+          onShowAwardsModal={onShowAwardsModal}
         />
       </Col>
     </Row>

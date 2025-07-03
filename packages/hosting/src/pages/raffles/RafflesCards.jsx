@@ -38,7 +38,13 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { darken, lighten, readableColor } from "polished";
 import { RafflesStatus } from "../../data-list";
 
-const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
+const RaffleCard = ({
+  raffle,
+  onEditRaffle,
+  onConfirmDeleteRaffle,
+  user,
+  onShowAwardsModal,
+}) => {
   const navigate = useNavigate();
   const { assignCreateProps } = useDefaultFirestoreProps();
   const [
@@ -163,7 +169,9 @@ const RaffleCard = ({ raffle, onEditRaffle, onConfirmDeleteRaffle, user }) => {
               tooltipTitle="Premios"
               icon={faGift}
               size={33}
-              onClick={() => {}}
+              onClick={() => {
+                onShowAwardsModal(raffle.id);
+              }}
             />
             <IconAction
               className="icon-action"
@@ -209,6 +217,7 @@ export const RafflesCards = ({
   onEditRaffle,
   onConfirmDeleteRaffle,
   user,
+  onShowAwardsModal,
 }) => {
   return (
     <Row gutter={[16, 16]} wrap>
@@ -219,6 +228,7 @@ export const RafflesCards = ({
             onEditRaffle={onEditRaffle}
             onConfirmDeleteRaffle={onConfirmDeleteRaffle}
             user={user}
+            onShowAwardsModal={onShowAwardsModal}
           />
         </Col>
       ))}
