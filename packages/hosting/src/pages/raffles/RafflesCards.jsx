@@ -44,6 +44,7 @@ const RaffleCard = ({
   onConfirmDeleteRaffle,
   user,
   onShowAwardsModal,
+  onShowWinnersModal,
 }) => {
   const navigate = useNavigate();
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -157,9 +158,9 @@ const RaffleCard = ({
                 <span>Solicitar unirse</span>
               </Button>
             ) : participant?.status === "pending" ? (
-              <span>A la espera de la aprobación</span>
+              <span className="status-text">A la espera de la aprobación</span>
             ) : (
-              <span>Ya forma parte del sorteo</span>
+              <span className="status-text">Ya forma parte del sorteo</span>
             )}
           </div>
 
@@ -178,7 +179,9 @@ const RaffleCard = ({
               tooltipTitle="Ganadores"
               icon={faTrophy}
               size={33}
-              onClick={() => {}}
+              onClick={() => {
+                onShowWinnersModal(raffle.id, isOrganizer);
+              }}
             />
             {isOrganizer && (
               <>
@@ -218,6 +221,7 @@ export const RafflesCards = ({
   onConfirmDeleteRaffle,
   user,
   onShowAwardsModal,
+  onShowWinnersModal,
 }) => {
   return (
     <Row gutter={[16, 16]} wrap>
@@ -229,6 +233,7 @@ export const RafflesCards = ({
             onConfirmDeleteRaffle={onConfirmDeleteRaffle}
             user={user}
             onShowAwardsModal={onShowAwardsModal}
+            onShowWinnersModal={onShowWinnersModal}
           />
         </Col>
       ))}
@@ -336,6 +341,23 @@ const Container = styled.div`
           &:hover {
             background: white;
             color: black;
+          }
+        }
+        .status-text {
+          display: inline-block;
+          padding: 0.5rem 1rem;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          background-color: rgba(255, 255, 255, 0.2);
+          color: ${({ mainColor }) => readableColor(mainColor)};
+          border: 1px solid ${({ mainColor }) => readableColor(mainColor)};
+          backdrop-filter: blur(4px);
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: ${({ mainColor }) => readableColor(mainColor)};
+            color: ${({ mainColor }) => mainColor};
           }
         }
       }

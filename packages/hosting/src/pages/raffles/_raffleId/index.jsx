@@ -16,8 +16,6 @@ import {
   Row,
   TextArea,
   Title,
-  Space,
-  Upload,
   UploadMultiple,
 } from "../../../components";
 import { useNavigate, useParams } from "react-router";
@@ -30,11 +28,9 @@ import {
   updateRaffle,
 } from "../../../firebase/collections/raffles";
 import { useAuthentication } from "../../../providers";
-import { faFileImport } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as XLSX from "xlsx";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
+import { ExcelImport } from "../_utils";
 
 export const RaffleIntegration = () => {
   const { authUser } = useAuthentication();
@@ -46,7 +42,6 @@ export const RaffleIntegration = () => {
   const [loading, setLoading] = useState(false);
   const [participantsImport, setParticipantsImport] = useState("");
   const [quantityParticipants, setQuantityParticipants] = useState("");
-  const [fileExcel, setFileExcel] = useState(null);
   const [uploadLoading, setUploadLoading] = useState(false);
 
   const isNew = raffleId === "new";
@@ -124,43 +119,6 @@ export const RaffleIntegration = () => {
     }
   };
 
-  const onImportParticipants = () => {
-    const file = fileExcel;
-
-    if (!file) return;
-
-    setUploadLoading(true);
-
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheet = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheet];
-      const json = XLSX.utils.sheet_to_json(worksheet);
-
-      const lineas = json.map((row) => {
-        const nombre = row.nombres || row.Nombre || "";
-        const dni = row.dni || row.DNI || "";
-        const celular = row.celular || row.Celular || "";
-        return `${nombre}:${dni}:${celular}`;
-      });
-
-      setParticipantsImport(lineas.join("\n"));
-      setQuantityParticipants(json.length);
-
-      setUploadLoading(false);
-    };
-
-    reader.onerror = () => {
-      notification({ type: "error", message: "Error al leer el archivo" });
-      setUploadLoading(false);
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
-
   return (
     <Acl
       category="public"
@@ -172,13 +130,12 @@ export const RaffleIntegration = () => {
         isNew={isNew}
         raffle={raffle}
         loading={loading}
-        fileExcel={fileExcel}
-        onSetFileExcel={setFileExcel}
         uploadLoading={uploadLoading}
-        onImportParticipants={onImportParticipants}
         participantsImport={participantsImport}
         onSubmit={onSubmit}
         onGoBack={onGoBack}
+        setQuantityParticipants={setQuantityParticipants}
+        setParticipantsImport={setParticipantsImport}
       />
     </Acl>
   );
@@ -188,12 +145,11 @@ const RaffleForm = ({
   isNew,
   raffle,
   loading,
-  fileExcel,
-  onSetFileExcel,
-  onImportParticipants,
   participantsImport,
   onSubmit,
   onGoBack,
+  setQuantityParticipants,
+  setParticipantsImport,
 }) => {
   const [onLoad, setLoad] = useState(false);
 
@@ -425,25 +381,12 @@ const RaffleForm = ({
                       )}
                     />
                   </Col>
-                  {/*<Col span={24}>*/}
-                  {/*  <Space align="start">*/}
-                  {/*    <Upload*/}
-                  {/*      name="file"*/}
-                  {/*      onRemove={() => onSetFileExcel(null)}*/}
-                  {/*      beforeUpload={(file) => {*/}
-                  {/*        onSetFileExcel(file);*/}
-                  {/*        return false;*/}
-                  {/*      }}*/}
-                  {/*    >*/}
-                  {/*      <Button icon={<FontAwesomeIcon icon={faFileImport} />}>*/}
-                  {/*        Importar desde archivo*/}
-                  {/*      </Button>*/}
-                  {/*    </Upload>*/}
-                  {/*    {fileExcel && (*/}
-                  {/*      <Button onClick={onImportParticipants}>Importar</Button>*/}
-                  {/*    )}*/}
-                  {/*  </Space>*/}
-                  {/*</Col>*/}
+                  <Col span={24}>
+                    <ExcelImport
+                      setQuantityParticipants={setQuantityParticipants}
+                      setParticipantsImport={setParticipantsImport}
+                    />
+                  </Col>
                 </Row>
               </Col>
             )}

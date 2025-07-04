@@ -11,13 +11,14 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   fetchRaffle,
   raffleParticipantsRef,
+  updateRaffleParticipant,
 } from "../../../firebase/collections/raffles";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { faArrowsSpin } from "@fortawesome/free-solid-svg-icons";
 import { isEmpty } from "lodash";
 import { RaffleWinner } from "./RaffleWinner";
-import { lighten } from "polished";
+import { lighten, readableColor } from "polished";
 
 export const RafflePlay = () => {
   const { raffleId } = useParams();
@@ -28,7 +29,9 @@ export const RafflePlay = () => {
 
   const [participants = [], participantsLoading, participantsError] =
     useCollectionData(
-      raffleParticipantsRef(raffleId).where("isDeleted", "==", false),
+      raffleParticipantsRef(raffleId)
+        .where("isDeleted", "==", false)
+        .where("winner", "==", false),
     );
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export const RafflePlay = () => {
     })();
   }, []);
 
-  const onRafflePlay = () => {
+  const onRafflePlay = async () => {
     const selectWinner = (participants) => {
       if (participants.length === 0) return null;
 
@@ -51,7 +54,16 @@ export const RafflePlay = () => {
     };
 
     const _winner = selectWinner(participants);
-    setWinner(_winner);
+    if (_winner) {
+      try {
+        await updateRaffleParticipant(raffleId, _winner.id, {
+          winner: true,
+        });
+        setWinner({ ..._winner, winner: true });
+      } catch (error) {
+        console.error("Error al actualizar al ganador:", error);
+      }
+    }
   };
 
   const onShuffleParticipants = () => {
@@ -86,6 +98,7 @@ export const RafflePlay = () => {
                       size={50}
                       onClick={() => onShuffleParticipants()}
                       styled={{ color: (theme) => theme.colors.black }}
+                      className="icon-action"
                     />
                   </div>
                   <strong>Total: {participants.length}</strong>
@@ -133,14 +146,17 @@ const Container = styled.div`
     background: ${({ mainColor }) =>
       `linear-gradient(135deg, ${mainColor} 0%, ${lighten(0.2, mainColor)} 100%)`};
 
-    color: white;
+    color: ${({ mainColor }) => `${readableColor(mainColor)}`};
     .title {
       display: flex;
       justify-content: space-between;
       align-items: center;
       h2 {
-        color: white;
+        color: ${({ mainColor }) => `${readableColor(mainColor)}`};
       }
+    }
+    .icon-action {
+      color: ${({ mainColor }) => `${readableColor(mainColor)}`};
     }
   }
 
