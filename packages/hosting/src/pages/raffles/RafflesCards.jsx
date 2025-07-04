@@ -44,6 +44,7 @@ const RaffleCard = ({
   onConfirmDeleteRaffle,
   user,
   onShowAwardsModal,
+  onShowWinnersModal,
 }) => {
   const navigate = useNavigate();
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -178,7 +179,9 @@ const RaffleCard = ({
               tooltipTitle="Ganadores"
               icon={faTrophy}
               size={33}
-              onClick={() => {}}
+              onClick={() => {
+                onShowWinnersModal(raffle.id, isOrganizer);
+              }}
             />
             {isOrganizer && (
               <>
@@ -218,6 +221,7 @@ export const RafflesCards = ({
   onConfirmDeleteRaffle,
   user,
   onShowAwardsModal,
+  onShowWinnersModal,
 }) => {
   return (
     <Row gutter={[16, 16]} wrap>
@@ -229,6 +233,7 @@ export const RafflesCards = ({
             onConfirmDeleteRaffle={onConfirmDeleteRaffle}
             user={user}
             onShowAwardsModal={onShowAwardsModal}
+            onShowWinnersModal={onShowWinnersModal}
           />
         </Col>
       ))}

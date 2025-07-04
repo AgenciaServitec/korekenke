@@ -17,10 +17,13 @@ import {
   addRaffleParticipant,
   getRaffleParticipantId,
 } from "../../firebase/collections/raffles";
+import { ExcelImport } from "./_utils";
 
 export const AddParticipants = ({ onCloseModal }) => {
   const { raffleId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [participantsImport, setParticipantsImport] = useState("");
+  const [quantityParticipants, setQuantityParticipants] = useState("");
 
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
@@ -35,7 +38,7 @@ export const AddParticipants = ({ onCloseModal }) => {
         number: formattedText(part[2]),
         prefix: "+51",
       },
-      status: "pending",
+      status: "approved",
       winner: false,
     };
   };
@@ -75,11 +78,21 @@ export const AddParticipants = ({ onCloseModal }) => {
       onSaveParticipants={onSaveParticipants}
       loading={loading}
       onCloseModal={onCloseModal}
+      setParticipantsImport={setParticipantsImport}
+      setQuantityParticipants={setQuantityParticipants}
+      participantsImport={participantsImport}
     />
   );
 };
 
-const AddParticipantsForm = ({ onSaveParticipants, loading, onCloseModal }) => {
+const AddParticipantsForm = ({
+  onSaveParticipants,
+  loading,
+  onCloseModal,
+  setQuantityParticipants,
+  setParticipantsImport,
+  participantsImport,
+}) => {
   const schema = yup.object({
     participants: yup.string(),
   });
@@ -89,6 +102,7 @@ const AddParticipantsForm = ({ onSaveParticipants, loading, onCloseModal }) => {
     handleSubmit,
     control,
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -98,6 +112,10 @@ const AddParticipantsForm = ({ onSaveParticipants, loading, onCloseModal }) => {
   useEffect(() => {
     resetForm();
   }, []);
+
+  useEffect(() => {
+    setValue("participants", participantsImport);
+  }, [participantsImport]);
 
   const resetForm = () => {
     reset({
@@ -130,6 +148,14 @@ const AddParticipantsForm = ({ onSaveParticipants, loading, onCloseModal }) => {
           />
         </Col>
         <Col span={24}>
+          <Row justify="start" gutter={[16, 16]}>
+            <Col xs={24} sm={6} md={4}>
+              <ExcelImport
+                setParticipantsImport={setParticipantsImport}
+                setQuantityParticipants={setQuantityParticipants}
+              />
+            </Col>
+          </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
               <Button

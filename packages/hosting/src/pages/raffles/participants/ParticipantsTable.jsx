@@ -99,8 +99,19 @@ export const ParticipantsTable = ({
       title: "Apellidos y Nombres",
       align: "center",
       width: ["15rem", "100%"],
-      render: (participant) => <div>{participant.fullName}</div>,
+      render: (participant) => (
+        <div
+          style={{
+            fontWeight: participant.winner ? "bold" : "normal",
+            color: participant.winner ? "#eab308" : undefined,
+          }}
+        >
+          {participant.winner && "🏆 "}
+          {participant.fullName}
+        </div>
+      ),
     },
+
     {
       title: "DNI",
       align: "center",
@@ -140,7 +151,14 @@ export const ParticipantsTable = ({
       render: (participant) => {
         const requestStatus = RaffleParticipantStatus[participant.status];
 
-        return <Tag color={requestStatus?.color}>{requestStatus?.name}</Tag>;
+        return (
+          <Space direction="vertical">
+            {!participant.winner && (
+              <Tag color={requestStatus?.color}>{requestStatus?.name}</Tag>
+            )}
+            {participant.winner && <Tag color="gold">Ganador 🏆</Tag>}
+          </Space>
+        );
       },
     },
     {
@@ -229,7 +247,11 @@ export const ParticipantsTable = ({
         </Col>
         <Col span={24}>
           <TableVirtualized
-            dataSource={orderBy(participants, "createAt", "desc")}
+            dataSource={orderBy(
+              participants,
+              ["winner", "createAt"],
+              ["desc", "desc"],
+            )}
             columns={columns}
             rowHeaderHeight={50}
             rowBodyHeight={150}

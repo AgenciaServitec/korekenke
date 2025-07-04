@@ -39,7 +39,7 @@ export const UpdateParticipant = ({ participant = null, onCloseModal }) => {
         number: formattedText(data.phone),
         prefix: "+51",
       },
-      status: participant?.status || "pending",
+      status: participant?.status || "approved",
       winner: participant?.winner || false,
     };
   };
