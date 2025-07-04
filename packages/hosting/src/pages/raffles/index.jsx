@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps, useDevice } from "../../hooks";
 import { ModalProvider, useAuthentication, useModal } from "../../providers";
 import { AwardsModal } from "./AwardsModal";
+import { WinnersInformationModal } from "./WinnersInformationModal";
 
 export const RafflesIntegration = () => {
   const navigate = useNavigate();
@@ -51,6 +52,17 @@ const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle, user }) => {
       onRenderBody: () => <AwardsModal raffle={raffle} />,
     });
   };
+  const onShowWinnersModal = (raffleId, isOrganizer) => {
+    onShowModal({
+      width: `${isTablet ? "100%" : "70%"}`,
+      onRenderBody: () => (
+        <WinnersInformationModal
+          raffleId={raffleId}
+          isOrganizer={isOrganizer}
+        />
+      ),
+    });
+  };
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -60,6 +72,7 @@ const Raffles = ({ raffles, onEditRaffle, onConfirmDeleteRaffle, user }) => {
           onConfirmDeleteRaffle={onConfirmDeleteRaffle}
           user={user}
           onShowAwardsModal={onShowAwardsModal}
+          onShowWinnersModal={onShowWinnersModal}
         />
       </Col>
     </Row>
