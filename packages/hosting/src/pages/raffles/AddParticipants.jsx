@@ -35,6 +35,8 @@ export const AddParticipants = ({ onCloseModal }) => {
         number: formattedText(part[2]),
         prefix: "+51",
       },
+      status: "pending",
+      winner: false,
     };
   };
 
