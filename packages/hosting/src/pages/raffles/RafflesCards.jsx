@@ -170,7 +170,7 @@ const RaffleCard = ({
               icon={faGift}
               size={33}
               onClick={() => {
-                onShowAwardsModal(raffle.id);
+                onShowAwardsModal(raffle);
               }}
             />
             <IconAction

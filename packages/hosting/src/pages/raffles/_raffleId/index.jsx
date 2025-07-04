@@ -106,7 +106,7 @@ export const RaffleIntegration = () => {
         : await updateRaffle(raffle.id, assignUpdateProps(mapRaffle(formData)));
 
       isNew &&
-        participants.map(
+        participants?.map(
           async (participant) =>
             await addRaffleParticipant(
               raffle.id,

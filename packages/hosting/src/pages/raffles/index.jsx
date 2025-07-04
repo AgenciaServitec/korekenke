@@ -6,7 +6,6 @@ import { rafflesRef, updateRaffle } from "../../firebase/collections/raffles";
 import { useNavigate } from "react-router";
 import { useDefaultFirestoreProps, useDevice } from "../../hooks";
 import { ModalProvider, useAuthentication, useModal } from "../../providers";
-import { ElectionStatistics } from "../elections/ElectionStadistics";
 import { AwardsModal } from "./AwardsModal";
 
 export const RafflesIntegration = () => {
