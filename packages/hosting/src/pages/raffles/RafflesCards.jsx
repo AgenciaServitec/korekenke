@@ -158,9 +158,9 @@ const RaffleCard = ({
                 <span>Solicitar unirse</span>
               </Button>
             ) : participant?.status === "pending" ? (
-              <span>A la espera de la aprobación</span>
+              <span className="status-text">A la espera de la aprobación</span>
             ) : (
-              <span>Ya forma parte del sorteo</span>
+              <span className="status-text">Ya forma parte del sorteo</span>
             )}
           </div>
 
@@ -341,6 +341,23 @@ const Container = styled.div`
           &:hover {
             background: white;
             color: black;
+          }
+        }
+        .status-text {
+          display: inline-block;
+          padding: 0.5rem 1rem;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          background-color: rgba(255, 255, 255, 0.2);
+          color: ${({ mainColor }) => readableColor(mainColor)};
+          border: 1px solid ${({ mainColor }) => readableColor(mainColor)};
+          backdrop-filter: blur(4px);
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: ${({ mainColor }) => readableColor(mainColor)};
+            color: ${({ mainColor }) => mainColor};
           }
         }
       }
