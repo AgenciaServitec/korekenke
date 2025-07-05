@@ -94,6 +94,7 @@ export const RaffleIntegration = () => {
           number: par.split(":")[2],
         },
         status: "approved",
+        winner: false,
       }));
 
       isNew
