@@ -55,11 +55,11 @@ export const RafflePlay = () => {
 
     const _winner = selectWinner(participants);
     if (_winner) {
+      setWinner({ ..._winner, winner: true });
       try {
         await updateRaffleParticipant(raffleId, _winner.id, {
           winner: true,
         });
-        setWinner({ ..._winner, winner: true });
       } catch (error) {
         console.error("Error al actualizar al ganador:", error);
       }
