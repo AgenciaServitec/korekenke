@@ -2,6 +2,20 @@ import React, { useRef, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import styled from "styled-components";
 
+const playBeep = () => {
+  const context = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = context.createOscillator();
+  const gainNode = context.createGain();
+
+  oscillator.connect(gainNode);
+  gainNode.connect(context.destination);
+
+  oscillator.type = "triangle";
+  oscillator.frequency.value = 1200;
+  oscillator.start();
+  oscillator.stop(context.currentTime + 0.2);
+};
+
 export const CountdownTimerWinner = ({ raffle, onSetShowWinner }) => {
   return (
     <Container>
@@ -13,14 +27,14 @@ export const CountdownTimerWinner = ({ raffle, onSetShowWinner }) => {
           colorsTime={[7, 5, 2, 0]}
           onComplete={() => onSetShowWinner(true)}
         >
-          {renderTime}
+          {(props) => renderTime(props, raffle?.durationSeconds)}
         </CountdownCircleTimer>
       </div>
     </Container>
   );
 };
 
-const renderTime = ({ remainingTime }) => {
+const renderTime = ({ remainingTime }, durationSeconds) => {
   const currentTime = useRef(remainingTime);
   const prevTime = useRef(null);
   const isNewTimeFirstTick = useRef(false);
@@ -30,6 +44,10 @@ const renderTime = ({ remainingTime }) => {
     isNewTimeFirstTick.current = true;
     prevTime.current = currentTime.current;
     currentTime.current = remainingTime;
+
+    if (remainingTime > 0 && remainingTime < durationSeconds) {
+      playBeep();
+    }
   } else {
     isNewTimeFirstTick.current = false;
   }
