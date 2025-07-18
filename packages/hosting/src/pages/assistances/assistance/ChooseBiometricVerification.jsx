@@ -5,7 +5,7 @@ import { useDevice } from "../../../hooks";
 import { useModal } from "../../../providers";
 import { Button } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceSmile, faFingerprint } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { mediaQuery } from "../../../styles";
 import { GetFingerprintBiometrics } from "./GetFingerprintBiometrics";
 
@@ -61,13 +61,13 @@ export const ChooseBiometricVerification = ({
         RECONOCIMIENTO FACIAL
         <FontAwesomeIcon icon={faFaceSmile} size="4x" />
       </Button>
-      <Button
-        className="styled-button"
-        onClick={() => onShowFingerprintValidate(type)}
-      >
-        HUELLA DACTILAR
-        <FontAwesomeIcon icon={faFingerprint} size="4x" />
-      </Button>
+      {/*<Button*/}
+      {/*  className="styled-button"*/}
+      {/*  onClick={() => onShowFingerprintValidate(type)}*/}
+      {/*>*/}
+      {/*  HUELLA DACTILAR*/}
+      {/*  <FontAwesomeIcon icon={faFingerprint} size="4x" />*/}
+      {/*</Button>*/}
     </Container>
   );
 };
