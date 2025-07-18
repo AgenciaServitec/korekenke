@@ -61,13 +61,13 @@ export const ChooseBiometricVerification = ({
         RECONOCIMIENTO FACIAL
         <FontAwesomeIcon icon={faFaceSmile} size="4x" />
       </Button>
-      <Button
-        className="styled-button"
-        onClick={() => onShowFingerprintValidate(type)}
-      >
-        HUELLA DACTILAR
-        <FontAwesomeIcon icon={faFingerprint} size="4x" />
-      </Button>
+      {/*<Button*/}
+      {/*  className="styled-button"*/}
+      {/*  onClick={() => onShowFingerprintValidate(type)}*/}
+      {/*>*/}
+      {/*  HUELLA DACTILAR*/}
+      {/*  <FontAwesomeIcon icon={faFingerprint} size="4x" />*/}
+      {/*</Button>*/}
     </Container>
   );
 };
