@@ -106,11 +106,11 @@ export const AccessDataLogin = ({ next }) => {
         <span>
           ¿No tienes una cuenta? <Link to="/register">Registrate</Link>
         </span>
-        {/*<div>*/}
-        {/*  <Button size="large" onClick={() => onGoToAssistance()}>*/}
-        {/*    Marca asistencia*/}
-        {/*  </Button>*/}
-        {/*</div>*/}
+        <div>
+          <Button size="large" onClick={() => onGoToAssistance()}>
+            Marca asistencia
+          </Button>
+        </div>
       </Form>
     </Container>
   );
