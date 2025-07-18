@@ -5,7 +5,7 @@ import { useDevice } from "../../../hooks";
 import { useModal } from "../../../providers";
 import { Button } from "../../../components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceSmile, faFingerprint } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { mediaQuery } from "../../../styles";
 import { GetFingerprintBiometrics } from "./GetFingerprintBiometrics";
 
