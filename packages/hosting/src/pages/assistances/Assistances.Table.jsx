@@ -1,12 +1,11 @@
 import React from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
-import { TableVirtualized } from "../../components";
+import { TableVirtualized, Tag } from "../../components";
 import { userFullName } from "../../utils";
-import { Tag } from "antd";
 import { ExportToExcelButton } from "./_utils";
 
-export const AssistancesTable = ({ user, loading, assistances }) => {
+export const AssistancesTable = ({ loading, assistances }) => {
   const columns = [
     {
       title: "Fecha",
@@ -72,7 +71,7 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
   return (
     <Container>
       <div style={{ marginBottom: 16, textAlign: "right" }}>
-        <ExportToExcelButton data={assistances} user={user} loading={loading} />
+        <ExportToExcelButton data={assistances} loading={loading} />
       </div>
       <TableVirtualized
         loading={loading}
