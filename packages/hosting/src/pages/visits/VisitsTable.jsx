@@ -3,11 +3,11 @@ import {
   Acl,
   Col,
   IconAction,
+  notification,
   Row,
   Space,
   TableVirtualized,
   Tag,
-  notification,
 } from "../../components/ui";
 import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
@@ -15,6 +15,7 @@ import {
   faBuildingCircleXmark,
   faEdit,
   faEye,
+  faHistory,
   faHourglassStart,
   faReply,
   faRightFromBracket,
@@ -24,7 +25,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { orderBy } from "lodash";
 import { userFullName } from "../../utils/users/userFullName2";
 import { useAuthentication } from "../../providers";
-import { useBosses } from "../../hooks";
+import { useBosses, useDefaultFirestoreProps } from "../../hooks";
 import { ExportVisitToExcel } from "./utils";
 import { updateVisit } from "../../firebase/collections";
 
@@ -38,10 +39,12 @@ export const VisitsTable = ({
   setFilterStates,
   filterCount,
   onShowVisitedObservation,
+  onShowVisitProcessModal,
 }) => {
   const { authUser } = useAuthentication();
   const { fetchEntityManager, fetchDepartmentBoss, fetchDepartmentBossSecond } =
     useBosses();
+  const { assignUpdateProps } = useDefaultFirestoreProps();
 
   const [managerEntityGu, setManagerEntityGu] = useState(null);
   const [managerEntityGuSeguridad, setManagerEntityGuSeguridad] =
@@ -269,18 +272,36 @@ export const VisitsTable = ({
         return (
           <Space>
             <IconAction
+              tooltipTitle="Proceso de la Visita"
+              icon={faHistory}
+              onClick={() => onShowVisitProcessModal(visit)}
+            />
+            <IconAction
               tooltipTitle="Observacion"
               icon={faEye}
               styled={{ color: (theme) => theme.colors.info }}
               onClick={() => onShowVisitedObservation(visit)}
             />
-            {visit.status === "waiting" && canRequestReview && (
+            {visit.status === "waiting" && (
               <IconAction
                 tooltipTitle="Solicitar revisión"
                 icon={faReply}
                 styled={{ color: (theme) => theme.colors.warning }}
                 onClick={async () => {
-                  await updateVisit(visit.id, { status: "pending" });
+                  await updateVisit(
+                    visit.id,
+                    assignUpdateProps({
+                      status: "pending",
+                      timeline: {
+                        ...visit.timeline,
+                        entryDependency: assignUpdateProps({
+                          ...visit?.timeline?.entryDependency,
+                          status: "approved",
+                          timestamp: dayjs().format("DD/MM/YYYY HH:mm"),
+                        }),
+                      },
+                    }),
+                  );
                   notification({
                     type: "success",
                   });

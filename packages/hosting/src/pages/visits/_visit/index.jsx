@@ -135,6 +135,34 @@ export const VisitsIntegration = () => {
             prefix: "+51",
           },
         },
+        timeline: {
+          entryCuartel: assignUpdateProps({
+            ...visit?.timeline?.entryCuartel,
+            title: "Entrada al Cuartel",
+            status: visit?.timeline?.entryCuartel.status || "approved",
+            timestamp:
+              visit?.timeline?.entryCuartel.timestamp ||
+              dayjs().format("DD/MM/YYYY HH:mm"),
+          }),
+          entryDependency: {
+            ...visit?.timeline?.entryDependency,
+            title: "Entrada a la Dependencia",
+            status: visit?.timeline?.entryDependency.status || "pending",
+            timestamp: visit?.timeline?.entryDependency.timestamp || null,
+          },
+          exitDependency: {
+            ...visit?.timeline?.exitDependency,
+            title: "Salida de la Dependencia",
+            status: visit?.timeline?.exitDependency.status || "pending",
+            timestamp: visit?.timeline?.exitDependency.timestamp || null,
+          },
+          exitCuartel: {
+            ...visit?.timeline?.exitCuartel,
+            title: "Salida del Cuartel",
+            status: visit?.timeline?.exitCuartel.status || "pending",
+            timestamp: visit?.timeline?.exitCuartel.timestamp || null,
+          },
+        },
         status: visit?.status || "waiting",
         userId: formData.personVisited?.id || "",
         entryDateTime: dateTime,
