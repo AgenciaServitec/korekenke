@@ -6,13 +6,13 @@ import { userFullName } from "../../../utils/users/userFullName2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 
-export const ExportToExcelButton = ({ data, user, loading }) => {
+export const ExportToExcelButton = ({ data, loading }) => {
   const exportToExcel = () => {
     const dataForExport = data.map((assistance) => ({
       Fecha: dayjs(assistance.createAt.toDate()).format("DD/MM/YYYY"),
       CIP: assistance.user.cip,
       "Apellidos y Nombres": userFullName(assistance.user),
-      "Lugar de trabajo": user.workPlace,
+      "Lugar de trabajo": assistance?.workPlace,
       "Hora entrada": assistance?.entry
         ? dayjs(assistance?.entry.date, "DD-MM-YYYY HH:mm").format(
             "DD/MM/YYYY HH:mm A",
