@@ -34,6 +34,7 @@ import { VisitedObservation } from "./VisitedObservation";
 import { VisitsDoorFilter } from "./Visits.DoorFilter";
 import { VisitsDependencyFilter } from "./Visits.DependencyFilter";
 import { VisitsFilterByDate } from "./Visits.FilterByDate";
+import { VisitProcessModal } from "./VisitProcessModal";
 
 export const Visits = () => {
   const navigate = useNavigate();
@@ -182,6 +183,19 @@ const VisitsList = ({
     });
   };
 
+  const onShowVisitProcessModal = (visit) => {
+    onShowModal({
+      centered: true,
+      top: 0,
+      padding: 0,
+      title: "Proceso de la Visita",
+      width: `${isTablet ? "90%" : "50%"}`,
+      onRenderBody: () => (
+        <VisitProcessModal visit={visit} onCloseModal={onCloseModal} />
+      ),
+    });
+  };
+
   return (
     <Acl category="public" subCategory="visits" name="/visits" redirect>
       <Row gutter={[16, 16]}>
@@ -278,6 +292,7 @@ const VisitsList = ({
             setFilterCount={setFilterCount}
             setFilterStates={setFilterStates}
             onShowVisitedObservation={onShowVisitedObservation}
+            onShowVisitProcessModal={onShowVisitProcessModal}
           />
         </Col>
       </Row>
