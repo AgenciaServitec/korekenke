@@ -31,8 +31,10 @@ export const AssistancesTable = ({ user, loading, assistances }) => {
       title: "Lugar de trabajo",
       align: "center",
       width: ["8rem", "100%"],
-      render: () => (
-        <span style={{ textTransform: "capitalize" }}>{user.workPlace}</span>
+      render: (assistance) => (
+        <span style={{ textTransform: "capitalize" }}>
+          {assistance.workPlace}
+        </span>
       ),
     },
     {
