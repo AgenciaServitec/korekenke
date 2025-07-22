@@ -10,7 +10,6 @@ import {
   Title,
 } from "../../components";
 import { useNavigate } from "react-router";
-import { useAuthentication } from "../../providers";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,7 +23,6 @@ import { assistancesQuery } from "./_utils";
 
 export const AssistancesIntegration = () => {
   const navigate = useNavigate();
-  const { authUser } = useAuthentication();
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
     fromDate: dayjs().format("DD-MM-YYYY HH:mm"),
@@ -50,7 +48,6 @@ export const AssistancesIntegration = () => {
 
   return (
     <Assistances
-      user={authUser}
       onNavigateGoTo={onNavigateGoTo}
       assistances={assistances}
       assistancesLoading={assistancesLoading}
@@ -141,7 +138,6 @@ const Assistances = ({
             <Col span={24}>
               <AssistancesTable
                 assistances={assistancesView}
-                user={user}
                 loading={assistancesLoading}
               />
             </Col>
