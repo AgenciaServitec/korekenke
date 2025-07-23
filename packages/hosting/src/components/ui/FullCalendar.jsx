@@ -88,6 +88,7 @@ export const FullCalendarComponent = ({
         locale={esLocale}
         events={events}
         selectable
+        firstDay={0}
         headerToolbar={{
           start: "today prev next",
           center: "title",
