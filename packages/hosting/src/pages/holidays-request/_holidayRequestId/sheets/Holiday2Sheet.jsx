@@ -171,7 +171,7 @@ const Container = styled.div`
           }
 
           .seal {
-            margin-left: 4rem;
+            margin-left: 3.9rem;
             display: flex;
             align-items: end;
           }
