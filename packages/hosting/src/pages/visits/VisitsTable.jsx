@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { VisitsStatus } from "../../data-list";
 import {
   faBuildingCircleXmark,
+  faCheckToSlot,
   faEdit,
   faEye,
   faHistory,
@@ -130,6 +131,22 @@ export const VisitsTable = ({
     setFilterStates(statusCounts);
   }, [filterCount]);
 
+  const onUpdatedVisitStatus = async (visit, status, timeline) =>
+    await updateVisit(
+      visit.id,
+      assignUpdateProps({
+        status: status,
+        timeline: {
+          ...visit.timeline,
+          [timeline]: assignUpdateProps({
+            ...visit?.timeline?.[timeline],
+            status: "approved",
+            timestamp: dayjs().format("DD/MM/YYYY HH:mm"),
+          }),
+        },
+      }),
+    );
+
   const columns = [
     {
       title: "F. Creación",
@@ -203,10 +220,18 @@ export const VisitsTable = ({
     {
       title: "Estado",
       align: "center",
-      width: ["9rem", "100%"],
+      width: ["7rem", "100%"],
       render: (visit) => {
         const status = VisitsStatus?.[visit?.status];
         return <Tag color={status?.color}>{status?.name}</Tag>;
+      },
+    },
+    {
+      title: "Respuesta",
+      align: "center",
+      width: ["7rem", "100%"],
+      render: (visit) => {
+        return <Tag color="blue">Aprobado</Tag>;
       },
     },
     {
@@ -266,7 +291,7 @@ export const VisitsTable = ({
     {
       title: "Opciones",
       align: "center",
-      width: ["14rem", "100%"],
+      width: ["18rem", "100%"],
       render: (visit) => {
         const canRequestReview = isBossPI || isBossSecondPI;
         return (
@@ -282,32 +307,35 @@ export const VisitsTable = ({
               styled={{ color: (theme) => theme.colors.info }}
               onClick={() => onShowVisitedObservation(visit)}
             />
-            {visit.status === "waiting" && (
-              <IconAction
-                tooltipTitle="Solicitar revisión"
-                icon={faReply}
-                styled={{ color: (theme) => theme.colors.warning }}
-                onClick={async () => {
-                  await updateVisit(
-                    visit.id,
-                    assignUpdateProps({
-                      status: "pending",
-                      timeline: {
-                        ...visit.timeline,
-                        entryDependency: assignUpdateProps({
-                          ...visit?.timeline?.entryDependency,
-                          status: "approved",
-                          timestamp: dayjs().format("DD/MM/YYYY HH:mm"),
-                        }),
-                      },
-                    }),
-                  );
-                  notification({
-                    type: "success",
-                  });
-                }}
-              />
-            )}
+            <IconAction
+              tooltipTitle="Confirmar llegada"
+              icon={faCheckToSlot}
+              onClick={() => ""}
+            />
+            <IconAction
+              tooltipTitle="Responder visita"
+              icon={faReply}
+              styled={{ color: (theme) => theme.colors.primary }}
+              onClick={async () => {
+                await updateVisit(
+                  visit.id,
+                  assignUpdateProps({
+                    status: "pending",
+                    timeline: {
+                      ...visit.timeline,
+                      entryDependency: assignUpdateProps({
+                        ...visit?.timeline?.entryDependency,
+                        status: "approved",
+                        timestamp: dayjs().format("DD/MM/YYYY HH:mm"),
+                      }),
+                    },
+                  }),
+                );
+                notification({
+                  type: "success",
+                });
+              }}
+            />
             <Acl
               category="public"
               subCategory="visits"

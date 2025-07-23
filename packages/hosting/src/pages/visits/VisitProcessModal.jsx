@@ -19,6 +19,32 @@ export const VisitProcessModal = ({ visit, onCloseModal }) => {
                 : "red",
             children: (
               <VisitInformation
+                title="Registro de la Visita"
+                date={visit?.timeline?.entryCuartel.timestamp}
+              />
+            ),
+          },
+          {
+            dot: <FontAwesomeIcon icon={faCircleCheck} size="2x" />,
+            color:
+              visit?.timeline?.entryCuartel.status === "approved"
+                ? "green"
+                : "red",
+            children: (
+              <VisitInformation
+                title="Aprobación de la visita"
+                date={visit?.timeline?.entryCuartel.timestamp}
+              />
+            ),
+          },
+          {
+            dot: <FontAwesomeIcon icon={faCircleCheck} size="2x" />,
+            color:
+              visit?.timeline?.entryCuartel.status === "approved"
+                ? "green"
+                : "red",
+            children: (
+              <VisitInformation
                 title={visit?.timeline?.entryCuartel.title}
                 date={visit?.timeline?.entryCuartel.timestamp}
               />
