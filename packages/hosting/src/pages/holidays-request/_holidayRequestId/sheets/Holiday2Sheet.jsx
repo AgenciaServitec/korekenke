@@ -7,6 +7,7 @@ import { CustomStampSheet } from "../../../../components";
 export const Holiday2Sheet = ({ holiday }) => {
   const { current, old } = holiday.user.holidaysDetail;
   const { secondSeal } = holiday.seals;
+  const { thirdSeal } = holiday.seals;
 
   const totalHolidays = {
     totalWorkingDays: current.workingDays + old.oldWorkingDays,
@@ -69,6 +70,15 @@ export const Holiday2Sheet = ({ holiday }) => {
                   value={`${window.location.href}`}
                   icon={LogoPrimary}
                   style={{ objectFit: "contain" }}
+                />
+              </span>
+              <span className="seal">
+                <CustomStampSheet
+                  topText={thirdSeal.sealTopText}
+                  bottomText={thirdSeal.sealBottomText}
+                  supervisorName={thirdSeal.supervisorName}
+                  supervisorNs={thirdSeal.supervisorNs}
+                  supervisorDegree={thirdSeal.supervisorDegree}
                 />
               </span>
               <span className="seal">
@@ -161,7 +171,7 @@ const Container = styled.div`
           }
 
           .seal {
-            margin-left: 12rem;
+            margin-left: 4rem;
             display: flex;
             align-items: end;
           }

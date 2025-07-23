@@ -64,7 +64,11 @@ export const SendHolidayRequestIntegration = ({
     uu: formData.uu,
     reason: formData.reason,
     status: "waiting",
-    seals: { firstSeal: formData.firstSeal, secondSeal: formData.secondSeal },
+    seals: {
+      firstSeal: formData.firstSeal,
+      secondSeal: formData.secondSeal,
+      thirdSeal: formData.thirdSeal,
+    },
     wasRead: false,
   });
 
@@ -153,6 +157,15 @@ const SendHolidayRequest = ({
         supervisorDegree: yup.string().required(),
       })
       .required(),
+    thirdSeal: yup
+      .object({
+        sealTopText: yup.string(),
+        sealBottomText: yup.string(),
+        supervisorName: yup.string(),
+        supervisorNs: yup.string(),
+        supervisorDegree: yup.string(),
+      })
+      .notRequired(),
   });
 
   const {
@@ -163,6 +176,8 @@ const SendHolidayRequest = ({
     resolver: yupResolver(schema),
     defaultValues: {
       firstSeal: null,
+      secondSeal: null,
+      thirdSeal: null,
     },
   });
 
@@ -326,6 +341,26 @@ const SendHolidayRequest = ({
                   onChange={onChange}
                   error={error(name)}
                   required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Title level={3} margin="1em 0 0 0">
+              Sello y Firma Adicional (opcional)
+            </Title>
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="thirdSeal"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <SignatureAndSealComponent
+                  label="Encargado Adicional"
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={false}
                 />
               )}
             />
