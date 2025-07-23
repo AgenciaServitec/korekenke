@@ -20,9 +20,11 @@ import { AssistancesFinder } from "./Assistances.Finder";
 import { AssistancesTable } from "./Assistances.Table";
 import dayjs from "dayjs";
 import { assistancesQuery } from "./_utils";
+import { useAuthentication } from "../../providers";
 
 export const AssistancesIntegration = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
   const [searchFields, setSearchFields] = useQueriesState({
     cip: undefined,
     fromDate: dayjs().format("DD-MM-YYYY HH:mm"),
@@ -48,6 +50,7 @@ export const AssistancesIntegration = () => {
 
   return (
     <Assistances
+      user={authUser}
       onNavigateGoTo={onNavigateGoTo}
       assistances={assistances}
       assistancesLoading={assistancesLoading}
