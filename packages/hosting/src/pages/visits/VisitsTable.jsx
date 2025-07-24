@@ -43,6 +43,8 @@ export const VisitsTable = ({
   const { fetchEntityManager, fetchDepartmentBoss, fetchDepartmentBossSecond } =
     useBosses();
 
+  const [isResponsible, setIsResponsible] = useState(false);
+
   const [managerEntityGu, setManagerEntityGu] = useState(null);
   const [managerEntityGuSeguridad, setManagerEntityGuSeguridad] =
     useState(null);
@@ -50,6 +52,9 @@ export const VisitsTable = ({
   const [bossSecondDepartment, setBossSecondDepartment] = useState(null);
   const [bossDepartment1, setBossDepartment1] = useState(null);
   const [bossSecondDepartment1, setBossSecondDepartment1] = useState(null);
+
+  console.log("authUser: ", authUser);
+  console.log("Asignado a: ", authUser?.assignedTo.type);
 
   useEffect(() => {
     (async () => {
@@ -79,6 +84,9 @@ export const VisitsTable = ({
 
   const messageWhatsapp = (visit) =>
     `https://api.whatsapp.com/send/?phone=${visit.personVisited.phone.prefix.replace("+", "")}${visit.personVisited.phone.number}&text=Hola ${userFullName(visit.personVisited)} 👋,te viene a visitar ${userFullName(visit)} ‍💼.%0A%0APor favor, ingresa al módulo de visitas en Korekenke 📲 para que puedas aprobar la visita ✅.%0A%0AGracias.&app_absent=0`;
+
+  const isManagerEntity = "";
+  const isBossDepartment = "";
 
   const isManagerEntityGuSeguridad =
     authUser.id === managerEntityGuSeguridad?.id;

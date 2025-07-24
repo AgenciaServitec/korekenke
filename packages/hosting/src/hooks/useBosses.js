@@ -2,12 +2,61 @@ import {
   departmentsRef,
   entitiesRef,
   fetchUser,
+  officesRef,
+  sectionsRef,
 } from "../firebase/collections";
 import { useCommand } from "../providers";
 import { fetchCollectionOnce } from "../firebase/firestore";
+import { firestore } from "../firebase";
 
 export const useBosses = () => {
   const { currentCommand } = useCommand();
+
+  const fetchDocById = async (collectionRef, docId) =>
+    await firestore.collection(collectionRef).doc(docId);
+
+  const fetchAssignedBoss = async (assignedTo) => {
+    if (!assignedTo?.id || !assignedTo?.type) return null;
+
+    let collectionRef;
+    let fieldToUse;
+
+    switch (assignedTo.type) {
+      case "department":
+        collectionRef = departmentsRef;
+        fieldToUse = "bossId";
+        break;
+      case "entityGU":
+        collectionRef = entitiesRef;
+        fieldToUse = "managerId";
+        break;
+      case "section":
+        collectionRef = sectionsRef;
+        fieldToUse = "bossId";
+        break;
+      case "office":
+        collectionRef = officesRef;
+        fieldToUse = "bossId";
+        break;
+      default:
+        return null;
+    }
+
+    const assignedDoc = await fetchDocById(collectionRef, assignedTo.id);
+
+    if (!assignedDoc || !assignedDoc[fieldToUse]) return null;
+
+    const bossOrManager = await fetchUser(assignedDoc[fieldToUse]);
+
+    return bossOrManager || null;
+  };
+
+  const isUserAssignedResponsible = async (authUser) => {
+    if (!authUser?.assignedTo.id) return false;
+
+    const responsible = await fetchAssignedBoss(authUser.assignedTo);
+    return responsible?.id === authUser.id;
+  };
 
   const fetchEntityManager = async (nameId) => {
     const entitiesGU = await fetchCollectionOnce(
